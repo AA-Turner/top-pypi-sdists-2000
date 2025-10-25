@@ -3310,6 +3310,51 @@ class CfnComponent(
         return typing.cast(_IResolvable_da3f097b, jsii.get(self, "attrEncrypted"))
 
     @builtins.property
+    @jsii.member(jsii_name="attrLatestVersion")
+    def attr_latest_version(self) -> _IResolvable_da3f097b:
+        '''The latest version references of the component.
+
+        :cloudformationAttribute: LatestVersion
+        '''
+        return typing.cast(_IResolvable_da3f097b, jsii.get(self, "attrLatestVersion"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrLatestVersionArn")
+    def attr_latest_version_arn(self) -> builtins.str:
+        '''The Amazon Resource Name (ARN) of the component.
+
+        :cloudformationAttribute: LatestVersion.Arn
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrLatestVersionArn"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrLatestVersionMajor")
+    def attr_latest_version_major(self) -> builtins.str:
+        '''The latest version ARN of the created component, with the same major version.
+
+        :cloudformationAttribute: LatestVersion.Major
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrLatestVersionMajor"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrLatestVersionMinor")
+    def attr_latest_version_minor(self) -> builtins.str:
+        '''The latest version ARN of the created component, with the same minor version.
+
+        :cloudformationAttribute: LatestVersion.Minor
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrLatestVersionMinor"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrLatestVersionPatch")
+    def attr_latest_version_patch(self) -> builtins.str:
+        '''The latest version ARN of the created component, with the same patch version.
+
+        :cloudformationAttribute: LatestVersion.Patch
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrLatestVersionPatch"))
+
+    @builtins.property
     @jsii.member(jsii_name="attrName")
     def attr_name(self) -> builtins.str:
         '''Returns the name of the component.
@@ -3481,6 +3526,111 @@ class CfnComponent(
             type_hints = typing.get_type_hints(_typecheckingstub__6efe7a7fb79c1c8d2effb9d5fa5a6b2b46eefe80a1dce4011093db23ed26368d)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
         jsii.set(self, "uri", value) # pyright: ignore[reportArgumentType]
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_imagebuilder.CfnComponent.LatestVersionProperty",
+        jsii_struct_bases=[],
+        name_mapping={
+            "arn": "arn",
+            "major": "major",
+            "minor": "minor",
+            "patch": "patch",
+        },
+    )
+    class LatestVersionProperty:
+        def __init__(
+            self,
+            *,
+            arn: typing.Optional[builtins.str] = None,
+            major: typing.Optional[builtins.str] = None,
+            minor: typing.Optional[builtins.str] = None,
+            patch: typing.Optional[builtins.str] = None,
+        ) -> None:
+            '''The latest version references of the component.
+
+            :param arn: The Amazon Resource Name (ARN) of the component.
+            :param major: The latest version ARN of the created component, with the same major version.
+            :param minor: The latest version ARN of the created component, with the same minor version.
+            :param patch: The latest version ARN of the created component, with the same patch version.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-imagebuilder-component-latestversion.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_imagebuilder as imagebuilder
+                
+                latest_version_property = imagebuilder.CfnComponent.LatestVersionProperty(
+                    arn="arn",
+                    major="major",
+                    minor="minor",
+                    patch="patch"
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__c4e79be107a6e971d25cd09ec63884e7fcb4e59de0b3b3dc1d6ae877cbb0c006)
+                check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
+                check_type(argname="argument major", value=major, expected_type=type_hints["major"])
+                check_type(argname="argument minor", value=minor, expected_type=type_hints["minor"])
+                check_type(argname="argument patch", value=patch, expected_type=type_hints["patch"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if arn is not None:
+                self._values["arn"] = arn
+            if major is not None:
+                self._values["major"] = major
+            if minor is not None:
+                self._values["minor"] = minor
+            if patch is not None:
+                self._values["patch"] = patch
+
+        @builtins.property
+        def arn(self) -> typing.Optional[builtins.str]:
+            '''The Amazon Resource Name (ARN) of the component.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-imagebuilder-component-latestversion.html#cfn-imagebuilder-component-latestversion-arn
+            '''
+            result = self._values.get("arn")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        @builtins.property
+        def major(self) -> typing.Optional[builtins.str]:
+            '''The latest version ARN of the created component, with the same major version.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-imagebuilder-component-latestversion.html#cfn-imagebuilder-component-latestversion-major
+            '''
+            result = self._values.get("major")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        @builtins.property
+        def minor(self) -> typing.Optional[builtins.str]:
+            '''The latest version ARN of the created component, with the same minor version.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-imagebuilder-component-latestversion.html#cfn-imagebuilder-component-latestversion-minor
+            '''
+            result = self._values.get("minor")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        @builtins.property
+        def patch(self) -> typing.Optional[builtins.str]:
+            '''The latest version ARN of the created component, with the same patch version.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-imagebuilder-component-latestversion.html#cfn-imagebuilder-component-latestversion-patch
+            '''
+            result = self._values.get("patch")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "LatestVersionProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
 
 
 @jsii.implements(_IInspectable_c2943556, IContainerRecipeRef, _ITaggable_36806126)
@@ -5999,6 +6149,59 @@ class CfnImage(
         return typing.cast(builtins.str, jsii.get(self, "attrImageUri"))
 
     @builtins.property
+    @jsii.member(jsii_name="attrLatestVersion")
+    def attr_latest_version(self) -> _IResolvable_da3f097b:
+        '''The latest version references of the image.
+
+        :cloudformationAttribute: LatestVersion
+        '''
+        return typing.cast(_IResolvable_da3f097b, jsii.get(self, "attrLatestVersion"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrLatestVersionArn")
+    def attr_latest_version_arn(self) -> builtins.str:
+        '''The Amazon Resource Name (ARN) of the image.
+
+        .. epigraph::
+
+           Semantic versioning is included in each object's Amazon Resource Name (ARN), at the level that applies to that object as follows:
+
+           - Versionless ARNs and Name ARNs do not include specific values in any of the nodes. The nodes are either left off entirely, or they are specified as wildcards, for example: x.x.x.
+           - Version ARNs have only the first three nodes: ..
+           - Build version ARNs have all four nodes, and point to a specific build for a specific version of an object.
+
+        :cloudformationAttribute: LatestVersion.Arn
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrLatestVersionArn"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrLatestVersionMajor")
+    def attr_latest_version_major(self) -> builtins.str:
+        '''The latest version ARN of the created image, with the same major version.
+
+        :cloudformationAttribute: LatestVersion.Major
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrLatestVersionMajor"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrLatestVersionMinor")
+    def attr_latest_version_minor(self) -> builtins.str:
+        '''The latest version ARN of the created image, with the same minor version.
+
+        :cloudformationAttribute: LatestVersion.Minor
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrLatestVersionMinor"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrLatestVersionPatch")
+    def attr_latest_version_patch(self) -> builtins.str:
+        '''The latest version ARN of the created image, with the same patch version.
+
+        :cloudformationAttribute: LatestVersion.Patch
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrLatestVersionPatch"))
+
+    @builtins.property
     @jsii.member(jsii_name="attrName")
     def attr_name(self) -> builtins.str:
         '''Returns the name of the image.
@@ -6497,6 +6700,119 @@ class CfnImage(
 
         def __repr__(self) -> str:
             return "ImageTestsConfigurationProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_imagebuilder.CfnImage.LatestVersionProperty",
+        jsii_struct_bases=[],
+        name_mapping={
+            "arn": "arn",
+            "major": "major",
+            "minor": "minor",
+            "patch": "patch",
+        },
+    )
+    class LatestVersionProperty:
+        def __init__(
+            self,
+            *,
+            arn: typing.Optional[builtins.str] = None,
+            major: typing.Optional[builtins.str] = None,
+            minor: typing.Optional[builtins.str] = None,
+            patch: typing.Optional[builtins.str] = None,
+        ) -> None:
+            '''The latest version references of the image.
+
+            :param arn: The Amazon Resource Name (ARN) of the image. .. epigraph:: Semantic versioning is included in each object's Amazon Resource Name (ARN), at the level that applies to that object as follows: - Versionless ARNs and Name ARNs do not include specific values in any of the nodes. The nodes are either left off entirely, or they are specified as wildcards, for example: x.x.x. - Version ARNs have only the first three nodes: .. - Build version ARNs have all four nodes, and point to a specific build for a specific version of an object.
+            :param major: The latest version ARN of the created image, with the same major version.
+            :param minor: The latest version ARN of the created image, with the same minor version.
+            :param patch: The latest version ARN of the created image, with the same patch version.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-imagebuilder-image-latestversion.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_imagebuilder as imagebuilder
+                
+                latest_version_property = imagebuilder.CfnImage.LatestVersionProperty(
+                    arn="arn",
+                    major="major",
+                    minor="minor",
+                    patch="patch"
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__ae579b3568475007ef3046d31af2cc00ebde2b499245bed681ab762a0fbf9641)
+                check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
+                check_type(argname="argument major", value=major, expected_type=type_hints["major"])
+                check_type(argname="argument minor", value=minor, expected_type=type_hints["minor"])
+                check_type(argname="argument patch", value=patch, expected_type=type_hints["patch"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if arn is not None:
+                self._values["arn"] = arn
+            if major is not None:
+                self._values["major"] = major
+            if minor is not None:
+                self._values["minor"] = minor
+            if patch is not None:
+                self._values["patch"] = patch
+
+        @builtins.property
+        def arn(self) -> typing.Optional[builtins.str]:
+            '''The Amazon Resource Name (ARN) of the image.
+
+            .. epigraph::
+
+               Semantic versioning is included in each object's Amazon Resource Name (ARN), at the level that applies to that object as follows:
+
+               - Versionless ARNs and Name ARNs do not include specific values in any of the nodes. The nodes are either left off entirely, or they are specified as wildcards, for example: x.x.x.
+               - Version ARNs have only the first three nodes: ..
+               - Build version ARNs have all four nodes, and point to a specific build for a specific version of an object.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-imagebuilder-image-latestversion.html#cfn-imagebuilder-image-latestversion-arn
+            '''
+            result = self._values.get("arn")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        @builtins.property
+        def major(self) -> typing.Optional[builtins.str]:
+            '''The latest version ARN of the created image, with the same major version.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-imagebuilder-image-latestversion.html#cfn-imagebuilder-image-latestversion-major
+            '''
+            result = self._values.get("major")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        @builtins.property
+        def minor(self) -> typing.Optional[builtins.str]:
+            '''The latest version ARN of the created image, with the same minor version.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-imagebuilder-image-latestversion.html#cfn-imagebuilder-image-latestversion-minor
+            '''
+            result = self._values.get("minor")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        @builtins.property
+        def patch(self) -> typing.Optional[builtins.str]:
+            '''The latest version ARN of the created image, with the same patch version.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-imagebuilder-image-latestversion.html#cfn-imagebuilder-image-latestversion-patch
+            '''
+            result = self._values.get("patch")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "LatestVersionProperty(%s)" % ", ".join(
                 k + "=" + repr(v) for k, v in self._values.items()
             )
 
@@ -10701,6 +11017,51 @@ class CfnWorkflow(
         return typing.cast(builtins.str, jsii.get(self, "attrArn"))
 
     @builtins.property
+    @jsii.member(jsii_name="attrLatestVersion")
+    def attr_latest_version(self) -> _IResolvable_da3f097b:
+        '''The latest version references of the workflow.
+
+        :cloudformationAttribute: LatestVersion
+        '''
+        return typing.cast(_IResolvable_da3f097b, jsii.get(self, "attrLatestVersion"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrLatestVersionArn")
+    def attr_latest_version_arn(self) -> builtins.str:
+        '''The Amazon Resource Name (ARN) of the workflow resource.
+
+        :cloudformationAttribute: LatestVersion.Arn
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrLatestVersionArn"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrLatestVersionMajor")
+    def attr_latest_version_major(self) -> builtins.str:
+        '''The latest version ARN of the created workflow, with the same major version.
+
+        :cloudformationAttribute: LatestVersion.Major
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrLatestVersionMajor"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrLatestVersionMinor")
+    def attr_latest_version_minor(self) -> builtins.str:
+        '''The latest version ARN of the created workflow, with the same minor version.
+
+        :cloudformationAttribute: LatestVersion.Minor
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrLatestVersionMinor"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrLatestVersionPatch")
+    def attr_latest_version_patch(self) -> builtins.str:
+        '''The latest version ARN of the created workflow, with the same patch version.
+
+        :cloudformationAttribute: LatestVersion.Patch
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrLatestVersionPatch"))
+
+    @builtins.property
     @jsii.member(jsii_name="cdkTagManager")
     def cdk_tag_manager(self) -> _TagManager_0a598cb3:
         '''Tag Manager which manages the tags for this resource.'''
@@ -10839,6 +11200,111 @@ class CfnWorkflow(
             type_hints = typing.get_type_hints(_typecheckingstub__2e36c0e0583778b96be119919e9f8e273d4b8ff0bfa5e58c3049f2cc89a520dd)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
         jsii.set(self, "uri", value) # pyright: ignore[reportArgumentType]
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_imagebuilder.CfnWorkflow.LatestVersionProperty",
+        jsii_struct_bases=[],
+        name_mapping={
+            "arn": "arn",
+            "major": "major",
+            "minor": "minor",
+            "patch": "patch",
+        },
+    )
+    class LatestVersionProperty:
+        def __init__(
+            self,
+            *,
+            arn: typing.Optional[builtins.str] = None,
+            major: typing.Optional[builtins.str] = None,
+            minor: typing.Optional[builtins.str] = None,
+            patch: typing.Optional[builtins.str] = None,
+        ) -> None:
+            '''The latest version references of the workflow.
+
+            :param arn: The Amazon Resource Name (ARN) of the workflow resource.
+            :param major: The latest version ARN of the created workflow, with the same major version.
+            :param minor: The latest version ARN of the created workflow, with the same minor version.
+            :param patch: The latest version ARN of the created workflow, with the same patch version.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-imagebuilder-workflow-latestversion.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_imagebuilder as imagebuilder
+                
+                latest_version_property = imagebuilder.CfnWorkflow.LatestVersionProperty(
+                    arn="arn",
+                    major="major",
+                    minor="minor",
+                    patch="patch"
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__181e93585176bbdf701a08d6598ff0f6dc84c063978f7194f7ad1ba3ef2612fe)
+                check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
+                check_type(argname="argument major", value=major, expected_type=type_hints["major"])
+                check_type(argname="argument minor", value=minor, expected_type=type_hints["minor"])
+                check_type(argname="argument patch", value=patch, expected_type=type_hints["patch"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if arn is not None:
+                self._values["arn"] = arn
+            if major is not None:
+                self._values["major"] = major
+            if minor is not None:
+                self._values["minor"] = minor
+            if patch is not None:
+                self._values["patch"] = patch
+
+        @builtins.property
+        def arn(self) -> typing.Optional[builtins.str]:
+            '''The Amazon Resource Name (ARN) of the workflow resource.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-imagebuilder-workflow-latestversion.html#cfn-imagebuilder-workflow-latestversion-arn
+            '''
+            result = self._values.get("arn")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        @builtins.property
+        def major(self) -> typing.Optional[builtins.str]:
+            '''The latest version ARN of the created workflow, with the same major version.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-imagebuilder-workflow-latestversion.html#cfn-imagebuilder-workflow-latestversion-major
+            '''
+            result = self._values.get("major")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        @builtins.property
+        def minor(self) -> typing.Optional[builtins.str]:
+            '''The latest version ARN of the created workflow, with the same minor version.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-imagebuilder-workflow-latestversion.html#cfn-imagebuilder-workflow-latestversion-minor
+            '''
+            result = self._values.get("minor")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        @builtins.property
+        def patch(self) -> typing.Optional[builtins.str]:
+            '''The latest version ARN of the created workflow, with the same patch version.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-imagebuilder-workflow-latestversion.html#cfn-imagebuilder-workflow-latestversion-patch
+            '''
+            result = self._values.get("patch")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "LatestVersionProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
 
 
 __all__ = [
@@ -11181,6 +11647,16 @@ def _typecheckingstub__a4a5d66d386d51bc332acca6c875fb548297567b633e53e35d7da1075
 
 def _typecheckingstub__6efe7a7fb79c1c8d2effb9d5fa5a6b2b46eefe80a1dce4011093db23ed26368d(
     value: typing.Optional[builtins.str],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__c4e79be107a6e971d25cd09ec63884e7fcb4e59de0b3b3dc1d6ae877cbb0c006(
+    *,
+    arn: typing.Optional[builtins.str] = None,
+    major: typing.Optional[builtins.str] = None,
+    minor: typing.Optional[builtins.str] = None,
+    patch: typing.Optional[builtins.str] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -11635,6 +12111,16 @@ def _typecheckingstub__e8cfede11f4b11fc577c8fddf9438af7db50acddcb364073adeaf606a
     *,
     image_tests_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     timeout_minutes: typing.Optional[jsii.Number] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__ae579b3568475007ef3046d31af2cc00ebde2b499245bed681ab762a0fbf9641(
+    *,
+    arn: typing.Optional[builtins.str] = None,
+    major: typing.Optional[builtins.str] = None,
+    minor: typing.Optional[builtins.str] = None,
+    patch: typing.Optional[builtins.str] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -12381,3 +12867,16 @@ def _typecheckingstub__2e36c0e0583778b96be119919e9f8e273d4b8ff0bfa5e58c3049f2cc8
 ) -> None:
     """Type checking stubs"""
     pass
+
+def _typecheckingstub__181e93585176bbdf701a08d6598ff0f6dc84c063978f7194f7ad1ba3ef2612fe(
+    *,
+    arn: typing.Optional[builtins.str] = None,
+    major: typing.Optional[builtins.str] = None,
+    minor: typing.Optional[builtins.str] = None,
+    patch: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+for cls in [IComponentRef, IContainerRecipeRef, IDistributionConfigurationRef, IImagePipelineRef, IImageRecipeRef, IImageRef, IInfrastructureConfigurationRef, ILifecyclePolicyRef, IWorkflowRef]:
+    typing.cast(typing.Any, cls).__protocol_attrs__ = typing.cast(typing.Any, cls).__protocol_attrs__ - set(['__jsii_proxy_class__', '__jsii_type__'])

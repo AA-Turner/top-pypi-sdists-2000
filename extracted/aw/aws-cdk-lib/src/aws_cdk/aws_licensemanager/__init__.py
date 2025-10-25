@@ -2058,3 +2058,6 @@ def _typecheckingstub__483b5b4e301dfddf60a6c6da8bdc4898ec615b5045a70ceeeefc10fe7
 ) -> None:
     """Type checking stubs"""
     pass
+
+for cls in [IGrantRef, ILicenseRef]:
+    typing.cast(typing.Any, cls).__protocol_attrs__ = typing.cast(typing.Any, cls).__protocol_attrs__ - set(['__jsii_proxy_class__', '__jsii_type__'])

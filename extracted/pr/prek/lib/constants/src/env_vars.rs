@@ -25,6 +25,8 @@ impl EnvVars {
     pub const PREK_INTERNAL__SKIP_POST_CHECKOUT: &'static str = "PREK_INTERNAL__SKIP_POST_CHECKOUT";
     pub const PREK_INTERNAL__RUN_ORIGINAL_PRE_COMMIT: &'static str =
         "PREK_INTERNAL__RUN_ORIGINAL_PRE_COMMIT";
+    pub const PREK_INTERNAL__GO_BINARY_NAME: &'static str = "PREK_INTERNAL__GO_BINARY_NAME";
+    pub const PREK_INTERNAL__NODE_BINARY_NAME: &'static str = "PREK_INTERNAL__NODE_BINARY_NAME";
     pub const PREK_GENERATE: &'static str = "PREK_GENERATE";
 
     // UV related
@@ -43,6 +45,10 @@ impl EnvVars {
     pub const GOROOT: &'static str = "GOROOT";
     pub const GOPATH: &'static str = "GOPATH";
     pub const GOBIN: &'static str = "GOBIN";
+
+    // Lua related
+    pub const LUA_PATH: &'static str = "LUA_PATH";
+    pub const LUA_CPATH: &'static str = "LUA_CPATH";
 }
 
 impl EnvVars {

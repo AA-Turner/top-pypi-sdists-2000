@@ -1366,3 +1366,6 @@ def _typecheckingstub__1f10519eb1d45ed1305e842ac3665885bde5d1c65940455981356edc1
 ) -> None:
     """Type checking stubs"""
     pass
+
+for cls in [IAccountAliasRef, ISlackChannelConfigurationRef, ISlackWorkspaceConfigurationRef]:
+    typing.cast(typing.Any, cls).__protocol_attrs__ = typing.cast(typing.Any, cls).__protocol_attrs__ - set(['__jsii_proxy_class__', '__jsii_type__'])

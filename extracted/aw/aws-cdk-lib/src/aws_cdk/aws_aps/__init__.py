@@ -71,6 +71,243 @@ from .. import (
 
 
 @jsii.data_type(
+    jsii_type="aws-cdk-lib.aws_aps.AnomalyDetectorReference",
+    jsii_struct_bases=[],
+    name_mapping={"anomaly_detector_arn": "anomalyDetectorArn"},
+)
+class AnomalyDetectorReference:
+    def __init__(self, *, anomaly_detector_arn: builtins.str) -> None:
+        '''A reference to a AnomalyDetector resource.
+
+        :param anomaly_detector_arn: The Arn of the AnomalyDetector resource.
+
+        :exampleMetadata: fixture=_generated
+
+        Example::
+
+            # The code below shows an example of how to instantiate this type.
+            # The values are placeholders you should change.
+            from aws_cdk import aws_aps as aps
+            
+            anomaly_detector_reference = aps.AnomalyDetectorReference(
+                anomaly_detector_arn="anomalyDetectorArn"
+            )
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__d8f087ddf091d7802928e5eb9ae2c35d5aea0cb5cb3e0d1494e32ce693f67efa)
+            check_type(argname="argument anomaly_detector_arn", value=anomaly_detector_arn, expected_type=type_hints["anomaly_detector_arn"])
+        self._values: typing.Dict[builtins.str, typing.Any] = {
+            "anomaly_detector_arn": anomaly_detector_arn,
+        }
+
+    @builtins.property
+    def anomaly_detector_arn(self) -> builtins.str:
+        '''The Arn of the AnomalyDetector resource.'''
+        result = self._values.get("anomaly_detector_arn")
+        assert result is not None, "Required property 'anomaly_detector_arn' is missing"
+        return typing.cast(builtins.str, result)
+
+    def __eq__(self, rhs: typing.Any) -> builtins.bool:
+        return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+    def __ne__(self, rhs: typing.Any) -> builtins.bool:
+        return not (rhs == self)
+
+    def __repr__(self) -> str:
+        return "AnomalyDetectorReference(%s)" % ", ".join(
+            k + "=" + repr(v) for k, v in self._values.items()
+        )
+
+
+@jsii.data_type(
+    jsii_type="aws-cdk-lib.aws_aps.CfnAnomalyDetectorProps",
+    jsii_struct_bases=[],
+    name_mapping={
+        "alias": "alias",
+        "configuration": "configuration",
+        "workspace": "workspace",
+        "evaluation_interval_in_seconds": "evaluationIntervalInSeconds",
+        "labels": "labels",
+        "missing_data_action": "missingDataAction",
+        "tags": "tags",
+    },
+)
+class CfnAnomalyDetectorProps:
+    def __init__(
+        self,
+        *,
+        alias: builtins.str,
+        configuration: typing.Union[_IResolvable_da3f097b, typing.Union["CfnAnomalyDetector.AnomalyDetectorConfigurationProperty", typing.Dict[builtins.str, typing.Any]]],
+        workspace: builtins.str,
+        evaluation_interval_in_seconds: typing.Optional[jsii.Number] = None,
+        labels: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnAnomalyDetector.LabelProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        missing_data_action: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnAnomalyDetector.MissingDataActionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+    ) -> None:
+        '''Properties for defining a ``CfnAnomalyDetector``.
+
+        :param alias: The AnomalyDetector alias.
+        :param configuration: 
+        :param workspace: An Amazon Managed Service for Prometheus workspace is a logical and isolated Prometheus server dedicated to ingesting, storing, and querying your Prometheus-compatible metrics.
+        :param evaluation_interval_in_seconds: The AnomalyDetector period of detection and metric generation. Default: - 60
+        :param labels: An array of key-value pairs to provide meta-data.
+        :param missing_data_action: 
+        :param tags: An array of key-value pairs to apply to this resource.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-aps-anomalydetector.html
+        :exampleMetadata: fixture=_generated
+
+        Example::
+
+            # The code below shows an example of how to instantiate this type.
+            # The values are placeholders you should change.
+            from aws_cdk import aws_aps as aps
+            
+            cfn_anomaly_detector_props = aps.CfnAnomalyDetectorProps(
+                alias="alias",
+                configuration=aps.CfnAnomalyDetector.AnomalyDetectorConfigurationProperty(
+                    random_cut_forest=aps.CfnAnomalyDetector.RandomCutForestConfigurationProperty(
+                        query="query",
+            
+                        # the properties below are optional
+                        ignore_near_expected_from_above=aps.CfnAnomalyDetector.IgnoreNearExpectedProperty(
+                            amount=123,
+                            ratio=123
+                        ),
+                        ignore_near_expected_from_below=aps.CfnAnomalyDetector.IgnoreNearExpectedProperty(
+                            amount=123,
+                            ratio=123
+                        ),
+                        sample_size=123,
+                        shingle_size=123
+                    )
+                ),
+                workspace="workspace",
+            
+                # the properties below are optional
+                evaluation_interval_in_seconds=123,
+                labels=[aps.CfnAnomalyDetector.LabelProperty(
+                    key="key",
+                    value="value"
+                )],
+                missing_data_action=aps.CfnAnomalyDetector.MissingDataActionProperty(
+                    mark_as_anomaly=False,
+                    skip=False
+                ),
+                tags=[CfnTag(
+                    key="key",
+                    value="value"
+                )]
+            )
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__be017a909bcb870b1880c9bb2c099abc51df504e0f9199ca315deb7fa50b9d6b)
+            check_type(argname="argument alias", value=alias, expected_type=type_hints["alias"])
+            check_type(argname="argument configuration", value=configuration, expected_type=type_hints["configuration"])
+            check_type(argname="argument workspace", value=workspace, expected_type=type_hints["workspace"])
+            check_type(argname="argument evaluation_interval_in_seconds", value=evaluation_interval_in_seconds, expected_type=type_hints["evaluation_interval_in_seconds"])
+            check_type(argname="argument labels", value=labels, expected_type=type_hints["labels"])
+            check_type(argname="argument missing_data_action", value=missing_data_action, expected_type=type_hints["missing_data_action"])
+            check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
+        self._values: typing.Dict[builtins.str, typing.Any] = {
+            "alias": alias,
+            "configuration": configuration,
+            "workspace": workspace,
+        }
+        if evaluation_interval_in_seconds is not None:
+            self._values["evaluation_interval_in_seconds"] = evaluation_interval_in_seconds
+        if labels is not None:
+            self._values["labels"] = labels
+        if missing_data_action is not None:
+            self._values["missing_data_action"] = missing_data_action
+        if tags is not None:
+            self._values["tags"] = tags
+
+    @builtins.property
+    def alias(self) -> builtins.str:
+        '''The AnomalyDetector alias.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-aps-anomalydetector.html#cfn-aps-anomalydetector-alias
+        '''
+        result = self._values.get("alias")
+        assert result is not None, "Required property 'alias' is missing"
+        return typing.cast(builtins.str, result)
+
+    @builtins.property
+    def configuration(
+        self,
+    ) -> typing.Union[_IResolvable_da3f097b, "CfnAnomalyDetector.AnomalyDetectorConfigurationProperty"]:
+        '''
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-aps-anomalydetector.html#cfn-aps-anomalydetector-configuration
+        '''
+        result = self._values.get("configuration")
+        assert result is not None, "Required property 'configuration' is missing"
+        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnAnomalyDetector.AnomalyDetectorConfigurationProperty"], result)
+
+    @builtins.property
+    def workspace(self) -> builtins.str:
+        '''An Amazon Managed Service for Prometheus workspace is a logical and isolated Prometheus server dedicated to ingesting, storing, and querying your Prometheus-compatible metrics.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-aps-anomalydetector.html#cfn-aps-anomalydetector-workspace
+        '''
+        result = self._values.get("workspace")
+        assert result is not None, "Required property 'workspace' is missing"
+        return typing.cast(builtins.str, result)
+
+    @builtins.property
+    def evaluation_interval_in_seconds(self) -> typing.Optional[jsii.Number]:
+        '''The AnomalyDetector period of detection and metric generation.
+
+        :default: - 60
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-aps-anomalydetector.html#cfn-aps-anomalydetector-evaluationintervalinseconds
+        '''
+        result = self._values.get("evaluation_interval_in_seconds")
+        return typing.cast(typing.Optional[jsii.Number], result)
+
+    @builtins.property
+    def labels(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnAnomalyDetector.LabelProperty"]]]]:
+        '''An array of key-value pairs to provide meta-data.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-aps-anomalydetector.html#cfn-aps-anomalydetector-labels
+        '''
+        result = self._values.get("labels")
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnAnomalyDetector.LabelProperty"]]]], result)
+
+    @builtins.property
+    def missing_data_action(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAnomalyDetector.MissingDataActionProperty"]]:
+        '''
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-aps-anomalydetector.html#cfn-aps-anomalydetector-missingdataaction
+        '''
+        result = self._values.get("missing_data_action")
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAnomalyDetector.MissingDataActionProperty"]], result)
+
+    @builtins.property
+    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+        '''An array of key-value pairs to apply to this resource.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-aps-anomalydetector.html#cfn-aps-anomalydetector-tags
+        '''
+        result = self._values.get("tags")
+        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+
+    def __eq__(self, rhs: typing.Any) -> builtins.bool:
+        return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+    def __ne__(self, rhs: typing.Any) -> builtins.bool:
+        return not (rhs == self)
+
+    def __repr__(self) -> str:
+        return "CfnAnomalyDetectorProps(%s)" % ", ".join(
+            k + "=" + repr(v) for k, v in self._values.items()
+        )
+
+
+@jsii.data_type(
     jsii_type="aws-cdk-lib.aws_aps.CfnResourcePolicyProps",
     jsii_struct_bases=[],
     name_mapping={
@@ -657,6 +894,46 @@ class CfnWorkspaceProps:
         )
 
 
+@jsii.interface(jsii_type="aws-cdk-lib.aws_aps.IAnomalyDetectorRef")
+class IAnomalyDetectorRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+    '''(experimental) Indicates that this resource can be referenced as a AnomalyDetector.
+
+    :stability: experimental
+    '''
+
+    @builtins.property
+    @jsii.member(jsii_name="anomalyDetectorRef")
+    def anomaly_detector_ref(self) -> AnomalyDetectorReference:
+        '''(experimental) A reference to a AnomalyDetector resource.
+
+        :stability: experimental
+        '''
+        ...
+
+
+class _IAnomalyDetectorRefProxy(
+    jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+):
+    '''(experimental) Indicates that this resource can be referenced as a AnomalyDetector.
+
+    :stability: experimental
+    '''
+
+    __jsii_type__: typing.ClassVar[str] = "aws-cdk-lib.aws_aps.IAnomalyDetectorRef"
+
+    @builtins.property
+    @jsii.member(jsii_name="anomalyDetectorRef")
+    def anomaly_detector_ref(self) -> AnomalyDetectorReference:
+        '''(experimental) A reference to a AnomalyDetector resource.
+
+        :stability: experimental
+        '''
+        return typing.cast(AnomalyDetectorReference, jsii.get(self, "anomalyDetectorRef"))
+
+# Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
+typing.cast(typing.Any, IAnomalyDetectorRef).__jsii_proxy_class__ = lambda : _IAnomalyDetectorRefProxy
+
+
 @jsii.interface(jsii_type="aws-cdk-lib.aws_aps.IResourcePolicyRef")
 class IResourcePolicyRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
     '''(experimental) Indicates that this resource can be referenced as a ResourcePolicy.
@@ -1014,6 +1291,676 @@ class WorkspaceReference:
         return "WorkspaceReference(%s)" % ", ".join(
             k + "=" + repr(v) for k, v in self._values.items()
         )
+
+
+@jsii.implements(_IInspectable_c2943556, IAnomalyDetectorRef, _ITaggableV2_4e6798f8)
+class CfnAnomalyDetector(
+    _CfnResource_9df397a6,
+    metaclass=jsii.JSIIMeta,
+    jsii_type="aws-cdk-lib.aws_aps.CfnAnomalyDetector",
+):
+    '''AnomalyDetector schema for cloudformation.
+
+    :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-aps-anomalydetector.html
+    :cloudformationResource: AWS::APS::AnomalyDetector
+    :exampleMetadata: fixture=_generated
+
+    Example::
+
+        # The code below shows an example of how to instantiate this type.
+        # The values are placeholders you should change.
+        from aws_cdk import aws_aps as aps
+        
+        cfn_anomaly_detector = aps.CfnAnomalyDetector(self, "MyCfnAnomalyDetector",
+            alias="alias",
+            configuration=aps.CfnAnomalyDetector.AnomalyDetectorConfigurationProperty(
+                random_cut_forest=aps.CfnAnomalyDetector.RandomCutForestConfigurationProperty(
+                    query="query",
+        
+                    # the properties below are optional
+                    ignore_near_expected_from_above=aps.CfnAnomalyDetector.IgnoreNearExpectedProperty(
+                        amount=123,
+                        ratio=123
+                    ),
+                    ignore_near_expected_from_below=aps.CfnAnomalyDetector.IgnoreNearExpectedProperty(
+                        amount=123,
+                        ratio=123
+                    ),
+                    sample_size=123,
+                    shingle_size=123
+                )
+            ),
+            workspace="workspace",
+        
+            # the properties below are optional
+            evaluation_interval_in_seconds=123,
+            labels=[aps.CfnAnomalyDetector.LabelProperty(
+                key="key",
+                value="value"
+            )],
+            missing_data_action=aps.CfnAnomalyDetector.MissingDataActionProperty(
+                mark_as_anomaly=False,
+                skip=False
+            ),
+            tags=[CfnTag(
+                key="key",
+                value="value"
+            )]
+        )
+    '''
+
+    def __init__(
+        self,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        *,
+        alias: builtins.str,
+        configuration: typing.Union[_IResolvable_da3f097b, typing.Union["CfnAnomalyDetector.AnomalyDetectorConfigurationProperty", typing.Dict[builtins.str, typing.Any]]],
+        workspace: builtins.str,
+        evaluation_interval_in_seconds: typing.Optional[jsii.Number] = None,
+        labels: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnAnomalyDetector.LabelProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        missing_data_action: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnAnomalyDetector.MissingDataActionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+    ) -> None:
+        '''
+        :param scope: Scope in which this resource is defined.
+        :param id: Construct identifier for this resource (unique in its scope).
+        :param alias: The AnomalyDetector alias.
+        :param configuration: 
+        :param workspace: An Amazon Managed Service for Prometheus workspace is a logical and isolated Prometheus server dedicated to ingesting, storing, and querying your Prometheus-compatible metrics.
+        :param evaluation_interval_in_seconds: The AnomalyDetector period of detection and metric generation. Default: - 60
+        :param labels: An array of key-value pairs to provide meta-data.
+        :param missing_data_action: 
+        :param tags: An array of key-value pairs to apply to this resource.
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__58b3184629f18780da9f7c9eb2f8acdbdbb5190c9fc3ae41fdbbe34341ba0f26)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+        props = CfnAnomalyDetectorProps(
+            alias=alias,
+            configuration=configuration,
+            workspace=workspace,
+            evaluation_interval_in_seconds=evaluation_interval_in_seconds,
+            labels=labels,
+            missing_data_action=missing_data_action,
+            tags=tags,
+        )
+
+        jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="inspect")
+    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+        '''Examines the CloudFormation resource and discloses attributes.
+
+        :param inspector: tree inspector to collect and process attributes.
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__36a9fa3c67c466703717001e2774dacca3fa612b6ec02f8b6361ad6736da0ec7)
+            check_type(argname="argument inspector", value=inspector, expected_type=type_hints["inspector"])
+        return typing.cast(None, jsii.invoke(self, "inspect", [inspector]))
+
+    @jsii.member(jsii_name="renderProperties")
+    def _render_properties(
+        self,
+        props: typing.Mapping[builtins.str, typing.Any],
+    ) -> typing.Mapping[builtins.str, typing.Any]:
+        '''
+        :param props: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__1edc3473fdf33536207faf87047c2bef23ac4e4aecad53d1e0338308f0e5ab91)
+            check_type(argname="argument props", value=props, expected_type=type_hints["props"])
+        return typing.cast(typing.Mapping[builtins.str, typing.Any], jsii.invoke(self, "renderProperties", [props]))
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="CFN_RESOURCE_TYPE_NAME")
+    def CFN_RESOURCE_TYPE_NAME(cls) -> builtins.str:
+        '''The CloudFormation resource type name for this resource class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "CFN_RESOURCE_TYPE_NAME"))
+
+    @builtins.property
+    @jsii.member(jsii_name="anomalyDetectorRef")
+    def anomaly_detector_ref(self) -> AnomalyDetectorReference:
+        '''A reference to a AnomalyDetector resource.'''
+        return typing.cast(AnomalyDetectorReference, jsii.get(self, "anomalyDetectorRef"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrArn")
+    def attr_arn(self) -> builtins.str:
+        '''The AnomalyDetector ARN.
+
+        :cloudformationAttribute: Arn
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrArn"))
+
+    @builtins.property
+    @jsii.member(jsii_name="cdkTagManager")
+    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+        '''Tag Manager which manages the tags for this resource.'''
+        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+
+    @builtins.property
+    @jsii.member(jsii_name="cfnProperties")
+    def _cfn_properties(self) -> typing.Mapping[builtins.str, typing.Any]:
+        return typing.cast(typing.Mapping[builtins.str, typing.Any], jsii.get(self, "cfnProperties"))
+
+    @builtins.property
+    @jsii.member(jsii_name="alias")
+    def alias(self) -> builtins.str:
+        '''The AnomalyDetector alias.'''
+        return typing.cast(builtins.str, jsii.get(self, "alias"))
+
+    @alias.setter
+    def alias(self, value: builtins.str) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__fe3aa1b72ccc7677675b2ae76ae8e5e1dfd2146dae8eba7520a981184cdf780d)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "alias", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="configuration")
+    def configuration(
+        self,
+    ) -> typing.Union[_IResolvable_da3f097b, "CfnAnomalyDetector.AnomalyDetectorConfigurationProperty"]:
+        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnAnomalyDetector.AnomalyDetectorConfigurationProperty"], jsii.get(self, "configuration"))
+
+    @configuration.setter
+    def configuration(
+        self,
+        value: typing.Union[_IResolvable_da3f097b, "CfnAnomalyDetector.AnomalyDetectorConfigurationProperty"],
+    ) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__1394fe6b497d7add7f3c437f746b83234bfd1714418b007d2ca77fcaf2e486fa)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "configuration", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="workspace")
+    def workspace(self) -> builtins.str:
+        '''An Amazon Managed Service for Prometheus workspace is a logical and isolated Prometheus server dedicated to ingesting, storing, and querying your Prometheus-compatible metrics.'''
+        return typing.cast(builtins.str, jsii.get(self, "workspace"))
+
+    @workspace.setter
+    def workspace(self, value: builtins.str) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__51d01d3c64410491a2005087b379e01fe1749ffd4be8e8dae194b7cc8e5e19b8)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "workspace", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="evaluationIntervalInSeconds")
+    def evaluation_interval_in_seconds(self) -> typing.Optional[jsii.Number]:
+        '''The AnomalyDetector period of detection and metric generation.'''
+        return typing.cast(typing.Optional[jsii.Number], jsii.get(self, "evaluationIntervalInSeconds"))
+
+    @evaluation_interval_in_seconds.setter
+    def evaluation_interval_in_seconds(
+        self,
+        value: typing.Optional[jsii.Number],
+    ) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__ce3cb5189478c72429dee4d6fa1ed9635e537559491f15b775c279a89020cb75)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "evaluationIntervalInSeconds", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="labels")
+    def labels(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnAnomalyDetector.LabelProperty"]]]]:
+        '''An array of key-value pairs to provide meta-data.'''
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnAnomalyDetector.LabelProperty"]]]], jsii.get(self, "labels"))
+
+    @labels.setter
+    def labels(
+        self,
+        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnAnomalyDetector.LabelProperty"]]]],
+    ) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__0d15555eb30ee6b4decc1dba71c708714ce1a7f00e658c2ce9c617f35dbea119)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "labels", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="missingDataAction")
+    def missing_data_action(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAnomalyDetector.MissingDataActionProperty"]]:
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAnomalyDetector.MissingDataActionProperty"]], jsii.get(self, "missingDataAction"))
+
+    @missing_data_action.setter
+    def missing_data_action(
+        self,
+        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAnomalyDetector.MissingDataActionProperty"]],
+    ) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__e639ced06e0101ba2e1108f2a5748e988f60e8c6ecadbb32ca0f2dc6162a53e8)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "missingDataAction", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="tags")
+    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+        '''An array of key-value pairs to apply to this resource.'''
+        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tags"))
+
+    @tags.setter
+    def tags(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__dc8b42c0f027d8c1c104a6037d9c3752efbfb2ae169c30d63f35dee5bad63b3f)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "tags", value) # pyright: ignore[reportArgumentType]
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_aps.CfnAnomalyDetector.AnomalyDetectorConfigurationProperty",
+        jsii_struct_bases=[],
+        name_mapping={"random_cut_forest": "randomCutForest"},
+    )
+    class AnomalyDetectorConfigurationProperty:
+        def __init__(
+            self,
+            *,
+            random_cut_forest: typing.Union[_IResolvable_da3f097b, typing.Union["CfnAnomalyDetector.RandomCutForestConfigurationProperty", typing.Dict[builtins.str, typing.Any]]],
+        ) -> None:
+            '''
+            :param random_cut_forest: 
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-aps-anomalydetector-anomalydetectorconfiguration.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_aps as aps
+                
+                anomaly_detector_configuration_property = aps.CfnAnomalyDetector.AnomalyDetectorConfigurationProperty(
+                    random_cut_forest=aps.CfnAnomalyDetector.RandomCutForestConfigurationProperty(
+                        query="query",
+                
+                        # the properties below are optional
+                        ignore_near_expected_from_above=aps.CfnAnomalyDetector.IgnoreNearExpectedProperty(
+                            amount=123,
+                            ratio=123
+                        ),
+                        ignore_near_expected_from_below=aps.CfnAnomalyDetector.IgnoreNearExpectedProperty(
+                            amount=123,
+                            ratio=123
+                        ),
+                        sample_size=123,
+                        shingle_size=123
+                    )
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__aca672630a5e19c23bb68b82c63c873a7687610464d166cef0da5d6cde142082)
+                check_type(argname="argument random_cut_forest", value=random_cut_forest, expected_type=type_hints["random_cut_forest"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "random_cut_forest": random_cut_forest,
+            }
+
+        @builtins.property
+        def random_cut_forest(
+            self,
+        ) -> typing.Union[_IResolvable_da3f097b, "CfnAnomalyDetector.RandomCutForestConfigurationProperty"]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-aps-anomalydetector-anomalydetectorconfiguration.html#cfn-aps-anomalydetector-anomalydetectorconfiguration-randomcutforest
+            '''
+            result = self._values.get("random_cut_forest")
+            assert result is not None, "Required property 'random_cut_forest' is missing"
+            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnAnomalyDetector.RandomCutForestConfigurationProperty"], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "AnomalyDetectorConfigurationProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_aps.CfnAnomalyDetector.IgnoreNearExpectedProperty",
+        jsii_struct_bases=[],
+        name_mapping={"amount": "amount", "ratio": "ratio"},
+    )
+    class IgnoreNearExpectedProperty:
+        def __init__(
+            self,
+            *,
+            amount: typing.Optional[jsii.Number] = None,
+            ratio: typing.Optional[jsii.Number] = None,
+        ) -> None:
+            '''
+            :param amount: 
+            :param ratio: 
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-aps-anomalydetector-ignorenearexpected.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_aps as aps
+                
+                ignore_near_expected_property = aps.CfnAnomalyDetector.IgnoreNearExpectedProperty(
+                    amount=123,
+                    ratio=123
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__e3e1cf276ea5a24efc7ebe9d526fad4e86dd66a3f55ea5a0dcb3a617b8d62dff)
+                check_type(argname="argument amount", value=amount, expected_type=type_hints["amount"])
+                check_type(argname="argument ratio", value=ratio, expected_type=type_hints["ratio"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if amount is not None:
+                self._values["amount"] = amount
+            if ratio is not None:
+                self._values["ratio"] = ratio
+
+        @builtins.property
+        def amount(self) -> typing.Optional[jsii.Number]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-aps-anomalydetector-ignorenearexpected.html#cfn-aps-anomalydetector-ignorenearexpected-amount
+            '''
+            result = self._values.get("amount")
+            return typing.cast(typing.Optional[jsii.Number], result)
+
+        @builtins.property
+        def ratio(self) -> typing.Optional[jsii.Number]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-aps-anomalydetector-ignorenearexpected.html#cfn-aps-anomalydetector-ignorenearexpected-ratio
+            '''
+            result = self._values.get("ratio")
+            return typing.cast(typing.Optional[jsii.Number], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "IgnoreNearExpectedProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_aps.CfnAnomalyDetector.LabelProperty",
+        jsii_struct_bases=[],
+        name_mapping={"key": "key", "value": "value"},
+    )
+    class LabelProperty:
+        def __init__(self, *, key: builtins.str, value: builtins.str) -> None:
+            '''A key-value pair to provide meta-data and multi-dimensional data analysis for filtering and aggregation.
+
+            :param key: The key name of the tag. You can specify a value that is 1 to 128 Unicode characters in length and cannot be prefixed with aws:. You can use any of the following characters: the set of Unicode letters, digits, whitespace, _, ., /, =, +, and -.
+            :param value: The value for the tag. You can specify a value that is 0 to 256 Unicode characters in length and cannot be prefixed with aws:. You can use any of the following characters: the set of Unicode letters, digits, whitespace, _, ., /, =, +, and -.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-aps-anomalydetector-label.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_aps as aps
+                
+                label_property = aps.CfnAnomalyDetector.LabelProperty(
+                    key="key",
+                    value="value"
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__3f784d604d60c49dd5fb567dcfedcd9d16e2ce47ba899589a373c9322818035a)
+                check_type(argname="argument key", value=key, expected_type=type_hints["key"])
+                check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "key": key,
+                "value": value,
+            }
+
+        @builtins.property
+        def key(self) -> builtins.str:
+            '''The key name of the tag.
+
+            You can specify a value that is 1 to 128 Unicode characters in length and cannot be prefixed with aws:. You can use any of the following characters: the set of Unicode letters, digits, whitespace, _, ., /, =, +, and -.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-aps-anomalydetector-label.html#cfn-aps-anomalydetector-label-key
+            '''
+            result = self._values.get("key")
+            assert result is not None, "Required property 'key' is missing"
+            return typing.cast(builtins.str, result)
+
+        @builtins.property
+        def value(self) -> builtins.str:
+            '''The value for the tag.
+
+            You can specify a value that is 0 to 256 Unicode characters in length and cannot be prefixed with aws:. You can use any of the following characters: the set of Unicode letters, digits, whitespace, _, ., /, =, +, and -.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-aps-anomalydetector-label.html#cfn-aps-anomalydetector-label-value
+            '''
+            result = self._values.get("value")
+            assert result is not None, "Required property 'value' is missing"
+            return typing.cast(builtins.str, result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "LabelProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_aps.CfnAnomalyDetector.MissingDataActionProperty",
+        jsii_struct_bases=[],
+        name_mapping={"mark_as_anomaly": "markAsAnomaly", "skip": "skip"},
+    )
+    class MissingDataActionProperty:
+        def __init__(
+            self,
+            *,
+            mark_as_anomaly: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            skip: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        ) -> None:
+            '''
+            :param mark_as_anomaly: 
+            :param skip: 
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-aps-anomalydetector-missingdataaction.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_aps as aps
+                
+                missing_data_action_property = aps.CfnAnomalyDetector.MissingDataActionProperty(
+                    mark_as_anomaly=False,
+                    skip=False
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__e5b8457b72ba87aa14000e26b68e021fa4b19e4e88f3a022910dcd18542039d0)
+                check_type(argname="argument mark_as_anomaly", value=mark_as_anomaly, expected_type=type_hints["mark_as_anomaly"])
+                check_type(argname="argument skip", value=skip, expected_type=type_hints["skip"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if mark_as_anomaly is not None:
+                self._values["mark_as_anomaly"] = mark_as_anomaly
+            if skip is not None:
+                self._values["skip"] = skip
+
+        @builtins.property
+        def mark_as_anomaly(
+            self,
+        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-aps-anomalydetector-missingdataaction.html#cfn-aps-anomalydetector-missingdataaction-markasanomaly
+            '''
+            result = self._values.get("mark_as_anomaly")
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+
+        @builtins.property
+        def skip(
+            self,
+        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-aps-anomalydetector-missingdataaction.html#cfn-aps-anomalydetector-missingdataaction-skip
+            '''
+            result = self._values.get("skip")
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "MissingDataActionProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_aps.CfnAnomalyDetector.RandomCutForestConfigurationProperty",
+        jsii_struct_bases=[],
+        name_mapping={
+            "query": "query",
+            "ignore_near_expected_from_above": "ignoreNearExpectedFromAbove",
+            "ignore_near_expected_from_below": "ignoreNearExpectedFromBelow",
+            "sample_size": "sampleSize",
+            "shingle_size": "shingleSize",
+        },
+    )
+    class RandomCutForestConfigurationProperty:
+        def __init__(
+            self,
+            *,
+            query: builtins.str,
+            ignore_near_expected_from_above: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnAnomalyDetector.IgnoreNearExpectedProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            ignore_near_expected_from_below: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnAnomalyDetector.IgnoreNearExpectedProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            sample_size: typing.Optional[jsii.Number] = None,
+            shingle_size: typing.Optional[jsii.Number] = None,
+        ) -> None:
+            '''
+            :param query: 
+            :param ignore_near_expected_from_above: 
+            :param ignore_near_expected_from_below: 
+            :param sample_size: Default: - 256
+            :param shingle_size: Default: - 8
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-aps-anomalydetector-randomcutforestconfiguration.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_aps as aps
+                
+                random_cut_forest_configuration_property = aps.CfnAnomalyDetector.RandomCutForestConfigurationProperty(
+                    query="query",
+                
+                    # the properties below are optional
+                    ignore_near_expected_from_above=aps.CfnAnomalyDetector.IgnoreNearExpectedProperty(
+                        amount=123,
+                        ratio=123
+                    ),
+                    ignore_near_expected_from_below=aps.CfnAnomalyDetector.IgnoreNearExpectedProperty(
+                        amount=123,
+                        ratio=123
+                    ),
+                    sample_size=123,
+                    shingle_size=123
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__83993f42a131a948093792cb8cd7b4f710c6b4dffce6b17f386497f1cbe514ea)
+                check_type(argname="argument query", value=query, expected_type=type_hints["query"])
+                check_type(argname="argument ignore_near_expected_from_above", value=ignore_near_expected_from_above, expected_type=type_hints["ignore_near_expected_from_above"])
+                check_type(argname="argument ignore_near_expected_from_below", value=ignore_near_expected_from_below, expected_type=type_hints["ignore_near_expected_from_below"])
+                check_type(argname="argument sample_size", value=sample_size, expected_type=type_hints["sample_size"])
+                check_type(argname="argument shingle_size", value=shingle_size, expected_type=type_hints["shingle_size"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "query": query,
+            }
+            if ignore_near_expected_from_above is not None:
+                self._values["ignore_near_expected_from_above"] = ignore_near_expected_from_above
+            if ignore_near_expected_from_below is not None:
+                self._values["ignore_near_expected_from_below"] = ignore_near_expected_from_below
+            if sample_size is not None:
+                self._values["sample_size"] = sample_size
+            if shingle_size is not None:
+                self._values["shingle_size"] = shingle_size
+
+        @builtins.property
+        def query(self) -> builtins.str:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-aps-anomalydetector-randomcutforestconfiguration.html#cfn-aps-anomalydetector-randomcutforestconfiguration-query
+            '''
+            result = self._values.get("query")
+            assert result is not None, "Required property 'query' is missing"
+            return typing.cast(builtins.str, result)
+
+        @builtins.property
+        def ignore_near_expected_from_above(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAnomalyDetector.IgnoreNearExpectedProperty"]]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-aps-anomalydetector-randomcutforestconfiguration.html#cfn-aps-anomalydetector-randomcutforestconfiguration-ignorenearexpectedfromabove
+            '''
+            result = self._values.get("ignore_near_expected_from_above")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAnomalyDetector.IgnoreNearExpectedProperty"]], result)
+
+        @builtins.property
+        def ignore_near_expected_from_below(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAnomalyDetector.IgnoreNearExpectedProperty"]]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-aps-anomalydetector-randomcutforestconfiguration.html#cfn-aps-anomalydetector-randomcutforestconfiguration-ignorenearexpectedfrombelow
+            '''
+            result = self._values.get("ignore_near_expected_from_below")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAnomalyDetector.IgnoreNearExpectedProperty"]], result)
+
+        @builtins.property
+        def sample_size(self) -> typing.Optional[jsii.Number]:
+            '''
+            :default: - 256
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-aps-anomalydetector-randomcutforestconfiguration.html#cfn-aps-anomalydetector-randomcutforestconfiguration-samplesize
+            '''
+            result = self._values.get("sample_size")
+            return typing.cast(typing.Optional[jsii.Number], result)
+
+        @builtins.property
+        def shingle_size(self) -> typing.Optional[jsii.Number]:
+            '''
+            :default: - 8
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-aps-anomalydetector-randomcutforestconfiguration.html#cfn-aps-anomalydetector-randomcutforestconfiguration-shinglesize
+            '''
+            result = self._values.get("shingle_size")
+            return typing.cast(typing.Optional[jsii.Number], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "RandomCutForestConfigurationProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
 
 
 @jsii.implements(_IInspectable_c2943556, IResourcePolicyRef)
@@ -3245,6 +4192,9 @@ class CfnWorkspace(
 
 
 __all__ = [
+    "AnomalyDetectorReference",
+    "CfnAnomalyDetector",
+    "CfnAnomalyDetectorProps",
     "CfnResourcePolicy",
     "CfnResourcePolicyProps",
     "CfnRuleGroupsNamespace",
@@ -3253,6 +4203,7 @@ __all__ = [
     "CfnScraperProps",
     "CfnWorkspace",
     "CfnWorkspaceProps",
+    "IAnomalyDetectorRef",
     "IResourcePolicyRef",
     "IRuleGroupsNamespaceRef",
     "IScraperRef",
@@ -3264,6 +4215,26 @@ __all__ = [
 ]
 
 publication.publish()
+
+def _typecheckingstub__d8f087ddf091d7802928e5eb9ae2c35d5aea0cb5cb3e0d1494e32ce693f67efa(
+    *,
+    anomaly_detector_arn: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__be017a909bcb870b1880c9bb2c099abc51df504e0f9199ca315deb7fa50b9d6b(
+    *,
+    alias: builtins.str,
+    configuration: typing.Union[_IResolvable_da3f097b, typing.Union[CfnAnomalyDetector.AnomalyDetectorConfigurationProperty, typing.Dict[builtins.str, typing.Any]]],
+    workspace: builtins.str,
+    evaluation_interval_in_seconds: typing.Optional[jsii.Number] = None,
+    labels: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAnomalyDetector.LabelProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+    missing_data_action: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAnomalyDetector.MissingDataActionProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
 
 def _typecheckingstub__bb05747fc90b1776c66fd40ec5d261399f93ac6b367fc973d5df8b912bd30997(
     *,
@@ -3333,6 +4304,117 @@ def _typecheckingstub__374a5fc232eb102ac8a6793598055a5f55853e59ffcefdb5264aa89a0
 def _typecheckingstub__aa321cfca0087100b6387ec771252167e8e12904e76c51b3da5c058ba6c23f46(
     *,
     workspace_arn: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__58b3184629f18780da9f7c9eb2f8acdbdbb5190c9fc3ae41fdbbe34341ba0f26(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    *,
+    alias: builtins.str,
+    configuration: typing.Union[_IResolvable_da3f097b, typing.Union[CfnAnomalyDetector.AnomalyDetectorConfigurationProperty, typing.Dict[builtins.str, typing.Any]]],
+    workspace: builtins.str,
+    evaluation_interval_in_seconds: typing.Optional[jsii.Number] = None,
+    labels: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAnomalyDetector.LabelProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+    missing_data_action: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAnomalyDetector.MissingDataActionProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__36a9fa3c67c466703717001e2774dacca3fa612b6ec02f8b6361ad6736da0ec7(
+    inspector: _TreeInspector_488e0dd5,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__1edc3473fdf33536207faf87047c2bef23ac4e4aecad53d1e0338308f0e5ab91(
+    props: typing.Mapping[builtins.str, typing.Any],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__fe3aa1b72ccc7677675b2ae76ae8e5e1dfd2146dae8eba7520a981184cdf780d(
+    value: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__1394fe6b497d7add7f3c437f746b83234bfd1714418b007d2ca77fcaf2e486fa(
+    value: typing.Union[_IResolvable_da3f097b, CfnAnomalyDetector.AnomalyDetectorConfigurationProperty],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__51d01d3c64410491a2005087b379e01fe1749ffd4be8e8dae194b7cc8e5e19b8(
+    value: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__ce3cb5189478c72429dee4d6fa1ed9635e537559491f15b775c279a89020cb75(
+    value: typing.Optional[jsii.Number],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__0d15555eb30ee6b4decc1dba71c708714ce1a7f00e658c2ce9c617f35dbea119(
+    value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnAnomalyDetector.LabelProperty]]]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__e639ced06e0101ba2e1108f2a5748e988f60e8c6ecadbb32ca0f2dc6162a53e8(
+    value: typing.Optional[typing.Union[_IResolvable_da3f097b, CfnAnomalyDetector.MissingDataActionProperty]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__dc8b42c0f027d8c1c104a6037d9c3752efbfb2ae169c30d63f35dee5bad63b3f(
+    value: typing.Optional[typing.List[_CfnTag_f6864754]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__aca672630a5e19c23bb68b82c63c873a7687610464d166cef0da5d6cde142082(
+    *,
+    random_cut_forest: typing.Union[_IResolvable_da3f097b, typing.Union[CfnAnomalyDetector.RandomCutForestConfigurationProperty, typing.Dict[builtins.str, typing.Any]]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__e3e1cf276ea5a24efc7ebe9d526fad4e86dd66a3f55ea5a0dcb3a617b8d62dff(
+    *,
+    amount: typing.Optional[jsii.Number] = None,
+    ratio: typing.Optional[jsii.Number] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__3f784d604d60c49dd5fb567dcfedcd9d16e2ce47ba899589a373c9322818035a(
+    *,
+    key: builtins.str,
+    value: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__e5b8457b72ba87aa14000e26b68e021fa4b19e4e88f3a022910dcd18542039d0(
+    *,
+    mark_as_anomaly: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+    skip: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__83993f42a131a948093792cb8cd7b4f710c6b4dffce6b17f386497f1cbe514ea(
+    *,
+    query: builtins.str,
+    ignore_near_expected_from_above: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAnomalyDetector.IgnoreNearExpectedProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    ignore_near_expected_from_below: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAnomalyDetector.IgnoreNearExpectedProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    sample_size: typing.Optional[jsii.Number] = None,
+    shingle_size: typing.Optional[jsii.Number] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -3705,3 +4787,6 @@ def _typecheckingstub__8d8bd4b9a39be1594ef4681992e92f89f24816c775c0e0c40e340be13
 ) -> None:
     """Type checking stubs"""
     pass
+
+for cls in [IAnomalyDetectorRef, IResourcePolicyRef, IRuleGroupsNamespaceRef, IScraperRef, IWorkspaceRef]:
+    typing.cast(typing.Any, cls).__protocol_attrs__ = typing.cast(typing.Any, cls).__protocol_attrs__ - set(['__jsii_proxy_class__', '__jsii_type__'])

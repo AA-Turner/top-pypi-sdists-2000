@@ -1188,3 +1188,6 @@ def _typecheckingstub__2caead7a21c70720675b949fc77715602dacb36c26a48d0f8d60fbd06
 ) -> None:
     """Type checking stubs"""
     pass
+
+for cls in [ICampaignRef]:
+    typing.cast(typing.Any, cls).__protocol_attrs__ = typing.cast(typing.Any, cls).__protocol_attrs__ - set(['__jsii_proxy_class__', '__jsii_type__'])

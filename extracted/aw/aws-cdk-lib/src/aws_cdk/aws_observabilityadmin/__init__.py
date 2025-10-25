@@ -95,8 +95,8 @@ class CfnOrganizationCentralizationRuleProps:
         '''Properties for defining a ``CfnOrganizationCentralizationRule``.
 
         :param rule: 
-        :param rule_name: 
-        :param tags: An array of key-value pairs to apply to this resource.
+        :param rule_name: The name of the organization centralization rule.
+        :param tags: A key-value pair to filter resources based on tags associated with the resource. For more information about tags, see `What are tags? <https://docs.aws.amazon.com/whitepapers/latest/tagging-best-practices/what-are-tags.html>`_
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-observabilityadmin-organizationcentralizationrule.html
         :exampleMetadata: fixture=_generated
@@ -175,7 +175,8 @@ class CfnOrganizationCentralizationRuleProps:
 
     @builtins.property
     def rule_name(self) -> builtins.str:
-        '''
+        '''The name of the organization centralization rule.
+
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-observabilityadmin-organizationcentralizationrule.html#cfn-observabilityadmin-organizationcentralizationrule-rulename
         '''
         result = self._values.get("rule_name")
@@ -184,7 +185,9 @@ class CfnOrganizationCentralizationRuleProps:
 
     @builtins.property
     def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
-        '''An array of key-value pairs to apply to this resource.
+        '''A key-value pair to filter resources based on tags associated with the resource.
+
+        For more information about tags, see `What are tags? <https://docs.aws.amazon.com/whitepapers/latest/tagging-best-practices/what-are-tags.html>`_
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-observabilityadmin-organizationcentralizationrule.html#cfn-observabilityadmin-organizationcentralizationrule-tags
         '''
@@ -218,9 +221,9 @@ class CfnOrganizationTelemetryRuleProps:
     ) -> None:
         '''Properties for defining a ``CfnOrganizationTelemetryRule``.
 
-        :param rule: The telemetry rule.
-        :param rule_name: The name of the organization telemetry rule.
-        :param tags: An array of key-value pairs to apply to this resource.
+        :param rule: The name of the organization telemetry rule.
+        :param rule_name: The name of the organization centralization rule.
+        :param tags: Lists all tags attached to the specified telemetry rule resource.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-observabilityadmin-organizationtelemetryrule.html
         :exampleMetadata: fixture=_generated
@@ -275,7 +278,7 @@ class CfnOrganizationTelemetryRuleProps:
     def rule(
         self,
     ) -> typing.Union[_IResolvable_da3f097b, "CfnOrganizationTelemetryRule.TelemetryRuleProperty"]:
-        '''The telemetry rule.
+        '''The name of the organization telemetry rule.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-observabilityadmin-organizationtelemetryrule.html#cfn-observabilityadmin-organizationtelemetryrule-rule
         '''
@@ -285,7 +288,7 @@ class CfnOrganizationTelemetryRuleProps:
 
     @builtins.property
     def rule_name(self) -> builtins.str:
-        '''The name of the organization telemetry rule.
+        '''The name of the organization centralization rule.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-observabilityadmin-organizationtelemetryrule.html#cfn-observabilityadmin-organizationtelemetryrule-rulename
         '''
@@ -295,7 +298,7 @@ class CfnOrganizationTelemetryRuleProps:
 
     @builtins.property
     def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
-        '''An array of key-value pairs to apply to this resource.
+        '''Lists all tags attached to the specified telemetry rule resource.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-observabilityadmin-organizationtelemetryrule.html#cfn-observabilityadmin-organizationtelemetryrule-tags
         '''
@@ -329,9 +332,9 @@ class CfnTelemetryRuleProps:
     ) -> None:
         '''Properties for defining a ``CfnTelemetryRule``.
 
-        :param rule: The telemetry rule.
+        :param rule: Retrieves the details of a specific telemetry rule in your account.
         :param rule_name: The name of the telemetry rule.
-        :param tags: An array of key-value pairs to apply to this resource.
+        :param tags: Lists all tags attached to the specified telemetry rule resource.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-observabilityadmin-telemetryrule.html
         :exampleMetadata: fixture=_generated
@@ -385,7 +388,7 @@ class CfnTelemetryRuleProps:
     def rule(
         self,
     ) -> typing.Union[_IResolvable_da3f097b, "CfnTelemetryRule.TelemetryRuleProperty"]:
-        '''The telemetry rule.
+        '''Retrieves the details of a specific telemetry rule in your account.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-observabilityadmin-telemetryrule.html#cfn-observabilityadmin-telemetryrule-rule
         '''
@@ -405,7 +408,7 @@ class CfnTelemetryRuleProps:
 
     @builtins.property
     def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
-        '''An array of key-value pairs to apply to this resource.
+        '''Lists all tags attached to the specified telemetry rule resource.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-observabilityadmin-telemetryrule.html#cfn-observabilityadmin-telemetryrule-tags
         '''
@@ -711,7 +714,7 @@ class CfnOrganizationCentralizationRule(
     metaclass=jsii.JSIIMeta,
     jsii_type="aws-cdk-lib.aws_observabilityadmin.CfnOrganizationCentralizationRule",
 ):
-    '''Resource schema for AWS:ObservabilityAdmin:OrganizationCentralizationRule.
+    '''Defines how telemetry data should be centralized across an AWS Organization, including source and destination configurations.
 
     :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-observabilityadmin-organizationcentralizationrule.html
     :cloudformationResource: AWS::ObservabilityAdmin::OrganizationCentralizationRule
@@ -780,8 +783,8 @@ class CfnOrganizationCentralizationRule(
         :param scope: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
         :param rule: 
-        :param rule_name: 
-        :param tags: An array of key-value pairs to apply to this resource.
+        :param rule_name: The name of the organization centralization rule.
+        :param tags: A key-value pair to filter resources based on tags associated with the resource. For more information about tags, see `What are tags? <https://docs.aws.amazon.com/whitepapers/latest/tagging-best-practices/what-are-tags.html>`_
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__18acbc8917f3c4cbc8bb06f5fae76010e41ab5f0e9b157f4c324c214a180ef2e)
@@ -826,7 +829,8 @@ class CfnOrganizationCentralizationRule(
     @builtins.property
     @jsii.member(jsii_name="attrRuleArn")
     def attr_rule_arn(self) -> builtins.str:
-        '''
+        '''The Amazon Resource Name (ARN) of the organization centralization rule.
+
         :cloudformationAttribute: RuleArn
         '''
         return typing.cast(builtins.str, jsii.get(self, "attrRuleArn"))
@@ -870,6 +874,7 @@ class CfnOrganizationCentralizationRule(
     @builtins.property
     @jsii.member(jsii_name="ruleName")
     def rule_name(self) -> builtins.str:
+        '''The name of the organization centralization rule.'''
         return typing.cast(builtins.str, jsii.get(self, "ruleName"))
 
     @rule_name.setter
@@ -882,7 +887,7 @@ class CfnOrganizationCentralizationRule(
     @builtins.property
     @jsii.member(jsii_name="tags")
     def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
-        '''An array of key-value pairs to apply to this resource.'''
+        '''A key-value pair to filter resources based on tags associated with the resource.'''
         return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tags"))
 
     @tags.setter
@@ -909,10 +914,11 @@ class CfnOrganizationCentralizationRule(
             account: typing.Optional[builtins.str] = None,
             destination_logs_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnOrganizationCentralizationRule.DestinationLogsConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
-            '''
-            :param region: 
-            :param account: 
-            :param destination_logs_configuration: 
+            '''Configuration specifying the primary destination for centralized telemetry data.
+
+            :param region: The primary destination region to which telemetry data should be centralized.
+            :param account: The destination account (within the organization) to which the telemetry data should be centralized.
+            :param destination_logs_configuration: Log specific configuration for centralization destination log groups.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-observabilityadmin-organizationcentralizationrule-centralizationruledestination.html
             :exampleMetadata: fixture=_generated
@@ -960,7 +966,8 @@ class CfnOrganizationCentralizationRule(
 
         @builtins.property
         def region(self) -> builtins.str:
-            '''
+            '''The primary destination region to which telemetry data should be centralized.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-observabilityadmin-organizationcentralizationrule-centralizationruledestination.html#cfn-observabilityadmin-organizationcentralizationrule-centralizationruledestination-region
             '''
             result = self._values.get("region")
@@ -969,7 +976,8 @@ class CfnOrganizationCentralizationRule(
 
         @builtins.property
         def account(self) -> typing.Optional[builtins.str]:
-            '''
+            '''The destination account (within the organization) to which the telemetry data should be centralized.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-observabilityadmin-organizationcentralizationrule-centralizationruledestination.html#cfn-observabilityadmin-organizationcentralizationrule-centralizationruledestination-account
             '''
             result = self._values.get("account")
@@ -979,7 +987,8 @@ class CfnOrganizationCentralizationRule(
         def destination_logs_configuration(
             self,
         ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnOrganizationCentralizationRule.DestinationLogsConfigurationProperty"]]:
-            '''
+            '''Log specific configuration for centralization destination log groups.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-observabilityadmin-organizationcentralizationrule-centralizationruledestination.html#cfn-observabilityadmin-organizationcentralizationrule-centralizationruledestination-destinationlogsconfiguration
             '''
             result = self._values.get("destination_logs_configuration")
@@ -1008,9 +1017,10 @@ class CfnOrganizationCentralizationRule(
             destination: typing.Union[_IResolvable_da3f097b, typing.Union["CfnOrganizationCentralizationRule.CentralizationRuleDestinationProperty", typing.Dict[builtins.str, typing.Any]]],
             source: typing.Union[_IResolvable_da3f097b, typing.Union["CfnOrganizationCentralizationRule.CentralizationRuleSourceProperty", typing.Dict[builtins.str, typing.Any]]],
         ) -> None:
-            '''
-            :param destination: 
-            :param source: 
+            '''Defines how telemetry data should be centralized across an AWS Organization, including source and destination configurations.
+
+            :param destination: Configuration determining where the telemetry data should be centralized, backed up, as well as encryption configuration for the primary and backup destinations.
+            :param source: Configuration determining the source of the telemetry data to be centralized.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-observabilityadmin-organizationcentralizationrule-centralizationrule.html
             :exampleMetadata: fixture=_generated
@@ -1068,7 +1078,8 @@ class CfnOrganizationCentralizationRule(
         def destination(
             self,
         ) -> typing.Union[_IResolvable_da3f097b, "CfnOrganizationCentralizationRule.CentralizationRuleDestinationProperty"]:
-            '''
+            '''Configuration determining where the telemetry data should be centralized, backed up, as well as encryption configuration for the primary and backup destinations.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-observabilityadmin-organizationcentralizationrule-centralizationrule.html#cfn-observabilityadmin-organizationcentralizationrule-centralizationrule-destination
             '''
             result = self._values.get("destination")
@@ -1079,7 +1090,8 @@ class CfnOrganizationCentralizationRule(
         def source(
             self,
         ) -> typing.Union[_IResolvable_da3f097b, "CfnOrganizationCentralizationRule.CentralizationRuleSourceProperty"]:
-            '''
+            '''Configuration determining the source of the telemetry data to be centralized.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-observabilityadmin-organizationcentralizationrule-centralizationrule.html#cfn-observabilityadmin-organizationcentralizationrule-centralizationrule-source
             '''
             result = self._values.get("source")
@@ -1114,10 +1126,11 @@ class CfnOrganizationCentralizationRule(
             scope: typing.Optional[builtins.str] = None,
             source_logs_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnOrganizationCentralizationRule.SourceLogsConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
-            '''
-            :param regions: 
-            :param scope: 
-            :param source_logs_configuration: 
+            '''Configuration specifying the source of telemetry data to be centralized.
+
+            :param regions: The list of source regions from which telemetry data should be centralized.
+            :param scope: The organizational scope from which telemetry data should be centralized, specified using organization id, accounts or organizational unit ids.
+            :param source_logs_configuration: Log specific configuration for centralization source log groups.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-observabilityadmin-organizationcentralizationrule-centralizationrulesource.html
             :exampleMetadata: fixture=_generated
@@ -1154,7 +1167,8 @@ class CfnOrganizationCentralizationRule(
 
         @builtins.property
         def regions(self) -> typing.List[builtins.str]:
-            '''
+            '''The list of source regions from which telemetry data should be centralized.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-observabilityadmin-organizationcentralizationrule-centralizationrulesource.html#cfn-observabilityadmin-organizationcentralizationrule-centralizationrulesource-regions
             '''
             result = self._values.get("regions")
@@ -1163,7 +1177,8 @@ class CfnOrganizationCentralizationRule(
 
         @builtins.property
         def scope(self) -> typing.Optional[builtins.str]:
-            '''
+            '''The organizational scope from which telemetry data should be centralized, specified using organization id, accounts or organizational unit ids.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-observabilityadmin-organizationcentralizationrule-centralizationrulesource.html#cfn-observabilityadmin-organizationcentralizationrule-centralizationrulesource-scope
             '''
             result = self._values.get("scope")
@@ -1173,7 +1188,8 @@ class CfnOrganizationCentralizationRule(
         def source_logs_configuration(
             self,
         ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnOrganizationCentralizationRule.SourceLogsConfigurationProperty"]]:
-            '''
+            '''Log specific configuration for centralization source log groups.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-observabilityadmin-organizationcentralizationrule-centralizationrulesource.html#cfn-observabilityadmin-organizationcentralizationrule-centralizationrulesource-sourcelogsconfiguration
             '''
             result = self._values.get("source_logs_configuration")
@@ -1205,9 +1221,10 @@ class CfnOrganizationCentralizationRule(
             backup_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnOrganizationCentralizationRule.LogsBackupConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             logs_encryption_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnOrganizationCentralizationRule.LogsEncryptionConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
-            '''
-            :param backup_configuration: 
-            :param logs_encryption_configuration: 
+            '''Configuration for centralization destination log groups, including encryption and backup settings.
+
+            :param backup_configuration: Configuration defining the backup region and an optional KMS key for the backup destination.
+            :param logs_encryption_configuration: The encryption configuration for centralization destination log groups.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-observabilityadmin-organizationcentralizationrule-destinationlogsconfiguration.html
             :exampleMetadata: fixture=_generated
@@ -1248,7 +1265,8 @@ class CfnOrganizationCentralizationRule(
         def backup_configuration(
             self,
         ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnOrganizationCentralizationRule.LogsBackupConfigurationProperty"]]:
-            '''
+            '''Configuration defining the backup region and an optional KMS key for the backup destination.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-observabilityadmin-organizationcentralizationrule-destinationlogsconfiguration.html#cfn-observabilityadmin-organizationcentralizationrule-destinationlogsconfiguration-backupconfiguration
             '''
             result = self._values.get("backup_configuration")
@@ -1258,7 +1276,8 @@ class CfnOrganizationCentralizationRule(
         def logs_encryption_configuration(
             self,
         ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnOrganizationCentralizationRule.LogsEncryptionConfigurationProperty"]]:
-            '''
+            '''The encryption configuration for centralization destination log groups.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-observabilityadmin-organizationcentralizationrule-destinationlogsconfiguration.html#cfn-observabilityadmin-organizationcentralizationrule-destinationlogsconfiguration-logsencryptionconfiguration
             '''
             result = self._values.get("logs_encryption_configuration")
@@ -1287,9 +1306,10 @@ class CfnOrganizationCentralizationRule(
             region: builtins.str,
             kms_key_arn: typing.Optional[builtins.str] = None,
         ) -> None:
-            '''
-            :param region: 
-            :param kms_key_arn: 
+            '''Configuration for backing up centralized log data to a secondary region.
+
+            :param region: Logs specific backup destination region within the primary destination account to which log data should be centralized.
+            :param kms_key_arn: KMS Key ARN belonging to the primary destination account and backup region, to encrypt newly created central log groups in the backup destination.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-observabilityadmin-organizationcentralizationrule-logsbackupconfiguration.html
             :exampleMetadata: fixture=_generated
@@ -1319,7 +1339,8 @@ class CfnOrganizationCentralizationRule(
 
         @builtins.property
         def region(self) -> builtins.str:
-            '''
+            '''Logs specific backup destination region within the primary destination account to which log data should be centralized.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-observabilityadmin-organizationcentralizationrule-logsbackupconfiguration.html#cfn-observabilityadmin-organizationcentralizationrule-logsbackupconfiguration-region
             '''
             result = self._values.get("region")
@@ -1328,7 +1349,8 @@ class CfnOrganizationCentralizationRule(
 
         @builtins.property
         def kms_key_arn(self) -> typing.Optional[builtins.str]:
-            '''
+            '''KMS Key ARN belonging to the primary destination account and backup region, to encrypt newly created central log groups in the backup destination.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-observabilityadmin-organizationcentralizationrule-logsbackupconfiguration.html#cfn-observabilityadmin-organizationcentralizationrule-logsbackupconfiguration-kmskeyarn
             '''
             result = self._values.get("kms_key_arn")
@@ -1362,10 +1384,13 @@ class CfnOrganizationCentralizationRule(
             encryption_conflict_resolution_strategy: typing.Optional[builtins.str] = None,
             kms_key_arn: typing.Optional[builtins.str] = None,
         ) -> None:
-            '''
-            :param encryption_strategy: 
-            :param encryption_conflict_resolution_strategy: 
-            :param kms_key_arn: 
+            '''Configuration for encrypting centralized log groups.
+
+            This configuration is only applied to destination log groups for which the corresponding source log groups are encrypted using Customer Managed KMS Keys.
+
+            :param encryption_strategy: Configuration that determines the encryption strategy of the destination log groups. CUSTOMER_MANAGED uses the configured KmsKeyArn to encrypt newly created destination log groups.
+            :param encryption_conflict_resolution_strategy: Conflict resolution strategy for centralization if the encryption strategy is set to CUSTOMER_MANAGED and the destination log group is encrypted with an AWS_OWNED KMS Key. ALLOW lets centralization go through while SKIP prevents centralization into the destination log group.
+            :param kms_key_arn: KMS Key ARN belonging to the primary destination account and region, to encrypt newly created central log groups in the primary destination.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-observabilityadmin-organizationcentralizationrule-logsencryptionconfiguration.html
             :exampleMetadata: fixture=_generated
@@ -1399,7 +1424,10 @@ class CfnOrganizationCentralizationRule(
 
         @builtins.property
         def encryption_strategy(self) -> builtins.str:
-            '''
+            '''Configuration that determines the encryption strategy of the destination log groups.
+
+            CUSTOMER_MANAGED uses the configured KmsKeyArn to encrypt newly created destination log groups.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-observabilityadmin-organizationcentralizationrule-logsencryptionconfiguration.html#cfn-observabilityadmin-organizationcentralizationrule-logsencryptionconfiguration-encryptionstrategy
             '''
             result = self._values.get("encryption_strategy")
@@ -1410,7 +1438,10 @@ class CfnOrganizationCentralizationRule(
         def encryption_conflict_resolution_strategy(
             self,
         ) -> typing.Optional[builtins.str]:
-            '''
+            '''Conflict resolution strategy for centralization if the encryption strategy is set to CUSTOMER_MANAGED and the destination log group is encrypted with an AWS_OWNED KMS Key.
+
+            ALLOW lets centralization go through while SKIP prevents centralization into the destination log group.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-observabilityadmin-organizationcentralizationrule-logsencryptionconfiguration.html#cfn-observabilityadmin-organizationcentralizationrule-logsencryptionconfiguration-encryptionconflictresolutionstrategy
             '''
             result = self._values.get("encryption_conflict_resolution_strategy")
@@ -1418,7 +1449,8 @@ class CfnOrganizationCentralizationRule(
 
         @builtins.property
         def kms_key_arn(self) -> typing.Optional[builtins.str]:
-            '''
+            '''KMS Key ARN belonging to the primary destination account and region, to encrypt newly created central log groups in the primary destination.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-observabilityadmin-organizationcentralizationrule-logsencryptionconfiguration.html#cfn-observabilityadmin-organizationcentralizationrule-logsencryptionconfiguration-kmskeyarn
             '''
             result = self._values.get("kms_key_arn")
@@ -1450,9 +1482,10 @@ class CfnOrganizationCentralizationRule(
             encrypted_log_group_strategy: builtins.str,
             log_group_selection_criteria: builtins.str,
         ) -> None:
-            '''
-            :param encrypted_log_group_strategy: 
-            :param log_group_selection_criteria: 
+            '''Configuration for selecting and handling source log groups for centralization.
+
+            :param encrypted_log_group_strategy: A strategy determining whether to centralize source log groups that are encrypted with customer managed KMS keys (CMK). ALLOW will consider CMK encrypted source log groups for centralization while SKIP will skip CMK encrypted source log groups from centralization.
+            :param log_group_selection_criteria: The selection criteria that specifies which source log groups to centralize. The selection criteria uses the same format as OAM link filters.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-observabilityadmin-organizationcentralizationrule-sourcelogsconfiguration.html
             :exampleMetadata: fixture=_generated
@@ -1479,7 +1512,10 @@ class CfnOrganizationCentralizationRule(
 
         @builtins.property
         def encrypted_log_group_strategy(self) -> builtins.str:
-            '''
+            '''A strategy determining whether to centralize source log groups that are encrypted with customer managed KMS keys (CMK).
+
+            ALLOW will consider CMK encrypted source log groups for centralization while SKIP will skip CMK encrypted source log groups from centralization.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-observabilityadmin-organizationcentralizationrule-sourcelogsconfiguration.html#cfn-observabilityadmin-organizationcentralizationrule-sourcelogsconfiguration-encryptedloggroupstrategy
             '''
             result = self._values.get("encrypted_log_group_strategy")
@@ -1488,7 +1524,10 @@ class CfnOrganizationCentralizationRule(
 
         @builtins.property
         def log_group_selection_criteria(self) -> builtins.str:
-            '''
+            '''The selection criteria that specifies which source log groups to centralize.
+
+            The selection criteria uses the same format as OAM link filters.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-observabilityadmin-organizationcentralizationrule-sourcelogsconfiguration.html#cfn-observabilityadmin-organizationcentralizationrule-sourcelogsconfiguration-loggroupselectioncriteria
             '''
             result = self._values.get("log_group_selection_criteria")
@@ -1513,7 +1552,9 @@ class CfnOrganizationTelemetryRule(
     metaclass=jsii.JSIIMeta,
     jsii_type="aws-cdk-lib.aws_observabilityadmin.CfnOrganizationTelemetryRule",
 ):
-    '''The AWS::ObservabilityAdmin::OrganizationTelemetryRule resource defines a CloudWatch Observability Admin Organization Telemetry Rule.
+    '''Retrieves the details of a specific organization centralization rule.
+
+    This operation can only be called by the organization's management account or a delegated administrator account.
 
     :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-observabilityadmin-organizationtelemetryrule.html
     :cloudformationResource: AWS::ObservabilityAdmin::OrganizationTelemetryRule
@@ -1566,9 +1607,9 @@ class CfnOrganizationTelemetryRule(
         '''
         :param scope: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
-        :param rule: The telemetry rule.
-        :param rule_name: The name of the organization telemetry rule.
-        :param tags: An array of key-value pairs to apply to this resource.
+        :param rule: The name of the organization telemetry rule.
+        :param rule_name: The name of the organization centralization rule.
+        :param tags: Lists all tags attached to the specified telemetry rule resource.
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__a67d6a9dd82924a413b7d3435faeb8efa735048df0244b926e672def8c2d5f75)
@@ -1641,7 +1682,7 @@ class CfnOrganizationTelemetryRule(
     def rule(
         self,
     ) -> typing.Union[_IResolvable_da3f097b, "CfnOrganizationTelemetryRule.TelemetryRuleProperty"]:
-        '''The telemetry rule.'''
+        '''The name of the organization telemetry rule.'''
         return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnOrganizationTelemetryRule.TelemetryRuleProperty"], jsii.get(self, "rule"))
 
     @rule.setter
@@ -1657,7 +1698,7 @@ class CfnOrganizationTelemetryRule(
     @builtins.property
     @jsii.member(jsii_name="ruleName")
     def rule_name(self) -> builtins.str:
-        '''The name of the organization telemetry rule.'''
+        '''The name of the organization centralization rule.'''
         return typing.cast(builtins.str, jsii.get(self, "ruleName"))
 
     @rule_name.setter
@@ -1670,7 +1711,7 @@ class CfnOrganizationTelemetryRule(
     @builtins.property
     @jsii.member(jsii_name="tags")
     def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
-        '''An array of key-value pairs to apply to this resource.'''
+        '''Lists all tags attached to the specified telemetry rule resource.'''
         return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tags"))
 
     @tags.setter
@@ -1699,12 +1740,12 @@ class CfnOrganizationTelemetryRule(
             retention_in_days: typing.Optional[jsii.Number] = None,
             vpc_flow_log_parameters: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnOrganizationTelemetryRule.VPCFlowLogParametersProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
-            '''The destination configuration for telemetry data.
+            '''Configuration specifying where and how telemetry data should be delivered for AWS resources.
 
-            :param destination_pattern: Pattern for telemetry data destination.
-            :param destination_type: Type of telemetry destination.
-            :param retention_in_days: Number of days to retain the telemetry data in the specified destination.
-            :param vpc_flow_log_parameters: Telemetry parameters for VPC Flow logs.
+            :param destination_pattern: The pattern used to generate the destination path or name, supporting macros like and .
+            :param destination_type: The type of destination for the telemetry data (e.g., "Amazon CloudWatch Logs", "S3").
+            :param retention_in_days: The number of days to retain the telemetry data in the destination.
+            :param vpc_flow_log_parameters: Configuration parameters specific to VPC Flow Logs when VPC is the resource type.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-observabilityadmin-organizationtelemetryrule-telemetrydestinationconfiguration.html
             :exampleMetadata: fixture=_generated
@@ -1744,7 +1785,7 @@ class CfnOrganizationTelemetryRule(
 
         @builtins.property
         def destination_pattern(self) -> typing.Optional[builtins.str]:
-            '''Pattern for telemetry data destination.
+            '''The pattern used to generate the destination path or name, supporting macros like  and .
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-observabilityadmin-organizationtelemetryrule-telemetrydestinationconfiguration.html#cfn-observabilityadmin-organizationtelemetryrule-telemetrydestinationconfiguration-destinationpattern
             '''
@@ -1753,7 +1794,7 @@ class CfnOrganizationTelemetryRule(
 
         @builtins.property
         def destination_type(self) -> typing.Optional[builtins.str]:
-            '''Type of telemetry destination.
+            '''The type of destination for the telemetry data (e.g., "Amazon CloudWatch Logs", "S3").
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-observabilityadmin-organizationtelemetryrule-telemetrydestinationconfiguration.html#cfn-observabilityadmin-organizationtelemetryrule-telemetrydestinationconfiguration-destinationtype
             '''
@@ -1762,7 +1803,7 @@ class CfnOrganizationTelemetryRule(
 
         @builtins.property
         def retention_in_days(self) -> typing.Optional[jsii.Number]:
-            '''Number of days to retain the telemetry data in the specified destination.
+            '''The number of days to retain the telemetry data in the destination.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-observabilityadmin-organizationtelemetryrule-telemetrydestinationconfiguration.html#cfn-observabilityadmin-organizationtelemetryrule-telemetrydestinationconfiguration-retentionindays
             '''
@@ -1773,7 +1814,7 @@ class CfnOrganizationTelemetryRule(
         def vpc_flow_log_parameters(
             self,
         ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnOrganizationTelemetryRule.VPCFlowLogParametersProperty"]]:
-            '''Telemetry parameters for VPC Flow logs.
+            '''Configuration parameters specific to VPC Flow Logs when VPC is the resource type.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-observabilityadmin-organizationtelemetryrule-telemetrydestinationconfiguration.html#cfn-observabilityadmin-organizationtelemetryrule-telemetrydestinationconfiguration-vpcflowlogparameters
             '''
@@ -1812,13 +1853,13 @@ class CfnOrganizationTelemetryRule(
             scope: typing.Optional[builtins.str] = None,
             selection_criteria: typing.Optional[builtins.str] = None,
         ) -> None:
-            '''The telemetry rule.
+            '''Defines how telemetry should be configured for specific AWS resources.
 
-            :param resource_type: Resource Type associated with the Organization Telemetry Rule.
-            :param telemetry_type: Telemetry Type associated with the Organization Telemetry Rule.
-            :param destination_configuration: The destination configuration for telemetry data.
-            :param scope: Selection Criteria on scope level for rule application.
-            :param selection_criteria: Selection Criteria on resource level for rule application.
+            :param resource_type: The type of AWS resource to configure telemetry for (e.g., "AWS::EC2::VPC").
+            :param telemetry_type: The type of telemetry to collect (Logs, Metrics, or Traces).
+            :param destination_configuration: Configuration specifying where and how the telemetry data should be delivered.
+            :param scope: The organizational scope to which the rule applies, specified using accounts or organizational units.
+            :param selection_criteria: Criteria for selecting which resources the rule applies to, such as resource tags.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-observabilityadmin-organizationtelemetryrule-telemetryrule.html
             :exampleMetadata: fixture=_generated
@@ -1868,7 +1909,7 @@ class CfnOrganizationTelemetryRule(
 
         @builtins.property
         def resource_type(self) -> builtins.str:
-            '''Resource Type associated with the Organization Telemetry Rule.
+            '''The type of AWS resource to configure telemetry for (e.g., "AWS::EC2::VPC").
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-observabilityadmin-organizationtelemetryrule-telemetryrule.html#cfn-observabilityadmin-organizationtelemetryrule-telemetryrule-resourcetype
             '''
@@ -1878,7 +1919,7 @@ class CfnOrganizationTelemetryRule(
 
         @builtins.property
         def telemetry_type(self) -> builtins.str:
-            '''Telemetry Type associated with the Organization Telemetry Rule.
+            '''The type of telemetry to collect (Logs, Metrics, or Traces).
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-observabilityadmin-organizationtelemetryrule-telemetryrule.html#cfn-observabilityadmin-organizationtelemetryrule-telemetryrule-telemetrytype
             '''
@@ -1890,7 +1931,7 @@ class CfnOrganizationTelemetryRule(
         def destination_configuration(
             self,
         ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnOrganizationTelemetryRule.TelemetryDestinationConfigurationProperty"]]:
-            '''The destination configuration for telemetry data.
+            '''Configuration specifying where and how the telemetry data should be delivered.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-observabilityadmin-organizationtelemetryrule-telemetryrule.html#cfn-observabilityadmin-organizationtelemetryrule-telemetryrule-destinationconfiguration
             '''
@@ -1899,7 +1940,7 @@ class CfnOrganizationTelemetryRule(
 
         @builtins.property
         def scope(self) -> typing.Optional[builtins.str]:
-            '''Selection Criteria on scope level for rule application.
+            '''The organizational scope to which the rule applies, specified using accounts or organizational units.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-observabilityadmin-organizationtelemetryrule-telemetryrule.html#cfn-observabilityadmin-organizationtelemetryrule-telemetryrule-scope
             '''
@@ -1908,7 +1949,7 @@ class CfnOrganizationTelemetryRule(
 
         @builtins.property
         def selection_criteria(self) -> typing.Optional[builtins.str]:
-            '''Selection Criteria on resource level for rule application.
+            '''Criteria for selecting which resources the rule applies to, such as resource tags.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-observabilityadmin-organizationtelemetryrule-telemetryrule.html#cfn-observabilityadmin-organizationtelemetryrule-telemetryrule-selectioncriteria
             '''
@@ -1943,11 +1984,11 @@ class CfnOrganizationTelemetryRule(
             max_aggregation_interval: typing.Optional[jsii.Number] = None,
             traffic_type: typing.Optional[builtins.str] = None,
         ) -> None:
-            '''Telemetry parameters for VPC Flow logs.
+            '''Configuration parameters specific to VPC Flow Logs.
 
-            :param log_format: The fields to include in the flow log record. If you omit this parameter, the flow log is created using the default format.
-            :param max_aggregation_interval: The maximum interval of time, in seconds, during which a flow of packets is captured and aggregated into a flow log record. Default is 600s.
-            :param traffic_type: The type of traffic captured for the flow log. Default is ALL
+            :param log_format: The format in which VPC Flow Log entries should be logged.
+            :param max_aggregation_interval: The maximum interval in seconds between the capture of flow log records.
+            :param traffic_type: The type of traffic to log (ACCEPT, REJECT, or ALL).
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-observabilityadmin-organizationtelemetryrule-vpcflowlogparameters.html
             :exampleMetadata: fixture=_generated
@@ -1979,9 +2020,7 @@ class CfnOrganizationTelemetryRule(
 
         @builtins.property
         def log_format(self) -> typing.Optional[builtins.str]:
-            '''The fields to include in the flow log record.
-
-            If you omit this parameter, the flow log is created using the default format.
+            '''The format in which VPC Flow Log entries should be logged.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-observabilityadmin-organizationtelemetryrule-vpcflowlogparameters.html#cfn-observabilityadmin-organizationtelemetryrule-vpcflowlogparameters-logformat
             '''
@@ -1990,9 +2029,7 @@ class CfnOrganizationTelemetryRule(
 
         @builtins.property
         def max_aggregation_interval(self) -> typing.Optional[jsii.Number]:
-            '''The maximum interval of time, in seconds, during which a flow of packets is captured and aggregated into a flow log record.
-
-            Default is 600s.
+            '''The maximum interval in seconds between the capture of flow log records.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-observabilityadmin-organizationtelemetryrule-vpcflowlogparameters.html#cfn-observabilityadmin-organizationtelemetryrule-vpcflowlogparameters-maxaggregationinterval
             '''
@@ -2001,9 +2038,7 @@ class CfnOrganizationTelemetryRule(
 
         @builtins.property
         def traffic_type(self) -> typing.Optional[builtins.str]:
-            '''The type of traffic captured for the flow log.
-
-            Default is ALL
+            '''The type of traffic to log (ACCEPT, REJECT, or ALL).
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-observabilityadmin-organizationtelemetryrule-vpcflowlogparameters.html#cfn-observabilityadmin-organizationtelemetryrule-vpcflowlogparameters-traffictype
             '''
@@ -2028,7 +2063,9 @@ class CfnTelemetryRule(
     metaclass=jsii.JSIIMeta,
     jsii_type="aws-cdk-lib.aws_observabilityadmin.CfnTelemetryRule",
 ):
-    '''The AWS::ObservabilityAdmin::TelemetryRule resource defines a CloudWatch Observability Admin Telemetry Rule.
+    '''Creates a telemetry rule that defines how telemetry should be configured for AWS resources in your account.
+
+    The rule specifies which resources should have telemetry enabled and how that telemetry data should be collected based on resource type, telemetry type, and selection criteria.
 
     :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-observabilityadmin-telemetryrule.html
     :cloudformationResource: AWS::ObservabilityAdmin::TelemetryRule
@@ -2080,9 +2117,9 @@ class CfnTelemetryRule(
         '''
         :param scope: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
-        :param rule: The telemetry rule.
+        :param rule: Retrieves the details of a specific telemetry rule in your account.
         :param rule_name: The name of the telemetry rule.
-        :param tags: An array of key-value pairs to apply to this resource.
+        :param tags: Lists all tags attached to the specified telemetry rule resource.
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__1cb28d06ef60815f8488b771b64aca8e3671a315a3f6676ad80a414dcd296224)
@@ -2125,7 +2162,7 @@ class CfnTelemetryRule(
     @builtins.property
     @jsii.member(jsii_name="attrRuleArn")
     def attr_rule_arn(self) -> builtins.str:
-        '''The arn of the telemetry rule.
+        '''The Amazon Resource Name (ARN) of the telemetry rule.
 
         :cloudformationAttribute: RuleArn
         '''
@@ -2153,7 +2190,7 @@ class CfnTelemetryRule(
     def rule(
         self,
     ) -> typing.Union[_IResolvable_da3f097b, "CfnTelemetryRule.TelemetryRuleProperty"]:
-        '''The telemetry rule.'''
+        '''Retrieves the details of a specific telemetry rule in your account.'''
         return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnTelemetryRule.TelemetryRuleProperty"], jsii.get(self, "rule"))
 
     @rule.setter
@@ -2182,7 +2219,7 @@ class CfnTelemetryRule(
     @builtins.property
     @jsii.member(jsii_name="tags")
     def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
-        '''An array of key-value pairs to apply to this resource.'''
+        '''Lists all tags attached to the specified telemetry rule resource.'''
         return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tags"))
 
     @tags.setter
@@ -2211,12 +2248,12 @@ class CfnTelemetryRule(
             retention_in_days: typing.Optional[jsii.Number] = None,
             vpc_flow_log_parameters: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTelemetryRule.VPCFlowLogParametersProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
-            '''The destination configuration for telemetry data.
+            '''Configuration specifying where and how telemetry data should be delivered for AWS resources.
 
-            :param destination_pattern: Pattern for telemetry data destination.
-            :param destination_type: Type of telemetry destination.
-            :param retention_in_days: Number of days to retain the telemetry data in the specified destination.
-            :param vpc_flow_log_parameters: Telemetry parameters for VPC Flow logs.
+            :param destination_pattern: The pattern used to generate the destination path or name, supporting macros like and .
+            :param destination_type: The type of destination for the telemetry data (e.g., "Amazon CloudWatch Logs", "S3").
+            :param retention_in_days: The number of days to retain the telemetry data in the destination.
+            :param vpc_flow_log_parameters: Configuration parameters specific to VPC Flow Logs when VPC is the resource type.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-observabilityadmin-telemetryrule-telemetrydestinationconfiguration.html
             :exampleMetadata: fixture=_generated
@@ -2256,7 +2293,7 @@ class CfnTelemetryRule(
 
         @builtins.property
         def destination_pattern(self) -> typing.Optional[builtins.str]:
-            '''Pattern for telemetry data destination.
+            '''The pattern used to generate the destination path or name, supporting macros like  and .
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-observabilityadmin-telemetryrule-telemetrydestinationconfiguration.html#cfn-observabilityadmin-telemetryrule-telemetrydestinationconfiguration-destinationpattern
             '''
@@ -2265,7 +2302,7 @@ class CfnTelemetryRule(
 
         @builtins.property
         def destination_type(self) -> typing.Optional[builtins.str]:
-            '''Type of telemetry destination.
+            '''The type of destination for the telemetry data (e.g., "Amazon CloudWatch Logs", "S3").
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-observabilityadmin-telemetryrule-telemetrydestinationconfiguration.html#cfn-observabilityadmin-telemetryrule-telemetrydestinationconfiguration-destinationtype
             '''
@@ -2274,7 +2311,7 @@ class CfnTelemetryRule(
 
         @builtins.property
         def retention_in_days(self) -> typing.Optional[jsii.Number]:
-            '''Number of days to retain the telemetry data in the specified destination.
+            '''The number of days to retain the telemetry data in the destination.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-observabilityadmin-telemetryrule-telemetrydestinationconfiguration.html#cfn-observabilityadmin-telemetryrule-telemetrydestinationconfiguration-retentionindays
             '''
@@ -2285,7 +2322,7 @@ class CfnTelemetryRule(
         def vpc_flow_log_parameters(
             self,
         ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTelemetryRule.VPCFlowLogParametersProperty"]]:
-            '''Telemetry parameters for VPC Flow logs.
+            '''Configuration parameters specific to VPC Flow Logs when VPC is the resource type.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-observabilityadmin-telemetryrule-telemetrydestinationconfiguration.html#cfn-observabilityadmin-telemetryrule-telemetrydestinationconfiguration-vpcflowlogparameters
             '''
@@ -2322,12 +2359,12 @@ class CfnTelemetryRule(
             destination_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTelemetryRule.TelemetryDestinationConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             selection_criteria: typing.Optional[builtins.str] = None,
         ) -> None:
-            '''The telemetry rule.
+            '''Defines how telemetry should be configured for specific AWS resources.
 
-            :param resource_type: Resource Type associated with the Telemetry Rule.
-            :param telemetry_type: Telemetry Type associated with the Telemetry Rule.
-            :param destination_configuration: The destination configuration for telemetry data.
-            :param selection_criteria: Selection Criteria on resource level for rule application.
+            :param resource_type: The type of AWS resource to configure telemetry for (e.g., "AWS::EC2::VPC").
+            :param telemetry_type: The type of telemetry to collect (Logs, Metrics, or Traces).
+            :param destination_configuration: Configuration specifying where and how the telemetry data should be delivered.
+            :param selection_criteria: Criteria for selecting which resources the rule applies to, such as resource tags.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-observabilityadmin-telemetryrule-telemetryrule.html
             :exampleMetadata: fixture=_generated
@@ -2373,7 +2410,7 @@ class CfnTelemetryRule(
 
         @builtins.property
         def resource_type(self) -> builtins.str:
-            '''Resource Type associated with the Telemetry Rule.
+            '''The type of AWS resource to configure telemetry for (e.g., "AWS::EC2::VPC").
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-observabilityadmin-telemetryrule-telemetryrule.html#cfn-observabilityadmin-telemetryrule-telemetryrule-resourcetype
             '''
@@ -2383,7 +2420,7 @@ class CfnTelemetryRule(
 
         @builtins.property
         def telemetry_type(self) -> builtins.str:
-            '''Telemetry Type associated with the Telemetry Rule.
+            '''The type of telemetry to collect (Logs, Metrics, or Traces).
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-observabilityadmin-telemetryrule-telemetryrule.html#cfn-observabilityadmin-telemetryrule-telemetryrule-telemetrytype
             '''
@@ -2395,7 +2432,7 @@ class CfnTelemetryRule(
         def destination_configuration(
             self,
         ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTelemetryRule.TelemetryDestinationConfigurationProperty"]]:
-            '''The destination configuration for telemetry data.
+            '''Configuration specifying where and how the telemetry data should be delivered.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-observabilityadmin-telemetryrule-telemetryrule.html#cfn-observabilityadmin-telemetryrule-telemetryrule-destinationconfiguration
             '''
@@ -2404,7 +2441,7 @@ class CfnTelemetryRule(
 
         @builtins.property
         def selection_criteria(self) -> typing.Optional[builtins.str]:
-            '''Selection Criteria on resource level for rule application.
+            '''Criteria for selecting which resources the rule applies to, such as resource tags.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-observabilityadmin-telemetryrule-telemetryrule.html#cfn-observabilityadmin-telemetryrule-telemetryrule-selectioncriteria
             '''
@@ -2439,11 +2476,11 @@ class CfnTelemetryRule(
             max_aggregation_interval: typing.Optional[jsii.Number] = None,
             traffic_type: typing.Optional[builtins.str] = None,
         ) -> None:
-            '''Telemetry parameters for VPC Flow logs.
+            '''Configuration parameters specific to VPC Flow Logs.
 
-            :param log_format: The fields to include in the flow log record. If you omit this parameter, the flow log is created using the default format.
-            :param max_aggregation_interval: The maximum interval of time, in seconds, during which a flow of packets is captured and aggregated into a flow log record. Default is 600s.
-            :param traffic_type: The type of traffic captured for the flow log. Default is ALL
+            :param log_format: The format in which VPC Flow Log entries should be logged.
+            :param max_aggregation_interval: The maximum interval in seconds between the capture of flow log records.
+            :param traffic_type: The type of traffic to log (ACCEPT, REJECT, or ALL).
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-observabilityadmin-telemetryrule-vpcflowlogparameters.html
             :exampleMetadata: fixture=_generated
@@ -2475,9 +2512,7 @@ class CfnTelemetryRule(
 
         @builtins.property
         def log_format(self) -> typing.Optional[builtins.str]:
-            '''The fields to include in the flow log record.
-
-            If you omit this parameter, the flow log is created using the default format.
+            '''The format in which VPC Flow Log entries should be logged.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-observabilityadmin-telemetryrule-vpcflowlogparameters.html#cfn-observabilityadmin-telemetryrule-vpcflowlogparameters-logformat
             '''
@@ -2486,9 +2521,7 @@ class CfnTelemetryRule(
 
         @builtins.property
         def max_aggregation_interval(self) -> typing.Optional[jsii.Number]:
-            '''The maximum interval of time, in seconds, during which a flow of packets is captured and aggregated into a flow log record.
-
-            Default is 600s.
+            '''The maximum interval in seconds between the capture of flow log records.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-observabilityadmin-telemetryrule-vpcflowlogparameters.html#cfn-observabilityadmin-telemetryrule-vpcflowlogparameters-maxaggregationinterval
             '''
@@ -2497,9 +2530,7 @@ class CfnTelemetryRule(
 
         @builtins.property
         def traffic_type(self) -> typing.Optional[builtins.str]:
-            '''The type of traffic captured for the flow log.
-
-            Default is ALL
+            '''The type of traffic to log (ACCEPT, REJECT, or ALL).
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-observabilityadmin-telemetryrule-vpcflowlogparameters.html#cfn-observabilityadmin-telemetryrule-vpcflowlogparameters-traffictype
             '''
@@ -2823,3 +2854,6 @@ def _typecheckingstub__cb426e63d8ddff6bc9e58865c89c023dbf7b61ef2e21b2f9ff902df9d
 ) -> None:
     """Type checking stubs"""
     pass
+
+for cls in [IOrganizationCentralizationRuleRef, IOrganizationTelemetryRuleRef, ITelemetryRuleRef]:
+    typing.cast(typing.Any, cls).__protocol_attrs__ = typing.cast(typing.Any, cls).__protocol_attrs__ - set(['__jsii_proxy_class__', '__jsii_type__'])

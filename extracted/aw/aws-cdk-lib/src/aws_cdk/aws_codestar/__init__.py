@@ -889,3 +889,6 @@ def _typecheckingstub__7b816900a0d1b0b1705f2e02c945928e972ea08d6638ac1248eba8f98
 ) -> None:
     """Type checking stubs"""
     pass
+
+for cls in [IGitHubRepositoryRef]:
+    typing.cast(typing.Any, cls).__protocol_attrs__ = typing.cast(typing.Any, cls).__protocol_attrs__ - set(['__jsii_proxy_class__', '__jsii_type__'])

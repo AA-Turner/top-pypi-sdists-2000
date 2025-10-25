@@ -927,3 +927,6 @@ def _typecheckingstub__1f170b124bae07e704d39551c1b3c66810f3a968e777ec40f4c806bb7
 ) -> None:
     """Type checking stubs"""
     pass
+
+for cls in [IEnvironmentEC2Ref]:
+    typing.cast(typing.Any, cls).__protocol_attrs__ = typing.cast(typing.Any, cls).__protocol_attrs__ - set(['__jsii_proxy_class__', '__jsii_type__'])

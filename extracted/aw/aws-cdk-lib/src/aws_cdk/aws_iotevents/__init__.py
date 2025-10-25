@@ -8395,3 +8395,6 @@ def _typecheckingstub__f28aaf2329f3541c2ea510b4c542b475eeb9d677b36275d8bffa1b5c4
 ) -> None:
     """Type checking stubs"""
     pass
+
+for cls in [IAlarmModelRef, IDetectorModelRef, IInputRef]:
+    typing.cast(typing.Any, cls).__protocol_attrs__ = typing.cast(typing.Any, cls).__protocol_attrs__ - set(['__jsii_proxy_class__', '__jsii_type__'])

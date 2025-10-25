@@ -19099,3 +19099,6 @@ def _typecheckingstub__b85333b9f4a3ca55431a35f4006c1aeb1fcd34f68dee45d5355498d8a
 ) -> None:
     """Type checking stubs"""
     pass
+
+for cls in [IGlobalTableRef, IScalableTableAttribute, ITable, ITableRef, ITableV2]:
+    typing.cast(typing.Any, cls).__protocol_attrs__ = typing.cast(typing.Any, cls).__protocol_attrs__ - set(['__jsii_proxy_class__', '__jsii_type__'])

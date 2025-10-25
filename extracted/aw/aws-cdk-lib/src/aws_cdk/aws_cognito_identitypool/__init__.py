@@ -2317,3 +2317,6 @@ def _typecheckingstub__96b0f5e74875a97abd1e74170f934c5a7746bf416d00b5b9a3a2b7956
 ) -> None:
     """Type checking stubs"""
     pass
+
+for cls in [IIdentityPool, IUserPoolAuthenticationProvider]:
+    typing.cast(typing.Any, cls).__protocol_attrs__ = typing.cast(typing.Any, cls).__protocol_attrs__ - set(['__jsii_proxy_class__', '__jsii_type__'])

@@ -751,6 +751,7 @@ class CfnDBClusterProps:
         "db_snapshot_identifier": "dbSnapshotIdentifier",
         "db_subnet_group_name": "dbSubnetGroupName",
         "preferred_maintenance_window": "preferredMaintenanceWindow",
+        "publicly_accessible": "publiclyAccessible",
         "tags": "tags",
     },
 )
@@ -768,6 +769,7 @@ class CfnDBInstanceProps:
         db_snapshot_identifier: typing.Optional[builtins.str] = None,
         db_subnet_group_name: typing.Optional[builtins.str] = None,
         preferred_maintenance_window: typing.Optional[builtins.str] = None,
+        publicly_accessible: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnDBInstance``.
@@ -782,6 +784,7 @@ class CfnDBInstanceProps:
         :param db_snapshot_identifier: (deprecated) This parameter is not supported. ``AWS::Neptune::DBInstance`` does not support restoring from snapshots. ``AWS::Neptune::DBCluster`` does support restoring from snapshots.
         :param db_subnet_group_name: A DB subnet group to associate with the DB instance. If you update this value, the new subnet group must be a subnet group in a new virtual private cloud (VPC).
         :param preferred_maintenance_window: Specifies the weekly time range during which system maintenance can occur, in Universal Coordinated Time (UTC).
+        :param publicly_accessible: Indicates whether the DB instance is publicly accessible. When the DB instance is publicly accessible and you connect from outside of the DB instance's virtual private cloud (VPC), its Domain Name System (DNS) endpoint resolves to the public IP address. When you connect from within the same VPC as the DB instance, the endpoint resolves to the private IP address. Access to the DB instance is ultimately controlled by the security group it uses. That public access isn't permitted if the security group assigned to the DB cluster doesn't permit it. When the DB instance isn't publicly accessible, it is an internal DB instance with a DNS name that resolves to a private IP address.
         :param tags: An arbitrary set of tags (key-value pairs) for this DB instance.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-neptune-dbinstance.html
@@ -806,6 +809,7 @@ class CfnDBInstanceProps:
                 db_snapshot_identifier="dbSnapshotIdentifier",
                 db_subnet_group_name="dbSubnetGroupName",
                 preferred_maintenance_window="preferredMaintenanceWindow",
+                publicly_accessible=False,
                 tags=[CfnTag(
                     key="key",
                     value="value"
@@ -824,6 +828,7 @@ class CfnDBInstanceProps:
             check_type(argname="argument db_snapshot_identifier", value=db_snapshot_identifier, expected_type=type_hints["db_snapshot_identifier"])
             check_type(argname="argument db_subnet_group_name", value=db_subnet_group_name, expected_type=type_hints["db_subnet_group_name"])
             check_type(argname="argument preferred_maintenance_window", value=preferred_maintenance_window, expected_type=type_hints["preferred_maintenance_window"])
+            check_type(argname="argument publicly_accessible", value=publicly_accessible, expected_type=type_hints["publicly_accessible"])
             check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
         self._values: typing.Dict[builtins.str, typing.Any] = {
             "db_instance_class": db_instance_class,
@@ -846,6 +851,8 @@ class CfnDBInstanceProps:
             self._values["db_subnet_group_name"] = db_subnet_group_name
         if preferred_maintenance_window is not None:
             self._values["preferred_maintenance_window"] = preferred_maintenance_window
+        if publicly_accessible is not None:
+            self._values["publicly_accessible"] = publicly_accessible
         if tags is not None:
             self._values["tags"] = tags
 
@@ -964,6 +971,21 @@ class CfnDBInstanceProps:
         '''
         result = self._values.get("preferred_maintenance_window")
         return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def publicly_accessible(
+        self,
+    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        '''Indicates whether the DB instance is publicly accessible.
+
+        When the DB instance is publicly accessible and you connect from outside of the DB instance's virtual private cloud (VPC), its Domain Name System (DNS) endpoint resolves to the public IP address. When you connect from within the same VPC as the DB instance, the endpoint resolves to the private IP address. Access to the DB instance is ultimately controlled by the security group it uses. That public access isn't permitted if the security group assigned to the DB cluster doesn't permit it.
+
+        When the DB instance isn't publicly accessible, it is an internal DB instance with a DNS name that resolves to a private IP address.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-neptune-dbinstance.html#cfn-neptune-dbinstance-publiclyaccessible
+        '''
+        result = self._values.get("publicly_accessible")
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
 
     @builtins.property
     def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
@@ -2966,6 +2988,7 @@ class CfnDBInstance(
             db_snapshot_identifier="dbSnapshotIdentifier",
             db_subnet_group_name="dbSubnetGroupName",
             preferred_maintenance_window="preferredMaintenanceWindow",
+            publicly_accessible=False,
             tags=[CfnTag(
                 key="key",
                 value="value"
@@ -2988,6 +3011,7 @@ class CfnDBInstance(
         db_snapshot_identifier: typing.Optional[builtins.str] = None,
         db_subnet_group_name: typing.Optional[builtins.str] = None,
         preferred_maintenance_window: typing.Optional[builtins.str] = None,
+        publicly_accessible: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''
@@ -3003,6 +3027,7 @@ class CfnDBInstance(
         :param db_snapshot_identifier: (deprecated) This parameter is not supported. ``AWS::Neptune::DBInstance`` does not support restoring from snapshots. ``AWS::Neptune::DBCluster`` does support restoring from snapshots.
         :param db_subnet_group_name: A DB subnet group to associate with the DB instance. If you update this value, the new subnet group must be a subnet group in a new virtual private cloud (VPC).
         :param preferred_maintenance_window: Specifies the weekly time range during which system maintenance can occur, in Universal Coordinated Time (UTC).
+        :param publicly_accessible: Indicates whether the DB instance is publicly accessible. When the DB instance is publicly accessible and you connect from outside of the DB instance's virtual private cloud (VPC), its Domain Name System (DNS) endpoint resolves to the public IP address. When you connect from within the same VPC as the DB instance, the endpoint resolves to the private IP address. Access to the DB instance is ultimately controlled by the security group it uses. That public access isn't permitted if the security group assigned to the DB cluster doesn't permit it. When the DB instance isn't publicly accessible, it is an internal DB instance with a DNS name that resolves to a private IP address.
         :param tags: An arbitrary set of tags (key-value pairs) for this DB instance.
         '''
         if __debug__:
@@ -3020,6 +3045,7 @@ class CfnDBInstance(
             db_snapshot_identifier=db_snapshot_identifier,
             db_subnet_group_name=db_subnet_group_name,
             preferred_maintenance_window=preferred_maintenance_window,
+            publicly_accessible=publicly_accessible,
             tags=tags,
         )
 
@@ -3241,6 +3267,24 @@ class CfnDBInstance(
             type_hints = typing.get_type_hints(_typecheckingstub__e0aad195d28ba72af4643cabac33c6e2d3d623be5e2b7f21c8bffae8d78cb509)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
         jsii.set(self, "preferredMaintenanceWindow", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="publiclyAccessible")
+    def publicly_accessible(
+        self,
+    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        '''Indicates whether the DB instance is publicly accessible.'''
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "publiclyAccessible"))
+
+    @publicly_accessible.setter
+    def publicly_accessible(
+        self,
+        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+    ) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__b67e50f3b4a51cbbe6d8beb4e55dcbb888cd70ccbf3854e7be69ae66ee18267d)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "publiclyAccessible", value) # pyright: ignore[reportArgumentType]
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
@@ -3921,6 +3965,7 @@ def _typecheckingstub__f97fae676e40e6f9b786d435eb3f1534d54b6bfccf982c2ddf6802fc9
     db_snapshot_identifier: typing.Optional[builtins.str] = None,
     db_subnet_group_name: typing.Optional[builtins.str] = None,
     preferred_maintenance_window: typing.Optional[builtins.str] = None,
+    publicly_accessible: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
 ) -> None:
     """Type checking stubs"""
@@ -4282,6 +4327,7 @@ def _typecheckingstub__018494df8760995ee1cfd5d6678e28db8bf415a10efea4384de0e660a
     db_snapshot_identifier: typing.Optional[builtins.str] = None,
     db_subnet_group_name: typing.Optional[builtins.str] = None,
     preferred_maintenance_window: typing.Optional[builtins.str] = None,
+    publicly_accessible: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
 ) -> None:
     """Type checking stubs"""
@@ -4355,6 +4401,12 @@ def _typecheckingstub__2053b4a3ff977691dc0668d445906736e3150716670837779e5121e6d
 
 def _typecheckingstub__e0aad195d28ba72af4643cabac33c6e2d3d623be5e2b7f21c8bffae8d78cb509(
     value: typing.Optional[builtins.str],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__b67e50f3b4a51cbbe6d8beb4e55dcbb888cd70ccbf3854e7be69ae66ee18267d(
+    value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
 ) -> None:
     """Type checking stubs"""
     pass
@@ -4536,3 +4588,6 @@ def _typecheckingstub__1a2214e33715f7b8a810325132d1442eca1b2f768a72caf6834425035
 ) -> None:
     """Type checking stubs"""
     pass
+
+for cls in [IDBClusterParameterGroupRef, IDBClusterRef, IDBInstanceRef, IDBParameterGroupRef, IDBSubnetGroupRef, IEventSubscriptionRef]:
+    typing.cast(typing.Any, cls).__protocol_attrs__ = typing.cast(typing.Any, cls).__protocol_attrs__ - set(['__jsii_proxy_class__', '__jsii_type__'])

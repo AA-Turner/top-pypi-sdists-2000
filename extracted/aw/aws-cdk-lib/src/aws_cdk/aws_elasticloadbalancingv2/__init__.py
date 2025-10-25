@@ -4165,6 +4165,7 @@ class CfnListenerProps:
         "conditions": "conditions",
         "priority": "priority",
         "listener_arn": "listenerArn",
+        "transforms": "transforms",
     },
 )
 class CfnListenerRuleProps:
@@ -4175,6 +4176,7 @@ class CfnListenerRuleProps:
         conditions: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnListenerRule.RuleConditionProperty", typing.Dict[builtins.str, typing.Any]]]]],
         priority: jsii.Number,
         listener_arn: typing.Optional[builtins.str] = None,
+        transforms: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnListenerRule.TransformProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnListenerRule``.
 
@@ -4182,6 +4184,7 @@ class CfnListenerRuleProps:
         :param conditions: The conditions. The rule can optionally include up to one of each of the following conditions: ``http-request-method`` , ``host-header`` , ``path-pattern`` , and ``source-ip`` . A rule can also optionally include one or more of each of the following conditions: ``http-header`` and ``query-string`` .
         :param priority: The rule priority. A listener can't have multiple rules with the same priority. If you try to reorder rules by updating their priorities, do not specify a new priority if an existing rule already uses this priority, as this can cause an error. If you need to reuse a priority with a different rule, you must remove it as a priority first, and then specify it in a subsequent update.
         :param listener_arn: The Amazon Resource Name (ARN) of the listener.
+        :param transforms: 
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-elasticloadbalancingv2-listenerrule.html
         :exampleMetadata: fixture=_generated
@@ -4262,16 +4265,19 @@ class CfnListenerRuleProps:
                 conditions=[elbv2.CfnListenerRule.RuleConditionProperty(
                     field="field",
                     host_header_config=elbv2.CfnListenerRule.HostHeaderConfigProperty(
+                        regex_values=["regexValues"],
                         values=["values"]
                     ),
                     http_header_config=elbv2.CfnListenerRule.HttpHeaderConfigProperty(
                         http_header_name="httpHeaderName",
+                        regex_values=["regexValues"],
                         values=["values"]
                     ),
                     http_request_method_config=elbv2.CfnListenerRule.HttpRequestMethodConfigProperty(
                         values=["values"]
                     ),
                     path_pattern_config=elbv2.CfnListenerRule.PathPatternConfigProperty(
+                        regex_values=["regexValues"],
                         values=["values"]
                     ),
                     query_string_config=elbv2.CfnListenerRule.QueryStringConfigProperty(
@@ -4280,6 +4286,7 @@ class CfnListenerRuleProps:
                             value="value"
                         )]
                     ),
+                    regex_values=["regexValues"],
                     source_ip_config=elbv2.CfnListenerRule.SourceIpConfigProperty(
                         values=["values"]
                     ),
@@ -4288,7 +4295,24 @@ class CfnListenerRuleProps:
                 priority=123,
             
                 # the properties below are optional
-                listener_arn="listenerArn"
+                listener_arn="listenerArn",
+                transforms=[elbv2.CfnListenerRule.TransformProperty(
+                    type="type",
+            
+                    # the properties below are optional
+                    host_header_rewrite_config=elbv2.CfnListenerRule.RewriteConfigObjectProperty(
+                        rewrites=[elbv2.CfnListenerRule.RewriteConfigProperty(
+                            regex="regex",
+                            replace="replace"
+                        )]
+                    ),
+                    url_rewrite_config=elbv2.CfnListenerRule.RewriteConfigObjectProperty(
+                        rewrites=[elbv2.CfnListenerRule.RewriteConfigProperty(
+                            regex="regex",
+                            replace="replace"
+                        )]
+                    )
+                )]
             )
         '''
         if __debug__:
@@ -4297,6 +4321,7 @@ class CfnListenerRuleProps:
             check_type(argname="argument conditions", value=conditions, expected_type=type_hints["conditions"])
             check_type(argname="argument priority", value=priority, expected_type=type_hints["priority"])
             check_type(argname="argument listener_arn", value=listener_arn, expected_type=type_hints["listener_arn"])
+            check_type(argname="argument transforms", value=transforms, expected_type=type_hints["transforms"])
         self._values: typing.Dict[builtins.str, typing.Any] = {
             "actions": actions,
             "conditions": conditions,
@@ -4304,6 +4329,8 @@ class CfnListenerRuleProps:
         }
         if listener_arn is not None:
             self._values["listener_arn"] = listener_arn
+        if transforms is not None:
+            self._values["transforms"] = transforms
 
     @builtins.property
     def actions(
@@ -4353,6 +4380,16 @@ class CfnListenerRuleProps:
         '''
         result = self._values.get("listener_arn")
         return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def transforms(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnListenerRule.TransformProperty"]]]]:
+        '''
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-elasticloadbalancingv2-listenerrule.html#cfn-elasticloadbalancingv2-listenerrule-transforms
+        '''
+        result = self._values.get("transforms")
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnListenerRule.TransformProperty"]]]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -4407,7 +4444,7 @@ class CfnLoadBalancerProps:
     ) -> None:
         '''Properties for defining a ``CfnLoadBalancer``.
 
-        :param enable_capacity_reservation_provision_stabilize: Default: - false
+        :param enable_capacity_reservation_provision_stabilize: Indicates whether to enable stabilization when creating or updating an LCU reservation. This ensures that the final stack status reflects the status of the LCU reservation. The default is ``false`` . Default: - false
         :param enable_prefix_for_ipv6_source_nat: [Network Load Balancers with UDP listeners] Indicates whether to use an IPv6 prefix from each subnet for source NAT. The IP address type must be ``dualstack`` . The default value is ``off`` .
         :param enforce_security_group_inbound_rules_on_private_link_traffic: Indicates whether to evaluate inbound security group rules for traffic sent to a Network Load Balancer through AWS PrivateLink . The default is ``on`` . You can't configure this property on a Network Load Balancer unless you associated a security group with the load balancer when you created it.
         :param ip_address_type: The IP address type. Internal load balancers must use ``ipv4`` . [Application Load Balancers] The possible values are ``ipv4`` (IPv4 addresses), ``dualstack`` (IPv4 and IPv6 addresses), and ``dualstack-without-public-ipv4`` (public IPv6 addresses and private IPv4 and IPv6 addresses). Application Load Balancer authentication supports IPv4 addresses only when connecting to an Identity Provider (IdP) or Amazon Cognito endpoint. Without a public IPv4 address the load balancer can't complete the authentication process, resulting in HTTP 500 errors. [Network Load Balancers and Gateway Load Balancers] The possible values are ``ipv4`` (IPv4 addresses) and ``dualstack`` (IPv4 and IPv6 addresses).
@@ -4514,7 +4551,10 @@ class CfnLoadBalancerProps:
     def enable_capacity_reservation_provision_stabilize(
         self,
     ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
-        '''
+        '''Indicates whether to enable stabilization when creating or updating an LCU reservation.
+
+        This ensures that the final stack status reflects the status of the LCU reservation. The default is ``false`` .
+
         :default: - false
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-elasticloadbalancingv2-loadbalancer.html#cfn-elasticloadbalancingv2-loadbalancer-enablecapacityreservationprovisionstabilize
@@ -11065,10 +11105,10 @@ class ListenerAction(
         :param authenticate_cognito_config: [HTTPS listeners] Information for using Amazon Cognito to authenticate users. Specify only when ``Type`` is ``authenticate-cognito`` .
         :param authenticate_oidc_config: [HTTPS listeners] Information about an identity provider that is compliant with OpenID Connect (OIDC). Specify only when ``Type`` is ``authenticate-oidc`` .
         :param fixed_response_config: [Application Load Balancer] Information for creating an action that returns a custom HTTP response. Specify only when ``Type`` is ``fixed-response`` .
-        :param forward_config: Information for creating an action that distributes requests among one or more target groups. For Network Load Balancers, you can specify a single target group. Specify only when ``Type`` is ``forward`` . If you specify both ``ForwardConfig`` and ``TargetGroupArn`` , you can specify only one target group using ``ForwardConfig`` and it must be the same target group specified in ``TargetGroupArn`` .
+        :param forward_config: Information for creating an action that distributes requests among multiple target groups. Specify only when ``Type`` is ``forward`` . If you specify both ``ForwardConfig`` and ``TargetGroupArn`` , you can specify only one target group using ``ForwardConfig`` and it must be the same target group specified in ``TargetGroupArn`` .
         :param order: The order for the action. This value is required for rules with multiple actions. The action with the lowest value for order is performed first.
         :param redirect_config: [Application Load Balancer] Information for creating a redirect action. Specify only when ``Type`` is ``redirect`` .
-        :param target_group_arn: The Amazon Resource Name (ARN) of the target group. Specify only when ``Type`` is ``forward`` and you want to route to a single target group. To route to one or more target groups, use ``ForwardConfig`` instead.
+        :param target_group_arn: The Amazon Resource Name (ARN) of the target group. Specify only when ``Type`` is ``forward`` and you want to route to a single target group. To route to multiple target groups, you must use ``ForwardConfig`` instead.
         '''
         action_json = CfnListenerRule.ActionProperty(
             type=type,
@@ -18150,10 +18190,10 @@ class CfnListener(
             :param authenticate_cognito_config: [HTTPS listeners] Information for using Amazon Cognito to authenticate users. Specify only when ``Type`` is ``authenticate-cognito`` .
             :param authenticate_oidc_config: [HTTPS listeners] Information about an identity provider that is compliant with OpenID Connect (OIDC). Specify only when ``Type`` is ``authenticate-oidc`` .
             :param fixed_response_config: [Application Load Balancer] Information for creating an action that returns a custom HTTP response. Specify only when ``Type`` is ``fixed-response`` .
-            :param forward_config: Information for creating an action that distributes requests among one or more target groups. For Network Load Balancers, you can specify a single target group. Specify only when ``Type`` is ``forward`` . If you specify both ``ForwardConfig`` and ``TargetGroupArn`` , you can specify only one target group using ``ForwardConfig`` and it must be the same target group specified in ``TargetGroupArn`` .
+            :param forward_config: Information for creating an action that distributes requests among multiple target groups. Specify only when ``Type`` is ``forward`` . If you specify both ``ForwardConfig`` and ``TargetGroupArn`` , you can specify only one target group using ``ForwardConfig`` and it must be the same target group specified in ``TargetGroupArn`` .
             :param order: The order for the action. This value is required for rules with multiple actions. The action with the lowest value for order is performed first.
             :param redirect_config: [Application Load Balancer] Information for creating a redirect action. Specify only when ``Type`` is ``redirect`` .
-            :param target_group_arn: The Amazon Resource Name (ARN) of the target group. Specify only when ``Type`` is ``forward`` and you want to route to a single target group. To route to one or more target groups, use ``ForwardConfig`` instead.
+            :param target_group_arn: The Amazon Resource Name (ARN) of the target group. Specify only when ``Type`` is ``forward`` and you want to route to a single target group. To route to multiple target groups, you must use ``ForwardConfig`` instead.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-elasticloadbalancingv2-listener-action.html
             :exampleMetadata: fixture=_generated
@@ -18312,9 +18352,9 @@ class CfnListener(
         def forward_config(
             self,
         ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnListener.ForwardConfigProperty"]]:
-            '''Information for creating an action that distributes requests among one or more target groups.
+            '''Information for creating an action that distributes requests among multiple target groups. Specify only when ``Type`` is ``forward`` .
 
-            For Network Load Balancers, you can specify a single target group. Specify only when ``Type`` is ``forward`` . If you specify both ``ForwardConfig`` and ``TargetGroupArn`` , you can specify only one target group using ``ForwardConfig`` and it must be the same target group specified in ``TargetGroupArn`` .
+            If you specify both ``ForwardConfig`` and ``TargetGroupArn`` , you can specify only one target group using ``ForwardConfig`` and it must be the same target group specified in ``TargetGroupArn`` .
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-elasticloadbalancingv2-listener-action.html#cfn-elasticloadbalancingv2-listener-action-forwardconfig
             '''
@@ -18349,7 +18389,7 @@ class CfnListener(
         def target_group_arn(self) -> typing.Optional[builtins.str]:
             '''The Amazon Resource Name (ARN) of the target group.
 
-            Specify only when ``Type`` is ``forward`` and you want to route to a single target group. To route to one or more target groups, use ``ForwardConfig`` instead.
+            Specify only when ``Type`` is ``forward`` and you want to route to a single target group. To route to multiple target groups, you must use ``ForwardConfig`` instead.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-elasticloadbalancingv2-listener-action.html#cfn-elasticloadbalancingv2-listener-action-targetgrouparn
             '''
@@ -18979,9 +19019,9 @@ class CfnListener(
             target_groups: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnListener.TargetGroupTupleProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
             target_group_stickiness_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnListener.TargetGroupStickinessConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
-            '''Information for creating an action that distributes requests among one or more target groups.
+            '''Information for creating an action that distributes requests among multiple target groups. Specify only when ``Type`` is ``forward`` .
 
-            For Network Load Balancers, you can specify a single target group. Specify only when ``Type`` is ``forward`` . If you specify both ``ForwardConfig`` and ``TargetGroupArn`` , you can specify only one target group using ``ForwardConfig`` and it must be the same target group specified in ``TargetGroupArn`` .
+            If you specify both ``ForwardConfig`` and ``TargetGroupArn`` , you can specify only one target group using ``ForwardConfig`` and it must be the same target group specified in ``TargetGroupArn`` .
 
             :param target_groups: Information about how traffic will be distributed between multiple target groups in a forward rule.
             :param target_group_stickiness_config: Information about the target group stickiness for a rule.
@@ -19432,7 +19472,7 @@ class CfnListener(
         ) -> None:
             '''Information about the target group stickiness for a rule.
 
-            :param duration_seconds: The time period, in seconds, during which requests from a client should be routed to the same target group. The range is 1-604800 seconds (7 days). You must specify this value when enabling target group stickiness.
+            :param duration_seconds: [Application Load Balancers] The time period, in seconds, during which requests from a client should be routed to the same target group. The range is 1-604800 seconds (7 days). You must specify this value when enabling target group stickiness.
             :param enabled: Indicates whether target group stickiness is enabled.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-elasticloadbalancingv2-listener-targetgroupstickinessconfig.html
@@ -19461,7 +19501,7 @@ class CfnListener(
 
         @builtins.property
         def duration_seconds(self) -> typing.Optional[jsii.Number]:
-            '''The time period, in seconds, during which requests from a client should be routed to the same target group.
+            '''[Application Load Balancers] The time period, in seconds, during which requests from a client should be routed to the same target group.
 
             The range is 1-604800 seconds (7 days). You must specify this value when enabling target group stickiness.
 
@@ -19843,16 +19883,19 @@ class CfnListenerRule(
             conditions=[elbv2.CfnListenerRule.RuleConditionProperty(
                 field="field",
                 host_header_config=elbv2.CfnListenerRule.HostHeaderConfigProperty(
+                    regex_values=["regexValues"],
                     values=["values"]
                 ),
                 http_header_config=elbv2.CfnListenerRule.HttpHeaderConfigProperty(
                     http_header_name="httpHeaderName",
+                    regex_values=["regexValues"],
                     values=["values"]
                 ),
                 http_request_method_config=elbv2.CfnListenerRule.HttpRequestMethodConfigProperty(
                     values=["values"]
                 ),
                 path_pattern_config=elbv2.CfnListenerRule.PathPatternConfigProperty(
+                    regex_values=["regexValues"],
                     values=["values"]
                 ),
                 query_string_config=elbv2.CfnListenerRule.QueryStringConfigProperty(
@@ -19861,6 +19904,7 @@ class CfnListenerRule(
                         value="value"
                     )]
                 ),
+                regex_values=["regexValues"],
                 source_ip_config=elbv2.CfnListenerRule.SourceIpConfigProperty(
                     values=["values"]
                 ),
@@ -19869,7 +19913,24 @@ class CfnListenerRule(
             priority=123,
         
             # the properties below are optional
-            listener_arn="listenerArn"
+            listener_arn="listenerArn",
+            transforms=[elbv2.CfnListenerRule.TransformProperty(
+                type="type",
+        
+                # the properties below are optional
+                host_header_rewrite_config=elbv2.CfnListenerRule.RewriteConfigObjectProperty(
+                    rewrites=[elbv2.CfnListenerRule.RewriteConfigProperty(
+                        regex="regex",
+                        replace="replace"
+                    )]
+                ),
+                url_rewrite_config=elbv2.CfnListenerRule.RewriteConfigObjectProperty(
+                    rewrites=[elbv2.CfnListenerRule.RewriteConfigProperty(
+                        regex="regex",
+                        replace="replace"
+                    )]
+                )
+            )]
         )
     '''
 
@@ -19882,6 +19943,7 @@ class CfnListenerRule(
         conditions: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnListenerRule.RuleConditionProperty", typing.Dict[builtins.str, typing.Any]]]]],
         priority: jsii.Number,
         listener_arn: typing.Optional[builtins.str] = None,
+        transforms: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnListenerRule.TransformProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
     ) -> None:
         '''
         :param scope: Scope in which this resource is defined.
@@ -19890,6 +19952,7 @@ class CfnListenerRule(
         :param conditions: The conditions. The rule can optionally include up to one of each of the following conditions: ``http-request-method`` , ``host-header`` , ``path-pattern`` , and ``source-ip`` . A rule can also optionally include one or more of each of the following conditions: ``http-header`` and ``query-string`` .
         :param priority: The rule priority. A listener can't have multiple rules with the same priority. If you try to reorder rules by updating their priorities, do not specify a new priority if an existing rule already uses this priority, as this can cause an error. If you need to reuse a priority with a different rule, you must remove it as a priority first, and then specify it in a subsequent update.
         :param listener_arn: The Amazon Resource Name (ARN) of the listener.
+        :param transforms: 
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__ae1e13bd1e6ee2145702f187cf74339faebe22401d39b3e4507fd776f5c1fb00)
@@ -19900,6 +19963,7 @@ class CfnListenerRule(
             conditions=conditions,
             priority=priority,
             listener_arn=listener_arn,
+            transforms=transforms,
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
@@ -20028,6 +20092,23 @@ class CfnListenerRule(
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
         jsii.set(self, "listenerArn", value) # pyright: ignore[reportArgumentType]
 
+    @builtins.property
+    @jsii.member(jsii_name="transforms")
+    def transforms(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnListenerRule.TransformProperty"]]]]:
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnListenerRule.TransformProperty"]]]], jsii.get(self, "transforms"))
+
+    @transforms.setter
+    def transforms(
+        self,
+        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnListenerRule.TransformProperty"]]]],
+    ) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__419a5d3af31f0f6ae614e1f0769137efa882317f1538e54380e430e493e35cd9)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "transforms", value) # pyright: ignore[reportArgumentType]
+
     @jsii.data_type(
         jsii_type="aws-cdk-lib.aws_elasticloadbalancingv2.CfnListenerRule.ActionProperty",
         jsii_struct_bases=[],
@@ -20061,10 +20142,10 @@ class CfnListenerRule(
             :param authenticate_cognito_config: [HTTPS listeners] Information for using Amazon Cognito to authenticate users. Specify only when ``Type`` is ``authenticate-cognito`` .
             :param authenticate_oidc_config: [HTTPS listeners] Information about an identity provider that is compliant with OpenID Connect (OIDC). Specify only when ``Type`` is ``authenticate-oidc`` .
             :param fixed_response_config: [Application Load Balancer] Information for creating an action that returns a custom HTTP response. Specify only when ``Type`` is ``fixed-response`` .
-            :param forward_config: Information for creating an action that distributes requests among one or more target groups. For Network Load Balancers, you can specify a single target group. Specify only when ``Type`` is ``forward`` . If you specify both ``ForwardConfig`` and ``TargetGroupArn`` , you can specify only one target group using ``ForwardConfig`` and it must be the same target group specified in ``TargetGroupArn`` .
+            :param forward_config: Information for creating an action that distributes requests among multiple target groups. Specify only when ``Type`` is ``forward`` . If you specify both ``ForwardConfig`` and ``TargetGroupArn`` , you can specify only one target group using ``ForwardConfig`` and it must be the same target group specified in ``TargetGroupArn`` .
             :param order: The order for the action. This value is required for rules with multiple actions. The action with the lowest value for order is performed first.
             :param redirect_config: [Application Load Balancer] Information for creating a redirect action. Specify only when ``Type`` is ``redirect`` .
-            :param target_group_arn: The Amazon Resource Name (ARN) of the target group. Specify only when ``Type`` is ``forward`` and you want to route to a single target group. To route to one or more target groups, use ``ForwardConfig`` instead.
+            :param target_group_arn: The Amazon Resource Name (ARN) of the target group. Specify only when ``Type`` is ``forward`` and you want to route to a single target group. To route to multiple target groups, you must use ``ForwardConfig`` instead.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-elasticloadbalancingv2-listenerrule-action.html
             :exampleMetadata: fixture=_generated
@@ -20223,9 +20304,9 @@ class CfnListenerRule(
         def forward_config(
             self,
         ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnListenerRule.ForwardConfigProperty"]]:
-            '''Information for creating an action that distributes requests among one or more target groups.
+            '''Information for creating an action that distributes requests among multiple target groups. Specify only when ``Type`` is ``forward`` .
 
-            For Network Load Balancers, you can specify a single target group. Specify only when ``Type`` is ``forward`` . If you specify both ``ForwardConfig`` and ``TargetGroupArn`` , you can specify only one target group using ``ForwardConfig`` and it must be the same target group specified in ``TargetGroupArn`` .
+            If you specify both ``ForwardConfig`` and ``TargetGroupArn`` , you can specify only one target group using ``ForwardConfig`` and it must be the same target group specified in ``TargetGroupArn`` .
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-elasticloadbalancingv2-listenerrule-action.html#cfn-elasticloadbalancingv2-listenerrule-action-forwardconfig
             '''
@@ -20260,7 +20341,7 @@ class CfnListenerRule(
         def target_group_arn(self) -> typing.Optional[builtins.str]:
             '''The Amazon Resource Name (ARN) of the target group.
 
-            Specify only when ``Type`` is ``forward`` and you want to route to a single target group. To route to one or more target groups, use ``ForwardConfig`` instead.
+            Specify only when ``Type`` is ``forward`` and you want to route to a single target group. To route to multiple target groups, you must use ``ForwardConfig`` instead.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-elasticloadbalancingv2-listenerrule-action.html#cfn-elasticloadbalancingv2-listenerrule-action-targetgrouparn
             '''
@@ -20835,9 +20916,9 @@ class CfnListenerRule(
             target_groups: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnListenerRule.TargetGroupTupleProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
             target_group_stickiness_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnListenerRule.TargetGroupStickinessConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
-            '''Information for creating an action that distributes requests among one or more target groups.
+            '''Information for creating an action that distributes requests among multiple target groups. Specify only when ``Type`` is ``forward`` .
 
-            For Network Load Balancers, you can specify a single target group. Specify only when ``Type`` is ``forward`` . If you specify both ``ForwardConfig`` and ``TargetGroupArn`` , you can specify only one target group using ``ForwardConfig`` and it must be the same target group specified in ``TargetGroupArn`` .
+            If you specify both ``ForwardConfig`` and ``TargetGroupArn`` , you can specify only one target group using ``ForwardConfig`` and it must be the same target group specified in ``TargetGroupArn`` .
 
             :param target_groups: Information about how traffic will be distributed between multiple target groups in a forward rule.
             :param target_group_stickiness_config: Information about the target group stickiness for a rule.
@@ -20908,17 +20989,19 @@ class CfnListenerRule(
     @jsii.data_type(
         jsii_type="aws-cdk-lib.aws_elasticloadbalancingv2.CfnListenerRule.HostHeaderConfigProperty",
         jsii_struct_bases=[],
-        name_mapping={"values": "values"},
+        name_mapping={"regex_values": "regexValues", "values": "values"},
     )
     class HostHeaderConfigProperty:
         def __init__(
             self,
             *,
+            regex_values: typing.Optional[typing.Sequence[builtins.str]] = None,
             values: typing.Optional[typing.Sequence[builtins.str]] = None,
         ) -> None:
             '''Information about a host header condition.
 
-            :param values: The host names. The maximum size of each name is 128 characters. The comparison is case insensitive. The following wildcard characters are supported: * (matches 0 or more characters) and ? (matches exactly 1 character). You must include at least one "." character. You can include only alphabetical characters after the final "." character. If you specify multiple strings, the condition is satisfied if one of the strings matches the host name.
+            :param regex_values: 
+            :param values: The host names. The maximum length of each string is 128 characters. The comparison is case insensitive. The following wildcard characters are supported: * (matches 0 or more characters) and ? (matches exactly 1 character). You must include at least one "." character. You can include only alphabetical characters after the final "." character. If you specify multiple strings, the condition is satisfied if one of the strings matches the host name.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-elasticloadbalancingv2-listenerrule-hostheaderconfig.html
             :exampleMetadata: fixture=_generated
@@ -20930,21 +21013,33 @@ class CfnListenerRule(
                 from aws_cdk import aws_elasticloadbalancingv2 as elbv2
                 
                 host_header_config_property = elbv2.CfnListenerRule.HostHeaderConfigProperty(
+                    regex_values=["regexValues"],
                     values=["values"]
                 )
             '''
             if __debug__:
                 type_hints = typing.get_type_hints(_typecheckingstub__1b5898a49fd69ca72a0823cc1f4cde0c5980f5ac1c3ff34184628db9c4c3d642)
+                check_type(argname="argument regex_values", value=regex_values, expected_type=type_hints["regex_values"])
                 check_type(argname="argument values", value=values, expected_type=type_hints["values"])
             self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if regex_values is not None:
+                self._values["regex_values"] = regex_values
             if values is not None:
                 self._values["values"] = values
+
+        @builtins.property
+        def regex_values(self) -> typing.Optional[typing.List[builtins.str]]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-elasticloadbalancingv2-listenerrule-hostheaderconfig.html#cfn-elasticloadbalancingv2-listenerrule-hostheaderconfig-regexvalues
+            '''
+            result = self._values.get("regex_values")
+            return typing.cast(typing.Optional[typing.List[builtins.str]], result)
 
         @builtins.property
         def values(self) -> typing.Optional[typing.List[builtins.str]]:
             '''The host names.
 
-            The maximum size of each name is 128 characters. The comparison is case insensitive. The following wildcard characters are supported: * (matches 0 or more characters) and ? (matches exactly 1 character). You must include at least one "." character. You can include only alphabetical characters after the final "." character.
+            The maximum length of each string is 128 characters. The comparison is case insensitive. The following wildcard characters are supported: * (matches 0 or more characters) and ? (matches exactly 1 character). You must include at least one "." character. You can include only alphabetical characters after the final "." character.
 
             If you specify multiple strings, the condition is satisfied if one of the strings matches the host name.
 
@@ -20967,13 +21062,18 @@ class CfnListenerRule(
     @jsii.data_type(
         jsii_type="aws-cdk-lib.aws_elasticloadbalancingv2.CfnListenerRule.HttpHeaderConfigProperty",
         jsii_struct_bases=[],
-        name_mapping={"http_header_name": "httpHeaderName", "values": "values"},
+        name_mapping={
+            "http_header_name": "httpHeaderName",
+            "regex_values": "regexValues",
+            "values": "values",
+        },
     )
     class HttpHeaderConfigProperty:
         def __init__(
             self,
             *,
             http_header_name: typing.Optional[builtins.str] = None,
+            regex_values: typing.Optional[typing.Sequence[builtins.str]] = None,
             values: typing.Optional[typing.Sequence[builtins.str]] = None,
         ) -> None:
             '''Information about an HTTP header condition.
@@ -20981,7 +21081,8 @@ class CfnListenerRule(
             There is a set of standard HTTP header fields. You can also define custom HTTP header fields.
 
             :param http_header_name: The name of the HTTP header field. The maximum size is 40 characters. The header name is case insensitive. The allowed characters are specified by RFC 7230. Wildcards are not supported.
-            :param values: The strings to compare against the value of the HTTP header. The maximum size of each string is 128 characters. The comparison strings are case insensitive. The following wildcard characters are supported: * (matches 0 or more characters) and ? (matches exactly 1 character). If the same header appears multiple times in the request, we search them in order until a match is found. If you specify multiple strings, the condition is satisfied if one of the strings matches the value of the HTTP header. To require that all of the strings are a match, create one condition per string.
+            :param regex_values: 
+            :param values: The strings to compare against the value of the HTTP header. The maximum length of each string is 128 characters. The comparison strings are case insensitive. The following wildcard characters are supported: * (matches 0 or more characters) and ? (matches exactly 1 character). If the same header appears multiple times in the request, we search them in order until a match is found. If you specify multiple strings, the condition is satisfied if one of the strings matches the value of the HTTP header. To require that all of the strings are a match, create one condition per string.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-elasticloadbalancingv2-listenerrule-httpheaderconfig.html
             :exampleMetadata: fixture=_generated
@@ -20994,16 +21095,20 @@ class CfnListenerRule(
                 
                 http_header_config_property = elbv2.CfnListenerRule.HttpHeaderConfigProperty(
                     http_header_name="httpHeaderName",
+                    regex_values=["regexValues"],
                     values=["values"]
                 )
             '''
             if __debug__:
                 type_hints = typing.get_type_hints(_typecheckingstub__fc8bc3be7581c3c74e13fd0af458f85ee288dc502b075ed589b066c9d37feb40)
                 check_type(argname="argument http_header_name", value=http_header_name, expected_type=type_hints["http_header_name"])
+                check_type(argname="argument regex_values", value=regex_values, expected_type=type_hints["regex_values"])
                 check_type(argname="argument values", value=values, expected_type=type_hints["values"])
             self._values: typing.Dict[builtins.str, typing.Any] = {}
             if http_header_name is not None:
                 self._values["http_header_name"] = http_header_name
+            if regex_values is not None:
+                self._values["regex_values"] = regex_values
             if values is not None:
                 self._values["values"] = values
 
@@ -21019,10 +21124,18 @@ class CfnListenerRule(
             return typing.cast(typing.Optional[builtins.str], result)
 
         @builtins.property
+        def regex_values(self) -> typing.Optional[typing.List[builtins.str]]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-elasticloadbalancingv2-listenerrule-httpheaderconfig.html#cfn-elasticloadbalancingv2-listenerrule-httpheaderconfig-regexvalues
+            '''
+            result = self._values.get("regex_values")
+            return typing.cast(typing.Optional[typing.List[builtins.str]], result)
+
+        @builtins.property
         def values(self) -> typing.Optional[typing.List[builtins.str]]:
             '''The strings to compare against the value of the HTTP header.
 
-            The maximum size of each string is 128 characters. The comparison strings are case insensitive. The following wildcard characters are supported: * (matches 0 or more characters) and ? (matches exactly 1 character).
+            The maximum length of each string is 128 characters. The comparison strings are case insensitive. The following wildcard characters are supported: * (matches 0 or more characters) and ? (matches exactly 1 character).
 
             If the same header appears multiple times in the request, we search them in order until a match is found.
 
@@ -21059,7 +21172,7 @@ class CfnListenerRule(
 
             HTTP defines a set of request methods, also referred to as HTTP verbs. For more information, see the `HTTP Method Registry <https://docs.aws.amazon.com/https://www.iana.org/assignments/http-methods/http-methods.xhtml>`_ . You can also define custom HTTP methods.
 
-            :param values: The name of the request method. The maximum size is 40 characters. The allowed characters are A-Z, hyphen (-), and underscore (_). The comparison is case sensitive. Wildcards are not supported; therefore, the method name must be an exact match. If you specify multiple strings, the condition is satisfied if one of the strings matches the HTTP request method. We recommend that you route GET and HEAD requests in the same way, because the response to a HEAD request may be cached.
+            :param values: The name of the request method. The maximum length is 40 characters. The allowed characters are A-Z, hyphen (-), and underscore (_). The comparison is case sensitive. Wildcards are not supported; therefore, the method name must be an exact match. If you specify multiple strings, the condition is satisfied if one of the strings matches the HTTP request method. We recommend that you route GET and HEAD requests in the same way, because the response to a HEAD request may be cached.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-elasticloadbalancingv2-listenerrule-httprequestmethodconfig.html
             :exampleMetadata: fixture=_generated
@@ -21085,7 +21198,7 @@ class CfnListenerRule(
         def values(self) -> typing.Optional[typing.List[builtins.str]]:
             '''The name of the request method.
 
-            The maximum size is 40 characters. The allowed characters are A-Z, hyphen (-), and underscore (_). The comparison is case sensitive. Wildcards are not supported; therefore, the method name must be an exact match.
+            The maximum length is 40 characters. The allowed characters are A-Z, hyphen (-), and underscore (_). The comparison is case sensitive. Wildcards are not supported; therefore, the method name must be an exact match.
 
             If you specify multiple strings, the condition is satisfied if one of the strings matches the HTTP request method. We recommend that you route GET and HEAD requests in the same way, because the response to a HEAD request may be cached.
 
@@ -21108,16 +21221,18 @@ class CfnListenerRule(
     @jsii.data_type(
         jsii_type="aws-cdk-lib.aws_elasticloadbalancingv2.CfnListenerRule.PathPatternConfigProperty",
         jsii_struct_bases=[],
-        name_mapping={"values": "values"},
+        name_mapping={"regex_values": "regexValues", "values": "values"},
     )
     class PathPatternConfigProperty:
         def __init__(
             self,
             *,
+            regex_values: typing.Optional[typing.Sequence[builtins.str]] = None,
             values: typing.Optional[typing.Sequence[builtins.str]] = None,
         ) -> None:
             '''Information about a path pattern condition.
 
+            :param regex_values: 
             :param values: The path patterns to compare against the request URL. The maximum size of each string is 128 characters. The comparison is case sensitive. The following wildcard characters are supported: * (matches 0 or more characters) and ? (matches exactly 1 character). If you specify multiple strings, the condition is satisfied if one of them matches the request URL. The path pattern is compared only to the path of the URL, not to its query string.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-elasticloadbalancingv2-listenerrule-pathpatternconfig.html
@@ -21130,15 +21245,27 @@ class CfnListenerRule(
                 from aws_cdk import aws_elasticloadbalancingv2 as elbv2
                 
                 path_pattern_config_property = elbv2.CfnListenerRule.PathPatternConfigProperty(
+                    regex_values=["regexValues"],
                     values=["values"]
                 )
             '''
             if __debug__:
                 type_hints = typing.get_type_hints(_typecheckingstub__e6e360611a9f0b6038a980c629c84350310b974cff3f7263e93acf13f081ebc5)
+                check_type(argname="argument regex_values", value=regex_values, expected_type=type_hints["regex_values"])
                 check_type(argname="argument values", value=values, expected_type=type_hints["values"])
             self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if regex_values is not None:
+                self._values["regex_values"] = regex_values
             if values is not None:
                 self._values["values"] = values
+
+        @builtins.property
+        def regex_values(self) -> typing.Optional[typing.List[builtins.str]]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-elasticloadbalancingv2-listenerrule-pathpatternconfig.html#cfn-elasticloadbalancingv2-listenerrule-pathpatternconfig-regexvalues
+            '''
+            result = self._values.get("regex_values")
+            return typing.cast(typing.Optional[typing.List[builtins.str]], result)
 
         @builtins.property
         def values(self) -> typing.Optional[typing.List[builtins.str]]:
@@ -21179,7 +21306,7 @@ class CfnListenerRule(
 
             The query string component of a URI starts after the first '?' character and is terminated by either a '#' character or the end of the URI. A typical query string contains key/value pairs separated by '&' characters. The allowed characters are specified by RFC 3986. Any character can be percentage encoded.
 
-            :param values: The key/value pairs or values to find in the query string. The maximum size of each string is 128 characters. The comparison is case insensitive. The following wildcard characters are supported: * (matches 0 or more characters) and ? (matches exactly 1 character). To search for a literal '*' or '?' character in a query string, you must escape these characters in ``Values`` using a '' character. If you specify multiple key/value pairs or values, the condition is satisfied if one of them is found in the query string.
+            :param values: The key/value pairs or values to find in the query string. The maximum length of each string is 128 characters. The comparison is case insensitive. The following wildcard characters are supported: * (matches 0 or more characters) and ? (matches exactly 1 character). To search for a literal '*' or '?' character in a query string, you must escape these characters in ``Values`` using a '' character. If you specify multiple key/value pairs or values, the condition is satisfied if one of them is found in the query string.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-elasticloadbalancingv2-listenerrule-querystringconfig.html
             :exampleMetadata: fixture=_generated
@@ -21210,7 +21337,7 @@ class CfnListenerRule(
         ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnListenerRule.QueryStringKeyValueProperty"]]]]:
             '''The key/value pairs or values to find in the query string.
 
-            The maximum size of each string is 128 characters. The comparison is case insensitive. The following wildcard characters are supported: * (matches 0 or more characters) and ? (matches exactly 1 character). To search for a literal '*' or '?' character in a query string, you must escape these characters in ``Values`` using a '' character.
+            The maximum length of each string is 128 characters. The comparison is case insensitive. The following wildcard characters are supported: * (matches 0 or more characters) and ? (matches exactly 1 character). To search for a literal '*' or '?' character in a query string, you must escape these characters in ``Values`` using a '' character.
 
             If you specify multiple key/value pairs or values, the condition is satisfied if one of them is found in the query string.
 
@@ -21467,6 +21594,128 @@ class CfnListenerRule(
             )
 
     @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_elasticloadbalancingv2.CfnListenerRule.RewriteConfigObjectProperty",
+        jsii_struct_bases=[],
+        name_mapping={"rewrites": "rewrites"},
+    )
+    class RewriteConfigObjectProperty:
+        def __init__(
+            self,
+            *,
+            rewrites: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnListenerRule.RewriteConfigProperty", typing.Dict[builtins.str, typing.Any]]]]],
+        ) -> None:
+            '''
+            :param rewrites: 
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-elasticloadbalancingv2-listenerrule-rewriteconfigobject.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_elasticloadbalancingv2 as elbv2
+                
+                rewrite_config_object_property = elbv2.CfnListenerRule.RewriteConfigObjectProperty(
+                    rewrites=[elbv2.CfnListenerRule.RewriteConfigProperty(
+                        regex="regex",
+                        replace="replace"
+                    )]
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__d22b4408908861a36e3f920a4f6c3a1838cc20f9a19985df5f304eca3edc5e40)
+                check_type(argname="argument rewrites", value=rewrites, expected_type=type_hints["rewrites"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "rewrites": rewrites,
+            }
+
+        @builtins.property
+        def rewrites(
+            self,
+        ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnListenerRule.RewriteConfigProperty"]]]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-elasticloadbalancingv2-listenerrule-rewriteconfigobject.html#cfn-elasticloadbalancingv2-listenerrule-rewriteconfigobject-rewrites
+            '''
+            result = self._values.get("rewrites")
+            assert result is not None, "Required property 'rewrites' is missing"
+            return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnListenerRule.RewriteConfigProperty"]]], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "RewriteConfigObjectProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_elasticloadbalancingv2.CfnListenerRule.RewriteConfigProperty",
+        jsii_struct_bases=[],
+        name_mapping={"regex": "regex", "replace": "replace"},
+    )
+    class RewriteConfigProperty:
+        def __init__(self, *, regex: builtins.str, replace: builtins.str) -> None:
+            '''
+            :param regex: 
+            :param replace: 
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-elasticloadbalancingv2-listenerrule-rewriteconfig.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_elasticloadbalancingv2 as elbv2
+                
+                rewrite_config_property = elbv2.CfnListenerRule.RewriteConfigProperty(
+                    regex="regex",
+                    replace="replace"
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__4c3f3a6e86413710fa57369e22bb4b764e58ae1c95bfcad66327ab3f9a73c775)
+                check_type(argname="argument regex", value=regex, expected_type=type_hints["regex"])
+                check_type(argname="argument replace", value=replace, expected_type=type_hints["replace"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "regex": regex,
+                "replace": replace,
+            }
+
+        @builtins.property
+        def regex(self) -> builtins.str:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-elasticloadbalancingv2-listenerrule-rewriteconfig.html#cfn-elasticloadbalancingv2-listenerrule-rewriteconfig-regex
+            '''
+            result = self._values.get("regex")
+            assert result is not None, "Required property 'regex' is missing"
+            return typing.cast(builtins.str, result)
+
+        @builtins.property
+        def replace(self) -> builtins.str:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-elasticloadbalancingv2-listenerrule-rewriteconfig.html#cfn-elasticloadbalancingv2-listenerrule-rewriteconfig-replace
+            '''
+            result = self._values.get("replace")
+            assert result is not None, "Required property 'replace' is missing"
+            return typing.cast(builtins.str, result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "RewriteConfigProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
         jsii_type="aws-cdk-lib.aws_elasticloadbalancingv2.CfnListenerRule.RuleConditionProperty",
         jsii_struct_bases=[],
         name_mapping={
@@ -21476,6 +21725,7 @@ class CfnListenerRule(
             "http_request_method_config": "httpRequestMethodConfig",
             "path_pattern_config": "pathPatternConfig",
             "query_string_config": "queryStringConfig",
+            "regex_values": "regexValues",
             "source_ip_config": "sourceIpConfig",
             "values": "values",
         },
@@ -21490,6 +21740,7 @@ class CfnListenerRule(
             http_request_method_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnListenerRule.HttpRequestMethodConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             path_pattern_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnListenerRule.PathPatternConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             query_string_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnListenerRule.QueryStringConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            regex_values: typing.Optional[typing.Sequence[builtins.str]] = None,
             source_ip_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnListenerRule.SourceIpConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             values: typing.Optional[typing.Sequence[builtins.str]] = None,
         ) -> None:
@@ -21501,6 +21752,7 @@ class CfnListenerRule(
             :param http_request_method_config: Information for an HTTP method condition. Specify only when ``Field`` is ``http-request-method`` .
             :param path_pattern_config: Information for a path pattern condition. Specify only when ``Field`` is ``path-pattern`` .
             :param query_string_config: Information for a query string condition. Specify only when ``Field`` is ``query-string`` .
+            :param regex_values: 
             :param source_ip_config: Information for a source IP condition. Specify only when ``Field`` is ``source-ip`` .
             :param values: The condition value. Specify only when ``Field`` is ``host-header`` or ``path-pattern`` . Alternatively, to specify multiple host names or multiple path patterns, use ``HostHeaderConfig`` or ``PathPatternConfig`` . If ``Field`` is ``host-header`` and you're not using ``HostHeaderConfig`` , you can specify a single host name (for example, my.example.com). A host name is case insensitive, can be up to 128 characters in length, and can contain any of the following characters. - A-Z, a-z, 0-9 - - . - - (matches 0 or more characters) - ? (matches exactly 1 character) If ``Field`` is ``path-pattern`` and you're not using ``PathPatternConfig`` , you can specify a single path pattern (for example, /img/*). A path pattern is case-sensitive, can be up to 128 characters in length, and can contain any of the following characters. - A-Z, a-z, 0-9 - _ - . $ / ~ " ' @ : + - & (using &) - - (matches 0 or more characters) - ? (matches exactly 1 character)
 
@@ -21516,16 +21768,19 @@ class CfnListenerRule(
                 rule_condition_property = elbv2.CfnListenerRule.RuleConditionProperty(
                     field="field",
                     host_header_config=elbv2.CfnListenerRule.HostHeaderConfigProperty(
+                        regex_values=["regexValues"],
                         values=["values"]
                     ),
                     http_header_config=elbv2.CfnListenerRule.HttpHeaderConfigProperty(
                         http_header_name="httpHeaderName",
+                        regex_values=["regexValues"],
                         values=["values"]
                     ),
                     http_request_method_config=elbv2.CfnListenerRule.HttpRequestMethodConfigProperty(
                         values=["values"]
                     ),
                     path_pattern_config=elbv2.CfnListenerRule.PathPatternConfigProperty(
+                        regex_values=["regexValues"],
                         values=["values"]
                     ),
                     query_string_config=elbv2.CfnListenerRule.QueryStringConfigProperty(
@@ -21534,6 +21789,7 @@ class CfnListenerRule(
                             value="value"
                         )]
                     ),
+                    regex_values=["regexValues"],
                     source_ip_config=elbv2.CfnListenerRule.SourceIpConfigProperty(
                         values=["values"]
                     ),
@@ -21548,6 +21804,7 @@ class CfnListenerRule(
                 check_type(argname="argument http_request_method_config", value=http_request_method_config, expected_type=type_hints["http_request_method_config"])
                 check_type(argname="argument path_pattern_config", value=path_pattern_config, expected_type=type_hints["path_pattern_config"])
                 check_type(argname="argument query_string_config", value=query_string_config, expected_type=type_hints["query_string_config"])
+                check_type(argname="argument regex_values", value=regex_values, expected_type=type_hints["regex_values"])
                 check_type(argname="argument source_ip_config", value=source_ip_config, expected_type=type_hints["source_ip_config"])
                 check_type(argname="argument values", value=values, expected_type=type_hints["values"])
             self._values: typing.Dict[builtins.str, typing.Any] = {}
@@ -21563,6 +21820,8 @@ class CfnListenerRule(
                 self._values["path_pattern_config"] = path_pattern_config
             if query_string_config is not None:
                 self._values["query_string_config"] = query_string_config
+            if regex_values is not None:
+                self._values["regex_values"] = regex_values
             if source_ip_config is not None:
                 self._values["source_ip_config"] = source_ip_config
             if values is not None:
@@ -21648,6 +21907,14 @@ class CfnListenerRule(
             '''
             result = self._values.get("query_string_config")
             return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnListenerRule.QueryStringConfigProperty"]], result)
+
+        @builtins.property
+        def regex_values(self) -> typing.Optional[typing.List[builtins.str]]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-elasticloadbalancingv2-listenerrule-rulecondition.html#cfn-elasticloadbalancingv2-listenerrule-rulecondition-regexvalues
+            '''
+            result = self._values.get("regex_values")
+            return typing.cast(typing.Optional[typing.List[builtins.str]], result)
 
         @builtins.property
         def source_ip_config(
@@ -21778,7 +22045,7 @@ class CfnListenerRule(
         ) -> None:
             '''Information about the target group stickiness for a rule.
 
-            :param duration_seconds: The time period, in seconds, during which requests from a client should be routed to the same target group. The range is 1-604800 seconds (7 days). You must specify this value when enabling target group stickiness.
+            :param duration_seconds: [Application Load Balancers] The time period, in seconds, during which requests from a client should be routed to the same target group. The range is 1-604800 seconds (7 days). You must specify this value when enabling target group stickiness.
             :param enabled: Indicates whether target group stickiness is enabled.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-elasticloadbalancingv2-listenerrule-targetgroupstickinessconfig.html
@@ -21807,7 +22074,7 @@ class CfnListenerRule(
 
         @builtins.property
         def duration_seconds(self) -> typing.Optional[jsii.Number]:
-            '''The time period, in seconds, during which requests from a client should be routed to the same target group.
+            '''[Application Load Balancers] The time period, in seconds, during which requests from a client should be routed to the same target group.
 
             The range is 1-604800 seconds (7 days). You must specify this value when enabling target group stickiness.
 
@@ -21910,6 +22177,108 @@ class CfnListenerRule(
                 k + "=" + repr(v) for k, v in self._values.items()
             )
 
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_elasticloadbalancingv2.CfnListenerRule.TransformProperty",
+        jsii_struct_bases=[],
+        name_mapping={
+            "type": "type",
+            "host_header_rewrite_config": "hostHeaderRewriteConfig",
+            "url_rewrite_config": "urlRewriteConfig",
+        },
+    )
+    class TransformProperty:
+        def __init__(
+            self,
+            *,
+            type: builtins.str,
+            host_header_rewrite_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnListenerRule.RewriteConfigObjectProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            url_rewrite_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnListenerRule.RewriteConfigObjectProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        ) -> None:
+            '''
+            :param type: 
+            :param host_header_rewrite_config: 
+            :param url_rewrite_config: 
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-elasticloadbalancingv2-listenerrule-transform.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_elasticloadbalancingv2 as elbv2
+                
+                transform_property = elbv2.CfnListenerRule.TransformProperty(
+                    type="type",
+                
+                    # the properties below are optional
+                    host_header_rewrite_config=elbv2.CfnListenerRule.RewriteConfigObjectProperty(
+                        rewrites=[elbv2.CfnListenerRule.RewriteConfigProperty(
+                            regex="regex",
+                            replace="replace"
+                        )]
+                    ),
+                    url_rewrite_config=elbv2.CfnListenerRule.RewriteConfigObjectProperty(
+                        rewrites=[elbv2.CfnListenerRule.RewriteConfigProperty(
+                            regex="regex",
+                            replace="replace"
+                        )]
+                    )
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__f6f25c4596bc3291a9eb0f8cf6830c9b4a4b0949d0bad500d5fefdbb325293fd)
+                check_type(argname="argument type", value=type, expected_type=type_hints["type"])
+                check_type(argname="argument host_header_rewrite_config", value=host_header_rewrite_config, expected_type=type_hints["host_header_rewrite_config"])
+                check_type(argname="argument url_rewrite_config", value=url_rewrite_config, expected_type=type_hints["url_rewrite_config"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "type": type,
+            }
+            if host_header_rewrite_config is not None:
+                self._values["host_header_rewrite_config"] = host_header_rewrite_config
+            if url_rewrite_config is not None:
+                self._values["url_rewrite_config"] = url_rewrite_config
+
+        @builtins.property
+        def type(self) -> builtins.str:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-elasticloadbalancingv2-listenerrule-transform.html#cfn-elasticloadbalancingv2-listenerrule-transform-type
+            '''
+            result = self._values.get("type")
+            assert result is not None, "Required property 'type' is missing"
+            return typing.cast(builtins.str, result)
+
+        @builtins.property
+        def host_header_rewrite_config(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnListenerRule.RewriteConfigObjectProperty"]]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-elasticloadbalancingv2-listenerrule-transform.html#cfn-elasticloadbalancingv2-listenerrule-transform-hostheaderrewriteconfig
+            '''
+            result = self._values.get("host_header_rewrite_config")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnListenerRule.RewriteConfigObjectProperty"]], result)
+
+        @builtins.property
+        def url_rewrite_config(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnListenerRule.RewriteConfigObjectProperty"]]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-elasticloadbalancingv2-listenerrule-transform.html#cfn-elasticloadbalancingv2-listenerrule-transform-urlrewriteconfig
+            '''
+            result = self._values.get("url_rewrite_config")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnListenerRule.RewriteConfigObjectProperty"]], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "TransformProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
 
 @jsii.implements(_IInspectable_c2943556, ILoadBalancerRef, _ITaggable_36806126)
 class CfnLoadBalancer(
@@ -21986,7 +22355,7 @@ class CfnLoadBalancer(
         '''
         :param scope: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
-        :param enable_capacity_reservation_provision_stabilize: Default: - false
+        :param enable_capacity_reservation_provision_stabilize: Indicates whether to enable stabilization when creating or updating an LCU reservation. This ensures that the final stack status reflects the status of the LCU reservation. The default is ``false`` . Default: - false
         :param enable_prefix_for_ipv6_source_nat: [Network Load Balancers with UDP listeners] Indicates whether to use an IPv6 prefix from each subnet for source NAT. The IP address type must be ``dualstack`` . The default value is ``off`` .
         :param enforce_security_group_inbound_rules_on_private_link_traffic: Indicates whether to evaluate inbound security group rules for traffic sent to a Network Load Balancer through AWS PrivateLink . The default is ``on`` . You can't configure this property on a Network Load Balancer unless you associated a security group with the load balancer when you created it.
         :param ip_address_type: The IP address type. Internal load balancers must use ``ipv4`` . [Application Load Balancers] The possible values are ``ipv4`` (IPv4 addresses), ``dualstack`` (IPv4 and IPv6 addresses), and ``dualstack-without-public-ipv4`` (public IPv6 addresses and private IPv4 and IPv6 addresses). Application Load Balancer authentication supports IPv4 addresses only when connecting to an Identity Provider (IdP) or Amazon Cognito endpoint. Without a public IPv4 address the load balancer can't complete the authentication process, resulting in HTTP 500 errors. [Network Load Balancers and Gateway Load Balancers] The possible values are ``ipv4`` (IPv4 addresses) and ``dualstack`` (IPv4 and IPv6 addresses).
@@ -22138,6 +22507,7 @@ class CfnLoadBalancer(
     def enable_capacity_reservation_provision_stabilize(
         self,
     ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        '''Indicates whether to enable stabilization when creating or updating an LCU reservation.'''
         return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "enableCapacityReservationProvisionStabilize"))
 
     @enable_capacity_reservation_provision_stabilize.setter
@@ -28430,6 +28800,7 @@ def _typecheckingstub__ca75076613edf0bf6ade8ee145bc71de34aa66567d90d5721bd40f862
     conditions: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnListenerRule.RuleConditionProperty, typing.Dict[builtins.str, typing.Any]]]]],
     priority: jsii.Number,
     listener_arn: typing.Optional[builtins.str] = None,
+    transforms: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnListenerRule.TransformProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -29638,6 +30009,7 @@ def _typecheckingstub__ae1e13bd1e6ee2145702f187cf74339faebe22401d39b3e4507fd776f
     conditions: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnListenerRule.RuleConditionProperty, typing.Dict[builtins.str, typing.Any]]]]],
     priority: jsii.Number,
     listener_arn: typing.Optional[builtins.str] = None,
+    transforms: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnListenerRule.TransformProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -29674,6 +30046,12 @@ def _typecheckingstub__ad2ec0aba371a9fd9fe7b43961d981938e552ae6cf69b73a21d00ec69
 
 def _typecheckingstub__5adb80db0269c5891b4a71aef172af30d3d5bd9e5d96d9809336d9aa10169c73(
     value: typing.Optional[builtins.str],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__419a5d3af31f0f6ae614e1f0769137efa882317f1538e54380e430e493e35cd9(
+    value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnListenerRule.TransformProperty]]]],
 ) -> None:
     """Type checking stubs"""
     pass
@@ -29743,6 +30121,7 @@ def _typecheckingstub__a222c6dcf7d01b3749391e772443eef278796e8879c110a3ac64e4cca
 
 def _typecheckingstub__1b5898a49fd69ca72a0823cc1f4cde0c5980f5ac1c3ff34184628db9c4c3d642(
     *,
+    regex_values: typing.Optional[typing.Sequence[builtins.str]] = None,
     values: typing.Optional[typing.Sequence[builtins.str]] = None,
 ) -> None:
     """Type checking stubs"""
@@ -29751,6 +30130,7 @@ def _typecheckingstub__1b5898a49fd69ca72a0823cc1f4cde0c5980f5ac1c3ff34184628db9c
 def _typecheckingstub__fc8bc3be7581c3c74e13fd0af458f85ee288dc502b075ed589b066c9d37feb40(
     *,
     http_header_name: typing.Optional[builtins.str] = None,
+    regex_values: typing.Optional[typing.Sequence[builtins.str]] = None,
     values: typing.Optional[typing.Sequence[builtins.str]] = None,
 ) -> None:
     """Type checking stubs"""
@@ -29765,6 +30145,7 @@ def _typecheckingstub__f3fe6a1ff6af190d9fb8cf22cffb0c9765117a47c52e2458d5d8ed20b
 
 def _typecheckingstub__e6e360611a9f0b6038a980c629c84350310b974cff3f7263e93acf13f081ebc5(
     *,
+    regex_values: typing.Optional[typing.Sequence[builtins.str]] = None,
     values: typing.Optional[typing.Sequence[builtins.str]] = None,
 ) -> None:
     """Type checking stubs"""
@@ -29797,6 +30178,21 @@ def _typecheckingstub__b3c17c21af6d672794fd622b97546367ce3d4977a505e496758481673
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__d22b4408908861a36e3f920a4f6c3a1838cc20f9a19985df5f304eca3edc5e40(
+    *,
+    rewrites: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnListenerRule.RewriteConfigProperty, typing.Dict[builtins.str, typing.Any]]]]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__4c3f3a6e86413710fa57369e22bb4b764e58ae1c95bfcad66327ab3f9a73c775(
+    *,
+    regex: builtins.str,
+    replace: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__ac8481b9d3e9b96b0aa37f48f9477db265b5e8adfee281cb486821b04d7fb23c(
     *,
     field: typing.Optional[builtins.str] = None,
@@ -29805,6 +30201,7 @@ def _typecheckingstub__ac8481b9d3e9b96b0aa37f48f9477db265b5e8adfee281cb486821b04
     http_request_method_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnListenerRule.HttpRequestMethodConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     path_pattern_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnListenerRule.PathPatternConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     query_string_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnListenerRule.QueryStringConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    regex_values: typing.Optional[typing.Sequence[builtins.str]] = None,
     source_ip_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnListenerRule.SourceIpConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     values: typing.Optional[typing.Sequence[builtins.str]] = None,
 ) -> None:
@@ -29830,6 +30227,15 @@ def _typecheckingstub__536593b57bfb34d0266501ba53a438ea659bbcb686bea52b916e875da
     *,
     target_group_arn: typing.Optional[builtins.str] = None,
     weight: typing.Optional[jsii.Number] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__f6f25c4596bc3291a9eb0f8cf6830c9b4a4b0949d0bad500d5fefdbb325293fd(
+    *,
+    type: builtins.str,
+    host_header_rewrite_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnListenerRule.RewriteConfigObjectProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    url_rewrite_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnListenerRule.RewriteConfigObjectProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -30827,3 +31233,6 @@ def _typecheckingstub__53d72da0daaf3bca2bf3a45722a5d9d665f24ce2ef58be7bfea7dc854
 ) -> None:
     """Type checking stubs"""
     pass
+
+for cls in [IApplicationListener, IApplicationLoadBalancer, IApplicationLoadBalancerMetrics, IApplicationLoadBalancerTarget, IApplicationTargetGroup, IApplicationTargetGroupMetrics, IListener, IListenerAction, IListenerCertificate, IListenerCertificateRef, IListenerRef, IListenerRuleRef, ILoadBalancerRef, ILoadBalancerV2, INetworkListener, INetworkLoadBalancer, INetworkLoadBalancerMetrics, INetworkLoadBalancerTarget, INetworkTargetGroup, INetworkTargetGroupMetrics, ITargetGroup, ITargetGroupRef, ITrustStore, ITrustStoreRef, ITrustStoreRevocationRef]:
+    typing.cast(typing.Any, cls).__protocol_attrs__ = typing.cast(typing.Any, cls).__protocol_attrs__ - set(['__jsii_proxy_class__', '__jsii_type__'])

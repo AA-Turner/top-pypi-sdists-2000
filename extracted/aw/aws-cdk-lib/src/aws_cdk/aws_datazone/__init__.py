@@ -2436,7 +2436,7 @@ class CfnProjectProfileProps:
                     deployment_mode="deploymentMode",
                     deployment_order=123,
                     description="description",
-                    id="id"
+                    environment_configuration_id="environmentConfigurationId"
                 )],
                 status="status"
             )
@@ -15152,7 +15152,7 @@ class CfnProjectProfile(
                 deployment_mode="deploymentMode",
                 deployment_order=123,
                 description="description",
-                id="id"
+                environment_configuration_id="environmentConfigurationId"
             )],
             status="status"
         )
@@ -15634,7 +15634,7 @@ class CfnProjectProfile(
             "deployment_mode": "deploymentMode",
             "deployment_order": "deploymentOrder",
             "description": "description",
-            "id": "id",
+            "environment_configuration_id": "environmentConfigurationId",
         },
     )
     class EnvironmentConfigurationProperty:
@@ -15649,7 +15649,7 @@ class CfnProjectProfile(
             deployment_mode: typing.Optional[builtins.str] = None,
             deployment_order: typing.Optional[jsii.Number] = None,
             description: typing.Optional[builtins.str] = None,
-            id: typing.Optional[builtins.str] = None,
+            environment_configuration_id: typing.Optional[builtins.str] = None,
         ) -> None:
             '''The configuration of an environment.
 
@@ -15661,7 +15661,7 @@ class CfnProjectProfile(
             :param deployment_mode: The deployment mode of the environment.
             :param deployment_order: The deployment order of the environment.
             :param description: The environment description.
-            :param id: The environment ID.
+            :param environment_configuration_id: 
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-datazone-projectprofile-environmentconfiguration.html
             :exampleMetadata: fixture=_generated
@@ -15699,7 +15699,7 @@ class CfnProjectProfile(
                     deployment_mode="deploymentMode",
                     deployment_order=123,
                     description="description",
-                    id="id"
+                    environment_configuration_id="environmentConfigurationId"
                 )
             '''
             if __debug__:
@@ -15712,7 +15712,7 @@ class CfnProjectProfile(
                 check_type(argname="argument deployment_mode", value=deployment_mode, expected_type=type_hints["deployment_mode"])
                 check_type(argname="argument deployment_order", value=deployment_order, expected_type=type_hints["deployment_order"])
                 check_type(argname="argument description", value=description, expected_type=type_hints["description"])
-                check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+                check_type(argname="argument environment_configuration_id", value=environment_configuration_id, expected_type=type_hints["environment_configuration_id"])
             self._values: typing.Dict[builtins.str, typing.Any] = {
                 "aws_region": aws_region,
                 "environment_blueprint_id": environment_blueprint_id,
@@ -15728,8 +15728,8 @@ class CfnProjectProfile(
                 self._values["deployment_order"] = deployment_order
             if description is not None:
                 self._values["description"] = description
-            if id is not None:
-                self._values["id"] = id
+            if environment_configuration_id is not None:
+                self._values["environment_configuration_id"] = environment_configuration_id
 
         @builtins.property
         def aws_region(
@@ -15813,12 +15813,11 @@ class CfnProjectProfile(
             return typing.cast(typing.Optional[builtins.str], result)
 
         @builtins.property
-        def id(self) -> typing.Optional[builtins.str]:
-            '''The environment ID.
-
-            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-datazone-projectprofile-environmentconfiguration.html#cfn-datazone-projectprofile-environmentconfiguration-id
+        def environment_configuration_id(self) -> typing.Optional[builtins.str]:
             '''
-            result = self._values.get("id")
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-datazone-projectprofile-environmentconfiguration.html#cfn-datazone-projectprofile-environmentconfiguration-environmentconfigurationid
+            '''
+            result = self._values.get("environment_configuration_id")
             return typing.cast(typing.Optional[builtins.str], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
@@ -18757,7 +18756,7 @@ def _typecheckingstub__8addc3ada6a67b6cbb6b275c952d4659afeea35b806096cdb6322e14e
     deployment_mode: typing.Optional[builtins.str] = None,
     deployment_order: typing.Optional[jsii.Number] = None,
     description: typing.Optional[builtins.str] = None,
-    id: typing.Optional[builtins.str] = None,
+    environment_configuration_id: typing.Optional[builtins.str] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -18931,3 +18930,6 @@ def _typecheckingstub__1a1351a79d8a8cf0246c7e7591c1c0736de90dfd896392c833f9cb353
 ) -> None:
     """Type checking stubs"""
     pass
+
+for cls in [IConnectionRef, IDataSourceRef, IDomainRef, IDomainUnitRef, IEnvironmentActionsRef, IEnvironmentBlueprintConfigurationRef, IEnvironmentProfileRef, IEnvironmentRef, IFormTypeRef, IGroupProfileRef, IOwnerRef, IPolicyGrantRef, IProjectMembershipRef, IProjectProfileRef, IProjectRef, ISubscriptionTargetRef, IUserProfileRef]:
+    typing.cast(typing.Any, cls).__protocol_attrs__ = typing.cast(typing.Any, cls).__protocol_attrs__ - set(['__jsii_proxy_class__', '__jsii_type__'])

@@ -1254,27 +1254,6 @@ class CfnBroker(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
-    @jsii.member(jsii_name="fromBrokerArn")
-    @builtins.classmethod
-    def from_broker_arn(
-        cls,
-        scope: _constructs_77d1e7e8.Construct,
-        id: builtins.str,
-        arn: builtins.str,
-    ) -> IBrokerRef:
-        '''Creates a new IBrokerRef from an ARN.
-
-        :param scope: -
-        :param id: -
-        :param arn: -
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__9c3ff9950394e78f42c5c2ee5ee24c371811514bc113748eae9a0642eff2005a)
-            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
-            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
-            check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
-        return typing.cast(IBrokerRef, jsii.sinvoke(cls, "fromBrokerArn", [scope, id, arn]))
-
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -3221,14 +3200,6 @@ def _typecheckingstub__d16f84aeefdd69c636acf0c8b4d958b93ded39c1da5d5eecb39ce8753
     """Type checking stubs"""
     pass
 
-def _typecheckingstub__9c3ff9950394e78f42c5c2ee5ee24c371811514bc113748eae9a0642eff2005a(
-    scope: _constructs_77d1e7e8.Construct,
-    id: builtins.str,
-    arn: builtins.str,
-) -> None:
-    """Type checking stubs"""
-    pass
-
 def _typecheckingstub__2d7a61b5b47c0d5f9d4072378260a383a676994ae22eab1593156375aeda79a7(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -3564,3 +3535,6 @@ def _typecheckingstub__08e92a82af3e279f734ea3e7cb4083780249c19e2dd02ec38e2bacb5b
 ) -> None:
     """Type checking stubs"""
     pass
+
+for cls in [IBrokerRef, IConfigurationAssociationRef, IConfigurationRef]:
+    typing.cast(typing.Any, cls).__protocol_attrs__ = typing.cast(typing.Any, cls).__protocol_attrs__ - set(['__jsii_proxy_class__', '__jsii_type__'])

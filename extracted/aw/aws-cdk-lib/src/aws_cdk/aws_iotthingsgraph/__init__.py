@@ -496,3 +496,6 @@ def _typecheckingstub__86e3976bedecf4f22f1a5d091e02ce3ae2c59b35197b46802f0c02733
 ) -> None:
     """Type checking stubs"""
     pass
+
+for cls in [IFlowTemplateRef]:
+    typing.cast(typing.Any, cls).__protocol_attrs__ = typing.cast(typing.Any, cls).__protocol_attrs__ - set(['__jsii_proxy_class__', '__jsii_type__'])

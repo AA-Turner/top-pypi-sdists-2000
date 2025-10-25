@@ -32,13 +32,13 @@ impl LanguageImpl for Golang {
         let go_dir = store.tools_path(crate::store::ToolBucket::Go);
         let installer = GoInstaller::new(go_dir);
 
-        let version = match &hook.language_request {
-            LanguageRequest::Any => &GoRequest::Any,
-            LanguageRequest::Golang(version) => version,
+        let (version, allows_download) = match &hook.language_request {
+            LanguageRequest::Any { system_only } => (&GoRequest::Any, !system_only),
+            LanguageRequest::Golang(version) => (version, true),
             _ => unreachable!(),
         };
         let go = installer
-            .install(store, version)
+            .install(store, version, allows_download)
             .await
             .context("Failed to install go")?;
 
@@ -51,7 +51,6 @@ impl LanguageImpl for Golang {
             .with_language_version(go.version().deref().clone());
 
         // 2. Create environment
-        fs_err::tokio::create_dir_all(&info.env_path).await?;
         fs_err::tokio::create_dir_all(bin_dir(&info.env_path)).await?;
 
         // 3. Install dependencies

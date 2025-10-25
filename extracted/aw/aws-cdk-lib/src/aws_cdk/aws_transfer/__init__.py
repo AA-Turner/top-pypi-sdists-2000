@@ -691,7 +691,7 @@ class CfnConnectorProps:
         '''Properties for defining a ``CfnConnector``.
 
         :param access_role: Connectors are used to send files using either the AS2 or SFTP protocol. For the access role, provide the Amazon Resource Name (ARN) of the AWS Identity and Access Management role to use. *For AS2 connectors* With AS2, you can send files by calling ``StartFileTransfer`` and specifying the file paths in the request parameter, ``SendFilePaths`` . We use the file’s parent directory (for example, for ``--send-file-paths /bucket/dir/file.txt`` , parent directory is ``/bucket/dir/`` ) to temporarily store a processed AS2 message file, store the MDN when we receive them from the partner, and write a final JSON file containing relevant metadata of the transmission. So, the ``AccessRole`` needs to provide read and write access to the parent directory of the file location used in the ``StartFileTransfer`` request. Additionally, you need to provide read and write access to the parent directory of the files that you intend to send with ``StartFileTransfer`` . If you are using Basic authentication for your AS2 connector, the access role requires the ``secretsmanager:GetSecretValue`` permission for the secret. If the secret is encrypted using a customer-managed key instead of the AWS managed key in Secrets Manager, then the role also needs the ``kms:Decrypt`` permission for that key. *For SFTP connectors* Make sure that the access role provides read and write access to the parent directory of the file location that's used in the ``StartFileTransfer`` request. Additionally, make sure that the role provides ``secretsmanager:GetSecretValue`` permission to AWS Secrets Manager .
-        :param url: The URL of the partner's AS2 or SFTP endpoint.
+        :param url: The URL of the partner's AS2 or SFTP endpoint. When creating AS2 connectors or service-managed SFTP connectors (connectors without egress configuration), you must provide a URL to specify the remote server endpoint. For VPC Lattice type connectors, the URL must be null.
         :param as2_config: A structure that contains the parameters for an AS2 connector object.
         :param logging_role: The Amazon Resource Name (ARN) of the AWS Identity and Access Management (IAM) role that allows a connector to turn on CloudWatch logging for Amazon S3 events. When set, you can view connector activity in your CloudWatch logs.
         :param security_policy_name: The text name of the security policy for the specified connector.
@@ -777,6 +777,8 @@ class CfnConnectorProps:
     @builtins.property
     def url(self) -> builtins.str:
         '''The URL of the partner's AS2 or SFTP endpoint.
+
+        When creating AS2 connectors or service-managed SFTP connectors (connectors without egress configuration), you must provide a URL to specify the remote server endpoint. For VPC Lattice type connectors, the URL must be null.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-transfer-connector.html#cfn-transfer-connector-url
         '''
@@ -2794,27 +2796,6 @@ class CfnAgreement(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
-    @jsii.member(jsii_name="fromAgreementArn")
-    @builtins.classmethod
-    def from_agreement_arn(
-        cls,
-        scope: _constructs_77d1e7e8.Construct,
-        id: builtins.str,
-        arn: builtins.str,
-    ) -> IAgreementRef:
-        '''Creates a new IAgreementRef from an ARN.
-
-        :param scope: -
-        :param id: -
-        :param arn: -
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__49865972fac7cf97b37625ebb0dab09d88b56b9f2dd79d90fc649828bfc624ff)
-            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
-            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
-            check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
-        return typing.cast(IAgreementRef, jsii.sinvoke(cls, "fromAgreementArn", [scope, id, arn]))
-
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -3573,7 +3554,7 @@ class CfnConnector(
         :param scope: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
         :param access_role: Connectors are used to send files using either the AS2 or SFTP protocol. For the access role, provide the Amazon Resource Name (ARN) of the AWS Identity and Access Management role to use. *For AS2 connectors* With AS2, you can send files by calling ``StartFileTransfer`` and specifying the file paths in the request parameter, ``SendFilePaths`` . We use the file’s parent directory (for example, for ``--send-file-paths /bucket/dir/file.txt`` , parent directory is ``/bucket/dir/`` ) to temporarily store a processed AS2 message file, store the MDN when we receive them from the partner, and write a final JSON file containing relevant metadata of the transmission. So, the ``AccessRole`` needs to provide read and write access to the parent directory of the file location used in the ``StartFileTransfer`` request. Additionally, you need to provide read and write access to the parent directory of the files that you intend to send with ``StartFileTransfer`` . If you are using Basic authentication for your AS2 connector, the access role requires the ``secretsmanager:GetSecretValue`` permission for the secret. If the secret is encrypted using a customer-managed key instead of the AWS managed key in Secrets Manager, then the role also needs the ``kms:Decrypt`` permission for that key. *For SFTP connectors* Make sure that the access role provides read and write access to the parent directory of the file location that's used in the ``StartFileTransfer`` request. Additionally, make sure that the role provides ``secretsmanager:GetSecretValue`` permission to AWS Secrets Manager .
-        :param url: The URL of the partner's AS2 or SFTP endpoint.
+        :param url: The URL of the partner's AS2 or SFTP endpoint. When creating AS2 connectors or service-managed SFTP connectors (connectors without egress configuration), you must provide a URL to specify the remote server endpoint. For VPC Lattice type connectors, the URL must be null.
         :param as2_config: A structure that contains the parameters for an AS2 connector object.
         :param logging_role: The Amazon Resource Name (ARN) of the AWS Identity and Access Management (IAM) role that allows a connector to turn on CloudWatch logging for Amazon S3 events. When set, you can view connector activity in your CloudWatch logs.
         :param security_policy_name: The text name of the security policy for the specified connector.
@@ -4064,7 +4045,7 @@ class CfnConnector(
             '''A structure that contains the parameters for an SFTP connector object.
 
             :param max_concurrent_connections: Specify the number of concurrent connections that your connector creates to the remote server. The default value is ``1`` . The maximum values is ``5`` . .. epigraph:: If you are using the AWS Management Console , the default value is ``5`` . This parameter specifies the number of active connections that your connector can establish with the remote server at the same time. Increasing this value can enhance connector performance when transferring large file batches by enabling parallel operations. Default: - 1
-            :param trusted_host_keys: The public portion of the host key, or keys, that are used to identify the external server to which you are connecting. You can use the ``ssh-keyscan`` command against the SFTP server to retrieve the necessary key. .. epigraph:: ``TrustedHostKeys`` is optional for ``CreateConnector`` . If not provided, you can use ``TestConnection`` to retrieve the server host key during the initial connection attempt, and subsequently update the connector with the observed host key. The three standard SSH public key format elements are ``<key type>`` , ``<body base64>`` , and an optional ``<comment>`` , with spaces between each element. Specify only the ``<key type>`` and ``<body base64>`` : do not enter the ``<comment>`` portion of the key. For the trusted host key, AWS Transfer Family accepts RSA and ECDSA keys. - For RSA keys, the ``<key type>`` string is ``ssh-rsa`` . - For ECDSA keys, the ``<key type>`` string is either ``ecdsa-sha2-nistp256`` , ``ecdsa-sha2-nistp384`` , or ``ecdsa-sha2-nistp521`` , depending on the size of the key you generated. Run this command to retrieve the SFTP server host key, where your SFTP server name is ``ftp.host.com`` . ``ssh-keyscan ftp.host.com`` This prints the public host key to standard output. ``ftp.host.com ssh-rsa AAAAB3Nza...<long-string-for-public-key`` Copy and paste this string into the ``TrustedHostKeys`` field for the ``create-connector`` command or into the *Trusted host keys* field in the console.
+            :param trusted_host_keys: The public portion of the host key, or keys, that are used to identify the external server to which you are connecting. You can use the ``ssh-keyscan`` command against the SFTP server to retrieve the necessary key. .. epigraph:: ``TrustedHostKeys`` is optional for ``CreateConnector`` . If not provided, you can use ``TestConnection`` to retrieve the server host key during the initial connection attempt, and subsequently update the connector with the observed host key. When creating connectors with egress config (VPC_LATTICE type connectors), since host name is not something we can verify, the only accepted trusted host key format is ``key-type key-body`` without the host name. For example: ``ssh-rsa AAAAB3Nza...<long-string-for-public-key>`` The three standard SSH public key format elements are ``<key type>`` , ``<body base64>`` , and an optional ``<comment>`` , with spaces between each element. Specify only the ``<key type>`` and ``<body base64>`` : do not enter the ``<comment>`` portion of the key. For the trusted host key, AWS Transfer Family accepts RSA and ECDSA keys. - For RSA keys, the ``<key type>`` string is ``ssh-rsa`` . - For ECDSA keys, the ``<key type>`` string is either ``ecdsa-sha2-nistp256`` , ``ecdsa-sha2-nistp384`` , or ``ecdsa-sha2-nistp521`` , depending on the size of the key you generated. Run this command to retrieve the SFTP server host key, where your SFTP server name is ``ftp.host.com`` . ``ssh-keyscan ftp.host.com`` This prints the public host key to standard output. ``ftp.host.com ssh-rsa AAAAB3Nza...<long-string-for-public-key>`` Copy and paste this string into the ``TrustedHostKeys`` field for the ``create-connector`` command or into the *Trusted host keys* field in the console. For VPC Lattice type connectors (VPC_LATTICE), remove the hostname from the key and use only the ``key-type key-body`` format. In this example, it should be: ``ssh-rsa AAAAB3Nza...<long-string-for-public-key>``
             :param user_secret_id: The identifier for the secret (in AWS Secrets Manager) that contains the SFTP user's private key, password, or both. The identifier must be the Amazon Resource Name (ARN) of the secret. .. epigraph:: - Required when creating an SFTP connector - Optional when updating an existing SFTP connector
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-transfer-connector-sftpconfig.html
@@ -4122,6 +4103,8 @@ class CfnConnector(
 
                ``TrustedHostKeys`` is optional for ``CreateConnector`` . If not provided, you can use ``TestConnection`` to retrieve the server host key during the initial connection attempt, and subsequently update the connector with the observed host key.
 
+            When creating connectors with egress config (VPC_LATTICE type connectors), since host name is not something we can verify, the only accepted trusted host key format is ``key-type key-body`` without the host name. For example: ``ssh-rsa AAAAB3Nza...<long-string-for-public-key>``
+
             The three standard SSH public key format elements are ``<key type>`` , ``<body base64>`` , and an optional ``<comment>`` , with spaces between each element. Specify only the ``<key type>`` and ``<body base64>`` : do not enter the ``<comment>`` portion of the key.
 
             For the trusted host key, AWS Transfer Family accepts RSA and ECDSA keys.
@@ -4135,9 +4118,11 @@ class CfnConnector(
 
             This prints the public host key to standard output.
 
-            ``ftp.host.com ssh-rsa AAAAB3Nza...<long-string-for-public-key``
+            ``ftp.host.com ssh-rsa AAAAB3Nza...<long-string-for-public-key>``
 
             Copy and paste this string into the ``TrustedHostKeys`` field for the ``create-connector`` command or into the *Trusted host keys* field in the console.
+
+            For VPC Lattice type connectors (VPC_LATTICE), remove the hostname from the key and use only the ``key-type key-body`` format. In this example, it should be: ``ssh-rsa AAAAB3Nza...<long-string-for-public-key>``
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-transfer-connector-sftpconfig.html#cfn-transfer-connector-sftpconfig-trustedhostkeys
             '''
@@ -5199,13 +5184,17 @@ class CfnServer(
         ) -> None:
             '''The protocol settings that are configured for your server.
 
+            .. epigraph::
+
+               Avoid placing Network Load Balancers (NLBs) or NAT gateways in front of AWS Transfer Family servers, as this increases costs and can cause performance issues, including reduced connection limits for FTPS. For more details, see `Avoid placing NLBs and NATs in front of AWS Transfer Family <https://docs.aws.amazon.com/transfer/latest/userguide/infrastructure-security.html#nlb-considerations>`_ .
+
             - To indicate passive mode (for FTP and FTPS protocols), use the ``PassiveIp`` parameter. Enter a single dotted-quad IPv4 address, such as the external IP address of a firewall, router, or load balancer.
             - To ignore the error that is generated when the client attempts to use the ``SETSTAT`` command on a file that you are uploading to an Amazon S3 bucket, use the ``SetStatOption`` parameter. To have the AWS Transfer Family server ignore the ``SETSTAT`` command and upload files without needing to make any changes to your SFTP client, set the value to ``ENABLE_NO_OP`` . If you set the ``SetStatOption`` parameter to ``ENABLE_NO_OP`` , Transfer Family generates a log entry to Amazon CloudWatch Logs, so that you can determine when the client is making a ``SETSTAT`` call.
             - To determine whether your AWS Transfer Family server resumes recent, negotiated sessions through a unique session ID, use the ``TlsSessionResumptionMode`` parameter.
             - ``As2Transports`` indicates the transport method for the AS2 messages. Currently, only HTTP is supported.
 
             :param as2_transports: List of ``As2Transport`` objects.
-            :param passive_ip: Indicates passive mode, for FTP and FTPS protocols. Enter a single IPv4 address, such as the public IP address of a firewall, router, or load balancer. For example: ``aws transfer update-server --protocol-details PassiveIp=0.0.0.0`` Replace ``0.0.0.0`` in the example above with the actual IP address you want to use. .. epigraph:: If you change the ``PassiveIp`` value, you must stop and then restart your Transfer Family server for the change to take effect. For details on using passive mode (PASV) in a NAT environment, see `Configuring your FTPS server behind a firewall or NAT with AWS Transfer Family <https://docs.aws.amazon.com/storage/configuring-your-ftps-server-behind-a-firewall-or-nat-with-aws-transfer-family/>`_ . *Special values* The ``AUTO`` and ``0.0.0.0`` are special values for the ``PassiveIp`` parameter. The value ``PassiveIp=AUTO`` is assigned by default to FTP and FTPS type servers. In this case, the server automatically responds with one of the endpoint IPs within the PASV response. ``PassiveIp=0.0.0.0`` has a more unique application for its usage. For example, if you have a High Availability (HA) Network Load Balancer (NLB) environment, where you have 3 subnets, you can only specify a single IP address using the ``PassiveIp`` parameter. This reduces the effectiveness of having High Availability. In this case, you can specify ``PassiveIp=0.0.0.0`` . This tells the client to use the same IP address as the Control connection and utilize all AZs for their connections. Note, however, that not all FTP clients support the ``PassiveIp=0.0.0.0`` response. FileZilla and WinSCP do support it. If you are using other clients, check to see if your client supports the ``PassiveIp=0.0.0.0`` response.
+            :param passive_ip: Indicates passive mode, for FTP and FTPS protocols. Enter a single IPv4 address, such as the public IP address of a firewall, router, or load balancer. For example: ``aws transfer update-server --protocol-details PassiveIp=0.0.0.0`` Replace ``0.0.0.0`` in the example above with the actual IP address you want to use. .. epigraph:: If you change the ``PassiveIp`` value, you must stop and then restart your Transfer Family server for the change to take effect. For details on using passive mode (PASV) in a NAT environment, see `Configuring your FTPS server behind a firewall or NAT with AWS Transfer Family <https://docs.aws.amazon.com/storage/configuring-your-ftps-server-behind-a-firewall-or-nat-with-aws-transfer-family/>`_ . Additionally, avoid placing Network Load Balancers (NLBs) or NAT gateways in front of AWS Transfer Family servers. This configuration increases costs and can cause performance issues. When NLBs or NATs are in the communication path, Transfer Family cannot accurately recognize client IP addresses, which impacts connection sharding and limits FTPS servers to only 300 simultaneous connections instead of 10,000. If you must use an NLB, use port 21 for health checks and enable TLS session resumption by setting ``TlsSessionResumptionMode = ENFORCED`` . For optimal performance, migrate to VPC endpoints with Elastic IP addresses instead of using NLBs. For more details, see `Avoid placing NLBs and NATs in front of AWS Transfer Family <https://docs.aws.amazon.com/transfer/latest/userguide/infrastructure-security.html#nlb-considerations>`_ . *Special values* The ``AUTO`` and ``0.0.0.0`` are special values for the ``PassiveIp`` parameter. The value ``PassiveIp=AUTO`` is assigned by default to FTP and FTPS type servers. In this case, the server automatically responds with one of the endpoint IPs within the PASV response. ``PassiveIp=0.0.0.0`` has a more unique application for its usage. For example, if you have a High Availability (HA) Network Load Balancer (NLB) environment, where you have 3 subnets, you can only specify a single IP address using the ``PassiveIp`` parameter. This reduces the effectiveness of having High Availability. In this case, you can specify ``PassiveIp=0.0.0.0`` . This tells the client to use the same IP address as the Control connection and utilize all AZs for their connections. Note, however, that not all FTP clients support the ``PassiveIp=0.0.0.0`` response. FileZilla and WinSCP do support it. If you are using other clients, check to see if your client supports the ``PassiveIp=0.0.0.0`` response.
             :param set_stat_option: Use the ``SetStatOption`` to ignore the error that is generated when the client attempts to use ``SETSTAT`` on a file you are uploading to an S3 bucket. Some SFTP file transfer clients can attempt to change the attributes of remote files, including timestamp and permissions, using commands, such as ``SETSTAT`` when uploading the file. However, these commands are not compatible with object storage systems, such as Amazon S3. Due to this incompatibility, file uploads from these clients can result in errors even when the file is otherwise successfully uploaded. Set the value to ``ENABLE_NO_OP`` to have the Transfer Family server ignore the ``SETSTAT`` command, and upload files without needing to make any changes to your SFTP client. While the ``SetStatOption`` ``ENABLE_NO_OP`` setting ignores the error, it does generate a log entry in Amazon CloudWatch Logs, so you can determine when the client is making a ``SETSTAT`` call. .. epigraph:: If you want to preserve the original timestamp for your file, and modify other file attributes using ``SETSTAT`` , you can use Amazon EFS as backend storage with Transfer Family.
             :param tls_session_resumption_mode: A property used with Transfer Family servers that use the FTPS protocol. TLS Session Resumption provides a mechanism to resume or share a negotiated secret key between the control and data connection for an FTPS session. ``TlsSessionResumptionMode`` determines whether or not the server resumes recent, negotiated sessions through a unique session ID. This property is available during ``CreateServer`` and ``UpdateServer`` calls. If a ``TlsSessionResumptionMode`` value is not specified during ``CreateServer`` , it is set to ``ENFORCED`` by default. - ``DISABLED`` : the server does not process TLS session resumption client requests and creates a new TLS session for each request. - ``ENABLED`` : the server processes and accepts clients that are performing TLS session resumption. The server doesn't reject client data connections that do not perform the TLS session resumption client processing. - ``ENFORCED`` : the server processes and accepts clients that are performing TLS session resumption. The server rejects client data connections that do not perform the TLS session resumption client processing. Before you set the value to ``ENFORCED`` , test your clients. .. epigraph:: Not all FTPS clients perform TLS session resumption. So, if you choose to enforce TLS session resumption, you prevent any connections from FTPS clients that don't perform the protocol negotiation. To determine whether or not you can use the ``ENFORCED`` value, you need to test your clients.
 
@@ -5262,6 +5251,8 @@ class CfnServer(
             .. epigraph::
 
                If you change the ``PassiveIp`` value, you must stop and then restart your Transfer Family server for the change to take effect. For details on using passive mode (PASV) in a NAT environment, see `Configuring your FTPS server behind a firewall or NAT with AWS Transfer Family <https://docs.aws.amazon.com/storage/configuring-your-ftps-server-behind-a-firewall-or-nat-with-aws-transfer-family/>`_ .
+
+               Additionally, avoid placing Network Load Balancers (NLBs) or NAT gateways in front of AWS Transfer Family servers. This configuration increases costs and can cause performance issues. When NLBs or NATs are in the communication path, Transfer Family cannot accurately recognize client IP addresses, which impacts connection sharding and limits FTPS servers to only 300 simultaneous connections instead of 10,000. If you must use an NLB, use port 21 for health checks and enable TLS session resumption by setting ``TlsSessionResumptionMode = ENFORCED`` . For optimal performance, migrate to VPC endpoints with Elastic IP addresses instead of using NLBs. For more details, see `Avoid placing NLBs and NATs in front of AWS Transfer Family <https://docs.aws.amazon.com/transfer/latest/userguide/infrastructure-security.html#nlb-considerations>`_ .
 
             *Special values*
 
@@ -8179,14 +8170,6 @@ def _typecheckingstub__f95ec07e6c4ee624e4f9374f7db0e66b46af64fa8c86e2e41aa290c72
     """Type checking stubs"""
     pass
 
-def _typecheckingstub__49865972fac7cf97b37625ebb0dab09d88b56b9f2dd79d90fc649828bfc624ff(
-    scope: _constructs_77d1e7e8.Construct,
-    id: builtins.str,
-    arn: builtins.str,
-) -> None:
-    """Type checking stubs"""
-    pass
-
 def _typecheckingstub__228db9cea00437d476e4860ef1214693d948e861477e0b0435205c3df9bf79f1(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -9093,3 +9076,6 @@ def _typecheckingstub__b548edb0a5fb9cfebb89a31ba69695395ed26d4793bbaa01e670bb558
 ) -> None:
     """Type checking stubs"""
     pass
+
+for cls in [IAgreementRef, ICertificateRef, IConnectorRef, IProfileRef, IServerRef, IUserRef, IWebAppRef, IWorkflowRef]:
+    typing.cast(typing.Any, cls).__protocol_attrs__ = typing.cast(typing.Any, cls).__protocol_attrs__ - set(['__jsii_proxy_class__', '__jsii_type__'])

@@ -3193,3 +3193,6 @@ def _typecheckingstub__2da45b394f0332be0f6d6b7468d9fb54961953d56265da69955d36ffa
 ) -> None:
     """Type checking stubs"""
     pass
+
+for cls in [ICommandHooks]:
+    typing.cast(typing.Any, cls).__protocol_attrs__ = typing.cast(typing.Any, cls).__protocol_attrs__ - set(['__jsii_proxy_class__', '__jsii_type__'])

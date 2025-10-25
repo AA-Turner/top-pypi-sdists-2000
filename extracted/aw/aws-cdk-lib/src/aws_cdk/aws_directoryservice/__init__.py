@@ -1542,3 +1542,6 @@ def _typecheckingstub__c8735fadd5f261261242f08594a8935a9e3119659f4d14301a33cd4a4
 ) -> None:
     """Type checking stubs"""
     pass
+
+for cls in [IMicrosoftADRef, ISimpleADRef]:
+    typing.cast(typing.Any, cls).__protocol_attrs__ = typing.cast(typing.Any, cls).__protocol_attrs__ - set(['__jsii_proxy_class__', '__jsii_type__'])

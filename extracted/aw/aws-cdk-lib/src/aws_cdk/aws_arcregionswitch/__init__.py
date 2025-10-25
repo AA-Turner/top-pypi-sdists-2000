@@ -5190,3 +5190,6 @@ def _typecheckingstub__20a30ca206bf2a7483e5517778a6e2e160f345026b4773019a9189cc9
 ) -> None:
     """Type checking stubs"""
     pass
+
+for cls in [IPlanRef]:
+    typing.cast(typing.Any, cls).__protocol_attrs__ = typing.cast(typing.Any, cls).__protocol_attrs__ - set(['__jsii_proxy_class__', '__jsii_type__'])

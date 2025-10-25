@@ -2743,3 +2743,6 @@ def _typecheckingstub__dafa1619bb92595ec0ff7aa95e55221719ed81eb6d2f7d44a84193d81
 ) -> None:
     """Type checking stubs"""
     pass
+
+for cls in [ISource]:
+    typing.cast(typing.Any, cls).__protocol_attrs__ = typing.cast(typing.Any, cls).__protocol_attrs__ - set(['__jsii_proxy_class__', '__jsii_type__'])

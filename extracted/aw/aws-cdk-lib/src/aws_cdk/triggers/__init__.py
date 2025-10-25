@@ -2210,3 +2210,6 @@ def _typecheckingstub__b2f4b009b0160d566d798bfa6d813ccc8440e1a9e0f75c99449184a2f
 ) -> None:
     """Type checking stubs"""
     pass
+
+for cls in [ITrigger]:
+    typing.cast(typing.Any, cls).__protocol_attrs__ = typing.cast(typing.Any, cls).__protocol_attrs__ - set(['__jsii_proxy_class__', '__jsii_type__'])

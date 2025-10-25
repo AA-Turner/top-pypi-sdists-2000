@@ -7167,3 +7167,6 @@ def _typecheckingstub__2c34b0e8a8ab7ac6d4c9c7ebda522c320d7e5fd5dd3569da4020209d9
 ) -> None:
     """Type checking stubs"""
     pass
+
+for cls in [IBrowserSettingsRef, IDataProtectionSettingsRef, IIdentityProviderRef, IIpAccessSettingsRef, INetworkSettingsRef, IPortalRef, ISessionLoggerRef, ITrustStoreRef, IUserAccessLoggingSettingsRef, IUserSettingsRef]:
+    typing.cast(typing.Any, cls).__protocol_attrs__ = typing.cast(typing.Any, cls).__protocol_attrs__ - set(['__jsii_proxy_class__', '__jsii_type__'])

@@ -994,7 +994,7 @@ class CfnGroupingConfiguration(
     @builtins.property
     @jsii.member(jsii_name="attrAccountId")
     def attr_account_id(self) -> builtins.str:
-        '''The identifier for the specified AWS account.
+        '''The 12 digit AWS Account ID for the account.
 
         :cloudformationAttribute: AccountId
         '''
@@ -4064,3 +4064,6 @@ def _typecheckingstub__7cd27fd1807625da6b260ce4b909abd68a6e0ece1732fab3f05f19247
 ) -> None:
     """Type checking stubs"""
     pass
+
+for cls in [IDiscoveryRef, IGroupingConfigurationRef, IServiceLevelObjectiveRef]:
+    typing.cast(typing.Any, cls).__protocol_attrs__ = typing.cast(typing.Any, cls).__protocol_attrs__ - set(['__jsii_proxy_class__', '__jsii_type__'])

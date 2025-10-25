@@ -22912,3 +22912,6 @@ def _typecheckingstub__c92b3cf4c512d5ff21aa2749ab5ec60562bb7ed4c53c41d882ac2cb7c
 ) -> None:
     """Type checking stubs"""
     pass
+
+for cls in [IConfigurationSet, IConfigurationSetEventDestination, IConfigurationSetEventDestinationRef, IConfigurationSetRef, IContactListRef, IDedicatedIpPool, IDedicatedIpPoolRef, IEmailIdentity, IEmailIdentityRef, IMailManagerAddonInstanceRef, IMailManagerAddonSubscriptionRef, IMailManagerAddressListRef, IMailManagerArchiveRef, IMailManagerIngressPointRef, IMailManagerRelayRef, IMailManagerRuleSetRef, IMailManagerTrafficPolicyRef, IReceiptFilterRef, IReceiptRule, IReceiptRuleAction, IReceiptRuleRef, IReceiptRuleSet, IReceiptRuleSetRef, ITemplateRef, IVdmAttributes, IVdmAttributesRef]:
+    typing.cast(typing.Any, cls).__protocol_attrs__ = typing.cast(typing.Any, cls).__protocol_attrs__ - set(['__jsii_proxy_class__', '__jsii_type__'])

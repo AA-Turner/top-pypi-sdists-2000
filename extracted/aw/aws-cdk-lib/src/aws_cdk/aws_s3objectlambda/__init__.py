@@ -1625,3 +1625,6 @@ def _typecheckingstub__1efc67ebff8549be6ada402864d14d3f20c1a9eb0a85a3c67f4b18a6e
 ) -> None:
     """Type checking stubs"""
     pass
+
+for cls in [IAccessPointPolicyRef, IAccessPointRef]:
+    typing.cast(typing.Any, cls).__protocol_attrs__ = typing.cast(typing.Any, cls).__protocol_attrs__ - set(['__jsii_proxy_class__', '__jsii_type__'])

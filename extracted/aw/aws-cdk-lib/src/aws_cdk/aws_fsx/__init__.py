@@ -11160,3 +11160,6 @@ def _typecheckingstub__09e9dff8e14ff81d8a495f07b5f7c6e2a9d756a63b5d283b892189cdc
 ) -> None:
     """Type checking stubs"""
     pass
+
+for cls in [IDataRepositoryAssociationRef, IFileSystem, IFileSystemRef, IS3AccessPointAttachmentRef, ISnapshotRef, IStorageVirtualMachineRef, IVolumeRef]:
+    typing.cast(typing.Any, cls).__protocol_attrs__ = typing.cast(typing.Any, cls).__protocol_attrs__ - set(['__jsii_proxy_class__', '__jsii_type__'])

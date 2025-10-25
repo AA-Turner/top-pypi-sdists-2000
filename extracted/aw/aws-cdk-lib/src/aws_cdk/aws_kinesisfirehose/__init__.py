@@ -130,6 +130,103 @@ s3_destination = firehose.S3Bucket(bucket,
 )
 ```
 
+## Data Format Conversion
+
+Data format conversion allows automatic conversion of inputs from JSON to either Parquet or ORC.
+Converting JSON records to columnar formats like Parquet or ORC can help speed up analytical querying while also increasing compression efficiency.
+When data format conversion is specified, it automatically enables Snappy compression on the output.
+
+Only S3 Destinations support data format conversion.
+
+An example of defining an S3 destination configured with data format conversion:
+
+```python
+# bucket: s3.Bucket
+# schema_glue_table: glue.CfnTable
+
+s3_destination = firehose.S3Bucket(bucket,
+    data_format_conversion=firehose.DataFormatConversionProps(
+        schema_configuration=firehose.SchemaConfiguration.from_cfn_table(schema_glue_table),
+        input_format=firehose.InputFormat.OPENX_JSON,
+        output_format=firehose.OutputFormat.PARQUET
+    )
+)
+```
+
+When data format conversion is enabled, the Delivery Stream's buffering size must be at least 64 MiB.
+Additionally, the default buffering size is changed from 5 MiB to 128 MiB. This mirrors the Cloudformation behavior.
+
+You can only parse JSON and transform it into either Parquet or ORC:
+
+* to read JSON using OpenX parser, choose `InputFormat.OPENX_JSON`.
+* to read JSON using Hive parser, choose `InputFormat.HIVE_JSON`.
+* to transform into Parquet, choose `OutputFormat.PARQUET`.
+* to transform into ORC, choose `OutputFormat.ORC`.
+
+The following subsections explain how to specify advanced configuration options for each input and output format if the defaults are not desirable
+
+### Input Format: OpenX JSON
+
+Example creation of custom OpenX JSON InputFormat:
+
+```python
+input_format = firehose.OpenXJsonInputFormat(
+    lowercase_column_names=False,
+    column_to_json_key_mappings={"ts": "timestamp"},
+    convert_dots_in_json_keys_to_underscores=True
+)
+```
+
+### Input Format: Hive JSON
+
+Example creation of custom Hive JSON InputFormat:
+
+```python
+input_format = firehose.HiveJsonInputFormat(
+    timestamp_parsers=[
+        firehose.TimestampParser.from_format_string("yyyy-MM-dd"), firehose.TimestampParser.EPOCH_MILLIS
+    ]
+)
+```
+
+Hive JSON allows you to specify custom timestamp formats to parse. The syntax of the format string is Joda Time.
+
+To parse timestamps formatted as milliseconds since epoch, use the convenience constant `TimestampParser.EPOCH_MILLIS`.
+
+### Output Format: Parquet
+
+Example of a custom Parquet OutputFormat, with all values changed from the defaults.
+
+```python
+output_format = firehose.ParquetOutputFormat(
+    block_size=Size.mebibytes(512),
+    compression=firehose.ParquetCompression.UNCOMPRESSED,
+    enable_dictionary_compression=True,
+    max_padding=Size.bytes(10),
+    page_size=Size.mebibytes(2),
+    writer_version=firehose.ParquetWriterVersion.V2
+)
+```
+
+### Output Format: ORC
+
+Example creation of custom ORC OutputFormat, with all values changed from the defaults.
+
+```python
+output_format = firehose.OrcOutputFormat(
+    format_version=firehose.OrcFormatVersion.V0_11,
+    block_size=Size.mebibytes(256),
+    compression=firehose.OrcCompression.NONE,
+    bloom_filter_columns=["columnA"],
+    bloom_filter_false_positive_probability=0.1,
+    dictionary_key_threshold=0.7,
+    enable_padding=True,
+    padding_tolerance=0.2,
+    row_index_stride=9000,
+    stripe_size=Size.mebibytes(32)
+)
+```
+
 ## Server-side Encryption
 
 Enabling server-side encryption (SSE) requires Amazon Data Firehose to encrypt all data
@@ -704,6 +801,7 @@ from ..aws_cloudwatch import (
 from ..aws_ec2 import (
     Connections as _Connections_0f31fce8, IConnectable as _IConnectable_10015a05
 )
+from ..aws_glue import CfnTable as _CfnTable_63ae0183
 from ..aws_iam import (
     Grant as _Grant_a7ae64f8,
     IGrantable as _IGrantable_71c4f5de,
@@ -1313,7 +1411,7 @@ class CommonDestinationS3Props:
         '''Common properties for defining a backup, intermediary, or final S3 destination for a Amazon Data Firehose delivery stream.
 
         :param buffering_interval: The length of time that Firehose buffers incoming data before delivering it to the S3 bucket. Minimum: Duration.seconds(0) Maximum: Duration.seconds(900) Default: Duration.seconds(300)
-        :param buffering_size: The size of the buffer that Amazon Data Firehose uses for incoming data before delivering it to the S3 bucket. Minimum: Size.mebibytes(1) Maximum: Size.mebibytes(128) Default: Size.mebibytes(5)
+        :param buffering_size: The size of the buffer that Amazon Data Firehose uses for incoming data before delivering it to the S3 bucket. Minimum: Size.mebibytes(1) when record data format conversion is disabled, Size.mebibytes(64) when it is enabled Maximum: Size.mebibytes(128) Default: Size.mebibytes(5) when record data format conversion is disabled, Size.mebibytes(128) when it is enabled
         :param compression: The type of compression that Amazon Data Firehose uses to compress the data that it delivers to the Amazon S3 bucket. The compression formats SNAPPY or ZIP cannot be specified for Amazon Redshift destinations because they are not supported by the Amazon Redshift COPY operation that reads from the S3 bucket. Default: - UNCOMPRESSED
         :param data_output_prefix: A prefix that Amazon Data Firehose evaluates and adds to records before writing them to S3. This prefix appears immediately following the bucket name. Default: "YYYY/MM/DD/HH"
         :param encryption_key: The AWS KMS key used to encrypt the data that it delivers to your Amazon S3 bucket. Default: - Data is not encrypted.
@@ -1380,10 +1478,10 @@ class CommonDestinationS3Props:
     def buffering_size(self) -> typing.Optional[_Size_7b441c34]:
         '''The size of the buffer that Amazon Data Firehose uses for incoming data before delivering it to the S3 bucket.
 
-        Minimum: Size.mebibytes(1)
+        Minimum: Size.mebibytes(1) when record data format conversion is disabled, Size.mebibytes(64) when it is enabled
         Maximum: Size.mebibytes(128)
 
-        :default: Size.mebibytes(5)
+        :default: Size.mebibytes(5) when record data format conversion is disabled, Size.mebibytes(128) when it is enabled
         '''
         result = self._values.get("buffering_size")
         return typing.cast(typing.Optional[_Size_7b441c34], result)
@@ -1516,6 +1614,104 @@ class Compression(
     def value(self) -> builtins.str:
         '''the string value of the Compression.'''
         return typing.cast(builtins.str, jsii.get(self, "value"))
+
+
+@jsii.data_type(
+    jsii_type="aws-cdk-lib.aws_kinesisfirehose.DataFormatConversionProps",
+    jsii_struct_bases=[],
+    name_mapping={
+        "input_format": "inputFormat",
+        "output_format": "outputFormat",
+        "schema_configuration": "schemaConfiguration",
+        "enabled": "enabled",
+    },
+)
+class DataFormatConversionProps:
+    def __init__(
+        self,
+        *,
+        input_format: "IInputFormat",
+        output_format: "IOutputFormat",
+        schema_configuration: "SchemaConfiguration",
+        enabled: typing.Optional[builtins.bool] = None,
+    ) -> None:
+        '''Props for specifying data format conversion for Firehose.
+
+        :param input_format: The input format to convert from for record format conversion.
+        :param output_format: The output format to convert to for record format conversion.
+        :param schema_configuration: The schema configuration to use in converting the input format to output format.
+        :param enabled: Whether data format conversion is enabled or not. Default: ``true``
+
+        :see: https://docs.aws.amazon.com/firehose/latest/dev/record-format-conversion.html
+        :exampleMetadata: infused
+
+        Example::
+
+            # bucket: s3.Bucket
+            # schema_glue_table: glue.CfnTable
+            
+            s3_destination = firehose.S3Bucket(bucket,
+                data_format_conversion=firehose.DataFormatConversionProps(
+                    schema_configuration=firehose.SchemaConfiguration.from_cfn_table(schema_glue_table),
+                    input_format=firehose.InputFormat.OPENX_JSON,
+                    output_format=firehose.OutputFormat.PARQUET
+                )
+            )
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__bff90bf1ac37687c050bd1dbbc7970543cf96f46bffc7e9b92aa180e16446a3e)
+            check_type(argname="argument input_format", value=input_format, expected_type=type_hints["input_format"])
+            check_type(argname="argument output_format", value=output_format, expected_type=type_hints["output_format"])
+            check_type(argname="argument schema_configuration", value=schema_configuration, expected_type=type_hints["schema_configuration"])
+            check_type(argname="argument enabled", value=enabled, expected_type=type_hints["enabled"])
+        self._values: typing.Dict[builtins.str, typing.Any] = {
+            "input_format": input_format,
+            "output_format": output_format,
+            "schema_configuration": schema_configuration,
+        }
+        if enabled is not None:
+            self._values["enabled"] = enabled
+
+    @builtins.property
+    def input_format(self) -> "IInputFormat":
+        '''The input format to convert from for record format conversion.'''
+        result = self._values.get("input_format")
+        assert result is not None, "Required property 'input_format' is missing"
+        return typing.cast("IInputFormat", result)
+
+    @builtins.property
+    def output_format(self) -> "IOutputFormat":
+        '''The output format to convert to for record format conversion.'''
+        result = self._values.get("output_format")
+        assert result is not None, "Required property 'output_format' is missing"
+        return typing.cast("IOutputFormat", result)
+
+    @builtins.property
+    def schema_configuration(self) -> "SchemaConfiguration":
+        '''The schema configuration to use in converting the input format to output format.'''
+        result = self._values.get("schema_configuration")
+        assert result is not None, "Required property 'schema_configuration' is missing"
+        return typing.cast("SchemaConfiguration", result)
+
+    @builtins.property
+    def enabled(self) -> typing.Optional[builtins.bool]:
+        '''Whether data format conversion is enabled or not.
+
+        :default: ``true``
+        '''
+        result = self._values.get("enabled")
+        return typing.cast(typing.Optional[builtins.bool], result)
+
+    def __eq__(self, rhs: typing.Any) -> builtins.bool:
+        return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+    def __ne__(self, rhs: typing.Any) -> builtins.bool:
+        return not (rhs == self)
+
+    def __repr__(self) -> str:
+        return "DataFormatConversionProps(%s)" % ", ".join(
+            k + "=" + repr(v) for k, v in self._values.items()
+        )
 
 
 @jsii.data_type(
@@ -2386,7 +2582,7 @@ class DestinationS3BackupProps(CommonDestinationS3Props):
         S3 backup is available for all destinations, regardless of whether the final destination is S3 or not.
 
         :param buffering_interval: The length of time that Firehose buffers incoming data before delivering it to the S3 bucket. Minimum: Duration.seconds(0) Maximum: Duration.seconds(900) Default: Duration.seconds(300)
-        :param buffering_size: The size of the buffer that Amazon Data Firehose uses for incoming data before delivering it to the S3 bucket. Minimum: Size.mebibytes(1) Maximum: Size.mebibytes(128) Default: Size.mebibytes(5)
+        :param buffering_size: The size of the buffer that Amazon Data Firehose uses for incoming data before delivering it to the S3 bucket. Minimum: Size.mebibytes(1) when record data format conversion is disabled, Size.mebibytes(64) when it is enabled Maximum: Size.mebibytes(128) Default: Size.mebibytes(5) when record data format conversion is disabled, Size.mebibytes(128) when it is enabled
         :param compression: The type of compression that Amazon Data Firehose uses to compress the data that it delivers to the Amazon S3 bucket. The compression formats SNAPPY or ZIP cannot be specified for Amazon Redshift destinations because they are not supported by the Amazon Redshift COPY operation that reads from the S3 bucket. Default: - UNCOMPRESSED
         :param data_output_prefix: A prefix that Amazon Data Firehose evaluates and adds to records before writing them to S3. This prefix appears immediately following the bucket name. Default: "YYYY/MM/DD/HH"
         :param encryption_key: The AWS KMS key used to encrypt the data that it delivers to your Amazon S3 bucket. Default: - Data is not encrypted.
@@ -2478,10 +2674,10 @@ class DestinationS3BackupProps(CommonDestinationS3Props):
     def buffering_size(self) -> typing.Optional[_Size_7b441c34]:
         '''The size of the buffer that Amazon Data Firehose uses for incoming data before delivering it to the S3 bucket.
 
-        Minimum: Size.mebibytes(1)
+        Minimum: Size.mebibytes(1) when record data format conversion is disabled, Size.mebibytes(64) when it is enabled
         Maximum: Size.mebibytes(128)
 
-        :default: Size.mebibytes(5)
+        :default: Size.mebibytes(5) when record data format conversion is disabled, Size.mebibytes(128) when it is enabled
         '''
         result = self._values.get("buffering_size")
         return typing.cast(typing.Optional[_Size_7b441c34], result)
@@ -2574,6 +2770,64 @@ class DestinationS3BackupProps(CommonDestinationS3Props):
 
     def __repr__(self) -> str:
         return "DestinationS3BackupProps(%s)" % ", ".join(
+            k + "=" + repr(v) for k, v in self._values.items()
+        )
+
+
+@jsii.data_type(
+    jsii_type="aws-cdk-lib.aws_kinesisfirehose.HiveJsonInputFormatProps",
+    jsii_struct_bases=[],
+    name_mapping={"timestamp_parsers": "timestampParsers"},
+)
+class HiveJsonInputFormatProps:
+    def __init__(
+        self,
+        *,
+        timestamp_parsers: typing.Optional[typing.Sequence["TimestampParser"]] = None,
+    ) -> None:
+        '''Props for Hive JSON input format for data record format conversion.
+
+        :param timestamp_parsers: List of TimestampParsers. These are used to parse custom timestamp strings from input JSON into dates. Note: Specifying a parser will override the default timestamp parser. If the default timestamp parser is required, include ``TimestampParser.DEFAULT`` in the list of parsers along with the custom parser. Default: the default timestamp parser is used
+
+        :exampleMetadata: infused
+
+        Example::
+
+            input_format = firehose.HiveJsonInputFormat(
+                timestamp_parsers=[
+                    firehose.TimestampParser.from_format_string("yyyy-MM-dd"), firehose.TimestampParser.EPOCH_MILLIS
+                ]
+            )
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__0afd5b01612b3cc327b3c1600a9eb4aa5aaa6f3ee92bada98ae2a5d7e07bf664)
+            check_type(argname="argument timestamp_parsers", value=timestamp_parsers, expected_type=type_hints["timestamp_parsers"])
+        self._values: typing.Dict[builtins.str, typing.Any] = {}
+        if timestamp_parsers is not None:
+            self._values["timestamp_parsers"] = timestamp_parsers
+
+    @builtins.property
+    def timestamp_parsers(self) -> typing.Optional[typing.List["TimestampParser"]]:
+        '''List of TimestampParsers.
+
+        These are used to parse custom timestamp strings from input JSON into dates.
+
+        Note: Specifying a parser will override the default timestamp parser. If the default timestamp parser is required,
+        include ``TimestampParser.DEFAULT`` in the list of parsers along with the custom parser.
+
+        :default: the default timestamp parser is used
+        '''
+        result = self._values.get("timestamp_parsers")
+        return typing.cast(typing.Optional[typing.List["TimestampParser"]], result)
+
+    def __eq__(self, rhs: typing.Any) -> builtins.bool:
+        return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+    def __ne__(self, rhs: typing.Any) -> builtins.bool:
+        return not (rhs == self)
+
+    def __repr__(self) -> str:
+        return "HiveJsonInputFormatProps(%s)" % ", ".join(
             k + "=" + repr(v) for k, v in self._values.items()
         )
 
@@ -3359,6 +3613,34 @@ class _IDestinationProxy:
 typing.cast(typing.Any, IDestination).__jsii_proxy_class__ = lambda : _IDestinationProxy
 
 
+@jsii.interface(jsii_type="aws-cdk-lib.aws_kinesisfirehose.IInputFormat")
+class IInputFormat(typing_extensions.Protocol):
+    '''An input format to be used in Firehose record format conversion.'''
+
+    @jsii.member(jsii_name="createInputFormatConfig")
+    def create_input_format_config(
+        self,
+    ) -> "CfnDeliveryStream.InputFormatConfigurationProperty":
+        '''Renders the cloudformation properties for the input format.'''
+        ...
+
+
+class _IInputFormatProxy:
+    '''An input format to be used in Firehose record format conversion.'''
+
+    __jsii_type__: typing.ClassVar[str] = "aws-cdk-lib.aws_kinesisfirehose.IInputFormat"
+
+    @jsii.member(jsii_name="createInputFormatConfig")
+    def create_input_format_config(
+        self,
+    ) -> "CfnDeliveryStream.InputFormatConfigurationProperty":
+        '''Renders the cloudformation properties for the input format.'''
+        return typing.cast("CfnDeliveryStream.InputFormatConfigurationProperty", jsii.invoke(self, "createInputFormatConfig", []))
+
+# Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
+typing.cast(typing.Any, IInputFormat).__jsii_proxy_class__ = lambda : _IInputFormatProxy
+
+
 @jsii.interface(jsii_type="aws-cdk-lib.aws_kinesisfirehose.ILoggingConfig")
 class ILoggingConfig(typing_extensions.Protocol):
     '''Configuration interface for logging errors when data transformation or delivery fails.
@@ -3417,6 +3699,34 @@ class _ILoggingConfigProxy:
 typing.cast(typing.Any, ILoggingConfig).__jsii_proxy_class__ = lambda : _ILoggingConfigProxy
 
 
+@jsii.interface(jsii_type="aws-cdk-lib.aws_kinesisfirehose.IOutputFormat")
+class IOutputFormat(typing_extensions.Protocol):
+    '''An output format to be used in Firehose record format conversion.'''
+
+    @jsii.member(jsii_name="createOutputFormatConfig")
+    def create_output_format_config(
+        self,
+    ) -> "CfnDeliveryStream.OutputFormatConfigurationProperty":
+        '''Renders the cloudformation properties for the output format.'''
+        ...
+
+
+class _IOutputFormatProxy:
+    '''An output format to be used in Firehose record format conversion.'''
+
+    __jsii_type__: typing.ClassVar[str] = "aws-cdk-lib.aws_kinesisfirehose.IOutputFormat"
+
+    @jsii.member(jsii_name="createOutputFormatConfig")
+    def create_output_format_config(
+        self,
+    ) -> "CfnDeliveryStream.OutputFormatConfigurationProperty":
+        '''Renders the cloudformation properties for the output format.'''
+        return typing.cast("CfnDeliveryStream.OutputFormatConfigurationProperty", jsii.invoke(self, "createOutputFormatConfig", []))
+
+# Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
+typing.cast(typing.Any, IOutputFormat).__jsii_proxy_class__ = lambda : _IOutputFormatProxy
+
+
 @jsii.interface(jsii_type="aws-cdk-lib.aws_kinesisfirehose.ISource")
 class ISource(typing_extensions.Protocol):
     '''An interface for defining a source that can be used in an Amazon Data Firehose delivery stream.'''
@@ -3454,6 +3764,44 @@ class _ISourceProxy:
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, ISource).__jsii_proxy_class__ = lambda : _ISourceProxy
+
+
+class InputFormat(
+    metaclass=jsii.JSIIMeta,
+    jsii_type="aws-cdk-lib.aws_kinesisfirehose.InputFormat",
+):
+    '''Represents possible input formats when performing record data conversion.
+
+    :exampleMetadata: infused
+
+    Example::
+
+        # bucket: s3.Bucket
+        # schema_glue_table: glue.CfnTable
+        
+        s3_destination = firehose.S3Bucket(bucket,
+            data_format_conversion=firehose.DataFormatConversionProps(
+                schema_configuration=firehose.SchemaConfiguration.from_cfn_table(schema_glue_table),
+                input_format=firehose.InputFormat.OPENX_JSON,
+                output_format=firehose.OutputFormat.PARQUET
+            )
+        )
+    '''
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="HIVE_JSON")
+    def HIVE_JSON(cls) -> "HiveJsonInputFormat":
+        '''Parse input JSON with Hive JSON specification.'''
+        return typing.cast("HiveJsonInputFormat", jsii.sget(cls, "HIVE_JSON"))
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="OPENX_JSON")
+    def OPENX_JSON(cls) -> "OpenXJsonInputFormat":
+        '''Parse input JSON with OpenX JSON specification.
+
+        This will typically suffice.
+        '''
+        return typing.cast("OpenXJsonInputFormat", jsii.sget(cls, "OPENX_JSON"))
 
 
 @jsii.implements(ISource)
@@ -3586,6 +3934,919 @@ class LambdaFunctionProcessor(
         return typing.cast(DataProcessorProps, jsii.get(self, "props"))
 
 
+@jsii.implements(IInputFormat)
+class OpenXJsonInputFormat(
+    metaclass=jsii.JSIIMeta,
+    jsii_type="aws-cdk-lib.aws_kinesisfirehose.OpenXJsonInputFormat",
+):
+    '''This class specifies properties for OpenX JSON input format for record format conversion.
+
+    You should only need to specify an instance of this class if the default configuration does not suit your needs.
+
+    :exampleMetadata: infused
+
+    Example::
+
+        input_format = firehose.OpenXJsonInputFormat(
+            lowercase_column_names=False,
+            column_to_json_key_mappings={"ts": "timestamp"},
+            convert_dots_in_json_keys_to_underscores=True
+        )
+    '''
+
+    def __init__(
+        self,
+        *,
+        column_to_json_key_mappings: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
+        convert_dots_in_json_keys_to_underscores: typing.Optional[builtins.bool] = None,
+        lowercase_column_names: typing.Optional[builtins.bool] = None,
+    ) -> None:
+        '''
+        :param column_to_json_key_mappings: Maps column names to JSON keys that aren't identical to the column names. This is useful when the JSON contains keys that are Hive keywords. For example, ``timestamp`` is a Hive keyword. If you have a JSON key named ``timestamp``, set this parameter to ``{"ts": "timestamp"}`` to map this key to a column named ``ts`` Default: JSON keys are not renamed
+        :param convert_dots_in_json_keys_to_underscores: When set to ``true``, specifies that the names of the keys include dots and that you want Firehose to replace them with underscores. This is useful because Apache Hive does not allow dots in column names. For example, if the JSON contains a key whose name is "a.b", you can define the column name to be "a_b" when using this option. Default: ``false``
+        :param lowercase_column_names: Whether the JSON keys should be lowercased when written as column names. Default: ``true``
+        '''
+        props = OpenXJsonInputFormatProps(
+            column_to_json_key_mappings=column_to_json_key_mappings,
+            convert_dots_in_json_keys_to_underscores=convert_dots_in_json_keys_to_underscores,
+            lowercase_column_names=lowercase_column_names,
+        )
+
+        jsii.create(self.__class__, self, [props])
+
+    @jsii.member(jsii_name="createInputFormatConfig")
+    def create_input_format_config(
+        self,
+    ) -> "CfnDeliveryStream.InputFormatConfigurationProperty":
+        '''Renders the cloudformation properties for the input format.'''
+        return typing.cast("CfnDeliveryStream.InputFormatConfigurationProperty", jsii.invoke(self, "createInputFormatConfig", []))
+
+    @builtins.property
+    @jsii.member(jsii_name="props")
+    def props(self) -> typing.Optional["OpenXJsonInputFormatProps"]:
+        '''Properties for OpenX JSON input format.'''
+        return typing.cast(typing.Optional["OpenXJsonInputFormatProps"], jsii.get(self, "props"))
+
+
+@jsii.data_type(
+    jsii_type="aws-cdk-lib.aws_kinesisfirehose.OpenXJsonInputFormatProps",
+    jsii_struct_bases=[],
+    name_mapping={
+        "column_to_json_key_mappings": "columnToJsonKeyMappings",
+        "convert_dots_in_json_keys_to_underscores": "convertDotsInJsonKeysToUnderscores",
+        "lowercase_column_names": "lowercaseColumnNames",
+    },
+)
+class OpenXJsonInputFormatProps:
+    def __init__(
+        self,
+        *,
+        column_to_json_key_mappings: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
+        convert_dots_in_json_keys_to_underscores: typing.Optional[builtins.bool] = None,
+        lowercase_column_names: typing.Optional[builtins.bool] = None,
+    ) -> None:
+        '''Props for OpenX JSON input format for data record format conversion.
+
+        :param column_to_json_key_mappings: Maps column names to JSON keys that aren't identical to the column names. This is useful when the JSON contains keys that are Hive keywords. For example, ``timestamp`` is a Hive keyword. If you have a JSON key named ``timestamp``, set this parameter to ``{"ts": "timestamp"}`` to map this key to a column named ``ts`` Default: JSON keys are not renamed
+        :param convert_dots_in_json_keys_to_underscores: When set to ``true``, specifies that the names of the keys include dots and that you want Firehose to replace them with underscores. This is useful because Apache Hive does not allow dots in column names. For example, if the JSON contains a key whose name is "a.b", you can define the column name to be "a_b" when using this option. Default: ``false``
+        :param lowercase_column_names: Whether the JSON keys should be lowercased when written as column names. Default: ``true``
+
+        :exampleMetadata: infused
+
+        Example::
+
+            input_format = firehose.OpenXJsonInputFormat(
+                lowercase_column_names=False,
+                column_to_json_key_mappings={"ts": "timestamp"},
+                convert_dots_in_json_keys_to_underscores=True
+            )
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__bf09507e4b7ba6abbfda17b454958c835099a4ff05786b47104813d50d0d5e6f)
+            check_type(argname="argument column_to_json_key_mappings", value=column_to_json_key_mappings, expected_type=type_hints["column_to_json_key_mappings"])
+            check_type(argname="argument convert_dots_in_json_keys_to_underscores", value=convert_dots_in_json_keys_to_underscores, expected_type=type_hints["convert_dots_in_json_keys_to_underscores"])
+            check_type(argname="argument lowercase_column_names", value=lowercase_column_names, expected_type=type_hints["lowercase_column_names"])
+        self._values: typing.Dict[builtins.str, typing.Any] = {}
+        if column_to_json_key_mappings is not None:
+            self._values["column_to_json_key_mappings"] = column_to_json_key_mappings
+        if convert_dots_in_json_keys_to_underscores is not None:
+            self._values["convert_dots_in_json_keys_to_underscores"] = convert_dots_in_json_keys_to_underscores
+        if lowercase_column_names is not None:
+            self._values["lowercase_column_names"] = lowercase_column_names
+
+    @builtins.property
+    def column_to_json_key_mappings(
+        self,
+    ) -> typing.Optional[typing.Mapping[builtins.str, builtins.str]]:
+        '''Maps column names to JSON keys that aren't identical to the column names.
+
+        This is useful when the JSON contains keys that are Hive keywords.
+        For example, ``timestamp`` is a Hive keyword. If you have a JSON key named ``timestamp``, set this parameter to ``{"ts": "timestamp"}`` to map this key to a column named ``ts``
+
+        :default: JSON keys are not renamed
+        '''
+        result = self._values.get("column_to_json_key_mappings")
+        return typing.cast(typing.Optional[typing.Mapping[builtins.str, builtins.str]], result)
+
+    @builtins.property
+    def convert_dots_in_json_keys_to_underscores(
+        self,
+    ) -> typing.Optional[builtins.bool]:
+        '''When set to ``true``, specifies that the names of the keys include dots and that you want Firehose to replace them with underscores.
+
+        This is useful because Apache Hive does not allow dots in column names.
+        For example, if the JSON contains a key whose name is "a.b", you can define the column name to be "a_b" when using this option.
+
+        :default: ``false``
+        '''
+        result = self._values.get("convert_dots_in_json_keys_to_underscores")
+        return typing.cast(typing.Optional[builtins.bool], result)
+
+    @builtins.property
+    def lowercase_column_names(self) -> typing.Optional[builtins.bool]:
+        '''Whether the JSON keys should be lowercased when written as column names.
+
+        :default: ``true``
+        '''
+        result = self._values.get("lowercase_column_names")
+        return typing.cast(typing.Optional[builtins.bool], result)
+
+    def __eq__(self, rhs: typing.Any) -> builtins.bool:
+        return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+    def __ne__(self, rhs: typing.Any) -> builtins.bool:
+        return not (rhs == self)
+
+    def __repr__(self) -> str:
+        return "OpenXJsonInputFormatProps(%s)" % ", ".join(
+            k + "=" + repr(v) for k, v in self._values.items()
+        )
+
+
+class OrcCompression(
+    metaclass=jsii.JSIIMeta,
+    jsii_type="aws-cdk-lib.aws_kinesisfirehose.OrcCompression",
+):
+    '''Possible compression options available for ORC OutputFormat.
+
+    :see: https://docs.aws.amazon.com/AWSCloudFormation/latest/TemplateReference/aws-properties-kinesisfirehose-deliverystream-orcserde.html#cfn-kinesisfirehose-deliverystream-orcserde-compression
+    :exampleMetadata: infused
+
+    Example::
+
+        output_format = firehose.OrcOutputFormat(
+            format_version=firehose.OrcFormatVersion.V0_11,
+            block_size=Size.mebibytes(256),
+            compression=firehose.OrcCompression.NONE,
+            bloom_filter_columns=["columnA"],
+            bloom_filter_false_positive_probability=0.1,
+            dictionary_key_threshold=0.7,
+            enable_padding=True,
+            padding_tolerance=0.2,
+            row_index_stride=9000,
+            stripe_size=Size.mebibytes(32)
+        )
+    '''
+
+    @jsii.member(jsii_name="of")
+    @builtins.classmethod
+    def of(cls, value: builtins.str) -> "OrcCompression":
+        '''Creates a new OrcCompression instance with a custom value.
+
+        :param value: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__02948bebe4c2930eed4c6124d0d7f279623b5812d4fe6983e8d186c02a4b2f5c)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        return typing.cast("OrcCompression", jsii.sinvoke(cls, "of", [value]))
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="NONE")
+    def NONE(cls) -> "OrcCompression":
+        '''Uncompressed.'''
+        return typing.cast("OrcCompression", jsii.sget(cls, "NONE"))
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="SNAPPY")
+    def SNAPPY(cls) -> "OrcCompression":
+        '''Snappy.'''
+        return typing.cast("OrcCompression", jsii.sget(cls, "SNAPPY"))
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="ZLIB")
+    def ZLIB(cls) -> "OrcCompression":
+        '''Gzip.'''
+        return typing.cast("OrcCompression", jsii.sget(cls, "ZLIB"))
+
+    @builtins.property
+    @jsii.member(jsii_name="value")
+    def value(self) -> builtins.str:
+        '''the string value of the Serde Compression.'''
+        return typing.cast(builtins.str, jsii.get(self, "value"))
+
+
+@jsii.enum(jsii_type="aws-cdk-lib.aws_kinesisfirehose.OrcFormatVersion")
+class OrcFormatVersion(enum.Enum):
+    '''The available WriterVersions for ORC output format.
+
+    :exampleMetadata: infused
+
+    Example::
+
+        output_format = firehose.OrcOutputFormat(
+            format_version=firehose.OrcFormatVersion.V0_11,
+            block_size=Size.mebibytes(256),
+            compression=firehose.OrcCompression.NONE,
+            bloom_filter_columns=["columnA"],
+            bloom_filter_false_positive_probability=0.1,
+            dictionary_key_threshold=0.7,
+            enable_padding=True,
+            padding_tolerance=0.2,
+            row_index_stride=9000,
+            stripe_size=Size.mebibytes(32)
+        )
+    '''
+
+    V0_11 = "V0_11"
+    '''Use V0_11 ORC writer version when writing the output of the record transformation.'''
+    V0_12 = "V0_12"
+    '''Use V0_12 ORC writer version when writing the output of the record transformation.'''
+
+
+@jsii.implements(IOutputFormat)
+class OrcOutputFormat(
+    metaclass=jsii.JSIIMeta,
+    jsii_type="aws-cdk-lib.aws_kinesisfirehose.OrcOutputFormat",
+):
+    '''This class specifies properties for ORC output format for record format conversion.
+
+    You should only need to specify an instance of this class if the default configuration does not suit your needs.
+
+    :exampleMetadata: infused
+
+    Example::
+
+        output_format = firehose.OrcOutputFormat(
+            format_version=firehose.OrcFormatVersion.V0_11,
+            block_size=Size.mebibytes(256),
+            compression=firehose.OrcCompression.NONE,
+            bloom_filter_columns=["columnA"],
+            bloom_filter_false_positive_probability=0.1,
+            dictionary_key_threshold=0.7,
+            enable_padding=True,
+            padding_tolerance=0.2,
+            row_index_stride=9000,
+            stripe_size=Size.mebibytes(32)
+        )
+    '''
+
+    def __init__(
+        self,
+        *,
+        block_size: typing.Optional[_Size_7b441c34] = None,
+        bloom_filter_columns: typing.Optional[typing.Sequence[builtins.str]] = None,
+        bloom_filter_false_positive_probability: typing.Optional[jsii.Number] = None,
+        compression: typing.Optional[OrcCompression] = None,
+        dictionary_key_threshold: typing.Optional[jsii.Number] = None,
+        enable_padding: typing.Optional[builtins.bool] = None,
+        format_version: typing.Optional[OrcFormatVersion] = None,
+        padding_tolerance: typing.Optional[jsii.Number] = None,
+        row_index_stride: typing.Optional[jsii.Number] = None,
+        stripe_size: typing.Optional[_Size_7b441c34] = None,
+    ) -> None:
+        '''
+        :param block_size: The Hadoop Distributed File System (HDFS) block size. This is useful if you intend to copy the data from Amazon S3 to HDFS before querying. Firehose uses this value for padding calculations. Default: ``Size.mebibytes(256)``
+        :param bloom_filter_columns: The column names for which you want Firehose to create bloom filters. Default: no bloom filters are created
+        :param bloom_filter_false_positive_probability: The Bloom filter false positive probability (FPP). The lower the FPP, the bigger the bloom filter. Default: ``0.05``
+        :param compression: The compression code to use over data blocks. The possible values are ``NONE`` , ``SNAPPY`` , and ``ZLIB``. Use ``SNAPPY`` for higher decompression speed. Use ``GZIP`` if the compression ratio is more important than speed. Default: ``SNAPPY``
+        :param dictionary_key_threshold: Determines whether dictionary encoding should be applied to a column. If the number of distinct keys (unique values) in a column exceeds this fraction of the total non-null rows in that column, dictionary encoding will be turned off for that specific column. To turn off dictionary encoding, set this threshold to 0. To always use dictionary encoding, set this threshold to 1. Default: ``0.8``
+        :param enable_padding: Set this to ``true`` to indicate that you want stripes to be padded to the HDFS block boundaries. This is useful if you intend to copy the data from Amazon S3 to HDFS before querying. Default: ``false``
+        :param format_version: The version of the ORC format to write. The possible values are ``V0_11`` and ``V0_12``. Default: ``V0_12``
+        :param padding_tolerance: A number between 0 and 1 that defines the tolerance for block padding as a decimal fraction of stripe size. The default value is 0.05, which means 5 percent of stripe size. For the default values of 64 MiB ORC stripes and 256 MiB HDFS blocks, the default block padding tolerance of 5 percent reserves a maximum of 3.2 MiB for padding within the 256 MiB block. In such a case, if the available size within the block is more than 3.2 MiB, a new, smaller stripe is inserted to fit within that space. This ensures that no stripe crosses block boundaries and causes remote reads within a node-local task. Kinesis Data Firehose ignores this parameter when ``EnablePadding`` is ``false`` . Default: ``0.05`` if ``enablePadding`` is ``true``
+        :param row_index_stride: The number of rows between index entries. Default: 10000
+        :param stripe_size: The number of bytes in each stripe. The default is 64 MiB and the minimum is 8 MiB. Default: ``Size.mebibytes(64)``
+        '''
+        props = OrcOutputFormatProps(
+            block_size=block_size,
+            bloom_filter_columns=bloom_filter_columns,
+            bloom_filter_false_positive_probability=bloom_filter_false_positive_probability,
+            compression=compression,
+            dictionary_key_threshold=dictionary_key_threshold,
+            enable_padding=enable_padding,
+            format_version=format_version,
+            padding_tolerance=padding_tolerance,
+            row_index_stride=row_index_stride,
+            stripe_size=stripe_size,
+        )
+
+        jsii.create(self.__class__, self, [props])
+
+    @jsii.member(jsii_name="createOutputFormatConfig")
+    def create_output_format_config(
+        self,
+    ) -> "CfnDeliveryStream.OutputFormatConfigurationProperty":
+        '''Renders the cloudformation properties for the output format.'''
+        return typing.cast("CfnDeliveryStream.OutputFormatConfigurationProperty", jsii.invoke(self, "createOutputFormatConfig", []))
+
+    @builtins.property
+    @jsii.member(jsii_name="props")
+    def props(self) -> typing.Optional["OrcOutputFormatProps"]:
+        '''Properties for the ORC output format.'''
+        return typing.cast(typing.Optional["OrcOutputFormatProps"], jsii.get(self, "props"))
+
+
+@jsii.data_type(
+    jsii_type="aws-cdk-lib.aws_kinesisfirehose.OrcOutputFormatProps",
+    jsii_struct_bases=[],
+    name_mapping={
+        "block_size": "blockSize",
+        "bloom_filter_columns": "bloomFilterColumns",
+        "bloom_filter_false_positive_probability": "bloomFilterFalsePositiveProbability",
+        "compression": "compression",
+        "dictionary_key_threshold": "dictionaryKeyThreshold",
+        "enable_padding": "enablePadding",
+        "format_version": "formatVersion",
+        "padding_tolerance": "paddingTolerance",
+        "row_index_stride": "rowIndexStride",
+        "stripe_size": "stripeSize",
+    },
+)
+class OrcOutputFormatProps:
+    def __init__(
+        self,
+        *,
+        block_size: typing.Optional[_Size_7b441c34] = None,
+        bloom_filter_columns: typing.Optional[typing.Sequence[builtins.str]] = None,
+        bloom_filter_false_positive_probability: typing.Optional[jsii.Number] = None,
+        compression: typing.Optional[OrcCompression] = None,
+        dictionary_key_threshold: typing.Optional[jsii.Number] = None,
+        enable_padding: typing.Optional[builtins.bool] = None,
+        format_version: typing.Optional[OrcFormatVersion] = None,
+        padding_tolerance: typing.Optional[jsii.Number] = None,
+        row_index_stride: typing.Optional[jsii.Number] = None,
+        stripe_size: typing.Optional[_Size_7b441c34] = None,
+    ) -> None:
+        '''Props for ORC output format for data record format conversion.
+
+        :param block_size: The Hadoop Distributed File System (HDFS) block size. This is useful if you intend to copy the data from Amazon S3 to HDFS before querying. Firehose uses this value for padding calculations. Default: ``Size.mebibytes(256)``
+        :param bloom_filter_columns: The column names for which you want Firehose to create bloom filters. Default: no bloom filters are created
+        :param bloom_filter_false_positive_probability: The Bloom filter false positive probability (FPP). The lower the FPP, the bigger the bloom filter. Default: ``0.05``
+        :param compression: The compression code to use over data blocks. The possible values are ``NONE`` , ``SNAPPY`` , and ``ZLIB``. Use ``SNAPPY`` for higher decompression speed. Use ``GZIP`` if the compression ratio is more important than speed. Default: ``SNAPPY``
+        :param dictionary_key_threshold: Determines whether dictionary encoding should be applied to a column. If the number of distinct keys (unique values) in a column exceeds this fraction of the total non-null rows in that column, dictionary encoding will be turned off for that specific column. To turn off dictionary encoding, set this threshold to 0. To always use dictionary encoding, set this threshold to 1. Default: ``0.8``
+        :param enable_padding: Set this to ``true`` to indicate that you want stripes to be padded to the HDFS block boundaries. This is useful if you intend to copy the data from Amazon S3 to HDFS before querying. Default: ``false``
+        :param format_version: The version of the ORC format to write. The possible values are ``V0_11`` and ``V0_12``. Default: ``V0_12``
+        :param padding_tolerance: A number between 0 and 1 that defines the tolerance for block padding as a decimal fraction of stripe size. The default value is 0.05, which means 5 percent of stripe size. For the default values of 64 MiB ORC stripes and 256 MiB HDFS blocks, the default block padding tolerance of 5 percent reserves a maximum of 3.2 MiB for padding within the 256 MiB block. In such a case, if the available size within the block is more than 3.2 MiB, a new, smaller stripe is inserted to fit within that space. This ensures that no stripe crosses block boundaries and causes remote reads within a node-local task. Kinesis Data Firehose ignores this parameter when ``EnablePadding`` is ``false`` . Default: ``0.05`` if ``enablePadding`` is ``true``
+        :param row_index_stride: The number of rows between index entries. Default: 10000
+        :param stripe_size: The number of bytes in each stripe. The default is 64 MiB and the minimum is 8 MiB. Default: ``Size.mebibytes(64)``
+
+        :exampleMetadata: infused
+
+        Example::
+
+            output_format = firehose.OrcOutputFormat(
+                format_version=firehose.OrcFormatVersion.V0_11,
+                block_size=Size.mebibytes(256),
+                compression=firehose.OrcCompression.NONE,
+                bloom_filter_columns=["columnA"],
+                bloom_filter_false_positive_probability=0.1,
+                dictionary_key_threshold=0.7,
+                enable_padding=True,
+                padding_tolerance=0.2,
+                row_index_stride=9000,
+                stripe_size=Size.mebibytes(32)
+            )
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__23d7be2aebca47c4f726452fdac9d7e13c1d079ee9bbc0eb6bf735c5fa7d1ec6)
+            check_type(argname="argument block_size", value=block_size, expected_type=type_hints["block_size"])
+            check_type(argname="argument bloom_filter_columns", value=bloom_filter_columns, expected_type=type_hints["bloom_filter_columns"])
+            check_type(argname="argument bloom_filter_false_positive_probability", value=bloom_filter_false_positive_probability, expected_type=type_hints["bloom_filter_false_positive_probability"])
+            check_type(argname="argument compression", value=compression, expected_type=type_hints["compression"])
+            check_type(argname="argument dictionary_key_threshold", value=dictionary_key_threshold, expected_type=type_hints["dictionary_key_threshold"])
+            check_type(argname="argument enable_padding", value=enable_padding, expected_type=type_hints["enable_padding"])
+            check_type(argname="argument format_version", value=format_version, expected_type=type_hints["format_version"])
+            check_type(argname="argument padding_tolerance", value=padding_tolerance, expected_type=type_hints["padding_tolerance"])
+            check_type(argname="argument row_index_stride", value=row_index_stride, expected_type=type_hints["row_index_stride"])
+            check_type(argname="argument stripe_size", value=stripe_size, expected_type=type_hints["stripe_size"])
+        self._values: typing.Dict[builtins.str, typing.Any] = {}
+        if block_size is not None:
+            self._values["block_size"] = block_size
+        if bloom_filter_columns is not None:
+            self._values["bloom_filter_columns"] = bloom_filter_columns
+        if bloom_filter_false_positive_probability is not None:
+            self._values["bloom_filter_false_positive_probability"] = bloom_filter_false_positive_probability
+        if compression is not None:
+            self._values["compression"] = compression
+        if dictionary_key_threshold is not None:
+            self._values["dictionary_key_threshold"] = dictionary_key_threshold
+        if enable_padding is not None:
+            self._values["enable_padding"] = enable_padding
+        if format_version is not None:
+            self._values["format_version"] = format_version
+        if padding_tolerance is not None:
+            self._values["padding_tolerance"] = padding_tolerance
+        if row_index_stride is not None:
+            self._values["row_index_stride"] = row_index_stride
+        if stripe_size is not None:
+            self._values["stripe_size"] = stripe_size
+
+    @builtins.property
+    def block_size(self) -> typing.Optional[_Size_7b441c34]:
+        '''The Hadoop Distributed File System (HDFS) block size.
+
+        This is useful if you intend to copy the data from Amazon S3 to HDFS before querying.
+        Firehose uses this value for padding calculations.
+
+        :default: ``Size.mebibytes(256)``
+
+        :minimum: ``Size.mebibytes(64)``
+        '''
+        result = self._values.get("block_size")
+        return typing.cast(typing.Optional[_Size_7b441c34], result)
+
+    @builtins.property
+    def bloom_filter_columns(self) -> typing.Optional[typing.List[builtins.str]]:
+        '''The column names for which you want Firehose to create bloom filters.
+
+        :default: no bloom filters are created
+
+        :see: https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisfirehose-deliverystream-orcserde.html#cfn-kinesisfirehose-deliverystream-orcserde-bloomfiltercolumns
+        '''
+        result = self._values.get("bloom_filter_columns")
+        return typing.cast(typing.Optional[typing.List[builtins.str]], result)
+
+    @builtins.property
+    def bloom_filter_false_positive_probability(self) -> typing.Optional[jsii.Number]:
+        '''The Bloom filter false positive probability (FPP).
+
+        The lower the FPP, the bigger the bloom filter.
+
+        :default: ``0.05``
+
+        :see: https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisfirehose-deliverystream-orcserde.html#cfn-kinesisfirehose-deliverystream-orcserde-bloomfilterfalsepositiveprobability
+        :maximum: ``1``
+        :minimum: ``0``
+        '''
+        result = self._values.get("bloom_filter_false_positive_probability")
+        return typing.cast(typing.Optional[jsii.Number], result)
+
+    @builtins.property
+    def compression(self) -> typing.Optional[OrcCompression]:
+        '''The compression code to use over data blocks.
+
+        The possible values are ``NONE`` , ``SNAPPY`` , and ``ZLIB``.
+        Use ``SNAPPY`` for higher decompression speed.
+        Use ``GZIP`` if the compression ratio is more important than speed.
+
+        :default: ``SNAPPY``
+
+        :see: https://docs.aws.amazon.com/AWSCloudFormation/latest/TemplateReference/aws-properties-kinesisfirehose-deliverystream-orcserde.html#cfn-kinesisfirehose-deliverystream-orcserde-compression
+        '''
+        result = self._values.get("compression")
+        return typing.cast(typing.Optional[OrcCompression], result)
+
+    @builtins.property
+    def dictionary_key_threshold(self) -> typing.Optional[jsii.Number]:
+        '''Determines whether dictionary encoding should be applied to a column.
+
+        If the number of distinct keys (unique values) in a column exceeds this fraction of the total non-null rows in that column, dictionary encoding will be turned off for that specific column.
+
+        To turn off dictionary encoding, set this threshold to 0. To always use dictionary encoding, set this threshold to 1.
+
+        :default: ``0.8``
+
+        :see: https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisfirehose-deliverystream-orcserde.html#cfn-kinesisfirehose-deliverystream-orcserde-dictionarykeythreshold
+        :maximum: ``1``
+        :minimum: ``0``
+        '''
+        result = self._values.get("dictionary_key_threshold")
+        return typing.cast(typing.Optional[jsii.Number], result)
+
+    @builtins.property
+    def enable_padding(self) -> typing.Optional[builtins.bool]:
+        '''Set this to ``true`` to indicate that you want stripes to be padded to the HDFS block boundaries.
+
+        This is useful if you intend to copy the data from Amazon S3 to HDFS before querying.
+
+        :default: ``false``
+
+        :see: https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisfirehose-deliverystream-orcserde.html#cfn-kinesisfirehose-deliverystream-orcserde-enablepadding
+        '''
+        result = self._values.get("enable_padding")
+        return typing.cast(typing.Optional[builtins.bool], result)
+
+    @builtins.property
+    def format_version(self) -> typing.Optional[OrcFormatVersion]:
+        '''The version of the ORC format to write.
+
+        The possible values are ``V0_11`` and ``V0_12``.
+
+        :default: ``V0_12``
+
+        :see: https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisfirehose-deliverystream-orcserde.html#cfn-kinesisfirehose-deliverystream-orcserde-formatversion
+        '''
+        result = self._values.get("format_version")
+        return typing.cast(typing.Optional[OrcFormatVersion], result)
+
+    @builtins.property
+    def padding_tolerance(self) -> typing.Optional[jsii.Number]:
+        '''A number between 0 and 1 that defines the tolerance for block padding as a decimal fraction of stripe size.
+
+        The default value is 0.05, which means 5 percent of stripe size.
+
+        For the default values of 64 MiB ORC stripes and 256 MiB HDFS blocks, the default block padding tolerance of 5 percent reserves a maximum of 3.2 MiB for padding within the 256 MiB block.
+        In such a case, if the available size within the block is more than 3.2 MiB, a new, smaller stripe is inserted to fit within that space.
+        This ensures that no stripe crosses block boundaries and causes remote reads within a node-local task.
+
+        Kinesis Data Firehose ignores this parameter when ``EnablePadding`` is ``false`` .
+
+        :default: ``0.05`` if ``enablePadding`` is ``true``
+
+        :see: https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisfirehose-deliverystream-orcserde.html#cfn-kinesisfirehose-deliverystream-orcserde-paddingtolerance
+        '''
+        result = self._values.get("padding_tolerance")
+        return typing.cast(typing.Optional[jsii.Number], result)
+
+    @builtins.property
+    def row_index_stride(self) -> typing.Optional[jsii.Number]:
+        '''The number of rows between index entries.
+
+        :default: 10000
+
+        :see: https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisfirehose-deliverystream-orcserde.html#cfn-kinesisfirehose-deliverystream-orcserde-rowindexstride
+        :minimum: 1000
+        '''
+        result = self._values.get("row_index_stride")
+        return typing.cast(typing.Optional[jsii.Number], result)
+
+    @builtins.property
+    def stripe_size(self) -> typing.Optional[_Size_7b441c34]:
+        '''The number of bytes in each stripe.
+
+        The default is 64 MiB and the minimum is 8 MiB.
+
+        :default: ``Size.mebibytes(64)``
+
+        :see: https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisfirehose-deliverystream-orcserde.html#cfn-kinesisfirehose-deliverystream-orcserde-stripesizebytes
+        :minimum: ``Size.mebibytes(8)``
+        '''
+        result = self._values.get("stripe_size")
+        return typing.cast(typing.Optional[_Size_7b441c34], result)
+
+    def __eq__(self, rhs: typing.Any) -> builtins.bool:
+        return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+    def __ne__(self, rhs: typing.Any) -> builtins.bool:
+        return not (rhs == self)
+
+    def __repr__(self) -> str:
+        return "OrcOutputFormatProps(%s)" % ", ".join(
+            k + "=" + repr(v) for k, v in self._values.items()
+        )
+
+
+class OutputFormat(
+    metaclass=jsii.JSIIMeta,
+    jsii_type="aws-cdk-lib.aws_kinesisfirehose.OutputFormat",
+):
+    '''Represents possible output formats when performing record data conversion.
+
+    :exampleMetadata: infused
+
+    Example::
+
+        # bucket: s3.Bucket
+        # schema_glue_table: glue.CfnTable
+        
+        s3_destination = firehose.S3Bucket(bucket,
+            data_format_conversion=firehose.DataFormatConversionProps(
+                schema_configuration=firehose.SchemaConfiguration.from_cfn_table(schema_glue_table),
+                input_format=firehose.InputFormat.OPENX_JSON,
+                output_format=firehose.OutputFormat.PARQUET
+            )
+        )
+    '''
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="ORC")
+    def ORC(cls) -> OrcOutputFormat:
+        '''Write output files in ORC.'''
+        return typing.cast(OrcOutputFormat, jsii.sget(cls, "ORC"))
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PARQUET")
+    def PARQUET(cls) -> "ParquetOutputFormat":
+        '''Write output files in Parquet.'''
+        return typing.cast("ParquetOutputFormat", jsii.sget(cls, "PARQUET"))
+
+
+class ParquetCompression(
+    metaclass=jsii.JSIIMeta,
+    jsii_type="aws-cdk-lib.aws_kinesisfirehose.ParquetCompression",
+):
+    '''Possible compression options available for Parquet OutputFormat.
+
+    :see: https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisfirehose-deliverystream-parquetserde.html#cfn-kinesisfirehose-deliverystream-parquetserde-compression
+    :exampleMetadata: infused
+
+    Example::
+
+        output_format = firehose.ParquetOutputFormat(
+            block_size=Size.mebibytes(512),
+            compression=firehose.ParquetCompression.UNCOMPRESSED,
+            enable_dictionary_compression=True,
+            max_padding=Size.bytes(10),
+            page_size=Size.mebibytes(2),
+            writer_version=firehose.ParquetWriterVersion.V2
+        )
+    '''
+
+    @jsii.member(jsii_name="of")
+    @builtins.classmethod
+    def of(cls, value: builtins.str) -> "ParquetCompression":
+        '''Creates a new ParquetCompression instance with a custom value.
+
+        :param value: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__61bd74ac3570328dbd418a538644f7198c553bd1d41a6ca4a6136f48d7cf4d50)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        return typing.cast("ParquetCompression", jsii.sinvoke(cls, "of", [value]))
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="GZIP")
+    def GZIP(cls) -> "ParquetCompression":
+        '''Gzip.'''
+        return typing.cast("ParquetCompression", jsii.sget(cls, "GZIP"))
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="SNAPPY")
+    def SNAPPY(cls) -> "ParquetCompression":
+        '''Snappy.'''
+        return typing.cast("ParquetCompression", jsii.sget(cls, "SNAPPY"))
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="UNCOMPRESSED")
+    def UNCOMPRESSED(cls) -> "ParquetCompression":
+        '''Uncompressed.'''
+        return typing.cast("ParquetCompression", jsii.sget(cls, "UNCOMPRESSED"))
+
+    @builtins.property
+    @jsii.member(jsii_name="value")
+    def value(self) -> builtins.str:
+        '''the string value of the Serde Compression.'''
+        return typing.cast(builtins.str, jsii.get(self, "value"))
+
+
+@jsii.implements(IOutputFormat)
+class ParquetOutputFormat(
+    metaclass=jsii.JSIIMeta,
+    jsii_type="aws-cdk-lib.aws_kinesisfirehose.ParquetOutputFormat",
+):
+    '''This class specifies properties for Parquet output format for record format conversion.
+
+    You should only need to specify an instance of this class if the default configuration does not suit your needs.
+
+    :exampleMetadata: infused
+
+    Example::
+
+        output_format = firehose.ParquetOutputFormat(
+            block_size=Size.mebibytes(512),
+            compression=firehose.ParquetCompression.UNCOMPRESSED,
+            enable_dictionary_compression=True,
+            max_padding=Size.bytes(10),
+            page_size=Size.mebibytes(2),
+            writer_version=firehose.ParquetWriterVersion.V2
+        )
+    '''
+
+    def __init__(
+        self,
+        *,
+        block_size: typing.Optional[_Size_7b441c34] = None,
+        compression: typing.Optional[ParquetCompression] = None,
+        enable_dictionary_compression: typing.Optional[builtins.bool] = None,
+        max_padding: typing.Optional[_Size_7b441c34] = None,
+        page_size: typing.Optional[_Size_7b441c34] = None,
+        writer_version: typing.Optional["ParquetWriterVersion"] = None,
+    ) -> None:
+        '''
+        :param block_size: The Hadoop Distributed File System (HDFS) block size. This is useful if you intend to copy the data from Amazon S3 to HDFS before querying. Firehose uses this value for padding calculations. Default: ``Size.mebibytes(256)``
+        :param compression: The compression code to use over data blocks. The possible values are ``UNCOMPRESSED`` , ``SNAPPY`` , and ``GZIP``. Use ``SNAPPY`` for higher decompression speed. Use ``GZIP`` if the compression ratio is more important than speed. Default: ``SNAPPY``
+        :param enable_dictionary_compression: Indicates whether to enable dictionary compression. Default: ``false``
+        :param max_padding: The maximum amount of padding to apply. This is useful if you intend to copy the data from Amazon S3 to HDFS before querying. Default: no padding is applied
+        :param page_size: The Parquet page size. Column chunks are divided into pages. A page is conceptually an indivisible unit (in terms of compression and encoding). The minimum value is 64 KiB and the default is 1 MiB. Default: ``Size.mebibytes(1)``
+        :param writer_version: Indicates the version of Parquet to output. The possible values are ``V1`` and ``V2`` Default: ``V1``
+        '''
+        props = ParquetOutputFormatProps(
+            block_size=block_size,
+            compression=compression,
+            enable_dictionary_compression=enable_dictionary_compression,
+            max_padding=max_padding,
+            page_size=page_size,
+            writer_version=writer_version,
+        )
+
+        jsii.create(self.__class__, self, [props])
+
+    @jsii.member(jsii_name="createOutputFormatConfig")
+    def create_output_format_config(
+        self,
+    ) -> "CfnDeliveryStream.OutputFormatConfigurationProperty":
+        '''Renders the cloudformation properties for the output format.'''
+        return typing.cast("CfnDeliveryStream.OutputFormatConfigurationProperty", jsii.invoke(self, "createOutputFormatConfig", []))
+
+    @builtins.property
+    @jsii.member(jsii_name="props")
+    def props(self) -> typing.Optional["ParquetOutputFormatProps"]:
+        '''Properties for the Parquet output format.'''
+        return typing.cast(typing.Optional["ParquetOutputFormatProps"], jsii.get(self, "props"))
+
+
+@jsii.data_type(
+    jsii_type="aws-cdk-lib.aws_kinesisfirehose.ParquetOutputFormatProps",
+    jsii_struct_bases=[],
+    name_mapping={
+        "block_size": "blockSize",
+        "compression": "compression",
+        "enable_dictionary_compression": "enableDictionaryCompression",
+        "max_padding": "maxPadding",
+        "page_size": "pageSize",
+        "writer_version": "writerVersion",
+    },
+)
+class ParquetOutputFormatProps:
+    def __init__(
+        self,
+        *,
+        block_size: typing.Optional[_Size_7b441c34] = None,
+        compression: typing.Optional[ParquetCompression] = None,
+        enable_dictionary_compression: typing.Optional[builtins.bool] = None,
+        max_padding: typing.Optional[_Size_7b441c34] = None,
+        page_size: typing.Optional[_Size_7b441c34] = None,
+        writer_version: typing.Optional["ParquetWriterVersion"] = None,
+    ) -> None:
+        '''Props for Parquet output format for data record format conversion.
+
+        :param block_size: The Hadoop Distributed File System (HDFS) block size. This is useful if you intend to copy the data from Amazon S3 to HDFS before querying. Firehose uses this value for padding calculations. Default: ``Size.mebibytes(256)``
+        :param compression: The compression code to use over data blocks. The possible values are ``UNCOMPRESSED`` , ``SNAPPY`` , and ``GZIP``. Use ``SNAPPY`` for higher decompression speed. Use ``GZIP`` if the compression ratio is more important than speed. Default: ``SNAPPY``
+        :param enable_dictionary_compression: Indicates whether to enable dictionary compression. Default: ``false``
+        :param max_padding: The maximum amount of padding to apply. This is useful if you intend to copy the data from Amazon S3 to HDFS before querying. Default: no padding is applied
+        :param page_size: The Parquet page size. Column chunks are divided into pages. A page is conceptually an indivisible unit (in terms of compression and encoding). The minimum value is 64 KiB and the default is 1 MiB. Default: ``Size.mebibytes(1)``
+        :param writer_version: Indicates the version of Parquet to output. The possible values are ``V1`` and ``V2`` Default: ``V1``
+
+        :exampleMetadata: infused
+
+        Example::
+
+            output_format = firehose.ParquetOutputFormat(
+                block_size=Size.mebibytes(512),
+                compression=firehose.ParquetCompression.UNCOMPRESSED,
+                enable_dictionary_compression=True,
+                max_padding=Size.bytes(10),
+                page_size=Size.mebibytes(2),
+                writer_version=firehose.ParquetWriterVersion.V2
+            )
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__30f6620eefd956acc092d03fba63b6121a146d30b699581234817a52e1d9792b)
+            check_type(argname="argument block_size", value=block_size, expected_type=type_hints["block_size"])
+            check_type(argname="argument compression", value=compression, expected_type=type_hints["compression"])
+            check_type(argname="argument enable_dictionary_compression", value=enable_dictionary_compression, expected_type=type_hints["enable_dictionary_compression"])
+            check_type(argname="argument max_padding", value=max_padding, expected_type=type_hints["max_padding"])
+            check_type(argname="argument page_size", value=page_size, expected_type=type_hints["page_size"])
+            check_type(argname="argument writer_version", value=writer_version, expected_type=type_hints["writer_version"])
+        self._values: typing.Dict[builtins.str, typing.Any] = {}
+        if block_size is not None:
+            self._values["block_size"] = block_size
+        if compression is not None:
+            self._values["compression"] = compression
+        if enable_dictionary_compression is not None:
+            self._values["enable_dictionary_compression"] = enable_dictionary_compression
+        if max_padding is not None:
+            self._values["max_padding"] = max_padding
+        if page_size is not None:
+            self._values["page_size"] = page_size
+        if writer_version is not None:
+            self._values["writer_version"] = writer_version
+
+    @builtins.property
+    def block_size(self) -> typing.Optional[_Size_7b441c34]:
+        '''The Hadoop Distributed File System (HDFS) block size.
+
+        This is useful if you intend to copy the data from Amazon S3 to HDFS before querying.
+        Firehose uses this value for padding calculations.
+
+        :default: ``Size.mebibytes(256)``
+
+        :minimum: ``Size.mebibytes(64)``
+        '''
+        result = self._values.get("block_size")
+        return typing.cast(typing.Optional[_Size_7b441c34], result)
+
+    @builtins.property
+    def compression(self) -> typing.Optional[ParquetCompression]:
+        '''The compression code to use over data blocks.
+
+        The possible values are ``UNCOMPRESSED`` , ``SNAPPY`` , and ``GZIP``.
+        Use ``SNAPPY`` for higher decompression speed.
+        Use ``GZIP`` if the compression ratio is more important than speed.
+
+        :default: ``SNAPPY``
+
+        :see: https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisfirehose-deliverystream-parquetserde.html#cfn-kinesisfirehose-deliverystream-parquetserde-compression
+        '''
+        result = self._values.get("compression")
+        return typing.cast(typing.Optional[ParquetCompression], result)
+
+    @builtins.property
+    def enable_dictionary_compression(self) -> typing.Optional[builtins.bool]:
+        '''Indicates whether to enable dictionary compression.
+
+        :default: ``false``
+
+        :see: https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisfirehose-deliverystream-parquetserde.html#cfn-kinesisfirehose-deliverystream-parquetserde-enabledictionarycompression
+        '''
+        result = self._values.get("enable_dictionary_compression")
+        return typing.cast(typing.Optional[builtins.bool], result)
+
+    @builtins.property
+    def max_padding(self) -> typing.Optional[_Size_7b441c34]:
+        '''The maximum amount of padding to apply.
+
+        This is useful if you intend to copy the data from Amazon S3 to HDFS before querying.
+
+        :default: no padding is applied
+
+        :see: https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisfirehose-deliverystream-parquetserde.html#cfn-kinesisfirehose-deliverystream-parquetserde-maxpaddingbytes
+        '''
+        result = self._values.get("max_padding")
+        return typing.cast(typing.Optional[_Size_7b441c34], result)
+
+    @builtins.property
+    def page_size(self) -> typing.Optional[_Size_7b441c34]:
+        '''The Parquet page size.
+
+        Column chunks are divided into pages. A page is conceptually an indivisible unit (in terms of compression and encoding). The minimum value is 64 KiB and the default is 1 MiB.
+
+        :default: ``Size.mebibytes(1)``
+
+        :see: https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisfirehose-deliverystream-parquetserde.html#cfn-kinesisfirehose-deliverystream-parquetserde-pagesizebytes
+        :minimum: ``Size.kibibytes(64)``
+        '''
+        result = self._values.get("page_size")
+        return typing.cast(typing.Optional[_Size_7b441c34], result)
+
+    @builtins.property
+    def writer_version(self) -> typing.Optional["ParquetWriterVersion"]:
+        '''Indicates the version of Parquet to output.
+
+        The possible values are ``V1`` and ``V2``
+
+        :default: ``V1``
+
+        :see: https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisfirehose-deliverystream-parquetserde.html#cfn-kinesisfirehose-deliverystream-parquetserde-writerversion
+        '''
+        result = self._values.get("writer_version")
+        return typing.cast(typing.Optional["ParquetWriterVersion"], result)
+
+    def __eq__(self, rhs: typing.Any) -> builtins.bool:
+        return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+    def __ne__(self, rhs: typing.Any) -> builtins.bool:
+        return not (rhs == self)
+
+    def __repr__(self) -> str:
+        return "ParquetOutputFormatProps(%s)" % ", ".join(
+            k + "=" + repr(v) for k, v in self._values.items()
+        )
+
+
+@jsii.enum(jsii_type="aws-cdk-lib.aws_kinesisfirehose.ParquetWriterVersion")
+class ParquetWriterVersion(enum.Enum):
+    '''The available WriterVersions for Parquet output format.
+
+    :exampleMetadata: infused
+
+    Example::
+
+        output_format = firehose.ParquetOutputFormat(
+            block_size=Size.mebibytes(512),
+            compression=firehose.ParquetCompression.UNCOMPRESSED,
+            enable_dictionary_compression=True,
+            max_padding=Size.bytes(10),
+            page_size=Size.mebibytes(2),
+            writer_version=firehose.ParquetWriterVersion.V2
+        )
+    '''
+
+    V1 = "V1"
+    '''Use V1 Parquet writer version when writing the output.'''
+    V2 = "V2"
+    '''Use V2 Parquet writer version when writing the output.'''
+
+
 @jsii.implements(IDestination)
 class S3Bucket(
     metaclass=jsii.JSIIMeta,
@@ -3620,6 +4881,7 @@ class S3Bucket(
         self,
         bucket: _IBucket_42e086fd,
         *,
+        data_format_conversion: typing.Optional[typing.Union[DataFormatConversionProps, typing.Dict[builtins.str, typing.Any]]] = None,
         file_extension: typing.Optional[builtins.str] = None,
         time_zone: typing.Optional[_TimeZone_cdd72ac9] = None,
         buffering_interval: typing.Optional[_Duration_4839e8c3] = None,
@@ -3635,10 +4897,11 @@ class S3Bucket(
     ) -> None:
         '''
         :param bucket: -
+        :param data_format_conversion: The input format, output format, and schema config for converting data from the JSON format to the Parquet or ORC format before writing to Amazon S3. Default: no data format conversion is done
         :param file_extension: Specify a file extension. It will override the default file extension appended by Data Format Conversion or S3 compression features such as ``.parquet`` or ``.gz``. File extension must start with a period (``.``) and can contain allowed characters: ``0-9a-z!-_.*'()``. Default: - The default file extension appended by Data Format Conversion or S3 compression features
         :param time_zone: The time zone you prefer. Default: - UTC
         :param buffering_interval: The length of time that Firehose buffers incoming data before delivering it to the S3 bucket. Minimum: Duration.seconds(0) Maximum: Duration.seconds(900) Default: Duration.seconds(300)
-        :param buffering_size: The size of the buffer that Amazon Data Firehose uses for incoming data before delivering it to the S3 bucket. Minimum: Size.mebibytes(1) Maximum: Size.mebibytes(128) Default: Size.mebibytes(5)
+        :param buffering_size: The size of the buffer that Amazon Data Firehose uses for incoming data before delivering it to the S3 bucket. Minimum: Size.mebibytes(1) when record data format conversion is disabled, Size.mebibytes(64) when it is enabled Maximum: Size.mebibytes(128) Default: Size.mebibytes(5) when record data format conversion is disabled, Size.mebibytes(128) when it is enabled
         :param compression: The type of compression that Amazon Data Firehose uses to compress the data that it delivers to the Amazon S3 bucket. The compression formats SNAPPY or ZIP cannot be specified for Amazon Redshift destinations because they are not supported by the Amazon Redshift COPY operation that reads from the S3 bucket. Default: - UNCOMPRESSED
         :param data_output_prefix: A prefix that Amazon Data Firehose evaluates and adds to records before writing them to S3. This prefix appears immediately following the bucket name. Default: "YYYY/MM/DD/HH"
         :param encryption_key: The AWS KMS key used to encrypt the data that it delivers to your Amazon S3 bucket. Default: - Data is not encrypted.
@@ -3652,6 +4915,7 @@ class S3Bucket(
             type_hints = typing.get_type_hints(_typecheckingstub__a2eaf455255fc260033aa24d456779f4b21172e8b4cf2c51f6355f415c9f3ccd)
             check_type(argname="argument bucket", value=bucket, expected_type=type_hints["bucket"])
         props = S3BucketProps(
+            data_format_conversion=data_format_conversion,
             file_extension=file_extension,
             time_zone=time_zone,
             buffering_interval=buffering_interval,
@@ -3698,6 +4962,7 @@ class S3Bucket(
         "processor": "processor",
         "role": "role",
         "s3_backup": "s3Backup",
+        "data_format_conversion": "dataFormatConversion",
         "file_extension": "fileExtension",
         "time_zone": "timeZone",
     },
@@ -3716,13 +4981,14 @@ class S3BucketProps(CommonDestinationS3Props, CommonDestinationProps):
         processor: typing.Optional[IDataProcessor] = None,
         role: typing.Optional[_IRole_235f5d8e] = None,
         s3_backup: typing.Optional[typing.Union[DestinationS3BackupProps, typing.Dict[builtins.str, typing.Any]]] = None,
+        data_format_conversion: typing.Optional[typing.Union[DataFormatConversionProps, typing.Dict[builtins.str, typing.Any]]] = None,
         file_extension: typing.Optional[builtins.str] = None,
         time_zone: typing.Optional[_TimeZone_cdd72ac9] = None,
     ) -> None:
         '''Props for defining an S3 destination of an Amazon Data Firehose delivery stream.
 
         :param buffering_interval: The length of time that Firehose buffers incoming data before delivering it to the S3 bucket. Minimum: Duration.seconds(0) Maximum: Duration.seconds(900) Default: Duration.seconds(300)
-        :param buffering_size: The size of the buffer that Amazon Data Firehose uses for incoming data before delivering it to the S3 bucket. Minimum: Size.mebibytes(1) Maximum: Size.mebibytes(128) Default: Size.mebibytes(5)
+        :param buffering_size: The size of the buffer that Amazon Data Firehose uses for incoming data before delivering it to the S3 bucket. Minimum: Size.mebibytes(1) when record data format conversion is disabled, Size.mebibytes(64) when it is enabled Maximum: Size.mebibytes(128) Default: Size.mebibytes(5) when record data format conversion is disabled, Size.mebibytes(128) when it is enabled
         :param compression: The type of compression that Amazon Data Firehose uses to compress the data that it delivers to the Amazon S3 bucket. The compression formats SNAPPY or ZIP cannot be specified for Amazon Redshift destinations because they are not supported by the Amazon Redshift COPY operation that reads from the S3 bucket. Default: - UNCOMPRESSED
         :param data_output_prefix: A prefix that Amazon Data Firehose evaluates and adds to records before writing them to S3. This prefix appears immediately following the bucket name. Default: "YYYY/MM/DD/HH"
         :param encryption_key: The AWS KMS key used to encrypt the data that it delivers to your Amazon S3 bucket. Default: - Data is not encrypted.
@@ -3731,6 +4997,7 @@ class S3BucketProps(CommonDestinationS3Props, CommonDestinationProps):
         :param processor: The data transformation that should be performed on the data before writing to the destination. Default: - no data transformation will occur.
         :param role: The IAM role associated with this destination. Assumed by Amazon Data Firehose to invoke processors and write to destinations Default: - a role will be created with default permissions.
         :param s3_backup: The configuration for backing up source records to S3. Default: - source records will not be backed up to S3.
+        :param data_format_conversion: The input format, output format, and schema config for converting data from the JSON format to the Parquet or ORC format before writing to Amazon S3. Default: no data format conversion is done
         :param file_extension: Specify a file extension. It will override the default file extension appended by Data Format Conversion or S3 compression features such as ``.parquet`` or ``.gz``. File extension must start with a period (``.``) and can contain allowed characters: ``0-9a-z!-_.*'()``. Default: - The default file extension appended by Data Format Conversion or S3 compression features
         :param time_zone: The time zone you prefer. Default: - UTC
 
@@ -3760,6 +5027,8 @@ class S3BucketProps(CommonDestinationS3Props, CommonDestinationProps):
         '''
         if isinstance(s3_backup, dict):
             s3_backup = DestinationS3BackupProps(**s3_backup)
+        if isinstance(data_format_conversion, dict):
+            data_format_conversion = DataFormatConversionProps(**data_format_conversion)
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__04b12dc503479d22af2396c4df8d38c37536719187eef6ddd01c18b529dcbfc9)
             check_type(argname="argument buffering_interval", value=buffering_interval, expected_type=type_hints["buffering_interval"])
@@ -3772,6 +5041,7 @@ class S3BucketProps(CommonDestinationS3Props, CommonDestinationProps):
             check_type(argname="argument processor", value=processor, expected_type=type_hints["processor"])
             check_type(argname="argument role", value=role, expected_type=type_hints["role"])
             check_type(argname="argument s3_backup", value=s3_backup, expected_type=type_hints["s3_backup"])
+            check_type(argname="argument data_format_conversion", value=data_format_conversion, expected_type=type_hints["data_format_conversion"])
             check_type(argname="argument file_extension", value=file_extension, expected_type=type_hints["file_extension"])
             check_type(argname="argument time_zone", value=time_zone, expected_type=type_hints["time_zone"])
         self._values: typing.Dict[builtins.str, typing.Any] = {}
@@ -3795,6 +5065,8 @@ class S3BucketProps(CommonDestinationS3Props, CommonDestinationProps):
             self._values["role"] = role
         if s3_backup is not None:
             self._values["s3_backup"] = s3_backup
+        if data_format_conversion is not None:
+            self._values["data_format_conversion"] = data_format_conversion
         if file_extension is not None:
             self._values["file_extension"] = file_extension
         if time_zone is not None:
@@ -3816,10 +5088,10 @@ class S3BucketProps(CommonDestinationS3Props, CommonDestinationProps):
     def buffering_size(self) -> typing.Optional[_Size_7b441c34]:
         '''The size of the buffer that Amazon Data Firehose uses for incoming data before delivering it to the S3 bucket.
 
-        Minimum: Size.mebibytes(1)
+        Minimum: Size.mebibytes(1) when record data format conversion is disabled, Size.mebibytes(64) when it is enabled
         Maximum: Size.mebibytes(128)
 
-        :default: Size.mebibytes(5)
+        :default: Size.mebibytes(5) when record data format conversion is disabled, Size.mebibytes(128) when it is enabled
         '''
         result = self._values.get("buffering_size")
         return typing.cast(typing.Optional[_Size_7b441c34], result)
@@ -3911,6 +5183,17 @@ class S3BucketProps(CommonDestinationS3Props, CommonDestinationProps):
         return typing.cast(typing.Optional[DestinationS3BackupProps], result)
 
     @builtins.property
+    def data_format_conversion(self) -> typing.Optional[DataFormatConversionProps]:
+        '''The input format, output format, and schema config for converting data from the JSON format to the Parquet or ORC format before writing to Amazon S3.
+
+        :default: no data format conversion is done
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisfirehose-deliverystream-extendeds3destinationconfiguration.html#cfn-kinesisfirehose-deliverystream-extendeds3destinationconfiguration-dataformatconversionconfiguration
+        '''
+        result = self._values.get("data_format_conversion")
+        return typing.cast(typing.Optional[DataFormatConversionProps], result)
+
+    @builtins.property
     def file_extension(self) -> typing.Optional[builtins.str]:
         '''Specify a file extension.
 
@@ -3944,6 +5227,199 @@ class S3BucketProps(CommonDestinationS3Props, CommonDestinationProps):
 
     def __repr__(self) -> str:
         return "S3BucketProps(%s)" % ", ".join(
+            k + "=" + repr(v) for k, v in self._values.items()
+        )
+
+
+class SchemaConfiguration(
+    metaclass=jsii.JSIIMeta,
+    jsii_type="aws-cdk-lib.aws_kinesisfirehose.SchemaConfiguration",
+):
+    '''Represents a schema configuration for Firehose S3 data record format conversion.
+
+    :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisfirehose-deliverystream-dataformatconversionconfiguration.html#cfn-kinesisfirehose-deliverystream-dataformatconversionconfiguration-schemaconfiguration
+    :exampleMetadata: infused
+
+    Example::
+
+        # bucket: s3.Bucket
+        # schema_glue_table: glue.CfnTable
+        
+        s3_destination = firehose.S3Bucket(bucket,
+            data_format_conversion=firehose.DataFormatConversionProps(
+                schema_configuration=firehose.SchemaConfiguration.from_cfn_table(schema_glue_table),
+                input_format=firehose.InputFormat.OPENX_JSON,
+                output_format=firehose.OutputFormat.PARQUET
+            )
+        )
+    '''
+
+    @jsii.member(jsii_name="fromCfnTable")
+    @builtins.classmethod
+    def from_cfn_table(
+        cls,
+        table: _CfnTable_63ae0183,
+        *,
+        region: typing.Optional[builtins.str] = None,
+        version_id: typing.Optional[builtins.str] = None,
+    ) -> "SchemaConfiguration":
+        '''Obtain schema configuration for data record format conversion from an ``aws_glue.CfnTable``.
+
+        :param table: -
+        :param region: The region of the database the table is in. Default: the region of the stack that contains the table reference is used
+        :param version_id: Specifies the table version for the output data schema. if set to ``LATEST``, Firehose uses the most recent table version. This means that any updates to the table are automatically picked up. Default: ``LATEST``
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__16698efebf7812a619f54735d92a199e9f2be81de7b9a45a6b47a846ad97bb22)
+            check_type(argname="argument table", value=table, expected_type=type_hints["table"])
+        props = SchemaConfigurationFromCfnTableProps(
+            region=region, version_id=version_id
+        )
+
+        return typing.cast("SchemaConfiguration", jsii.sinvoke(cls, "fromCfnTable", [table, props]))
+
+    @jsii.member(jsii_name="bind")
+    def bind(
+        self,
+        scope: _constructs_77d1e7e8.Construct,
+        *,
+        role: _IRole_235f5d8e,
+    ) -> "CfnDeliveryStream.SchemaConfigurationProperty":
+        '''Binds this Schema to the Destination, adding the necessary permissions to the Destination role.
+
+        :param scope: -
+        :param role: The IAM Role that will be used by the Delivery Stream for access to the Glue data catalog for record format conversion.
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__fa302f4f5dcb045545aee457a21bea52383c93a0b3a83d889ecd270cb21edc8d)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+        options = SchemaConfigurationBindOptions(role=role)
+
+        return typing.cast("CfnDeliveryStream.SchemaConfigurationProperty", jsii.invoke(self, "bind", [scope, options]))
+
+
+@jsii.data_type(
+    jsii_type="aws-cdk-lib.aws_kinesisfirehose.SchemaConfigurationBindOptions",
+    jsii_struct_bases=[],
+    name_mapping={"role": "role"},
+)
+class SchemaConfigurationBindOptions:
+    def __init__(self, *, role: _IRole_235f5d8e) -> None:
+        '''Options when binding a SchemaConfig to a Destination.
+
+        :param role: The IAM Role that will be used by the Delivery Stream for access to the Glue data catalog for record format conversion.
+
+        :exampleMetadata: fixture=_generated
+
+        Example::
+
+            # The code below shows an example of how to instantiate this type.
+            # The values are placeholders you should change.
+            from aws_cdk import aws_iam as iam
+            from aws_cdk import aws_kinesisfirehose as kinesisfirehose
+            
+            # role: iam.Role
+            
+            schema_configuration_bind_options = kinesisfirehose.SchemaConfigurationBindOptions(
+                role=role
+            )
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__be38cc765d422319285e857e984a2a96aeac0bf84fc8ba50ca36f24ae4a656a6)
+            check_type(argname="argument role", value=role, expected_type=type_hints["role"])
+        self._values: typing.Dict[builtins.str, typing.Any] = {
+            "role": role,
+        }
+
+    @builtins.property
+    def role(self) -> _IRole_235f5d8e:
+        '''The IAM Role that will be used by the Delivery Stream for access to the Glue data catalog for record format conversion.'''
+        result = self._values.get("role")
+        assert result is not None, "Required property 'role' is missing"
+        return typing.cast(_IRole_235f5d8e, result)
+
+    def __eq__(self, rhs: typing.Any) -> builtins.bool:
+        return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+    def __ne__(self, rhs: typing.Any) -> builtins.bool:
+        return not (rhs == self)
+
+    def __repr__(self) -> str:
+        return "SchemaConfigurationBindOptions(%s)" % ", ".join(
+            k + "=" + repr(v) for k, v in self._values.items()
+        )
+
+
+@jsii.data_type(
+    jsii_type="aws-cdk-lib.aws_kinesisfirehose.SchemaConfigurationFromCfnTableProps",
+    jsii_struct_bases=[],
+    name_mapping={"region": "region", "version_id": "versionId"},
+)
+class SchemaConfigurationFromCfnTableProps:
+    def __init__(
+        self,
+        *,
+        region: typing.Optional[builtins.str] = None,
+        version_id: typing.Optional[builtins.str] = None,
+    ) -> None:
+        '''Options for creating a Schema for record format conversion from a ``glue.CfnTable``.
+
+        :param region: The region of the database the table is in. Default: the region of the stack that contains the table reference is used
+        :param version_id: Specifies the table version for the output data schema. if set to ``LATEST``, Firehose uses the most recent table version. This means that any updates to the table are automatically picked up. Default: ``LATEST``
+
+        :exampleMetadata: fixture=_generated
+
+        Example::
+
+            # The code below shows an example of how to instantiate this type.
+            # The values are placeholders you should change.
+            from aws_cdk import aws_kinesisfirehose as kinesisfirehose
+            
+            schema_configuration_from_cfn_table_props = kinesisfirehose.SchemaConfigurationFromCfnTableProps(
+                region="region",
+                version_id="versionId"
+            )
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__d59e8faea792bc8275a33e7b7ca4b7d0096136ba71d39758a60dc5f61140e8dd)
+            check_type(argname="argument region", value=region, expected_type=type_hints["region"])
+            check_type(argname="argument version_id", value=version_id, expected_type=type_hints["version_id"])
+        self._values: typing.Dict[builtins.str, typing.Any] = {}
+        if region is not None:
+            self._values["region"] = region
+        if version_id is not None:
+            self._values["version_id"] = version_id
+
+    @builtins.property
+    def region(self) -> typing.Optional[builtins.str]:
+        '''The region of the database the table is in.
+
+        :default: the region of the stack that contains the table reference is used
+        '''
+        result = self._values.get("region")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def version_id(self) -> typing.Optional[builtins.str]:
+        '''Specifies the table version for the output data schema.
+
+        if set to ``LATEST``, Firehose uses the most recent table version. This means that any updates to the table are automatically picked up.
+
+        :default: ``LATEST``
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisfirehose-deliverystream-schemaconfiguration.html#cfn-kinesisfirehose-deliverystream-schemaconfiguration-versionid
+        '''
+        result = self._values.get("version_id")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    def __eq__(self, rhs: typing.Any) -> builtins.bool:
+        return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+    def __ne__(self, rhs: typing.Any) -> builtins.bool:
+        return not (rhs == self)
+
+    def __repr__(self) -> str:
+        return "SchemaConfigurationFromCfnTableProps(%s)" % ", ".join(
             k + "=" + repr(v) for k, v in self._values.items()
         )
 
@@ -4036,6 +5512,53 @@ class StreamEncryptionType(enum.Enum):
     '''Data in the stream is stored encrypted by a KMS key managed by the customer.'''
     AWS_OWNED = "AWS_OWNED"
     '''Data in the stream is stored encrypted by a KMS key owned by AWS and managed for use in multiple AWS accounts.'''
+
+
+class TimestampParser(
+    metaclass=jsii.JSIIMeta,
+    jsii_type="aws-cdk-lib.aws_kinesisfirehose.TimestampParser",
+):
+    '''Value class that wraps a Joda Time format string.
+
+    Use this with the Hive JSON input format for data record format conversion to parse custom timestamp formats.
+
+    :exampleMetadata: infused
+
+    Example::
+
+        input_format = firehose.HiveJsonInputFormat(
+            timestamp_parsers=[
+                firehose.TimestampParser.from_format_string("yyyy-MM-dd"), firehose.TimestampParser.EPOCH_MILLIS
+            ]
+        )
+    '''
+
+    @jsii.member(jsii_name="fromFormatString")
+    @builtins.classmethod
+    def from_format_string(cls, format: builtins.str) -> "TimestampParser":
+        '''Creates a TimestampParser from the given format string.
+
+        The format string should be a valid Joda Time pattern string.
+        See `Class DateTimeFormat <https://docs.aws.amazon.com/https://www.joda.org/joda-time/apidocs/org/joda/time/format/DateTimeFormat.html>`_ for more details
+
+        :param format: the Joda Time format string.
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__f9355b4b9cb75f1433155f9d39e32472e4f0342bd652e191a412203a56a7a082)
+            check_type(argname="argument format", value=format, expected_type=type_hints["format"])
+        return typing.cast("TimestampParser", jsii.sinvoke(cls, "fromFormatString", [format]))
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="EPOCH_MILLIS")
+    def EPOCH_MILLIS(cls) -> "TimestampParser":
+        '''Parses timestamps formatted in milliseconds since epoch.'''
+        return typing.cast("TimestampParser", jsii.sget(cls, "EPOCH_MILLIS"))
+
+    @builtins.property
+    @jsii.member(jsii_name="format")
+    def format(self) -> builtins.str:
+        '''The format string to use in Hive JSON input format configuration.'''
+        return typing.cast(builtins.str, jsii.get(self, "format"))
 
 
 @jsii.implements(_IInspectable_c2943556, IDeliveryStreamRef, _ITaggable_36806126)
@@ -13275,6 +14798,52 @@ class EnableLogging(
         return typing.cast(typing.Optional[_ILogGroup_3c4fa718], jsii.get(self, "logGroup"))
 
 
+@jsii.implements(IInputFormat)
+class HiveJsonInputFormat(
+    metaclass=jsii.JSIIMeta,
+    jsii_type="aws-cdk-lib.aws_kinesisfirehose.HiveJsonInputFormat",
+):
+    '''This class specifies properties for Hive JSON input format for record format conversion.
+
+    You should only need to specify an instance of this class if the default configuration does not suit your needs.
+
+    :exampleMetadata: infused
+
+    Example::
+
+        input_format = firehose.HiveJsonInputFormat(
+            timestamp_parsers=[
+                firehose.TimestampParser.from_format_string("yyyy-MM-dd"), firehose.TimestampParser.EPOCH_MILLIS
+            ]
+        )
+    '''
+
+    def __init__(
+        self,
+        *,
+        timestamp_parsers: typing.Optional[typing.Sequence[TimestampParser]] = None,
+    ) -> None:
+        '''
+        :param timestamp_parsers: List of TimestampParsers. These are used to parse custom timestamp strings from input JSON into dates. Note: Specifying a parser will override the default timestamp parser. If the default timestamp parser is required, include ``TimestampParser.DEFAULT`` in the list of parsers along with the custom parser. Default: the default timestamp parser is used
+        '''
+        props = HiveJsonInputFormatProps(timestamp_parsers=timestamp_parsers)
+
+        jsii.create(self.__class__, self, [props])
+
+    @jsii.member(jsii_name="createInputFormatConfig")
+    def create_input_format_config(
+        self,
+    ) -> CfnDeliveryStream.InputFormatConfigurationProperty:
+        '''Renders the cloudformation properties for the input format.'''
+        return typing.cast(CfnDeliveryStream.InputFormatConfigurationProperty, jsii.invoke(self, "createInputFormatConfig", []))
+
+    @builtins.property
+    @jsii.member(jsii_name="props")
+    def props(self) -> typing.Optional[HiveJsonInputFormatProps]:
+        '''Properties for Hive JSON input format.'''
+        return typing.cast(typing.Optional[HiveJsonInputFormatProps], jsii.get(self, "props"))
+
+
 __all__ = [
     "BackupMode",
     "CfnDeliveryStream",
@@ -13282,6 +14851,7 @@ __all__ = [
     "CommonDestinationProps",
     "CommonDestinationS3Props",
     "Compression",
+    "DataFormatConversionProps",
     "DataProcessorBindOptions",
     "DataProcessorConfig",
     "DataProcessorIdentifier",
@@ -13295,18 +14865,38 @@ __all__ = [
     "DestinationS3BackupProps",
     "DisableLogging",
     "EnableLogging",
+    "HiveJsonInputFormat",
+    "HiveJsonInputFormatProps",
     "IDataProcessor",
     "IDeliveryStream",
     "IDeliveryStreamRef",
     "IDestination",
+    "IInputFormat",
     "ILoggingConfig",
+    "IOutputFormat",
     "ISource",
+    "InputFormat",
     "KinesisStreamSource",
     "LambdaFunctionProcessor",
+    "OpenXJsonInputFormat",
+    "OpenXJsonInputFormatProps",
+    "OrcCompression",
+    "OrcFormatVersion",
+    "OrcOutputFormat",
+    "OrcOutputFormatProps",
+    "OutputFormat",
+    "ParquetCompression",
+    "ParquetOutputFormat",
+    "ParquetOutputFormatProps",
+    "ParquetWriterVersion",
     "S3Bucket",
     "S3BucketProps",
+    "SchemaConfiguration",
+    "SchemaConfigurationBindOptions",
+    "SchemaConfigurationFromCfnTableProps",
     "StreamEncryption",
     "StreamEncryptionType",
+    "TimestampParser",
 ]
 
 publication.publish()
@@ -13359,6 +14949,16 @@ def _typecheckingstub__e31b00e38ca06327867ea44e0a0f3d63eb65aaa770f96419cf713c515
 
 def _typecheckingstub__4e41ad5beb7c57e7d6a51a6e7b54af84f87429433140b71bcff2768d479fc24c(
     value: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__bff90bf1ac37687c050bd1dbbc7970543cf96f46bffc7e9b92aa180e16446a3e(
+    *,
+    input_format: IInputFormat,
+    output_format: IOutputFormat,
+    schema_configuration: SchemaConfiguration,
+    enabled: typing.Optional[builtins.bool] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -13446,6 +15046,13 @@ def _typecheckingstub__14700eb876e8e0f20f42a3b1362e4b8cd4eb596f1fbaecf0e207a387e
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__0afd5b01612b3cc327b3c1600a9eb4aa5aaa6f3ee92bada98ae2a5d7e07bf664(
+    *,
+    timestamp_parsers: typing.Optional[typing.Sequence[TimestampParser]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__4720a6b97c475eae9ec0d65aca8250b00f57d45f0efb2368b8df6d486162c508(
     scope: _constructs_77d1e7e8.Construct,
     *,
@@ -13528,9 +15135,59 @@ def _typecheckingstub__393c41d8ae2fe5acab13fd70fff9f4778e727adfd78b86d20820f0670
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__bf09507e4b7ba6abbfda17b454958c835099a4ff05786b47104813d50d0d5e6f(
+    *,
+    column_to_json_key_mappings: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
+    convert_dots_in_json_keys_to_underscores: typing.Optional[builtins.bool] = None,
+    lowercase_column_names: typing.Optional[builtins.bool] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__02948bebe4c2930eed4c6124d0d7f279623b5812d4fe6983e8d186c02a4b2f5c(
+    value: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__23d7be2aebca47c4f726452fdac9d7e13c1d079ee9bbc0eb6bf735c5fa7d1ec6(
+    *,
+    block_size: typing.Optional[_Size_7b441c34] = None,
+    bloom_filter_columns: typing.Optional[typing.Sequence[builtins.str]] = None,
+    bloom_filter_false_positive_probability: typing.Optional[jsii.Number] = None,
+    compression: typing.Optional[OrcCompression] = None,
+    dictionary_key_threshold: typing.Optional[jsii.Number] = None,
+    enable_padding: typing.Optional[builtins.bool] = None,
+    format_version: typing.Optional[OrcFormatVersion] = None,
+    padding_tolerance: typing.Optional[jsii.Number] = None,
+    row_index_stride: typing.Optional[jsii.Number] = None,
+    stripe_size: typing.Optional[_Size_7b441c34] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__61bd74ac3570328dbd418a538644f7198c553bd1d41a6ca4a6136f48d7cf4d50(
+    value: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__30f6620eefd956acc092d03fba63b6121a146d30b699581234817a52e1d9792b(
+    *,
+    block_size: typing.Optional[_Size_7b441c34] = None,
+    compression: typing.Optional[ParquetCompression] = None,
+    enable_dictionary_compression: typing.Optional[builtins.bool] = None,
+    max_padding: typing.Optional[_Size_7b441c34] = None,
+    page_size: typing.Optional[_Size_7b441c34] = None,
+    writer_version: typing.Optional[ParquetWriterVersion] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__a2eaf455255fc260033aa24d456779f4b21172e8b4cf2c51f6355f415c9f3ccd(
     bucket: _IBucket_42e086fd,
     *,
+    data_format_conversion: typing.Optional[typing.Union[DataFormatConversionProps, typing.Dict[builtins.str, typing.Any]]] = None,
     file_extension: typing.Optional[builtins.str] = None,
     time_zone: typing.Optional[_TimeZone_cdd72ac9] = None,
     buffering_interval: typing.Optional[_Duration_4839e8c3] = None,
@@ -13565,14 +15222,53 @@ def _typecheckingstub__04b12dc503479d22af2396c4df8d38c37536719187eef6ddd01c18b52
     processor: typing.Optional[IDataProcessor] = None,
     role: typing.Optional[_IRole_235f5d8e] = None,
     s3_backup: typing.Optional[typing.Union[DestinationS3BackupProps, typing.Dict[builtins.str, typing.Any]]] = None,
+    data_format_conversion: typing.Optional[typing.Union[DataFormatConversionProps, typing.Dict[builtins.str, typing.Any]]] = None,
     file_extension: typing.Optional[builtins.str] = None,
     time_zone: typing.Optional[_TimeZone_cdd72ac9] = None,
 ) -> None:
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__16698efebf7812a619f54735d92a199e9f2be81de7b9a45a6b47a846ad97bb22(
+    table: _CfnTable_63ae0183,
+    *,
+    region: typing.Optional[builtins.str] = None,
+    version_id: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__fa302f4f5dcb045545aee457a21bea52383c93a0b3a83d889ecd270cb21edc8d(
+    scope: _constructs_77d1e7e8.Construct,
+    *,
+    role: _IRole_235f5d8e,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__be38cc765d422319285e857e984a2a96aeac0bf84fc8ba50ca36f24ae4a656a6(
+    *,
+    role: _IRole_235f5d8e,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__d59e8faea792bc8275a33e7b7ca4b7d0096136ba71d39758a60dc5f61140e8dd(
+    *,
+    region: typing.Optional[builtins.str] = None,
+    version_id: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__efb44f4c68ce5ed338b1cadc1095db8f6b1ea6c2478ee68c07bb0fa95cecdf47(
     encryption_key: typing.Optional[_IKey_5f11635f] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__f9355b4b9cb75f1433155f9d39e32472e4f0342bd652e191a412203a56a7a082(
+    format: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -14470,3 +16166,6 @@ def _typecheckingstub__ba11d69a3d91c8a6ba63c6ed55a7bbd149c317325863da3c41ebf373c
 ) -> None:
     """Type checking stubs"""
     pass
+
+for cls in [IDataProcessor, IDeliveryStream, IDeliveryStreamRef, IDestination, IInputFormat, ILoggingConfig, IOutputFormat, ISource]:
+    typing.cast(typing.Any, cls).__protocol_attrs__ = typing.cast(typing.Any, cls).__protocol_attrs__ - set(['__jsii_proxy_class__', '__jsii_type__'])

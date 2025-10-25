@@ -8180,6 +8180,48 @@ class CfnWirelessDeviceImportTask(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="fromWirelessDeviceImportTaskArn")
+    @builtins.classmethod
+    def from_wireless_device_import_task_arn(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        arn: builtins.str,
+    ) -> IWirelessDeviceImportTaskRef:
+        '''Creates a new IWirelessDeviceImportTaskRef from an ARN.
+
+        :param scope: -
+        :param id: -
+        :param arn: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__a0c293252db3b2463ec5dfc198c9ca809a983a4ac7c329a34635fd53b19f6b97)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
+        return typing.cast(IWirelessDeviceImportTaskRef, jsii.sinvoke(cls, "fromWirelessDeviceImportTaskArn", [scope, id, arn]))
+
+    @jsii.member(jsii_name="fromWirelessDeviceImportTaskId")
+    @builtins.classmethod
+    def from_wireless_device_import_task_id(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        wireless_device_import_task_id: builtins.str,
+    ) -> IWirelessDeviceImportTaskRef:
+        '''Creates a new IWirelessDeviceImportTaskRef from a wirelessDeviceImportTaskId.
+
+        :param scope: -
+        :param id: -
+        :param wireless_device_import_task_id: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__50573423c06641c7238fcaa89088754c478960c1ce3fc1363300661b7fdde907)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument wireless_device_import_task_id", value=wireless_device_import_task_id, expected_type=type_hints["wireless_device_import_task_id"])
+        return typing.cast(IWirelessDeviceImportTaskRef, jsii.sinvoke(cls, "fromWirelessDeviceImportTaskId", [scope, id, wireless_device_import_task_id]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -10003,6 +10045,22 @@ def _typecheckingstub__9b81904b6ea4a40be4179e391a0bb52c165600b850295d5a6b580ad76
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__a0c293252db3b2463ec5dfc198c9ca809a983a4ac7c329a34635fd53b19f6b97(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    arn: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__50573423c06641c7238fcaa89088754c478960c1ce3fc1363300661b7fdde907(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    wireless_device_import_task_id: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__198856489aba15c5acfb8dfab7e2b4a71dc22d665121a8744c5ee52b5a33b0d1(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -10135,3 +10193,6 @@ def _typecheckingstub__ddc162c67799ffa5b9f0b75305d65763275f726ca096abf2be6e97d8d
 ) -> None:
     """Type checking stubs"""
     pass
+
+for cls in [IDestinationRef, IDeviceProfileRef, IFuotaTaskRef, IMulticastGroupRef, INetworkAnalyzerConfigurationRef, IPartnerAccountRef, IServiceProfileRef, ITaskDefinitionRef, IWirelessDeviceImportTaskRef, IWirelessDeviceRef, IWirelessGatewayRef]:
+    typing.cast(typing.Any, cls).__protocol_attrs__ = typing.cast(typing.Any, cls).__protocol_attrs__ - set(['__jsii_proxy_class__', '__jsii_type__'])

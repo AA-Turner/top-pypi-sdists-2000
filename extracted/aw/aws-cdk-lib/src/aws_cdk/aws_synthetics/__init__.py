@@ -1676,15 +1676,14 @@ class CfnCanaryProps:
             cfn_canary_props = synthetics.CfnCanaryProps(
                 artifact_s3_location="artifactS3Location",
                 code=synthetics.CfnCanary.CodeProperty(
-                    handler="handler",
-            
-                    # the properties below are optional
+                    blueprint_types=["blueprintTypes"],
                     dependencies=[synthetics.CfnCanary.DependencyProperty(
                         reference="reference",
             
                         # the properties below are optional
                         type="type"
                     )],
+                    handler="handler",
                     s3_bucket="s3Bucket",
                     s3_key="s3Key",
                     s3_object_version="s3ObjectVersion",
@@ -3390,6 +3389,15 @@ class Runtime(metaclass=jsii.JSIIMeta, jsii_type="aws-cdk-lib.aws_synthetics.Run
         '''
         return typing.cast("Runtime", jsii.sget(cls, "SYNTHETICS_PYTHON_SELENIUM_6_0"))
 
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="SYNTHETICS_PYTHON_SELENIUM_7_0")
+    def SYNTHETICS_PYTHON_SELENIUM_7_0(cls) -> "Runtime":
+        '''``syn-python-selenium-7.0`` includes the following: - Lambda runtime Python 3.11 - Selenium version 4.32.0 - Chromium version 138.0.7204.168.
+
+        :see: https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch_Synthetics_Library_python_selenium.html#CloudWatch_Synthetics_runtimeversion-syn-python-selenium-7.0
+        '''
+        return typing.cast("Runtime", jsii.sget(cls, "SYNTHETICS_PYTHON_SELENIUM_7_0"))
+
     @builtins.property
     @jsii.member(jsii_name="family")
     def family(self) -> "RuntimeFamily":
@@ -3773,15 +3781,14 @@ class CfnCanary(
         cfn_canary = synthetics.CfnCanary(self, "MyCfnCanary",
             artifact_s3_location="artifactS3Location",
             code=synthetics.CfnCanary.CodeProperty(
-                handler="handler",
-        
-                # the properties below are optional
+                blueprint_types=["blueprintTypes"],
                 dependencies=[synthetics.CfnCanary.DependencyProperty(
                     reference="reference",
         
                     # the properties below are optional
                     type="type"
                 )],
+                handler="handler",
                 s3_bucket="s3Bucket",
                 s3_key="s3Key",
                 s3_object_version="s3ObjectVersion",
@@ -4568,8 +4575,9 @@ class CfnCanary(
         jsii_type="aws-cdk-lib.aws_synthetics.CfnCanary.CodeProperty",
         jsii_struct_bases=[],
         name_mapping={
-            "handler": "handler",
+            "blueprint_types": "blueprintTypes",
             "dependencies": "dependencies",
+            "handler": "handler",
             "s3_bucket": "s3Bucket",
             "s3_key": "s3Key",
             "s3_object_version": "s3ObjectVersion",
@@ -4581,8 +4589,9 @@ class CfnCanary(
         def __init__(
             self,
             *,
-            handler: builtins.str,
+            blueprint_types: typing.Optional[typing.Sequence[builtins.str]] = None,
             dependencies: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCanary.DependencyProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            handler: typing.Optional[builtins.str] = None,
             s3_bucket: typing.Optional[builtins.str] = None,
             s3_key: typing.Optional[builtins.str] = None,
             s3_object_version: typing.Optional[builtins.str] = None,
@@ -4593,8 +4602,9 @@ class CfnCanary(
 
             This structure contains the Lambda handler with the location where the canary should start running the script. If the script is stored in an S3 bucket, the bucket name, key, and version are also included. If the script is passed into the canary directly, the script code is contained in the value of ``Script`` .
 
-            :param handler: The entry point to use for the source code when running the canary. For canaries that use the ``syn-python-selenium-1.0`` runtime or a ``syn-nodejs.puppeteer`` runtime earlier than ``syn-nodejs.puppeteer-3.4`` , the handler must be specified as ``*fileName* .handler`` . For ``syn-python-selenium-1.1`` , ``syn-nodejs.puppeteer-3.4`` , and later runtimes, the handler can be specified as ``*fileName* . *functionName*`` , or you can specify a folder where canary scripts reside as ``*folder* / *fileName* . *functionName*`` .
+            :param blueprint_types: ``BlueprintTypes`` are a list of templates that enable simplified canary creation. You can create canaries for common monitoring scenarios by providing only a JSON configuration file instead of writing custom scripts. ``multi-checks`` is the only supported value. When you specify ``BlueprintTypes`` , the ``Handler`` field cannot be specified since the blueprint provides a pre-defined entry point.
             :param dependencies: List of Lambda layers to attach to the canary.
+            :param handler: The entry point to use for the source code when running the canary. For canaries that use the ``syn-python-selenium-1.0`` runtime or a ``syn-nodejs.puppeteer`` runtime earlier than ``syn-nodejs.puppeteer-3.4`` , the handler must be specified as ``*fileName* .handler`` . For ``syn-python-selenium-1.1`` , ``syn-nodejs.puppeteer-3.4`` , and later runtimes, the handler can be specified as ``*fileName* . *functionName*`` , or you can specify a folder where canary scripts reside as ``*folder* / *fileName* . *functionName*`` . This field is required when you don't specify ``BlueprintTypes`` and is not allowed when you specify ``BlueprintTypes`` .
             :param s3_bucket: If your canary script is located in S3, specify the bucket name here. The bucket must already exist.
             :param s3_key: The Amazon S3 key of your script. For more information, see `Working with Amazon S3 Objects <https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingObjects.html>`_ .
             :param s3_object_version: The Amazon S3 version ID of your script.
@@ -4611,15 +4621,14 @@ class CfnCanary(
                 from aws_cdk import aws_synthetics as synthetics
                 
                 code_property = synthetics.CfnCanary.CodeProperty(
-                    handler="handler",
-                
-                    # the properties below are optional
+                    blueprint_types=["blueprintTypes"],
                     dependencies=[synthetics.CfnCanary.DependencyProperty(
                         reference="reference",
                 
                         # the properties below are optional
                         type="type"
                     )],
+                    handler="handler",
                     s3_bucket="s3Bucket",
                     s3_key="s3Key",
                     s3_object_version="s3ObjectVersion",
@@ -4629,18 +4638,21 @@ class CfnCanary(
             '''
             if __debug__:
                 type_hints = typing.get_type_hints(_typecheckingstub__3d403372a613babc1ab10717d050ec9a7f4055961f3545f2d0600d89c7b3dcc3)
-                check_type(argname="argument handler", value=handler, expected_type=type_hints["handler"])
+                check_type(argname="argument blueprint_types", value=blueprint_types, expected_type=type_hints["blueprint_types"])
                 check_type(argname="argument dependencies", value=dependencies, expected_type=type_hints["dependencies"])
+                check_type(argname="argument handler", value=handler, expected_type=type_hints["handler"])
                 check_type(argname="argument s3_bucket", value=s3_bucket, expected_type=type_hints["s3_bucket"])
                 check_type(argname="argument s3_key", value=s3_key, expected_type=type_hints["s3_key"])
                 check_type(argname="argument s3_object_version", value=s3_object_version, expected_type=type_hints["s3_object_version"])
                 check_type(argname="argument script", value=script, expected_type=type_hints["script"])
                 check_type(argname="argument source_location_arn", value=source_location_arn, expected_type=type_hints["source_location_arn"])
-            self._values: typing.Dict[builtins.str, typing.Any] = {
-                "handler": handler,
-            }
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if blueprint_types is not None:
+                self._values["blueprint_types"] = blueprint_types
             if dependencies is not None:
                 self._values["dependencies"] = dependencies
+            if handler is not None:
+                self._values["handler"] = handler
             if s3_bucket is not None:
                 self._values["s3_bucket"] = s3_bucket
             if s3_key is not None:
@@ -4653,16 +4665,17 @@ class CfnCanary(
                 self._values["source_location_arn"] = source_location_arn
 
         @builtins.property
-        def handler(self) -> builtins.str:
-            '''The entry point to use for the source code when running the canary.
+        def blueprint_types(self) -> typing.Optional[typing.List[builtins.str]]:
+            '''``BlueprintTypes`` are a list of templates that enable simplified canary creation.
 
-            For canaries that use the ``syn-python-selenium-1.0`` runtime or a ``syn-nodejs.puppeteer`` runtime earlier than ``syn-nodejs.puppeteer-3.4`` , the handler must be specified as ``*fileName* .handler`` . For ``syn-python-selenium-1.1`` , ``syn-nodejs.puppeteer-3.4`` , and later runtimes, the handler can be specified as ``*fileName* . *functionName*`` , or you can specify a folder where canary scripts reside as ``*folder* / *fileName* . *functionName*`` .
+            You can create canaries for common monitoring scenarios by providing only a JSON configuration file instead of writing custom scripts. ``multi-checks`` is the only supported value.
 
-            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-synthetics-canary-code.html#cfn-synthetics-canary-code-handler
+            When you specify ``BlueprintTypes`` , the ``Handler`` field cannot be specified since the blueprint provides a pre-defined entry point.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-synthetics-canary-code.html#cfn-synthetics-canary-code-blueprinttypes
             '''
-            result = self._values.get("handler")
-            assert result is not None, "Required property 'handler' is missing"
-            return typing.cast(builtins.str, result)
+            result = self._values.get("blueprint_types")
+            return typing.cast(typing.Optional[typing.List[builtins.str]], result)
 
         @builtins.property
         def dependencies(
@@ -4674,6 +4687,19 @@ class CfnCanary(
             '''
             result = self._values.get("dependencies")
             return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnCanary.DependencyProperty"]]]], result)
+
+        @builtins.property
+        def handler(self) -> typing.Optional[builtins.str]:
+            '''The entry point to use for the source code when running the canary.
+
+            For canaries that use the ``syn-python-selenium-1.0`` runtime or a ``syn-nodejs.puppeteer`` runtime earlier than ``syn-nodejs.puppeteer-3.4`` , the handler must be specified as ``*fileName* .handler`` . For ``syn-python-selenium-1.1`` , ``syn-nodejs.puppeteer-3.4`` , and later runtimes, the handler can be specified as ``*fileName* . *functionName*`` , or you can specify a folder where canary scripts reside as ``*folder* / *fileName* . *functionName*`` .
+
+            This field is required when you don't specify ``BlueprintTypes`` and is not allowed when you specify ``BlueprintTypes`` .
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-synthetics-canary-code.html#cfn-synthetics-canary-code-handler
+            '''
+            result = self._values.get("handler")
+            return typing.cast(typing.Optional[builtins.str], result)
 
         @builtins.property
         def s3_bucket(self) -> typing.Optional[builtins.str]:
@@ -5336,7 +5362,7 @@ class CfnCanary(
 
             :param base_canary_run_id: Specifies which canary run to use the screenshots from as the baseline for future visual monitoring with this canary. Valid values are ``nextrun`` to use the screenshots from the next run after this update is made, ``lastrun`` to use the screenshots from the most recent run before this update was made, or the value of ``Id`` in the `CanaryRun <https://docs.aws.amazon.com/AmazonSynthetics/latest/APIReference/API_CanaryRun.html>`_ from any past run of this canary.
             :param base_screenshots: An array of screenshots that are used as the baseline for comparisons during visual monitoring.
-            :param browser_type: 
+            :param browser_type: The browser type associated with this visual reference configuration. Valid values are ``CHROME`` and ``FIREFOX`` .
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-synthetics-canary-visualreference.html
             :exampleMetadata: fixture=_generated
@@ -5398,7 +5424,10 @@ class CfnCanary(
 
         @builtins.property
         def browser_type(self) -> typing.Optional[builtins.str]:
-            '''
+            '''The browser type associated with this visual reference configuration.
+
+            Valid values are ``CHROME`` and ``FIREFOX`` .
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-synthetics-canary-visualreference.html#cfn-synthetics-canary-visualreference-browsertype
             '''
             result = self._values.get("browser_type")
@@ -6065,8 +6094,9 @@ def _typecheckingstub__c91e35c3c240434fee052d7f899893609a9c027813412eb6312483e20
 
 def _typecheckingstub__3d403372a613babc1ab10717d050ec9a7f4055961f3545f2d0600d89c7b3dcc3(
     *,
-    handler: builtins.str,
+    blueprint_types: typing.Optional[typing.Sequence[builtins.str]] = None,
     dependencies: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCanary.DependencyProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+    handler: typing.Optional[builtins.str] = None,
     s3_bucket: typing.Optional[builtins.str] = None,
     s3_key: typing.Optional[builtins.str] = None,
     s3_object_version: typing.Optional[builtins.str] = None,
@@ -6178,3 +6208,6 @@ def _typecheckingstub__0d85cd0ddf465884c3990e0492b92e22606ecfb33b8127bf42d0c344b
 ) -> None:
     """Type checking stubs"""
     pass
+
+for cls in [ICanaryRef, IGroupRef]:
+    typing.cast(typing.Any, cls).__protocol_attrs__ = typing.cast(typing.Any, cls).__protocol_attrs__ - set(['__jsii_proxy_class__', '__jsii_type__'])

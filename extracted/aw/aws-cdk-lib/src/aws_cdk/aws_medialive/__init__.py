@@ -20108,7 +20108,16 @@ class CfnChannel(
                             caption_channel=123,
                             language_code="languageCode",
                             language_description="languageDescription"
-                        )]
+                        )],
+                        id3_behavior="id3Behavior",
+                        klv_behavior="klvBehavior",
+                        nielsen_id3_behavior="nielsenId3Behavior",
+                        scte35_type="scte35Type",
+                        segment_length=123,
+                        segment_length_units="segmentLengthUnits",
+                        timed_metadata_id3_frame="timedMetadataId3Frame",
+                        timed_metadata_id3_period=123,
+                        timed_metadata_passthrough="timedMetadataPassthrough"
                     )
                 )
             '''
@@ -20413,16 +20422,45 @@ class CfnChannel(
     @jsii.data_type(
         jsii_type="aws-cdk-lib.aws_medialive.CfnChannel.MediaPackageV2GroupSettingsProperty",
         jsii_struct_bases=[],
-        name_mapping={"caption_language_mappings": "captionLanguageMappings"},
+        name_mapping={
+            "caption_language_mappings": "captionLanguageMappings",
+            "id3_behavior": "id3Behavior",
+            "klv_behavior": "klvBehavior",
+            "nielsen_id3_behavior": "nielsenId3Behavior",
+            "scte35_type": "scte35Type",
+            "segment_length": "segmentLength",
+            "segment_length_units": "segmentLengthUnits",
+            "timed_metadata_id3_frame": "timedMetadataId3Frame",
+            "timed_metadata_id3_period": "timedMetadataId3Period",
+            "timed_metadata_passthrough": "timedMetadataPassthrough",
+        },
     )
     class MediaPackageV2GroupSettingsProperty:
         def __init__(
             self,
             *,
             caption_language_mappings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnChannel.CaptionLanguageMappingProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            id3_behavior: typing.Optional[builtins.str] = None,
+            klv_behavior: typing.Optional[builtins.str] = None,
+            nielsen_id3_behavior: typing.Optional[builtins.str] = None,
+            scte35_type: typing.Optional[builtins.str] = None,
+            segment_length: typing.Optional[jsii.Number] = None,
+            segment_length_units: typing.Optional[builtins.str] = None,
+            timed_metadata_id3_frame: typing.Optional[builtins.str] = None,
+            timed_metadata_id3_period: typing.Optional[jsii.Number] = None,
+            timed_metadata_passthrough: typing.Optional[builtins.str] = None,
         ) -> None:
             '''
             :param caption_language_mappings: 
+            :param id3_behavior: 
+            :param klv_behavior: 
+            :param nielsen_id3_behavior: 
+            :param scte35_type: 
+            :param segment_length: 
+            :param segment_length_units: 
+            :param timed_metadata_id3_frame: 
+            :param timed_metadata_id3_period: 
+            :param timed_metadata_passthrough: 
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-medialive-channel-mediapackagev2groupsettings.html
             :exampleMetadata: fixture=_generated
@@ -20438,15 +20476,51 @@ class CfnChannel(
                         caption_channel=123,
                         language_code="languageCode",
                         language_description="languageDescription"
-                    )]
+                    )],
+                    id3_behavior="id3Behavior",
+                    klv_behavior="klvBehavior",
+                    nielsen_id3_behavior="nielsenId3Behavior",
+                    scte35_type="scte35Type",
+                    segment_length=123,
+                    segment_length_units="segmentLengthUnits",
+                    timed_metadata_id3_frame="timedMetadataId3Frame",
+                    timed_metadata_id3_period=123,
+                    timed_metadata_passthrough="timedMetadataPassthrough"
                 )
             '''
             if __debug__:
                 type_hints = typing.get_type_hints(_typecheckingstub__8189ecb41c1c07836a410e8f437062328cb6483c38d02ea4abcb3be57ed148e4)
                 check_type(argname="argument caption_language_mappings", value=caption_language_mappings, expected_type=type_hints["caption_language_mappings"])
+                check_type(argname="argument id3_behavior", value=id3_behavior, expected_type=type_hints["id3_behavior"])
+                check_type(argname="argument klv_behavior", value=klv_behavior, expected_type=type_hints["klv_behavior"])
+                check_type(argname="argument nielsen_id3_behavior", value=nielsen_id3_behavior, expected_type=type_hints["nielsen_id3_behavior"])
+                check_type(argname="argument scte35_type", value=scte35_type, expected_type=type_hints["scte35_type"])
+                check_type(argname="argument segment_length", value=segment_length, expected_type=type_hints["segment_length"])
+                check_type(argname="argument segment_length_units", value=segment_length_units, expected_type=type_hints["segment_length_units"])
+                check_type(argname="argument timed_metadata_id3_frame", value=timed_metadata_id3_frame, expected_type=type_hints["timed_metadata_id3_frame"])
+                check_type(argname="argument timed_metadata_id3_period", value=timed_metadata_id3_period, expected_type=type_hints["timed_metadata_id3_period"])
+                check_type(argname="argument timed_metadata_passthrough", value=timed_metadata_passthrough, expected_type=type_hints["timed_metadata_passthrough"])
             self._values: typing.Dict[builtins.str, typing.Any] = {}
             if caption_language_mappings is not None:
                 self._values["caption_language_mappings"] = caption_language_mappings
+            if id3_behavior is not None:
+                self._values["id3_behavior"] = id3_behavior
+            if klv_behavior is not None:
+                self._values["klv_behavior"] = klv_behavior
+            if nielsen_id3_behavior is not None:
+                self._values["nielsen_id3_behavior"] = nielsen_id3_behavior
+            if scte35_type is not None:
+                self._values["scte35_type"] = scte35_type
+            if segment_length is not None:
+                self._values["segment_length"] = segment_length
+            if segment_length_units is not None:
+                self._values["segment_length_units"] = segment_length_units
+            if timed_metadata_id3_frame is not None:
+                self._values["timed_metadata_id3_frame"] = timed_metadata_id3_frame
+            if timed_metadata_id3_period is not None:
+                self._values["timed_metadata_id3_period"] = timed_metadata_id3_period
+            if timed_metadata_passthrough is not None:
+                self._values["timed_metadata_passthrough"] = timed_metadata_passthrough
 
         @builtins.property
         def caption_language_mappings(
@@ -20457,6 +20531,78 @@ class CfnChannel(
             '''
             result = self._values.get("caption_language_mappings")
             return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnChannel.CaptionLanguageMappingProperty"]]]], result)
+
+        @builtins.property
+        def id3_behavior(self) -> typing.Optional[builtins.str]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-medialive-channel-mediapackagev2groupsettings.html#cfn-medialive-channel-mediapackagev2groupsettings-id3behavior
+            '''
+            result = self._values.get("id3_behavior")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        @builtins.property
+        def klv_behavior(self) -> typing.Optional[builtins.str]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-medialive-channel-mediapackagev2groupsettings.html#cfn-medialive-channel-mediapackagev2groupsettings-klvbehavior
+            '''
+            result = self._values.get("klv_behavior")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        @builtins.property
+        def nielsen_id3_behavior(self) -> typing.Optional[builtins.str]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-medialive-channel-mediapackagev2groupsettings.html#cfn-medialive-channel-mediapackagev2groupsettings-nielsenid3behavior
+            '''
+            result = self._values.get("nielsen_id3_behavior")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        @builtins.property
+        def scte35_type(self) -> typing.Optional[builtins.str]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-medialive-channel-mediapackagev2groupsettings.html#cfn-medialive-channel-mediapackagev2groupsettings-scte35type
+            '''
+            result = self._values.get("scte35_type")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        @builtins.property
+        def segment_length(self) -> typing.Optional[jsii.Number]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-medialive-channel-mediapackagev2groupsettings.html#cfn-medialive-channel-mediapackagev2groupsettings-segmentlength
+            '''
+            result = self._values.get("segment_length")
+            return typing.cast(typing.Optional[jsii.Number], result)
+
+        @builtins.property
+        def segment_length_units(self) -> typing.Optional[builtins.str]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-medialive-channel-mediapackagev2groupsettings.html#cfn-medialive-channel-mediapackagev2groupsettings-segmentlengthunits
+            '''
+            result = self._values.get("segment_length_units")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        @builtins.property
+        def timed_metadata_id3_frame(self) -> typing.Optional[builtins.str]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-medialive-channel-mediapackagev2groupsettings.html#cfn-medialive-channel-mediapackagev2groupsettings-timedmetadataid3frame
+            '''
+            result = self._values.get("timed_metadata_id3_frame")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        @builtins.property
+        def timed_metadata_id3_period(self) -> typing.Optional[jsii.Number]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-medialive-channel-mediapackagev2groupsettings.html#cfn-medialive-channel-mediapackagev2groupsettings-timedmetadataid3period
+            '''
+            result = self._values.get("timed_metadata_id3_period")
+            return typing.cast(typing.Optional[jsii.Number], result)
+
+        @builtins.property
+        def timed_metadata_passthrough(self) -> typing.Optional[builtins.str]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-medialive-channel-mediapackagev2groupsettings.html#cfn-medialive-channel-mediapackagev2groupsettings-timedmetadatapassthrough
+            '''
+            result = self._values.get("timed_metadata_passthrough")
+            return typing.cast(typing.Optional[builtins.str], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -23190,7 +23336,16 @@ class CfnChannel(
                                 caption_channel=123,
                                 language_code="languageCode",
                                 language_description="languageDescription"
-                            )]
+                            )],
+                            id3_behavior="id3Behavior",
+                            klv_behavior="klvBehavior",
+                            nielsen_id3_behavior="nielsenId3Behavior",
+                            scte35_type="scte35Type",
+                            segment_length=123,
+                            segment_length_units="segmentLengthUnits",
+                            timed_metadata_id3_frame="timedMetadataId3Frame",
+                            timed_metadata_id3_period=123,
+                            timed_metadata_passthrough="timedMetadataPassthrough"
                         )
                     ),
                     ms_smooth_group_settings=medialive.CfnChannel.MsSmoothGroupSettingsProperty(
@@ -28310,27 +28465,6 @@ class CfnChannelPlacementGroup(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
-
-    @jsii.member(jsii_name="fromChannelPlacementGroupArn")
-    @builtins.classmethod
-    def from_channel_placement_group_arn(
-        cls,
-        scope: _constructs_77d1e7e8.Construct,
-        id: builtins.str,
-        arn: builtins.str,
-    ) -> IChannelPlacementGroupRef:
-        '''Creates a new IChannelPlacementGroupRef from an ARN.
-
-        :param scope: -
-        :param id: -
-        :param arn: -
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__9b1f175fb7dae2b324a3046c29dc93a58faa99c0aaaf8b57b8a17aa2e09cdb80)
-            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
-            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
-            check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
-        return typing.cast(IChannelPlacementGroupRef, jsii.sinvoke(cls, "fromChannelPlacementGroupArn", [scope, id, arn]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -36382,6 +36516,15 @@ def _typecheckingstub__f3d603bf777a51fcd4a655ef17dcc1a5fa66a4fa5fe69e9918522175d
 def _typecheckingstub__8189ecb41c1c07836a410e8f437062328cb6483c38d02ea4abcb3be57ed148e4(
     *,
     caption_language_mappings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnChannel.CaptionLanguageMappingProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+    id3_behavior: typing.Optional[builtins.str] = None,
+    klv_behavior: typing.Optional[builtins.str] = None,
+    nielsen_id3_behavior: typing.Optional[builtins.str] = None,
+    scte35_type: typing.Optional[builtins.str] = None,
+    segment_length: typing.Optional[jsii.Number] = None,
+    segment_length_units: typing.Optional[builtins.str] = None,
+    timed_metadata_id3_frame: typing.Optional[builtins.str] = None,
+    timed_metadata_id3_period: typing.Optional[jsii.Number] = None,
+    timed_metadata_passthrough: typing.Optional[builtins.str] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -36943,14 +37086,6 @@ def _typecheckingstub__4e243315b7345536389960f25695eb10f1fa9ae011ea703c70b9fbe4c
     name: typing.Optional[builtins.str] = None,
     nodes: typing.Optional[typing.Sequence[builtins.str]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-) -> None:
-    """Type checking stubs"""
-    pass
-
-def _typecheckingstub__9b1f175fb7dae2b324a3046c29dc93a58faa99c0aaaf8b57b8a17aa2e09cdb80(
-    scope: _constructs_77d1e7e8.Construct,
-    id: builtins.str,
-    arn: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -38130,3 +38265,6 @@ def _typecheckingstub__9317fc441faa2bbf831054a6400c72c65b432c3cea33091ae4241073c
 ) -> None:
     """Type checking stubs"""
     pass
+
+for cls in [IChannelPlacementGroupRef, IChannelRef, ICloudWatchAlarmTemplateGroupRef, ICloudWatchAlarmTemplateRef, IClusterRef, IEventBridgeRuleTemplateGroupRef, IEventBridgeRuleTemplateRef, IInputRef, IInputSecurityGroupRef, IMultiplexRef, IMultiplexprogramRef, INetworkRef, ISdiSourceRef, ISignalMapRef]:
+    typing.cast(typing.Any, cls).__protocol_attrs__ = typing.cast(typing.Any, cls).__protocol_attrs__ - set(['__jsii_proxy_class__', '__jsii_type__'])

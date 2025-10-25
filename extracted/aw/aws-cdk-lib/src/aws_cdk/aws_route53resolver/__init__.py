@@ -1114,7 +1114,7 @@ class CfnResolverRuleAssociationProps:
 
         :param resolver_rule_id: The ID of the Resolver rule that you associated with the VPC that is specified by ``VPCId`` .
         :param vpc_id: The ID of the VPC that you associated the Resolver rule with.
-        :param name: The name of an association between a Resolver rule and a VPC.
+        :param name: The name of an association between a Resolver rule and a VPC. The name can be up to 64 characters long and can contain letters (a-z, A-Z), numbers (0-9), hyphens (-), underscores (_), and spaces. The name cannot consist of only numbers.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-route53resolver-resolverruleassociation.html
         :exampleMetadata: fixture=_generated
@@ -1169,6 +1169,8 @@ class CfnResolverRuleAssociationProps:
     def name(self) -> typing.Optional[builtins.str]:
         '''The name of an association between a Resolver rule and a VPC.
 
+        The name can be up to 64 characters long and can contain letters (a-z, A-Z), numbers (0-9), hyphens (-), underscores (_), and spaces. The name cannot consist of only numbers.
+
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-route53resolver-resolverruleassociation.html#cfn-route53resolver-resolverruleassociation-name
         '''
         result = self._values.get("name")
@@ -1216,7 +1218,7 @@ class CfnResolverRuleProps:
         :param rule_type: When you want to forward DNS queries for specified domain name to resolvers on your network, specify ``FORWARD`` or ``DELEGATE`` . If a query matches multiple Resolver rules (example.com and www.example.com), outbound DNS queries are routed using the Resolver rule that contains the most specific domain name (www.example.com). When you have a forwarding rule to forward DNS queries for a domain to your network and you want Resolver to process queries for a subdomain of that domain, specify ``SYSTEM`` . For example, to forward DNS queries for example.com to resolvers on your network, you create a rule and specify ``FORWARD`` for ``RuleType`` . To then have Resolver process queries for apex.example.com, you create a rule and specify ``SYSTEM`` for ``RuleType`` . Currently, only Resolver can create rules that have a value of ``RECURSIVE`` for ``RuleType`` .
         :param delegation_record: DNS queries with delegation records that point to this domain name are forwarded to resolvers on your network.
         :param domain_name: DNS queries for this domain name are forwarded to the IP addresses that are specified in ``TargetIps`` . If a query matches multiple Resolver rules (example.com and www.example.com), the query is routed using the Resolver rule that contains the most specific domain name (www.example.com).
-        :param name: The name for the Resolver rule, which you specified when you created the Resolver rule.
+        :param name: The name for the Resolver rule, which you specified when you created the Resolver rule. The name can be up to 64 characters long and can contain letters (a-z, A-Z), numbers (0-9), hyphens (-), underscores (_), and spaces. The name cannot consist of only numbers.
         :param resolver_endpoint_id: The ID of the endpoint that the rule is associated with.
         :param tags: Tags help organize and categorize your Resolver rules. Each tag consists of a key and an optional value, both of which you define.
         :param target_ips: An array that contains the IP addresses and ports that an outbound endpoint forwards DNS queries to. Typically, these are the IP addresses of DNS resolvers on your network.
@@ -1317,6 +1319,8 @@ class CfnResolverRuleProps:
     @builtins.property
     def name(self) -> typing.Optional[builtins.str]:
         '''The name for the Resolver rule, which you specified when you created the Resolver rule.
+
+        The name can be up to 64 characters long and can contain letters (a-z, A-Z), numbers (0-9), hyphens (-), underscores (_), and spaces. The name cannot consist of only numbers.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-route53resolver-resolverrule.html#cfn-route53resolver-resolverrule-name
         '''
@@ -5033,7 +5037,7 @@ class CfnResolverRule(
         :param rule_type: When you want to forward DNS queries for specified domain name to resolvers on your network, specify ``FORWARD`` or ``DELEGATE`` . If a query matches multiple Resolver rules (example.com and www.example.com), outbound DNS queries are routed using the Resolver rule that contains the most specific domain name (www.example.com). When you have a forwarding rule to forward DNS queries for a domain to your network and you want Resolver to process queries for a subdomain of that domain, specify ``SYSTEM`` . For example, to forward DNS queries for example.com to resolvers on your network, you create a rule and specify ``FORWARD`` for ``RuleType`` . To then have Resolver process queries for apex.example.com, you create a rule and specify ``SYSTEM`` for ``RuleType`` . Currently, only Resolver can create rules that have a value of ``RECURSIVE`` for ``RuleType`` .
         :param delegation_record: DNS queries with delegation records that point to this domain name are forwarded to resolvers on your network.
         :param domain_name: DNS queries for this domain name are forwarded to the IP addresses that are specified in ``TargetIps`` . If a query matches multiple Resolver rules (example.com and www.example.com), the query is routed using the Resolver rule that contains the most specific domain name (www.example.com).
-        :param name: The name for the Resolver rule, which you specified when you created the Resolver rule.
+        :param name: The name for the Resolver rule, which you specified when you created the Resolver rule. The name can be up to 64 characters long and can contain letters (a-z, A-Z), numbers (0-9), hyphens (-), underscores (_), and spaces. The name cannot consist of only numbers.
         :param resolver_endpoint_id: The ID of the endpoint that the rule is associated with.
         :param tags: Tags help organize and categorize your Resolver rules. Each tag consists of a key and an optional value, both of which you define.
         :param target_ips: An array that contains the IP addresses and ports that an outbound endpoint forwards DNS queries to. Typically, these are the IP addresses of DNS resolvers on your network.
@@ -5426,7 +5430,7 @@ class CfnResolverRuleAssociation(
         :param id: Construct identifier for this resource (unique in its scope).
         :param resolver_rule_id: The ID of the Resolver rule that you associated with the VPC that is specified by ``VPCId`` .
         :param vpc_id: The ID of the VPC that you associated the Resolver rule with.
-        :param name: The name of an association between a Resolver rule and a VPC.
+        :param name: The name of an association between a Resolver rule and a VPC. The name can be up to 64 characters long and can contain letters (a-z, A-Z), numbers (0-9), hyphens (-), underscores (_), and spaces. The name cannot consist of only numbers.
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__8e372f7e2d960601c8b6496b7cbefaf56be2402644532349feb6b1a788f12a6f)
@@ -6379,3 +6383,6 @@ def _typecheckingstub__dbb22cd6829772b1f3226c329a7cb57daf6b212b33815f8279e8d6430
 ) -> None:
     """Type checking stubs"""
     pass
+
+for cls in [IFirewallDomainListRef, IFirewallRuleGroupAssociationRef, IFirewallRuleGroupRef, IOutpostResolverRef, IResolverConfigRef, IResolverDNSSECConfigRef, IResolverEndpointRef, IResolverQueryLoggingConfigAssociationRef, IResolverQueryLoggingConfigRef, IResolverRuleAssociationRef, IResolverRuleRef]:
+    typing.cast(typing.Any, cls).__protocol_attrs__ = typing.cast(typing.Any, cls).__protocol_attrs__ - set(['__jsii_proxy_class__', '__jsii_type__'])

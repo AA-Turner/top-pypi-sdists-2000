@@ -869,3 +869,6 @@ def _typecheckingstub__26be72236c14a8878e3d92d7b17397aa49c8a844f85e9e98c958600dd
 ) -> None:
     """Type checking stubs"""
     pass
+
+for cls in [IVirtualClusterRef]:
+    typing.cast(typing.Any, cls).__protocol_attrs__ = typing.cast(typing.Any, cls).__protocol_attrs__ - set(['__jsii_proxy_class__', '__jsii_type__'])

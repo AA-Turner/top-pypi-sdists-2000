@@ -4779,6 +4779,12 @@ class FoundationModelIdentifier(
         return typing.cast("FoundationModelIdentifier", jsii.sget(cls, "ANTHROPIC_CLAUDE_3_SONNET_20240229_V1_0_28K"))
 
     @jsii.python.classproperty
+    @jsii.member(jsii_name="ANTHROPIC_CLAUDE_HAIKU_4_5_20251001_V1_0")
+    def ANTHROPIC_CLAUDE_HAIKU_4_5_20251001_V1_0(cls) -> "FoundationModelIdentifier":
+        '''Base model "anthropic.claude-haiku-4-5-20251001-v1:0".'''
+        return typing.cast("FoundationModelIdentifier", jsii.sget(cls, "ANTHROPIC_CLAUDE_HAIKU_4_5_20251001_V1_0"))
+
+    @jsii.python.classproperty
     @jsii.member(jsii_name="ANTHROPIC_CLAUDE_INSTANT_V1")
     def ANTHROPIC_CLAUDE_INSTANT_V1(cls) -> "FoundationModelIdentifier":
         '''(deprecated) Base model "anthropic.claude-instant-v1".
@@ -9004,27 +9010,6 @@ class CfnAgentAlias(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
-
-    @jsii.member(jsii_name="fromAgentAliasArn")
-    @builtins.classmethod
-    def from_agent_alias_arn(
-        cls,
-        scope: _constructs_77d1e7e8.Construct,
-        id: builtins.str,
-        arn: builtins.str,
-    ) -> IAgentAliasRef:
-        '''Creates a new IAgentAliasRef from an ARN.
-
-        :param scope: -
-        :param id: -
-        :param arn: -
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__e6591016d37503aa9857cba22986f12d7e87f0fbb1f7f3ab93e7b00dce6b951b)
-            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
-            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
-            check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
-        return typing.cast(IAgentAliasRef, jsii.sinvoke(cls, "fromAgentAliasArn", [scope, id, arn]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -41076,14 +41061,6 @@ def _typecheckingstub__9a8230a990c5fac91dc09e3de4211aa6f82fce95537f199a7987ca92f
     """Type checking stubs"""
     pass
 
-def _typecheckingstub__e6591016d37503aa9857cba22986f12d7e87f0fbb1f7f3ab93e7b00dce6b951b(
-    scope: _constructs_77d1e7e8.Construct,
-    id: builtins.str,
-    arn: builtins.str,
-) -> None:
-    """Type checking stubs"""
-    pass
-
 def _typecheckingstub__881be8885c059b078e3110beb1aed396db2ce3f0505bec32be8cedeba399356d(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -44323,3 +44300,6 @@ def _typecheckingstub__f64541c2daf01636476388a49436a79864b7cc8c00bbbf47f4d0f84cc
 ) -> None:
     """Type checking stubs"""
     pass
+
+for cls in [IAgentAliasRef, IAgentRef, IApplicationInferenceProfileRef, IAutomatedReasoningPolicyRef, IAutomatedReasoningPolicyVersionRef, IBlueprintRef, IDataAutomationProjectRef, IDataSourceRef, IFlowAliasRef, IFlowRef, IFlowVersionRef, IGuardrailRef, IGuardrailVersionRef, IIntelligentPromptRouterRef, IKnowledgeBaseRef, IModel, IPromptRef, IPromptVersionRef]:
+    typing.cast(typing.Any, cls).__protocol_attrs__ = typing.cast(typing.Any, cls).__protocol_attrs__ - set(['__jsii_proxy_class__', '__jsii_type__'])

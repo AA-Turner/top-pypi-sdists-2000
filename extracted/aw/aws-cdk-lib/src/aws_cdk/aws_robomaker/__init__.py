@@ -3422,3 +3422,6 @@ def _typecheckingstub__b4436c869d1e97db1310a07c8709c1c39527703571128932c8cdb4b5b
 ) -> None:
     """Type checking stubs"""
     pass
+
+for cls in [IFleetRef, IRobotApplicationRef, IRobotApplicationVersionRef, IRobotRef, ISimulationApplicationRef, ISimulationApplicationVersionRef]:
+    typing.cast(typing.Any, cls).__protocol_attrs__ = typing.cast(typing.Any, cls).__protocol_attrs__ - set(['__jsii_proxy_class__', '__jsii_type__'])

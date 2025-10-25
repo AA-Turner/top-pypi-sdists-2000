@@ -1340,3 +1340,6 @@ def _typecheckingstub__570d79c602907c31355fd27286b9195e6a4ac50d33a57b857248da0d9
 ) -> None:
     """Type checking stubs"""
     pass
+
+for cls in [IAliasRecordTargetProps]:
+    typing.cast(typing.Any, cls).__protocol_attrs__ = typing.cast(typing.Any, cls).__protocol_attrs__ - set(['__jsii_proxy_class__', '__jsii_type__'])

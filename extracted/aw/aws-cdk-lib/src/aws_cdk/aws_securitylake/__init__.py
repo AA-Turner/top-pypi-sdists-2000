@@ -3060,3 +3060,6 @@ def _typecheckingstub__eda053f3e120e20df5120b1a8032bb559c0c4d069b5d67b0576d442df
 ) -> None:
     """Type checking stubs"""
     pass
+
+for cls in [IAwsLogSourceRef, IDataLakeRef, ISubscriberNotificationRef, ISubscriberRef]:
+    typing.cast(typing.Any, cls).__protocol_attrs__ = typing.cast(typing.Any, cls).__protocol_attrs__ - set(['__jsii_proxy_class__', '__jsii_type__'])

@@ -1253,3 +1253,6 @@ def _typecheckingstub__b4fc8bb9e26efd06ea5bc87d6e7358de98fcb83d1fb96fc3f74ed7716
 ) -> None:
     """Type checking stubs"""
     pass
+
+for cls in [IGraphRef, IPrivateGraphEndpointRef]:
+    typing.cast(typing.Any, cls).__protocol_attrs__ = typing.cast(typing.Any, cls).__protocol_attrs__ - set(['__jsii_proxy_class__', '__jsii_type__'])

@@ -8807,3 +8807,6 @@ def _typecheckingstub__a4050a951f11df379d3f03171015f338d23cc9145a854d86f45352dbc
 ) -> None:
     """Type checking stubs"""
     pass
+
+for cls in [ICodePipelineActionFactory, IFileSetProducer]:
+    typing.cast(typing.Any, cls).__protocol_attrs__ = typing.cast(typing.Any, cls).__protocol_attrs__ - set(['__jsii_proxy_class__', '__jsii_type__'])

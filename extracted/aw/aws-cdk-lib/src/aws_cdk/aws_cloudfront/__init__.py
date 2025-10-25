@@ -3265,7 +3265,12 @@ class CachedMethods(
 @jsii.data_type(
     jsii_type="aws-cdk-lib.aws_cloudfront.CfnAnycastIpListProps",
     jsii_struct_bases=[],
-    name_mapping={"ip_count": "ipCount", "name": "name", "tags": "tags"},
+    name_mapping={
+        "ip_count": "ipCount",
+        "name": "name",
+        "ip_address_type": "ipAddressType",
+        "tags": "tags",
+    },
 )
 class CfnAnycastIpListProps:
     def __init__(
@@ -3273,12 +3278,14 @@ class CfnAnycastIpListProps:
         *,
         ip_count: jsii.Number,
         name: builtins.str,
+        ip_address_type: typing.Optional[builtins.str] = None,
         tags: typing.Optional[typing.Union["CfnAnycastIpList.TagsProperty", typing.Dict[builtins.str, typing.Any]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnAnycastIpList``.
 
         :param ip_count: The number of IP addresses in the Anycast static IP list.
         :param name: The name of the Anycast static IP list.
+        :param ip_address_type: 
         :param tags: A complex type that contains zero or more ``Tag`` elements.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudfront-anycastiplist.html
@@ -3295,6 +3302,7 @@ class CfnAnycastIpListProps:
                 name="name",
             
                 # the properties below are optional
+                ip_address_type="ipAddressType",
                 tags=cloudfront.CfnAnycastIpList.TagsProperty(
                     items=[CfnTag(
                         key="key",
@@ -3309,11 +3317,14 @@ class CfnAnycastIpListProps:
             type_hints = typing.get_type_hints(_typecheckingstub__0531888e60306e7fdb982a8f30e2606d9c2f13802b9db82d7dcaa3a2728264ee)
             check_type(argname="argument ip_count", value=ip_count, expected_type=type_hints["ip_count"])
             check_type(argname="argument name", value=name, expected_type=type_hints["name"])
+            check_type(argname="argument ip_address_type", value=ip_address_type, expected_type=type_hints["ip_address_type"])
             check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
         self._values: typing.Dict[builtins.str, typing.Any] = {
             "ip_count": ip_count,
             "name": name,
         }
+        if ip_address_type is not None:
+            self._values["ip_address_type"] = ip_address_type
         if tags is not None:
             self._values["tags"] = tags
 
@@ -3336,6 +3347,14 @@ class CfnAnycastIpListProps:
         result = self._values.get("name")
         assert result is not None, "Required property 'name' is missing"
         return typing.cast(builtins.str, result)
+
+    @builtins.property
+    def ip_address_type(self) -> typing.Optional[builtins.str]:
+        '''
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudfront-anycastiplist.html#cfn-cloudfront-anycastiplist-ipaddresstype
+        '''
+        result = self._values.get("ip_address_type")
+        return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
     def tags(self) -> typing.Optional["CfnAnycastIpList.TagsProperty"]:
@@ -13457,6 +13476,7 @@ class SecurityPolicyProtocol(enum.Enum):
     TLS_V1_2_2018 = "TLS_V1_2_2018"
     TLS_V1_2_2019 = "TLS_V1_2_2019"
     TLS_V1_2_2021 = "TLS_V1_2_2021"
+    TLS_V1_2_2025 = "TLS_V1_2_2025"
     TLS_V1_3_2025 = "TLS_V1_3_2025"
 
 
@@ -14790,6 +14810,7 @@ class CfnAnycastIpList(
             name="name",
         
             # the properties below are optional
+            ip_address_type="ipAddressType",
             tags=cloudfront.CfnAnycastIpList.TagsProperty(
                 items=[CfnTag(
                     key="key",
@@ -14806,6 +14827,7 @@ class CfnAnycastIpList(
         *,
         ip_count: jsii.Number,
         name: builtins.str,
+        ip_address_type: typing.Optional[builtins.str] = None,
         tags: typing.Optional[typing.Union["CfnAnycastIpList.TagsProperty", typing.Dict[builtins.str, typing.Any]]] = None,
     ) -> None:
         '''
@@ -14813,13 +14835,16 @@ class CfnAnycastIpList(
         :param id: Construct identifier for this resource (unique in its scope).
         :param ip_count: The number of IP addresses in the Anycast static IP list.
         :param name: The name of the Anycast static IP list.
+        :param ip_address_type: 
         :param tags: A complex type that contains zero or more ``Tag`` elements.
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__2b13827b228b7c298a17121364286edab0de8f14fd459f83803e07a1c878948b)
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
-        props = CfnAnycastIpListProps(ip_count=ip_count, name=name, tags=tags)
+        props = CfnAnycastIpListProps(
+            ip_count=ip_count, name=name, ip_address_type=ip_address_type, tags=tags
+        )
 
         jsii.create(self.__class__, self, [scope, id, props])
 
@@ -14926,6 +14951,18 @@ class CfnAnycastIpList(
         jsii.set(self, "name", value) # pyright: ignore[reportArgumentType]
 
     @builtins.property
+    @jsii.member(jsii_name="ipAddressType")
+    def ip_address_type(self) -> typing.Optional[builtins.str]:
+        return typing.cast(typing.Optional[builtins.str], jsii.get(self, "ipAddressType"))
+
+    @ip_address_type.setter
+    def ip_address_type(self, value: typing.Optional[builtins.str]) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__bdda08ac166df373a10568e7cb5f553dce85744030b95b9b2c0b38cd83c4b095)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "ipAddressType", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
     @jsii.member(jsii_name="tags")
     def tags(self) -> typing.Optional["CfnAnycastIpList.TagsProperty"]:
         '''A complex type that contains zero or more ``Tag`` elements.'''
@@ -14949,6 +14986,7 @@ class CfnAnycastIpList(
             "last_modified_time": "lastModifiedTime",
             "name": "name",
             "status": "status",
+            "ip_address_type": "ipAddressType",
         },
     )
     class AnycastIpListProperty:
@@ -14962,6 +15000,7 @@ class CfnAnycastIpList(
             last_modified_time: builtins.str,
             name: builtins.str,
             status: builtins.str,
+            ip_address_type: typing.Optional[builtins.str] = None,
         ) -> None:
             '''An Anycast static IP list.
 
@@ -14974,6 +15013,7 @@ class CfnAnycastIpList(
             :param last_modified_time: The last time the Anycast static IP list was modified.
             :param name: The name of the Anycast static IP list.
             :param status: The status of the Anycast static IP list. Valid values: ``Deployed`` , ``Deploying`` , or ``Failed`` .
+            :param ip_address_type: 
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-anycastiplist-anycastiplist.html
             :exampleMetadata: fixture=_generated
@@ -14991,7 +15031,10 @@ class CfnAnycastIpList(
                     ip_count=123,
                     last_modified_time="lastModifiedTime",
                     name="name",
-                    status="status"
+                    status="status",
+                
+                    # the properties below are optional
+                    ip_address_type="ipAddressType"
                 )
             '''
             if __debug__:
@@ -15003,6 +15046,7 @@ class CfnAnycastIpList(
                 check_type(argname="argument last_modified_time", value=last_modified_time, expected_type=type_hints["last_modified_time"])
                 check_type(argname="argument name", value=name, expected_type=type_hints["name"])
                 check_type(argname="argument status", value=status, expected_type=type_hints["status"])
+                check_type(argname="argument ip_address_type", value=ip_address_type, expected_type=type_hints["ip_address_type"])
             self._values: typing.Dict[builtins.str, typing.Any] = {
                 "anycast_ips": anycast_ips,
                 "arn": arn,
@@ -15012,6 +15056,8 @@ class CfnAnycastIpList(
                 "name": name,
                 "status": status,
             }
+            if ip_address_type is not None:
+                self._values["ip_address_type"] = ip_address_type
 
         @builtins.property
         def anycast_ips(self) -> typing.List[builtins.str]:
@@ -15084,6 +15130,14 @@ class CfnAnycastIpList(
             result = self._values.get("status")
             assert result is not None, "Required property 'status' is missing"
             return typing.cast(builtins.str, result)
+
+        @builtins.property
+        def ip_address_type(self) -> typing.Optional[builtins.str]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-anycastiplist-anycastiplist.html#cfn-cloudfront-anycastiplist-anycastiplist-ipaddresstype
+            '''
+            result = self._values.get("ip_address_type")
+            return typing.cast(typing.Optional[builtins.str], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -32141,6 +32195,7 @@ def _typecheckingstub__0531888e60306e7fdb982a8f30e2606d9c2f13802b9db82d7dcaa3a27
     *,
     ip_count: jsii.Number,
     name: builtins.str,
+    ip_address_type: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Union[CfnAnycastIpList.TagsProperty, typing.Dict[builtins.str, typing.Any]]] = None,
 ) -> None:
     """Type checking stubs"""
@@ -33130,6 +33185,7 @@ def _typecheckingstub__2b13827b228b7c298a17121364286edab0de8f14fd459f83803e07a1c
     *,
     ip_count: jsii.Number,
     name: builtins.str,
+    ip_address_type: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Union[CfnAnycastIpList.TagsProperty, typing.Dict[builtins.str, typing.Any]]] = None,
 ) -> None:
     """Type checking stubs"""
@@ -33159,6 +33215,12 @@ def _typecheckingstub__ac37e78a6ea86b3ef0227ef8ab78147385ce1b63a99049def4d84be02
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__bdda08ac166df373a10568e7cb5f553dce85744030b95b9b2c0b38cd83c4b095(
+    value: typing.Optional[builtins.str],
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__b1d1dfdc7936ba000dfdec659315150c3bf594d4b2b99b2d3b37e510f78d7e57(
     value: typing.Optional[CfnAnycastIpList.TagsProperty],
 ) -> None:
@@ -33174,6 +33236,7 @@ def _typecheckingstub__52438d74e9c64ccb0851ad4bbbcc3d1dab9c3fa5daeefa73f0df7ada7
     last_modified_time: builtins.str,
     name: builtins.str,
     status: builtins.str,
+    ip_address_type: typing.Optional[builtins.str] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -35048,3 +35111,6 @@ def _typecheckingstub__5989cbf7079014eacde0ab3a45d42fc3fb56a2cf17ecfbacd7bc46da0
 ) -> None:
     """Type checking stubs"""
     pass
+
+for cls in [IAnycastIpListRef, ICachePolicy, ICachePolicyRef, ICloudFrontOriginAccessIdentityRef, IConnectionGroupRef, IContinuousDeploymentPolicyRef, IDistribution, IDistributionRef, IDistributionTenantRef, IFunction, IFunctionRef, IKeyGroup, IKeyGroupRef, IKeyValueStore, IKeyValueStoreRef, IMonitoringSubscriptionRef, IOrigin, IOriginAccessControl, IOriginAccessControlRef, IOriginAccessIdentity, IOriginRequestPolicy, IOriginRequestPolicyRef, IPublicKey, IPublicKeyRef, IRealtimeLogConfig, IRealtimeLogConfigRef, IResponseHeadersPolicy, IResponseHeadersPolicyRef, IStreamingDistributionRef, IVpcOrigin, IVpcOriginRef]:
+    typing.cast(typing.Any, cls).__protocol_attrs__ = typing.cast(typing.Any, cls).__protocol_attrs__ - set(['__jsii_proxy_class__', '__jsii_type__'])

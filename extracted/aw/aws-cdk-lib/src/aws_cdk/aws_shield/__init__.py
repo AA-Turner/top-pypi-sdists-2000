@@ -2239,3 +2239,6 @@ def _typecheckingstub__70ea7c7493bdebcbd30035fe4d1550d14d6af25225d32845d78baca96
 ) -> None:
     """Type checking stubs"""
     pass
+
+for cls in [IDRTAccessRef, IProactiveEngagementRef, IProtectionGroupRef, IProtectionRef]:
+    typing.cast(typing.Any, cls).__protocol_attrs__ = typing.cast(typing.Any, cls).__protocol_attrs__ - set(['__jsii_proxy_class__', '__jsii_type__'])

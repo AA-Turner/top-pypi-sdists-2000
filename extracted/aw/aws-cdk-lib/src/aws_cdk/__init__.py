@@ -23284,24 +23284,24 @@ class Size(metaclass=jsii.JSIIMeta, jsii_type="aws-cdk-lib.Size"):
 
     Example::
 
-        # bucket: s3.Bucket
-        # Provide a Lambda function that will transform records before delivery, with custom
-        # buffering and retry configuration
-        lambda_function = lambda_.Function(self, "Processor",
-            runtime=lambda_.Runtime.NODEJS_LATEST,
-            handler="index.handler",
-            code=lambda_.Code.from_asset(path.join(__dirname, "process-records"))
-        )
-        lambda_processor = firehose.LambdaFunctionProcessor(lambda_function,
-            buffer_interval=Duration.minutes(5),
-            buffer_size=Size.mebibytes(5),
-            retries=5
-        )
-        s3_destination = firehose.S3Bucket(bucket,
-            processor=lambda_processor
-        )
-        firehose.DeliveryStream(self, "Delivery Stream",
-            destination=s3_destination
+        # my_file_system: efs.IFileSystem
+        # my_job_role: iam.Role
+        
+        my_file_system.grant_read(my_job_role)
+        
+        job_defn = batch.EcsJobDefinition(self, "JobDefn",
+            container=batch.EcsEc2ContainerDefinition(self, "containerDefn",
+                image=ecs.ContainerImage.from_registry("public.ecr.aws/amazonlinux/amazonlinux:latest"),
+                memory=cdk.Size.mebibytes(2048),
+                cpu=256,
+                volumes=[batch.EcsVolume.efs(
+                    name="myVolume",
+                    file_system=my_file_system,
+                    container_path="/Volumes/myVolume",
+                    use_job_role=True
+                )],
+                job_role=my_job_role
+            )
         )
     '''
 
@@ -45555,3 +45555,6 @@ def _typecheckingstub__47e469f0015340593bcbbe8474c853bc170a6dfd3bcb31e6795042408
 ) -> None:
     """Type checking stubs"""
     pass
+
+for cls in [IAnyProducer, IAspect, IAsset, IBoundStackSynthesizer, ICfnConditionExpression, ICfnResourceOptions, ICfnRuleConditionExpression, ICustomResourceRef, IFragmentConcatenator, IGuardHookRef, IHookDefaultVersionRef, IHookTypeConfigRef, IHookVersionRef, IInspectable, ILambdaHookRef, IListProducer, ILocalBundling, IMacroRef, IModuleDefaultVersionRef, IModuleVersionRef, INumberProducer, IPolicyValidationContextBeta1, IPolicyValidationPluginBeta1, IPostProcessor, IPropertyInjector, IPublicTypeVersionRef, IPublisherRef, IResolvable, IResolveContext, IResource, IResourceDefaultVersionRef, IResourceVersionRef, IReusableStackSynthesizer, IStableAnyProducer, IStableListProducer, IStableNumberProducer, IStableStringProducer, IStackRef, IStackSetRef, IStackSynthesizer, IStringProducer, ISynthesisSession, ITaggable, ITaggableV2, ITemplateOptions, ITokenMapper, ITokenResolver, ITypeActivationRef, IWaitConditionHandleRef, IWaitConditionRef]:
+    typing.cast(typing.Any, cls).__protocol_attrs__ = typing.cast(typing.Any, cls).__protocol_attrs__ - set(['__jsii_proxy_class__', '__jsii_type__'])

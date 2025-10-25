@@ -118,7 +118,7 @@ class CertificateAuthority(
         
         cluster = msk.Cluster(self, "Cluster",
             cluster_name="myCluster",
-            kafka_version=msk.KafkaVersion.V4_0_X_KRAFT,
+            kafka_version=msk.KafkaVersion.V4_1_X_KRAFT,
             vpc=vpc,
             encryption_in_transit=msk.EncryptionInTransitConfig(
                 client_broker=msk.ClientBrokerEncryption.TLS
@@ -6395,3 +6395,6 @@ def _typecheckingstub__336a294e18ad34a8379580ec71e5c0dca499ba44efb4e2cad4bf5190b
 ) -> None:
     """Type checking stubs"""
     pass
+
+for cls in [ICertificateAuthority, ICertificateAuthorityActivationRef, ICertificateAuthorityRef, ICertificateRef, IPermissionRef]:
+    typing.cast(typing.Any, cls).__protocol_attrs__ = typing.cast(typing.Any, cls).__protocol_attrs__ - set(['__jsii_proxy_class__', '__jsii_type__'])

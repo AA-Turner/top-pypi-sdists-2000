@@ -1472,3 +1472,6 @@ def _typecheckingstub__b8de671f791820abae21cf6b0bd8d2f03cbf454fb6af42a06db0dd74e
 ) -> None:
     """Type checking stubs"""
     pass
+
+for cls in [ILoggingConfigurationRef, IRoomRef]:
+    typing.cast(typing.Any, cls).__protocol_attrs__ = typing.cast(typing.Any, cls).__protocol_attrs__ - set(['__jsii_proxy_class__', '__jsii_type__'])

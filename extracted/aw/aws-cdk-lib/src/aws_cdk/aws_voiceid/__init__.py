@@ -627,3 +627,6 @@ def _typecheckingstub__026258552a46cefb8caa670ab5034652c3e2c257df5858a178b076195
 ) -> None:
     """Type checking stubs"""
     pass
+
+for cls in [IDomainRef]:
+    typing.cast(typing.Any, cls).__protocol_attrs__ = typing.cast(typing.Any, cls).__protocol_attrs__ - set(['__jsii_proxy_class__', '__jsii_type__'])

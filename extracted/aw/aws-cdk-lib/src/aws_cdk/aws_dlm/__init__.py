@@ -4210,3 +4210,6 @@ def _typecheckingstub__17018411aa866dc818102e8981736b177dd1a23646009ebb8d8cbe6a3
 ) -> None:
     """Type checking stubs"""
     pass
+
+for cls in [ILifecyclePolicyRef]:
+    typing.cast(typing.Any, cls).__protocol_attrs__ = typing.cast(typing.Any, cls).__protocol_attrs__ - set(['__jsii_proxy_class__', '__jsii_type__'])

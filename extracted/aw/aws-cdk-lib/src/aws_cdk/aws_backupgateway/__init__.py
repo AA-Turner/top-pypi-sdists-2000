@@ -647,3 +647,6 @@ def _typecheckingstub__01da04068d13529ca3507c1adc48f01d03eb0ade1021a50f92b12c74e
 ) -> None:
     """Type checking stubs"""
     pass
+
+for cls in [IHypervisorRef]:
+    typing.cast(typing.Any, cls).__protocol_attrs__ = typing.cast(typing.Any, cls).__protocol_attrs__ - set(['__jsii_proxy_class__', '__jsii_type__'])

@@ -39,6 +39,7 @@ from timm.layers import (
     get_norm_layer,
     apply_keep_indices_nlc,
     disable_compiler,
+    calculate_drop_path_rates,
 )
 from ._builder import build_model_with_cfg
 from ._features import feature_take_indices
@@ -202,8 +203,8 @@ class NaFlexRopeIterator:
         unique_sizes: List[Tuple[int, int]],
         batch_size: int,
         seq_len: int,
-        dtype: torch.dtype,
         device: torch.device,
+        dtype: torch.dtype,
     ):
         self.rope = rope_module
         self.size_to_indices = size_to_indices
@@ -361,6 +362,8 @@ class NaFlexEmbeds(nn.Module):
             norm_layer: Optional[Type[nn.Module]] = None,
             pos_drop_rate: float = 0.,
             enable_patch_interpolator: bool = False,
+            device=None,
+            dtype=None,
     ) -> None:
         """Initialize NaFlexEmbeds module.
 
@@ -384,6 +387,7 @@ class NaFlexEmbeds(nn.Module):
             pos_drop_rate: Dropout rate for position embeddings.
             enable_patch_interpolator: Enable dynamic patch size support.
         """
+        dd = {'device': device, 'dtype': dtype}
         super().__init__()
         self.has_class_token = class_token
         self.num_reg_tokens = reg_tokens
@@ -401,8 +405,8 @@ class NaFlexEmbeds(nn.Module):
         self.num_prefix_tokens += reg_tokens
 
         # Create class and register tokens
-        self.cls_token = nn.Parameter(torch.zeros(1, 1, embed_dim)) if class_token else None
-        self.reg_token = nn.Parameter(torch.zeros(1, reg_tokens, embed_dim)) if reg_tokens else None
+        self.cls_token = nn.Parameter(torch.zeros(1, 1, embed_dim, **dd)) if class_token else None
+        self.reg_token = nn.Parameter(torch.zeros(1, reg_tokens, embed_dim, **dd)) if reg_tokens else None
 
         # Calculate grid size and number of patches
         self.default_img_size: Optional[Tuple[int, int]] = None
@@ -424,7 +428,7 @@ class NaFlexEmbeds(nn.Module):
                 "`norm_layer` must be given when input_norm_layer=True"
             input_norm_layer = norm_layer if input_norm_layer is True else (input_norm_layer or None)
             self.norm_input = input_norm_layer(patch_dim) if input_norm_layer else None
-            self.proj = nn.Linear(patch_dim, embed_dim, bias=proj_bias)
+            self.proj = nn.Linear(patch_dim, embed_dim, bias=proj_bias, **dd)
             self.flatten = False
             self.is_linear = True
         else:
@@ -432,7 +436,12 @@ class NaFlexEmbeds(nn.Module):
             assert not input_norm_layer
             self.norm_input = None
             self.proj = nn.Conv2d(
-                in_chans, embed_dim, kernel_size=patch_size, stride=patch_size, bias=proj_bias
+                in_chans,
+                embed_dim,
+                kernel_size=patch_size,
+                stride=patch_size,
+                bias=proj_bias,
+                **dd,
             )
             self.flatten = True
             self.is_linear = False
@@ -469,12 +478,12 @@ class NaFlexEmbeds(nn.Module):
             assert self.pos_embed_grid_size is not None
             h, w = self.pos_embed_grid_size
             self.pos_embed_type = 'factorized'
-            self.pos_embed_y = nn.Parameter(torch.randn(1, h, embed_dim) * .02)
-            self.pos_embed_x = nn.Parameter(torch.randn(1, w, embed_dim) * .02)
+            self.pos_embed_y = nn.Parameter(torch.randn(1, h, embed_dim, **dd) * .02)
+            self.pos_embed_x = nn.Parameter(torch.randn(1, w, embed_dim, **dd) * .02)
         else:
             assert self.pos_embed_grid_size is not None
             h, w = self.pos_embed_grid_size
-            self.pos_embed = nn.Parameter(torch.randn(1, h, w, embed_dim) * .02)
+            self.pos_embed = nn.Parameter(torch.randn(1, h, w, embed_dim, **dd) * .02)
             self.pos_embed_type = 'learned'
 
         # Dropout layer
@@ -622,7 +631,7 @@ class NaFlexEmbeds(nn.Module):
             padding_mode='border',
         ).to(dtype=x.dtype)  # (B, C, H_out, W_out)
 
-        bi = torch.arange(B, device=device).unsqueeze(1)
+        bi = torch.arange(B, device=device, dtype=torch.long).unsqueeze(1)
         x += pos_embed[bi, :, patch_coord[..., 0], patch_coord[..., 1]]  # NOTE leave as '+='
 
     def _apply_learned_pos_embed(
@@ -767,7 +776,7 @@ class NaFlexEmbeds(nn.Module):
         pe_x = _interp1d(self.pos_embed_x, scale=scale_x, out_length=grid_size_x)
         pe_y = _interp1d(self.pos_embed_y, scale=scale_y, out_length=grid_size_y)
 
-        bi = torch.arange(B, device=device).unsqueeze(1)
+        bi = torch.arange(B, device=device, dtype=torch.long).unsqueeze(1)
         x += pe_x[bi, :, 0, patch_coord[..., 1]] + pe_y[bi, :, 0, patch_coord[..., 0]]
 
     def _apply_factorized_pos_embed(
@@ -1079,6 +1088,8 @@ class NaFlexVit(nn.Module):
             in_chans: int = 3,
             num_classes: int = 1000,
             img_size: Optional[Union[int, Tuple[int, int]]] = None,
+            device=None,
+            dtype=None,
             **kwargs,
     ) -> None:
         """Initialize NaFlexVit model.
@@ -1091,6 +1102,7 @@ class NaFlexVit(nn.Module):
             **kwargs: Additional config parameters to override cfg values.
         """
         super().__init__()
+        dd = {'device': device, 'dtype': dtype}
 
         # Initialize config
         cfg = cfg or NaFlexVitCfg()
@@ -1140,8 +1152,9 @@ class NaFlexVit(nn.Module):
             proj_norm_layer=embed_norm_layer,
             pos_drop_rate=cfg.pos_drop_rate,
             enable_patch_interpolator=getattr(cfg, 'enable_patch_interpolator', False),
+            **dd,
         )
-        self.norm_pre = norm_layer(cfg.embed_dim) if cfg.pre_norm else nn.Identity()
+        self.norm_pre = norm_layer(cfg.embed_dim, **dd) if cfg.pre_norm else nn.Identity()
 
         # ROPE position embeddings at model level
         self.rope: Optional[nn.Module] = None
@@ -1156,6 +1169,7 @@ class NaFlexVit(nn.Module):
                     temperature=cfg.rope_temperature,
                     feat_shape=None,  # Dynamic shapes for NaFlex
                     grid_indexing=cfg.rope_grid_indexing,
+                    **dd,
                 )
                 self.rope_is_mixed = True
             elif cfg.rope_type == 'axial':
@@ -1167,6 +1181,7 @@ class NaFlexVit(nn.Module):
                     ref_feat_shape=cfg.rope_ref_feat_shape,
                     grid_offset=cfg.rope_grid_offset,
                     grid_indexing=cfg.rope_grid_indexing,
+                    **dd,
                 )
                 self.rope_is_mixed = False
             else:
@@ -1182,7 +1197,7 @@ class NaFlexVit(nn.Module):
             self.patch_drop = None
 
         # Transformer blocks
-        dpr = [x.item() for x in torch.linspace(0, cfg.drop_path_rate, cfg.depth)]  # stochastic depth decay rule
+        dpr = calculate_drop_path_rates(cfg.drop_path_rate, cfg.depth)  # stochastic depth decay rule
         # Create transformer blocks
         self.blocks = nn.Sequential(*[
             block_fn(
@@ -1199,6 +1214,7 @@ class NaFlexVit(nn.Module):
                 norm_layer=norm_layer,
                 act_layer=act_layer,
                 mlp_layer=mlp_layer,
+                **dd,
             )
             for i in range(cfg.depth)
         ])
@@ -1210,7 +1226,7 @@ class NaFlexVit(nn.Module):
             for i in range(cfg.depth)
         ]
 
-        self.norm = norm_layer(cfg.embed_dim) if cfg.final_norm and not cfg.fc_norm else nn.Identity()
+        self.norm = norm_layer(cfg.embed_dim, **dd) if cfg.final_norm and not cfg.fc_norm else nn.Identity()
 
         # Classifier Head
         if cfg.global_pool == 'map':
@@ -1220,6 +1236,7 @@ class NaFlexVit(nn.Module):
                 mlp_ratio=cfg.attn_pool_mlp_ratio or cfg.mlp_ratio,
                 norm_layer=norm_layer,
                 act_layer=act_layer,
+                **dd,
             )
         else:
             self.attn_pool = None
@@ -1228,9 +1245,9 @@ class NaFlexVit(nn.Module):
         fc_norm = cfg.fc_norm
         if fc_norm is None:
             fc_norm = cfg.global_pool == 'avg'
-        self.fc_norm = norm_layer(cfg.embed_dim) if cfg.final_norm and fc_norm else nn.Identity()
+        self.fc_norm = norm_layer(cfg.embed_dim, **dd) if cfg.final_norm and fc_norm else nn.Identity()
         self.head_drop = nn.Dropout(cfg.drop_rate)
-        self.head = nn.Linear(self.embed_dim, num_classes) if num_classes > 0 else nn.Identity()
+        self.head = nn.Linear(self.embed_dim, num_classes, **dd) if num_classes > 0 else nn.Identity()
 
         if cfg.weight_init != 'skip':
             self.init_weights(cfg.weight_init)
@@ -1920,6 +1937,8 @@ default_cfgs = generate_default_cfgs({
         hf_hub_id='timm/',
     ),
     'naflexvit_base_patch16_map.untrained': _cfg(),
+    'naflexvit_so150m2_patch16_reg1_gap.untrained': _cfg(),
+    'naflexvit_so150m2_patch16_reg1_map.untrained': _cfg(),
 
     # SigLIP-2 NaFlex vit encoder weights
     'naflexvit_base_patch16_siglip.v2_webli': _cfg(

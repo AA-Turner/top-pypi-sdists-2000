@@ -12063,27 +12063,6 @@ class CfnExtension(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
-    @jsii.member(jsii_name="fromExtensionArn")
-    @builtins.classmethod
-    def from_extension_arn(
-        cls,
-        scope: _constructs_77d1e7e8.Construct,
-        id: builtins.str,
-        arn: builtins.str,
-    ) -> IExtensionRef:
-        '''Creates a new IExtensionRef from an ARN.
-
-        :param scope: -
-        :param id: -
-        :param arn: -
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__9c35cd1fb68aecb43f622de5da4fdd2dd5dec2b995275f05e4df9412a0f5bf43)
-            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
-            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
-            check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
-        return typing.cast(IExtensionRef, jsii.sinvoke(cls, "fromExtensionArn", [scope, id, arn]))
-
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -16453,14 +16432,6 @@ def _typecheckingstub__d3442a7f4d7a9c3256544c6b0526d285ef0cf3970ec1f140b344aed1a
     """Type checking stubs"""
     pass
 
-def _typecheckingstub__9c35cd1fb68aecb43f622de5da4fdd2dd5dec2b995275f05e4df9412a0f5bf43(
-    scope: _constructs_77d1e7e8.Construct,
-    id: builtins.str,
-    arn: builtins.str,
-) -> None:
-    """Type checking stubs"""
-    pass
-
 def _typecheckingstub__a6930a24c04bd5aebe54f7a225f7ec08743e520b61a781973e88a4b6678524a5(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -17171,3 +17142,6 @@ def _typecheckingstub__0a1e6913f9293558fa6d2222b6d11c3af6b25866b966dd63195511173
 ) -> None:
     """Type checking stubs"""
     pass
+
+for cls in [IApplication, IApplicationRef, IConfiguration, IConfigurationProfileRef, IDeploymentRef, IDeploymentStrategy, IDeploymentStrategyRef, IEnvironment, IEnvironmentRef, IEventDestination, IExtensible, IExtension, IExtensionAssociationRef, IExtensionRef, IHostedConfigurationVersionRef, IValidator]:
+    typing.cast(typing.Any, cls).__protocol_attrs__ = typing.cast(typing.Any, cls).__protocol_attrs__ - set(['__jsii_proxy_class__', '__jsii_type__'])

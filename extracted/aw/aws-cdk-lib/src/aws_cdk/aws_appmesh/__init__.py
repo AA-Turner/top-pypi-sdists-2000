@@ -34664,3 +34664,6 @@ def _typecheckingstub__02ad94d3b83c7fb4dde3d72b1e367e0e5f94d7508e4f12784c47bef30
 ) -> None:
     """Type checking stubs"""
     pass
+
+for cls in [IGatewayRoute, IGatewayRouteRef, IMesh, IMeshRef, IRoute, IRouteRef, IVirtualGateway, IVirtualGatewayRef, IVirtualNode, IVirtualNodeRef, IVirtualRouter, IVirtualRouterRef, IVirtualService, IVirtualServiceRef]:
+    typing.cast(typing.Any, cls).__protocol_attrs__ = typing.cast(typing.Any, cls).__protocol_attrs__ - set(['__jsii_proxy_class__', '__jsii_type__'])

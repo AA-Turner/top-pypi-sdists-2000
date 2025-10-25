@@ -1064,27 +1064,6 @@ class CfnProject(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
-    @jsii.member(jsii_name="fromProjectArn")
-    @builtins.classmethod
-    def from_project_arn(
-        cls,
-        scope: _constructs_77d1e7e8.Construct,
-        id: builtins.str,
-        arn: builtins.str,
-    ) -> IProjectRef:
-        '''Creates a new IProjectRef from an ARN.
-
-        :param scope: -
-        :param id: -
-        :param arn: -
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__47ff058de186dbda01a49e6a1edc4d38fbfae207c99297e978eec7bfb197497d)
-            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
-            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
-            check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
-        return typing.cast(IProjectRef, jsii.sinvoke(cls, "fromProjectArn", [scope, id, arn]))
-
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -2347,14 +2326,6 @@ def _typecheckingstub__14434bd621070d38889fc701fc289b3379981bee9c73fd7502773f1ee
     """Type checking stubs"""
     pass
 
-def _typecheckingstub__47ff058de186dbda01a49e6a1edc4d38fbfae207c99297e978eec7bfb197497d(
-    scope: _constructs_77d1e7e8.Construct,
-    id: builtins.str,
-    arn: builtins.str,
-) -> None:
-    """Type checking stubs"""
-    pass
-
 def _typecheckingstub__0172e641847a31da5e6877581313d2ece51b9650bcb74b1b80ba13e563323cc0(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -2553,3 +2524,6 @@ def _typecheckingstub__e523487c02bfde11953c715444eddb9f2ed729eec0aa81767c2868bf9
 ) -> None:
     """Type checking stubs"""
     pass
+
+for cls in [ICollectionRef, IProjectRef, IStreamProcessorRef]:
+    typing.cast(typing.Any, cls).__protocol_attrs__ = typing.cast(typing.Any, cls).__protocol_attrs__ - set(['__jsii_proxy_class__', '__jsii_type__'])

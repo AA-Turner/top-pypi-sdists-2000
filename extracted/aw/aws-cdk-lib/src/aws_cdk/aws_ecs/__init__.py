@@ -1725,6 +1725,9 @@ mi_capacity_provider = ecs.ManagedInstancesCapacityProvider(self, "MICapacityPro
     propagate_tags=ecs.PropagateManagedInstancesTags.CAPACITY_PROVIDER
 )
 
+# Optionally configure security group rules using IConnectable interface
+mi_capacity_provider.connections.allow_from(ec2.Peer.ipv4(vpc.vpc_cidr_block), ec2.Port.tcp(80))
+
 # Add the capacity provider to the cluster
 cluster.add_managed_instances_capacity_provider(mi_capacity_provider)
 
@@ -2370,6 +2373,7 @@ from ..aws_cloudwatch import (
 from ..aws_ec2 import (
     Connections as _Connections_0f31fce8,
     EbsDeviceVolumeType as _EbsDeviceVolumeType_6792555b,
+    IConnectable as _IConnectable_10015a05,
     IKeyPair as _IKeyPair_bc344eda,
     IMachineImage as _IMachineImage_0e8bd50b,
     ISecurityGroup as _ISecurityGroup_acf8a799,
@@ -6881,7 +6885,7 @@ class CfnCapacityProviderProps:
         '''Properties for defining a ``CfnCapacityProvider``.
 
         :param auto_scaling_group_provider: The Auto Scaling group settings for the capacity provider.
-        :param cluster_name: 
+        :param cluster_name: The cluster that this capacity provider is associated with. Managed instances capacity providers are cluster-scoped, meaning they can only be used within their associated cluster. This is required for Managed instances.
         :param managed_instances_provider: The configuration for the Amazon ECS Managed Instances provider. This includes the infrastructure role, the launch template configuration, and tag propagation settings.
         :param name: The name of the capacity provider. If a name is specified, it cannot start with ``aws`` , ``ecs`` , or ``fargate`` . If no name is specified, a default name in the ``CFNStackName-CFNResourceName-RandomString`` format is used.
         :param tags: The metadata that you apply to the capacity provider to help you categorize and organize it. Each tag consists of a key and an optional value. You define both. The following basic restrictions apply to tags: - Maximum number of tags per resource - 50 - For each resource, each tag key must be unique, and each tag key can have only one value. - Maximum key length - 128 Unicode characters in UTF-8 - Maximum value length - 256 Unicode characters in UTF-8 - If your tagging schema is used across multiple services and resources, remember that other services may have restrictions on allowed characters. Generally allowed characters are: letters, numbers, and spaces representable in UTF-8, and the following characters: + - = . _ : /
@@ -7030,7 +7034,12 @@ class CfnCapacityProviderProps:
 
     @builtins.property
     def cluster_name(self) -> typing.Optional[builtins.str]:
-        '''
+        '''The cluster that this capacity provider is associated with.
+
+        Managed instances capacity providers are cluster-scoped, meaning they can only be used within their associated cluster.
+
+        This is required for Managed instances.
+
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecs-capacityprovider.html#cfn-ecs-capacityprovider-clustername
         '''
         result = self._values.get("cluster_name")
@@ -7101,24 +7110,24 @@ class CfnCapacityProviderProps:
     jsii_type="aws-cdk-lib.aws_ecs.CfnClusterCapacityProviderAssociationsProps",
     jsii_struct_bases=[],
     name_mapping={
-        "capacity_providers": "capacityProviders",
         "cluster": "cluster",
         "default_capacity_provider_strategy": "defaultCapacityProviderStrategy",
+        "capacity_providers": "capacityProviders",
     },
 )
 class CfnClusterCapacityProviderAssociationsProps:
     def __init__(
         self,
         *,
-        capacity_providers: typing.Sequence[builtins.str],
         cluster: builtins.str,
         default_capacity_provider_strategy: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnClusterCapacityProviderAssociations.CapacityProviderStrategyProperty", typing.Dict[builtins.str, typing.Any]]]]],
+        capacity_providers: typing.Optional[typing.Sequence[builtins.str]] = None,
     ) -> None:
         '''Properties for defining a ``CfnClusterCapacityProviderAssociations``.
 
-        :param capacity_providers: The capacity providers to associate with the cluster.
         :param cluster: The cluster the capacity provider association is the target of.
         :param default_capacity_provider_strategy: The default capacity provider strategy to associate with the cluster.
+        :param capacity_providers: The capacity providers to associate with the cluster.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecs-clustercapacityproviderassociations.html
         :exampleMetadata: fixture=_generated
@@ -7130,7 +7139,6 @@ class CfnClusterCapacityProviderAssociationsProps:
             from aws_cdk import aws_ecs as ecs
             
             cfn_cluster_capacity_provider_associations_props = ecs.CfnClusterCapacityProviderAssociationsProps(
-                capacity_providers=["capacityProviders"],
                 cluster="cluster",
                 default_capacity_provider_strategy=[ecs.CfnClusterCapacityProviderAssociations.CapacityProviderStrategyProperty(
                     capacity_provider="capacityProvider",
@@ -7138,29 +7146,23 @@ class CfnClusterCapacityProviderAssociationsProps:
                     # the properties below are optional
                     base=123,
                     weight=123
-                )]
+                )],
+            
+                # the properties below are optional
+                capacity_providers=["capacityProviders"]
             )
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__dec87cf6e858f074737c41c7a13a61e2e324b94deacf1f66ca9c0a48eb0b81b2)
-            check_type(argname="argument capacity_providers", value=capacity_providers, expected_type=type_hints["capacity_providers"])
             check_type(argname="argument cluster", value=cluster, expected_type=type_hints["cluster"])
             check_type(argname="argument default_capacity_provider_strategy", value=default_capacity_provider_strategy, expected_type=type_hints["default_capacity_provider_strategy"])
+            check_type(argname="argument capacity_providers", value=capacity_providers, expected_type=type_hints["capacity_providers"])
         self._values: typing.Dict[builtins.str, typing.Any] = {
-            "capacity_providers": capacity_providers,
             "cluster": cluster,
             "default_capacity_provider_strategy": default_capacity_provider_strategy,
         }
-
-    @builtins.property
-    def capacity_providers(self) -> typing.List[builtins.str]:
-        '''The capacity providers to associate with the cluster.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecs-clustercapacityproviderassociations.html#cfn-ecs-clustercapacityproviderassociations-capacityproviders
-        '''
-        result = self._values.get("capacity_providers")
-        assert result is not None, "Required property 'capacity_providers' is missing"
-        return typing.cast(typing.List[builtins.str], result)
+        if capacity_providers is not None:
+            self._values["capacity_providers"] = capacity_providers
 
     @builtins.property
     def cluster(self) -> builtins.str:
@@ -7183,6 +7185,15 @@ class CfnClusterCapacityProviderAssociationsProps:
         result = self._values.get("default_capacity_provider_strategy")
         assert result is not None, "Required property 'default_capacity_provider_strategy' is missing"
         return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnClusterCapacityProviderAssociations.CapacityProviderStrategyProperty"]]], result)
+
+    @builtins.property
+    def capacity_providers(self) -> typing.Optional[typing.List[builtins.str]]:
+        '''The capacity providers to associate with the cluster.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecs-clustercapacityproviderassociations.html#cfn-ecs-clustercapacityproviderassociations-capacityproviders
+        '''
+        result = self._values.get("capacity_providers")
+        return typing.cast(typing.Optional[typing.List[builtins.str]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -7590,7 +7601,7 @@ class CfnServiceProps:
         :param enable_execute_command: Determines whether the execute command functionality is turned on for the service. If ``true`` , the execute command functionality is turned on for all containers in tasks as part of the service.
         :param force_new_deployment: Determines whether to force a new deployment of the service. By default, deployments aren't forced. You can use this option to start a new deployment with no service definition changes. For example, you can update a service's tasks to use a newer Docker image with the same image/tag combination ( ``my_image:latest`` ) or to roll Fargate tasks onto a newer platform version.
         :param health_check_grace_period_seconds: The period of time, in seconds, that the Amazon ECS service scheduler ignores unhealthy Elastic Load Balancing, VPC Lattice, and container health checks after a task has first started. If you do not specify a health check grace period value, the default value of 0 is used. If you do not use any of the health checks, then ``healthCheckGracePeriodSeconds`` is unused. If your service has more running tasks than desired, unhealthy tasks in the grace period might be stopped to reach the desired count.
-        :param launch_type: The launch type on which to run your service. For more information, see `Amazon ECS Launch Types <https://docs.aws.amazon.com/AmazonECS/latest/developerguide/launch_types.html>`_ in the *Amazon Elastic Container Service Developer Guide* .
+        :param launch_type: The launch type on which to run your service. For more information, see `Amazon ECS Launch Types <https://docs.aws.amazon.com/AmazonECS/latest/developerguide/launch_types.html>`_ in the *Amazon Elastic Container Service Developer Guide* . .. epigraph:: If you want to use Managed Instances, you must use the ``capacityProviderStrategy`` request parameter
         :param load_balancers: A list of load balancer objects to associate with the service. If you specify the ``Role`` property, ``LoadBalancers`` must be specified as well. For information about the number of load balancers that you can specify per service, see `Service Load Balancing <https://docs.aws.amazon.com/AmazonECS/latest/developerguide/service-load-balancing.html>`_ in the *Amazon Elastic Container Service Developer Guide* . .. epigraph:: To remove this property from your service resource, specify an empty ``LoadBalancer`` array.
         :param network_configuration: The network configuration for the service. This parameter is required for task definitions that use the ``awsvpc`` network mode to receive their own elastic network interface, and it is not supported for other network modes. For more information, see `Task Networking <https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task-networking.html>`_ in the *Amazon Elastic Container Service Developer Guide* .
         :param placement_constraints: An array of placement constraint objects to use for tasks in your service. You can specify a maximum of 10 constraints for each task. This limit includes constraints in the task definition and those specified at runtime. .. epigraph:: To remove this property from your service resource, specify an empty ``PlacementConstraint`` array.
@@ -8023,6 +8034,9 @@ class CfnServiceProps:
         '''The launch type on which to run your service.
 
         For more information, see `Amazon ECS Launch Types <https://docs.aws.amazon.com/AmazonECS/latest/developerguide/launch_types.html>`_ in the *Amazon Elastic Container Service Developer Guide* .
+        .. epigraph::
+
+           If you want to use Managed Instances, you must use the ``capacityProviderStrategy`` request parameter
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecs-service.html#cfn-ecs-service-launchtype
         '''
@@ -23809,6 +23823,7 @@ class MachineImageType(enum.Enum):
     '''Bottlerocket AMI.'''
 
 
+@jsii.implements(_IConnectable_10015a05)
 class ManagedInstancesCapacityProvider(
     _constructs_77d1e7e8.Construct,
     metaclass=jsii.JSIIMeta,
@@ -23844,6 +23859,9 @@ class ManagedInstancesCapacityProvider(
             ),
             propagate_tags=ecs.PropagateManagedInstancesTags.CAPACITY_PROVIDER
         )
+        
+        # Optionally configure security group rules using IConnectable interface
+        mi_capacity_provider.connections.allow_from(ec2.Peer.ipv4(vpc.vpc_cidr_block), ec2.Port.tcp(80))
         
         # Add the capacity provider to the cluster
         cluster.add_managed_instances_capacity_provider(mi_capacity_provider)
@@ -23938,6 +23956,12 @@ class ManagedInstancesCapacityProvider(
         '''Capacity provider name.'''
         return typing.cast(builtins.str, jsii.get(self, "capacityProviderName"))
 
+    @builtins.property
+    @jsii.member(jsii_name="connections")
+    def connections(self) -> _Connections_0f31fce8:
+        '''The network connections associated with this resource.'''
+        return typing.cast(_Connections_0f31fce8, jsii.get(self, "connections"))
+
 
 @jsii.data_type(
     jsii_type="aws-cdk-lib.aws_ecs.ManagedInstancesCapacityProviderProps",
@@ -24005,6 +24029,9 @@ class ManagedInstancesCapacityProviderProps:
                 ),
                 propagate_tags=ecs.PropagateManagedInstancesTags.CAPACITY_PROVIDER
             )
+            
+            # Optionally configure security group rules using IConnectable interface
+            mi_capacity_provider.connections.allow_from(ec2.Peer.ipv4(vpc.vpc_cidr_block), ec2.Port.tcp(80))
             
             # Add the capacity provider to the cluster
             cluster.add_managed_instances_capacity_provider(mi_capacity_provider)
@@ -25210,6 +25237,9 @@ class PropagateManagedInstancesTags(enum.Enum):
             ),
             propagate_tags=ecs.PropagateManagedInstancesTags.CAPACITY_PROVIDER
         )
+        
+        # Optionally configure security group rules using IConnectable interface
+        mi_capacity_provider.connections.allow_from(ec2.Peer.ipv4(vpc.vpc_cidr_block), ec2.Port.tcp(80))
         
         # Add the capacity provider to the cluster
         cluster.add_managed_instances_capacity_provider(mi_capacity_provider)
@@ -31503,7 +31533,7 @@ class CfnCapacityProvider(
         :param scope: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
         :param auto_scaling_group_provider: The Auto Scaling group settings for the capacity provider.
-        :param cluster_name: 
+        :param cluster_name: The cluster that this capacity provider is associated with. Managed instances capacity providers are cluster-scoped, meaning they can only be used within their associated cluster. This is required for Managed instances.
         :param managed_instances_provider: The configuration for the Amazon ECS Managed Instances provider. This includes the infrastructure role, the launch template configuration, and tag propagation settings.
         :param name: The name of the capacity provider. If a name is specified, it cannot start with ``aws`` , ``ecs`` , or ``fargate`` . If no name is specified, a default name in the ``CFNStackName-CFNResourceName-RandomString`` format is used.
         :param tags: The metadata that you apply to the capacity provider to help you categorize and organize it. Each tag consists of a key and an optional value. You define both. The following basic restrictions apply to tags: - Maximum number of tags per resource - 50 - For each resource, each tag key must be unique, and each tag key can have only one value. - Maximum key length - 128 Unicode characters in UTF-8 - Maximum value length - 256 Unicode characters in UTF-8 - If your tagging schema is used across multiple services and resources, remember that other services may have restrictions on allowed characters. Generally allowed characters are: letters, numbers, and spaces representable in UTF-8, and the following characters: + - = . _ : /
@@ -31611,6 +31641,7 @@ class CfnCapacityProvider(
     @builtins.property
     @jsii.member(jsii_name="clusterName")
     def cluster_name(self) -> typing.Optional[builtins.str]:
+        '''The cluster that this capacity provider is associated with.'''
         return typing.cast(typing.Optional[builtins.str], jsii.get(self, "clusterName"))
 
     @cluster_name.setter
@@ -34690,7 +34721,6 @@ class CfnClusterCapacityProviderAssociations(
         from aws_cdk import aws_ecs as ecs
         
         cfn_cluster_capacity_provider_associations = ecs.CfnClusterCapacityProviderAssociations(self, "MyCfnClusterCapacityProviderAssociations",
-            capacity_providers=["capacityProviders"],
             cluster="cluster",
             default_capacity_provider_strategy=[ecs.CfnClusterCapacityProviderAssociations.CapacityProviderStrategyProperty(
                 capacity_provider="capacityProvider",
@@ -34698,7 +34728,10 @@ class CfnClusterCapacityProviderAssociations(
                 # the properties below are optional
                 base=123,
                 weight=123
-            )]
+            )],
+        
+            # the properties below are optional
+            capacity_providers=["capacityProviders"]
         )
     '''
 
@@ -34707,25 +34740,25 @@ class CfnClusterCapacityProviderAssociations(
         scope: _constructs_77d1e7e8.Construct,
         id: builtins.str,
         *,
-        capacity_providers: typing.Sequence[builtins.str],
         cluster: builtins.str,
         default_capacity_provider_strategy: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnClusterCapacityProviderAssociations.CapacityProviderStrategyProperty", typing.Dict[builtins.str, typing.Any]]]]],
+        capacity_providers: typing.Optional[typing.Sequence[builtins.str]] = None,
     ) -> None:
         '''
         :param scope: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
-        :param capacity_providers: The capacity providers to associate with the cluster.
         :param cluster: The cluster the capacity provider association is the target of.
         :param default_capacity_provider_strategy: The default capacity provider strategy to associate with the cluster.
+        :param capacity_providers: The capacity providers to associate with the cluster.
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__5b726b14d4a82695a68a7344f7ef1201a7390a69e77c604686bf3a3a16980041)
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
         props = CfnClusterCapacityProviderAssociationsProps(
-            capacity_providers=capacity_providers,
             cluster=cluster,
             default_capacity_provider_strategy=default_capacity_provider_strategy,
+            capacity_providers=capacity_providers,
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
@@ -34774,19 +34807,6 @@ class CfnClusterCapacityProviderAssociations(
         return typing.cast(ClusterCapacityProviderAssociationsReference, jsii.get(self, "clusterCapacityProviderAssociationsRef"))
 
     @builtins.property
-    @jsii.member(jsii_name="capacityProviders")
-    def capacity_providers(self) -> typing.List[builtins.str]:
-        '''The capacity providers to associate with the cluster.'''
-        return typing.cast(typing.List[builtins.str], jsii.get(self, "capacityProviders"))
-
-    @capacity_providers.setter
-    def capacity_providers(self, value: typing.List[builtins.str]) -> None:
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__179caeeed8cf1e3badcd9269f89a732efb1582d0dc5fe1a1431aee106eefe333)
-            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
-        jsii.set(self, "capacityProviders", value) # pyright: ignore[reportArgumentType]
-
-    @builtins.property
     @jsii.member(jsii_name="cluster")
     def cluster(self) -> builtins.str:
         '''The cluster the capacity provider association is the target of.'''
@@ -34816,6 +34836,22 @@ class CfnClusterCapacityProviderAssociations(
             type_hints = typing.get_type_hints(_typecheckingstub__adacafb6e01b8e49c325edb233c0e67268b6787a00fc50eea158771a202ed80a)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
         jsii.set(self, "defaultCapacityProviderStrategy", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="capacityProviders")
+    def capacity_providers(self) -> typing.Optional[typing.List[builtins.str]]:
+        '''The capacity providers to associate with the cluster.'''
+        return typing.cast(typing.Optional[typing.List[builtins.str]], jsii.get(self, "capacityProviders"))
+
+    @capacity_providers.setter
+    def capacity_providers(
+        self,
+        value: typing.Optional[typing.List[builtins.str]],
+    ) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__179caeeed8cf1e3badcd9269f89a732efb1582d0dc5fe1a1431aee106eefe333)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "capacityProviders", value) # pyright: ignore[reportArgumentType]
 
     @jsii.data_type(
         jsii_type="aws-cdk-lib.aws_ecs.CfnClusterCapacityProviderAssociations.CapacityProviderStrategyProperty",
@@ -35357,7 +35393,7 @@ class CfnService(
         :param enable_execute_command: Determines whether the execute command functionality is turned on for the service. If ``true`` , the execute command functionality is turned on for all containers in tasks as part of the service.
         :param force_new_deployment: Determines whether to force a new deployment of the service. By default, deployments aren't forced. You can use this option to start a new deployment with no service definition changes. For example, you can update a service's tasks to use a newer Docker image with the same image/tag combination ( ``my_image:latest`` ) or to roll Fargate tasks onto a newer platform version.
         :param health_check_grace_period_seconds: The period of time, in seconds, that the Amazon ECS service scheduler ignores unhealthy Elastic Load Balancing, VPC Lattice, and container health checks after a task has first started. If you do not specify a health check grace period value, the default value of 0 is used. If you do not use any of the health checks, then ``healthCheckGracePeriodSeconds`` is unused. If your service has more running tasks than desired, unhealthy tasks in the grace period might be stopped to reach the desired count.
-        :param launch_type: The launch type on which to run your service. For more information, see `Amazon ECS Launch Types <https://docs.aws.amazon.com/AmazonECS/latest/developerguide/launch_types.html>`_ in the *Amazon Elastic Container Service Developer Guide* .
+        :param launch_type: The launch type on which to run your service. For more information, see `Amazon ECS Launch Types <https://docs.aws.amazon.com/AmazonECS/latest/developerguide/launch_types.html>`_ in the *Amazon Elastic Container Service Developer Guide* . .. epigraph:: If you want to use Managed Instances, you must use the ``capacityProviderStrategy`` request parameter
         :param load_balancers: A list of load balancer objects to associate with the service. If you specify the ``Role`` property, ``LoadBalancers`` must be specified as well. For information about the number of load balancers that you can specify per service, see `Service Load Balancing <https://docs.aws.amazon.com/AmazonECS/latest/developerguide/service-load-balancing.html>`_ in the *Amazon Elastic Container Service Developer Guide* . .. epigraph:: To remove this property from your service resource, specify an empty ``LoadBalancer`` array.
         :param network_configuration: The network configuration for the service. This parameter is required for task definitions that use the ``awsvpc`` network mode to receive their own elastic network interface, and it is not supported for other network modes. For more information, see `Task Networking <https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task-networking.html>`_ in the *Amazon Elastic Container Service Developer Guide* .
         :param placement_constraints: An array of placement constraint objects to use for tasks in your service. You can specify a maximum of 10 constraints for each task. This limit includes constraints in the task definition and those specified at runtime. .. epigraph:: To remove this property from your service resource, specify an empty ``PlacementConstraint`` array.
@@ -49537,9 +49573,9 @@ def _typecheckingstub__48080bdf05dc1c4ca9ab46c833774163f6afcd0d1551b378b8d59e67b
 
 def _typecheckingstub__dec87cf6e858f074737c41c7a13a61e2e324b94deacf1f66ca9c0a48eb0b81b2(
     *,
-    capacity_providers: typing.Sequence[builtins.str],
     cluster: builtins.str,
     default_capacity_provider_strategy: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnClusterCapacityProviderAssociations.CapacityProviderStrategyProperty, typing.Dict[builtins.str, typing.Any]]]]],
+    capacity_providers: typing.Optional[typing.Sequence[builtins.str]] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -52196,9 +52232,9 @@ def _typecheckingstub__5b726b14d4a82695a68a7344f7ef1201a7390a69e77c604686bf3a3a1
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     *,
-    capacity_providers: typing.Sequence[builtins.str],
     cluster: builtins.str,
     default_capacity_provider_strategy: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnClusterCapacityProviderAssociations.CapacityProviderStrategyProperty, typing.Dict[builtins.str, typing.Any]]]]],
+    capacity_providers: typing.Optional[typing.Sequence[builtins.str]] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -52215,12 +52251,6 @@ def _typecheckingstub__93896bd7ebbe840c8fa66a8f20ac3a94d52db05f416661f3eb272dbf9
     """Type checking stubs"""
     pass
 
-def _typecheckingstub__179caeeed8cf1e3badcd9269f89a732efb1582d0dc5fe1a1431aee106eefe333(
-    value: typing.List[builtins.str],
-) -> None:
-    """Type checking stubs"""
-    pass
-
 def _typecheckingstub__df256c18acb77e38e5110ec5f1e3b55621c49f4da43f861e9d55ef39c9207076(
     value: builtins.str,
 ) -> None:
@@ -52229,6 +52259,12 @@ def _typecheckingstub__df256c18acb77e38e5110ec5f1e3b55621c49f4da43f861e9d55ef39c
 
 def _typecheckingstub__adacafb6e01b8e49c325edb233c0e67268b6787a00fc50eea158771a202ed80a(
     value: typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnClusterCapacityProviderAssociations.CapacityProviderStrategyProperty]]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__179caeeed8cf1e3badcd9269f89a732efb1582d0dc5fe1a1431aee106eefe333(
+    value: typing.Optional[typing.List[builtins.str]],
 ) -> None:
     """Type checking stubs"""
     pass
@@ -54071,3 +54107,6 @@ def _typecheckingstub__59be62eab8487bb224b6839e6560b22ec29653bf5f8e319f85996fa99
 ) -> None:
     """Type checking stubs"""
     pass
+
+for cls in [IAlternateTarget, IBaseService, ICapacityProviderRef, ICluster, IClusterCapacityProviderAssociationsRef, IClusterRef, IDeploymentLifecycleHookTarget, IEc2Service, IEc2TaskDefinition, IEcsLoadBalancerTarget, IExternalService, IExternalTaskDefinition, IFargateService, IFargateTaskDefinition, IPrimaryTaskSetRef, IService, IServiceRef, ITaskDefinition, ITaskDefinitionExtension, ITaskDefinitionRef, ITaskSetRef]:
+    typing.cast(typing.Any, cls).__protocol_attrs__ = typing.cast(typing.Any, cls).__protocol_attrs__ - set(['__jsii_proxy_class__', '__jsii_type__'])

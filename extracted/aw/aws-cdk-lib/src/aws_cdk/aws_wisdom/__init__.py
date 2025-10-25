@@ -3812,27 +3812,6 @@ class CfnAIAgent(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
-    @jsii.member(jsii_name="fromAIAgentArn")
-    @builtins.classmethod
-    def from_ai_agent_arn(
-        cls,
-        scope: _constructs_77d1e7e8.Construct,
-        id: builtins.str,
-        arn: builtins.str,
-    ) -> IAIAgentRef:
-        '''Creates a new IAIAgentRef from an ARN.
-
-        :param scope: -
-        :param id: -
-        :param arn: -
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__e70e3665bf011176b4022bce42ce388d6c862e0f7206cb895132bc713123f2df)
-            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
-            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
-            check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
-        return typing.cast(IAIAgentRef, jsii.sinvoke(cls, "fromAIAgentArn", [scope, id, arn]))
-
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -5600,27 +5579,6 @@ class CfnAIGuardrail(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
-    @jsii.member(jsii_name="fromAIGuardrailArn")
-    @builtins.classmethod
-    def from_ai_guardrail_arn(
-        cls,
-        scope: _constructs_77d1e7e8.Construct,
-        id: builtins.str,
-        arn: builtins.str,
-    ) -> IAIGuardrailRef:
-        '''Creates a new IAIGuardrailRef from an ARN.
-
-        :param scope: -
-        :param id: -
-        :param arn: -
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__53ed097b5e2be9dc0c930e9b28a3660b97a5fef48e0cb35522df3f2b6494e3f1)
-            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
-            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
-            check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
-        return typing.cast(IAIGuardrailRef, jsii.sinvoke(cls, "fromAIGuardrailArn", [scope, id, arn]))
-
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -7024,27 +6982,6 @@ class CfnAIPrompt(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
-    @jsii.member(jsii_name="fromAIPromptArn")
-    @builtins.classmethod
-    def from_ai_prompt_arn(
-        cls,
-        scope: _constructs_77d1e7e8.Construct,
-        id: builtins.str,
-        arn: builtins.str,
-    ) -> IAIPromptRef:
-        '''Creates a new IAIPromptRef from an ARN.
-
-        :param scope: -
-        :param id: -
-        :param arn: -
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__63fa7ac36afde639989d374e49aa90c47a2690771974175b69fed1e406c6272e)
-            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
-            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
-            check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
-        return typing.cast(IAIPromptRef, jsii.sinvoke(cls, "fromAIPromptArn", [scope, id, arn]))
-
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -7904,27 +7841,6 @@ class CfnAssistantAssociation(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
-
-    @jsii.member(jsii_name="fromAssistantAssociationArn")
-    @builtins.classmethod
-    def from_assistant_association_arn(
-        cls,
-        scope: _constructs_77d1e7e8.Construct,
-        id: builtins.str,
-        arn: builtins.str,
-    ) -> IAssistantAssociationRef:
-        '''Creates a new IAssistantAssociationRef from an ARN.
-
-        :param scope: -
-        :param id: -
-        :param arn: -
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__0814779e46c29dd8a693967cc42bd54cd9b7f75fc63367e7f120d079bf92046e)
-            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
-            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
-            check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
-        return typing.cast(IAssistantAssociationRef, jsii.sinvoke(cls, "fromAssistantAssociationArn", [scope, id, arn]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -13428,14 +13344,6 @@ def _typecheckingstub__e4d43de9ccaeb31eba5b0b613ecac25531a87bb9137652388e6196070
     """Type checking stubs"""
     pass
 
-def _typecheckingstub__e70e3665bf011176b4022bce42ce388d6c862e0f7206cb895132bc713123f2df(
-    scope: _constructs_77d1e7e8.Construct,
-    id: builtins.str,
-    arn: builtins.str,
-) -> None:
-    """Type checking stubs"""
-    pass
-
 def _typecheckingstub__daf9bd162ab4eaa6b11972bcaf8372498a47b4ad8cf111130cabfae3f675d2b4(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -13631,14 +13539,6 @@ def _typecheckingstub__76ea8e26c58eaed3d156b1860dd33693ef608e81ac9c96aa849d3236d
     tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
     topic_policy_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAIGuardrail.AIGuardrailTopicPolicyConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     word_policy_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAIGuardrail.AIGuardrailWordPolicyConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-) -> None:
-    """Type checking stubs"""
-    pass
-
-def _typecheckingstub__53ed097b5e2be9dc0c930e9b28a3660b97a5fef48e0cb35522df3f2b6494e3f1(
-    scope: _constructs_77d1e7e8.Construct,
-    id: builtins.str,
-    arn: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -13875,14 +13775,6 @@ def _typecheckingstub__48a265f7ec519ced4028dd8e69d5a1fe8ef89d36b11d693c968f74c8b
     """Type checking stubs"""
     pass
 
-def _typecheckingstub__63fa7ac36afde639989d374e49aa90c47a2690771974175b69fed1e406c6272e(
-    scope: _constructs_77d1e7e8.Construct,
-    id: builtins.str,
-    arn: builtins.str,
-) -> None:
-    """Type checking stubs"""
-    pass
-
 def _typecheckingstub__7567e2bb6113fabf7ae624801bcdbbfa2507650c0fcedb4572ac328601553fcc(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -14090,14 +13982,6 @@ def _typecheckingstub__17f6f8491bb7be7dab63c57bf64b65f643c4fece381b02f49002f796c
     association: typing.Union[_IResolvable_da3f097b, typing.Union[CfnAssistantAssociation.AssociationDataProperty, typing.Dict[builtins.str, typing.Any]]],
     association_type: builtins.str,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-) -> None:
-    """Type checking stubs"""
-    pass
-
-def _typecheckingstub__0814779e46c29dd8a693967cc42bd54cd9b7f75fc63367e7f120d079bf92046e(
-    scope: _constructs_77d1e7e8.Construct,
-    id: builtins.str,
-    arn: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -14791,3 +14675,6 @@ def _typecheckingstub__41295c77edcd7270c3f3a36764ea805915fa2a44214fd58b6530df7e0
 ) -> None:
     """Type checking stubs"""
     pass
+
+for cls in [IAIAgentRef, IAIAgentVersionRef, IAIGuardrailRef, IAIGuardrailVersionRef, IAIPromptRef, IAIPromptVersionRef, IAssistantAssociationRef, IAssistantRef, IKnowledgeBaseRef, IMessageTemplateRef, IMessageTemplateVersionRef, IQuickResponseRef]:
+    typing.cast(typing.Any, cls).__protocol_attrs__ = typing.cast(typing.Any, cls).__protocol_attrs__ - set(['__jsii_proxy_class__', '__jsii_type__'])

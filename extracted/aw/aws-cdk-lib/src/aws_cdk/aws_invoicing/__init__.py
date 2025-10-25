@@ -780,3 +780,6 @@ def _typecheckingstub__8558be1d7f9b75065f54979d9fa00436e977578b77550f4c1d3e32a6b
 ) -> None:
     """Type checking stubs"""
     pass
+
+for cls in [IInvoiceUnitRef]:
+    typing.cast(typing.Any, cls).__protocol_attrs__ = typing.cast(typing.Any, cls).__protocol_attrs__ - set(['__jsii_proxy_class__', '__jsii_type__'])

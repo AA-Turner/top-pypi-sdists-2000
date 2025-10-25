@@ -695,3 +695,6 @@ def _typecheckingstub__48f41a7ff86bdb3f6536168c36c8ddd6876c1a2bfcd36169b53af9ce3
 ) -> None:
     """Type checking stubs"""
     pass
+
+for cls in [IEmailContactRef]:
+    typing.cast(typing.Any, cls).__protocol_attrs__ = typing.cast(typing.Any, cls).__protocol_attrs__ - set(['__jsii_proxy_class__', '__jsii_type__'])

@@ -1405,16 +1405,24 @@ static const char *const extnames[] = {
 //|
 //|.endif
 //|
+//|//-- Control-Flow Enforcement Technique (CET) ---------------------------
+//|
+//|.if CET_BR
+//|.macro endbr; endbr64; .endmacro
+//|.else
+//|.macro endbr; .endmacro
+//|.endif
+//|
 //|//-----------------------------------------------------------------------
 //|
 //|// Instruction headers.
-//|.macro ins_A; .endmacro
-//|.macro ins_AD; .endmacro
-//|.macro ins_AJ; .endmacro
-//|.macro ins_ABC; movzx RBd, RCH; movzx RCd, RCL; .endmacro
-//|.macro ins_AB_; movzx RBd, RCH; .endmacro
-//|.macro ins_A_C; movzx RCd, RCL; .endmacro
-//|.macro ins_AND; not RD; .endmacro
+//|.macro ins_A; endbr; .endmacro
+//|.macro ins_AD; endbr; .endmacro
+//|.macro ins_AJ; endbr; .endmacro
+//|.macro ins_ABC; endbr; movzx RBd, RCH; movzx RCd, RCL; .endmacro
+//|.macro ins_AB_; endbr; movzx RBd, RCH; .endmacro
+//|.macro ins_A_C; endbr; movzx RCd, RCL; .endmacro
+//|.macro ins_AND; endbr; not RD; .endmacro
 //|
 //|// Instruction decode+dispatch. Carefully tuned (nope, lodsd is not faster).
 //|.macro ins_NEXT
@@ -1598,7 +1606,7 @@ static void build_subroutines(BuildCtx *ctx)
 {
   //|.code_sub
   dasm_put(Dst, 0);
-#line 384 "vm_x64.dasc"
+#line 392 "vm_x64.dasc"
   //|
   //|//-----------------------------------------------------------------------
   //|//-- Return handling ----------------------------------------------------
@@ -1634,7 +1642,7 @@ static void build_subroutines(BuildCtx *ctx)
   //|  set_vmstate C
   //|  and PC, -8
   dasm_put(Dst, 2, FRAME_P, (unsigned int)((int64_t)~((uint64_t)2<<47)), (unsigned int)(((int64_t)~((uint64_t)2<<47))>>32), FRAME_TYPE, FRAME_C, FRAME_TYPE, DISPATCH_GL(vmstate), ~LJ_VMST_C);
-#line 418 "vm_x64.dasc"
+#line 426 "vm_x64.dasc"
   //|  sub PC, BASE
   //|  neg PC				// Previous base = BASE - delta.
   //|
@@ -1673,7 +1681,7 @@ static void build_subroutines(BuildCtx *ctx)
   //|  // More results wanted. Check stack size and fill up results with nil.
   //|  cmp BASE, L:RB->maxstack
   dasm_put(Dst, 81, Dt1(->base), Dt1(->top), Dt1(->cframe));
-#line 455 "vm_x64.dasc"
+#line 463 "vm_x64.dasc"
   //|  ja >8
   //|  mov aword [BASE-16], LJ_TNIL
   //|  add BASE, 8
@@ -1701,22 +1709,26 @@ static void build_subroutines(BuildCtx *ctx)
   //|  jmp <3
   //|
   //|->vm_unwind_yield:
+  //|  endbr
   //|  mov al, LUA_YIELD
   //|  jmp ->vm_unwind_c_eh
   //|
   //|->vm_unwind_c:			// Unwind C stack, return from vm_pcall.
+  //|  endbr
   //|  // (void *cframe, int errcode)
   //|  mov eax, CARG2d			// Error return status for vm_pcall.
   dasm_put(Dst, 194, Dt1(->maxstack), LJ_TNIL, Dt1(->top), Dt1(->top), LUA_YIELD);
-#line 488 "vm_x64.dasc"
+#line 498 "vm_x64.dasc"
   //|  mov rsp, CARG1
   //|->vm_unwind_c_eh:			// Landing pad for external unwinder.
+  //|  endbr
   //|  mov L:RB, SAVE_L
   //|  mov GL:RB, L:RB->glref
   //|  mov dword GL:RB->vmstate, ~LJ_VMST_C
   //|  jmp ->vm_leave_unw
   //|
   //|->vm_unwind_rethrow:
+  //|  endbr
   //|.if not X64WIN
   //|  mov CARG1, SAVE_L
   //|  mov CARG2d, eax
@@ -1725,10 +1737,12 @@ static void build_subroutines(BuildCtx *ctx)
   //|.endif
   //|
   //|->vm_unwind_ff:			// Unwind C stack, return from ff pcall.
+  //|  endbr
   //|  // (void *cframe)
   //|  and CARG1, CFRAME_RAWMASK
   //|  mov rsp, CARG1
   //|->vm_unwind_ff_eh:			// Landing pad for external unwinder.
+  //|  endbr
   //|  mov L:RB, SAVE_L
   //|  mov RDd, 1+1			// Really 1+2 results, incr. later.
   //|  mov BASE, L:RB->base
@@ -1750,7 +1764,7 @@ static void build_subroutines(BuildCtx *ctx)
   //|->vm_growstack_c:			// Grow stack for C function.
   //|  mov CARG2d, LUA_MINSTACK
   dasm_put(Dst, 276, Dt1(->glref), Dt2(->vmstate), ~LJ_VMST_C, CFRAME_RAWMASK, 1+1, Dt1(->base), Dt1(->glref), GG_G2DISP, (unsigned int)((int64_t)~((uint64_t)1<<47)), (unsigned int)(((int64_t)~((uint64_t)1<<47))>>32), DISPATCH_GL(vmstate), ~LJ_VMST_INTERP);
-#line 528 "vm_x64.dasc"
+#line 542 "vm_x64.dasc"
   //|  jmp >2
   //|
   //|->vm_growstack_v:			// Grow stack for vararg Lua function.
@@ -1797,7 +1811,7 @@ static void build_subroutines(BuildCtx *ctx)
   //|  mov DISPATCH, L:RB->glref		// Setup pointer to dispatch table.
   //|  add DISPATCH, GG_G2DISP
   dasm_put(Dst, 402, LUA_MINSTACK, -4+PC2PROTO(framesize), Dt1(->base), Dt1(->top), Dt1(->base), Dt1(->top), Dt7(->pc), FRAME_CP, CFRAME_RESUME, Dt1(->glref));
-#line 573 "vm_x64.dasc"
+#line 587 "vm_x64.dasc"
   //|  mov SAVE_PC, RD			// Any value outside of bytecode is ok.
   //|  mov SAVE_CFRAME, RD
   //|  mov SAVE_NRES, RDd
@@ -1833,7 +1847,7 @@ static void build_subroutines(BuildCtx *ctx)
   //|  // (lua_State *L, TValue *base, int nres1)
   //|  saveregs
   dasm_put(Dst, 557, GG_G2DISP, Dt1(->cframe), Dt1(->status), DISPATCH_GL(cur_L), DISPATCH_GL(vmstate), ~LJ_VMST_INTERP, Dt1(->status), Dt1(->base), Dt1(->top), FRAME_TYPE, FRAME_CP);
-#line 607 "vm_x64.dasc"
+#line 621 "vm_x64.dasc"
   //|  mov PCd, FRAME_C
   //|
   //|1:  // Entry point for vm_pcall above (PC = ftype).
@@ -1874,7 +1888,7 @@ static void build_subroutines(BuildCtx *ctx)
   //|  // (lua_State *L, lua_CFunction func, void *ud, lua_CPFunction cp)
   //|  saveregs
   dasm_put(Dst, 668, FRAME_C, Dt1(->glref), Dt1(->cframe), GG_G2DISP, Dt1(->cframe), DISPATCH_GL(cur_L), DISPATCH_GL(vmstate), ~LJ_VMST_INTERP, Dt1(->base), Dt1(->top), LJ_TFUNC, Dt7(->pc));
-#line 646 "vm_x64.dasc"
+#line 660 "vm_x64.dasc"
   //|  mov L:RB, CARG1			// Caveat: CARG1 may be RA.
   //|  mov SAVE_L, CARG1
   //|  mov SAVE_PC, L:RB			// Any value outside of bytecode is ok.
@@ -1907,6 +1921,7 @@ static void build_subroutines(BuildCtx *ctx)
   //|//-- Continuation dispatch ----------------------------------------------
   //|
   //|->cont_dispatch:
+  //|  endbr
   //|  // BASE = meta base, RA = resultofs, RD = nresults+1 (also in MULTRES)
   //|  add RA, BASE
   //|  and PC, -8
@@ -1931,7 +1946,7 @@ static void build_subroutines(BuildCtx *ctx)
   //|1:
   //|  je ->cont_ffi_callback		// cont = 1: return from FFI callback.
   dasm_put(Dst, 830, Dt1(->stack), Dt1(->top), Dt1(->glref), GG_G2DISP, Dt1(->cframe), Dt1(->cframe), DISPATCH_GL(cur_L), FRAME_CP, LJ_TNIL, Dt7(->pc), PC2PROTO(k));
-#line 701 "vm_x64.dasc"
+#line 716 "vm_x64.dasc"
   //|  // cont = 0: Tail call from C function.
   //|  sub RB, BASE
   //|  shr RBd, 3
@@ -1940,6 +1955,7 @@ static void build_subroutines(BuildCtx *ctx)
   //|.endif
   //|
   //|->cont_cat:				// BASE = base, RC = result, RB = mbase
+  //|  endbr
   //|  movzx RAd, PC_RB
   //|  sub RB, 32
   //|  lea RA, [BASE+RA*8]
@@ -1976,7 +1992,7 @@ static void build_subroutines(BuildCtx *ctx)
   //|  lea RB, [DISPATCH+DISPATCH_GL(tmptv)]  // Store fn->l.env in g->tmptv.
   //|  mov [RB], TAB:RA
   dasm_put(Dst, 991, Dt1(->base), (unsigned int)(((uint64_t)LJ_TSTR<<47)), (unsigned int)((((uint64_t)LJ_TSTR<<47))>>32), BC_GGET, (unsigned int)(((uint64_t)LJ_TTAB<<47)), (unsigned int)((((uint64_t)LJ_TTAB<<47))>>32), DISPATCH_GL(tmptv));
-#line 744 "vm_x64.dasc"
+#line 760 "vm_x64.dasc"
   //|  jmp >2
   //|
   //|->vmeta_tgetb:
@@ -2010,6 +2026,7 @@ static void build_subroutines(BuildCtx *ctx)
   //|  test RC, RC
   //|  jz >3
   //|->cont_ra:				// BASE = base, RC = result
+  //|  endbr
   //|  movzx RAd, PC_RA
   //|  mov RB, [RC]
   //|  mov [BASE+RA*8], RB
@@ -2029,7 +2046,7 @@ static void build_subroutines(BuildCtx *ctx)
   //|->vmeta_tgetr:
   //|  mov CARG1, TAB:RB
   dasm_put(Dst, 1107, Dt1(->base), Dt1(->base), Dt1(->top), FRAME_CONT, 2+1);
-#line 795 "vm_x64.dasc"
+#line 812 "vm_x64.dasc"
   //|  mov RB, BASE			// Save BASE.
   //|  mov CARG2d, RCd			// Caveat: CARG2 == BASE
   //|  call extern lj_tab_getinth		// (GCtab *t, int32_t key)
@@ -2069,7 +2086,7 @@ static void build_subroutines(BuildCtx *ctx)
   //|->vmeta_tsetv:
   //|  movzx RCd, PC_RC			// Reload TValue *k from RC.
   dasm_put(Dst, 1281, LJ_TNIL, (unsigned int)(((uint64_t)LJ_TSTR<<47)), (unsigned int)((((uint64_t)LJ_TSTR<<47))>>32), BC_GSET, (unsigned int)(((uint64_t)LJ_TTAB<<47)), (unsigned int)((((uint64_t)LJ_TTAB<<47))>>32), DISPATCH_GL(tmptv));
-#line 833 "vm_x64.dasc"
+#line 850 "vm_x64.dasc"
   //|  lea RC, [BASE+RC*8]
   //|1:
   //|  movzx RBd, PC_RB			// Reload TValue *t from RB.
@@ -2091,6 +2108,7 @@ static void build_subroutines(BuildCtx *ctx)
   //|  mov RB, [BASE+RA*8]
   //|  mov [RC], RB
   //|->cont_nop:				// BASE = base, (RC = result)
+  //|  endbr
   //|  ins_next
   //|
   //|3:  // Call __newindex metamethod.
@@ -2141,7 +2159,7 @@ static void build_subroutines(BuildCtx *ctx)
   //|.else
   //|  lea CARG2, [BASE+RA*8]
   dasm_put(Dst, 1393, Dt1(->base), Dt1(->base), Dt1(->top), FRAME_CONT, 3+1, Dt1(->base), Dt1(->base));
-#line 903 "vm_x64.dasc"
+#line 921 "vm_x64.dasc"
   //|  lea CARG3, [BASE+RD*8]
   //|.endif
   //|  mov CARG1, L:RB			// Caveat: CARG1/CARG4 == RA.
@@ -2163,6 +2181,7 @@ static void build_subroutines(BuildCtx *ctx)
   //|  ins_next
   //|
   //|->cont_condt:			// BASE = base, RC = result
+  //|  endbr
   //|  add PC, 4
   //|  mov ITYPE, [RC]
   //|  sar ITYPE, 47
@@ -2171,6 +2190,7 @@ static void build_subroutines(BuildCtx *ctx)
   //|  jmp <6
   //|
   //|->cont_condf:			// BASE = base, RC = result
+  //|  endbr
   //|  mov ITYPE, [RC]
   //|  sar ITYPE, 47
   //|  cmp ITYPEd, LJ_TISTRUECOND		// Branch if result is false.
@@ -2179,7 +2199,7 @@ static void build_subroutines(BuildCtx *ctx)
   //|->vmeta_equal:
   //|  cleartp TAB:RD
   dasm_put(Dst, 1605, Dt1(->base), -BCBIAS_J*4, LJ_TISTRUECOND, LJ_TISTRUECOND);
-#line 939 "vm_x64.dasc"
+#line 959 "vm_x64.dasc"
   //|  sub PC, 4
   //|.if X64WIN
   //|  mov CARG3, RD
@@ -2250,7 +2270,7 @@ static void build_subroutines(BuildCtx *ctx)
   //|->vmeta_unm:
   //|  lea RC, [BASE+RD*8]
   dasm_put(Dst, 1741, Dt1(->base), Dt1(->base), Dt1(->base), Dt1(->base));
-#line 1008 "vm_x64.dasc"
+#line 1028 "vm_x64.dasc"
   //|  mov RB, RC
   //|  jmp >2
   //|
@@ -2311,7 +2331,7 @@ static void build_subroutines(BuildCtx *ctx)
   //|  // NULL (retry) or TValue * (metamethod) returned in eax (RC).
   //|  mov BASE, L:RB->base
   dasm_put(Dst, 1897, Dt1(->base), Dt1(->base), FRAME_CONT, 2+1, Dt1(->base), Dt1(->base));
-#line 1067 "vm_x64.dasc"
+#line 1087 "vm_x64.dasc"
 #if LJ_52
   //|  test RC, RC
   //|  jne ->vmeta_binop			// Binop call for compatibility.
@@ -2320,11 +2340,11 @@ static void build_subroutines(BuildCtx *ctx)
   //|  cleartp TAB:CARG1
   //|  jmp ->BC_LEN_Z
   dasm_put(Dst, 2038);
-#line 1074 "vm_x64.dasc"
+#line 1094 "vm_x64.dasc"
 #else
   //|  jmp ->vmeta_binop			// Binop call for compatibility.
   dasm_put(Dst, 2068);
-#line 1076 "vm_x64.dasc"
+#line 1096 "vm_x64.dasc"
 #endif
   //|
   //|//-- Call metamethod ----------------------------------------------------
@@ -2384,16 +2404,17 @@ static void build_subroutines(BuildCtx *ctx)
   //|
   //|.macro .ffunc, name
   //|->ff_ .. name:
+  //| endbr
   //|.endmacro
   //|
   //|.macro .ffunc_1, name
   //|->ff_ .. name:
-  //|  cmp NARGS:RDd, 1+1;  jb ->fff_fallback
+  //|  endbr; cmp NARGS:RDd, 1+1;  jb ->fff_fallback
   //|.endmacro
   //|
   //|.macro .ffunc_2, name
   //|->ff_ .. name:
-  //|  cmp NARGS:RDd, 2+1;  jb ->fff_fallback
+  //|  endbr; cmp NARGS:RDd, 2+1;  jb ->fff_fallback
   //|.endmacro
   //|
   //|.macro .ffunc_n, name, op
@@ -2438,7 +2459,7 @@ static void build_subroutines(BuildCtx *ctx)
   //|  jz >2
   //|  mov RA, BASE
   dasm_put(Dst, 2073, Dt1(->base), Dt1(->base), Dt7(->pc), Dt1(->base), Dt1(->base), GG_DISP2STATIC, 1+1, LJ_TISTRUECOND);
-#line 1188 "vm_x64.dasc"
+#line 1209 "vm_x64.dasc"
   //|1:
   //|  add RA, 8
   //|  mov RB, [RA]
@@ -2469,7 +2490,7 @@ static void build_subroutines(BuildCtx *ctx)
   //|
   //|.ffunc_1 getmetatable
   dasm_put(Dst, 2294, 1+1, LJ_TISNUM, ((char *)(&((GCfuncC *)0)->upvalue)), (unsigned int)(((uint64_t)LJ_TSTR<<47)), (unsigned int)((((uint64_t)LJ_TSTR<<47))>>32), 1+1);
-#line 1217 "vm_x64.dasc"
+#line 1238 "vm_x64.dasc"
   //|  mov TAB:RB, [BASE]
   //|  mov PC, [BASE-8]
   //|  checktab TAB:RB, >6
@@ -2488,7 +2509,7 @@ static void build_subroutines(BuildCtx *ctx)
   //|  imul RAd, #NODE
   //|  add NODE:RA, TAB:RB->node
   dasm_put(Dst, 2405, LJ_TTAB, Dt6(->metatable), LJ_TNIL, (unsigned int)(((uint64_t)LJ_TTAB<<47)), (unsigned int)((((uint64_t)LJ_TTAB<<47))>>32), DISPATCH_GL(gcroot)+8*(GCROOT_MMNAME+MM_metatable), Dt6(->hmask), Dt5(->sid), (unsigned int)(((uint64_t)LJ_TSTR<<47)), (unsigned int)((((uint64_t)LJ_TSTR<<47))>>32), sizeof(Node));
-#line 1234 "vm_x64.dasc"
+#line 1255 "vm_x64.dasc"
   //|3:  // Rearranged logic, because we expect _not_ to find the key.
   //|  cmp NODE:RA->key, STR:RC
   //|  je >5
@@ -2506,7 +2527,7 @@ static void build_subroutines(BuildCtx *ctx)
   //|6:
   //|  cmp ITYPEd, LJ_TUDATA; je <1
   dasm_put(Dst, 2499, Dt6(->node), DtB(->key), DtB(->next), DtB(->val), LJ_TNIL);
-#line 1250 "vm_x64.dasc"
+#line 1271 "vm_x64.dasc"
   //|  cmp ITYPEd, LJ_TISNUM; ja >7
   //|  mov ITYPEd, LJ_TISNUM
   //|7:
@@ -2521,7 +2542,7 @@ static void build_subroutines(BuildCtx *ctx)
   //|  // Fast path: no mt for table yet and not clearing the mt.
   //|  cmp aword TAB:RB->metatable, 0; jne ->fff_fallback
   dasm_put(Dst, 2557, LJ_TUDATA, LJ_TISNUM, LJ_TISNUM, DISPATCH_GL(gcroot[GCROOT_BASEMT]), 2+1, LJ_TTAB, Dt6(->metatable));
-#line 1263 "vm_x64.dasc"
+#line 1284 "vm_x64.dasc"
   //|  mov TAB:RA, [BASE+8]
   //|  checktab TAB:RA, ->fff_fallback
   //|  mov TAB:RB->metatable, TAB:RA
@@ -2536,7 +2557,7 @@ static void build_subroutines(BuildCtx *ctx)
   //|
   //|.ffunc_2 rawget
   dasm_put(Dst, 2644, LJ_TTAB, Dt6(->metatable), Dt6(->marked), LJ_GC_BLACK, Dt6(->marked), (uint8_t)~LJ_GC_BLACK, DISPATCH_GL(gc.grayagain), DISPATCH_GL(gc.grayagain), Dt6(->gclist));
-#line 1276 "vm_x64.dasc"
+#line 1297 "vm_x64.dasc"
   //|.if X64WIN
   //|  mov TAB:RA, [BASE]
   //|  checktab TAB:RA, ->fff_fallback
@@ -2573,7 +2594,7 @@ static void build_subroutines(BuildCtx *ctx)
   //|
   //|.ffunc_1 tostring
   dasm_put(Dst, 2726, 2+1, LJ_TTAB, 1+1, LJ_TISNUM, 1+1);
-#line 1311 "vm_x64.dasc"
+#line 1332 "vm_x64.dasc"
   //|  // Only handles the string or number case inline.
   //|  mov PC, [BASE-8]
   //|  mov STR:RB, [BASE]
@@ -2588,7 +2609,7 @@ static void build_subroutines(BuildCtx *ctx)
   //|  jne ->fff_fallback
   //|  ffgccheck				// Caveat: uses label 1.
   dasm_put(Dst, 2853, LJ_TSTR, LJ_TISNUM, DISPATCH_GL(gcroot[GCROOT_BASEMT_NUM]), DISPATCH_GL(gc.total), DISPATCH_GL(gc.threshold));
-#line 1324 "vm_x64.dasc"
+#line 1345 "vm_x64.dasc"
   //|  mov L:RB, SAVE_L
   //|  mov L:RB->base, BASE		// Add frame since C call can throw.
   //|  mov SAVE_PC, PC			// Redundant (but a defined value).
@@ -2616,7 +2637,7 @@ static void build_subroutines(BuildCtx *ctx)
   //|  checktab CARG1, ->fff_fallback
   //|  mov RB, BASE			// Save BASE.
   dasm_put(Dst, 2927, Dt1(->base), Dt1(->base), (unsigned int)(((uint64_t)LJ_TSTR<<47)), (unsigned int)((((uint64_t)LJ_TSTR<<47))>>32), 1+1, LJ_TTAB);
-#line 1350 "vm_x64.dasc"
+#line 1371 "vm_x64.dasc"
   //|.if X64WIN
   //|  lea CARG3, [BASE-16]
   //|  lea CARG2, [BASE+8]		// Caveat: CARG2 == BASE.
@@ -2641,11 +2662,11 @@ static void build_subroutines(BuildCtx *ctx)
   //|  mov TMPR, TAB:RB
   //|  checktab TAB:RB, ->fff_fallback
   dasm_put(Dst, 3024, LJ_TNIL, LJ_TNIL, 1+1, LJ_TTAB);
-#line 1373 "vm_x64.dasc"
+#line 1394 "vm_x64.dasc"
 #if LJ_52
   //|  cmp aword TAB:RB->metatable, 0; jne ->fff_fallback
   dasm_put(Dst, 3120, Dt6(->metatable));
-#line 1375 "vm_x64.dasc"
+#line 1396 "vm_x64.dasc"
 #endif
   //|  mov CFUNC:RD, [BASE-16]
   //|  cleartp CFUNC:RD
@@ -2676,7 +2697,7 @@ static void build_subroutines(BuildCtx *ctx)
   //|.else
   //|  sseconst_1 xmm1, TMPR
   dasm_put(Dst, 3130, Dt8(->upvalue[0]), (unsigned int)(((uint64_t)LJ_TFUNC<<47)), (unsigned int)((((uint64_t)LJ_TFUNC<<47))>>32), LJ_TNIL, 1+3, 2+1, LJ_TTAB, LJ_TISNUM, (unsigned int)(U64x(3ff00000,00000000)), (unsigned int)((U64x(3ff00000,00000000))>>32));
-#line 1404 "vm_x64.dasc"
+#line 1425 "vm_x64.dasc"
   //|  addsd xmm0, xmm1
   //|  cvttsd2si RAd, xmm0
   //|  movsd qword [BASE-16], xmm0
@@ -2712,7 +2733,7 @@ static void build_subroutines(BuildCtx *ctx)
   //|->fff_res0:
   //|  mov RDd, 1+0
   dasm_put(Dst, 3253, Dt6(->asize), Dt6(->array), LJ_TNIL, 1+2, Dt6(->hmask));
-#line 1438 "vm_x64.dasc"
+#line 1459 "vm_x64.dasc"
   //|  jmp ->fff_res
   //|
   //|.ffunc_1 ipairs
@@ -2720,11 +2741,11 @@ static void build_subroutines(BuildCtx *ctx)
   //|  mov TMPR, TAB:RB
   //|  checktab TAB:RB, ->fff_fallback
   dasm_put(Dst, 3353, 1+0, 1+1, LJ_TTAB);
-#line 1444 "vm_x64.dasc"
+#line 1465 "vm_x64.dasc"
 #if LJ_52
   //|  cmp aword TAB:RB->metatable, 0; jne ->fff_fallback
   dasm_put(Dst, 3120, Dt6(->metatable));
-#line 1446 "vm_x64.dasc"
+#line 1467 "vm_x64.dasc"
 #endif
   //|  mov CFUNC:RD, [BASE-16]
   //|  cleartp CFUNC:RD
@@ -2765,7 +2786,7 @@ static void build_subroutines(BuildCtx *ctx)
   //|  ja <2
   //|  jmp ->vm_call_dispatch
   dasm_put(Dst, 3404, Dt8(->upvalue[0]), (unsigned int)(((uint64_t)LJ_TFUNC<<47)), (unsigned int)((((uint64_t)LJ_TFUNC<<47))>>32), 1+3, 1+1, Dt1(->maxstack), 16+FRAME_PCALL, DISPATCH_GL(hookmask), HOOK_ACTIVE_SHIFT);
-#line 1485 "vm_x64.dasc"
+#line 1506 "vm_x64.dasc"
   //|
   //|.ffunc_2 xpcall
   //|  mov L:RB, SAVE_L
@@ -2928,12 +2949,12 @@ static void build_subroutines(BuildCtx *ctx)
   dasm_put(Dst, 3626, LJ_TTHREAD, Dt1(->cframe), Dt1(->status), LUA_YIELD, Dt1(->top), Dt1(->base), Dt1(->maxstack));
   dasm_put(Dst, 3731, Dt1(->top), Dt1(->base), Dt1(->top), Dt1(->base), DISPATCH_GL(cur_L), DISPATCH_GL(vmstate), ~LJ_VMST_INTERP, LUA_YIELD);
   dasm_put(Dst, 3835, Dt1(->base), Dt1(->top), Dt1(->top), Dt1(->maxstack), (unsigned int)((int64_t)~((uint64_t)2<<47)), (unsigned int)(((int64_t)~((uint64_t)2<<47))>>32), FRAME_TYPE, (unsigned int)((int64_t)~((uint64_t)1<<47)), (unsigned int)(((int64_t)~((uint64_t)1<<47))>>32));
-#line 1643 "vm_x64.dasc"
+#line 1664 "vm_x64.dasc"
   //|  coroutine_resume_wrap 0		// coroutine.wrap
   dasm_put(Dst, 3955, Dt1(->top), Dt1(->top), 1+2, Dt1(->top), Dt1(->base), Dt8(->upvalue[0].gcr), Dt1(->cframe), Dt1(->status), LUA_YIELD);
   dasm_put(Dst, 4079, Dt1(->top), Dt1(->base), Dt1(->maxstack), Dt1(->top), Dt1(->base), Dt1(->top));
   dasm_put(Dst, 4182, Dt1(->base), DISPATCH_GL(cur_L), DISPATCH_GL(vmstate), ~LJ_VMST_INTERP, LUA_YIELD, Dt1(->base), Dt1(->top), Dt1(->top), Dt1(->maxstack));
-#line 1644 "vm_x64.dasc"
+#line 1665 "vm_x64.dasc"
   //|
   //|.ffunc coroutine_yield
   //|  mov L:RB, SAVE_L
@@ -2941,7 +2962,7 @@ static void build_subroutines(BuildCtx *ctx)
   //|  jz ->fff_fallback
   //|  mov L:RB->base, BASE
   dasm_put(Dst, 4272, FRAME_TYPE, Dt1(->top), Dt1(->base), Dt1(->cframe), CFRAME_RESUME);
-#line 1650 "vm_x64.dasc"
+#line 1671 "vm_x64.dasc"
   //|  lea RD, [BASE+NARGS:RD*8-8]
   //|  mov L:RB->top, RD
   //|  xor RDd, RDd
@@ -2981,7 +3002,7 @@ static void build_subroutines(BuildCtx *ctx)
   //|
   //|.ffunc_n math_sqrt, sqrtsd
   dasm_put(Dst, 4384, Dt1(->base), Dt1(->top), Dt1(->cframe), LUA_YIELD, Dt1(->status), 1+1, LJ_TISNUM, 1+1);
-#line 1688 "vm_x64.dasc"
+#line 1709 "vm_x64.dasc"
   //|->fff_resxmm0:
   //|  mov PC, [BASE-8]
   //|  movsd qword [BASE-16], xmm0
@@ -3011,7 +3032,7 @@ static void build_subroutines(BuildCtx *ctx)
   //|7:  // Non-standard return case.
   //|  mov RA, -16			// Results start at BASE+RA = BASE-16.
   dasm_put(Dst, 4476, LJ_TISNUM, 1+1, FRAME_TYPE, LJ_TNIL);
-#line 1716 "vm_x64.dasc"
+#line 1737 "vm_x64.dasc"
   //|  jmp ->vm_return
   //|
   //|.macro math_round, func
@@ -3043,7 +3064,7 @@ static void build_subroutines(BuildCtx *ctx)
   //|.ffunc math_log
   //|  cmp NARGS:RDd, 1+1; jne ->fff_fallback	// Exactly one argument.
   dasm_put(Dst, 4596, LJ_TISNUM, LJ_TISNUM);
-#line 1746 "vm_x64.dasc"
+#line 1767 "vm_x64.dasc"
   //|  checknumtp [BASE], ->fff_fallback
   //|  movsd xmm0, qword [BASE]
   //|  mov RB, BASE
@@ -3070,31 +3091,31 @@ static void build_subroutines(BuildCtx *ctx)
   //|  math_extern log10
   //|  math_extern exp
   dasm_put(Dst, 4676, 1+1, LJ_TISNUM, 1+1, LJ_TISNUM, 1+1);
-#line 1771 "vm_x64.dasc"
+#line 1792 "vm_x64.dasc"
   //|  math_extern sin
   //|  math_extern cos
   dasm_put(Dst, 4775, LJ_TISNUM, 1+1, LJ_TISNUM, 1+1);
-#line 1773 "vm_x64.dasc"
+#line 1794 "vm_x64.dasc"
   //|  math_extern tan
   //|  math_extern asin
   dasm_put(Dst, 4874, LJ_TISNUM, 1+1, LJ_TISNUM, 1+1, LJ_TISNUM);
-#line 1775 "vm_x64.dasc"
+#line 1796 "vm_x64.dasc"
   //|  math_extern acos
   //|  math_extern atan
   dasm_put(Dst, 4982, 1+1, LJ_TISNUM, 1+1, LJ_TISNUM);
-#line 1777 "vm_x64.dasc"
+#line 1798 "vm_x64.dasc"
   //|  math_extern sinh
   //|  math_extern cosh
   //|  math_extern tanh
   dasm_put(Dst, 5081, 1+1, LJ_TISNUM, 1+1, LJ_TISNUM);
-#line 1780 "vm_x64.dasc"
+#line 1801 "vm_x64.dasc"
   //|  math_extern2 pow
   //|  math_extern2 atan2
   dasm_put(Dst, 5198, 1+1, LJ_TISNUM, 2+1, LJ_TISNUM, LJ_TISNUM);
-#line 1782 "vm_x64.dasc"
+#line 1803 "vm_x64.dasc"
   //|  math_extern2 fmod
   dasm_put(Dst, 5317, 2+1, LJ_TISNUM, LJ_TISNUM, 2+1, LJ_TISNUM, LJ_TISNUM);
-#line 1783 "vm_x64.dasc"
+#line 1804 "vm_x64.dasc"
   //|
   //|.ffunc_2 math_ldexp
   //|  checknumtp [BASE], ->fff_fallback
@@ -3109,7 +3130,7 @@ static void build_subroutines(BuildCtx *ctx)
   //|
   //|.ffunc_n math_frexp
   dasm_put(Dst, 5428, 2+1, LJ_TISNUM, LJ_TISNUM, 1+1);
-#line 1796 "vm_x64.dasc"
+#line 1817 "vm_x64.dasc"
   //|  mov RB, BASE
   //|.if X64WIN
   //|  lea CARG2, TMP1		// Caveat: CARG2 == BASE
@@ -3192,10 +3213,10 @@ static void build_subroutines(BuildCtx *ctx)
   //|
   //|  math_minmax math_min, cmovg, minsd
   dasm_put(Dst, 5537, LJ_TISNUM, 1+2, 1+1, LJ_TISNUM, 1+2, 1+1);
-#line 1877 "vm_x64.dasc"
+#line 1898 "vm_x64.dasc"
   //|  math_minmax math_max, cmovl, maxsd
   dasm_put(Dst, 5684, LJ_TISNUM, LJ_TISNUM, 1+1, LJ_TISNUM);
-#line 1878 "vm_x64.dasc"
+#line 1899 "vm_x64.dasc"
   //|
   //|//-- String library -----------------------------------------------------
   //|
@@ -3208,7 +3229,7 @@ static void build_subroutines(BuildCtx *ctx)
   //|  jb ->fff_res0			// Return no results for empty string.
   //|  movzx RBd, byte STR:RB[1]
   dasm_put(Dst, 5796, LJ_TISNUM, 1+1, LJ_TSTR, Dt5(->len));
-#line 1889 "vm_x64.dasc"
+#line 1910 "vm_x64.dasc"
   //|.if DUALNUM
   //|  jmp ->fff_resi
   //|.else
@@ -3228,7 +3249,7 @@ static void build_subroutines(BuildCtx *ctx)
   //|  cmp RBd, 255;  ja ->fff_fallback
   //|  mov TMP1d, RBd
   dasm_put(Dst, 5907, Dt5([1]), DISPATCH_GL(gc.total), DISPATCH_GL(gc.threshold), 1+1, LJ_TISNUM);
-#line 1907 "vm_x64.dasc"
+#line 1928 "vm_x64.dasc"
   //|  mov TMPRd, 1
   //|  lea RD, TMP1			// Points to stack. Little-endian.
   //|->fff_newstr:
@@ -3253,7 +3274,7 @@ static void build_subroutines(BuildCtx *ctx)
   //|  cmp NARGS:RDd, 1+2;  jb ->fff_fallback
   //|  jna >1
   dasm_put(Dst, 5982, Dt1(->base), Dt1(->base), (unsigned int)(((uint64_t)LJ_TSTR<<47)), (unsigned int)((((uint64_t)LJ_TSTR<<47))>>32), DISPATCH_GL(gc.total), DISPATCH_GL(gc.threshold), 1+2);
-#line 1930 "vm_x64.dasc"
+#line 1951 "vm_x64.dasc"
   //|.if DUALNUM
   //|  mov TMPR, [BASE+16]
   //|  checkint TMPR, ->fff_fallback
@@ -3283,7 +3304,7 @@ static void build_subroutines(BuildCtx *ctx)
   //|3:
   //|  sub TMPRd, RAd			// start > end?
   dasm_put(Dst, 6090, LJ_TISNUM, LJ_TSTR, LJ_TISNUM, Dt5(->len));
-#line 1958 "vm_x64.dasc"
+#line 1979 "vm_x64.dasc"
   //|  jl ->fff_emptystr
   //|  lea RD, [STR:RB+RAd+#STR-1]
   //|  add TMPRd, 1
@@ -3306,7 +3327,7 @@ static void build_subroutines(BuildCtx *ctx)
   //|8:  // Underflow.
   //|  mov RAd, 1				// start = 1
   dasm_put(Dst, 6196, sizeof(GCstr)-1);
-#line 1979 "vm_x64.dasc"
+#line 2000 "vm_x64.dasc"
   //|  jmp <3
   //|
   //|->fff_emptystr:  // Range underflow.
@@ -3341,13 +3362,13 @@ static void build_subroutines(BuildCtx *ctx)
   //|
   //|ffstring_op reverse
   dasm_put(Dst, 6261, 1+1, DISPATCH_GL(gc.total), DISPATCH_GL(gc.threshold), LJ_TSTR);
-#line 2012 "vm_x64.dasc"
+#line 2033 "vm_x64.dasc"
   //|ffstring_op lower
   dasm_put(Dst, 6337, DISPATCH_GL(tmpbuf), Dt1(->base), DtE(->b), DtE(->L), DtE(->w), 1+1, DISPATCH_GL(gc.total), DISPATCH_GL(gc.threshold), LJ_TSTR);
-#line 2013 "vm_x64.dasc"
+#line 2034 "vm_x64.dasc"
   //|ffstring_op upper
   dasm_put(Dst, 6436, DISPATCH_GL(tmpbuf), Dt1(->base), DtE(->b), DtE(->L), DtE(->w), 1+1, DISPATCH_GL(gc.total), DISPATCH_GL(gc.threshold));
-#line 2014 "vm_x64.dasc"
+#line 2035 "vm_x64.dasc"
   //|
   //|//-- Bit library --------------------------------------------------------
   //|
@@ -3385,7 +3406,7 @@ static void build_subroutines(BuildCtx *ctx)
   //|
   //|.ffunc_bit bit_tobit, 0
   dasm_put(Dst, 6513, LJ_TSTR, DISPATCH_GL(tmpbuf), Dt1(->base), DtE(->b), DtE(->L), DtE(->w), 1+1, LJ_TISNUM, (unsigned int)(U64x(43380000,00000000)), (unsigned int)((U64x(43380000,00000000))>>32));
-#line 2050 "vm_x64.dasc"
+#line 2071 "vm_x64.dasc"
   //|  jmp ->fff_resbit
   //|
   //|.macro .ffunc_bit_op, name, ins
@@ -3417,21 +3438,21 @@ static void build_subroutines(BuildCtx *ctx)
   //|
   //|.ffunc_bit_op bit_band, and
   dasm_put(Dst, 6625, 1+1, (unsigned int)(U64x(43380000,00000000)), (unsigned int)((U64x(43380000,00000000))>>32), LJ_TISNUM, LJ_TISNUM);
-#line 2080 "vm_x64.dasc"
+#line 2101 "vm_x64.dasc"
   //|.ffunc_bit_op bit_bor, or
   //|.ffunc_bit_op bit_bxor, xor
   dasm_put(Dst, 6733, 1+1, (unsigned int)(U64x(43380000,00000000)), (unsigned int)((U64x(43380000,00000000))>>32), LJ_TISNUM, LJ_TISNUM);
-#line 2082 "vm_x64.dasc"
+#line 2103 "vm_x64.dasc"
   //|
   //|.ffunc_bit bit_bswap, 1
   dasm_put(Dst, 6871, 1+1, (unsigned int)(U64x(43380000,00000000)), (unsigned int)((U64x(43380000,00000000))>>32), LJ_TISNUM, LJ_TISNUM, 1+1);
-#line 2084 "vm_x64.dasc"
+#line 2105 "vm_x64.dasc"
   //|  bswap RBd
   //|  jmp ->fff_resbit
   //|
   //|.ffunc_bit bit_bnot, 1
   dasm_put(Dst, 6987, LJ_TISNUM, (unsigned int)(U64x(43380000,00000000)), (unsigned int)((U64x(43380000,00000000))>>32), 1+1, LJ_TISNUM, (unsigned int)(U64x(43380000,00000000)), (unsigned int)((U64x(43380000,00000000))>>32));
-#line 2088 "vm_x64.dasc"
+#line 2109 "vm_x64.dasc"
   //|  not RBd
   //|.if DUALNUM
   //|  jmp ->fff_resbit
@@ -3465,14 +3486,14 @@ static void build_subroutines(BuildCtx *ctx)
   //|
   //|.ffunc_bit_sh bit_lshift, shl
   dasm_put(Dst, 7076, 2+1, LJ_TISNUM, LJ_TISNUM, (unsigned int)(U64x(43380000,00000000)), (unsigned int)((U64x(43380000,00000000))>>32));
-#line 2120 "vm_x64.dasc"
+#line 2141 "vm_x64.dasc"
   //|.ffunc_bit_sh bit_rshift, shr
   //|.ffunc_bit_sh bit_arshift, sar
   dasm_put(Dst, 7176, 2+1, LJ_TISNUM, LJ_TISNUM, (unsigned int)(U64x(43380000,00000000)), (unsigned int)((U64x(43380000,00000000))>>32), 2+1);
-#line 2122 "vm_x64.dasc"
+#line 2143 "vm_x64.dasc"
   //|.ffunc_bit_sh bit_rol, rol
   dasm_put(Dst, 7306, LJ_TISNUM, LJ_TISNUM, (unsigned int)(U64x(43380000,00000000)), (unsigned int)((U64x(43380000,00000000))>>32), 2+1, LJ_TISNUM, LJ_TISNUM);
-#line 2123 "vm_x64.dasc"
+#line 2144 "vm_x64.dasc"
   //|.ffunc_bit_sh bit_ror, ror
   //|
   //|//-----------------------------------------------------------------------
@@ -3480,7 +3501,7 @@ static void build_subroutines(BuildCtx *ctx)
   //|->fff_fallback_2:
   //|  mov NARGS:RDd, 1+2			// Other args are ignored, anyway.
   dasm_put(Dst, 7432, (unsigned int)(U64x(43380000,00000000)), (unsigned int)((U64x(43380000,00000000))>>32), 2+1, LJ_TISNUM, LJ_TISNUM, (unsigned int)(U64x(43380000,00000000)), (unsigned int)((U64x(43380000,00000000))>>32));
-#line 2129 "vm_x64.dasc"
+#line 2150 "vm_x64.dasc"
   //|  jmp ->fff_fallback
   //|->fff_fallback_1:
   //|  mov NARGS:RDd, 1+1			// Other args are ignored, anyway.
@@ -3512,7 +3533,7 @@ static void build_subroutines(BuildCtx *ctx)
   //|  jne ->vm_call_tail			// Returned -1?
   //|  cleartp LFUNC:RB
   dasm_put(Dst, 7568, 1+2, 1+1, Dt1(->base), 8*LUA_MINSTACK, Dt1(->top), Dt1(->maxstack), Dt8(->f), Dt1(->base), Dt1(->top));
-#line 2159 "vm_x64.dasc"
+#line 2180 "vm_x64.dasc"
   //|  ins_callt				// Returned 0: retry fast path.
   //|
   //|// Reconstruct previous base for vmeta_call during tailcall.
@@ -3552,7 +3573,7 @@ static void build_subroutines(BuildCtx *ctx)
   //|  mov BASE, L:RB->base
   //|  mov RD, L:RB->top
   dasm_put(Dst, 7680, Dt7(->pc), FRAME_TYPE, LUA_MINSTACK, Dt1(->base), Dt1(->base), Dt1(->top), Dt1(->base));
-#line 2197 "vm_x64.dasc"
+#line 2218 "vm_x64.dasc"
   //|  sub RD, BASE
   //|  shr RDd, 3
   //|  add NARGS:RDd, 1
@@ -3566,6 +3587,7 @@ static void build_subroutines(BuildCtx *ctx)
   //|
   //|->vm_record:				// Dispatch target for recording phase.
   //|.if JIT
+  //|  endbr
   //|  movzx RDd, byte [DISPATCH+DISPATCH_GL(hookmask)]
   //|  test RDL, HOOK_VMEVENT		// No recording while in vmevent.
   //|  jnz >5
@@ -3579,14 +3601,16 @@ static void build_subroutines(BuildCtx *ctx)
   //|.endif
   //|
   //|->vm_rethook:			// Dispatch target for return hooks.
+  //|  endbr
   //|  movzx RDd, byte [DISPATCH+DISPATCH_GL(hookmask)]
   //|  test RDL, HOOK_ACTIVE		// Hook already active?
   //|  jnz >5
   //|  jmp >1
   dasm_put(Dst, 7829, Dt1(->top), DISPATCH_GL(hookmask), HOOK_VMEVENT, HOOK_ACTIVE, LUA_MASKLINE|LUA_MASKCOUNT, DISPATCH_GL(hookcount), DISPATCH_GL(hookmask), HOOK_ACTIVE);
-#line 2227 "vm_x64.dasc"
+#line 2250 "vm_x64.dasc"
   //|
   //|->vm_inshook:			// Dispatch target for instr/line hooks.
+  //|  endbr
   //|  movzx RDd, byte [DISPATCH+DISPATCH_GL(hookmask)]
   //|  test RDL, HOOK_ACTIVE		// Hook already active?
   //|  jnz >5
@@ -3607,7 +3631,7 @@ static void build_subroutines(BuildCtx *ctx)
   //|3:
   //|  mov BASE, L:RB->base
   dasm_put(Dst, 7896, DISPATCH_GL(hookmask), HOOK_ACTIVE, LUA_MASKLINE|LUA_MASKCOUNT, DISPATCH_GL(hookcount), LUA_MASKLINE, Dt1(->base));
-#line 2248 "vm_x64.dasc"
+#line 2272 "vm_x64.dasc"
   //|4:
   //|  movzx RAd, PC_RA
   //|5:
@@ -3616,6 +3640,7 @@ static void build_subroutines(BuildCtx *ctx)
   //|  jmp aword [DISPATCH+OP*8+GG_DISP2STATIC]	// Re-dispatch to static ins.
   //|
   //|->cont_hook:				// Continue from hook yield.
+  //|  endbr
   //|  add PC, 4
   //|  mov RA, [RB-40]
   //|  mov MULTRES, RAd			// Restore MULTRES for *M ins.
@@ -3640,6 +3665,7 @@ static void build_subroutines(BuildCtx *ctx)
   //|.endif
   //|
   //|->vm_callhook:			// Dispatch target for call hooks.
+  //|  endbr
   //|  mov SAVE_PC, PC
   //|.if JIT
   //|  jmp >1
@@ -3649,7 +3675,7 @@ static void build_subroutines(BuildCtx *ctx)
   //|.if JIT
   //|  mov SAVE_PC, PC
   dasm_put(Dst, 7959, Dt1(->base), GG_DISP2STATIC, Dt7(->pc), PC2PROTO(framesize), Dt1(->base), Dt1(->top), GG_DISP2J, DISPATCH_J(L));
-#line 2288 "vm_x64.dasc"
+#line 2314 "vm_x64.dasc"
   //|  or PC, 1				// Marker for hot call.
   //|1:
   //|.endif
@@ -3677,6 +3703,7 @@ static void build_subroutines(BuildCtx *ctx)
   //|
   //|->cont_stitch:			// Trace stitching.
   //|.if JIT
+  //|  endbr
   //|  // BASE = base, RC = result, RB = mbase
   //|  mov TRACE:ITYPE, [RB-40]		// Save previous trace.
   //|  cleartp TRACE:ITYPE
@@ -3707,7 +3734,7 @@ static void build_subroutines(BuildCtx *ctx)
   //|  movzx RDd, word TRACE:ITYPE->link
   //|  cmp RDd, RBd
   dasm_put(Dst, 8086, Dt1(->base), Dt1(->top), Dt1(->base), Dt1(->top), DtD(->traceno), DtD(->link));
-#line 2344 "vm_x64.dasc"
+#line 2371 "vm_x64.dasc"
   //|  je ->cont_nop			// Blacklisted.
   //|  test RDd, RDd
   //|  jne =>BC_JLOOP			// Jump to stitched trace.
@@ -3731,8 +3758,9 @@ static void build_subroutines(BuildCtx *ctx)
   //|
   //|->vm_profhook:			// Dispatch target for profiler hook.
   dasm_put(Dst, 8282, BC_JLOOP, DISPATCH_J(exitno), Dt1(->base), GG_DISP2J, DISPATCH_J(L), Dt1(->base), LJ_TNIL);
-#line 2366 "vm_x64.dasc"
+#line 2393 "vm_x64.dasc"
 #if LJ_HASPROFILE
+  //|  endbr
   //|  mov L:RB, SAVE_L
   //|  mov L:RB->base, BASE
   //|  mov CARG2, PC			// Caveat: CARG2 == BASE
@@ -3743,7 +3771,7 @@ static void build_subroutines(BuildCtx *ctx)
   //|  sub PC, 4
   //|  jmp ->cont_nop
   dasm_put(Dst, 8346, Dt1(->base), Dt1(->base));
-#line 2376 "vm_x64.dasc"
+#line 2404 "vm_x64.dasc"
 #endif
   //|
   //|//-----------------------------------------------------------------------
@@ -3754,6 +3782,7 @@ static void build_subroutines(BuildCtx *ctx)
   //|// The 16 bit exit number is stored with two (sign-extended) push imm8.
   //|->vm_exit_handler:
   //|.if JIT
+  //|  endbr
   //|  push r13; push r12
   //|  push r11; push r10; push r9; push r8
   //|  push rdi; push rsi; push rbp; lea rbp, [rsp+88]; push rbp
@@ -3802,6 +3831,7 @@ static void build_subroutines(BuildCtx *ctx)
   //|  jmp >1
   //|.endif
   //|->vm_exit_interp:
+  //|  endbr
   //|  // RD = MULTRES or negated error code, BASE, PC and DISPATCH set.
   //|.if JIT
   //|  // Restore additional callee-save registers only used in compiled code.
@@ -3826,7 +3856,7 @@ static void build_subroutines(BuildCtx *ctx)
   //|.else
   //|  lea RA, [rsp+16]
   dasm_put(Dst, 8380, DISPATCH_GL(vmstate), DISPATCH_GL(vmstate), ~LJ_VMST_EXIT, DISPATCH_J(exitno), DISPATCH_J(parent), 16*8, DISPATCH_GL(cur_L), DISPATCH_GL(jit_base), DISPATCH_J(L), Dt1(->base), GG_DISP2J, DISPATCH_GL(jit_base), Dt1(->cframe), CFRAME_RAWMASK, CFRAME_OFS_L, Dt1(->base), CFRAME_OFS_PC);
-#line 2457 "vm_x64.dasc"
+#line 2487 "vm_x64.dasc"
   //|1:
   //|  mov r13, [RA-8]
   //|  mov r12, [RA]
@@ -3857,7 +3887,7 @@ static void build_subroutines(BuildCtx *ctx)
   //|2:
   //|  mov RCd, MULTRES			// RC/RD holds nres+1.
   dasm_put(Dst, 8620, -LUA_ERRERR, Dt7(->pc), PC2PROTO(k), Dt1(->base), DISPATCH_GL(jit_base), DISPATCH_GL(vmstate), ~LJ_VMST_INTERP, BC_FUNCF, BC_FUNCC+2);
-#line 2486 "vm_x64.dasc"
+#line 2516 "vm_x64.dasc"
   //|3:
   //|  jmp aword [DISPATCH+OP*8]
   //|
@@ -3899,6 +3929,7 @@ static void build_subroutines(BuildCtx *ctx)
   //|.macro vm_round, name, mode, cond
   //|->name:
   //|->name .. _sse:
+  //|  endbr
   //|  sseconst_abs xmm2, RD
   //|  sseconst_2p52 xmm3, RD
   //|  movaps xmm1, xmm0
@@ -3938,11 +3969,11 @@ static void build_subroutines(BuildCtx *ctx)
   //|
   //|  vm_round vm_floor, 0, 1
   dasm_put(Dst, 8736, FRAME_TYPE, Dt7(->pc), PC2PROTO(k), DISPATCH_J(trace), DtD(->startins), GG_DISP2STATIC, (unsigned int)(U64x(7fffffff,ffffffff)), (unsigned int)((U64x(7fffffff,ffffffff))>>32), (unsigned int)(U64x(43300000,00000000)), (unsigned int)((U64x(43300000,00000000))>>32));
-#line 2565 "vm_x64.dasc"
+#line 2596 "vm_x64.dasc"
   //|  vm_round vm_ceil,  1, JIT
   //|  vm_round vm_trunc, 2, JIT
   dasm_put(Dst, 8858, (unsigned int)(U64x(3ff00000,00000000)), (unsigned int)((U64x(3ff00000,00000000))>>32), (unsigned int)(U64x(7fffffff,ffffffff)), (unsigned int)((U64x(7fffffff,ffffffff))>>32), (unsigned int)(U64x(43300000,00000000)), (unsigned int)((U64x(43300000,00000000))>>32), (unsigned int)(U64x(3ff00000,00000000)), (unsigned int)((U64x(3ff00000,00000000))>>32), (unsigned int)(U64x(7fffffff,ffffffff)), (unsigned int)((U64x(7fffffff,ffffffff))>>32));
-#line 2567 "vm_x64.dasc"
+#line 2598 "vm_x64.dasc"
   //|
   //|// FP modulo x%y. Called by BC_MOD* and vm_arith.
   //|->vm_mod:
@@ -4013,9 +4044,10 @@ static void build_subroutines(BuildCtx *ctx)
   //|// Next idx returned in edx.
   //|->vm_next:
   //|.if JIT
+  //|  endbr
   //|  mov NEXT_ASIZE, NEXT_TAB->asize
   dasm_put(Dst, 9024, (unsigned int)(U64x(43300000,00000000)), (unsigned int)((U64x(43300000,00000000))>>32), (unsigned int)(U64x(3ff00000,00000000)), (unsigned int)((U64x(3ff00000,00000000))>>32), (unsigned int)(U64x(7fffffff,ffffffff)), (unsigned int)((U64x(7fffffff,ffffffff))>>32), (unsigned int)(U64x(43300000,00000000)), (unsigned int)((U64x(43300000,00000000))>>32), (unsigned int)(U64x(3ff00000,00000000)), (unsigned int)((U64x(3ff00000,00000000))>>32));
-#line 2638 "vm_x64.dasc"
+#line 2670 "vm_x64.dasc"
   //|1:  // Traverse array part.
   //|  cmp NEXT_IDX, NEXT_ASIZE;  jae >5
   //|  mov NEXT_TMP, NEXT_TAB->array
@@ -4044,7 +4076,7 @@ static void build_subroutines(BuildCtx *ctx)
   //|  add NODE:NEXT_PTR, NEXT_TAB->node
   //|  cmp qword NODE:NEXT_PTR->val, LJ_TNIL; je >7
   dasm_put(Dst, 9245, Dt6(->asize), Dt6(->array), LJ_TNIL, Dt6(->hmask), sizeof(Node), Dt6(->node), DtB(->val), LJ_TNIL);
-#line 2665 "vm_x64.dasc"
+#line 2697 "vm_x64.dasc"
   //|  NEXT_RES_IDXL NEXT_ASIZE+1
   //|  ret
   //|7:  // Skip holes in hash part.
@@ -4064,11 +4096,11 @@ static void build_subroutines(BuildCtx *ctx)
   //|
   //|->assert_bad_for_arg_type:
   dasm_put(Dst, 9332, LJ_TNIL);
-#line 2683 "vm_x64.dasc"
+#line 2715 "vm_x64.dasc"
 #ifdef LUA_USE_ASSERT
   //|  int3
   dasm_put(Dst, 9369);
-#line 2685 "vm_x64.dasc"
+#line 2717 "vm_x64.dasc"
 #endif
   //|  int3
   //|
@@ -4081,7 +4113,7 @@ static void build_subroutines(BuildCtx *ctx)
   //|.if FFI
   //|.type CTSTATE, CTState, PC
 #define DtF(_V) (int)(ptrdiff_t)&(((CTState *)0)_V)
-#line 2696 "vm_x64.dasc"
+#line 2728 "vm_x64.dasc"
   //|  saveregs_	// ebp/rbp already saved. ebp now holds global_State *.
   //|  lea DISPATCH, [ebp+GG_G2DISP]
   //|  mov CTSTATE, GL:ebp->ctype_state
@@ -4108,7 +4140,7 @@ static void build_subroutines(BuildCtx *ctx)
   //|.endif
   //|  mov CTSTATE->cb.stack, rax
   dasm_put(Dst, 9371, GG_G2DISP, Dt2(->ctype_state), DtF(->cb.slot), DtF(->cb.gpr[0]), DtF(->cb.gpr[1]), DtF(->cb.gpr[2]), DtF(->cb.gpr[3]), DtF(->cb.fpr[0]), DtF(->cb.fpr[1]), DtF(->cb.fpr[2]), DtF(->cb.fpr[3]), CFRAME_SIZE, DtF(->cb.gpr[4]), DtF(->cb.gpr[5]), DtF(->cb.fpr[4]), DtF(->cb.fpr[5]), DtF(->cb.fpr[6]), DtF(->cb.fpr[7]));
-#line 2721 "vm_x64.dasc"
+#line 2753 "vm_x64.dasc"
   //|  mov CARG2, rsp
   //|  mov SAVE_PC, CTSTATE		// Any value outside of bytecode is ok.
   //|  mov CARG1, CTSTATE
@@ -4145,7 +4177,7 @@ static void build_subroutines(BuildCtx *ctx)
   //|.if FFI
   //|  .type CCSTATE, CCallState, rbx
 #define Dt10(_V) (int)(ptrdiff_t)&(((CCallState *)0)_V)
-#line 2756 "vm_x64.dasc"
+#line 2788 "vm_x64.dasc"
   //|  push rbp; mov rbp, rsp; push rbx; mov CCSTATE, CARG1
   //|
   //|  // Readjust stack.
@@ -4159,7 +4191,7 @@ static void build_subroutines(BuildCtx *ctx)
   //|1:
   //|  mov rax, [CCSTATE+rcx+offsetof(CCallState, stack)]
   dasm_put(Dst, 9477, DtF(->cb.stack), DISPATCH_GL(vmstate), ~LJ_VMST_INTERP, Dt1(->base), Dt1(->top), Dt7(->pc), DISPATCH_GL(ctype_state), DtF(->L), Dt1(->base), Dt1(->top), DtF(->cb.gpr[0]), DtF(->cb.fpr[0]), Dt10(->spadj), Dt10(->nsp));
-#line 2768 "vm_x64.dasc"
+#line 2800 "vm_x64.dasc"
   //|  mov [rsp+rcx+CCALL_SPS_EXTRA*8], rax
   //|  sub ecx, 8
   //|  jns <1
@@ -4183,7 +4215,7 @@ static void build_subroutines(BuildCtx *ctx)
   //|  cmp eax, 4; jbe >5
   //|  movaps xmm4, CCSTATE->fpr[4]
   dasm_put(Dst, 9636, offsetof(CCallState, stack), CCALL_SPS_EXTRA*8, Dt10(->nfpr), Dt10(->gpr[0]), Dt10(->gpr[1]), Dt10(->gpr[2]), Dt10(->gpr[3]), Dt10(->gpr[4]), Dt10(->gpr[5]), Dt10(->fpr[0]), Dt10(->fpr[1]), Dt10(->fpr[2]), Dt10(->fpr[3]));
-#line 2790 "vm_x64.dasc"
+#line 2822 "vm_x64.dasc"
   //|  movaps xmm5, CCSTATE->fpr[5]
   //|  movaps xmm6, CCSTATE->fpr[6]
   //|  movaps xmm7, CCSTATE->fpr[7]
@@ -4205,7 +4237,7 @@ static void build_subroutines(BuildCtx *ctx)
   //|
   //|//-----------------------------------------------------------------------
   dasm_put(Dst, 9717, Dt10(->fpr[4]), Dt10(->fpr[5]), Dt10(->fpr[6]), Dt10(->fpr[7]), Dt10(->func), Dt10(->gpr[0]), Dt10(->fpr[0]), Dt10(->gpr[1]), Dt10(->fpr[1]));
-#line 2810 "vm_x64.dasc"
+#line 2842 "vm_x64.dasc"
 }
 
 /* Generate the code for a single instruction. */
@@ -4215,7 +4247,7 @@ static void build_ins(BuildCtx *ctx, BCOp op, int defop)
   //|// Note: aligning all instructions does not pay off.
   //|=>defop:
   dasm_put(Dst, 9763, defop);
-#line 2818 "vm_x64.dasc"
+#line 2850 "vm_x64.dasc"
 
   switch (op) {
 
@@ -4310,14 +4342,14 @@ static void build_ins(BuildCtx *ctx, BCOp op, int defop)
     break;
     default: break;  /* Shut up GCC. */
     }
-#line 2896 "vm_x64.dasc"
+#line 2928 "vm_x64.dasc"
     //|  movzx RDd, PC_RD
     //|  branchPC RD
     //|1:
     //|  ins_next
     //|.endif
     dasm_put(Dst, 9846, -BCBIAS_J*4);
-#line 2901 "vm_x64.dasc"
+#line 2933 "vm_x64.dasc"
     break;
 
   case BC_ISEQV: case BC_ISNEV:
@@ -4335,7 +4367,7 @@ static void build_ins(BuildCtx *ctx, BCOp op, int defop)
     //|  cmp ITYPEd, LJ_TISNUM; jne >8
     //|  cmp RDd, RAd
     dasm_put(Dst, 9881);
-#line 2917 "vm_x64.dasc"
+#line 2949 "vm_x64.dasc"
     if (vk) {
       //|  jne >9
     } else {
@@ -4372,18 +4404,18 @@ static void build_ins(BuildCtx *ctx, BCOp op, int defop)
     //|  ucomisd xmm0, xmm1
     //|4:
     dasm_put(Dst, 9910, LJ_TISNUM, LJ_TISNUM);
-#line 2952 "vm_x64.dasc"
+#line 2984 "vm_x64.dasc"
   iseqne_fp:
     if (vk) {
       //|  jp >2				// Unordered means not equal.
       //|  jne >2
       dasm_put(Dst, 9948);
-#line 2956 "vm_x64.dasc"
+#line 2988 "vm_x64.dasc"
     } else {
       //|  jp >2				// Unordered means not equal.
       //|  je >1
       dasm_put(Dst, 9957);
-#line 2959 "vm_x64.dasc"
+#line 2991 "vm_x64.dasc"
     }
   iseqne_end:
     if (vk) {
@@ -4395,7 +4427,7 @@ static void build_ins(BuildCtx *ctx, BCOp op, int defop)
       //|3:
       //|.endif
       dasm_put(Dst, 9966, -BCBIAS_J*4);
-#line 2969 "vm_x64.dasc"
+#line 3001 "vm_x64.dasc"
     } else {
       //|.if not FFI
       //|3:
@@ -4405,17 +4437,17 @@ static void build_ins(BuildCtx *ctx, BCOp op, int defop)
       //|  branchPC RD
       //|1:				// EQ: Fallthrough to next instruction.
       dasm_put(Dst, 9982, -BCBIAS_J*4);
-#line 2977 "vm_x64.dasc"
+#line 3009 "vm_x64.dasc"
     }
     if (LJ_DUALNUM && (op == BC_ISEQV || op == BC_ISNEV ||
 		       op == BC_ISEQN || op == BC_ISNEN)) {
       //|  jmp <9
       dasm_put(Dst, 9998);
-#line 2981 "vm_x64.dasc"
+#line 3013 "vm_x64.dasc"
     } else {
       //|  ins_next
       dasm_put(Dst, 9859);
-#line 2983 "vm_x64.dasc"
+#line 3015 "vm_x64.dasc"
     }
     //|
     if (op == BC_ISEQV || op == BC_ISNEV) {
@@ -4441,38 +4473,38 @@ static void build_ins(BuildCtx *ctx, BCOp op, int defop)
       //|  jnz <2				// Or 'no __eq' flag set?
       dasm_put(Dst, 10003, LJ_TCDATA, LJ_TCDATA, LJ_TISTABUD, Dt6(->metatable), Dt6(->nomm), 1<<MM_eq);
       dasm_put(Dst, 10071);
-#line 3006 "vm_x64.dasc"
+#line 3038 "vm_x64.dasc"
       if (vk) {
 	//|  xor RBd, RBd			// ne = 0
 	dasm_put(Dst, 10076);
-#line 3008 "vm_x64.dasc"
+#line 3040 "vm_x64.dasc"
       } else {
 	//|  mov RBd, 1			// ne = 1
 	dasm_put(Dst, 10080);
-#line 3010 "vm_x64.dasc"
+#line 3042 "vm_x64.dasc"
       }
       //|  jmp ->vmeta_equal		// Handle __eq metamethod.
       dasm_put(Dst, 10086);
-#line 3012 "vm_x64.dasc"
+#line 3044 "vm_x64.dasc"
     } else {
       //|.if FFI
       //|3:
       //|  cmp ITYPEd, LJ_TCDATA
       dasm_put(Dst, 10091, LJ_TCDATA);
-#line 3016 "vm_x64.dasc"
+#line 3048 "vm_x64.dasc"
       if (LJ_DUALNUM && vk) {
 	//|  jne <9
 	dasm_put(Dst, 10099);
-#line 3018 "vm_x64.dasc"
+#line 3050 "vm_x64.dasc"
       } else {
 	//|  jne <2
 	dasm_put(Dst, 10071);
-#line 3020 "vm_x64.dasc"
+#line 3052 "vm_x64.dasc"
       }
       //|  jmp ->vmeta_equal_cd
       //|.endif
       dasm_put(Dst, 10104);
-#line 3023 "vm_x64.dasc"
+#line 3055 "vm_x64.dasc"
     }
     break;
   case BC_ISEQS: case BC_ISNES:
@@ -4483,16 +4515,16 @@ static void build_ins(BuildCtx *ctx, BCOp op, int defop)
     //|  checkstr RB, >3
     //|  cmp RB, [KBASE+RD*8]
     dasm_put(Dst, 10109, LJ_TSTR);
-#line 3032 "vm_x64.dasc"
+#line 3064 "vm_x64.dasc"
   iseqne_test:
     if (vk) {
       //|  jne >2
       dasm_put(Dst, 9952);
-#line 3035 "vm_x64.dasc"
+#line 3067 "vm_x64.dasc"
     } else {
       //|  je >1
       dasm_put(Dst, 9961);
-#line 3037 "vm_x64.dasc"
+#line 3069 "vm_x64.dasc"
     }
     goto iseqne_end;
   case BC_ISEQN: case BC_ISNEN:
@@ -4506,7 +4538,7 @@ static void build_ins(BuildCtx *ctx, BCOp op, int defop)
     //|  checkint RD, >8
     //|  cmp RBd, RDd
     dasm_put(Dst, 10153);
-#line 3049 "vm_x64.dasc"
+#line 3081 "vm_x64.dasc"
     if (vk) {
       //|  jne >9
     } else {
@@ -4542,7 +4574,7 @@ static void build_ins(BuildCtx *ctx, BCOp op, int defop)
     //|  ucomisd xmm0, qword [BASE+RA*8]
     //|4:
     dasm_put(Dst, 10162, LJ_TISNUM);
-#line 3083 "vm_x64.dasc"
+#line 3115 "vm_x64.dasc"
     goto iseqne_fp;
   case BC_ISEQP: case BC_ISNEP:
     vk = op == BC_ISEQP;
@@ -4552,7 +4584,7 @@ static void build_ins(BuildCtx *ctx, BCOp op, int defop)
     //|  add PC, 4
     //|  cmp RBd, RDd
     dasm_put(Dst, 10199);
-#line 3091 "vm_x64.dasc"
+#line 3123 "vm_x64.dasc"
     if (!LJ_HASFFI) goto iseqne_test;
     if (vk) {
       //|  jne >3
@@ -4564,7 +4596,7 @@ static void build_ins(BuildCtx *ctx, BCOp op, int defop)
       //|  cmp RBd, LJ_TCDATA; jne <2
       //|  jmp ->vmeta_equal_cd
       dasm_put(Dst, 10219, -BCBIAS_J*4, LJ_TCDATA);
-#line 3101 "vm_x64.dasc"
+#line 3133 "vm_x64.dasc"
     } else {
       //|  je >2
       //|  cmp RBd, LJ_TCDATA; je ->vmeta_equal_cd
@@ -4573,7 +4605,7 @@ static void build_ins(BuildCtx *ctx, BCOp op, int defop)
       //|2:
       //|  ins_next
       dasm_put(Dst, 10272, LJ_TCDATA, -BCBIAS_J*4);
-#line 3108 "vm_x64.dasc"
+#line 3140 "vm_x64.dasc"
     }
     break;
 
@@ -4584,36 +4616,36 @@ static void build_ins(BuildCtx *ctx, BCOp op, int defop)
     //|  mov ITYPE, [BASE+RD*8]
     //|  add PC, 4
     dasm_put(Dst, 10319);
-#line 3117 "vm_x64.dasc"
+#line 3149 "vm_x64.dasc"
     if (op == BC_ISTC || op == BC_ISFC) {
       //|  mov RB, ITYPE
       dasm_put(Dst, 10328);
-#line 3119 "vm_x64.dasc"
+#line 3151 "vm_x64.dasc"
     }
     //|  sar ITYPE, 47
     //|  cmp ITYPEd, LJ_TISTRUECOND
     dasm_put(Dst, 4971, LJ_TISTRUECOND);
-#line 3122 "vm_x64.dasc"
+#line 3154 "vm_x64.dasc"
     if (op == BC_IST || op == BC_ISTC) {
       //|  jae >1
       dasm_put(Dst, 9841);
-#line 3124 "vm_x64.dasc"
+#line 3156 "vm_x64.dasc"
     } else {
       //|  jb >1
       dasm_put(Dst, 2922);
-#line 3126 "vm_x64.dasc"
+#line 3158 "vm_x64.dasc"
     }
     if (op == BC_ISTC || op == BC_ISFC) {
       //|  mov [BASE+RA*8], RB
       dasm_put(Dst, 10332);
-#line 3129 "vm_x64.dasc"
+#line 3161 "vm_x64.dasc"
     }
     //|  movzx RDd, PC_RD
     //|  branchPC RD
     //|1:					// Fallthrough to the next instruction.
     //|  ins_next
     dasm_put(Dst, 9846, -BCBIAS_J*4);
-#line 3134 "vm_x64.dasc"
+#line 3166 "vm_x64.dasc"
     break;
 
   case BC_ISTYPE:
@@ -4624,14 +4656,14 @@ static void build_ins(BuildCtx *ctx, BCOp op, int defop)
     //|  jne ->vmeta_istype
     //|  ins_next
     dasm_put(Dst, 10337);
-#line 3143 "vm_x64.dasc"
+#line 3175 "vm_x64.dasc"
     break;
   case BC_ISNUM:
     //|  ins_AD	// RA = src, RD = -(TISNUM-1)
     //|  checknumtp [BASE+RA*8], ->vmeta_istype
     //|  ins_next
     dasm_put(Dst, 10374, LJ_TISNUM);
-#line 3148 "vm_x64.dasc"
+#line 3180 "vm_x64.dasc"
     break;
 
   /* -- Unary ops --------------------------------------------------------- */
@@ -4642,7 +4674,7 @@ static void build_ins(BuildCtx *ctx, BCOp op, int defop)
     //|  mov [BASE+RA*8], RB
     //|  ins_next_
     dasm_put(Dst, 10414);
-#line 3157 "vm_x64.dasc"
+#line 3189 "vm_x64.dasc"
     break;
   case BC_NOT:
     //|  ins_AD	// RA = dst, RD = src
@@ -4656,7 +4688,7 @@ static void build_ins(BuildCtx *ctx, BCOp op, int defop)
     //|  mov [BASE+RA*8], RC
     //|  ins_next
     dasm_put(Dst, 10444, LJ_TISTRUECOND);
-#line 3169 "vm_x64.dasc"
+#line 3201 "vm_x64.dasc"
     break;
   case BC_UNM:
     //|  ins_AD	// RA = dst, RD = src
@@ -4686,7 +4718,7 @@ static void build_ins(BuildCtx *ctx, BCOp op, int defop)
     //|  ins_next
     //|.endif
     dasm_put(Dst, 10500, LJ_TISNUM, (unsigned int)(U64x(80000000,00000000)), (unsigned int)((U64x(80000000,00000000))>>32));
-#line 3197 "vm_x64.dasc"
+#line 3229 "vm_x64.dasc"
     break;
   case BC_LEN:
     //|  ins_AD	// RA = dst, RD = src
@@ -4708,14 +4740,14 @@ static void build_ins(BuildCtx *ctx, BCOp op, int defop)
     //|  cmp ITYPEd, LJ_TTAB; jne ->vmeta_len
     //|  mov TAB:CARG1, TAB:RD
     dasm_put(Dst, 10555, LJ_TSTR, Dt5(->len), LJ_TTAB);
-#line 3217 "vm_x64.dasc"
+#line 3249 "vm_x64.dasc"
 #if LJ_52
     //|  mov TAB:RB, TAB:RD->metatable
     //|  cmp TAB:RB, 0
     //|  jnz >9
     //|3:
     dasm_put(Dst, 10637, Dt6(->metatable));
-#line 3222 "vm_x64.dasc"
+#line 3254 "vm_x64.dasc"
 #endif
     //|->BC_LEN_Z:
     //|  mov RB, BASE			// Save BASE.
@@ -4730,14 +4762,14 @@ static void build_ins(BuildCtx *ctx, BCOp op, int defop)
     //|  movzx RAd, PC_RA
     //|  jmp <1
     dasm_put(Dst, 10653);
-#line 3235 "vm_x64.dasc"
+#line 3267 "vm_x64.dasc"
 #if LJ_52
     //|9:  // Check for __len.
     //|  test byte TAB:RB->nomm, 1<<MM_len
     //|  jnz <3
     //|  jmp ->vmeta_len			// 'no __len' flag NOT set: check.
     dasm_put(Dst, 10681, Dt6(->nomm), 1<<MM_len);
-#line 3240 "vm_x64.dasc"
+#line 3272 "vm_x64.dasc"
 #endif
     break;
 
@@ -4843,7 +4875,7 @@ static void build_ins(BuildCtx *ctx, BCOp op, int defop)
       break;
     }
     dasm_put(Dst, 10824);
-#line 3331 "vm_x64.dasc"
+#line 3363 "vm_x64.dasc"
     break;
   case BC_SUBVN: case BC_SUBNV: case BC_SUBVV:
     //|  ins_arith sub, subsd
@@ -4861,7 +4893,7 @@ static void build_ins(BuildCtx *ctx, BCOp op, int defop)
       break;
     }
     dasm_put(Dst, 10824);
-#line 3334 "vm_x64.dasc"
+#line 3366 "vm_x64.dasc"
     break;
   case BC_MULVN: case BC_MULNV: case BC_MULVV:
     //|  ins_arith imul, mulsd
@@ -4879,7 +4911,7 @@ static void build_ins(BuildCtx *ctx, BCOp op, int defop)
       break;
     }
     dasm_put(Dst, 10824);
-#line 3337 "vm_x64.dasc"
+#line 3369 "vm_x64.dasc"
     break;
   case BC_DIVVN: case BC_DIVNV: case BC_DIVVV:
     //|  ins_arith divsd
@@ -4897,7 +4929,7 @@ static void build_ins(BuildCtx *ctx, BCOp op, int defop)
       break;
     }
     dasm_put(Dst, 10824);
-#line 3340 "vm_x64.dasc"
+#line 3372 "vm_x64.dasc"
     break;
   case BC_MODVN:
     //|  ins_arithpre movsd, xmm1
@@ -4914,13 +4946,13 @@ static void build_ins(BuildCtx *ctx, BCOp op, int defop)
     dasm_put(Dst, 11277, LJ_TISNUM, LJ_TISNUM);
       break;
     }
-#line 3343 "vm_x64.dasc"
+#line 3375 "vm_x64.dasc"
     //|->BC_MODVN_Z:
     //|  call ->vm_mod
     //|  ins_arithpost
     //|  ins_next
     dasm_put(Dst, 11328);
-#line 3347 "vm_x64.dasc"
+#line 3379 "vm_x64.dasc"
     break;
   case BC_MODNV: case BC_MODVV:
     //|  ins_arithpre movsd, xmm1
@@ -4937,10 +4969,10 @@ static void build_ins(BuildCtx *ctx, BCOp op, int defop)
     dasm_put(Dst, 11277, LJ_TISNUM, LJ_TISNUM);
       break;
     }
-#line 3350 "vm_x64.dasc"
+#line 3382 "vm_x64.dasc"
     //|  jmp ->BC_MODVN_Z			// Avoid 3 copies. It's slow anyway.
     dasm_put(Dst, 11361);
-#line 3351 "vm_x64.dasc"
+#line 3383 "vm_x64.dasc"
     break;
   case BC_POW:
     //|  ins_arithpre movsd, xmm1
@@ -4957,7 +4989,7 @@ static void build_ins(BuildCtx *ctx, BCOp op, int defop)
     dasm_put(Dst, 11277, LJ_TISNUM, LJ_TISNUM);
       break;
     }
-#line 3354 "vm_x64.dasc"
+#line 3386 "vm_x64.dasc"
     //|  mov RB, BASE
     //|  call extern pow
     //|  movzx RAd, PC_RA
@@ -4965,7 +4997,7 @@ static void build_ins(BuildCtx *ctx, BCOp op, int defop)
     //|  ins_arithpost
     //|  ins_next
     dasm_put(Dst, 11366);
-#line 3360 "vm_x64.dasc"
+#line 3392 "vm_x64.dasc"
     break;
 
   case BC_CAT:
@@ -4989,7 +5021,7 @@ static void build_ins(BuildCtx *ctx, BCOp op, int defop)
     //|  mov [BASE+RA*8], RC
     //|  ins_next
     dasm_put(Dst, 11410, Dt1(->base), Dt1(->base));
-#line 3382 "vm_x64.dasc"
+#line 3414 "vm_x64.dasc"
     break;
 
   /* -- Constant ops ------------------------------------------------------ */
@@ -5001,7 +5033,7 @@ static void build_ins(BuildCtx *ctx, BCOp op, int defop)
     //|  mov [BASE+RA*8], RD
     //|  ins_next
     dasm_put(Dst, 11502, (unsigned int)(((uint64_t)LJ_TSTR<<47)), (unsigned int)((((uint64_t)LJ_TSTR<<47))>>32));
-#line 3392 "vm_x64.dasc"
+#line 3424 "vm_x64.dasc"
     break;
   case BC_KCDATA:
     //|.if FFI
@@ -5012,7 +5044,7 @@ static void build_ins(BuildCtx *ctx, BCOp op, int defop)
     //|  ins_next
     //|.endif
     dasm_put(Dst, 11502, (unsigned int)(((uint64_t)LJ_TCDATA<<47)), (unsigned int)((((uint64_t)LJ_TCDATA<<47))>>32));
-#line 3401 "vm_x64.dasc"
+#line 3433 "vm_x64.dasc"
     break;
   case BC_KSHORT:
     //|  ins_AD	// RA = dst, RD = signed int16 literal
@@ -5027,7 +5059,7 @@ static void build_ins(BuildCtx *ctx, BCOp op, int defop)
     //|.endif
     //|  ins_next
     dasm_put(Dst, 11543);
-#line 3414 "vm_x64.dasc"
+#line 3446 "vm_x64.dasc"
     break;
   case BC_KNUM:
     //|  ins_AD	// RA = dst, RD = num const
@@ -5035,7 +5067,7 @@ static void build_ins(BuildCtx *ctx, BCOp op, int defop)
     //|  movsd qword [BASE+RA*8], xmm0
     //|  ins_next
     dasm_put(Dst, 11579);
-#line 3420 "vm_x64.dasc"
+#line 3452 "vm_x64.dasc"
     break;
   case BC_KPRI:
     //|  ins_AD	// RA = dst, RD = primitive type (~)
@@ -5044,7 +5076,7 @@ static void build_ins(BuildCtx *ctx, BCOp op, int defop)
     //|  mov [BASE+RA*8], RD
     //|  ins_next
     dasm_put(Dst, 10466);
-#line 3427 "vm_x64.dasc"
+#line 3459 "vm_x64.dasc"
     break;
   case BC_KNIL:
     //|  ins_AD	// RA = dst_start, RD = dst_end
@@ -5059,7 +5091,7 @@ static void build_ins(BuildCtx *ctx, BCOp op, int defop)
     //|  jbe <1
     //|  ins_next
     dasm_put(Dst, 11614, LJ_TNIL);
-#line 3440 "vm_x64.dasc"
+#line 3472 "vm_x64.dasc"
     break;
 
   /* -- Upvalue and function ops ------------------------------------------ */
@@ -5074,7 +5106,7 @@ static void build_ins(BuildCtx *ctx, BCOp op, int defop)
     //|  mov [BASE+RA*8], RD
     //|  ins_next
     dasm_put(Dst, 11670, offsetof(GCfuncL, uvptr), DtA(->v));
-#line 3453 "vm_x64.dasc"
+#line 3485 "vm_x64.dasc"
     break;
   case BC_USETV:
 #define TV2MARKOFS \
@@ -5107,7 +5139,7 @@ static void build_ins(BuildCtx *ctx, BCOp op, int defop)
     //|.if not X64WIN
     //|  mov CARG2, RB
     dasm_put(Dst, 11724, offsetof(GCfuncL, uvptr), DtA(->closed), DtA(->v), TV2MARKOFS, LJ_GC_BLACK, LJ_TISGCV, LJ_TNUMX - LJ_TISGCV, Dt4(->gch.marked), LJ_GC_WHITES);
-#line 3484 "vm_x64.dasc"
+#line 3516 "vm_x64.dasc"
     //|  mov RB, BASE			// Save BASE.
     //|.else
     //|  xchg CARG2, RB			// Save BASE (CARG2 == BASE).
@@ -5117,7 +5149,7 @@ static void build_ins(BuildCtx *ctx, BCOp op, int defop)
     //|  mov BASE, RB			// Restore BASE.
     //|  jmp <1
     dasm_put(Dst, 11836, GG_DISP2G);
-#line 3492 "vm_x64.dasc"
+#line 3524 "vm_x64.dasc"
     break;
 #undef TV2MARKOFS
   case BC_USETS:
@@ -5147,7 +5179,7 @@ static void build_ins(BuildCtx *ctx, BCOp op, int defop)
     //|  mov BASE, RB			// Restore BASE.
     //|  jmp <1
     dasm_put(Dst, 11860, offsetof(GCfuncL, uvptr), DtA(->v), (unsigned int)(((uint64_t)LJ_TSTR<<47)), (unsigned int)((((uint64_t)LJ_TSTR<<47))>>32), DtA(->marked), LJ_GC_BLACK, Dt4(->gch.marked), LJ_GC_WHITES, DtA(->closed), GG_DISP2G);
-#line 3520 "vm_x64.dasc"
+#line 3552 "vm_x64.dasc"
     break;
   case BC_USETN:
     //|  ins_AD	// RA = upvalue #, RD = num const
@@ -5159,7 +5191,7 @@ static void build_ins(BuildCtx *ctx, BCOp op, int defop)
     //|  movsd qword [RA], xmm0
     //|  ins_next
     dasm_put(Dst, 11976, offsetof(GCfuncL, uvptr), DtA(->v));
-#line 3530 "vm_x64.dasc"
+#line 3562 "vm_x64.dasc"
     break;
   case BC_USETP:
     //|  ins_AD	// RA = upvalue #, RD = primitive type (~)
@@ -5172,7 +5204,7 @@ static void build_ins(BuildCtx *ctx, BCOp op, int defop)
     //|  mov [RA], RD
     //|  ins_next
     dasm_put(Dst, 12034, offsetof(GCfuncL, uvptr), DtA(->v));
-#line 3541 "vm_x64.dasc"
+#line 3573 "vm_x64.dasc"
     break;
   case BC_UCLO:
     //|  ins_AD	// RA = level, RD = target
@@ -5188,7 +5220,7 @@ static void build_ins(BuildCtx *ctx, BCOp op, int defop)
     //|1:
     //|  ins_next
     dasm_put(Dst, 12091, -BCBIAS_J*4, Dt1(->openupval), Dt1(->base), Dt1(->base));
-#line 3555 "vm_x64.dasc"
+#line 3587 "vm_x64.dasc"
     break;
 
   case BC_FNEW:
@@ -5209,7 +5241,7 @@ static void build_ins(BuildCtx *ctx, BCOp op, int defop)
     //|  mov [BASE+RA*8], LFUNC:RC
     //|  ins_next
     dasm_put(Dst, 12155, Dt1(->base), Dt1(->base), (unsigned int)(((uint64_t)LJ_TFUNC<<47)), (unsigned int)((((uint64_t)LJ_TFUNC<<47))>>32));
-#line 3574 "vm_x64.dasc"
+#line 3606 "vm_x64.dasc"
     break;
 
   /* -- Table ops --------------------------------------------------------- */
@@ -5247,7 +5279,7 @@ static void build_ins(BuildCtx *ctx, BCOp op, int defop)
     //|  movzx RDd, PC_RD
     //|  jmp <1
     dasm_put(Dst, 12241, Dt1(->base), DISPATCH_GL(gc.total), DISPATCH_GL(gc.threshold), Dt1(->base), (unsigned int)(((uint64_t)LJ_TTAB<<47)), (unsigned int)((((uint64_t)LJ_TTAB<<47))>>32));
-#line 3610 "vm_x64.dasc"
+#line 3642 "vm_x64.dasc"
     break;
   case BC_TDUP:
     //|  ins_AND	// RA = dst, RD = table const (~) (holding template table)
@@ -5274,7 +5306,7 @@ static void build_ins(BuildCtx *ctx, BCOp op, int defop)
     //|  not RD
     //|  jmp <2
     dasm_put(Dst, 12375, DISPATCH_GL(gc.total), DISPATCH_GL(gc.threshold), Dt1(->base), Dt1(->base), (unsigned int)(((uint64_t)LJ_TTAB<<47)), (unsigned int)((((uint64_t)LJ_TTAB<<47))>>32));
-#line 3635 "vm_x64.dasc"
+#line 3667 "vm_x64.dasc"
     break;
 
   case BC_GGET:
@@ -5285,7 +5317,7 @@ static void build_ins(BuildCtx *ctx, BCOp op, int defop)
     //|  mov STR:RC, [KBASE+RD*8]
     //|  jmp ->BC_TGETS_Z
     dasm_put(Dst, 12484, Dt7(->env));
-#line 3644 "vm_x64.dasc"
+#line 3676 "vm_x64.dasc"
     break;
   case BC_GSET:
     //|  ins_AND	// RA = src, RD = str const (~)
@@ -5295,7 +5327,7 @@ static void build_ins(BuildCtx *ctx, BCOp op, int defop)
     //|  mov STR:RC, [KBASE+RD*8]
     //|  jmp ->BC_TSETS_Z
     dasm_put(Dst, 12515, Dt7(->env));
-#line 3652 "vm_x64.dasc"
+#line 3684 "vm_x64.dasc"
     break;
 
   case BC_TGETV:
@@ -5334,7 +5366,7 @@ static void build_ins(BuildCtx *ctx, BCOp op, int defop)
     //|  jz <1
     //|  test byte TAB:TMPR->nomm, 1<<MM_index
     dasm_put(Dst, 12546, LJ_TTAB, LJ_TISNUM, Dt6(->asize), Dt6(->array), LJ_TNIL, Dt6(->metatable));
-#line 3689 "vm_x64.dasc"
+#line 3721 "vm_x64.dasc"
     //|  jz ->vmeta_tgetv			// 'no __index' flag NOT set: check.
     //|  jmp <1
     //|
@@ -5343,7 +5375,7 @@ static void build_ins(BuildCtx *ctx, BCOp op, int defop)
     //|  cleartp STR:RC
     //|  jmp ->BC_TGETS_Z
     dasm_put(Dst, 12696, Dt6(->nomm), 1<<MM_index, LJ_TSTR);
-#line 3696 "vm_x64.dasc"
+#line 3728 "vm_x64.dasc"
     break;
   case BC_TGETS:
     //|  ins_ABC	// RA = dst, RB = table, RC = str const (~)
@@ -5367,7 +5399,7 @@ static void build_ins(BuildCtx *ctx, BCOp op, int defop)
     //|2:
     //|  mov [BASE+RA*8], ITYPE
     dasm_put(Dst, 12734, LJ_TTAB, Dt6(->hmask), Dt5(->sid), sizeof(Node), Dt6(->node), (unsigned int)(((uint64_t)LJ_TSTR<<47)), (unsigned int)((((uint64_t)LJ_TSTR<<47))>>32), DtB(->key), DtB(->val), LJ_TNIL);
-#line 3718 "vm_x64.dasc"
+#line 3750 "vm_x64.dasc"
     //|  ins_next
     //|
     //|4:  // Follow hash chain.
@@ -5385,7 +5417,7 @@ static void build_ins(BuildCtx *ctx, BCOp op, int defop)
     //|  jnz <2				// 'no __index' flag set: done.
     //|  jmp ->vmeta_tgets		// Caveat: preserve STR:RC.
     dasm_put(Dst, 12832, DtB(->next), LJ_TNIL, Dt6(->metatable), Dt6(->nomm), 1<<MM_index);
-#line 3734 "vm_x64.dasc"
+#line 3766 "vm_x64.dasc"
     break;
   case BC_TGETB:
     //|  ins_ABC	// RA = dst, RB = table, RC = byte literal
@@ -5412,7 +5444,7 @@ static void build_ins(BuildCtx *ctx, BCOp op, int defop)
     //|  jmp <1
     dasm_put(Dst, 12902, LJ_TTAB, Dt6(->asize), Dt6(->array), LJ_TNIL, Dt6(->metatable), Dt6(->nomm), 1<<MM_index);
     dasm_put(Dst, 10676);
-#line 3758 "vm_x64.dasc"
+#line 3790 "vm_x64.dasc"
     break;
   case BC_TGETR:
     //|  ins_ABC	// RA = dst, RB = table, RC = key
@@ -5434,7 +5466,7 @@ static void build_ins(BuildCtx *ctx, BCOp op, int defop)
     //|  mov [BASE+RA*8], ITYPE
     //|  ins_next
     dasm_put(Dst, 13018, Dt6(->asize), Dt6(->array));
-#line 3778 "vm_x64.dasc"
+#line 3810 "vm_x64.dasc"
     break;
 
   case BC_TSETV:
@@ -5467,7 +5499,7 @@ static void build_ins(BuildCtx *ctx, BCOp op, int defop)
     //|2:  // Set array slot.
     //|  mov RB, [BASE+RA*8]
     dasm_put(Dst, 13092, LJ_TTAB, LJ_TISNUM, Dt6(->asize), Dt6(->array), LJ_TNIL, Dt6(->marked), LJ_GC_BLACK);
-#line 3809 "vm_x64.dasc"
+#line 3841 "vm_x64.dasc"
     //|  mov [RC], RB
     //|  ins_next
     //|
@@ -5487,10 +5519,10 @@ static void build_ins(BuildCtx *ctx, BCOp op, int defop)
     //|7:  // Possible table write barrier for the value. Skip valiswhite check.
     //|  barrierback TAB:RB, TMPR
     dasm_put(Dst, 13211, Dt6(->metatable), Dt6(->nomm), 1<<MM_newindex, LJ_TSTR, Dt6(->marked), (uint8_t)~LJ_GC_BLACK);
-#line 3827 "vm_x64.dasc"
+#line 3859 "vm_x64.dasc"
     //|  jmp <2
     dasm_put(Dst, 13296, DISPATCH_GL(gc.grayagain), DISPATCH_GL(gc.grayagain), Dt6(->gclist));
-#line 3828 "vm_x64.dasc"
+#line 3860 "vm_x64.dasc"
     break;
   case BC_TSETS:
     //|  ins_ABC	// RA = src, RB = table, RC = str const (~)
@@ -5514,7 +5546,7 @@ static void build_ins(BuildCtx *ctx, BCOp op, int defop)
     //|2:
     //|  test byte TAB:RB->marked, LJ_GC_BLACK	// isblack(table)
     dasm_put(Dst, 13313, LJ_TTAB, Dt6(->hmask), Dt5(->sid), sizeof(Node), Dt6(->nomm), Dt6(->node), (unsigned int)(((uint64_t)LJ_TSTR<<47)), (unsigned int)((((uint64_t)LJ_TSTR<<47))>>32), DtB(->key), LJ_TNIL);
-#line 3850 "vm_x64.dasc"
+#line 3882 "vm_x64.dasc"
     //|  jnz >7
     //|3:  // Set node value.
     //|  mov ITYPE, [BASE+RA*8]
@@ -5538,7 +5570,7 @@ static void build_ins(BuildCtx *ctx, BCOp op, int defop)
     //|  // But check for __newindex first.
     //|  mov TAB:TMPR, TAB:RB->metatable
     dasm_put(Dst, 13410, Dt6(->marked), LJ_GC_BLACK, Dt6(->metatable), Dt6(->nomm), 1<<MM_newindex, DtB(->next));
-#line 3872 "vm_x64.dasc"
+#line 3904 "vm_x64.dasc"
     //|  test TAB:TMPR, TAB:TMPR
     //|  jz >6				// No metatable: continue.
     //|  test byte TAB:TMPR->nomm, 1<<MM_newindex
@@ -5562,7 +5594,7 @@ static void build_ins(BuildCtx *ctx, BCOp op, int defop)
     //|  barrierback TAB:RB, ITYPE
     //|  jmp <3
     dasm_put(Dst, 13490, Dt6(->metatable), Dt6(->nomm), 1<<MM_newindex, Dt1(->base), Dt1(->base), Dt6(->marked), (uint8_t)~LJ_GC_BLACK, DISPATCH_GL(gc.grayagain), DISPATCH_GL(gc.grayagain), Dt6(->gclist));
-#line 3894 "vm_x64.dasc"
+#line 3926 "vm_x64.dasc"
     break;
   case BC_TSETB:
     //|  ins_ABC	// RA = src, RB = table, RC = byte literal
@@ -5588,7 +5620,7 @@ static void build_ins(BuildCtx *ctx, BCOp op, int defop)
     //|  jz <1
     //|  test byte TAB:TMPR->nomm, 1<<MM_newindex
     dasm_put(Dst, 13587, LJ_TTAB, Dt6(->asize), Dt6(->array), LJ_TNIL, Dt6(->marked), LJ_GC_BLACK, Dt6(->metatable));
-#line 3918 "vm_x64.dasc"
+#line 3950 "vm_x64.dasc"
     //|  jz ->vmeta_tsetb			// 'no __newindex' flag NOT set: check.
     //|  jmp <1
     //|
@@ -5596,7 +5628,7 @@ static void build_ins(BuildCtx *ctx, BCOp op, int defop)
     //|  barrierback TAB:RB, TMPR
     //|  jmp <2
     dasm_put(Dst, 13703, Dt6(->nomm), 1<<MM_newindex, Dt6(->marked), (uint8_t)~LJ_GC_BLACK, DISPATCH_GL(gc.grayagain), DISPATCH_GL(gc.grayagain), Dt6(->gclist));
-#line 3924 "vm_x64.dasc"
+#line 3956 "vm_x64.dasc"
     break;
   case BC_TSETR:
     //|  ins_ABC	// RA = src, RB = table, RC = key
@@ -5624,7 +5656,7 @@ static void build_ins(BuildCtx *ctx, BCOp op, int defop)
     //|  barrierback TAB:RB, TMPR
     //|  jmp <2
     dasm_put(Dst, 13740, Dt6(->marked), LJ_GC_BLACK, Dt6(->asize), Dt6(->array), Dt6(->marked), (uint8_t)~LJ_GC_BLACK, DISPATCH_GL(gc.grayagain), DISPATCH_GL(gc.grayagain), Dt6(->gclist));
-#line 3950 "vm_x64.dasc"
+#line 3982 "vm_x64.dasc"
     break;
 
   case BC_TSETM:
@@ -5667,7 +5699,7 @@ static void build_ins(BuildCtx *ctx, BCOp op, int defop)
     //|  mov BASE, L:RB->base
     //|  movzx RAd, PC_RA			// Restore RA.
     dasm_put(Dst, 13845, Dt6(->marked), LJ_GC_BLACK, Dt6(->asize), Dt6(->array), Dt1(->base), Dt1(->base));
-#line 3991 "vm_x64.dasc"
+#line 4023 "vm_x64.dasc"
     //|  movzx RDd, PC_RD			// Restore RD.
     //|  jmp <1				// Retry.
     //|
@@ -5675,7 +5707,7 @@ static void build_ins(BuildCtx *ctx, BCOp op, int defop)
     //|  barrierback TAB:RB, RD
     //|  jmp <2
     dasm_put(Dst, 13992, Dt6(->marked), (uint8_t)~LJ_GC_BLACK, DISPATCH_GL(gc.grayagain), DISPATCH_GL(gc.grayagain), Dt6(->gclist));
-#line 3997 "vm_x64.dasc"
+#line 4029 "vm_x64.dasc"
     break;
 
   /* -- Calls and vararg handling ----------------------------------------- */
@@ -5683,18 +5715,18 @@ static void build_ins(BuildCtx *ctx, BCOp op, int defop)
   case BC_CALL: case BC_CALLM:
     //|  ins_A_C	// RA = base, (RB = nresults+1,) RC = nargs+1 | extra_nargs
     dasm_put(Dst, 10701);
-#line 4003 "vm_x64.dasc"
+#line 4035 "vm_x64.dasc"
     if (op == BC_CALLM) {
       //|  add NARGS:RDd, MULTRES
       dasm_put(Dst, 14029);
-#line 4005 "vm_x64.dasc"
+#line 4037 "vm_x64.dasc"
     }
     //|  mov LFUNC:RB, [BASE+RA*8]
     //|  checkfunc LFUNC:RB, ->vmeta_call_ra
     //|  lea BASE, [BASE+RA*8+16]
     //|  ins_call
     dasm_put(Dst, 14033, LJ_TFUNC, Dt7(->pc));
-#line 4010 "vm_x64.dasc"
+#line 4042 "vm_x64.dasc"
     break;
 
   case BC_CALLMT:
@@ -5702,7 +5734,7 @@ static void build_ins(BuildCtx *ctx, BCOp op, int defop)
     //|  add NARGS:RDd, MULTRES
     //|  // Fall through. Assumes BC_CALLT follows and ins_AD is a no-op.
     dasm_put(Dst, 14029);
-#line 4016 "vm_x64.dasc"
+#line 4048 "vm_x64.dasc"
     break;
   case BC_CALLT:
     //|  ins_AD	// RA = base, RD = nargs+1
@@ -5736,7 +5768,7 @@ static void build_ins(BuildCtx *ctx, BCOp op, int defop)
     //|4:
     //|  ins_callt
     dasm_put(Dst, 14098, LJ_TFUNC, FRAME_TYPE, Dt7(->ffid), Dt7(->pc));
-#line 4048 "vm_x64.dasc"
+#line 4080 "vm_x64.dasc"
     //|
     //|5:  // Tailcall to a fast function.
     //|  test PCd, FRAME_TYPE		// Lua frame below?
@@ -5761,7 +5793,7 @@ static void build_ins(BuildCtx *ctx, BCOp op, int defop)
     //|  add PCd, FRAME_VARG
     //|  jmp <1
     dasm_put(Dst, 14218, FRAME_TYPE, Dt7(->pc), PC2PROTO(k), FRAME_VARG, FRAME_TYPEP, FRAME_VARG);
-#line 4071 "vm_x64.dasc"
+#line 4103 "vm_x64.dasc"
     break;
 
   case BC_ITERC:
@@ -5778,11 +5810,12 @@ static void build_ins(BuildCtx *ctx, BCOp op, int defop)
     //|  mov BASE, RA
     //|  ins_call
     dasm_put(Dst, 14322, 2+1, LJ_TFUNC, Dt7(->pc));
-#line 4086 "vm_x64.dasc"
+#line 4118 "vm_x64.dasc"
     break;
 
   case BC_ITERN:
     //|.if JIT
+    //|  endbr
     //|  hotloop RBd
     //|.endif
     //|->vm_IITERN:
@@ -5824,7 +5857,7 @@ static void build_ins(BuildCtx *ctx, BCOp op, int defop)
     //|5:  // Traverse hash part.
     //|  sub RCd, TMPRd
     dasm_put(Dst, 14412, HOTCOUNT_PCMASK, GG_DISP2HOT, HOTCOUNT_LOOP, Dt6(->asize), Dt6(->array), LJ_TNIL, -BCBIAS_J*4);
-#line 4130 "vm_x64.dasc"
+#line 4163 "vm_x64.dasc"
     //|6:
     //|  cmp RCd, TAB:RB->hmask; ja <3	// End of iteration? Branch to ITERL+1.
     //|  imul ITYPEd, RCd, #NODE
@@ -5843,7 +5876,7 @@ static void build_ins(BuildCtx *ctx, BCOp op, int defop)
     //|  add RCd, 1
     //|  jmp <6
     dasm_put(Dst, 14561, Dt6(->hmask), sizeof(Node), Dt6(->node), DtB(->val), LJ_TNIL, DtB(->key), DtB(->val));
-#line 4147 "vm_x64.dasc"
+#line 4180 "vm_x64.dasc"
     break;
 
   case BC_ISNEXT:
@@ -5862,7 +5895,7 @@ static void build_ins(BuildCtx *ctx, BCOp op, int defop)
     //|  mov PC_OP, BC_JMP
     //|  branchPC RD
     dasm_put(Dst, 14632, LJ_TFUNC, LJ_TTAB, LJ_TNIL, Dt8(->ffid), FF_next_N, -BCBIAS_J*4, (unsigned int)(((uint64_t)LJ_KEYINDEX << 32)), (unsigned int)((((uint64_t)LJ_KEYINDEX << 32))>>32), BC_JMP);
-#line 4164 "vm_x64.dasc"
+#line 4197 "vm_x64.dasc"
     //|.if JIT
     //|  cmp byte [PC], BC_ITERN
     //|  jne >6
@@ -5880,7 +5913,7 @@ static void build_ins(BuildCtx *ctx, BCOp op, int defop)
     //|  jmp <1
     //|.endif
     dasm_put(Dst, 14751, -BCBIAS_J*4, BC_ITERN, BC_ITERC, DISPATCH_J(trace), DtD(->startins), BC_ITERC);
-#line 4180 "vm_x64.dasc"
+#line 4213 "vm_x64.dasc"
     break;
 
   case BC_VARG:
@@ -5925,7 +5958,7 @@ static void build_ins(BuildCtx *ctx, BCOp op, int defop)
     //|  cmp RC, L:RB->maxstack
     //|  ja >7				// Need to grow stack?
     dasm_put(Dst, 14797, (16+FRAME_VARG), LJ_TNIL, Dt1(->maxstack));
-#line 4223 "vm_x64.dasc"
+#line 4256 "vm_x64.dasc"
     //|6:  // Copy all vararg slots.
     //|  mov RC, [TMPR-16]
     //|  add TMPR, 8
@@ -5951,7 +5984,7 @@ static void build_ins(BuildCtx *ctx, BCOp op, int defop)
     //|  add TMPR, BASE
     //|  jmp <6
     dasm_put(Dst, 14959, Dt1(->base), Dt1(->top), Dt1(->base), Dt1(->top));
-#line 4247 "vm_x64.dasc"
+#line 4280 "vm_x64.dasc"
     break;
 
   /* -- Returns ----------------------------------------------------------- */
@@ -5961,7 +5994,7 @@ static void build_ins(BuildCtx *ctx, BCOp op, int defop)
     //|  add RDd, MULTRES			// MULTRES >=1, so RD >=1.
     //|  // Fall through. Assumes BC_RET follows and ins_AD is a no-op.
     dasm_put(Dst, 14029);
-#line 4255 "vm_x64.dasc"
+#line 4288 "vm_x64.dasc"
     break;
 
   case BC_RET: case BC_RET0: case BC_RET1:
@@ -5969,7 +6002,7 @@ static void build_ins(BuildCtx *ctx, BCOp op, int defop)
     if (op != BC_RET0) {
       //|  shl RAd, 3
       dasm_put(Dst, 15051);
-#line 4261 "vm_x64.dasc"
+#line 4294 "vm_x64.dasc"
     }
     //|1:
     //|  mov PC, [BASE-8]
@@ -5977,9 +6010,10 @@ static void build_ins(BuildCtx *ctx, BCOp op, int defop)
     //|  test PCd, FRAME_TYPE		// Check frame type marker.
     //|  jnz >7				// Not returning to a fixarg Lua func?
     dasm_put(Dst, 15055, FRAME_TYPE);
-#line 4267 "vm_x64.dasc"
+#line 4300 "vm_x64.dasc"
     switch (op) {
     case BC_RET:
+      //|  endbr
       //|->BC_RET_Z:
       //|  mov KBASE, BASE		// Use KBASE for result move.
       //|  sub RDd, 1
@@ -5997,20 +6031,22 @@ static void build_ins(BuildCtx *ctx, BCOp op, int defop)
       //|  cmp RBd, RDd			// More results expected?
       //|  ja >6
       dasm_put(Dst, 15074);
-#line 4285 "vm_x64.dasc"
+#line 4319 "vm_x64.dasc"
       break;
     case BC_RET1:
+      //|  endbr
       //|  mov RB, [BASE+RA]
       //|  mov [BASE-16], RB
       dasm_put(Dst, 15127);
-#line 4289 "vm_x64.dasc"
+#line 4324 "vm_x64.dasc"
       /* fallthrough */
     case BC_RET0:
+      //|  endbr
       //|5:
       //|  cmp PC_RB, RDL			// More results expected?
       //|  ja >6
       dasm_put(Dst, 15137);
-#line 4294 "vm_x64.dasc"
+#line 4330 "vm_x64.dasc"
     default:
       break;
     }
@@ -6025,16 +6061,16 @@ static void build_ins(BuildCtx *ctx, BCOp op, int defop)
     //|
     //|6:  // Fill up results with nil.
     dasm_put(Dst, 15148, Dt7(->pc), PC2PROTO(k));
-#line 4307 "vm_x64.dasc"
+#line 4343 "vm_x64.dasc"
     if (op == BC_RET) {
       //|  mov aword [KBASE-16], LJ_TNIL	// Note: relies on shifted base.
       //|  add KBASE, 8
       dasm_put(Dst, 15209, LJ_TNIL);
-#line 4310 "vm_x64.dasc"
+#line 4346 "vm_x64.dasc"
     } else {
       //|  mov aword [BASE+RD*8-24], LJ_TNIL
       dasm_put(Dst, 15220, LJ_TNIL);
-#line 4312 "vm_x64.dasc"
+#line 4348 "vm_x64.dasc"
     }
     //|  add RD, 1
     //|  jmp <5
@@ -6046,15 +6082,15 @@ static void build_ins(BuildCtx *ctx, BCOp op, int defop)
     //|  // Return from vararg function: relocate BASE down and RA up.
     //|  sub BASE, RB
     dasm_put(Dst, 15227, -FRAME_VARG, FRAME_TYPEP);
-#line 4322 "vm_x64.dasc"
+#line 4358 "vm_x64.dasc"
     if (op != BC_RET0) {
       //|  add RA, RB
       dasm_put(Dst, 15254);
-#line 4324 "vm_x64.dasc"
+#line 4360 "vm_x64.dasc"
     }
     //|  jmp <1
     dasm_put(Dst, 10676);
-#line 4326 "vm_x64.dasc"
+#line 4362 "vm_x64.dasc"
     break;
 
   /* -- Loops and branches ------------------------------------------------ */
@@ -6066,11 +6102,12 @@ static void build_ins(BuildCtx *ctx, BCOp op, int defop)
 
   case BC_FORL:
     //|.if JIT
+    //|  endbr
     //|  hotloop RBd
     //|.endif
     //| // Fall through. Assumes BC_IFORL follows and ins_AJ is a no-op.
     dasm_put(Dst, 15259, HOTCOUNT_PCMASK, GG_DISP2HOT, HOTCOUNT_LOOP);
-#line 4340 "vm_x64.dasc"
+#line 4377 "vm_x64.dasc"
     break;
 
   case BC_JFORI:
@@ -6084,13 +6121,13 @@ static void build_ins(BuildCtx *ctx, BCOp op, int defop)
     //|  ins_AJ	// RA = base, RD = target (after end of loop or start of loop)
     //|  lea RA, [BASE+RA*8]
     dasm_put(Dst, 15280);
-#line 4352 "vm_x64.dasc"
+#line 4389 "vm_x64.dasc"
     if (LJ_DUALNUM) {
       //|  mov RB, FOR_IDX
       //|  checkint RB, >9
       //|  mov TMPR, FOR_STOP
       dasm_put(Dst, 15285, LJ_TISNUM);
-#line 4356 "vm_x64.dasc"
+#line 4393 "vm_x64.dasc"
       if (!vk) {
 	//|  checkint TMPR, ->vmeta_for
 	//|  mov ITYPE, FOR_STEP
@@ -6098,13 +6135,13 @@ static void build_ins(BuildCtx *ctx, BCOp op, int defop)
 	//|  sar ITYPE, 47;
 	//|  cmp ITYPEd, LJ_TISNUM; jne ->vmeta_for
 	dasm_put(Dst, 15311, LJ_TISNUM, LJ_TISNUM);
-#line 4362 "vm_x64.dasc"
+#line 4399 "vm_x64.dasc"
       } else {
 #ifdef LUA_USE_ASSERT
 	//|  checkinttp FOR_STOP, ->assert_bad_for_arg_type
 	//|  checkinttp FOR_STEP, ->assert_bad_for_arg_type
 	dasm_put(Dst, 15354, LJ_TISNUM, LJ_TISNUM);
-#line 4366 "vm_x64.dasc"
+#line 4403 "vm_x64.dasc"
 #endif
 	//|  mov ITYPE, FOR_STEP
 	//|  test ITYPEd, ITYPEd; js >5
@@ -6112,19 +6149,19 @@ static void build_ins(BuildCtx *ctx, BCOp op, int defop)
 	//|  setint RB
 	//|  mov FOR_IDX, RB
 	dasm_put(Dst, 15391, (unsigned int)(((uint64_t)LJ_TISNUM<<47)), (unsigned int)((((uint64_t)LJ_TISNUM<<47))>>32));
-#line 4372 "vm_x64.dasc"
+#line 4409 "vm_x64.dasc"
       }
       //|  cmp RBd, TMPRd
       //|  mov FOR_EXT, RB
       dasm_put(Dst, 15420);
-#line 4375 "vm_x64.dasc"
+#line 4412 "vm_x64.dasc"
       if (op == BC_FORI) {
 	//|  jle >7
 	//|1:
 	//|6:
 	//|  branchPC RD
 	dasm_put(Dst, 15428, -BCBIAS_J*4);
-#line 4380 "vm_x64.dasc"
+#line 4417 "vm_x64.dasc"
       } else if (op == BC_JFORI) {
 	//|  branchPC RD
 	//|  movzx RDd, PC_RD
@@ -6132,116 +6169,116 @@ static void build_ins(BuildCtx *ctx, BCOp op, int defop)
 	//|1:
 	//|6:
 	dasm_put(Dst, 15443, -BCBIAS_J*4, BC_JLOOP);
-#line 4386 "vm_x64.dasc"
+#line 4423 "vm_x64.dasc"
       } else if (op == BC_IFORL) {
 	//|  jg >7
 	//|6:
 	//|  branchPC RD
 	//|1:
 	dasm_put(Dst, 15462, -BCBIAS_J*4);
-#line 4391 "vm_x64.dasc"
+#line 4428 "vm_x64.dasc"
       } else {
 	//|  jle =>BC_JLOOP
 	//|1:
 	//|6:
 	dasm_put(Dst, 15454, BC_JLOOP);
-#line 4395 "vm_x64.dasc"
+#line 4432 "vm_x64.dasc"
       }
       //|7:
       //|  ins_next
       //|
       //|5:  // Invert check for negative step.
       dasm_put(Dst, 15477);
-#line 4400 "vm_x64.dasc"
+#line 4437 "vm_x64.dasc"
       if (!vk) {
 	//|  sar ITYPE, 47;
 	//|  cmp ITYPEd, LJ_TISNUM; jne ->vmeta_for
 	dasm_put(Dst, 15339, LJ_TISNUM);
-#line 4403 "vm_x64.dasc"
+#line 4440 "vm_x64.dasc"
       } else {
 	//|  add RBd, ITYPEd; jo <1
 	//|  setint RB
 	//|  mov FOR_IDX, RB
 	dasm_put(Dst, 15503, (unsigned int)(((uint64_t)LJ_TISNUM<<47)), (unsigned int)((((uint64_t)LJ_TISNUM<<47))>>32));
-#line 4407 "vm_x64.dasc"
+#line 4444 "vm_x64.dasc"
       }
       //|  cmp RBd, TMPRd
       //|  mov FOR_EXT, RB
       dasm_put(Dst, 15420);
-#line 4410 "vm_x64.dasc"
+#line 4447 "vm_x64.dasc"
       if (op == BC_FORI) {
 	//|  jge <7
 	dasm_put(Dst, 15521);
-#line 4412 "vm_x64.dasc"
+#line 4449 "vm_x64.dasc"
       } else if (op == BC_JFORI) {
 	//|  branchPC RD
 	//|  movzx RDd, PC_RD
 	//|  jge =>BC_JLOOP
 	dasm_put(Dst, 15526, -BCBIAS_J*4, BC_JLOOP);
-#line 4416 "vm_x64.dasc"
+#line 4453 "vm_x64.dasc"
       } else if (op == BC_IFORL) {
 	//|  jl <7
 	dasm_put(Dst, 15541);
-#line 4418 "vm_x64.dasc"
+#line 4455 "vm_x64.dasc"
       } else {
 	//|  jge =>BC_JLOOP
 	dasm_put(Dst, 15537, BC_JLOOP);
-#line 4420 "vm_x64.dasc"
+#line 4457 "vm_x64.dasc"
       }
       //|  jmp <6
       //|9:  // Fallback to FP variant.
       dasm_put(Dst, 15546);
-#line 4423 "vm_x64.dasc"
+#line 4460 "vm_x64.dasc"
       if (!vk) {
 	//|  jae ->vmeta_for
 	dasm_put(Dst, 15553);
-#line 4425 "vm_x64.dasc"
+#line 4462 "vm_x64.dasc"
       }
     } else if (!vk) {
       //|  checknumtp FOR_IDX, ->vmeta_for
       dasm_put(Dst, 15558, LJ_TISNUM);
-#line 4428 "vm_x64.dasc"
+#line 4465 "vm_x64.dasc"
     }
     if (!vk) {
       //|  checknumtp FOR_STOP, ->vmeta_for
       dasm_put(Dst, 15576, LJ_TISNUM);
-#line 4431 "vm_x64.dasc"
+#line 4468 "vm_x64.dasc"
     } else {
 #ifdef LUA_USE_ASSERT
       //|  checknumtp FOR_STOP, ->assert_bad_for_arg_type
       //|  checknumtp FOR_STEP, ->assert_bad_for_arg_type
       dasm_put(Dst, 15595, LJ_TISNUM, LJ_TISNUM);
-#line 4435 "vm_x64.dasc"
+#line 4472 "vm_x64.dasc"
 #endif
     }
     //|  mov RB, FOR_STEP
     dasm_put(Dst, 15632);
-#line 4438 "vm_x64.dasc"
+#line 4475 "vm_x64.dasc"
     if (!vk) {
       //|  checknum RB, ->vmeta_for
       dasm_put(Dst, 15637, LJ_TISNUM);
-#line 4440 "vm_x64.dasc"
+#line 4477 "vm_x64.dasc"
     }
     //|  movsd xmm0, qword FOR_IDX
     //|  movsd xmm1, qword FOR_STOP
     dasm_put(Dst, 15656);
-#line 4443 "vm_x64.dasc"
+#line 4480 "vm_x64.dasc"
     if (vk) {
       //|  addsd xmm0, qword FOR_STEP
       //|  movsd qword FOR_IDX, xmm0
       //|  test RB, RB; js >3
       dasm_put(Dst, 15668);
-#line 4447 "vm_x64.dasc"
+#line 4484 "vm_x64.dasc"
     } else {
       //|  jl >3
       dasm_put(Dst, 15688);
-#line 4449 "vm_x64.dasc"
+#line 4486 "vm_x64.dasc"
     }
     //|  ucomisd xmm1, xmm0
     //|1:
     //|  movsd qword FOR_EXT, xmm0
     dasm_put(Dst, 15693);
-#line 4453 "vm_x64.dasc"
+#line 4490 "vm_x64.dasc"
     if (op == BC_FORI) {
       //|.if DUALNUM
       //|  jnb <7
@@ -6250,13 +6287,13 @@ static void build_ins(BuildCtx *ctx, BCOp op, int defop)
       //|  branchPC RD
       //|.endif
       dasm_put(Dst, 15706, -BCBIAS_J*4);
-#line 4460 "vm_x64.dasc"
+#line 4497 "vm_x64.dasc"
     } else if (op == BC_JFORI) {
       //|  branchPC RD
       //|  movzx RDd, PC_RD
       //|  jnb =>BC_JLOOP
       dasm_put(Dst, 15717, -BCBIAS_J*4, BC_JLOOP);
-#line 4464 "vm_x64.dasc"
+#line 4501 "vm_x64.dasc"
     } else if (op == BC_IFORL) {
       //|.if DUALNUM
       //|  jb <7
@@ -6265,11 +6302,11 @@ static void build_ins(BuildCtx *ctx, BCOp op, int defop)
       //|  branchPC RD
       //|.endif
       dasm_put(Dst, 15732, -BCBIAS_J*4);
-#line 4471 "vm_x64.dasc"
+#line 4508 "vm_x64.dasc"
     } else {
       //|  jnb =>BC_JLOOP
       dasm_put(Dst, 15728, BC_JLOOP);
-#line 4473 "vm_x64.dasc"
+#line 4510 "vm_x64.dasc"
     }
     //|.if DUALNUM
     //|  jmp <6
@@ -6282,16 +6319,17 @@ static void build_ins(BuildCtx *ctx, BCOp op, int defop)
     //|  ucomisd xmm0, xmm1
     //|  jmp <1
     dasm_put(Dst, 15743);
-#line 4484 "vm_x64.dasc"
+#line 4521 "vm_x64.dasc"
     break;
 
   case BC_ITERL:
     //|.if JIT
+    //|  endbr
     //|  hotloop RBd
     //|.endif
     //| // Fall through. Assumes BC_IITERL follows and ins_AJ is a no-op.
     dasm_put(Dst, 15259, HOTCOUNT_PCMASK, GG_DISP2HOT, HOTCOUNT_LOOP);
-#line 4491 "vm_x64.dasc"
+#line 4529 "vm_x64.dasc"
     break;
 
   case BC_JITERL:
@@ -6304,22 +6342,22 @@ static void build_ins(BuildCtx *ctx, BCOp op, int defop)
     //|  mov RB, [RA]
     //|  cmp RB, LJ_TNIL; je >1		// Stop if iterator returned nil.
     dasm_put(Dst, 15777, LJ_TNIL);
-#line 4502 "vm_x64.dasc"
+#line 4540 "vm_x64.dasc"
     if (op == BC_JITERL) {
       //|  mov [RA-8], RB
       //|  jmp =>BC_JLOOP
       dasm_put(Dst, 15794, BC_JLOOP);
-#line 4505 "vm_x64.dasc"
+#line 4543 "vm_x64.dasc"
     } else {
       //|  branchPC RD			// Otherwise save control var + branch.
       //|  mov [RA-8], RB
       dasm_put(Dst, 15803, -BCBIAS_J*4);
-#line 4508 "vm_x64.dasc"
+#line 4546 "vm_x64.dasc"
     }
     //|1:
     //|  ins_next
     dasm_put(Dst, 9857);
-#line 4511 "vm_x64.dasc"
+#line 4549 "vm_x64.dasc"
     break;
 
   case BC_LOOP:
@@ -6331,14 +6369,14 @@ static void build_ins(BuildCtx *ctx, BCOp op, int defop)
     //|.endif
     //| // Fall through. Assumes BC_ILOOP follows and ins_A is a no-op.
     dasm_put(Dst, 15259, HOTCOUNT_PCMASK, GG_DISP2HOT, HOTCOUNT_LOOP);
-#line 4521 "vm_x64.dasc"
+#line 4559 "vm_x64.dasc"
     break;
 
   case BC_ILOOP:
     //|  ins_A	// RA = base, RD = target (loop extent)
     //|  ins_next
     dasm_put(Dst, 9859);
-#line 4526 "vm_x64.dasc"
+#line 4564 "vm_x64.dasc"
     break;
 
   case BC_JLOOP:
@@ -6376,7 +6414,7 @@ static void build_ins(BuildCtx *ctx, BCOp op, int defop)
     //|  jmp RD
     //|.endif
     dasm_put(Dst, 15815, DISPATCH_J(trace), DtD(->mcode), DISPATCH_GL(jit_base), DISPATCH_GL(tmpbuf.L));
-#line 4562 "vm_x64.dasc"
+#line 4600 "vm_x64.dasc"
     break;
 
   case BC_JMP:
@@ -6384,7 +6422,7 @@ static void build_ins(BuildCtx *ctx, BCOp op, int defop)
     //|  branchPC RD
     //|  ins_next
     dasm_put(Dst, 15859, -BCBIAS_J*4);
-#line 4568 "vm_x64.dasc"
+#line 4606 "vm_x64.dasc"
     break;
 
   /* -- Function headers -------------------------------------------------- */
@@ -6398,10 +6436,11 @@ static void build_ins(BuildCtx *ctx, BCOp op, int defop)
 
   case BC_FUNCF:
     //|.if JIT
+    //|  endbr
     //|  hotcall RBd
     //|.endif
     dasm_put(Dst, 15887, HOTCOUNT_PCMASK, GG_DISP2HOT, HOTCOUNT_CALL);
-#line 4583 "vm_x64.dasc"
+#line 4622 "vm_x64.dasc"
   case BC_FUNCV:  /* NYI: compiled vararg functions. */
     //| // Fall through. Assumes BC_IFUNCF/BC_IFUNCV follow and ins_AD is a no-op.
     break;
@@ -6422,16 +6461,16 @@ static void build_ins(BuildCtx *ctx, BCOp op, int defop)
     //|  jbe >3
     //|2:
     dasm_put(Dst, 15908, -4+PC2PROTO(k), Dt1(->maxstack), -4+PC2PROTO(numparams));
-#line 4602 "vm_x64.dasc"
+#line 4641 "vm_x64.dasc"
     if (op == BC_JFUNCF) {
       //|  movzx RDd, PC_RD
       //|  jmp =>BC_JLOOP
       dasm_put(Dst, 15942, BC_JLOOP);
-#line 4605 "vm_x64.dasc"
+#line 4644 "vm_x64.dasc"
     } else {
       //|  ins_next
       dasm_put(Dst, 9859);
-#line 4607 "vm_x64.dasc"
+#line 4646 "vm_x64.dasc"
     }
     //|
     //|3:  // Clear missing parameters.
@@ -6441,7 +6480,7 @@ static void build_ins(BuildCtx *ctx, BCOp op, int defop)
     //|  jbe <3
     //|  jmp <2
     dasm_put(Dst, 15951, LJ_TNIL);
-#line 4615 "vm_x64.dasc"
+#line 4654 "vm_x64.dasc"
     break;
 
   case BC_JFUNCV:
@@ -6450,7 +6489,7 @@ static void build_ins(BuildCtx *ctx, BCOp op, int defop)
 #endif
     //| int3  // NYI: compiled vararg functions
     dasm_put(Dst, 9369);
-#line 4622 "vm_x64.dasc"
+#line 4661 "vm_x64.dasc"
     break;  /* NYI: compiled vararg functions. */
 
   case BC_IFUNCV:
@@ -6482,17 +6521,17 @@ static void build_ins(BuildCtx *ctx, BCOp op, int defop)
     //|  jnz <1
     //|2:
     dasm_put(Dst, 15974, FRAME_VARG+8, Dt1(->maxstack), -4+PC2PROTO(numparams), LJ_TNIL);
-#line 4652 "vm_x64.dasc"
+#line 4691 "vm_x64.dasc"
     if (op == BC_JFUNCV) {
       //|  movzx RDd, PC_RD
       //|  jmp =>BC_JLOOP
       dasm_put(Dst, 15942, BC_JLOOP);
-#line 4655 "vm_x64.dasc"
+#line 4694 "vm_x64.dasc"
     } else {
       //|  mov KBASE, [PC-4+PC2PROTO(k)]
       //|  ins_next
       dasm_put(Dst, 16078, -4+PC2PROTO(k));
-#line 4658 "vm_x64.dasc"
+#line 4697 "vm_x64.dasc"
     }
     //|
     //|3:  // Clear missing parameters.
@@ -6502,7 +6541,7 @@ static void build_ins(BuildCtx *ctx, BCOp op, int defop)
     //|  jnz <3
     //|  jmp <2
     dasm_put(Dst, 16104, LJ_TNIL);
-#line 4666 "vm_x64.dasc"
+#line 4705 "vm_x64.dasc"
     break;
 
   case BC_FUNCC:
@@ -6518,30 +6557,30 @@ static void build_ins(BuildCtx *ctx, BCOp op, int defop)
     //|  cmp RA, L:RB->maxstack
     //|  mov L:RB->top, RD
     dasm_put(Dst, 16127, Dt8(->f), Dt1(->base), 8*LUA_MINSTACK, Dt1(->maxstack), Dt1(->top));
-#line 4680 "vm_x64.dasc"
+#line 4719 "vm_x64.dasc"
     if (op == BC_FUNCC) {
       //|  mov CARG1, L:RB		// Caveat: CARG1 may be RA.
       dasm_put(Dst, 16173);
-#line 4682 "vm_x64.dasc"
+#line 4721 "vm_x64.dasc"
     } else {
       //|  mov CARG2, KBASE
       //|  mov CARG1, L:RB		// Caveat: CARG1 may be RA.
       dasm_put(Dst, 16178);
-#line 4685 "vm_x64.dasc"
+#line 4724 "vm_x64.dasc"
     }
     //|  ja ->vm_growstack_c		// Need to grow stack.
     //|  set_vmstate C
     dasm_put(Dst, 16187, DISPATCH_GL(vmstate), ~LJ_VMST_C);
-#line 4688 "vm_x64.dasc"
+#line 4727 "vm_x64.dasc"
     if (op == BC_FUNCC) {
       //|  call KBASE			// (lua_State *L)
       dasm_put(Dst, 16197);
-#line 4690 "vm_x64.dasc"
+#line 4729 "vm_x64.dasc"
     } else {
       //|  // (lua_State *L, lua_CFunction f)
       //|  call aword [DISPATCH+DISPATCH_GL(wrapf)]
       dasm_put(Dst, 16202, DISPATCH_GL(wrapf));
-#line 4693 "vm_x64.dasc"
+#line 4732 "vm_x64.dasc"
     }
     //|  // nresults returned in eax (RD).
     //|  mov BASE, L:RB->base
@@ -6553,7 +6592,7 @@ static void build_ins(BuildCtx *ctx, BCOp op, int defop)
     //|  mov PC, [BASE-8]			// Fetch PC of caller.
     //|  jmp ->vm_returnc
     dasm_put(Dst, 16208, Dt1(->base), DISPATCH_GL(cur_L), DISPATCH_GL(vmstate), ~LJ_VMST_INTERP, Dt1(->top));
-#line 4703 "vm_x64.dasc"
+#line 4742 "vm_x64.dasc"
     break;
 
   /* ---------------------------------------------------------------------- */
@@ -6572,7 +6611,7 @@ static int build_backend(BuildCtx *ctx)
   build_subroutines(ctx);
   //|.code_op
   dasm_put(Dst, 16243);
-#line 4720 "vm_x64.dasc"
+#line 4759 "vm_x64.dasc"
   for (op = 0; op < BC__MAX; op++)
     build_ins(ctx, (BCOp)op, op);
   return BC__MAX;

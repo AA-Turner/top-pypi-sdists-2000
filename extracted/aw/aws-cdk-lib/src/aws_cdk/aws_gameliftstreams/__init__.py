@@ -156,7 +156,7 @@ class CfnApplicationProps:
 
         :param application_source_uri: The location of the content that you want to stream. Enter an Amazon S3 URI to a bucket that contains your game or other application. The location can have a multi-level prefix structure, but it must include all the files needed to run the content. Amazon GameLift Streams copies everything under the specified location. This value is immutable. To designate a different content location, create a new application. .. epigraph:: The Amazon S3 bucket and the Amazon GameLift Streams application must be in the same AWS Region.
         :param description: A human-readable label for the application. You can update this value later.
-        :param executable_path: The path and file name of the executable file that launches the content for streaming. Enter a path value that is relative to the location set in ``ApplicationSourceUri`` .
+        :param executable_path: The relative path and file name of the executable file that Amazon GameLift Streams will stream. Specify a path relative to the location set in ``ApplicationSourceUri`` . The file must be contained within the application's root folder. For Windows applications, the file must be a valid Windows executable or batch file with a filename ending in .exe, .cmd, or .bat. For Linux applications, the file must be a valid Linux binary executable or a script that contains an initial interpreter line starting with a shebang (' ``#!`` ').
         :param runtime_environment: A set of configuration settings to run the application on a stream group. This configures the operating system, and can include compatibility layers and other drivers.
         :param application_log_output_uri: An Amazon S3 URI to a bucket where you would like Amazon GameLift Streams to save application logs. Required if you specify one or more ``ApplicationLogPaths`` .
         :param application_log_paths: Locations of log files that your content generates during a stream session. Enter path values that are relative to the ``ApplicationSourceUri`` location. You can specify up to 10 log paths. Amazon GameLift Streams uploads designated log files to the Amazon S3 bucket that you specify in ``ApplicationLogOutputUri`` at the end of a stream session. To retrieve stored log files, call `GetStreamSession <https://docs.aws.amazon.com/gameliftstreams/latest/apireference/API_GetStreamSession.html>`_ and get the ``LogFileLocationUri`` .
@@ -241,9 +241,9 @@ class CfnApplicationProps:
 
     @builtins.property
     def executable_path(self) -> builtins.str:
-        '''The path and file name of the executable file that launches the content for streaming.
+        '''The relative path and file name of the executable file that Amazon GameLift Streams will stream.
 
-        Enter a path value that is relative to the location set in ``ApplicationSourceUri`` .
+        Specify a path relative to the location set in ``ApplicationSourceUri`` . The file must be contained within the application's root folder. For Windows applications, the file must be a valid Windows executable or batch file with a filename ending in .exe, .cmd, or .bat. For Linux applications, the file must be a valid Linux binary executable or a script that contains an initial interpreter line starting with a shebang (' ``#!`` ').
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-gameliftstreams-application.html#cfn-gameliftstreams-application-executablepath
         '''
@@ -676,7 +676,7 @@ class CfnApplication(
         :param id: Construct identifier for this resource (unique in its scope).
         :param application_source_uri: The location of the content that you want to stream. Enter an Amazon S3 URI to a bucket that contains your game or other application. The location can have a multi-level prefix structure, but it must include all the files needed to run the content. Amazon GameLift Streams copies everything under the specified location. This value is immutable. To designate a different content location, create a new application. .. epigraph:: The Amazon S3 bucket and the Amazon GameLift Streams application must be in the same AWS Region.
         :param description: A human-readable label for the application. You can update this value later.
-        :param executable_path: The path and file name of the executable file that launches the content for streaming. Enter a path value that is relative to the location set in ``ApplicationSourceUri`` .
+        :param executable_path: The relative path and file name of the executable file that Amazon GameLift Streams will stream. Specify a path relative to the location set in ``ApplicationSourceUri`` . The file must be contained within the application's root folder. For Windows applications, the file must be a valid Windows executable or batch file with a filename ending in .exe, .cmd, or .bat. For Linux applications, the file must be a valid Linux binary executable or a script that contains an initial interpreter line starting with a shebang (' ``#!`` ').
         :param runtime_environment: A set of configuration settings to run the application on a stream group. This configures the operating system, and can include compatibility layers and other drivers.
         :param application_log_output_uri: An Amazon S3 URI to a bucket where you would like Amazon GameLift Streams to save application logs. Required if you specify one or more ``ApplicationLogPaths`` .
         :param application_log_paths: Locations of log files that your content generates during a stream session. Enter path values that are relative to the ``ApplicationSourceUri`` location. You can specify up to 10 log paths. Amazon GameLift Streams uploads designated log files to the Amazon S3 bucket that you specify in ``ApplicationLogOutputUri`` at the end of a stream session. To retrieve stored log files, call `GetStreamSession <https://docs.aws.amazon.com/gameliftstreams/latest/apireference/API_GetStreamSession.html>`_ and get the ``LogFileLocationUri`` .
@@ -796,7 +796,7 @@ class CfnApplication(
     @builtins.property
     @jsii.member(jsii_name="executablePath")
     def executable_path(self) -> builtins.str:
-        '''The path and file name of the executable file that launches the content for streaming.'''
+        '''The relative path and file name of the executable file that Amazon GameLift Streams will stream.'''
         return typing.cast(builtins.str, jsii.get(self, "executablePath"))
 
     @executable_path.setter
@@ -1553,3 +1553,6 @@ def _typecheckingstub__4c32e96242e189f6a75d890a7316a655383684ce9337b4906f2e3b49b
 ) -> None:
     """Type checking stubs"""
     pass
+
+for cls in [IApplicationRef, IStreamGroupRef]:
+    typing.cast(typing.Any, cls).__protocol_attrs__ = typing.cast(typing.Any, cls).__protocol_attrs__ - set(['__jsii_proxy_class__', '__jsii_type__'])

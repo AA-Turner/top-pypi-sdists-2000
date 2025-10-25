@@ -28614,3 +28614,6 @@ def _typecheckingstub__336ca5bcbe380ed2e934b92392f8548b45a77fa6056f7dbbf4741722d
 ) -> None:
     """Type checking stubs"""
     pass
+
+for cls in [IComputeEnvironment, IComputeEnvironmentRef, IConsumableResourceRef, IEcsContainerDefinition, IEcsEc2ContainerDefinition, IEcsFargateContainerDefinition, IEksContainerDefinition, IEksJobDefinition, IFairshareSchedulingPolicy, IFargateComputeEnvironment, IJobDefinition, IJobDefinitionRef, IJobQueue, IJobQueueRef, IManagedComputeEnvironment, IManagedEc2EcsComputeEnvironment, ISchedulingPolicy, ISchedulingPolicyRef, IServiceEnvironmentRef, IUnmanagedComputeEnvironment]:
+    typing.cast(typing.Any, cls).__protocol_attrs__ = typing.cast(typing.Any, cls).__protocol_attrs__ - set(['__jsii_proxy_class__', '__jsii_type__'])

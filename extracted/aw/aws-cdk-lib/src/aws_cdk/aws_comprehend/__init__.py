@@ -2906,3 +2906,6 @@ def _typecheckingstub__6f148a8e29a057dfa8bd6a5945aaf37e92f70297900e6a35e12b4f9de
 ) -> None:
     """Type checking stubs"""
     pass
+
+for cls in [IDocumentClassifierRef, IFlywheelRef]:
+    typing.cast(typing.Any, cls).__protocol_attrs__ = typing.cast(typing.Any, cls).__protocol_attrs__ - set(['__jsii_proxy_class__', '__jsii_type__'])

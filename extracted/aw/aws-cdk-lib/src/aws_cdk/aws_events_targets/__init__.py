@@ -6789,3 +6789,6 @@ def _typecheckingstub__6472cea5f7d90ec67bd493d4b2ba6bc083b2c915d8dc1da40193693c2
 ) -> None:
     """Type checking stubs"""
     pass
+
+for cls in [IDeliveryStream]:
+    typing.cast(typing.Any, cls).__protocol_attrs__ = typing.cast(typing.Any, cls).__protocol_attrs__ - set(['__jsii_proxy_class__', '__jsii_type__'])

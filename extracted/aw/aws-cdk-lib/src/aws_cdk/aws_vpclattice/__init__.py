@@ -783,7 +783,7 @@ class CfnResourceGatewayProps:
         :param subnet_ids: The IDs of the VPC subnets for the resource gateway.
         :param vpc_identifier: The ID of the VPC for the resource gateway.
         :param ip_address_type: The type of IP address used by the resource gateway.
-        :param ipv4_addresses_per_eni: The number of IPv4 addresses to allocate per ENI for the resource gateway.
+        :param ipv4_addresses_per_eni: The number of IPv4 addresses in each ENI for the resource gateway.
         :param security_group_ids: The IDs of the security groups applied to the resource gateway.
         :param tags: The tags for the resource gateway.
 
@@ -875,7 +875,7 @@ class CfnResourceGatewayProps:
 
     @builtins.property
     def ipv4_addresses_per_eni(self) -> typing.Optional[jsii.Number]:
-        '''The number of IPv4 addresses to allocate per ENI for the resource gateway.
+        '''The number of IPv4 addresses in each ENI for the resource gateway.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-vpclattice-resourcegateway.html#cfn-vpclattice-resourcegateway-ipv4addressespereni
         '''
@@ -4461,7 +4461,7 @@ class CfnResourceGateway(
         :param subnet_ids: The IDs of the VPC subnets for the resource gateway.
         :param vpc_identifier: The ID of the VPC for the resource gateway.
         :param ip_address_type: The type of IP address used by the resource gateway.
-        :param ipv4_addresses_per_eni: The number of IPv4 addresses to allocate per ENI for the resource gateway.
+        :param ipv4_addresses_per_eni: The number of IPv4 addresses in each ENI for the resource gateway.
         :param security_group_ids: The IDs of the security groups applied to the resource gateway.
         :param tags: The tags for the resource gateway.
         '''
@@ -4601,7 +4601,7 @@ class CfnResourceGateway(
     @builtins.property
     @jsii.member(jsii_name="ipv4AddressesPerEni")
     def ipv4_addresses_per_eni(self) -> typing.Optional[jsii.Number]:
-        '''The number of IPv4 addresses to allocate per ENI for the resource gateway.'''
+        '''The number of IPv4 addresses in each ENI for the resource gateway.'''
         return typing.cast(typing.Optional[jsii.Number], jsii.get(self, "ipv4AddressesPerEni"))
 
     @ipv4_addresses_per_eni.setter
@@ -9220,3 +9220,6 @@ def _typecheckingstub__2d56100b501da89da21de19c41e69ce3c600f9f6f41dbc6fa3266fed8
 ) -> None:
     """Type checking stubs"""
     pass
+
+for cls in [IAccessLogSubscriptionRef, IAuthPolicyRef, IListenerRef, IResourceConfigurationRef, IResourceGatewayRef, IResourcePolicyRef, IRuleRef, IServiceNetworkRef, IServiceNetworkResourceAssociationRef, IServiceNetworkServiceAssociationRef, IServiceNetworkVpcAssociationRef, IServiceRef, ITargetGroupRef]:
+    typing.cast(typing.Any, cls).__protocol_attrs__ = typing.cast(typing.Any, cls).__protocol_attrs__ - set(['__jsii_proxy_class__', '__jsii_type__'])

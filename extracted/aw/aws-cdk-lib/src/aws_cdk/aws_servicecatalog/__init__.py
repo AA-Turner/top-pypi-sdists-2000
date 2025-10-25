@@ -1757,27 +1757,27 @@ class CfnLaunchTemplateConstraintProps:
     jsii_type="aws-cdk-lib.aws_servicecatalog.CfnPortfolioPrincipalAssociationProps",
     jsii_struct_bases=[],
     name_mapping={
-        "portfolio_id": "portfolioId",
-        "principal_arn": "principalArn",
         "principal_type": "principalType",
         "accept_language": "acceptLanguage",
+        "portfolio_id": "portfolioId",
+        "principal_arn": "principalArn",
     },
 )
 class CfnPortfolioPrincipalAssociationProps:
     def __init__(
         self,
         *,
-        portfolio_id: builtins.str,
-        principal_arn: builtins.str,
         principal_type: builtins.str,
         accept_language: typing.Optional[builtins.str] = None,
+        portfolio_id: typing.Optional[builtins.str] = None,
+        principal_arn: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Properties for defining a ``CfnPortfolioPrincipalAssociation``.
 
-        :param portfolio_id: The portfolio identifier.
-        :param principal_arn: The ARN of the principal ( IAM user, role, or group).
         :param principal_type: The principal type. The supported values are ``IAM`` and ``IAM_PATTERN`` .
         :param accept_language: The language code. - ``jp`` - Japanese - ``zh`` - Chinese
+        :param portfolio_id: The portfolio identifier.
+        :param principal_arn: The ARN of the principal ( IAM user, role, or group).
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-servicecatalog-portfolioprincipalassociation.html
         :exampleMetadata: fixture=_generated
@@ -1789,47 +1789,29 @@ class CfnPortfolioPrincipalAssociationProps:
             from aws_cdk import aws_servicecatalog as servicecatalog
             
             cfn_portfolio_principal_association_props = servicecatalog.CfnPortfolioPrincipalAssociationProps(
-                portfolio_id="portfolioId",
-                principal_arn="principalArn",
                 principal_type="principalType",
             
                 # the properties below are optional
-                accept_language="acceptLanguage"
+                accept_language="acceptLanguage",
+                portfolio_id="portfolioId",
+                principal_arn="principalArn"
             )
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__86aa94ae9b8977b851184740615709136e8ab87d84e565bd4ed1c37202e743af)
-            check_type(argname="argument portfolio_id", value=portfolio_id, expected_type=type_hints["portfolio_id"])
-            check_type(argname="argument principal_arn", value=principal_arn, expected_type=type_hints["principal_arn"])
             check_type(argname="argument principal_type", value=principal_type, expected_type=type_hints["principal_type"])
             check_type(argname="argument accept_language", value=accept_language, expected_type=type_hints["accept_language"])
+            check_type(argname="argument portfolio_id", value=portfolio_id, expected_type=type_hints["portfolio_id"])
+            check_type(argname="argument principal_arn", value=principal_arn, expected_type=type_hints["principal_arn"])
         self._values: typing.Dict[builtins.str, typing.Any] = {
-            "portfolio_id": portfolio_id,
-            "principal_arn": principal_arn,
             "principal_type": principal_type,
         }
         if accept_language is not None:
             self._values["accept_language"] = accept_language
-
-    @builtins.property
-    def portfolio_id(self) -> builtins.str:
-        '''The portfolio identifier.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-servicecatalog-portfolioprincipalassociation.html#cfn-servicecatalog-portfolioprincipalassociation-portfolioid
-        '''
-        result = self._values.get("portfolio_id")
-        assert result is not None, "Required property 'portfolio_id' is missing"
-        return typing.cast(builtins.str, result)
-
-    @builtins.property
-    def principal_arn(self) -> builtins.str:
-        '''The ARN of the principal ( IAM user, role, or group).
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-servicecatalog-portfolioprincipalassociation.html#cfn-servicecatalog-portfolioprincipalassociation-principalarn
-        '''
-        result = self._values.get("principal_arn")
-        assert result is not None, "Required property 'principal_arn' is missing"
-        return typing.cast(builtins.str, result)
+        if portfolio_id is not None:
+            self._values["portfolio_id"] = portfolio_id
+        if principal_arn is not None:
+            self._values["principal_arn"] = principal_arn
 
     @builtins.property
     def principal_type(self) -> builtins.str:
@@ -1853,6 +1835,24 @@ class CfnPortfolioPrincipalAssociationProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-servicecatalog-portfolioprincipalassociation.html#cfn-servicecatalog-portfolioprincipalassociation-acceptlanguage
         '''
         result = self._values.get("accept_language")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def portfolio_id(self) -> typing.Optional[builtins.str]:
+        '''The portfolio identifier.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-servicecatalog-portfolioprincipalassociation.html#cfn-servicecatalog-portfolioprincipalassociation-portfolioid
+        '''
+        result = self._values.get("portfolio_id")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def principal_arn(self) -> typing.Optional[builtins.str]:
+        '''The ARN of the principal ( IAM user, role, or group).
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-servicecatalog-portfolioprincipalassociation.html#cfn-servicecatalog-portfolioprincipalassociation-principalarn
+        '''
+        result = self._values.get("principal_arn")
         return typing.cast(typing.Optional[builtins.str], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
@@ -2795,8 +2795,8 @@ class CfnTagOptionAssociationProps:
     def __init__(
         self,
         *,
-        resource_id: builtins.str,
-        tag_option_id: builtins.str,
+        resource_id: typing.Optional[builtins.str] = None,
+        tag_option_id: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Properties for defining a ``CfnTagOptionAssociation``.
 
@@ -2821,30 +2821,29 @@ class CfnTagOptionAssociationProps:
             type_hints = typing.get_type_hints(_typecheckingstub__0b40cb505bb578364f2c02a3a08b4793fd747379748d820e8ec767c54ad4bb1f)
             check_type(argname="argument resource_id", value=resource_id, expected_type=type_hints["resource_id"])
             check_type(argname="argument tag_option_id", value=tag_option_id, expected_type=type_hints["tag_option_id"])
-        self._values: typing.Dict[builtins.str, typing.Any] = {
-            "resource_id": resource_id,
-            "tag_option_id": tag_option_id,
-        }
+        self._values: typing.Dict[builtins.str, typing.Any] = {}
+        if resource_id is not None:
+            self._values["resource_id"] = resource_id
+        if tag_option_id is not None:
+            self._values["tag_option_id"] = tag_option_id
 
     @builtins.property
-    def resource_id(self) -> builtins.str:
+    def resource_id(self) -> typing.Optional[builtins.str]:
         '''The resource identifier.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-servicecatalog-tagoptionassociation.html#cfn-servicecatalog-tagoptionassociation-resourceid
         '''
         result = self._values.get("resource_id")
-        assert result is not None, "Required property 'resource_id' is missing"
-        return typing.cast(builtins.str, result)
+        return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tag_option_id(self) -> builtins.str:
+    def tag_option_id(self) -> typing.Optional[builtins.str]:
         '''The TagOption identifier.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-servicecatalog-tagoptionassociation.html#cfn-servicecatalog-tagoptionassociation-tagoptionid
         '''
         result = self._values.get("tag_option_id")
-        assert result is not None, "Required property 'tag_option_id' is missing"
-        return typing.cast(builtins.str, result)
+        return typing.cast(typing.Optional[builtins.str], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -6967,13 +6966,19 @@ class StackSetsConstraintOptions(CommonConstraintOptions):
 @jsii.data_type(
     jsii_type="aws-cdk-lib.aws_servicecatalog.TagOptionAssociationReference",
     jsii_struct_bases=[],
-    name_mapping={"tag_option_association_id": "tagOptionAssociationId"},
+    name_mapping={"resource_id": "resourceId", "tag_option_id": "tagOptionId"},
 )
 class TagOptionAssociationReference:
-    def __init__(self, *, tag_option_association_id: builtins.str) -> None:
+    def __init__(
+        self,
+        *,
+        resource_id: builtins.str,
+        tag_option_id: builtins.str,
+    ) -> None:
         '''A reference to a TagOptionAssociation resource.
 
-        :param tag_option_association_id: The Id of the TagOptionAssociation resource.
+        :param resource_id: The ResourceId of the TagOptionAssociation resource.
+        :param tag_option_id: The TagOptionId of the TagOptionAssociation resource.
 
         :exampleMetadata: fixture=_generated
 
@@ -6984,21 +6989,31 @@ class TagOptionAssociationReference:
             from aws_cdk import aws_servicecatalog as servicecatalog
             
             tag_option_association_reference = servicecatalog.TagOptionAssociationReference(
-                tag_option_association_id="tagOptionAssociationId"
+                resource_id="resourceId",
+                tag_option_id="tagOptionId"
             )
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__179465a55f99e650e86059352c3de8b18048551e4911214e5ebe90278fa61181)
-            check_type(argname="argument tag_option_association_id", value=tag_option_association_id, expected_type=type_hints["tag_option_association_id"])
+            check_type(argname="argument resource_id", value=resource_id, expected_type=type_hints["resource_id"])
+            check_type(argname="argument tag_option_id", value=tag_option_id, expected_type=type_hints["tag_option_id"])
         self._values: typing.Dict[builtins.str, typing.Any] = {
-            "tag_option_association_id": tag_option_association_id,
+            "resource_id": resource_id,
+            "tag_option_id": tag_option_id,
         }
 
     @builtins.property
-    def tag_option_association_id(self) -> builtins.str:
-        '''The Id of the TagOptionAssociation resource.'''
-        result = self._values.get("tag_option_association_id")
-        assert result is not None, "Required property 'tag_option_association_id' is missing"
+    def resource_id(self) -> builtins.str:
+        '''The ResourceId of the TagOptionAssociation resource.'''
+        result = self._values.get("resource_id")
+        assert result is not None, "Required property 'resource_id' is missing"
+        return typing.cast(builtins.str, result)
+
+    @builtins.property
+    def tag_option_id(self) -> builtins.str:
+        '''The TagOptionId of the TagOptionAssociation resource.'''
+        result = self._values.get("tag_option_id")
+        assert result is not None, "Required property 'tag_option_id' is missing"
         return typing.cast(builtins.str, result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
@@ -9092,7 +9107,8 @@ class CfnLaunchNotificationConstraint(
     @builtins.property
     @jsii.member(jsii_name="attrId")
     def attr_id(self) -> builtins.str:
-        '''
+        '''Unique identifier for the constraint.
+
         :cloudformationAttribute: Id
         '''
         return typing.cast(builtins.str, jsii.get(self, "attrId"))
@@ -9787,12 +9803,12 @@ class CfnPortfolioPrincipalAssociation(
         from aws_cdk import aws_servicecatalog as servicecatalog
         
         cfn_portfolio_principal_association = servicecatalog.CfnPortfolioPrincipalAssociation(self, "MyCfnPortfolioPrincipalAssociation",
-            portfolio_id="portfolioId",
-            principal_arn="principalArn",
             principal_type="principalType",
         
             # the properties below are optional
-            accept_language="acceptLanguage"
+            accept_language="acceptLanguage",
+            portfolio_id="portfolioId",
+            principal_arn="principalArn"
         )
     '''
 
@@ -9801,28 +9817,28 @@ class CfnPortfolioPrincipalAssociation(
         scope: _constructs_77d1e7e8.Construct,
         id: builtins.str,
         *,
-        portfolio_id: builtins.str,
-        principal_arn: builtins.str,
         principal_type: builtins.str,
         accept_language: typing.Optional[builtins.str] = None,
+        portfolio_id: typing.Optional[builtins.str] = None,
+        principal_arn: typing.Optional[builtins.str] = None,
     ) -> None:
         '''
         :param scope: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
-        :param portfolio_id: The portfolio identifier.
-        :param principal_arn: The ARN of the principal ( IAM user, role, or group).
         :param principal_type: The principal type. The supported values are ``IAM`` and ``IAM_PATTERN`` .
         :param accept_language: The language code. - ``jp`` - Japanese - ``zh`` - Chinese
+        :param portfolio_id: The portfolio identifier.
+        :param principal_arn: The ARN of the principal ( IAM user, role, or group).
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__2b8a7d450a71f88f29341f360bc05a021b910027171e4e63c9be6c67c4d53b2a)
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
         props = CfnPortfolioPrincipalAssociationProps(
-            portfolio_id=portfolio_id,
-            principal_arn=principal_arn,
             principal_type=principal_type,
             accept_language=accept_language,
+            portfolio_id=portfolio_id,
+            principal_arn=principal_arn,
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
@@ -9879,32 +9895,6 @@ class CfnPortfolioPrincipalAssociation(
         return typing.cast(PortfolioPrincipalAssociationReference, jsii.get(self, "portfolioPrincipalAssociationRef"))
 
     @builtins.property
-    @jsii.member(jsii_name="portfolioId")
-    def portfolio_id(self) -> builtins.str:
-        '''The portfolio identifier.'''
-        return typing.cast(builtins.str, jsii.get(self, "portfolioId"))
-
-    @portfolio_id.setter
-    def portfolio_id(self, value: builtins.str) -> None:
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__726706747073f477b14d5b31fa14aba7087b2fc4265414101c6069e458c605ef)
-            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
-        jsii.set(self, "portfolioId", value) # pyright: ignore[reportArgumentType]
-
-    @builtins.property
-    @jsii.member(jsii_name="principalArn")
-    def principal_arn(self) -> builtins.str:
-        '''The ARN of the principal ( IAM user, role, or group).'''
-        return typing.cast(builtins.str, jsii.get(self, "principalArn"))
-
-    @principal_arn.setter
-    def principal_arn(self, value: builtins.str) -> None:
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__71c52a4171fa242df45a083617e532d09ea08d89eea6a461f83e7608b28c48bb)
-            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
-        jsii.set(self, "principalArn", value) # pyright: ignore[reportArgumentType]
-
-    @builtins.property
     @jsii.member(jsii_name="principalType")
     def principal_type(self) -> builtins.str:
         '''The principal type.'''
@@ -9929,6 +9919,32 @@ class CfnPortfolioPrincipalAssociation(
             type_hints = typing.get_type_hints(_typecheckingstub__1390265bc6b4e797f81f5a56c99acfec9dceeb8b223c28fc92f325ebf1ee9136)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
         jsii.set(self, "acceptLanguage", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="portfolioId")
+    def portfolio_id(self) -> typing.Optional[builtins.str]:
+        '''The portfolio identifier.'''
+        return typing.cast(typing.Optional[builtins.str], jsii.get(self, "portfolioId"))
+
+    @portfolio_id.setter
+    def portfolio_id(self, value: typing.Optional[builtins.str]) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__726706747073f477b14d5b31fa14aba7087b2fc4265414101c6069e458c605ef)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "portfolioId", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="principalArn")
+    def principal_arn(self) -> typing.Optional[builtins.str]:
+        '''The ARN of the principal ( IAM user, role, or group).'''
+        return typing.cast(typing.Optional[builtins.str], jsii.get(self, "principalArn"))
+
+    @principal_arn.setter
+    def principal_arn(self, value: typing.Optional[builtins.str]) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__71c52a4171fa242df45a083617e532d09ea08d89eea6a461f83e7608b28c48bb)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "principalArn", value) # pyright: ignore[reportArgumentType]
 
 
 @jsii.implements(_IInspectable_c2943556, IPortfolioProductAssociationRef)
@@ -11235,8 +11251,8 @@ class CfnTagOptionAssociation(
         scope: _constructs_77d1e7e8.Construct,
         id: builtins.str,
         *,
-        resource_id: builtins.str,
-        tag_option_id: builtins.str,
+        resource_id: typing.Optional[builtins.str] = None,
+        tag_option_id: typing.Optional[builtins.str] = None,
     ) -> None:
         '''
         :param scope: Scope in which this resource is defined.
@@ -11285,14 +11301,6 @@ class CfnTagOptionAssociation(
         return typing.cast(builtins.str, jsii.sget(cls, "CFN_RESOURCE_TYPE_NAME"))
 
     @builtins.property
-    @jsii.member(jsii_name="attrId")
-    def attr_id(self) -> builtins.str:
-        '''
-        :cloudformationAttribute: Id
-        '''
-        return typing.cast(builtins.str, jsii.get(self, "attrId"))
-
-    @builtins.property
     @jsii.member(jsii_name="cfnProperties")
     def _cfn_properties(self) -> typing.Mapping[builtins.str, typing.Any]:
         return typing.cast(typing.Mapping[builtins.str, typing.Any], jsii.get(self, "cfnProperties"))
@@ -11305,12 +11313,12 @@ class CfnTagOptionAssociation(
 
     @builtins.property
     @jsii.member(jsii_name="resourceId")
-    def resource_id(self) -> builtins.str:
+    def resource_id(self) -> typing.Optional[builtins.str]:
         '''The resource identifier.'''
-        return typing.cast(builtins.str, jsii.get(self, "resourceId"))
+        return typing.cast(typing.Optional[builtins.str], jsii.get(self, "resourceId"))
 
     @resource_id.setter
-    def resource_id(self, value: builtins.str) -> None:
+    def resource_id(self, value: typing.Optional[builtins.str]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__471e0b593fbd9d09ee6976802eded33631b789cde5f21fad9622617eeb6305bb)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -11318,12 +11326,12 @@ class CfnTagOptionAssociation(
 
     @builtins.property
     @jsii.member(jsii_name="tagOptionId")
-    def tag_option_id(self) -> builtins.str:
+    def tag_option_id(self) -> typing.Optional[builtins.str]:
         '''The TagOption identifier.'''
-        return typing.cast(builtins.str, jsii.get(self, "tagOptionId"))
+        return typing.cast(typing.Optional[builtins.str], jsii.get(self, "tagOptionId"))
 
     @tag_option_id.setter
-    def tag_option_id(self, value: builtins.str) -> None:
+    def tag_option_id(self, value: typing.Optional[builtins.str]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__36b3523e61ec3624717af470321b5a099be0fe767c62edbb115ee12884351d73)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -11720,10 +11728,10 @@ def _typecheckingstub__782bde46fdc76fe863545140febd1fe95f163b327614047bf13a8ac26
 
 def _typecheckingstub__86aa94ae9b8977b851184740615709136e8ab87d84e565bd4ed1c37202e743af(
     *,
-    portfolio_id: builtins.str,
-    principal_arn: builtins.str,
     principal_type: builtins.str,
     accept_language: typing.Optional[builtins.str] = None,
+    portfolio_id: typing.Optional[builtins.str] = None,
+    principal_arn: typing.Optional[builtins.str] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -11807,8 +11815,8 @@ def _typecheckingstub__71d420933cee59879101b98c29d269504af0cb190b1929c9f0657e67f
 
 def _typecheckingstub__0b40cb505bb578364f2c02a3a08b4793fd747379748d820e8ec767c54ad4bb1f(
     *,
-    resource_id: builtins.str,
-    tag_option_id: builtins.str,
+    resource_id: typing.Optional[builtins.str] = None,
+    tag_option_id: typing.Optional[builtins.str] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -12372,7 +12380,8 @@ def _typecheckingstub__1387553eccc6e9ab98ba5fb751351089515cc923a65a4149c029cee2a
 
 def _typecheckingstub__179465a55f99e650e86059352c3de8b18048551e4911214e5ebe90278fa61181(
     *,
-    tag_option_association_id: builtins.str,
+    resource_id: builtins.str,
+    tag_option_id: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -12971,10 +12980,10 @@ def _typecheckingstub__2b8a7d450a71f88f29341f360bc05a021b910027171e4e63c9be6c67c
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     *,
-    portfolio_id: builtins.str,
-    principal_arn: builtins.str,
     principal_type: builtins.str,
     accept_language: typing.Optional[builtins.str] = None,
+    portfolio_id: typing.Optional[builtins.str] = None,
+    principal_arn: typing.Optional[builtins.str] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -12991,18 +13000,6 @@ def _typecheckingstub__257e8fbedbaa67aa61288a1f94be02039da4ac33558591be208505deb
     """Type checking stubs"""
     pass
 
-def _typecheckingstub__726706747073f477b14d5b31fa14aba7087b2fc4265414101c6069e458c605ef(
-    value: builtins.str,
-) -> None:
-    """Type checking stubs"""
-    pass
-
-def _typecheckingstub__71c52a4171fa242df45a083617e532d09ea08d89eea6a461f83e7608b28c48bb(
-    value: builtins.str,
-) -> None:
-    """Type checking stubs"""
-    pass
-
 def _typecheckingstub__66dbe3deef345271ae1cfb35b0e313622b15892928d8581127c03e117db33585(
     value: builtins.str,
 ) -> None:
@@ -13010,6 +13007,18 @@ def _typecheckingstub__66dbe3deef345271ae1cfb35b0e313622b15892928d8581127c03e117
     pass
 
 def _typecheckingstub__1390265bc6b4e797f81f5a56c99acfec9dceeb8b223c28fc92f325ebf1ee9136(
+    value: typing.Optional[builtins.str],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__726706747073f477b14d5b31fa14aba7087b2fc4265414101c6069e458c605ef(
+    value: typing.Optional[builtins.str],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__71c52a4171fa242df45a083617e532d09ea08d89eea6a461f83e7608b28c48bb(
     value: typing.Optional[builtins.str],
 ) -> None:
     """Type checking stubs"""
@@ -13398,8 +13407,8 @@ def _typecheckingstub__a574b3e75b877de4dcfa7d8a2517237604ed1f3dd3d7cac2ea2238f67
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     *,
-    resource_id: builtins.str,
-    tag_option_id: builtins.str,
+    resource_id: typing.Optional[builtins.str] = None,
+    tag_option_id: typing.Optional[builtins.str] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -13417,13 +13426,13 @@ def _typecheckingstub__be21e5622bd6d44a3621a1eb8b311fd50ef6c4f7295cfaa5b45c24780
     pass
 
 def _typecheckingstub__471e0b593fbd9d09ee6976802eded33631b789cde5f21fad9622617eeb6305bb(
-    value: builtins.str,
+    value: typing.Optional[builtins.str],
 ) -> None:
     """Type checking stubs"""
     pass
 
 def _typecheckingstub__36b3523e61ec3624717af470321b5a099be0fe767c62edbb115ee12884351d73(
-    value: builtins.str,
+    value: typing.Optional[builtins.str],
 ) -> None:
     """Type checking stubs"""
     pass
@@ -13455,3 +13464,6 @@ def _typecheckingstub__386164543716d63390e1491aeeeb20318fd10f2bb48e8a9c33e28a0de
 ) -> None:
     """Type checking stubs"""
     pass
+
+for cls in [IAcceptedPortfolioShareRef, ICloudFormationProductRef, ICloudFormationProvisionedProductRef, ILaunchNotificationConstraintRef, ILaunchRoleConstraintRef, ILaunchTemplateConstraintRef, IPortfolio, IPortfolioPrincipalAssociationRef, IPortfolioProductAssociationRef, IPortfolioRef, IPortfolioShareRef, IProduct, IResourceUpdateConstraintRef, IServiceActionAssociationRef, IServiceActionRef, IStackSetConstraintRef, ITagOptionAssociationRef, ITagOptionRef]:
+    typing.cast(typing.Any, cls).__protocol_attrs__ = typing.cast(typing.Any, cls).__protocol_attrs__ - set(['__jsii_proxy_class__', '__jsii_type__'])

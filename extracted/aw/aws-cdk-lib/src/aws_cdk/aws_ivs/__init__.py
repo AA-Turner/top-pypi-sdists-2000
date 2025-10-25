@@ -6121,3 +6121,6 @@ def _typecheckingstub__9b966c0532d39deb26a3bd43a45365e1ee3edf5d3158d0a479134abca
 ) -> None:
     """Type checking stubs"""
     pass
+
+for cls in [IChannelRef, IEncoderConfigurationRef, IIngestConfigurationRef, IPlaybackKeyPairRef, IPlaybackRestrictionPolicyRef, IPublicKeyRef, IRecordingConfigurationRef, IStageRef, IStorageConfigurationRef, IStreamKeyRef]:
+    typing.cast(typing.Any, cls).__protocol_attrs__ = typing.cast(typing.Any, cls).__protocol_attrs__ - set(['__jsii_proxy_class__', '__jsii_type__'])

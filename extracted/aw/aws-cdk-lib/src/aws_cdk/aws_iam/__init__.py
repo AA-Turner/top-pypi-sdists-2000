@@ -14851,27 +14851,22 @@ class ManagedPolicy(
 
     Example::
 
-        # build: gamelift.Build
+        # vpc: ec2.Vpc
         
-        role = iam.Role(self, "Role",
-            assumed_by=iam.CompositePrincipal(iam.ServicePrincipal("gamelift.amazonaws.com"))
+        role = iam.Role(self, "RDSDirectoryServicesRole",
+            assumed_by=iam.CompositePrincipal(
+                iam.ServicePrincipal("rds.amazonaws.com"),
+                iam.ServicePrincipal("directoryservice.rds.amazonaws.com")),
+            managed_policies=[
+                iam.ManagedPolicy.from_aws_managed_policy_name("service-role/AmazonRDSDirectoryServiceAccess")
+            ]
         )
-        role.add_managed_policy(iam.ManagedPolicy.from_aws_managed_policy_name("CloudWatchAgentServerPolicy"))
-        
-        fleet = gamelift.BuildFleet(self, "Game server fleet",
-            fleet_name="test-fleet",
-            content=build,
-            instance_type=ec2.InstanceType.of(ec2.InstanceClass.C5, ec2.InstanceSize.LARGE),
-            runtime_configuration=gamelift.RuntimeConfiguration(
-                server_processes=[gamelift.ServerProcess(
-                    launch_path="/local/game/GameLiftExampleServer.x86_64"
-                )]
-            ),
-            role=role
+        instance = rds.DatabaseInstance(self, "Instance",
+            engine=rds.DatabaseInstanceEngine.mysql(version=rds.MysqlEngineVersion.VER_8_0_19),
+            vpc=vpc,
+            domain="d-????????",  # The ID of the domain for the instance to join.
+            domain_role=role
         )
-        
-        # Actions can also be grantted through dedicated method
-        fleet.grant(role, "gamelift:ListFleets")
     '''
 
     def __init__(
@@ -15614,25 +15609,25 @@ class Role(
     Defines an IAM role. The role is created with an assume policy document associated with
     the specified AWS service principal defined in ``serviceAssumeRole``.
 
-    :exampleMetadata: infused
+    :exampleMetadata: fixture=default infused
 
     Example::
 
-        # Option 3: Create a new role that allows the account root principal to assume. Add this role in the `system:masters` and witch to this role from the AWS console.
-        # cluster: eks.Cluster
-        
-        
-        console_read_only_role = iam.Role(self, "ConsoleReadOnlyRole",
-            assumed_by=iam.ArnPrincipal("arn_for_trusted_principal")
+        # Create a custom execution role
+        execution_role = iam.Role(self, "BrowserExecutionRole",
+            assumed_by=iam.ServicePrincipal("bedrock-agentcore.amazonaws.com"),
+            managed_policies=[
+                iam.ManagedPolicy.from_aws_managed_policy_name("AmazonBedrockAgentCoreBrowserExecutionRolePolicy")
+            ]
         )
-        console_read_only_role.add_to_policy(iam.PolicyStatement(
-            actions=["eks:AccessKubernetesApi", "eks:Describe*", "eks:List*"
-            ],
-            resources=[cluster.cluster_arn]
-        ))
         
-        # Add this role to system:masters RBAC group
-        cluster.aws_auth.add_masters_role(console_read_only_role)
+        # Create browser with custom execution role
+        browser = agentcore.BrowserCustom(self, "MyBrowser",
+            browser_custom_name="my_browser",
+            description="Browser with custom execution role",
+            network_configuration=agentcore.BrowserNetworkConfiguration.using_public_network(),
+            execution_role=execution_role
+        )
     '''
 
     def __init__(
@@ -20212,3 +20207,6 @@ def _typecheckingstub__c7271e79a3715a166397ac94ded3c4043db8b40c10213ffae6abbb3a1
 ) -> None:
     """Type checking stubs"""
     pass
+
+for cls in [IAccessKey, IAccessKeyRef, IAssumeRolePrincipal, IComparablePrincipal, IGrantable, IGroup, IGroupPolicyRef, IGroupRef, IIdentity, IInstanceProfile, IInstanceProfileRef, IManagedPolicy, IManagedPolicyRef, IOIDCProviderRef, IOidcProvider, IOpenIdConnectProvider, IPolicy, IPolicyRef, IPrincipal, IResourceWithPolicy, IRole, IRolePolicyRef, IRoleRef, ISAMLProviderRef, ISamlProvider, IServerCertificateRef, IServiceLinkedRoleRef, IUser, IUserPolicyRef, IUserRef, IUserToGroupAdditionRef, IVirtualMFADeviceRef]:
+    typing.cast(typing.Any, cls).__protocol_attrs__ = typing.cast(typing.Any, cls).__protocol_attrs__ - set(['__jsii_proxy_class__', '__jsii_type__'])

@@ -787,7 +787,7 @@ class CfnDBClusterProps:
         :param master_username: The name of the master user for the cluster. Constraints: - Must be from 1 to 63 letters or numbers. - The first character must be a letter. - Cannot be a reserved word for the chosen database engine.
         :param master_user_password: The password for the master database user. This password can contain any printable ASCII character except forward slash (/), double quote ("), or the "at" symbol (@). Constraints: Must contain from 8 to 100 characters.
         :param master_user_secret_kms_key_id: The Amazon Web Services KMS key identifier to encrypt a secret that is automatically generated and managed in Amazon Web Services Secrets Manager. This setting is valid only if the master user password is managed by Amazon DocumentDB in Amazon Web Services Secrets Manager for the DB cluster. The Amazon Web Services KMS key identifier is the key ARN, key ID, alias ARN, or alias name for the KMS key. To use a KMS key in a different Amazon Web Services account, specify the key ARN or alias ARN. If you don't specify ``MasterUserSecretKmsKeyId`` , then the ``aws/secretsmanager`` KMS key is used to encrypt the secret. If the secret is in a different Amazon Web Services account, then you can't use the ``aws/secretsmanager`` KMS key to encrypt the secret, and you must use a customer managed KMS key. There is a default KMS key for your Amazon Web Services account. Your Amazon Web Services account has a different default KMS key for each Amazon Web Services Region.
-        :param network_type: 
+        :param network_type: The network type of the cluster. The network type is determined by the ``DBSubnetGroup`` specified for the cluster. A ``DBSubnetGroup`` can support only the IPv4 protocol or the IPv4 and the IPv6 protocols ( ``DUAL`` ). For more information, see `DocumentDB clusters in a VPC <https://docs.aws.amazon.com/documentdb/latest/developerguide/vpc-clusters.html>`_ in the Amazon DocumentDB Developer Guide. Valid Values: ``IPV4`` | ``DUAL``
         :param port: Specifies the port that the database engine is listening on.
         :param preferred_backup_window: The daily time range during which automated backups are created if automated backups are enabled using the ``BackupRetentionPeriod`` parameter. The default is a 30-minute window selected at random from an 8-hour block of time for each AWS Region . Constraints: - Must be in the format ``hh24:mi-hh24:mi`` . - Must be in Universal Coordinated Time (UTC). - Must not conflict with the preferred maintenance window. - Must be at least 30 minutes.
         :param preferred_maintenance_window: The weekly time range during which system maintenance can occur, in Universal Coordinated Time (UTC). Format: ``ddd:hh24:mi-ddd:hh24:mi`` The default is a 30-minute window selected at random from an 8-hour block of time for each AWS Region , occurring on a random day of the week. Valid days: Mon, Tue, Wed, Thu, Fri, Sat, Sun Constraints: Minimum 30-minute window.
@@ -1146,7 +1146,14 @@ class CfnDBClusterProps:
 
     @builtins.property
     def network_type(self) -> typing.Optional[builtins.str]:
-        '''
+        '''The network type of the cluster.
+
+        The network type is determined by the ``DBSubnetGroup`` specified for the cluster. A ``DBSubnetGroup`` can support only the IPv4 protocol or the IPv4 and the IPv6 protocols ( ``DUAL`` ).
+
+        For more information, see `DocumentDB clusters in a VPC <https://docs.aws.amazon.com/documentdb/latest/developerguide/vpc-clusters.html>`_ in the Amazon DocumentDB Developer Guide.
+
+        Valid Values: ``IPV4`` | ``DUAL``
+
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-docdb-dbcluster.html#cfn-docdb-dbcluster-networktype
         '''
         result = self._values.get("network_type")
@@ -4312,7 +4319,7 @@ class CfnDBCluster(
         :param master_username: The name of the master user for the cluster. Constraints: - Must be from 1 to 63 letters or numbers. - The first character must be a letter. - Cannot be a reserved word for the chosen database engine.
         :param master_user_password: The password for the master database user. This password can contain any printable ASCII character except forward slash (/), double quote ("), or the "at" symbol (@). Constraints: Must contain from 8 to 100 characters.
         :param master_user_secret_kms_key_id: The Amazon Web Services KMS key identifier to encrypt a secret that is automatically generated and managed in Amazon Web Services Secrets Manager. This setting is valid only if the master user password is managed by Amazon DocumentDB in Amazon Web Services Secrets Manager for the DB cluster. The Amazon Web Services KMS key identifier is the key ARN, key ID, alias ARN, or alias name for the KMS key. To use a KMS key in a different Amazon Web Services account, specify the key ARN or alias ARN. If you don't specify ``MasterUserSecretKmsKeyId`` , then the ``aws/secretsmanager`` KMS key is used to encrypt the secret. If the secret is in a different Amazon Web Services account, then you can't use the ``aws/secretsmanager`` KMS key to encrypt the secret, and you must use a customer managed KMS key. There is a default KMS key for your Amazon Web Services account. Your Amazon Web Services account has a different default KMS key for each Amazon Web Services Region.
-        :param network_type: 
+        :param network_type: The network type of the cluster. The network type is determined by the ``DBSubnetGroup`` specified for the cluster. A ``DBSubnetGroup`` can support only the IPv4 protocol or the IPv4 and the IPv6 protocols ( ``DUAL`` ). For more information, see `DocumentDB clusters in a VPC <https://docs.aws.amazon.com/documentdb/latest/developerguide/vpc-clusters.html>`_ in the Amazon DocumentDB Developer Guide. Valid Values: ``IPV4`` | ``DUAL``
         :param port: Specifies the port that the database engine is listening on.
         :param preferred_backup_window: The daily time range during which automated backups are created if automated backups are enabled using the ``BackupRetentionPeriod`` parameter. The default is a 30-minute window selected at random from an 8-hour block of time for each AWS Region . Constraints: - Must be in the format ``hh24:mi-hh24:mi`` . - Must be in Universal Coordinated Time (UTC). - Must not conflict with the preferred maintenance window. - Must be at least 30 minutes.
         :param preferred_maintenance_window: The weekly time range during which system maintenance can occur, in Universal Coordinated Time (UTC). Format: ``ddd:hh24:mi-ddd:hh24:mi`` The default is a 30-minute window selected at random from an 8-hour block of time for each AWS Region , occurring on a random day of the week. Valid days: Mon, Tue, Wed, Thu, Fri, Sat, Sun Constraints: Minimum 30-minute window.
@@ -4697,6 +4704,7 @@ class CfnDBCluster(
     @builtins.property
     @jsii.member(jsii_name="networkType")
     def network_type(self) -> typing.Optional[builtins.str]:
+        '''The network type of the cluster.'''
         return typing.cast(typing.Optional[builtins.str], jsii.get(self, "networkType"))
 
     @network_type.setter
@@ -7394,3 +7402,6 @@ def _typecheckingstub__5af197dfd9513994e6eb32cf7bee6ff17fef900a5adb40b20b62ef897
 ) -> None:
     """Type checking stubs"""
     pass
+
+for cls in [IClusterParameterGroup, IDBClusterParameterGroupRef, IDBClusterRef, IDBInstanceRef, IDBSubnetGroupRef, IDatabaseCluster, IDatabaseInstance, IEventSubscriptionRef]:
+    typing.cast(typing.Any, cls).__protocol_attrs__ = typing.cast(typing.Any, cls).__protocol_attrs__ - set(['__jsii_proxy_class__', '__jsii_type__'])

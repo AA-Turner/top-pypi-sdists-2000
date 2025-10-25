@@ -632,3 +632,6 @@ def _typecheckingstub__a8a7019de50716e632f620fdc25a9002b3dd655fc191589f4a7e2eb2a
 ) -> None:
     """Type checking stubs"""
     pass
+
+for cls in [IRepositoryAssociationRef]:
+    typing.cast(typing.Any, cls).__protocol_attrs__ = typing.cast(typing.Any, cls).__protocol_attrs__ - set(['__jsii_proxy_class__', '__jsii_type__'])

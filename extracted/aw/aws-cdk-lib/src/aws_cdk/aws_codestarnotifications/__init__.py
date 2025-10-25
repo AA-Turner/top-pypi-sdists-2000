@@ -1737,3 +1737,6 @@ def _typecheckingstub__c5808f80235ebed2f288b2e5e65437084fde23b48cb2a5daa84d6bf15
 ) -> None:
     """Type checking stubs"""
     pass
+
+for cls in [INotificationRule, INotificationRuleRef, INotificationRuleSource, INotificationRuleTarget]:
+    typing.cast(typing.Any, cls).__protocol_attrs__ = typing.cast(typing.Any, cls).__protocol_attrs__ - set(['__jsii_proxy_class__', '__jsii_type__'])

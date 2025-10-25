@@ -611,15 +611,15 @@ decode_definite_long_bytestring(CBORDecoderObject *self, Py_ssize_t length)
         }
 
         if (buffer) {
-            PyObject *new_buffer = PyByteArray_Concat(buffer, chunk);
-            Py_DECREF(chunk);
-            if (!new_buffer)
+            Py_ssize_t current_size = PyByteArray_GET_SIZE(buffer);
+            if (PyByteArray_Resize(buffer, current_size + chunk_length) < 0) {
+                Py_DECREF(chunk);
                 goto error;
-
-            if (new_buffer != buffer) {
-                Py_DECREF(buffer);
-                buffer = new_buffer;
             }
+            memcpy(PyByteArray_AS_STRING(buffer) + current_size,
+                   PyBytes_AS_STRING(chunk),
+                   chunk_length);
+            Py_DECREF(chunk);
         } else {
             buffer = PyByteArray_FromObject(chunk);
             Py_DECREF(chunk);
@@ -759,7 +759,7 @@ decode_definite_long_string(CBORDecoderObject *self, Py_ssize_t length)
     char *buffer = NULL;
     while (left) {
         // Read up to 65536 bytes of data from the stream
-        Py_ssize_t chunk_length = 65536 - buffer_size;
+        Py_ssize_t chunk_length = 65536 - buffer_length;
         if (left < chunk_length)
             chunk_length = left;
 
@@ -829,7 +829,13 @@ decode_definite_long_string(CBORDecoderObject *self, Py_ssize_t length)
                 memcpy(buffer, bytes_buffer + consumed, unconsumed);
             }
             buffer_length = unconsumed;
+        } else {
+            // All bytes consumed, reset buffer_length
+            buffer_length = 0;
         }
+
+        Py_DECREF(chunk);
+        chunk = NULL;
     }
 
     if (ret && string_namespace_add(self, ret, length) == -1)

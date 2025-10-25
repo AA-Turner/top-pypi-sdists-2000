@@ -129,7 +129,7 @@ class SPARQLStore(SPARQLConnector, Store):
         sparql11: bool = True,
         context_aware: bool = True,
         node_to_sparql: _NodeToSparql = _node_to_sparql,
-        returnFormat: str = "xml",  # noqa: N803
+        returnFormat: Optional[str] = "xml",  # noqa: N803
         auth: Optional[Tuple[str, str]] = None,
         **sparqlconnector_kwargs,
     ):
@@ -148,11 +148,11 @@ class SPARQLStore(SPARQLConnector, Store):
         self._queries = 0
 
     # type error: Missing return statement
-    def open(self, configuration: str, create: bool = False) -> Optional[int]:  # type: ignore[return]
+    def open(self, configuration: Union[str, tuple[str, str]], create: bool = False) -> Optional[int]:  # type: ignore[return]
         """This method is included so that calls to this Store via Graph, e.g. Graph("SPARQLStore"),
         can set the required parameters
         """
-        if type(configuration) == str:  # noqa: E721
+        if type(configuration) is str:
             self.query_endpoint = configuration
         else:
             raise Exception(

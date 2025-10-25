@@ -3873,3 +3873,6 @@ def _typecheckingstub__53b54f7e3522aacd600ff090e6221f615565664782c185bdcb801f95f
 ) -> None:
     """Type checking stubs"""
     pass
+
+for cls in [IBudgetRef, IBudgetsActionRef]:
+    typing.cast(typing.Any, cls).__protocol_attrs__ = typing.cast(typing.Any, cls).__protocol_attrs__ - set(['__jsii_proxy_class__', '__jsii_type__'])

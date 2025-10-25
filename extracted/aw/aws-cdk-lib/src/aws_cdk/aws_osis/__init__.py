@@ -90,6 +90,8 @@ from .. import (
         "buffer_options": "bufferOptions",
         "encryption_at_rest_options": "encryptionAtRestOptions",
         "log_publishing_options": "logPublishingOptions",
+        "pipeline_role_arn": "pipelineRoleArn",
+        "resource_policy": "resourcePolicy",
         "tags": "tags",
         "vpc_options": "vpcOptions",
     },
@@ -105,6 +107,8 @@ class CfnPipelineProps:
         buffer_options: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnPipeline.BufferOptionsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         encryption_at_rest_options: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnPipeline.EncryptionAtRestOptionsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         log_publishing_options: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnPipeline.LogPublishingOptionsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        pipeline_role_arn: typing.Optional[builtins.str] = None,
+        resource_policy: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnPipeline.ResourcePolicyProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
         vpc_options: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnPipeline.VpcOptionsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
@@ -117,6 +121,8 @@ class CfnPipelineProps:
         :param buffer_options: Options that specify the configuration of a persistent buffer. To configure how OpenSearch Ingestion encrypts this data, set the ``EncryptionAtRestOptions`` . For more information, see `Persistent buffering <https://docs.aws.amazon.com/opensearch-service/latest/developerguide/osis-features-overview.html#persistent-buffering>`_ .
         :param encryption_at_rest_options: Options to control how OpenSearch encrypts buffer data.
         :param log_publishing_options: Key-value pairs that represent log publishing settings.
+        :param pipeline_role_arn: The Pipeline Role (ARN) for the pipeline.
+        :param resource_policy: 
         :param tags: List of tags to add to the pipeline upon creation.
         :param vpc_options: Options that specify the subnets and security groups for an OpenSearch Ingestion VPC endpoint.
 
@@ -128,6 +134,8 @@ class CfnPipelineProps:
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_osis as osis
+            
+            # policy: Any
             
             cfn_pipeline_props = osis.CfnPipelineProps(
                 max_units=123,
@@ -147,6 +155,10 @@ class CfnPipelineProps:
                         log_group="logGroup"
                     ),
                     is_logging_enabled=False
+                ),
+                pipeline_role_arn="pipelineRoleArn",
+                resource_policy=osis.CfnPipeline.ResourcePolicyProperty(
+                    policy=policy
                 ),
                 tags=[CfnTag(
                     key="key",
@@ -174,6 +186,8 @@ class CfnPipelineProps:
             check_type(argname="argument buffer_options", value=buffer_options, expected_type=type_hints["buffer_options"])
             check_type(argname="argument encryption_at_rest_options", value=encryption_at_rest_options, expected_type=type_hints["encryption_at_rest_options"])
             check_type(argname="argument log_publishing_options", value=log_publishing_options, expected_type=type_hints["log_publishing_options"])
+            check_type(argname="argument pipeline_role_arn", value=pipeline_role_arn, expected_type=type_hints["pipeline_role_arn"])
+            check_type(argname="argument resource_policy", value=resource_policy, expected_type=type_hints["resource_policy"])
             check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
             check_type(argname="argument vpc_options", value=vpc_options, expected_type=type_hints["vpc_options"])
         self._values: typing.Dict[builtins.str, typing.Any] = {
@@ -188,6 +202,10 @@ class CfnPipelineProps:
             self._values["encryption_at_rest_options"] = encryption_at_rest_options
         if log_publishing_options is not None:
             self._values["log_publishing_options"] = log_publishing_options
+        if pipeline_role_arn is not None:
+            self._values["pipeline_role_arn"] = pipeline_role_arn
+        if resource_policy is not None:
+            self._values["resource_policy"] = resource_policy
         if tags is not None:
             self._values["tags"] = tags
         if vpc_options is not None:
@@ -267,6 +285,25 @@ class CfnPipelineProps:
         '''
         result = self._values.get("log_publishing_options")
         return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPipeline.LogPublishingOptionsProperty"]], result)
+
+    @builtins.property
+    def pipeline_role_arn(self) -> typing.Optional[builtins.str]:
+        '''The Pipeline Role (ARN) for the pipeline.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-osis-pipeline.html#cfn-osis-pipeline-pipelinerolearn
+        '''
+        result = self._values.get("pipeline_role_arn")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def resource_policy(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPipeline.ResourcePolicyProperty"]]:
+        '''
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-osis-pipeline.html#cfn-osis-pipeline-resourcepolicy
+        '''
+        result = self._values.get("resource_policy")
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPipeline.ResourcePolicyProperty"]], result)
 
     @builtins.property
     def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
@@ -407,6 +444,8 @@ class CfnPipeline(
         # The values are placeholders you should change.
         from aws_cdk import aws_osis as osis
         
+        # policy: Any
+        
         cfn_pipeline = osis.CfnPipeline(self, "MyCfnPipeline",
             max_units=123,
             min_units=123,
@@ -425,6 +464,10 @@ class CfnPipeline(
                     log_group="logGroup"
                 ),
                 is_logging_enabled=False
+            ),
+            pipeline_role_arn="pipelineRoleArn",
+            resource_policy=osis.CfnPipeline.ResourcePolicyProperty(
+                policy=policy
             ),
             tags=[CfnTag(
                 key="key",
@@ -456,6 +499,8 @@ class CfnPipeline(
         buffer_options: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnPipeline.BufferOptionsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         encryption_at_rest_options: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnPipeline.EncryptionAtRestOptionsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         log_publishing_options: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnPipeline.LogPublishingOptionsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        pipeline_role_arn: typing.Optional[builtins.str] = None,
+        resource_policy: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnPipeline.ResourcePolicyProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
         vpc_options: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnPipeline.VpcOptionsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
@@ -469,6 +514,8 @@ class CfnPipeline(
         :param buffer_options: Options that specify the configuration of a persistent buffer. To configure how OpenSearch Ingestion encrypts this data, set the ``EncryptionAtRestOptions`` . For more information, see `Persistent buffering <https://docs.aws.amazon.com/opensearch-service/latest/developerguide/osis-features-overview.html#persistent-buffering>`_ .
         :param encryption_at_rest_options: Options to control how OpenSearch encrypts buffer data.
         :param log_publishing_options: Key-value pairs that represent log publishing settings.
+        :param pipeline_role_arn: The Pipeline Role (ARN) for the pipeline.
+        :param resource_policy: 
         :param tags: List of tags to add to the pipeline upon creation.
         :param vpc_options: Options that specify the subnets and security groups for an OpenSearch Ingestion VPC endpoint.
         '''
@@ -484,6 +531,8 @@ class CfnPipeline(
             buffer_options=buffer_options,
             encryption_at_rest_options=encryption_at_rest_options,
             log_publishing_options=log_publishing_options,
+            pipeline_role_arn=pipeline_role_arn,
+            resource_policy=resource_policy,
             tags=tags,
             vpc_options=vpc_options,
         )
@@ -680,6 +729,36 @@ class CfnPipeline(
             type_hints = typing.get_type_hints(_typecheckingstub__7b44b1fb090de1c3a97c62326f13cf12ff45ba873b47547be0cd3ea8680ef42e)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
         jsii.set(self, "logPublishingOptions", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="pipelineRoleArn")
+    def pipeline_role_arn(self) -> typing.Optional[builtins.str]:
+        '''The Pipeline Role (ARN) for the pipeline.'''
+        return typing.cast(typing.Optional[builtins.str], jsii.get(self, "pipelineRoleArn"))
+
+    @pipeline_role_arn.setter
+    def pipeline_role_arn(self, value: typing.Optional[builtins.str]) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__6cca984307f2963eeb4f0db4527a401cf7e431dd5504f7c6c38b8a9f33379d33)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "pipelineRoleArn", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="resourcePolicy")
+    def resource_policy(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPipeline.ResourcePolicyProperty"]]:
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPipeline.ResourcePolicyProperty"]], jsii.get(self, "resourcePolicy"))
+
+    @resource_policy.setter
+    def resource_policy(
+        self,
+        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPipeline.ResourcePolicyProperty"]],
+    ) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__572f8477e6c9cfb3f696174970e1dc41dec1aad38d472aa56943c7db80dde8dc)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "resourcePolicy", value) # pyright: ignore[reportArgumentType]
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
@@ -960,6 +1039,58 @@ class CfnPipeline(
 
         def __repr__(self) -> str:
             return "LogPublishingOptionsProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_osis.CfnPipeline.ResourcePolicyProperty",
+        jsii_struct_bases=[],
+        name_mapping={"policy": "policy"},
+    )
+    class ResourcePolicyProperty:
+        def __init__(self, *, policy: typing.Any) -> None:
+            '''
+            :param policy: 
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-osis-pipeline-resourcepolicy.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_osis as osis
+                
+                # policy: Any
+                
+                resource_policy_property = osis.CfnPipeline.ResourcePolicyProperty(
+                    policy=policy
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__fc4aa45dd3afa27eb9ae44d58220b58b63a71a891ef6b5e018b24b51ea896bb2)
+                check_type(argname="argument policy", value=policy, expected_type=type_hints["policy"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "policy": policy,
+            }
+
+        @builtins.property
+        def policy(self) -> typing.Any:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-osis-pipeline-resourcepolicy.html#cfn-osis-pipeline-resourcepolicy-policy
+            '''
+            result = self._values.get("policy")
+            assert result is not None, "Required property 'policy' is missing"
+            return typing.cast(typing.Any, result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "ResourcePolicyProperty(%s)" % ", ".join(
                 k + "=" + repr(v) for k, v in self._values.items()
             )
 
@@ -1269,6 +1400,8 @@ def _typecheckingstub__e5ae24cae502e48ff4f681bebbc941bf569bb00330722c27b6a689ced
     buffer_options: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnPipeline.BufferOptionsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     encryption_at_rest_options: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnPipeline.EncryptionAtRestOptionsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     log_publishing_options: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnPipeline.LogPublishingOptionsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    pipeline_role_arn: typing.Optional[builtins.str] = None,
+    resource_policy: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnPipeline.ResourcePolicyProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     vpc_options: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnPipeline.VpcOptionsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
 ) -> None:
@@ -1293,6 +1426,8 @@ def _typecheckingstub__f7720fc023720b487ee160161639df896ae055ed55f72c575e20e1b94
     buffer_options: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnPipeline.BufferOptionsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     encryption_at_rest_options: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnPipeline.EncryptionAtRestOptionsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     log_publishing_options: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnPipeline.LogPublishingOptionsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    pipeline_role_arn: typing.Optional[builtins.str] = None,
+    resource_policy: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnPipeline.ResourcePolicyProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     vpc_options: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnPipeline.VpcOptionsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
 ) -> None:
@@ -1353,6 +1488,18 @@ def _typecheckingstub__7b44b1fb090de1c3a97c62326f13cf12ff45ba873b47547be0cd3ea86
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__6cca984307f2963eeb4f0db4527a401cf7e431dd5504f7c6c38b8a9f33379d33(
+    value: typing.Optional[builtins.str],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__572f8477e6c9cfb3f696174970e1dc41dec1aad38d472aa56943c7db80dde8dc(
+    value: typing.Optional[typing.Union[_IResolvable_da3f097b, CfnPipeline.ResourcePolicyProperty]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__678a542f1777226f3ecd76ae89117b1cbf99c7a46ef4c26f32370792db69c5ad(
     value: typing.Optional[typing.List[_CfnTag_f6864754]],
 ) -> None:
@@ -1394,6 +1541,13 @@ def _typecheckingstub__c2a4597a1154076637de8b0314d4ccfd1e5283d50069d827a0d01e2cc
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__fc4aa45dd3afa27eb9ae44d58220b58b63a71a891ef6b5e018b24b51ea896bb2(
+    *,
+    policy: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__7f17f2ecfc08a6464c5ca6cd5911cac75c468f44896510a68deda49d3d5b62ba(
     *,
     attach_to_vpc: typing.Union[builtins.bool, _IResolvable_da3f097b],
@@ -1420,3 +1574,6 @@ def _typecheckingstub__d6c7fc6663c9baefdd81f02e0e69deb4e81a8e210a00a4346752ffa95
 ) -> None:
     """Type checking stubs"""
     pass
+
+for cls in [IPipelineRef]:
+    typing.cast(typing.Any, cls).__protocol_attrs__ = typing.cast(typing.Any, cls).__protocol_attrs__ - set(['__jsii_proxy_class__', '__jsii_type__'])

@@ -1093,6 +1093,7 @@ class CfnAccountPolicyProps:
     name_mapping={
         "name": "name",
         "delivery_destination_policy": "deliveryDestinationPolicy",
+        "delivery_destination_type": "deliveryDestinationType",
         "destination_resource_arn": "destinationResourceArn",
         "output_format": "outputFormat",
         "tags": "tags",
@@ -1104,6 +1105,7 @@ class CfnDeliveryDestinationProps:
         *,
         name: builtins.str,
         delivery_destination_policy: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDeliveryDestination.DestinationPolicyProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        delivery_destination_type: typing.Optional[builtins.str] = None,
         destination_resource_arn: typing.Optional[builtins.str] = None,
         output_format: typing.Optional[builtins.str] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -1112,6 +1114,7 @@ class CfnDeliveryDestinationProps:
 
         :param name: The name of this delivery destination.
         :param delivery_destination_policy: An IAM policy that grants permissions to CloudWatch Logs to deliver logs cross-account to a specified destination in this account. For examples of this policy, see `Examples <https://docs.aws.amazon.com/AmazonCloudWatchLogs/latest/APIReference/API_PutDeliveryDestinationPolicy.html#API_PutDeliveryDestinationPolicy_Examples>`_ in the CloudWatch Logs API Reference.
+        :param delivery_destination_type: Displays whether this delivery destination is CloudWatch Logs, Amazon S3, Firehose, or X-Ray.
         :param destination_resource_arn: The ARN of the AWS destination that this delivery destination represents. That AWS destination can be a log group in CloudWatch Logs , an Amazon S3 bucket, or a Firehose stream.
         :param output_format: The format of the logs that are sent to this delivery destination.
         :param tags: An array of key-value pairs to apply to the delivery destination. For more information, see `Tag <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-resource-tags.html>`_ .
@@ -1135,6 +1138,7 @@ class CfnDeliveryDestinationProps:
                     delivery_destination_name="deliveryDestinationName",
                     delivery_destination_policy=delivery_destination_policy
                 ),
+                delivery_destination_type="deliveryDestinationType",
                 destination_resource_arn="destinationResourceArn",
                 output_format="outputFormat",
                 tags=[CfnTag(
@@ -1147,6 +1151,7 @@ class CfnDeliveryDestinationProps:
             type_hints = typing.get_type_hints(_typecheckingstub__53bbf04ee2b4b7e83a98258d41a973972fae20f7537731a0fbcda3e7c5f46c1c)
             check_type(argname="argument name", value=name, expected_type=type_hints["name"])
             check_type(argname="argument delivery_destination_policy", value=delivery_destination_policy, expected_type=type_hints["delivery_destination_policy"])
+            check_type(argname="argument delivery_destination_type", value=delivery_destination_type, expected_type=type_hints["delivery_destination_type"])
             check_type(argname="argument destination_resource_arn", value=destination_resource_arn, expected_type=type_hints["destination_resource_arn"])
             check_type(argname="argument output_format", value=output_format, expected_type=type_hints["output_format"])
             check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
@@ -1155,6 +1160,8 @@ class CfnDeliveryDestinationProps:
         }
         if delivery_destination_policy is not None:
             self._values["delivery_destination_policy"] = delivery_destination_policy
+        if delivery_destination_type is not None:
+            self._values["delivery_destination_type"] = delivery_destination_type
         if destination_resource_arn is not None:
             self._values["destination_resource_arn"] = destination_resource_arn
         if output_format is not None:
@@ -1184,6 +1191,15 @@ class CfnDeliveryDestinationProps:
         '''
         result = self._values.get("delivery_destination_policy")
         return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryDestination.DestinationPolicyProperty"]], result)
+
+    @builtins.property
+    def delivery_destination_type(self) -> typing.Optional[builtins.str]:
+        '''Displays whether this delivery destination is CloudWatch Logs, Amazon S3, Firehose, or X-Ray.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-logs-deliverydestination.html#cfn-logs-deliverydestination-deliverydestinationtype
+        '''
+        result = self._values.get("delivery_destination_type")
+        return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
     def destination_resource_arn(self) -> typing.Optional[builtins.str]:
@@ -2210,6 +2226,8 @@ class CfnLogStreamProps:
         "log_group_name": "logGroupName",
         "metric_transformations": "metricTransformations",
         "apply_on_transformed_logs": "applyOnTransformedLogs",
+        "emit_system_field_dimensions": "emitSystemFieldDimensions",
+        "field_selection_criteria": "fieldSelectionCriteria",
         "filter_name": "filterName",
     },
 )
@@ -2221,6 +2239,8 @@ class CfnMetricFilterProps:
         log_group_name: builtins.str,
         metric_transformations: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnMetricFilter.MetricTransformationProperty", typing.Dict[builtins.str, typing.Any]]]]],
         apply_on_transformed_logs: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        emit_system_field_dimensions: typing.Optional[typing.Sequence[builtins.str]] = None,
+        field_selection_criteria: typing.Optional[builtins.str] = None,
         filter_name: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Properties for defining a ``CfnMetricFilter``.
@@ -2229,6 +2249,8 @@ class CfnMetricFilterProps:
         :param log_group_name: The name of an existing log group that you want to associate with this metric filter.
         :param metric_transformations: The metric transformations.
         :param apply_on_transformed_logs: This parameter is valid only for log groups that have an active log transformer. For more information about log transformers, see `PutTransformer <https://docs.aws.amazon.com/AmazonCloudWatchLogs/latest/APIReference/API_PutTransformer.html>`_ . If this value is ``true`` , the metric filter is applied on the transformed version of the log events instead of the original ingested log events.
+        :param emit_system_field_dimensions: The list of system fields that are emitted as additional dimensions in the generated metrics. Returns the ``emitSystemFieldDimensions`` value if it was specified when the metric filter was created.
+        :param field_selection_criteria: The filter expression that specifies which log events are processed by this metric filter based on system fields. Returns the ``fieldSelectionCriteria`` value if it was specified when the metric filter was created.
         :param filter_name: The name of the metric filter.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-logs-metricfilter.html
@@ -2259,6 +2281,8 @@ class CfnMetricFilterProps:
             
                 # the properties below are optional
                 apply_on_transformed_logs=False,
+                emit_system_field_dimensions=["emitSystemFieldDimensions"],
+                field_selection_criteria="fieldSelectionCriteria",
                 filter_name="filterName"
             )
         '''
@@ -2268,6 +2292,8 @@ class CfnMetricFilterProps:
             check_type(argname="argument log_group_name", value=log_group_name, expected_type=type_hints["log_group_name"])
             check_type(argname="argument metric_transformations", value=metric_transformations, expected_type=type_hints["metric_transformations"])
             check_type(argname="argument apply_on_transformed_logs", value=apply_on_transformed_logs, expected_type=type_hints["apply_on_transformed_logs"])
+            check_type(argname="argument emit_system_field_dimensions", value=emit_system_field_dimensions, expected_type=type_hints["emit_system_field_dimensions"])
+            check_type(argname="argument field_selection_criteria", value=field_selection_criteria, expected_type=type_hints["field_selection_criteria"])
             check_type(argname="argument filter_name", value=filter_name, expected_type=type_hints["filter_name"])
         self._values: typing.Dict[builtins.str, typing.Any] = {
             "filter_pattern": filter_pattern,
@@ -2276,6 +2302,10 @@ class CfnMetricFilterProps:
         }
         if apply_on_transformed_logs is not None:
             self._values["apply_on_transformed_logs"] = apply_on_transformed_logs
+        if emit_system_field_dimensions is not None:
+            self._values["emit_system_field_dimensions"] = emit_system_field_dimensions
+        if field_selection_criteria is not None:
+            self._values["field_selection_criteria"] = field_selection_criteria
         if filter_name is not None:
             self._values["filter_name"] = filter_name
 
@@ -2327,6 +2357,30 @@ class CfnMetricFilterProps:
         '''
         result = self._values.get("apply_on_transformed_logs")
         return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+
+    @builtins.property
+    def emit_system_field_dimensions(
+        self,
+    ) -> typing.Optional[typing.List[builtins.str]]:
+        '''The list of system fields that are emitted as additional dimensions in the generated metrics.
+
+        Returns the ``emitSystemFieldDimensions`` value if it was specified when the metric filter was created.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-logs-metricfilter.html#cfn-logs-metricfilter-emitsystemfielddimensions
+        '''
+        result = self._values.get("emit_system_field_dimensions")
+        return typing.cast(typing.Optional[typing.List[builtins.str]], result)
+
+    @builtins.property
+    def field_selection_criteria(self) -> typing.Optional[builtins.str]:
+        '''The filter expression that specifies which log events are processed by this metric filter based on system fields.
+
+        Returns the ``fieldSelectionCriteria`` value if it was specified when the metric filter was created.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-logs-metricfilter.html#cfn-logs-metricfilter-fieldselectioncriteria
+        '''
+        result = self._values.get("field_selection_criteria")
+        return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
     def filter_name(self) -> typing.Optional[builtins.str]:
@@ -2551,6 +2605,8 @@ class CfnResourcePolicyProps:
         "log_group_name": "logGroupName",
         "apply_on_transformed_logs": "applyOnTransformedLogs",
         "distribution": "distribution",
+        "emit_system_fields": "emitSystemFields",
+        "field_selection_criteria": "fieldSelectionCriteria",
         "filter_name": "filterName",
         "role_arn": "roleArn",
     },
@@ -2564,6 +2620,8 @@ class CfnSubscriptionFilterProps:
         log_group_name: builtins.str,
         apply_on_transformed_logs: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
         distribution: typing.Optional[builtins.str] = None,
+        emit_system_fields: typing.Optional[typing.Sequence[builtins.str]] = None,
+        field_selection_criteria: typing.Optional[builtins.str] = None,
         filter_name: typing.Optional[builtins.str] = None,
         role_arn: typing.Optional[builtins.str] = None,
     ) -> None:
@@ -2574,6 +2632,8 @@ class CfnSubscriptionFilterProps:
         :param log_group_name: The log group to associate with the subscription filter. All log events that are uploaded to this log group are filtered and delivered to the specified AWS resource if the filter pattern matches the log events.
         :param apply_on_transformed_logs: This parameter is valid only for log groups that have an active log transformer. For more information about log transformers, see `PutTransformer <https://docs.aws.amazon.com/AmazonCloudWatchLogs/latest/APIReference/API_PutTransformer.html>`_ . If this value is ``true`` , the subscription filter is applied on the transformed version of the log events instead of the original ingested log events.
         :param distribution: The method used to distribute log data to the destination, which can be either random or grouped by log stream.
+        :param emit_system_fields: The list of system fields that are included in the log events sent to the subscription destination. Returns the ``emitSystemFields`` value if it was specified when the subscription filter was created.
+        :param field_selection_criteria: The filter expression that specifies which log events are processed by this subscription filter based on system fields. Returns the ``fieldSelectionCriteria`` value if it was specified when the subscription filter was created.
         :param filter_name: The name of the subscription filter.
         :param role_arn: The ARN of an IAM role that grants CloudWatch Logs permissions to deliver ingested log events to the destination stream. You don't need to provide the ARN when you are working with a logical destination for cross-account delivery.
 
@@ -2594,6 +2654,8 @@ class CfnSubscriptionFilterProps:
                 # the properties below are optional
                 apply_on_transformed_logs=False,
                 distribution="distribution",
+                emit_system_fields=["emitSystemFields"],
+                field_selection_criteria="fieldSelectionCriteria",
                 filter_name="filterName",
                 role_arn="roleArn"
             )
@@ -2605,6 +2667,8 @@ class CfnSubscriptionFilterProps:
             check_type(argname="argument log_group_name", value=log_group_name, expected_type=type_hints["log_group_name"])
             check_type(argname="argument apply_on_transformed_logs", value=apply_on_transformed_logs, expected_type=type_hints["apply_on_transformed_logs"])
             check_type(argname="argument distribution", value=distribution, expected_type=type_hints["distribution"])
+            check_type(argname="argument emit_system_fields", value=emit_system_fields, expected_type=type_hints["emit_system_fields"])
+            check_type(argname="argument field_selection_criteria", value=field_selection_criteria, expected_type=type_hints["field_selection_criteria"])
             check_type(argname="argument filter_name", value=filter_name, expected_type=type_hints["filter_name"])
             check_type(argname="argument role_arn", value=role_arn, expected_type=type_hints["role_arn"])
         self._values: typing.Dict[builtins.str, typing.Any] = {
@@ -2616,6 +2680,10 @@ class CfnSubscriptionFilterProps:
             self._values["apply_on_transformed_logs"] = apply_on_transformed_logs
         if distribution is not None:
             self._values["distribution"] = distribution
+        if emit_system_fields is not None:
+            self._values["emit_system_fields"] = emit_system_fields
+        if field_selection_criteria is not None:
+            self._values["field_selection_criteria"] = field_selection_criteria
         if filter_name is not None:
             self._values["filter_name"] = filter_name
         if role_arn is not None:
@@ -2677,6 +2745,28 @@ class CfnSubscriptionFilterProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-logs-subscriptionfilter.html#cfn-logs-subscriptionfilter-distribution
         '''
         result = self._values.get("distribution")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def emit_system_fields(self) -> typing.Optional[typing.List[builtins.str]]:
+        '''The list of system fields that are included in the log events sent to the subscription destination.
+
+        Returns the ``emitSystemFields`` value if it was specified when the subscription filter was created.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-logs-subscriptionfilter.html#cfn-logs-subscriptionfilter-emitsystemfields
+        '''
+        result = self._values.get("emit_system_fields")
+        return typing.cast(typing.Optional[typing.List[builtins.str]], result)
+
+    @builtins.property
+    def field_selection_criteria(self) -> typing.Optional[builtins.str]:
+        '''The filter expression that specifies which log events are processed by this subscription filter based on system fields.
+
+        Returns the ``fieldSelectionCriteria`` value if it was specified when the subscription filter was created.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-logs-subscriptionfilter.html#cfn-logs-subscriptionfilter-fieldselectioncriteria
+        '''
+        result = self._values.get("field_selection_criteria")
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
@@ -13178,6 +13268,7 @@ class CfnDeliveryDestination(
                 delivery_destination_name="deliveryDestinationName",
                 delivery_destination_policy=delivery_destination_policy
             ),
+            delivery_destination_type="deliveryDestinationType",
             destination_resource_arn="destinationResourceArn",
             output_format="outputFormat",
             tags=[CfnTag(
@@ -13194,6 +13285,7 @@ class CfnDeliveryDestination(
         *,
         name: builtins.str,
         delivery_destination_policy: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDeliveryDestination.DestinationPolicyProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        delivery_destination_type: typing.Optional[builtins.str] = None,
         destination_resource_arn: typing.Optional[builtins.str] = None,
         output_format: typing.Optional[builtins.str] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -13203,6 +13295,7 @@ class CfnDeliveryDestination(
         :param id: Construct identifier for this resource (unique in its scope).
         :param name: The name of this delivery destination.
         :param delivery_destination_policy: An IAM policy that grants permissions to CloudWatch Logs to deliver logs cross-account to a specified destination in this account. For examples of this policy, see `Examples <https://docs.aws.amazon.com/AmazonCloudWatchLogs/latest/APIReference/API_PutDeliveryDestinationPolicy.html#API_PutDeliveryDestinationPolicy_Examples>`_ in the CloudWatch Logs API Reference.
+        :param delivery_destination_type: Displays whether this delivery destination is CloudWatch Logs, Amazon S3, Firehose, or X-Ray.
         :param destination_resource_arn: The ARN of the AWS destination that this delivery destination represents. That AWS destination can be a log group in CloudWatch Logs , an Amazon S3 bucket, or a Firehose stream.
         :param output_format: The format of the logs that are sent to this delivery destination.
         :param tags: An array of key-value pairs to apply to the delivery destination. For more information, see `Tag <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-resource-tags.html>`_ .
@@ -13214,6 +13307,7 @@ class CfnDeliveryDestination(
         props = CfnDeliveryDestinationProps(
             name=name,
             delivery_destination_policy=delivery_destination_policy,
+            delivery_destination_type=delivery_destination_type,
             destination_resource_arn=destination_resource_arn,
             output_format=output_format,
             tags=tags,
@@ -13303,15 +13397,6 @@ class CfnDeliveryDestination(
         return typing.cast(builtins.str, jsii.get(self, "attrArn"))
 
     @builtins.property
-    @jsii.member(jsii_name="attrDeliveryDestinationType")
-    def attr_delivery_destination_type(self) -> builtins.str:
-        '''Displays whether this delivery destination is CloudWatch Logs, Amazon S3, Firehose, or X-Ray.
-
-        :cloudformationAttribute: DeliveryDestinationType
-        '''
-        return typing.cast(builtins.str, jsii.get(self, "attrDeliveryDestinationType"))
-
-    @builtins.property
     @jsii.member(jsii_name="cdkTagManager")
     def cdk_tag_manager(self) -> _TagManager_0a598cb3:
         '''Tag Manager which manages the tags for this resource.'''
@@ -13358,6 +13443,19 @@ class CfnDeliveryDestination(
             type_hints = typing.get_type_hints(_typecheckingstub__318bc8d97cf7e7f129b83631444b5c478bd65a7e80725c9b3be7e3cc4a600b05)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
         jsii.set(self, "deliveryDestinationPolicy", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="deliveryDestinationType")
+    def delivery_destination_type(self) -> typing.Optional[builtins.str]:
+        '''Displays whether this delivery destination is CloudWatch Logs, Amazon S3, Firehose, or X-Ray.'''
+        return typing.cast(typing.Optional[builtins.str], jsii.get(self, "deliveryDestinationType"))
+
+    @delivery_destination_type.setter
+    def delivery_destination_type(self, value: typing.Optional[builtins.str]) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__e9094a474a1f0538a2e8cb2dba700e3a54dadb80fd6043cdc3c06c27ef4e0a61)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "deliveryDestinationType", value) # pyright: ignore[reportArgumentType]
 
     @builtins.property
     @jsii.member(jsii_name="destinationResourceArn")
@@ -15030,6 +15128,8 @@ class CfnMetricFilter(
         
             # the properties below are optional
             apply_on_transformed_logs=False,
+            emit_system_field_dimensions=["emitSystemFieldDimensions"],
+            field_selection_criteria="fieldSelectionCriteria",
             filter_name="filterName"
         )
     '''
@@ -15043,6 +15143,8 @@ class CfnMetricFilter(
         log_group_name: builtins.str,
         metric_transformations: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnMetricFilter.MetricTransformationProperty", typing.Dict[builtins.str, typing.Any]]]]],
         apply_on_transformed_logs: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        emit_system_field_dimensions: typing.Optional[typing.Sequence[builtins.str]] = None,
+        field_selection_criteria: typing.Optional[builtins.str] = None,
         filter_name: typing.Optional[builtins.str] = None,
     ) -> None:
         '''
@@ -15052,6 +15154,8 @@ class CfnMetricFilter(
         :param log_group_name: The name of an existing log group that you want to associate with this metric filter.
         :param metric_transformations: The metric transformations.
         :param apply_on_transformed_logs: This parameter is valid only for log groups that have an active log transformer. For more information about log transformers, see `PutTransformer <https://docs.aws.amazon.com/AmazonCloudWatchLogs/latest/APIReference/API_PutTransformer.html>`_ . If this value is ``true`` , the metric filter is applied on the transformed version of the log events instead of the original ingested log events.
+        :param emit_system_field_dimensions: The list of system fields that are emitted as additional dimensions in the generated metrics. Returns the ``emitSystemFieldDimensions`` value if it was specified when the metric filter was created.
+        :param field_selection_criteria: The filter expression that specifies which log events are processed by this metric filter based on system fields. Returns the ``fieldSelectionCriteria`` value if it was specified when the metric filter was created.
         :param filter_name: The name of the metric filter.
         '''
         if __debug__:
@@ -15063,6 +15167,8 @@ class CfnMetricFilter(
             log_group_name=log_group_name,
             metric_transformations=metric_transformations,
             apply_on_transformed_logs=apply_on_transformed_logs,
+            emit_system_field_dimensions=emit_system_field_dimensions,
+            field_selection_criteria=field_selection_criteria,
             filter_name=filter_name,
         )
 
@@ -15170,6 +15276,37 @@ class CfnMetricFilter(
             type_hints = typing.get_type_hints(_typecheckingstub__ace95a6c73bb2a95ee90d8e4e4ad81a77108a607e59d44e12214965f5ebf9073)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
         jsii.set(self, "applyOnTransformedLogs", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="emitSystemFieldDimensions")
+    def emit_system_field_dimensions(
+        self,
+    ) -> typing.Optional[typing.List[builtins.str]]:
+        '''The list of system fields that are emitted as additional dimensions in the generated metrics.'''
+        return typing.cast(typing.Optional[typing.List[builtins.str]], jsii.get(self, "emitSystemFieldDimensions"))
+
+    @emit_system_field_dimensions.setter
+    def emit_system_field_dimensions(
+        self,
+        value: typing.Optional[typing.List[builtins.str]],
+    ) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__fb85bbbf4daaebc375fd8c7eaa366dd3b65d115ccf9913372bdd3e96861be308)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "emitSystemFieldDimensions", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="fieldSelectionCriteria")
+    def field_selection_criteria(self) -> typing.Optional[builtins.str]:
+        '''The filter expression that specifies which log events are processed by this metric filter based on system fields.'''
+        return typing.cast(typing.Optional[builtins.str], jsii.get(self, "fieldSelectionCriteria"))
+
+    @field_selection_criteria.setter
+    def field_selection_criteria(self, value: typing.Optional[builtins.str]) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__60d4c57a25cb5c0860f998187d0c8393e713de52986857fd0e48ce908497f0ae)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "fieldSelectionCriteria", value) # pyright: ignore[reportArgumentType]
 
     @builtins.property
     @jsii.member(jsii_name="filterName")
@@ -15747,6 +15884,8 @@ class CfnSubscriptionFilter(
             # the properties below are optional
             apply_on_transformed_logs=False,
             distribution="distribution",
+            emit_system_fields=["emitSystemFields"],
+            field_selection_criteria="fieldSelectionCriteria",
             filter_name="filterName",
             role_arn="roleArn"
         )
@@ -15762,6 +15901,8 @@ class CfnSubscriptionFilter(
         log_group_name: builtins.str,
         apply_on_transformed_logs: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
         distribution: typing.Optional[builtins.str] = None,
+        emit_system_fields: typing.Optional[typing.Sequence[builtins.str]] = None,
+        field_selection_criteria: typing.Optional[builtins.str] = None,
         filter_name: typing.Optional[builtins.str] = None,
         role_arn: typing.Optional[builtins.str] = None,
     ) -> None:
@@ -15773,6 +15914,8 @@ class CfnSubscriptionFilter(
         :param log_group_name: The log group to associate with the subscription filter. All log events that are uploaded to this log group are filtered and delivered to the specified AWS resource if the filter pattern matches the log events.
         :param apply_on_transformed_logs: This parameter is valid only for log groups that have an active log transformer. For more information about log transformers, see `PutTransformer <https://docs.aws.amazon.com/AmazonCloudWatchLogs/latest/APIReference/API_PutTransformer.html>`_ . If this value is ``true`` , the subscription filter is applied on the transformed version of the log events instead of the original ingested log events.
         :param distribution: The method used to distribute log data to the destination, which can be either random or grouped by log stream.
+        :param emit_system_fields: The list of system fields that are included in the log events sent to the subscription destination. Returns the ``emitSystemFields`` value if it was specified when the subscription filter was created.
+        :param field_selection_criteria: The filter expression that specifies which log events are processed by this subscription filter based on system fields. Returns the ``fieldSelectionCriteria`` value if it was specified when the subscription filter was created.
         :param filter_name: The name of the subscription filter.
         :param role_arn: The ARN of an IAM role that grants CloudWatch Logs permissions to deliver ingested log events to the destination stream. You don't need to provide the ARN when you are working with a logical destination for cross-account delivery.
         '''
@@ -15786,6 +15929,8 @@ class CfnSubscriptionFilter(
             log_group_name=log_group_name,
             apply_on_transformed_logs=apply_on_transformed_logs,
             distribution=distribution,
+            emit_system_fields=emit_system_fields,
+            field_selection_criteria=field_selection_criteria,
             filter_name=filter_name,
             role_arn=role_arn,
         )
@@ -15902,6 +16047,35 @@ class CfnSubscriptionFilter(
             type_hints = typing.get_type_hints(_typecheckingstub__4730d6086a07b6e1f3b3d7251138c936aa909d17834505b0c341ec6b421adf19)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
         jsii.set(self, "distribution", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="emitSystemFields")
+    def emit_system_fields(self) -> typing.Optional[typing.List[builtins.str]]:
+        '''The list of system fields that are included in the log events sent to the subscription destination.'''
+        return typing.cast(typing.Optional[typing.List[builtins.str]], jsii.get(self, "emitSystemFields"))
+
+    @emit_system_fields.setter
+    def emit_system_fields(
+        self,
+        value: typing.Optional[typing.List[builtins.str]],
+    ) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__3588fc313efd4c1adce87f72f75d7ba7f300452acb834dd4e3ecf41cded24179)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "emitSystemFields", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="fieldSelectionCriteria")
+    def field_selection_criteria(self) -> typing.Optional[builtins.str]:
+        '''The filter expression that specifies which log events are processed by this subscription filter based on system fields.'''
+        return typing.cast(typing.Optional[builtins.str], jsii.get(self, "fieldSelectionCriteria"))
+
+    @field_selection_criteria.setter
+    def field_selection_criteria(self, value: typing.Optional[builtins.str]) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__cf9aef993c8f57b45189c5dbbeac65a444ff57b1cd1261310430e2c395efeab5)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "fieldSelectionCriteria", value) # pyright: ignore[reportArgumentType]
 
     @builtins.property
     @jsii.member(jsii_name="filterName")
@@ -19683,6 +19857,7 @@ def _typecheckingstub__53bbf04ee2b4b7e83a98258d41a973972fae20f7537731a0fbcda3e7c
     *,
     name: builtins.str,
     delivery_destination_policy: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDeliveryDestination.DestinationPolicyProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    delivery_destination_type: typing.Optional[builtins.str] = None,
     destination_resource_arn: typing.Optional[builtins.str] = None,
     output_format: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -19774,6 +19949,8 @@ def _typecheckingstub__524e2e94ad4843f66081953f516426a1396490f271842ac0c5ca7c7ec
     log_group_name: builtins.str,
     metric_transformations: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnMetricFilter.MetricTransformationProperty, typing.Dict[builtins.str, typing.Any]]]]],
     apply_on_transformed_logs: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+    emit_system_field_dimensions: typing.Optional[typing.Sequence[builtins.str]] = None,
+    field_selection_criteria: typing.Optional[builtins.str] = None,
     filter_name: typing.Optional[builtins.str] = None,
 ) -> None:
     """Type checking stubs"""
@@ -19804,6 +19981,8 @@ def _typecheckingstub__1250ecc947a5eb57e428cd8fedeb9ae0f6da4eb03c22d674fa019a076
     log_group_name: builtins.str,
     apply_on_transformed_logs: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     distribution: typing.Optional[builtins.str] = None,
+    emit_system_fields: typing.Optional[typing.Sequence[builtins.str]] = None,
+    field_selection_criteria: typing.Optional[builtins.str] = None,
     filter_name: typing.Optional[builtins.str] = None,
     role_arn: typing.Optional[builtins.str] = None,
 ) -> None:
@@ -20947,6 +21126,7 @@ def _typecheckingstub__b48efa0b7b05ab2d9f1417a0b1e0cd7f28039825d1520fe16f6f8dca7
     *,
     name: builtins.str,
     delivery_destination_policy: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDeliveryDestination.DestinationPolicyProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    delivery_destination_type: typing.Optional[builtins.str] = None,
     destination_resource_arn: typing.Optional[builtins.str] = None,
     output_format: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -20990,6 +21170,12 @@ def _typecheckingstub__0fdc8a995b69cc816b4deffcde2adde43de71476430695742e74896d1
 
 def _typecheckingstub__318bc8d97cf7e7f129b83631444b5c478bd65a7e80725c9b3be7e3cc4a600b05(
     value: typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDeliveryDestination.DestinationPolicyProperty]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__e9094a474a1f0538a2e8cb2dba700e3a54dadb80fd6043cdc3c06c27ef4e0a61(
+    value: typing.Optional[builtins.str],
 ) -> None:
     """Type checking stubs"""
     pass
@@ -21417,6 +21603,8 @@ def _typecheckingstub__aaa6a2018a5f10ec1a79f547b81a628d6f434d037b49c5975131bba2d
     log_group_name: builtins.str,
     metric_transformations: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnMetricFilter.MetricTransformationProperty, typing.Dict[builtins.str, typing.Any]]]]],
     apply_on_transformed_logs: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+    emit_system_field_dimensions: typing.Optional[typing.Sequence[builtins.str]] = None,
+    field_selection_criteria: typing.Optional[builtins.str] = None,
     filter_name: typing.Optional[builtins.str] = None,
 ) -> None:
     """Type checking stubs"""
@@ -21454,6 +21642,18 @@ def _typecheckingstub__e42e8a9e143351ba28d452f886abff3c46adff74b2c2fc8876dc18aab
 
 def _typecheckingstub__ace95a6c73bb2a95ee90d8e4e4ad81a77108a607e59d44e12214965f5ebf9073(
     value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__fb85bbbf4daaebc375fd8c7eaa366dd3b65d115ccf9913372bdd3e96861be308(
+    value: typing.Optional[typing.List[builtins.str]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__60d4c57a25cb5c0860f998187d0c8393e713de52986857fd0e48ce908497f0ae(
+    value: typing.Optional[builtins.str],
 ) -> None:
     """Type checking stubs"""
     pass
@@ -21575,6 +21775,8 @@ def _typecheckingstub__6c7a154450656ee0f7e524d596c7e140faad893a71a7c8b9b8a85fe73
     log_group_name: builtins.str,
     apply_on_transformed_logs: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     distribution: typing.Optional[builtins.str] = None,
+    emit_system_fields: typing.Optional[typing.Sequence[builtins.str]] = None,
+    field_selection_criteria: typing.Optional[builtins.str] = None,
     filter_name: typing.Optional[builtins.str] = None,
     role_arn: typing.Optional[builtins.str] = None,
 ) -> None:
@@ -21618,6 +21820,18 @@ def _typecheckingstub__9575bfc33fe73bebe8b16e0496334b59edcb3f2b7fbf109199f2fc70d
     pass
 
 def _typecheckingstub__4730d6086a07b6e1f3b3d7251138c936aa909d17834505b0c341ec6b421adf19(
+    value: typing.Optional[builtins.str],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__3588fc313efd4c1adce87f72f75d7ba7f300452acb834dd4e3ecf41cded24179(
+    value: typing.Optional[typing.List[builtins.str]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__cf9aef993c8f57b45189c5dbbeac65a444ff57b1cd1261310430e2c395efeab5(
     value: typing.Optional[builtins.str],
 ) -> None:
     """Type checking stubs"""
@@ -21980,3 +22194,6 @@ def _typecheckingstub__bea2654ebc88ef45acb691425a17897e52198e8f268040b952558fccd
 ) -> None:
     """Type checking stubs"""
     pass
+
+for cls in [IAccountPolicyRef, IDeliveryDestinationRef, IDeliveryRef, IDeliverySourceRef, IDestinationRef, IFilterPattern, IIntegrationRef, ILogAnomalyDetectorRef, ILogGroup, ILogGroupRef, ILogStream, ILogStreamRef, ILogSubscriptionDestination, IMetricFilterRef, IProcessor, IQueryDefinitionRef, IResourcePolicyRef, ISubscriptionFilterRef, ITransformerRef]:
+    typing.cast(typing.Any, cls).__protocol_attrs__ = typing.cast(typing.Any, cls).__protocol_attrs__ - set(['__jsii_proxy_class__', '__jsii_type__'])

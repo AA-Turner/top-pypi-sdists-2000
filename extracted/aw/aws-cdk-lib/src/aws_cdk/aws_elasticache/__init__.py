@@ -10327,3 +10327,6 @@ def _typecheckingstub__f91d8988fa4ff59ae0f0f6e912aaa87f88df9ee98afddb86934a2611c
 ) -> None:
     """Type checking stubs"""
     pass
+
+for cls in [ICacheClusterRef, IGlobalReplicationGroupRef, IParameterGroupRef, IReplicationGroupRef, ISecurityGroupIngressRef, ISecurityGroupRef, IServerlessCacheRef, ISubnetGroupRef, IUserGroupRef, IUserRef]:
+    typing.cast(typing.Any, cls).__protocol_attrs__ = typing.cast(typing.Any, cls).__protocol_attrs__ - set(['__jsii_proxy_class__', '__jsii_type__'])

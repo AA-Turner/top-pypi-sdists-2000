@@ -3129,3 +3129,6 @@ def _typecheckingstub__59a10349817ed5e601360f9aae1ffe6f0222e05d576372a8f753e0362
 ) -> None:
     """Type checking stubs"""
     pass
+
+for cls in [ILoadBalancerRef, ILoadBalancerTarget]:
+    typing.cast(typing.Any, cls).__protocol_attrs__ = typing.cast(typing.Any, cls).__protocol_attrs__ - set(['__jsii_proxy_class__', '__jsii_type__'])

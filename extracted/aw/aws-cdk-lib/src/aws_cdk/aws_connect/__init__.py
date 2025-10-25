@@ -1011,6 +1011,32 @@ class CfnEvaluationFormProps:
                                 title="title",
             
                                 # the properties below are optional
+                                enablement=connect.CfnEvaluationForm.EvaluationFormItemEnablementConfigurationProperty(
+                                    action="action",
+                                    condition=connect.CfnEvaluationForm.EvaluationFormItemEnablementConditionProperty(
+                                        operands=[connect.CfnEvaluationForm.EvaluationFormItemEnablementConditionOperandProperty(
+                                            expression=connect.CfnEvaluationForm.EvaluationFormItemEnablementExpressionProperty(
+                                                comparator="comparator",
+                                                source=connect.CfnEvaluationForm.EvaluationFormItemEnablementSourceProperty(
+                                                    type="type",
+            
+                                                    # the properties below are optional
+                                                    ref_id="refId"
+                                                ),
+                                                values=[connect.CfnEvaluationForm.EvaluationFormItemEnablementSourceValueProperty(
+                                                    ref_id="refId",
+                                                    type="type"
+                                                )]
+                                            )
+                                        )],
+            
+                                        # the properties below are optional
+                                        operator="operator"
+                                    ),
+            
+                                    # the properties below are optional
+                                    default_action="defaultAction"
+                                ),
                                 instructions="instructions",
                                 not_applicable_enabled=False,
                                 question_type_properties=connect.CfnEvaluationForm.EvaluationFormQuestionTypePropertiesProperty(
@@ -1020,6 +1046,9 @@ class CfnEvaluationFormProps:
             
                                         # the properties below are optional
                                         automation=connect.CfnEvaluationForm.EvaluationFormNumericQuestionAutomationProperty(
+                                            answer_source=connect.CfnEvaluationForm.EvaluationFormQuestionAutomationAnswerSourceProperty(
+                                                source_type="sourceType"
+                                            ),
                                             property_value=connect.CfnEvaluationForm.NumericQuestionPropertyValueAutomationProperty(
                                                 label="label"
                                             )
@@ -1030,6 +1059,9 @@ class CfnEvaluationFormProps:
             
                                             # the properties below are optional
                                             automatic_fail=False,
+                                            automatic_fail_configuration=connect.CfnEvaluationForm.AutomaticFailConfigurationProperty(
+                                                target_section="targetSection"
+                                            ),
                                             score=123
                                         )]
                                     ),
@@ -1040,6 +1072,9 @@ class CfnEvaluationFormProps:
             
                                             # the properties below are optional
                                             automatic_fail=False,
+                                            automatic_fail_configuration=connect.CfnEvaluationForm.AutomaticFailConfigurationProperty(
+                                                target_section="targetSection"
+                                            ),
                                             score=123
                                         )],
             
@@ -1054,9 +1089,19 @@ class CfnEvaluationFormProps:
                                             )],
             
                                             # the properties below are optional
+                                            answer_source=connect.CfnEvaluationForm.EvaluationFormQuestionAutomationAnswerSourceProperty(
+                                                source_type="sourceType"
+                                            ),
                                             default_option_ref_id="defaultOptionRefId"
                                         ),
                                         display_as="displayAs"
+                                    ),
+                                    text=connect.CfnEvaluationForm.EvaluationFormTextQuestionPropertiesProperty(
+                                        automation=connect.CfnEvaluationForm.EvaluationFormTextQuestionAutomationProperty(
+                                            answer_source=connect.CfnEvaluationForm.EvaluationFormQuestionAutomationAnswerSourceProperty(
+                                                source_type="sourceType"
+                                            )
+                                        )
                                     )
                                 ),
                                 weight=123
@@ -8101,6 +8146,32 @@ class CfnEvaluationForm(
                             title="title",
         
                             # the properties below are optional
+                            enablement=connect.CfnEvaluationForm.EvaluationFormItemEnablementConfigurationProperty(
+                                action="action",
+                                condition=connect.CfnEvaluationForm.EvaluationFormItemEnablementConditionProperty(
+                                    operands=[connect.CfnEvaluationForm.EvaluationFormItemEnablementConditionOperandProperty(
+                                        expression=connect.CfnEvaluationForm.EvaluationFormItemEnablementExpressionProperty(
+                                            comparator="comparator",
+                                            source=connect.CfnEvaluationForm.EvaluationFormItemEnablementSourceProperty(
+                                                type="type",
+        
+                                                # the properties below are optional
+                                                ref_id="refId"
+                                            ),
+                                            values=[connect.CfnEvaluationForm.EvaluationFormItemEnablementSourceValueProperty(
+                                                ref_id="refId",
+                                                type="type"
+                                            )]
+                                        )
+                                    )],
+        
+                                    # the properties below are optional
+                                    operator="operator"
+                                ),
+        
+                                # the properties below are optional
+                                default_action="defaultAction"
+                            ),
                             instructions="instructions",
                             not_applicable_enabled=False,
                             question_type_properties=connect.CfnEvaluationForm.EvaluationFormQuestionTypePropertiesProperty(
@@ -8110,6 +8181,9 @@ class CfnEvaluationForm(
         
                                     # the properties below are optional
                                     automation=connect.CfnEvaluationForm.EvaluationFormNumericQuestionAutomationProperty(
+                                        answer_source=connect.CfnEvaluationForm.EvaluationFormQuestionAutomationAnswerSourceProperty(
+                                            source_type="sourceType"
+                                        ),
                                         property_value=connect.CfnEvaluationForm.NumericQuestionPropertyValueAutomationProperty(
                                             label="label"
                                         )
@@ -8120,6 +8194,9 @@ class CfnEvaluationForm(
         
                                         # the properties below are optional
                                         automatic_fail=False,
+                                        automatic_fail_configuration=connect.CfnEvaluationForm.AutomaticFailConfigurationProperty(
+                                            target_section="targetSection"
+                                        ),
                                         score=123
                                     )]
                                 ),
@@ -8130,6 +8207,9 @@ class CfnEvaluationForm(
         
                                         # the properties below are optional
                                         automatic_fail=False,
+                                        automatic_fail_configuration=connect.CfnEvaluationForm.AutomaticFailConfigurationProperty(
+                                            target_section="targetSection"
+                                        ),
                                         score=123
                                     )],
         
@@ -8144,9 +8224,19 @@ class CfnEvaluationForm(
                                         )],
         
                                         # the properties below are optional
+                                        answer_source=connect.CfnEvaluationForm.EvaluationFormQuestionAutomationAnswerSourceProperty(
+                                            source_type="sourceType"
+                                        ),
                                         default_option_ref_id="defaultOptionRefId"
                                     ),
                                     display_as="displayAs"
+                                ),
+                                text=connect.CfnEvaluationForm.EvaluationFormTextQuestionPropertiesProperty(
+                                    automation=connect.CfnEvaluationForm.EvaluationFormTextQuestionAutomationProperty(
+                                        answer_source=connect.CfnEvaluationForm.EvaluationFormQuestionAutomationAnswerSourceProperty(
+                                            source_type="sourceType"
+                                        )
+                                    )
                                 )
                             ),
                             weight=123
@@ -8448,6 +8538,60 @@ class CfnEvaluationForm(
             )
 
     @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_connect.CfnEvaluationForm.AutomaticFailConfigurationProperty",
+        jsii_struct_bases=[],
+        name_mapping={"target_section": "targetSection"},
+    )
+    class AutomaticFailConfigurationProperty:
+        def __init__(
+            self,
+            *,
+            target_section: typing.Optional[builtins.str] = None,
+        ) -> None:
+            '''
+            :param target_section: The target section refId to control failure propagation boundary.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-connect-evaluationform-automaticfailconfiguration.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_connect as connect
+                
+                automatic_fail_configuration_property = connect.CfnEvaluationForm.AutomaticFailConfigurationProperty(
+                    target_section="targetSection"
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__68b49b9b7d113d61d45e43a7f1b761ff41daab6f7845d517a10f65c5ce013c5f)
+                check_type(argname="argument target_section", value=target_section, expected_type=type_hints["target_section"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if target_section is not None:
+                self._values["target_section"] = target_section
+
+        @builtins.property
+        def target_section(self) -> typing.Optional[builtins.str]:
+            '''The target section refId to control failure propagation boundary.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-connect-evaluationform-automaticfailconfiguration.html#cfn-connect-evaluationform-automaticfailconfiguration-targetsection
+            '''
+            result = self._values.get("target_section")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "AutomaticFailConfigurationProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
         jsii_type="aws-cdk-lib.aws_connect.CfnEvaluationForm.EvaluationFormBaseItemProperty",
         jsii_struct_bases=[],
         name_mapping={"section": "section"},
@@ -8489,6 +8633,32 @@ class CfnEvaluationForm(
                                 title="title",
                 
                                 # the properties below are optional
+                                enablement=connect.CfnEvaluationForm.EvaluationFormItemEnablementConfigurationProperty(
+                                    action="action",
+                                    condition=connect.CfnEvaluationForm.EvaluationFormItemEnablementConditionProperty(
+                                        operands=[connect.CfnEvaluationForm.EvaluationFormItemEnablementConditionOperandProperty(
+                                            expression=connect.CfnEvaluationForm.EvaluationFormItemEnablementExpressionProperty(
+                                                comparator="comparator",
+                                                source=connect.CfnEvaluationForm.EvaluationFormItemEnablementSourceProperty(
+                                                    type="type",
+                
+                                                    # the properties below are optional
+                                                    ref_id="refId"
+                                                ),
+                                                values=[connect.CfnEvaluationForm.EvaluationFormItemEnablementSourceValueProperty(
+                                                    ref_id="refId",
+                                                    type="type"
+                                                )]
+                                            )
+                                        )],
+                
+                                        # the properties below are optional
+                                        operator="operator"
+                                    ),
+                
+                                    # the properties below are optional
+                                    default_action="defaultAction"
+                                ),
                                 instructions="instructions",
                                 not_applicable_enabled=False,
                                 question_type_properties=connect.CfnEvaluationForm.EvaluationFormQuestionTypePropertiesProperty(
@@ -8498,6 +8668,9 @@ class CfnEvaluationForm(
                 
                                         # the properties below are optional
                                         automation=connect.CfnEvaluationForm.EvaluationFormNumericQuestionAutomationProperty(
+                                            answer_source=connect.CfnEvaluationForm.EvaluationFormQuestionAutomationAnswerSourceProperty(
+                                                source_type="sourceType"
+                                            ),
                                             property_value=connect.CfnEvaluationForm.NumericQuestionPropertyValueAutomationProperty(
                                                 label="label"
                                             )
@@ -8508,6 +8681,9 @@ class CfnEvaluationForm(
                 
                                             # the properties below are optional
                                             automatic_fail=False,
+                                            automatic_fail_configuration=connect.CfnEvaluationForm.AutomaticFailConfigurationProperty(
+                                                target_section="targetSection"
+                                            ),
                                             score=123
                                         )]
                                     ),
@@ -8518,6 +8694,9 @@ class CfnEvaluationForm(
                 
                                             # the properties below are optional
                                             automatic_fail=False,
+                                            automatic_fail_configuration=connect.CfnEvaluationForm.AutomaticFailConfigurationProperty(
+                                                target_section="targetSection"
+                                            ),
                                             score=123
                                         )],
                 
@@ -8532,9 +8711,19 @@ class CfnEvaluationForm(
                                             )],
                 
                                             # the properties below are optional
+                                            answer_source=connect.CfnEvaluationForm.EvaluationFormQuestionAutomationAnswerSourceProperty(
+                                                source_type="sourceType"
+                                            ),
                                             default_option_ref_id="defaultOptionRefId"
                                         ),
                                         display_as="displayAs"
+                                    ),
+                                    text=connect.CfnEvaluationForm.EvaluationFormTextQuestionPropertiesProperty(
+                                        automation=connect.CfnEvaluationForm.EvaluationFormTextQuestionAutomationProperty(
+                                            answer_source=connect.CfnEvaluationForm.EvaluationFormQuestionAutomationAnswerSourceProperty(
+                                                source_type="sourceType"
+                                            )
+                                        )
                                     )
                                 ),
                                 weight=123
@@ -8576,6 +8765,515 @@ class CfnEvaluationForm(
             )
 
     @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_connect.CfnEvaluationForm.EvaluationFormItemEnablementConditionOperandProperty",
+        jsii_struct_bases=[],
+        name_mapping={"expression": "expression"},
+    )
+    class EvaluationFormItemEnablementConditionOperandProperty:
+        def __init__(
+            self,
+            *,
+            expression: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnEvaluationForm.EvaluationFormItemEnablementExpressionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        ) -> None:
+            '''
+            :param expression: 
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-connect-evaluationform-evaluationformitemenablementconditionoperand.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_connect as connect
+                
+                evaluation_form_item_enablement_condition_operand_property = connect.CfnEvaluationForm.EvaluationFormItemEnablementConditionOperandProperty(
+                    expression=connect.CfnEvaluationForm.EvaluationFormItemEnablementExpressionProperty(
+                        comparator="comparator",
+                        source=connect.CfnEvaluationForm.EvaluationFormItemEnablementSourceProperty(
+                            type="type",
+                
+                            # the properties below are optional
+                            ref_id="refId"
+                        ),
+                        values=[connect.CfnEvaluationForm.EvaluationFormItemEnablementSourceValueProperty(
+                            ref_id="refId",
+                            type="type"
+                        )]
+                    )
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__7424b1961cb60c135d54fb18291096ad719b1a7b344a0a00f02daae87f487cac)
+                check_type(argname="argument expression", value=expression, expected_type=type_hints["expression"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if expression is not None:
+                self._values["expression"] = expression
+
+        @builtins.property
+        def expression(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnEvaluationForm.EvaluationFormItemEnablementExpressionProperty"]]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-connect-evaluationform-evaluationformitemenablementconditionoperand.html#cfn-connect-evaluationform-evaluationformitemenablementconditionoperand-expression
+            '''
+            result = self._values.get("expression")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnEvaluationForm.EvaluationFormItemEnablementExpressionProperty"]], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "EvaluationFormItemEnablementConditionOperandProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_connect.CfnEvaluationForm.EvaluationFormItemEnablementConditionProperty",
+        jsii_struct_bases=[],
+        name_mapping={"operands": "operands", "operator": "operator"},
+    )
+    class EvaluationFormItemEnablementConditionProperty:
+        def __init__(
+            self,
+            *,
+            operands: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnEvaluationForm.EvaluationFormItemEnablementConditionOperandProperty", typing.Dict[builtins.str, typing.Any]]]]],
+            operator: typing.Optional[builtins.str] = None,
+        ) -> None:
+            '''
+            :param operands: The list of operands that compose the condition. Each operand represents a specific criteria to be evaluated.
+            :param operator: The logical operator used to combine multiple operands, determining how the condition is evaluated as a whole.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-connect-evaluationform-evaluationformitemenablementcondition.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_connect as connect
+                
+                evaluation_form_item_enablement_condition_property = connect.CfnEvaluationForm.EvaluationFormItemEnablementConditionProperty(
+                    operands=[connect.CfnEvaluationForm.EvaluationFormItemEnablementConditionOperandProperty(
+                        expression=connect.CfnEvaluationForm.EvaluationFormItemEnablementExpressionProperty(
+                            comparator="comparator",
+                            source=connect.CfnEvaluationForm.EvaluationFormItemEnablementSourceProperty(
+                                type="type",
+                
+                                # the properties below are optional
+                                ref_id="refId"
+                            ),
+                            values=[connect.CfnEvaluationForm.EvaluationFormItemEnablementSourceValueProperty(
+                                ref_id="refId",
+                                type="type"
+                            )]
+                        )
+                    )],
+                
+                    # the properties below are optional
+                    operator="operator"
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__1dd2a28b9112d816864a58d43ebbaedd3bce5fdfc4344ec27cdc5c233ff887b2)
+                check_type(argname="argument operands", value=operands, expected_type=type_hints["operands"])
+                check_type(argname="argument operator", value=operator, expected_type=type_hints["operator"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "operands": operands,
+            }
+            if operator is not None:
+                self._values["operator"] = operator
+
+        @builtins.property
+        def operands(
+            self,
+        ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnEvaluationForm.EvaluationFormItemEnablementConditionOperandProperty"]]]:
+            '''The list of operands that compose the condition.
+
+            Each operand represents a specific criteria to be evaluated.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-connect-evaluationform-evaluationformitemenablementcondition.html#cfn-connect-evaluationform-evaluationformitemenablementcondition-operands
+            '''
+            result = self._values.get("operands")
+            assert result is not None, "Required property 'operands' is missing"
+            return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnEvaluationForm.EvaluationFormItemEnablementConditionOperandProperty"]]], result)
+
+        @builtins.property
+        def operator(self) -> typing.Optional[builtins.str]:
+            '''The logical operator used to combine multiple operands, determining how the condition is evaluated as a whole.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-connect-evaluationform-evaluationformitemenablementcondition.html#cfn-connect-evaluationform-evaluationformitemenablementcondition-operator
+            '''
+            result = self._values.get("operator")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "EvaluationFormItemEnablementConditionProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_connect.CfnEvaluationForm.EvaluationFormItemEnablementConfigurationProperty",
+        jsii_struct_bases=[],
+        name_mapping={
+            "action": "action",
+            "condition": "condition",
+            "default_action": "defaultAction",
+        },
+    )
+    class EvaluationFormItemEnablementConfigurationProperty:
+        def __init__(
+            self,
+            *,
+            action: builtins.str,
+            condition: typing.Union[_IResolvable_da3f097b, typing.Union["CfnEvaluationForm.EvaluationFormItemEnablementConditionProperty", typing.Dict[builtins.str, typing.Any]]],
+            default_action: typing.Optional[builtins.str] = None,
+        ) -> None:
+            '''
+            :param action: Defines the enablement status to be applied when the specified condition is met.
+            :param condition: 
+            :param default_action: Specifies the default enablement status to be applied when the condition is not satisfied.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-connect-evaluationform-evaluationformitemenablementconfiguration.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_connect as connect
+                
+                evaluation_form_item_enablement_configuration_property = connect.CfnEvaluationForm.EvaluationFormItemEnablementConfigurationProperty(
+                    action="action",
+                    condition=connect.CfnEvaluationForm.EvaluationFormItemEnablementConditionProperty(
+                        operands=[connect.CfnEvaluationForm.EvaluationFormItemEnablementConditionOperandProperty(
+                            expression=connect.CfnEvaluationForm.EvaluationFormItemEnablementExpressionProperty(
+                                comparator="comparator",
+                                source=connect.CfnEvaluationForm.EvaluationFormItemEnablementSourceProperty(
+                                    type="type",
+                
+                                    # the properties below are optional
+                                    ref_id="refId"
+                                ),
+                                values=[connect.CfnEvaluationForm.EvaluationFormItemEnablementSourceValueProperty(
+                                    ref_id="refId",
+                                    type="type"
+                                )]
+                            )
+                        )],
+                
+                        # the properties below are optional
+                        operator="operator"
+                    ),
+                
+                    # the properties below are optional
+                    default_action="defaultAction"
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__f1dd1c18baeb94fd4e5d68940b6866b0d491c7bb380d243a094e78b30f4566ec)
+                check_type(argname="argument action", value=action, expected_type=type_hints["action"])
+                check_type(argname="argument condition", value=condition, expected_type=type_hints["condition"])
+                check_type(argname="argument default_action", value=default_action, expected_type=type_hints["default_action"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "action": action,
+                "condition": condition,
+            }
+            if default_action is not None:
+                self._values["default_action"] = default_action
+
+        @builtins.property
+        def action(self) -> builtins.str:
+            '''Defines the enablement status to be applied when the specified condition is met.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-connect-evaluationform-evaluationformitemenablementconfiguration.html#cfn-connect-evaluationform-evaluationformitemenablementconfiguration-action
+            '''
+            result = self._values.get("action")
+            assert result is not None, "Required property 'action' is missing"
+            return typing.cast(builtins.str, result)
+
+        @builtins.property
+        def condition(
+            self,
+        ) -> typing.Union[_IResolvable_da3f097b, "CfnEvaluationForm.EvaluationFormItemEnablementConditionProperty"]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-connect-evaluationform-evaluationformitemenablementconfiguration.html#cfn-connect-evaluationform-evaluationformitemenablementconfiguration-condition
+            '''
+            result = self._values.get("condition")
+            assert result is not None, "Required property 'condition' is missing"
+            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnEvaluationForm.EvaluationFormItemEnablementConditionProperty"], result)
+
+        @builtins.property
+        def default_action(self) -> typing.Optional[builtins.str]:
+            '''Specifies the default enablement status to be applied when the condition is not satisfied.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-connect-evaluationform-evaluationformitemenablementconfiguration.html#cfn-connect-evaluationform-evaluationformitemenablementconfiguration-defaultaction
+            '''
+            result = self._values.get("default_action")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "EvaluationFormItemEnablementConfigurationProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_connect.CfnEvaluationForm.EvaluationFormItemEnablementExpressionProperty",
+        jsii_struct_bases=[],
+        name_mapping={
+            "comparator": "comparator",
+            "source": "source",
+            "values": "values",
+        },
+    )
+    class EvaluationFormItemEnablementExpressionProperty:
+        def __init__(
+            self,
+            *,
+            comparator: builtins.str,
+            source: typing.Union[_IResolvable_da3f097b, typing.Union["CfnEvaluationForm.EvaluationFormItemEnablementSourceProperty", typing.Dict[builtins.str, typing.Any]]],
+            values: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnEvaluationForm.EvaluationFormItemEnablementSourceValueProperty", typing.Dict[builtins.str, typing.Any]]]]],
+        ) -> None:
+            '''
+            :param comparator: Specifies the comparison method to determine if the source value matches any of the specified values.
+            :param source: 
+            :param values: The list of possible values to compare against the source form item's value.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-connect-evaluationform-evaluationformitemenablementexpression.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_connect as connect
+                
+                evaluation_form_item_enablement_expression_property = connect.CfnEvaluationForm.EvaluationFormItemEnablementExpressionProperty(
+                    comparator="comparator",
+                    source=connect.CfnEvaluationForm.EvaluationFormItemEnablementSourceProperty(
+                        type="type",
+                
+                        # the properties below are optional
+                        ref_id="refId"
+                    ),
+                    values=[connect.CfnEvaluationForm.EvaluationFormItemEnablementSourceValueProperty(
+                        ref_id="refId",
+                        type="type"
+                    )]
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__6c4a1ac75d0247a87e23eddef9c206b1a37f65a8a1f47e799dc3383a222db780)
+                check_type(argname="argument comparator", value=comparator, expected_type=type_hints["comparator"])
+                check_type(argname="argument source", value=source, expected_type=type_hints["source"])
+                check_type(argname="argument values", value=values, expected_type=type_hints["values"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "comparator": comparator,
+                "source": source,
+                "values": values,
+            }
+
+        @builtins.property
+        def comparator(self) -> builtins.str:
+            '''Specifies the comparison method to determine if the source value matches any of the specified values.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-connect-evaluationform-evaluationformitemenablementexpression.html#cfn-connect-evaluationform-evaluationformitemenablementexpression-comparator
+            '''
+            result = self._values.get("comparator")
+            assert result is not None, "Required property 'comparator' is missing"
+            return typing.cast(builtins.str, result)
+
+        @builtins.property
+        def source(
+            self,
+        ) -> typing.Union[_IResolvable_da3f097b, "CfnEvaluationForm.EvaluationFormItemEnablementSourceProperty"]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-connect-evaluationform-evaluationformitemenablementexpression.html#cfn-connect-evaluationform-evaluationformitemenablementexpression-source
+            '''
+            result = self._values.get("source")
+            assert result is not None, "Required property 'source' is missing"
+            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnEvaluationForm.EvaluationFormItemEnablementSourceProperty"], result)
+
+        @builtins.property
+        def values(
+            self,
+        ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnEvaluationForm.EvaluationFormItemEnablementSourceValueProperty"]]]:
+            '''The list of possible values to compare against the source form item's value.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-connect-evaluationform-evaluationformitemenablementexpression.html#cfn-connect-evaluationform-evaluationformitemenablementexpression-values
+            '''
+            result = self._values.get("values")
+            assert result is not None, "Required property 'values' is missing"
+            return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnEvaluationForm.EvaluationFormItemEnablementSourceValueProperty"]]], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "EvaluationFormItemEnablementExpressionProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_connect.CfnEvaluationForm.EvaluationFormItemEnablementSourceProperty",
+        jsii_struct_bases=[],
+        name_mapping={"type": "type", "ref_id": "refId"},
+    )
+    class EvaluationFormItemEnablementSourceProperty:
+        def __init__(
+            self,
+            *,
+            type: builtins.str,
+            ref_id: typing.Optional[builtins.str] = None,
+        ) -> None:
+            '''
+            :param type: The type of the source entity.
+            :param ref_id: The identifier to reference the item.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-connect-evaluationform-evaluationformitemenablementsource.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_connect as connect
+                
+                evaluation_form_item_enablement_source_property = connect.CfnEvaluationForm.EvaluationFormItemEnablementSourceProperty(
+                    type="type",
+                
+                    # the properties below are optional
+                    ref_id="refId"
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__d57c3b1336375ff46cac69cfdb0fdbc67905ffaef7fc35793a2e952a6099c597)
+                check_type(argname="argument type", value=type, expected_type=type_hints["type"])
+                check_type(argname="argument ref_id", value=ref_id, expected_type=type_hints["ref_id"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "type": type,
+            }
+            if ref_id is not None:
+                self._values["ref_id"] = ref_id
+
+        @builtins.property
+        def type(self) -> builtins.str:
+            '''The type of the source entity.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-connect-evaluationform-evaluationformitemenablementsource.html#cfn-connect-evaluationform-evaluationformitemenablementsource-type
+            '''
+            result = self._values.get("type")
+            assert result is not None, "Required property 'type' is missing"
+            return typing.cast(builtins.str, result)
+
+        @builtins.property
+        def ref_id(self) -> typing.Optional[builtins.str]:
+            '''The identifier to reference the item.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-connect-evaluationform-evaluationformitemenablementsource.html#cfn-connect-evaluationform-evaluationformitemenablementsource-refid
+            '''
+            result = self._values.get("ref_id")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "EvaluationFormItemEnablementSourceProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_connect.CfnEvaluationForm.EvaluationFormItemEnablementSourceValueProperty",
+        jsii_struct_bases=[],
+        name_mapping={"ref_id": "refId", "type": "type"},
+    )
+    class EvaluationFormItemEnablementSourceValueProperty:
+        def __init__(
+            self,
+            *,
+            ref_id: typing.Optional[builtins.str] = None,
+            type: typing.Optional[builtins.str] = None,
+        ) -> None:
+            '''
+            :param ref_id: The identifier to reference the item.
+            :param type: Type of the source entity value.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-connect-evaluationform-evaluationformitemenablementsourcevalue.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_connect as connect
+                
+                evaluation_form_item_enablement_source_value_property = connect.CfnEvaluationForm.EvaluationFormItemEnablementSourceValueProperty(
+                    ref_id="refId",
+                    type="type"
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__855c40da72ef6f32c384437820c0fa147a5d6bc4aa0341cace248d1f1a2fcc4e)
+                check_type(argname="argument ref_id", value=ref_id, expected_type=type_hints["ref_id"])
+                check_type(argname="argument type", value=type, expected_type=type_hints["type"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if ref_id is not None:
+                self._values["ref_id"] = ref_id
+            if type is not None:
+                self._values["type"] = type
+
+        @builtins.property
+        def ref_id(self) -> typing.Optional[builtins.str]:
+            '''The identifier to reference the item.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-connect-evaluationform-evaluationformitemenablementsourcevalue.html#cfn-connect-evaluationform-evaluationformitemenablementsourcevalue-refid
+            '''
+            result = self._values.get("ref_id")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        @builtins.property
+        def type(self) -> typing.Optional[builtins.str]:
+            '''Type of the source entity value.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-connect-evaluationform-evaluationformitemenablementsourcevalue.html#cfn-connect-evaluationform-evaluationformitemenablementsourcevalue-type
+            '''
+            result = self._values.get("type")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "EvaluationFormItemEnablementSourceValueProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
         jsii_type="aws-cdk-lib.aws_connect.CfnEvaluationForm.EvaluationFormItemProperty",
         jsii_struct_bases=[],
         name_mapping={"question": "question", "section": "section"},
@@ -8612,6 +9310,32 @@ class CfnEvaluationForm(
                         title="title",
                 
                         # the properties below are optional
+                        enablement=connect.CfnEvaluationForm.EvaluationFormItemEnablementConfigurationProperty(
+                            action="action",
+                            condition=connect.CfnEvaluationForm.EvaluationFormItemEnablementConditionProperty(
+                                operands=[connect.CfnEvaluationForm.EvaluationFormItemEnablementConditionOperandProperty(
+                                    expression=connect.CfnEvaluationForm.EvaluationFormItemEnablementExpressionProperty(
+                                        comparator="comparator",
+                                        source=connect.CfnEvaluationForm.EvaluationFormItemEnablementSourceProperty(
+                                            type="type",
+                
+                                            # the properties below are optional
+                                            ref_id="refId"
+                                        ),
+                                        values=[connect.CfnEvaluationForm.EvaluationFormItemEnablementSourceValueProperty(
+                                            ref_id="refId",
+                                            type="type"
+                                        )]
+                                    )
+                                )],
+                
+                                # the properties below are optional
+                                operator="operator"
+                            ),
+                
+                            # the properties below are optional
+                            default_action="defaultAction"
+                        ),
                         instructions="instructions",
                         not_applicable_enabled=False,
                         question_type_properties=connect.CfnEvaluationForm.EvaluationFormQuestionTypePropertiesProperty(
@@ -8621,6 +9345,9 @@ class CfnEvaluationForm(
                 
                                 # the properties below are optional
                                 automation=connect.CfnEvaluationForm.EvaluationFormNumericQuestionAutomationProperty(
+                                    answer_source=connect.CfnEvaluationForm.EvaluationFormQuestionAutomationAnswerSourceProperty(
+                                        source_type="sourceType"
+                                    ),
                                     property_value=connect.CfnEvaluationForm.NumericQuestionPropertyValueAutomationProperty(
                                         label="label"
                                     )
@@ -8631,6 +9358,9 @@ class CfnEvaluationForm(
                 
                                     # the properties below are optional
                                     automatic_fail=False,
+                                    automatic_fail_configuration=connect.CfnEvaluationForm.AutomaticFailConfigurationProperty(
+                                        target_section="targetSection"
+                                    ),
                                     score=123
                                 )]
                             ),
@@ -8641,6 +9371,9 @@ class CfnEvaluationForm(
                 
                                     # the properties below are optional
                                     automatic_fail=False,
+                                    automatic_fail_configuration=connect.CfnEvaluationForm.AutomaticFailConfigurationProperty(
+                                        target_section="targetSection"
+                                    ),
                                     score=123
                                 )],
                 
@@ -8655,9 +9388,19 @@ class CfnEvaluationForm(
                                     )],
                 
                                     # the properties below are optional
+                                    answer_source=connect.CfnEvaluationForm.EvaluationFormQuestionAutomationAnswerSourceProperty(
+                                        source_type="sourceType"
+                                    ),
                                     default_option_ref_id="defaultOptionRefId"
                                 ),
                                 display_as="displayAs"
+                            ),
+                            text=connect.CfnEvaluationForm.EvaluationFormTextQuestionPropertiesProperty(
+                                automation=connect.CfnEvaluationForm.EvaluationFormTextQuestionAutomationProperty(
+                                    answer_source=connect.CfnEvaluationForm.EvaluationFormQuestionAutomationAnswerSourceProperty(
+                                        source_type="sourceType"
+                                    )
+                                )
                             )
                         ),
                         weight=123
@@ -8719,16 +9462,21 @@ class CfnEvaluationForm(
     @jsii.data_type(
         jsii_type="aws-cdk-lib.aws_connect.CfnEvaluationForm.EvaluationFormNumericQuestionAutomationProperty",
         jsii_struct_bases=[],
-        name_mapping={"property_value": "propertyValue"},
+        name_mapping={
+            "answer_source": "answerSource",
+            "property_value": "propertyValue",
+        },
     )
     class EvaluationFormNumericQuestionAutomationProperty:
         def __init__(
             self,
             *,
+            answer_source: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnEvaluationForm.EvaluationFormQuestionAutomationAnswerSourceProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             property_value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnEvaluationForm.NumericQuestionPropertyValueAutomationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''Information about the automation configuration in numeric questions.
 
+            :param answer_source: 
             :param property_value: The property value of the automation.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-connect-evaluationform-evaluationformnumericquestionautomation.html
@@ -8741,6 +9489,9 @@ class CfnEvaluationForm(
                 from aws_cdk import aws_connect as connect
                 
                 evaluation_form_numeric_question_automation_property = connect.CfnEvaluationForm.EvaluationFormNumericQuestionAutomationProperty(
+                    answer_source=connect.CfnEvaluationForm.EvaluationFormQuestionAutomationAnswerSourceProperty(
+                        source_type="sourceType"
+                    ),
                     property_value=connect.CfnEvaluationForm.NumericQuestionPropertyValueAutomationProperty(
                         label="label"
                     )
@@ -8748,10 +9499,23 @@ class CfnEvaluationForm(
             '''
             if __debug__:
                 type_hints = typing.get_type_hints(_typecheckingstub__b81afcd26ca2b7f7f360e53cfff837a4d204082391c2522686bc1415137d9bb0)
+                check_type(argname="argument answer_source", value=answer_source, expected_type=type_hints["answer_source"])
                 check_type(argname="argument property_value", value=property_value, expected_type=type_hints["property_value"])
             self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if answer_source is not None:
+                self._values["answer_source"] = answer_source
             if property_value is not None:
                 self._values["property_value"] = property_value
+
+        @builtins.property
+        def answer_source(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnEvaluationForm.EvaluationFormQuestionAutomationAnswerSourceProperty"]]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-connect-evaluationform-evaluationformnumericquestionautomation.html#cfn-connect-evaluationform-evaluationformnumericquestionautomation-answersource
+            '''
+            result = self._values.get("answer_source")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnEvaluationForm.EvaluationFormQuestionAutomationAnswerSourceProperty"]], result)
 
         @builtins.property
         def property_value(
@@ -8782,6 +9546,7 @@ class CfnEvaluationForm(
             "max_value": "maxValue",
             "min_value": "minValue",
             "automatic_fail": "automaticFail",
+            "automatic_fail_configuration": "automaticFailConfiguration",
             "score": "score",
         },
     )
@@ -8792,6 +9557,7 @@ class CfnEvaluationForm(
             max_value: jsii.Number,
             min_value: jsii.Number,
             automatic_fail: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            automatic_fail_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnEvaluationForm.AutomaticFailConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             score: typing.Optional[jsii.Number] = None,
         ) -> None:
             '''Information about the option range used for scoring in numeric questions.
@@ -8799,6 +9565,7 @@ class CfnEvaluationForm(
             :param max_value: The maximum answer value of the range option.
             :param min_value: The minimum answer value of the range option.
             :param automatic_fail: The flag to mark the option as automatic fail. If an automatic fail answer is provided, the overall evaluation gets a score of 0.
+            :param automatic_fail_configuration: 
             :param score: The score assigned to answer values within the range option. *Minimum* : 0 *Maximum* : 10
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-connect-evaluationform-evaluationformnumericquestionoption.html
@@ -8816,6 +9583,9 @@ class CfnEvaluationForm(
                 
                     # the properties below are optional
                     automatic_fail=False,
+                    automatic_fail_configuration=connect.CfnEvaluationForm.AutomaticFailConfigurationProperty(
+                        target_section="targetSection"
+                    ),
                     score=123
                 )
             '''
@@ -8824,6 +9594,7 @@ class CfnEvaluationForm(
                 check_type(argname="argument max_value", value=max_value, expected_type=type_hints["max_value"])
                 check_type(argname="argument min_value", value=min_value, expected_type=type_hints["min_value"])
                 check_type(argname="argument automatic_fail", value=automatic_fail, expected_type=type_hints["automatic_fail"])
+                check_type(argname="argument automatic_fail_configuration", value=automatic_fail_configuration, expected_type=type_hints["automatic_fail_configuration"])
                 check_type(argname="argument score", value=score, expected_type=type_hints["score"])
             self._values: typing.Dict[builtins.str, typing.Any] = {
                 "max_value": max_value,
@@ -8831,6 +9602,8 @@ class CfnEvaluationForm(
             }
             if automatic_fail is not None:
                 self._values["automatic_fail"] = automatic_fail
+            if automatic_fail_configuration is not None:
+                self._values["automatic_fail_configuration"] = automatic_fail_configuration
             if score is not None:
                 self._values["score"] = score
 
@@ -8866,6 +9639,16 @@ class CfnEvaluationForm(
             '''
             result = self._values.get("automatic_fail")
             return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+
+        @builtins.property
+        def automatic_fail_configuration(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnEvaluationForm.AutomaticFailConfigurationProperty"]]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-connect-evaluationform-evaluationformnumericquestionoption.html#cfn-connect-evaluationform-evaluationformnumericquestionoption-automaticfailconfiguration
+            '''
+            result = self._values.get("automatic_fail_configuration")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnEvaluationForm.AutomaticFailConfigurationProperty"]], result)
 
         @builtins.property
         def score(self) -> typing.Optional[jsii.Number]:
@@ -8932,6 +9715,9 @@ class CfnEvaluationForm(
                 
                     # the properties below are optional
                     automation=connect.CfnEvaluationForm.EvaluationFormNumericQuestionAutomationProperty(
+                        answer_source=connect.CfnEvaluationForm.EvaluationFormQuestionAutomationAnswerSourceProperty(
+                            source_type="sourceType"
+                        ),
                         property_value=connect.CfnEvaluationForm.NumericQuestionPropertyValueAutomationProperty(
                             label="label"
                         )
@@ -8942,6 +9728,9 @@ class CfnEvaluationForm(
                 
                         # the properties below are optional
                         automatic_fail=False,
+                        automatic_fail_configuration=connect.CfnEvaluationForm.AutomaticFailConfigurationProperty(
+                            target_section="targetSection"
+                        ),
                         score=123
                     )]
                 )
@@ -9015,12 +9804,64 @@ class CfnEvaluationForm(
             )
 
     @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_connect.CfnEvaluationForm.EvaluationFormQuestionAutomationAnswerSourceProperty",
+        jsii_struct_bases=[],
+        name_mapping={"source_type": "sourceType"},
+    )
+    class EvaluationFormQuestionAutomationAnswerSourceProperty:
+        def __init__(self, *, source_type: builtins.str) -> None:
+            '''
+            :param source_type: The type of the answer sourcr.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-connect-evaluationform-evaluationformquestionautomationanswersource.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_connect as connect
+                
+                evaluation_form_question_automation_answer_source_property = connect.CfnEvaluationForm.EvaluationFormQuestionAutomationAnswerSourceProperty(
+                    source_type="sourceType"
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__cfe1e81f58dc411f7b80896c864f4e0c4b473e20cb632be4ae2cccafb0882a67)
+                check_type(argname="argument source_type", value=source_type, expected_type=type_hints["source_type"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "source_type": source_type,
+            }
+
+        @builtins.property
+        def source_type(self) -> builtins.str:
+            '''The type of the answer sourcr.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-connect-evaluationform-evaluationformquestionautomationanswersource.html#cfn-connect-evaluationform-evaluationformquestionautomationanswersource-sourcetype
+            '''
+            result = self._values.get("source_type")
+            assert result is not None, "Required property 'source_type' is missing"
+            return typing.cast(builtins.str, result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "EvaluationFormQuestionAutomationAnswerSourceProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
         jsii_type="aws-cdk-lib.aws_connect.CfnEvaluationForm.EvaluationFormQuestionProperty",
         jsii_struct_bases=[],
         name_mapping={
             "question_type": "questionType",
             "ref_id": "refId",
             "title": "title",
+            "enablement": "enablement",
             "instructions": "instructions",
             "not_applicable_enabled": "notApplicableEnabled",
             "question_type_properties": "questionTypeProperties",
@@ -9034,6 +9875,7 @@ class CfnEvaluationForm(
             question_type: builtins.str,
             ref_id: builtins.str,
             title: builtins.str,
+            enablement: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnEvaluationForm.EvaluationFormItemEnablementConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             instructions: typing.Optional[builtins.str] = None,
             not_applicable_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
             question_type_properties: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnEvaluationForm.EvaluationFormQuestionTypePropertiesProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -9044,6 +9886,7 @@ class CfnEvaluationForm(
             :param question_type: The type of the question. *Allowed values* : ``NUMERIC`` | ``SINGLESELECT`` | ``TEXT``
             :param ref_id: The identifier of the question. An identifier must be unique within the evaluation form. *Length Constraints* : Minimum length of 1. Maximum length of 40.
             :param title: The title of the question. *Length Constraints* : Minimum length of 1. Maximum length of 350.
+            :param enablement: 
             :param instructions: The instructions of the section. *Length Constraints* : Minimum length of 0. Maximum length of 1024.
             :param not_applicable_enabled: The flag to enable not applicable answers to the question.
             :param question_type_properties: The properties of the type of question. Text questions do not have to define question type properties.
@@ -9064,6 +9907,32 @@ class CfnEvaluationForm(
                     title="title",
                 
                     # the properties below are optional
+                    enablement=connect.CfnEvaluationForm.EvaluationFormItemEnablementConfigurationProperty(
+                        action="action",
+                        condition=connect.CfnEvaluationForm.EvaluationFormItemEnablementConditionProperty(
+                            operands=[connect.CfnEvaluationForm.EvaluationFormItemEnablementConditionOperandProperty(
+                                expression=connect.CfnEvaluationForm.EvaluationFormItemEnablementExpressionProperty(
+                                    comparator="comparator",
+                                    source=connect.CfnEvaluationForm.EvaluationFormItemEnablementSourceProperty(
+                                        type="type",
+                
+                                        # the properties below are optional
+                                        ref_id="refId"
+                                    ),
+                                    values=[connect.CfnEvaluationForm.EvaluationFormItemEnablementSourceValueProperty(
+                                        ref_id="refId",
+                                        type="type"
+                                    )]
+                                )
+                            )],
+                
+                            # the properties below are optional
+                            operator="operator"
+                        ),
+                
+                        # the properties below are optional
+                        default_action="defaultAction"
+                    ),
                     instructions="instructions",
                     not_applicable_enabled=False,
                     question_type_properties=connect.CfnEvaluationForm.EvaluationFormQuestionTypePropertiesProperty(
@@ -9073,6 +9942,9 @@ class CfnEvaluationForm(
                 
                             # the properties below are optional
                             automation=connect.CfnEvaluationForm.EvaluationFormNumericQuestionAutomationProperty(
+                                answer_source=connect.CfnEvaluationForm.EvaluationFormQuestionAutomationAnswerSourceProperty(
+                                    source_type="sourceType"
+                                ),
                                 property_value=connect.CfnEvaluationForm.NumericQuestionPropertyValueAutomationProperty(
                                     label="label"
                                 )
@@ -9083,6 +9955,9 @@ class CfnEvaluationForm(
                 
                                 # the properties below are optional
                                 automatic_fail=False,
+                                automatic_fail_configuration=connect.CfnEvaluationForm.AutomaticFailConfigurationProperty(
+                                    target_section="targetSection"
+                                ),
                                 score=123
                             )]
                         ),
@@ -9093,6 +9968,9 @@ class CfnEvaluationForm(
                 
                                 # the properties below are optional
                                 automatic_fail=False,
+                                automatic_fail_configuration=connect.CfnEvaluationForm.AutomaticFailConfigurationProperty(
+                                    target_section="targetSection"
+                                ),
                                 score=123
                             )],
                 
@@ -9107,9 +9985,19 @@ class CfnEvaluationForm(
                                 )],
                 
                                 # the properties below are optional
+                                answer_source=connect.CfnEvaluationForm.EvaluationFormQuestionAutomationAnswerSourceProperty(
+                                    source_type="sourceType"
+                                ),
                                 default_option_ref_id="defaultOptionRefId"
                             ),
                             display_as="displayAs"
+                        ),
+                        text=connect.CfnEvaluationForm.EvaluationFormTextQuestionPropertiesProperty(
+                            automation=connect.CfnEvaluationForm.EvaluationFormTextQuestionAutomationProperty(
+                                answer_source=connect.CfnEvaluationForm.EvaluationFormQuestionAutomationAnswerSourceProperty(
+                                    source_type="sourceType"
+                                )
+                            )
                         )
                     ),
                     weight=123
@@ -9120,6 +10008,7 @@ class CfnEvaluationForm(
                 check_type(argname="argument question_type", value=question_type, expected_type=type_hints["question_type"])
                 check_type(argname="argument ref_id", value=ref_id, expected_type=type_hints["ref_id"])
                 check_type(argname="argument title", value=title, expected_type=type_hints["title"])
+                check_type(argname="argument enablement", value=enablement, expected_type=type_hints["enablement"])
                 check_type(argname="argument instructions", value=instructions, expected_type=type_hints["instructions"])
                 check_type(argname="argument not_applicable_enabled", value=not_applicable_enabled, expected_type=type_hints["not_applicable_enabled"])
                 check_type(argname="argument question_type_properties", value=question_type_properties, expected_type=type_hints["question_type_properties"])
@@ -9129,6 +10018,8 @@ class CfnEvaluationForm(
                 "ref_id": ref_id,
                 "title": title,
             }
+            if enablement is not None:
+                self._values["enablement"] = enablement
             if instructions is not None:
                 self._values["instructions"] = instructions
             if not_applicable_enabled is not None:
@@ -9173,6 +10064,16 @@ class CfnEvaluationForm(
             result = self._values.get("title")
             assert result is not None, "Required property 'title' is missing"
             return typing.cast(builtins.str, result)
+
+        @builtins.property
+        def enablement(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnEvaluationForm.EvaluationFormItemEnablementConfigurationProperty"]]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-connect-evaluationform-evaluationformquestion.html#cfn-connect-evaluationform-evaluationformquestion-enablement
+            '''
+            result = self._values.get("enablement")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnEvaluationForm.EvaluationFormItemEnablementConfigurationProperty"]], result)
 
         @builtins.property
         def instructions(self) -> typing.Optional[builtins.str]:
@@ -9236,7 +10137,11 @@ class CfnEvaluationForm(
     @jsii.data_type(
         jsii_type="aws-cdk-lib.aws_connect.CfnEvaluationForm.EvaluationFormQuestionTypePropertiesProperty",
         jsii_struct_bases=[],
-        name_mapping={"numeric": "numeric", "single_select": "singleSelect"},
+        name_mapping={
+            "numeric": "numeric",
+            "single_select": "singleSelect",
+            "text": "text",
+        },
     )
     class EvaluationFormQuestionTypePropertiesProperty:
         def __init__(
@@ -9244,6 +10149,7 @@ class CfnEvaluationForm(
             *,
             numeric: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnEvaluationForm.EvaluationFormNumericQuestionPropertiesProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             single_select: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnEvaluationForm.EvaluationFormSingleSelectQuestionPropertiesProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            text: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnEvaluationForm.EvaluationFormTextQuestionPropertiesProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''Information about properties for a question in an evaluation form.
 
@@ -9251,6 +10157,7 @@ class CfnEvaluationForm(
 
             :param numeric: The properties of the numeric question.
             :param single_select: The properties of the numeric question.
+            :param text: 
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-connect-evaluationform-evaluationformquestiontypeproperties.html
             :exampleMetadata: fixture=_generated
@@ -9268,6 +10175,9 @@ class CfnEvaluationForm(
                 
                         # the properties below are optional
                         automation=connect.CfnEvaluationForm.EvaluationFormNumericQuestionAutomationProperty(
+                            answer_source=connect.CfnEvaluationForm.EvaluationFormQuestionAutomationAnswerSourceProperty(
+                                source_type="sourceType"
+                            ),
                             property_value=connect.CfnEvaluationForm.NumericQuestionPropertyValueAutomationProperty(
                                 label="label"
                             )
@@ -9278,6 +10188,9 @@ class CfnEvaluationForm(
                 
                             # the properties below are optional
                             automatic_fail=False,
+                            automatic_fail_configuration=connect.CfnEvaluationForm.AutomaticFailConfigurationProperty(
+                                target_section="targetSection"
+                            ),
                             score=123
                         )]
                     ),
@@ -9288,6 +10201,9 @@ class CfnEvaluationForm(
                 
                             # the properties below are optional
                             automatic_fail=False,
+                            automatic_fail_configuration=connect.CfnEvaluationForm.AutomaticFailConfigurationProperty(
+                                target_section="targetSection"
+                            ),
                             score=123
                         )],
                 
@@ -9302,9 +10218,19 @@ class CfnEvaluationForm(
                             )],
                 
                             # the properties below are optional
+                            answer_source=connect.CfnEvaluationForm.EvaluationFormQuestionAutomationAnswerSourceProperty(
+                                source_type="sourceType"
+                            ),
                             default_option_ref_id="defaultOptionRefId"
                         ),
                         display_as="displayAs"
+                    ),
+                    text=connect.CfnEvaluationForm.EvaluationFormTextQuestionPropertiesProperty(
+                        automation=connect.CfnEvaluationForm.EvaluationFormTextQuestionAutomationProperty(
+                            answer_source=connect.CfnEvaluationForm.EvaluationFormQuestionAutomationAnswerSourceProperty(
+                                source_type="sourceType"
+                            )
+                        )
                     )
                 )
             '''
@@ -9312,11 +10238,14 @@ class CfnEvaluationForm(
                 type_hints = typing.get_type_hints(_typecheckingstub__9c2a28674a94b033e97fe7c1b9bbd46fbd0b917a1605152cbffbc509362bd288)
                 check_type(argname="argument numeric", value=numeric, expected_type=type_hints["numeric"])
                 check_type(argname="argument single_select", value=single_select, expected_type=type_hints["single_select"])
+                check_type(argname="argument text", value=text, expected_type=type_hints["text"])
             self._values: typing.Dict[builtins.str, typing.Any] = {}
             if numeric is not None:
                 self._values["numeric"] = numeric
             if single_select is not None:
                 self._values["single_select"] = single_select
+            if text is not None:
+                self._values["text"] = text
 
         @builtins.property
         def numeric(
@@ -9339,6 +10268,16 @@ class CfnEvaluationForm(
             '''
             result = self._values.get("single_select")
             return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnEvaluationForm.EvaluationFormSingleSelectQuestionPropertiesProperty"]], result)
+
+        @builtins.property
+        def text(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnEvaluationForm.EvaluationFormTextQuestionPropertiesProperty"]]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-connect-evaluationform-evaluationformquestiontypeproperties.html#cfn-connect-evaluationform-evaluationformquestiontypeproperties-text
+            '''
+            result = self._values.get("text")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnEvaluationForm.EvaluationFormTextQuestionPropertiesProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -9406,6 +10345,32 @@ class CfnEvaluationForm(
                             title="title",
                 
                             # the properties below are optional
+                            enablement=connect.CfnEvaluationForm.EvaluationFormItemEnablementConfigurationProperty(
+                                action="action",
+                                condition=connect.CfnEvaluationForm.EvaluationFormItemEnablementConditionProperty(
+                                    operands=[connect.CfnEvaluationForm.EvaluationFormItemEnablementConditionOperandProperty(
+                                        expression=connect.CfnEvaluationForm.EvaluationFormItemEnablementExpressionProperty(
+                                            comparator="comparator",
+                                            source=connect.CfnEvaluationForm.EvaluationFormItemEnablementSourceProperty(
+                                                type="type",
+                
+                                                # the properties below are optional
+                                                ref_id="refId"
+                                            ),
+                                            values=[connect.CfnEvaluationForm.EvaluationFormItemEnablementSourceValueProperty(
+                                                ref_id="refId",
+                                                type="type"
+                                            )]
+                                        )
+                                    )],
+                
+                                    # the properties below are optional
+                                    operator="operator"
+                                ),
+                
+                                # the properties below are optional
+                                default_action="defaultAction"
+                            ),
                             instructions="instructions",
                             not_applicable_enabled=False,
                             question_type_properties=connect.CfnEvaluationForm.EvaluationFormQuestionTypePropertiesProperty(
@@ -9415,6 +10380,9 @@ class CfnEvaluationForm(
                 
                                     # the properties below are optional
                                     automation=connect.CfnEvaluationForm.EvaluationFormNumericQuestionAutomationProperty(
+                                        answer_source=connect.CfnEvaluationForm.EvaluationFormQuestionAutomationAnswerSourceProperty(
+                                            source_type="sourceType"
+                                        ),
                                         property_value=connect.CfnEvaluationForm.NumericQuestionPropertyValueAutomationProperty(
                                             label="label"
                                         )
@@ -9425,6 +10393,9 @@ class CfnEvaluationForm(
                 
                                         # the properties below are optional
                                         automatic_fail=False,
+                                        automatic_fail_configuration=connect.CfnEvaluationForm.AutomaticFailConfigurationProperty(
+                                            target_section="targetSection"
+                                        ),
                                         score=123
                                     )]
                                 ),
@@ -9435,6 +10406,9 @@ class CfnEvaluationForm(
                 
                                         # the properties below are optional
                                         automatic_fail=False,
+                                        automatic_fail_configuration=connect.CfnEvaluationForm.AutomaticFailConfigurationProperty(
+                                            target_section="targetSection"
+                                        ),
                                         score=123
                                     )],
                 
@@ -9449,9 +10423,19 @@ class CfnEvaluationForm(
                                         )],
                 
                                         # the properties below are optional
+                                        answer_source=connect.CfnEvaluationForm.EvaluationFormQuestionAutomationAnswerSourceProperty(
+                                            source_type="sourceType"
+                                        ),
                                         default_option_ref_id="defaultOptionRefId"
                                     ),
                                     display_as="displayAs"
+                                ),
+                                text=connect.CfnEvaluationForm.EvaluationFormTextQuestionPropertiesProperty(
+                                    automation=connect.CfnEvaluationForm.EvaluationFormTextQuestionAutomationProperty(
+                                        answer_source=connect.CfnEvaluationForm.EvaluationFormQuestionAutomationAnswerSourceProperty(
+                                            source_type="sourceType"
+                                        )
+                                    )
                                 )
                             ),
                             weight=123
@@ -9616,6 +10600,7 @@ class CfnEvaluationForm(
         jsii_struct_bases=[],
         name_mapping={
             "options": "options",
+            "answer_source": "answerSource",
             "default_option_ref_id": "defaultOptionRefId",
         },
     )
@@ -9624,6 +10609,7 @@ class CfnEvaluationForm(
             self,
             *,
             options: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnEvaluationForm.EvaluationFormSingleSelectQuestionAutomationOptionProperty", typing.Dict[builtins.str, typing.Any]]]]],
+            answer_source: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnEvaluationForm.EvaluationFormQuestionAutomationAnswerSourceProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             default_option_ref_id: typing.Optional[builtins.str] = None,
         ) -> None:
             '''Information about the automation configuration in single select questions.
@@ -9631,6 +10617,7 @@ class CfnEvaluationForm(
             Automation options are evaluated in order, and the first matched option is applied. If no automation option matches, and there is a default option, then the default option is applied.
 
             :param options: The automation options of the single select question. *Minimum* : 1 *Maximum* : 20
+            :param answer_source: 
             :param default_option_ref_id: The identifier of the default answer option, when none of the automation options match the criteria. *Length Constraints* : Minimum length of 1. Maximum length of 40.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-connect-evaluationform-evaluationformsingleselectquestionautomation.html
@@ -9652,16 +10639,22 @@ class CfnEvaluationForm(
                     )],
                 
                     # the properties below are optional
+                    answer_source=connect.CfnEvaluationForm.EvaluationFormQuestionAutomationAnswerSourceProperty(
+                        source_type="sourceType"
+                    ),
                     default_option_ref_id="defaultOptionRefId"
                 )
             '''
             if __debug__:
                 type_hints = typing.get_type_hints(_typecheckingstub__fc97b2bfa6d5fb8da071bf0ca06feb3e4bb442b1422677cdb6c7ae776fc3629c)
                 check_type(argname="argument options", value=options, expected_type=type_hints["options"])
+                check_type(argname="argument answer_source", value=answer_source, expected_type=type_hints["answer_source"])
                 check_type(argname="argument default_option_ref_id", value=default_option_ref_id, expected_type=type_hints["default_option_ref_id"])
             self._values: typing.Dict[builtins.str, typing.Any] = {
                 "options": options,
             }
+            if answer_source is not None:
+                self._values["answer_source"] = answer_source
             if default_option_ref_id is not None:
                 self._values["default_option_ref_id"] = default_option_ref_id
 
@@ -9680,6 +10673,16 @@ class CfnEvaluationForm(
             result = self._values.get("options")
             assert result is not None, "Required property 'options' is missing"
             return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnEvaluationForm.EvaluationFormSingleSelectQuestionAutomationOptionProperty"]]], result)
+
+        @builtins.property
+        def answer_source(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnEvaluationForm.EvaluationFormQuestionAutomationAnswerSourceProperty"]]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-connect-evaluationform-evaluationformsingleselectquestionautomation.html#cfn-connect-evaluationform-evaluationformsingleselectquestionautomation-answersource
+            '''
+            result = self._values.get("answer_source")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnEvaluationForm.EvaluationFormQuestionAutomationAnswerSourceProperty"]], result)
 
         @builtins.property
         def default_option_ref_id(self) -> typing.Optional[builtins.str]:
@@ -9710,6 +10713,7 @@ class CfnEvaluationForm(
             "ref_id": "refId",
             "text": "text",
             "automatic_fail": "automaticFail",
+            "automatic_fail_configuration": "automaticFailConfiguration",
             "score": "score",
         },
     )
@@ -9720,6 +10724,7 @@ class CfnEvaluationForm(
             ref_id: builtins.str,
             text: builtins.str,
             automatic_fail: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            automatic_fail_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnEvaluationForm.AutomaticFailConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             score: typing.Optional[jsii.Number] = None,
         ) -> None:
             '''Information about the automation configuration in single select questions.
@@ -9727,6 +10732,7 @@ class CfnEvaluationForm(
             :param ref_id: The identifier of the answer option. An identifier must be unique within the question. *Length Constraints* : Minimum length of 1. Maximum length of 40.
             :param text: The title of the answer option. *Length Constraints* : Minimum length of 1. Maximum length of 128.
             :param automatic_fail: The flag to mark the option as automatic fail. If an automatic fail answer is provided, the overall evaluation gets a score of 0.
+            :param automatic_fail_configuration: 
             :param score: The score assigned to the answer option. *Minimum* : 0 *Maximum* : 10
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-connect-evaluationform-evaluationformsingleselectquestionoption.html
@@ -9744,6 +10750,9 @@ class CfnEvaluationForm(
                 
                     # the properties below are optional
                     automatic_fail=False,
+                    automatic_fail_configuration=connect.CfnEvaluationForm.AutomaticFailConfigurationProperty(
+                        target_section="targetSection"
+                    ),
                     score=123
                 )
             '''
@@ -9752,6 +10761,7 @@ class CfnEvaluationForm(
                 check_type(argname="argument ref_id", value=ref_id, expected_type=type_hints["ref_id"])
                 check_type(argname="argument text", value=text, expected_type=type_hints["text"])
                 check_type(argname="argument automatic_fail", value=automatic_fail, expected_type=type_hints["automatic_fail"])
+                check_type(argname="argument automatic_fail_configuration", value=automatic_fail_configuration, expected_type=type_hints["automatic_fail_configuration"])
                 check_type(argname="argument score", value=score, expected_type=type_hints["score"])
             self._values: typing.Dict[builtins.str, typing.Any] = {
                 "ref_id": ref_id,
@@ -9759,6 +10769,8 @@ class CfnEvaluationForm(
             }
             if automatic_fail is not None:
                 self._values["automatic_fail"] = automatic_fail
+            if automatic_fail_configuration is not None:
+                self._values["automatic_fail_configuration"] = automatic_fail_configuration
             if score is not None:
                 self._values["score"] = score
 
@@ -9798,6 +10810,16 @@ class CfnEvaluationForm(
             '''
             result = self._values.get("automatic_fail")
             return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+
+        @builtins.property
+        def automatic_fail_configuration(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnEvaluationForm.AutomaticFailConfigurationProperty"]]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-connect-evaluationform-evaluationformsingleselectquestionoption.html#cfn-connect-evaluationform-evaluationformsingleselectquestionoption-automaticfailconfiguration
+            '''
+            result = self._values.get("automatic_fail_configuration")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnEvaluationForm.AutomaticFailConfigurationProperty"]], result)
 
         @builtins.property
         def score(self) -> typing.Optional[jsii.Number]:
@@ -9862,6 +10884,9 @@ class CfnEvaluationForm(
                 
                         # the properties below are optional
                         automatic_fail=False,
+                        automatic_fail_configuration=connect.CfnEvaluationForm.AutomaticFailConfigurationProperty(
+                            target_section="targetSection"
+                        ),
                         score=123
                     )],
                 
@@ -9876,6 +10901,9 @@ class CfnEvaluationForm(
                         )],
                 
                         # the properties below are optional
+                        answer_source=connect.CfnEvaluationForm.EvaluationFormQuestionAutomationAnswerSourceProperty(
+                            source_type="sourceType"
+                        ),
                         default_option_ref_id="defaultOptionRefId"
                     ),
                     display_as="displayAs"
@@ -9940,6 +10968,122 @@ class CfnEvaluationForm(
 
         def __repr__(self) -> str:
             return "EvaluationFormSingleSelectQuestionPropertiesProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_connect.CfnEvaluationForm.EvaluationFormTextQuestionAutomationProperty",
+        jsii_struct_bases=[],
+        name_mapping={"answer_source": "answerSource"},
+    )
+    class EvaluationFormTextQuestionAutomationProperty:
+        def __init__(
+            self,
+            *,
+            answer_source: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnEvaluationForm.EvaluationFormQuestionAutomationAnswerSourceProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        ) -> None:
+            '''
+            :param answer_source: 
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-connect-evaluationform-evaluationformtextquestionautomation.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_connect as connect
+                
+                evaluation_form_text_question_automation_property = connect.CfnEvaluationForm.EvaluationFormTextQuestionAutomationProperty(
+                    answer_source=connect.CfnEvaluationForm.EvaluationFormQuestionAutomationAnswerSourceProperty(
+                        source_type="sourceType"
+                    )
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__2ca5130e277ddd74204d9bbd7aeee6155c32ce87f65672233c24b6ac1a433fcd)
+                check_type(argname="argument answer_source", value=answer_source, expected_type=type_hints["answer_source"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if answer_source is not None:
+                self._values["answer_source"] = answer_source
+
+        @builtins.property
+        def answer_source(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnEvaluationForm.EvaluationFormQuestionAutomationAnswerSourceProperty"]]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-connect-evaluationform-evaluationformtextquestionautomation.html#cfn-connect-evaluationform-evaluationformtextquestionautomation-answersource
+            '''
+            result = self._values.get("answer_source")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnEvaluationForm.EvaluationFormQuestionAutomationAnswerSourceProperty"]], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "EvaluationFormTextQuestionAutomationProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_connect.CfnEvaluationForm.EvaluationFormTextQuestionPropertiesProperty",
+        jsii_struct_bases=[],
+        name_mapping={"automation": "automation"},
+    )
+    class EvaluationFormTextQuestionPropertiesProperty:
+        def __init__(
+            self,
+            *,
+            automation: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnEvaluationForm.EvaluationFormTextQuestionAutomationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        ) -> None:
+            '''
+            :param automation: 
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-connect-evaluationform-evaluationformtextquestionproperties.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_connect as connect
+                
+                evaluation_form_text_question_properties_property = connect.CfnEvaluationForm.EvaluationFormTextQuestionPropertiesProperty(
+                    automation=connect.CfnEvaluationForm.EvaluationFormTextQuestionAutomationProperty(
+                        answer_source=connect.CfnEvaluationForm.EvaluationFormQuestionAutomationAnswerSourceProperty(
+                            source_type="sourceType"
+                        )
+                    )
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__bf7945895c50206de7b3703ba68cf028dc4eaef3ad3a6f2e2ded4961891aa32e)
+                check_type(argname="argument automation", value=automation, expected_type=type_hints["automation"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if automation is not None:
+                self._values["automation"] = automation
+
+        @builtins.property
+        def automation(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnEvaluationForm.EvaluationFormTextQuestionAutomationProperty"]]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-connect-evaluationform-evaluationformtextquestionproperties.html#cfn-connect-evaluationform-evaluationformtextquestionproperties-automation
+            '''
+            result = self._values.get("automation")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnEvaluationForm.EvaluationFormTextQuestionAutomationProperty"]], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "EvaluationFormTextQuestionPropertiesProperty(%s)" % ", ".join(
                 k + "=" + repr(v) for k, v in self._values.items()
             )
 
@@ -20723,9 +21867,65 @@ def _typecheckingstub__30b463f4300b968f0cb3373d8f901132b083c7d8934434bd6d53aa58b
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__68b49b9b7d113d61d45e43a7f1b761ff41daab6f7845d517a10f65c5ce013c5f(
+    *,
+    target_section: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__5f23a880d7bbcb8fab0eba70189a52c3eb1d392f5651dc0f0a2fe54cf4df27d7(
     *,
     section: typing.Union[_IResolvable_da3f097b, typing.Union[CfnEvaluationForm.EvaluationFormSectionProperty, typing.Dict[builtins.str, typing.Any]]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__7424b1961cb60c135d54fb18291096ad719b1a7b344a0a00f02daae87f487cac(
+    *,
+    expression: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnEvaluationForm.EvaluationFormItemEnablementExpressionProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__1dd2a28b9112d816864a58d43ebbaedd3bce5fdfc4344ec27cdc5c233ff887b2(
+    *,
+    operands: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnEvaluationForm.EvaluationFormItemEnablementConditionOperandProperty, typing.Dict[builtins.str, typing.Any]]]]],
+    operator: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__f1dd1c18baeb94fd4e5d68940b6866b0d491c7bb380d243a094e78b30f4566ec(
+    *,
+    action: builtins.str,
+    condition: typing.Union[_IResolvable_da3f097b, typing.Union[CfnEvaluationForm.EvaluationFormItemEnablementConditionProperty, typing.Dict[builtins.str, typing.Any]]],
+    default_action: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__6c4a1ac75d0247a87e23eddef9c206b1a37f65a8a1f47e799dc3383a222db780(
+    *,
+    comparator: builtins.str,
+    source: typing.Union[_IResolvable_da3f097b, typing.Union[CfnEvaluationForm.EvaluationFormItemEnablementSourceProperty, typing.Dict[builtins.str, typing.Any]]],
+    values: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnEvaluationForm.EvaluationFormItemEnablementSourceValueProperty, typing.Dict[builtins.str, typing.Any]]]]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__d57c3b1336375ff46cac69cfdb0fdbc67905ffaef7fc35793a2e952a6099c597(
+    *,
+    type: builtins.str,
+    ref_id: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__855c40da72ef6f32c384437820c0fa147a5d6bc4aa0341cace248d1f1a2fcc4e(
+    *,
+    ref_id: typing.Optional[builtins.str] = None,
+    type: typing.Optional[builtins.str] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -20740,6 +21940,7 @@ def _typecheckingstub__1ed93558b58ad3642a506969313dd38d56ce0f003f808635135ccaf5c
 
 def _typecheckingstub__b81afcd26ca2b7f7f360e53cfff837a4d204082391c2522686bc1415137d9bb0(
     *,
+    answer_source: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnEvaluationForm.EvaluationFormQuestionAutomationAnswerSourceProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     property_value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnEvaluationForm.NumericQuestionPropertyValueAutomationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
 ) -> None:
     """Type checking stubs"""
@@ -20750,6 +21951,7 @@ def _typecheckingstub__b52418aba140bb56125771f8a631543b2ff66b57a21d4994b919cafe5
     max_value: jsii.Number,
     min_value: jsii.Number,
     automatic_fail: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+    automatic_fail_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnEvaluationForm.AutomaticFailConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     score: typing.Optional[jsii.Number] = None,
 ) -> None:
     """Type checking stubs"""
@@ -20765,11 +21967,19 @@ def _typecheckingstub__6fdebefe553e70e8e484dd5dc1c652ee40882ca2d19bc3a12aa677060
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__cfe1e81f58dc411f7b80896c864f4e0c4b473e20cb632be4ae2cccafb0882a67(
+    *,
+    source_type: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__76f87135992dba43e2709251a961f9661f40617cabeb04621ceba33e2e2a0831(
     *,
     question_type: builtins.str,
     ref_id: builtins.str,
     title: builtins.str,
+    enablement: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnEvaluationForm.EvaluationFormItemEnablementConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     instructions: typing.Optional[builtins.str] = None,
     not_applicable_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     question_type_properties: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnEvaluationForm.EvaluationFormQuestionTypePropertiesProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -20782,6 +21992,7 @@ def _typecheckingstub__9c2a28674a94b033e97fe7c1b9bbd46fbd0b917a1605152cbffbc5093
     *,
     numeric: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnEvaluationForm.EvaluationFormNumericQuestionPropertiesProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     single_select: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnEvaluationForm.EvaluationFormSingleSelectQuestionPropertiesProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    text: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnEvaluationForm.EvaluationFormTextQuestionPropertiesProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -20807,6 +22018,7 @@ def _typecheckingstub__e3628da3194346fb903c2da16aee6a4931544b13dac0a74d2857ffd14
 def _typecheckingstub__fc97b2bfa6d5fb8da071bf0ca06feb3e4bb442b1422677cdb6c7ae776fc3629c(
     *,
     options: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnEvaluationForm.EvaluationFormSingleSelectQuestionAutomationOptionProperty, typing.Dict[builtins.str, typing.Any]]]]],
+    answer_source: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnEvaluationForm.EvaluationFormQuestionAutomationAnswerSourceProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     default_option_ref_id: typing.Optional[builtins.str] = None,
 ) -> None:
     """Type checking stubs"""
@@ -20817,6 +22029,7 @@ def _typecheckingstub__511068b0668e9106d683cef742ddd4f219ab5e8b7872b9c6d3692faf6
     ref_id: builtins.str,
     text: builtins.str,
     automatic_fail: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+    automatic_fail_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnEvaluationForm.AutomaticFailConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     score: typing.Optional[jsii.Number] = None,
 ) -> None:
     """Type checking stubs"""
@@ -20827,6 +22040,20 @@ def _typecheckingstub__45e8b8c481c725b1ed84e34212cf426ea008289d40995f757fe99cb6f
     options: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnEvaluationForm.EvaluationFormSingleSelectQuestionOptionProperty, typing.Dict[builtins.str, typing.Any]]]]],
     automation: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnEvaluationForm.EvaluationFormSingleSelectQuestionAutomationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     display_as: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__2ca5130e277ddd74204d9bbd7aeee6155c32ce87f65672233c24b6ac1a433fcd(
+    *,
+    answer_source: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnEvaluationForm.EvaluationFormQuestionAutomationAnswerSourceProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__bf7945895c50206de7b3703ba68cf028dc4eaef3ad3a6f2e2ded4961891aa32e(
+    *,
+    automation: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnEvaluationForm.EvaluationFormTextQuestionAutomationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -22579,3 +23806,6 @@ def _typecheckingstub__c5c8aa5e5d6802692a03611724808d85ab729895ff6180601dee7f8b5
 ) -> None:
     """Type checking stubs"""
     pass
+
+for cls in [IAgentStatusRef, IApprovedOriginRef, IContactFlowModuleRef, IContactFlowRef, IContactFlowVersionRef, IEmailAddressRef, IEvaluationFormRef, IHoursOfOperationRef, IInstanceRef, IInstanceStorageConfigRef, IIntegrationAssociationRef, IPhoneNumberRef, IPredefinedAttributeRef, IPromptRef, IQueueRef, IQuickConnectRef, IRoutingProfileRef, IRuleRef, ISecurityKeyRef, ISecurityProfileRef, ITaskTemplateRef, ITrafficDistributionGroupRef, IUserHierarchyGroupRef, IUserHierarchyStructureRef, IUserRef, IViewRef, IViewVersionRef]:
+    typing.cast(typing.Any, cls).__protocol_attrs__ = typing.cast(typing.Any, cls).__protocol_attrs__ - set(['__jsii_proxy_class__', '__jsii_type__'])

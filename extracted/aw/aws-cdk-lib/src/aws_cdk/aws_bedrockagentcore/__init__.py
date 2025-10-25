@@ -887,13 +887,13 @@ class CfnMemoryProps:
     ) -> None:
         '''Properties for defining a ``CfnMemory``.
 
-        :param event_expiry_duration: Duration in days until memory events expire.
-        :param name: Name of the Memory resource.
+        :param event_expiry_duration: The event expiry configuration.
+        :param name: The memory name.
         :param description: Description of the Memory resource.
-        :param encryption_key_arn: ARN format.
-        :param memory_execution_role_arn: ARN format.
-        :param memory_strategies: List of memory strategies attached to this memory.
-        :param tags: A map of tag keys and values.
+        :param encryption_key_arn: The memory encryption key Amazon Resource Name (ARN).
+        :param memory_execution_role_arn: The memory role ARN.
+        :param memory_strategies: The memory strategies.
+        :param tags: The tags for the resources.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-bedrockagentcore-memory.html
         :exampleMetadata: fixture=_generated
@@ -918,6 +918,24 @@ class CfnMemoryProps:
             
                         # the properties below are optional
                         configuration=bedrockagentcore.CfnMemory.CustomConfigurationInputProperty(
+                            self_managed_configuration=bedrockagentcore.CfnMemory.SelfManagedConfigurationProperty(
+                                historical_context_window_size=123,
+                                invocation_configuration=bedrockagentcore.CfnMemory.InvocationConfigurationInputProperty(
+                                    payload_delivery_bucket_name="payloadDeliveryBucketName",
+                                    topic_arn="topicArn"
+                                ),
+                                trigger_conditions=[bedrockagentcore.CfnMemory.TriggerConditionInputProperty(
+                                    message_based_trigger=bedrockagentcore.CfnMemory.MessageBasedTriggerInputProperty(
+                                        message_count=123
+                                    ),
+                                    time_based_trigger=bedrockagentcore.CfnMemory.TimeBasedTriggerInputProperty(
+                                        idle_session_timeout=123
+                                    ),
+                                    token_based_trigger=bedrockagentcore.CfnMemory.TokenBasedTriggerInputProperty(
+                                        token_count=123
+                                    )
+                                )]
+                            ),
                             semantic_override=bedrockagentcore.CfnMemory.SemanticOverrideProperty(
                                 consolidation=bedrockagentcore.CfnMemory.SemanticOverrideConsolidationConfigurationInputProperty(
                                     append_to_prompt="appendToPrompt",
@@ -1021,7 +1039,7 @@ class CfnMemoryProps:
 
     @builtins.property
     def event_expiry_duration(self) -> jsii.Number:
-        '''Duration in days until memory events expire.
+        '''The event expiry configuration.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-bedrockagentcore-memory.html#cfn-bedrockagentcore-memory-eventexpiryduration
         '''
@@ -1031,7 +1049,7 @@ class CfnMemoryProps:
 
     @builtins.property
     def name(self) -> builtins.str:
-        '''Name of the Memory resource.
+        '''The memory name.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-bedrockagentcore-memory.html#cfn-bedrockagentcore-memory-name
         '''
@@ -1050,7 +1068,7 @@ class CfnMemoryProps:
 
     @builtins.property
     def encryption_key_arn(self) -> typing.Optional[builtins.str]:
-        '''ARN format.
+        '''The memory encryption key Amazon Resource Name (ARN).
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-bedrockagentcore-memory.html#cfn-bedrockagentcore-memory-encryptionkeyarn
         '''
@@ -1059,7 +1077,7 @@ class CfnMemoryProps:
 
     @builtins.property
     def memory_execution_role_arn(self) -> typing.Optional[builtins.str]:
-        '''ARN format.
+        '''The memory role ARN.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-bedrockagentcore-memory.html#cfn-bedrockagentcore-memory-memoryexecutionrolearn
         '''
@@ -1070,7 +1088,7 @@ class CfnMemoryProps:
     def memory_strategies(
         self,
     ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnMemory.MemoryStrategyProperty"]]]]:
-        '''List of memory strategies attached to this memory.
+        '''The memory strategies.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-bedrockagentcore-memory.html#cfn-bedrockagentcore-memory-memorystrategies
         '''
@@ -1079,7 +1097,7 @@ class CfnMemoryProps:
 
     @builtins.property
     def tags(self) -> typing.Optional[typing.Mapping[builtins.str, builtins.str]]:
-        '''A map of tag keys and values.
+        '''The tags for the resources.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-bedrockagentcore-memory.html#cfn-bedrockagentcore-memory-tags
         '''
@@ -2068,11 +2086,7 @@ class CfnBrowserCustom(
     metaclass=jsii.JSIIMeta,
     jsii_type="aws-cdk-lib.aws_bedrockagentcore.CfnBrowserCustom",
 ):
-    '''.. epigraph::
-
-   Amazon Bedrock AgentCore is in preview release and is subject to change.
-
-    AgentCore Browser tool provides a fast, secure, cloud-based browser runtime to enable AI agents to interact with websites at scale.
+    '''AgentCore Browser tool provides a fast, secure, cloud-based browser runtime to enable AI agents to interact with websites at scale.
 
     For more information about using the custom browser, see `Interact with web applications using Amazon Bedrock AgentCore Browser <https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/browser-tool.html>`_ .
 
@@ -2669,11 +2683,9 @@ class CfnCodeInterpreterCustom(
     metaclass=jsii.JSIIMeta,
     jsii_type="aws-cdk-lib.aws_bedrockagentcore.CfnCodeInterpreterCustom",
 ):
-    '''.. epigraph::
+    '''The AgentCore Code Interpreter tool enables agents to securely execute code in isolated sandbox environments.
 
-   Amazon Bedrock AgentCore is in preview release and is subject to change.
-
-    The AgentCore Code Interpreter tool enables agents to securely execute code in isolated sandbox environments. It offers advanced configuration support and seamless integration with popular frameworks.
+    It offers advanced configuration support and seamless integration with popular frameworks.
 
     For more information about using the custom code interpreter, see `Execute code and analyze data using Amazon Bedrock AgentCore Code Interpreter <https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/code-interpreter-tool.html>`_ .
 
@@ -3095,11 +3107,7 @@ class CfnGateway(
     metaclass=jsii.JSIIMeta,
     jsii_type="aws-cdk-lib.aws_bedrockagentcore.CfnGateway",
 ):
-    '''.. epigraph::
-
-   Amazon Bedrock AgentCore is in preview release and is subject to change.
-
-    Amazon Bedrock AgentCore Gateway provides a unified connectivity layer between agents and the tools and resources they need to interact with.
+    '''Amazon Bedrock AgentCore Gateway provides a unified connectivity layer between agents and the tools and resources they need to interact with.
 
     For more information about creating a gateway, see `Set up an Amazon Bedrock AgentCore gateway <https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/gateway-building.html>`_ .
 
@@ -3814,11 +3822,7 @@ class CfnGatewayTarget(
     metaclass=jsii.JSIIMeta,
     jsii_type="aws-cdk-lib.aws_bedrockagentcore.CfnGatewayTarget",
 ):
-    '''.. epigraph::
-
-   Amazon Bedrock AgentCore is in preview release and is subject to change.
-
-    After creating a gateway, you can add targets, which define the tools that your gateway will host.
+    '''After creating a gateway, you can add targets, which define the tools that your gateway will host.
 
     For more information about adding gateway targets, see `Add targets to an existing gateway <https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/gateway-building-adding-targets.html>`_ .
 
@@ -5405,7 +5409,11 @@ class CfnMemory(
     metaclass=jsii.JSIIMeta,
     jsii_type="aws-cdk-lib.aws_bedrockagentcore.CfnMemory",
 ):
-    '''Resource Type definition for AWS::BedrockAgentCore::Memory.
+    '''Memory allows AI agents to maintain both immediate and long-term knowledge, enabling context-aware and personalized interactions.
+
+    For more information about using Memory in Amazon Bedrock AgentCore, see `Host agent or tools with Amazon Bedrock AgentCore Memory <https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/memory-getting-started.html>`_ .
+
+    See the *Properties* section below for descriptions of both the required and optional properties.
 
     :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-bedrockagentcore-memory.html
     :cloudformationResource: AWS::BedrockAgentCore::Memory
@@ -5431,6 +5439,24 @@ class CfnMemory(
         
                     # the properties below are optional
                     configuration=bedrockagentcore.CfnMemory.CustomConfigurationInputProperty(
+                        self_managed_configuration=bedrockagentcore.CfnMemory.SelfManagedConfigurationProperty(
+                            historical_context_window_size=123,
+                            invocation_configuration=bedrockagentcore.CfnMemory.InvocationConfigurationInputProperty(
+                                payload_delivery_bucket_name="payloadDeliveryBucketName",
+                                topic_arn="topicArn"
+                            ),
+                            trigger_conditions=[bedrockagentcore.CfnMemory.TriggerConditionInputProperty(
+                                message_based_trigger=bedrockagentcore.CfnMemory.MessageBasedTriggerInputProperty(
+                                    message_count=123
+                                ),
+                                time_based_trigger=bedrockagentcore.CfnMemory.TimeBasedTriggerInputProperty(
+                                    idle_session_timeout=123
+                                ),
+                                token_based_trigger=bedrockagentcore.CfnMemory.TokenBasedTriggerInputProperty(
+                                    token_count=123
+                                )
+                            )]
+                        ),
                         semantic_override=bedrockagentcore.CfnMemory.SemanticOverrideProperty(
                             consolidation=bedrockagentcore.CfnMemory.SemanticOverrideConsolidationConfigurationInputProperty(
                                 append_to_prompt="appendToPrompt",
@@ -5525,13 +5551,13 @@ class CfnMemory(
         '''
         :param scope: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
-        :param event_expiry_duration: Duration in days until memory events expire.
-        :param name: Name of the Memory resource.
+        :param event_expiry_duration: The event expiry configuration.
+        :param name: The memory name.
         :param description: Description of the Memory resource.
-        :param encryption_key_arn: ARN format.
-        :param memory_execution_role_arn: ARN format.
-        :param memory_strategies: List of memory strategies attached to this memory.
-        :param tags: A map of tag keys and values.
+        :param encryption_key_arn: The memory encryption key Amazon Resource Name (ARN).
+        :param memory_execution_role_arn: The memory role ARN.
+        :param memory_strategies: The memory strategies.
+        :param tags: The tags for the resources.
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__b95a7255db9df73ca225a32aecd624481667f18f3308ba77ce3fbf7d7e1cf4f0)
@@ -5582,7 +5608,8 @@ class CfnMemory(
     @builtins.property
     @jsii.member(jsii_name="attrCreatedAt")
     def attr_created_at(self) -> builtins.str:
-        '''
+        '''The timestamp when the memory record was created.
+
         :cloudformationAttribute: CreatedAt
         '''
         return typing.cast(builtins.str, jsii.get(self, "attrCreatedAt"))
@@ -5607,7 +5634,7 @@ class CfnMemory(
     @builtins.property
     @jsii.member(jsii_name="attrMemoryId")
     def attr_memory_id(self) -> builtins.str:
-        '''Unique identifier for the Memory resource.
+        '''The memory ID.
 
         :cloudformationAttribute: MemoryId
         '''
@@ -5616,7 +5643,7 @@ class CfnMemory(
     @builtins.property
     @jsii.member(jsii_name="attrStatus")
     def attr_status(self) -> builtins.str:
-        '''Status of the Memory resource.
+        '''The memory status.
 
         :cloudformationAttribute: Status
         '''
@@ -5650,7 +5677,7 @@ class CfnMemory(
     @builtins.property
     @jsii.member(jsii_name="eventExpiryDuration")
     def event_expiry_duration(self) -> jsii.Number:
-        '''Duration in days until memory events expire.'''
+        '''The event expiry configuration.'''
         return typing.cast(jsii.Number, jsii.get(self, "eventExpiryDuration"))
 
     @event_expiry_duration.setter
@@ -5663,7 +5690,7 @@ class CfnMemory(
     @builtins.property
     @jsii.member(jsii_name="name")
     def name(self) -> builtins.str:
-        '''Name of the Memory resource.'''
+        '''The memory name.'''
         return typing.cast(builtins.str, jsii.get(self, "name"))
 
     @name.setter
@@ -5689,7 +5716,7 @@ class CfnMemory(
     @builtins.property
     @jsii.member(jsii_name="encryptionKeyArn")
     def encryption_key_arn(self) -> typing.Optional[builtins.str]:
-        '''ARN format.'''
+        '''The memory encryption key Amazon Resource Name (ARN).'''
         return typing.cast(typing.Optional[builtins.str], jsii.get(self, "encryptionKeyArn"))
 
     @encryption_key_arn.setter
@@ -5702,7 +5729,7 @@ class CfnMemory(
     @builtins.property
     @jsii.member(jsii_name="memoryExecutionRoleArn")
     def memory_execution_role_arn(self) -> typing.Optional[builtins.str]:
-        '''ARN format.'''
+        '''The memory role ARN.'''
         return typing.cast(typing.Optional[builtins.str], jsii.get(self, "memoryExecutionRoleArn"))
 
     @memory_execution_role_arn.setter
@@ -5717,7 +5744,7 @@ class CfnMemory(
     def memory_strategies(
         self,
     ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnMemory.MemoryStrategyProperty"]]]]:
-        '''List of memory strategies attached to this memory.'''
+        '''The memory strategies.'''
         return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnMemory.MemoryStrategyProperty"]]]], jsii.get(self, "memoryStrategies"))
 
     @memory_strategies.setter
@@ -5733,7 +5760,7 @@ class CfnMemory(
     @builtins.property
     @jsii.member(jsii_name="tags")
     def tags(self) -> typing.Optional[typing.Mapping[builtins.str, builtins.str]]:
-        '''A map of tag keys and values.'''
+        '''The tags for the resources.'''
         return typing.cast(typing.Optional[typing.Mapping[builtins.str, builtins.str]], jsii.get(self, "tags"))
 
     @tags.setter
@@ -5750,6 +5777,7 @@ class CfnMemory(
         jsii_type="aws-cdk-lib.aws_bedrockagentcore.CfnMemory.CustomConfigurationInputProperty",
         jsii_struct_bases=[],
         name_mapping={
+            "self_managed_configuration": "selfManagedConfiguration",
             "semantic_override": "semanticOverride",
             "summary_override": "summaryOverride",
             "user_preference_override": "userPreferenceOverride",
@@ -5759,14 +5787,17 @@ class CfnMemory(
         def __init__(
             self,
             *,
+            self_managed_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnMemory.SelfManagedConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             semantic_override: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnMemory.SemanticOverrideProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             summary_override: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnMemory.SummaryOverrideProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             user_preference_override: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnMemory.UserPreferenceOverrideProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
-            '''
-            :param semantic_override: 
-            :param summary_override: 
-            :param user_preference_override: 
+            '''The memory configuration input.
+
+            :param self_managed_configuration: The custom configuration input.
+            :param semantic_override: The memory override configuration.
+            :param summary_override: The memory configuration override.
+            :param user_preference_override: The memory user preference override.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrockagentcore-memory-customconfigurationinput.html
             :exampleMetadata: fixture=_generated
@@ -5778,6 +5809,24 @@ class CfnMemory(
                 from aws_cdk import aws_bedrockagentcore as bedrockagentcore
                 
                 custom_configuration_input_property = bedrockagentcore.CfnMemory.CustomConfigurationInputProperty(
+                    self_managed_configuration=bedrockagentcore.CfnMemory.SelfManagedConfigurationProperty(
+                        historical_context_window_size=123,
+                        invocation_configuration=bedrockagentcore.CfnMemory.InvocationConfigurationInputProperty(
+                            payload_delivery_bucket_name="payloadDeliveryBucketName",
+                            topic_arn="topicArn"
+                        ),
+                        trigger_conditions=[bedrockagentcore.CfnMemory.TriggerConditionInputProperty(
+                            message_based_trigger=bedrockagentcore.CfnMemory.MessageBasedTriggerInputProperty(
+                                message_count=123
+                            ),
+                            time_based_trigger=bedrockagentcore.CfnMemory.TimeBasedTriggerInputProperty(
+                                idle_session_timeout=123
+                            ),
+                            token_based_trigger=bedrockagentcore.CfnMemory.TokenBasedTriggerInputProperty(
+                                token_count=123
+                            )
+                        )]
+                    ),
                     semantic_override=bedrockagentcore.CfnMemory.SemanticOverrideProperty(
                         consolidation=bedrockagentcore.CfnMemory.SemanticOverrideConsolidationConfigurationInputProperty(
                             append_to_prompt="appendToPrompt",
@@ -5808,10 +5857,13 @@ class CfnMemory(
             '''
             if __debug__:
                 type_hints = typing.get_type_hints(_typecheckingstub__80b393ad440afaf6b639d0ad3fdd1431e23bc8fa4658d92c51bbe3ae892ec72e)
+                check_type(argname="argument self_managed_configuration", value=self_managed_configuration, expected_type=type_hints["self_managed_configuration"])
                 check_type(argname="argument semantic_override", value=semantic_override, expected_type=type_hints["semantic_override"])
                 check_type(argname="argument summary_override", value=summary_override, expected_type=type_hints["summary_override"])
                 check_type(argname="argument user_preference_override", value=user_preference_override, expected_type=type_hints["user_preference_override"])
             self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if self_managed_configuration is not None:
+                self._values["self_managed_configuration"] = self_managed_configuration
             if semantic_override is not None:
                 self._values["semantic_override"] = semantic_override
             if summary_override is not None:
@@ -5820,10 +5872,22 @@ class CfnMemory(
                 self._values["user_preference_override"] = user_preference_override
 
         @builtins.property
+        def self_managed_configuration(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnMemory.SelfManagedConfigurationProperty"]]:
+            '''The custom configuration input.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrockagentcore-memory-customconfigurationinput.html#cfn-bedrockagentcore-memory-customconfigurationinput-selfmanagedconfiguration
+            '''
+            result = self._values.get("self_managed_configuration")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnMemory.SelfManagedConfigurationProperty"]], result)
+
+        @builtins.property
         def semantic_override(
             self,
         ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnMemory.SemanticOverrideProperty"]]:
-            '''
+            '''The memory override configuration.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrockagentcore-memory-customconfigurationinput.html#cfn-bedrockagentcore-memory-customconfigurationinput-semanticoverride
             '''
             result = self._values.get("semantic_override")
@@ -5833,7 +5897,8 @@ class CfnMemory(
         def summary_override(
             self,
         ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnMemory.SummaryOverrideProperty"]]:
-            '''
+            '''The memory configuration override.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrockagentcore-memory-customconfigurationinput.html#cfn-bedrockagentcore-memory-customconfigurationinput-summaryoverride
             '''
             result = self._values.get("summary_override")
@@ -5843,7 +5908,8 @@ class CfnMemory(
         def user_preference_override(
             self,
         ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnMemory.UserPreferenceOverrideProperty"]]:
-            '''
+            '''The memory user preference override.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrockagentcore-memory-customconfigurationinput.html#cfn-bedrockagentcore-memory-customconfigurationinput-userpreferenceoverride
             '''
             result = self._values.get("user_preference_override")
@@ -5889,16 +5955,17 @@ class CfnMemory(
             type: typing.Optional[builtins.str] = None,
             updated_at: typing.Optional[builtins.str] = None,
         ) -> None:
-            '''
-            :param name: Name of the Memory resource.
-            :param configuration: 
+            '''The memory strategy.
+
+            :param name: The memory strategy name.
+            :param configuration: The memory strategy configuration.
             :param created_at: Creation timestamp of the memory strategy.
-            :param description: Description of the Memory resource.
-            :param namespaces: List of namespaces for memory strategy.
-            :param status: Status of the memory strategy.
-            :param strategy_id: Unique identifier for the memory strategy.
-            :param type: Type of memory strategy.
-            :param updated_at: Last update timestamp of the memory strategy.
+            :param description: The memory strategy description.
+            :param namespaces: The memory strategy namespaces.
+            :param status: The memory strategy status.
+            :param strategy_id: The memory strategy ID.
+            :param type: The memory strategy type.
+            :param updated_at: The memory strategy update date and time.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrockagentcore-memory-custommemorystrategy.html
             :exampleMetadata: fixture=_generated
@@ -5914,6 +5981,24 @@ class CfnMemory(
                 
                     # the properties below are optional
                     configuration=bedrockagentcore.CfnMemory.CustomConfigurationInputProperty(
+                        self_managed_configuration=bedrockagentcore.CfnMemory.SelfManagedConfigurationProperty(
+                            historical_context_window_size=123,
+                            invocation_configuration=bedrockagentcore.CfnMemory.InvocationConfigurationInputProperty(
+                                payload_delivery_bucket_name="payloadDeliveryBucketName",
+                                topic_arn="topicArn"
+                            ),
+                            trigger_conditions=[bedrockagentcore.CfnMemory.TriggerConditionInputProperty(
+                                message_based_trigger=bedrockagentcore.CfnMemory.MessageBasedTriggerInputProperty(
+                                    message_count=123
+                                ),
+                                time_based_trigger=bedrockagentcore.CfnMemory.TimeBasedTriggerInputProperty(
+                                    idle_session_timeout=123
+                                ),
+                                token_based_trigger=bedrockagentcore.CfnMemory.TokenBasedTriggerInputProperty(
+                                    token_count=123
+                                )
+                            )]
+                        ),
                         semantic_override=bedrockagentcore.CfnMemory.SemanticOverrideProperty(
                             consolidation=bedrockagentcore.CfnMemory.SemanticOverrideConsolidationConfigurationInputProperty(
                                 append_to_prompt="appendToPrompt",
@@ -5983,7 +6068,7 @@ class CfnMemory(
 
         @builtins.property
         def name(self) -> builtins.str:
-            '''Name of the Memory resource.
+            '''The memory strategy name.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrockagentcore-memory-custommemorystrategy.html#cfn-bedrockagentcore-memory-custommemorystrategy-name
             '''
@@ -5995,7 +6080,8 @@ class CfnMemory(
         def configuration(
             self,
         ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnMemory.CustomConfigurationInputProperty"]]:
-            '''
+            '''The memory strategy configuration.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrockagentcore-memory-custommemorystrategy.html#cfn-bedrockagentcore-memory-custommemorystrategy-configuration
             '''
             result = self._values.get("configuration")
@@ -6012,7 +6098,7 @@ class CfnMemory(
 
         @builtins.property
         def description(self) -> typing.Optional[builtins.str]:
-            '''Description of the Memory resource.
+            '''The memory strategy description.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrockagentcore-memory-custommemorystrategy.html#cfn-bedrockagentcore-memory-custommemorystrategy-description
             '''
@@ -6021,7 +6107,7 @@ class CfnMemory(
 
         @builtins.property
         def namespaces(self) -> typing.Optional[typing.List[builtins.str]]:
-            '''List of namespaces for memory strategy.
+            '''The memory strategy namespaces.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrockagentcore-memory-custommemorystrategy.html#cfn-bedrockagentcore-memory-custommemorystrategy-namespaces
             '''
@@ -6030,7 +6116,7 @@ class CfnMemory(
 
         @builtins.property
         def status(self) -> typing.Optional[builtins.str]:
-            '''Status of the memory strategy.
+            '''The memory strategy status.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrockagentcore-memory-custommemorystrategy.html#cfn-bedrockagentcore-memory-custommemorystrategy-status
             '''
@@ -6039,7 +6125,7 @@ class CfnMemory(
 
         @builtins.property
         def strategy_id(self) -> typing.Optional[builtins.str]:
-            '''Unique identifier for the memory strategy.
+            '''The memory strategy ID.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrockagentcore-memory-custommemorystrategy.html#cfn-bedrockagentcore-memory-custommemorystrategy-strategyid
             '''
@@ -6048,7 +6134,7 @@ class CfnMemory(
 
         @builtins.property
         def type(self) -> typing.Optional[builtins.str]:
-            '''Type of memory strategy.
+            '''The memory strategy type.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrockagentcore-memory-custommemorystrategy.html#cfn-bedrockagentcore-memory-custommemorystrategy-type
             '''
@@ -6057,7 +6143,7 @@ class CfnMemory(
 
         @builtins.property
         def updated_at(self) -> typing.Optional[builtins.str]:
-            '''Last update timestamp of the memory strategy.
+            '''The memory strategy update date and time.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrockagentcore-memory-custommemorystrategy.html#cfn-bedrockagentcore-memory-custommemorystrategy-updatedat
             '''
@@ -6072,6 +6158,79 @@ class CfnMemory(
 
         def __repr__(self) -> str:
             return "CustomMemoryStrategyProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_bedrockagentcore.CfnMemory.InvocationConfigurationInputProperty",
+        jsii_struct_bases=[],
+        name_mapping={
+            "payload_delivery_bucket_name": "payloadDeliveryBucketName",
+            "topic_arn": "topicArn",
+        },
+    )
+    class InvocationConfigurationInputProperty:
+        def __init__(
+            self,
+            *,
+            payload_delivery_bucket_name: typing.Optional[builtins.str] = None,
+            topic_arn: typing.Optional[builtins.str] = None,
+        ) -> None:
+            '''The memory invocation configuration input.
+
+            :param payload_delivery_bucket_name: The message invocation configuration information for the bucket name.
+            :param topic_arn: The memory trigger condition topic Amazon Resource Name (ARN).
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrockagentcore-memory-invocationconfigurationinput.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_bedrockagentcore as bedrockagentcore
+                
+                invocation_configuration_input_property = bedrockagentcore.CfnMemory.InvocationConfigurationInputProperty(
+                    payload_delivery_bucket_name="payloadDeliveryBucketName",
+                    topic_arn="topicArn"
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__44e7fa751a69795001dc84cc0fd23b36ae6952ce8c475d549b7599b3353a7c9a)
+                check_type(argname="argument payload_delivery_bucket_name", value=payload_delivery_bucket_name, expected_type=type_hints["payload_delivery_bucket_name"])
+                check_type(argname="argument topic_arn", value=topic_arn, expected_type=type_hints["topic_arn"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if payload_delivery_bucket_name is not None:
+                self._values["payload_delivery_bucket_name"] = payload_delivery_bucket_name
+            if topic_arn is not None:
+                self._values["topic_arn"] = topic_arn
+
+        @builtins.property
+        def payload_delivery_bucket_name(self) -> typing.Optional[builtins.str]:
+            '''The message invocation configuration information for the bucket name.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrockagentcore-memory-invocationconfigurationinput.html#cfn-bedrockagentcore-memory-invocationconfigurationinput-payloaddeliverybucketname
+            '''
+            result = self._values.get("payload_delivery_bucket_name")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        @builtins.property
+        def topic_arn(self) -> typing.Optional[builtins.str]:
+            '''The memory trigger condition topic Amazon Resource Name (ARN).
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrockagentcore-memory-invocationconfigurationinput.html#cfn-bedrockagentcore-memory-invocationconfigurationinput-topicarn
+            '''
+            result = self._values.get("topic_arn")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "InvocationConfigurationInputProperty(%s)" % ", ".join(
                 k + "=" + repr(v) for k, v in self._values.items()
             )
 
@@ -6094,11 +6253,12 @@ class CfnMemory(
             summary_memory_strategy: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnMemory.SummaryMemoryStrategyProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             user_preference_memory_strategy: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnMemory.UserPreferenceMemoryStrategyProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
-            '''
-            :param custom_memory_strategy: 
-            :param semantic_memory_strategy: 
-            :param summary_memory_strategy: 
-            :param user_preference_memory_strategy: 
+            '''The memory strategy.
+
+            :param custom_memory_strategy: The memory strategy.
+            :param semantic_memory_strategy: The memory strategy.
+            :param summary_memory_strategy: The memory strategy summary.
+            :param user_preference_memory_strategy: The memory strategy.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrockagentcore-memory-memorystrategy.html
             :exampleMetadata: fixture=_generated
@@ -6115,6 +6275,24 @@ class CfnMemory(
                 
                         # the properties below are optional
                         configuration=bedrockagentcore.CfnMemory.CustomConfigurationInputProperty(
+                            self_managed_configuration=bedrockagentcore.CfnMemory.SelfManagedConfigurationProperty(
+                                historical_context_window_size=123,
+                                invocation_configuration=bedrockagentcore.CfnMemory.InvocationConfigurationInputProperty(
+                                    payload_delivery_bucket_name="payloadDeliveryBucketName",
+                                    topic_arn="topicArn"
+                                ),
+                                trigger_conditions=[bedrockagentcore.CfnMemory.TriggerConditionInputProperty(
+                                    message_based_trigger=bedrockagentcore.CfnMemory.MessageBasedTriggerInputProperty(
+                                        message_count=123
+                                    ),
+                                    time_based_trigger=bedrockagentcore.CfnMemory.TimeBasedTriggerInputProperty(
+                                        idle_session_timeout=123
+                                    ),
+                                    token_based_trigger=bedrockagentcore.CfnMemory.TokenBasedTriggerInputProperty(
+                                        token_count=123
+                                    )
+                                )]
+                            ),
                             semantic_override=bedrockagentcore.CfnMemory.SemanticOverrideProperty(
                                 consolidation=bedrockagentcore.CfnMemory.SemanticOverrideConsolidationConfigurationInputProperty(
                                     append_to_prompt="appendToPrompt",
@@ -6208,7 +6386,8 @@ class CfnMemory(
         def custom_memory_strategy(
             self,
         ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnMemory.CustomMemoryStrategyProperty"]]:
-            '''
+            '''The memory strategy.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrockagentcore-memory-memorystrategy.html#cfn-bedrockagentcore-memory-memorystrategy-custommemorystrategy
             '''
             result = self._values.get("custom_memory_strategy")
@@ -6218,7 +6397,8 @@ class CfnMemory(
         def semantic_memory_strategy(
             self,
         ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnMemory.SemanticMemoryStrategyProperty"]]:
-            '''
+            '''The memory strategy.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrockagentcore-memory-memorystrategy.html#cfn-bedrockagentcore-memory-memorystrategy-semanticmemorystrategy
             '''
             result = self._values.get("semantic_memory_strategy")
@@ -6228,7 +6408,8 @@ class CfnMemory(
         def summary_memory_strategy(
             self,
         ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnMemory.SummaryMemoryStrategyProperty"]]:
-            '''
+            '''The memory strategy summary.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrockagentcore-memory-memorystrategy.html#cfn-bedrockagentcore-memory-memorystrategy-summarymemorystrategy
             '''
             result = self._values.get("summary_memory_strategy")
@@ -6238,7 +6419,8 @@ class CfnMemory(
         def user_preference_memory_strategy(
             self,
         ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnMemory.UserPreferenceMemoryStrategyProperty"]]:
-            '''
+            '''The memory strategy.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrockagentcore-memory-memorystrategy.html#cfn-bedrockagentcore-memory-memorystrategy-userpreferencememorystrategy
             '''
             result = self._values.get("user_preference_memory_strategy")
@@ -6252,6 +6434,166 @@ class CfnMemory(
 
         def __repr__(self) -> str:
             return "MemoryStrategyProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_bedrockagentcore.CfnMemory.MessageBasedTriggerInputProperty",
+        jsii_struct_bases=[],
+        name_mapping={"message_count": "messageCount"},
+    )
+    class MessageBasedTriggerInputProperty:
+        def __init__(
+            self,
+            *,
+            message_count: typing.Optional[jsii.Number] = None,
+        ) -> None:
+            '''The message based trigger input.
+
+            :param message_count: The memory trigger condition input for the message based trigger message count.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrockagentcore-memory-messagebasedtriggerinput.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_bedrockagentcore as bedrockagentcore
+                
+                message_based_trigger_input_property = bedrockagentcore.CfnMemory.MessageBasedTriggerInputProperty(
+                    message_count=123
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__f26f0bfb6bb91a96529926b34610d43ded0571d826aa8ac6cb6e63367e9ea089)
+                check_type(argname="argument message_count", value=message_count, expected_type=type_hints["message_count"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if message_count is not None:
+                self._values["message_count"] = message_count
+
+        @builtins.property
+        def message_count(self) -> typing.Optional[jsii.Number]:
+            '''The memory trigger condition input for the message based trigger message count.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrockagentcore-memory-messagebasedtriggerinput.html#cfn-bedrockagentcore-memory-messagebasedtriggerinput-messagecount
+            '''
+            result = self._values.get("message_count")
+            return typing.cast(typing.Optional[jsii.Number], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "MessageBasedTriggerInputProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_bedrockagentcore.CfnMemory.SelfManagedConfigurationProperty",
+        jsii_struct_bases=[],
+        name_mapping={
+            "historical_context_window_size": "historicalContextWindowSize",
+            "invocation_configuration": "invocationConfiguration",
+            "trigger_conditions": "triggerConditions",
+        },
+    )
+    class SelfManagedConfigurationProperty:
+        def __init__(
+            self,
+            *,
+            historical_context_window_size: typing.Optional[jsii.Number] = None,
+            invocation_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnMemory.InvocationConfigurationInputProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            trigger_conditions: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnMemory.TriggerConditionInputProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        ) -> None:
+            '''The self managed configuration.
+
+            :param historical_context_window_size: The memory configuration for self managed.
+            :param invocation_configuration: The self managed configuration.
+            :param trigger_conditions: 
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrockagentcore-memory-selfmanagedconfiguration.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_bedrockagentcore as bedrockagentcore
+                
+                self_managed_configuration_property = bedrockagentcore.CfnMemory.SelfManagedConfigurationProperty(
+                    historical_context_window_size=123,
+                    invocation_configuration=bedrockagentcore.CfnMemory.InvocationConfigurationInputProperty(
+                        payload_delivery_bucket_name="payloadDeliveryBucketName",
+                        topic_arn="topicArn"
+                    ),
+                    trigger_conditions=[bedrockagentcore.CfnMemory.TriggerConditionInputProperty(
+                        message_based_trigger=bedrockagentcore.CfnMemory.MessageBasedTriggerInputProperty(
+                            message_count=123
+                        ),
+                        time_based_trigger=bedrockagentcore.CfnMemory.TimeBasedTriggerInputProperty(
+                            idle_session_timeout=123
+                        ),
+                        token_based_trigger=bedrockagentcore.CfnMemory.TokenBasedTriggerInputProperty(
+                            token_count=123
+                        )
+                    )]
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__e4fcd7b9f7c5c0bb0c80ff54635936b78ada2b3d24596ba7cd43b9ece93f804c)
+                check_type(argname="argument historical_context_window_size", value=historical_context_window_size, expected_type=type_hints["historical_context_window_size"])
+                check_type(argname="argument invocation_configuration", value=invocation_configuration, expected_type=type_hints["invocation_configuration"])
+                check_type(argname="argument trigger_conditions", value=trigger_conditions, expected_type=type_hints["trigger_conditions"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if historical_context_window_size is not None:
+                self._values["historical_context_window_size"] = historical_context_window_size
+            if invocation_configuration is not None:
+                self._values["invocation_configuration"] = invocation_configuration
+            if trigger_conditions is not None:
+                self._values["trigger_conditions"] = trigger_conditions
+
+        @builtins.property
+        def historical_context_window_size(self) -> typing.Optional[jsii.Number]:
+            '''The memory configuration for self managed.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrockagentcore-memory-selfmanagedconfiguration.html#cfn-bedrockagentcore-memory-selfmanagedconfiguration-historicalcontextwindowsize
+            '''
+            result = self._values.get("historical_context_window_size")
+            return typing.cast(typing.Optional[jsii.Number], result)
+
+        @builtins.property
+        def invocation_configuration(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnMemory.InvocationConfigurationInputProperty"]]:
+            '''The self managed configuration.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrockagentcore-memory-selfmanagedconfiguration.html#cfn-bedrockagentcore-memory-selfmanagedconfiguration-invocationconfiguration
+            '''
+            result = self._values.get("invocation_configuration")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnMemory.InvocationConfigurationInputProperty"]], result)
+
+        @builtins.property
+        def trigger_conditions(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnMemory.TriggerConditionInputProperty"]]]]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrockagentcore-memory-selfmanagedconfiguration.html#cfn-bedrockagentcore-memory-selfmanagedconfiguration-triggerconditions
+            '''
+            result = self._values.get("trigger_conditions")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnMemory.TriggerConditionInputProperty"]]]], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "SelfManagedConfigurationProperty(%s)" % ", ".join(
                 k + "=" + repr(v) for k, v in self._values.items()
             )
 
@@ -6282,14 +6624,15 @@ class CfnMemory(
             type: typing.Optional[builtins.str] = None,
             updated_at: typing.Optional[builtins.str] = None,
         ) -> None:
-            '''
-            :param name: Name of the Memory resource.
+            '''The memory strategy.
+
+            :param name: The memory strategy name.
             :param created_at: Creation timestamp of the memory strategy.
-            :param description: Description of the Memory resource.
-            :param namespaces: List of namespaces for memory strategy.
+            :param description: The memory strategy description.
+            :param namespaces: The memory strategy namespaces.
             :param status: Status of the memory strategy.
-            :param strategy_id: Unique identifier for the memory strategy.
-            :param type: Type of memory strategy.
+            :param strategy_id: The memory strategy ID.
+            :param type: The memory strategy type.
             :param updated_at: Last update timestamp of the memory strategy.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrockagentcore-memory-semanticmemorystrategy.html
@@ -6344,7 +6687,7 @@ class CfnMemory(
 
         @builtins.property
         def name(self) -> builtins.str:
-            '''Name of the Memory resource.
+            '''The memory strategy name.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrockagentcore-memory-semanticmemorystrategy.html#cfn-bedrockagentcore-memory-semanticmemorystrategy-name
             '''
@@ -6363,7 +6706,7 @@ class CfnMemory(
 
         @builtins.property
         def description(self) -> typing.Optional[builtins.str]:
-            '''Description of the Memory resource.
+            '''The memory strategy description.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrockagentcore-memory-semanticmemorystrategy.html#cfn-bedrockagentcore-memory-semanticmemorystrategy-description
             '''
@@ -6372,7 +6715,7 @@ class CfnMemory(
 
         @builtins.property
         def namespaces(self) -> typing.Optional[typing.List[builtins.str]]:
-            '''List of namespaces for memory strategy.
+            '''The memory strategy namespaces.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrockagentcore-memory-semanticmemorystrategy.html#cfn-bedrockagentcore-memory-semanticmemorystrategy-namespaces
             '''
@@ -6390,7 +6733,7 @@ class CfnMemory(
 
         @builtins.property
         def strategy_id(self) -> typing.Optional[builtins.str]:
-            '''Unique identifier for the memory strategy.
+            '''The memory strategy ID.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrockagentcore-memory-semanticmemorystrategy.html#cfn-bedrockagentcore-memory-semanticmemorystrategy-strategyid
             '''
@@ -6399,7 +6742,7 @@ class CfnMemory(
 
         @builtins.property
         def type(self) -> typing.Optional[builtins.str]:
-            '''Type of memory strategy.
+            '''The memory strategy type.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrockagentcore-memory-semanticmemorystrategy.html#cfn-bedrockagentcore-memory-semanticmemorystrategy-type
             '''
@@ -6438,9 +6781,10 @@ class CfnMemory(
             append_to_prompt: builtins.str,
             model_id: builtins.str,
         ) -> None:
-            '''
-            :param append_to_prompt: Text prompt for model instructions.
-            :param model_id: 
+            '''The memory override configuration.
+
+            :param append_to_prompt: The override configuration.
+            :param model_id: The memory override model ID.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrockagentcore-memory-semanticoverrideconsolidationconfigurationinput.html
             :exampleMetadata: fixture=_generated
@@ -6467,7 +6811,7 @@ class CfnMemory(
 
         @builtins.property
         def append_to_prompt(self) -> builtins.str:
-            '''Text prompt for model instructions.
+            '''The override configuration.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrockagentcore-memory-semanticoverrideconsolidationconfigurationinput.html#cfn-bedrockagentcore-memory-semanticoverrideconsolidationconfigurationinput-appendtoprompt
             '''
@@ -6477,7 +6821,8 @@ class CfnMemory(
 
         @builtins.property
         def model_id(self) -> builtins.str:
-            '''
+            '''The memory override model ID.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrockagentcore-memory-semanticoverrideconsolidationconfigurationinput.html#cfn-bedrockagentcore-memory-semanticoverrideconsolidationconfigurationinput-modelid
             '''
             result = self._values.get("model_id")
@@ -6507,9 +6852,10 @@ class CfnMemory(
             append_to_prompt: builtins.str,
             model_id: builtins.str,
         ) -> None:
-            '''
-            :param append_to_prompt: Text prompt for model instructions.
-            :param model_id: 
+            '''The memory override configuration.
+
+            :param append_to_prompt: The extraction configuration.
+            :param model_id: The memory override configuration model ID.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrockagentcore-memory-semanticoverrideextractionconfigurationinput.html
             :exampleMetadata: fixture=_generated
@@ -6536,7 +6882,7 @@ class CfnMemory(
 
         @builtins.property
         def append_to_prompt(self) -> builtins.str:
-            '''Text prompt for model instructions.
+            '''The extraction configuration.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrockagentcore-memory-semanticoverrideextractionconfigurationinput.html#cfn-bedrockagentcore-memory-semanticoverrideextractionconfigurationinput-appendtoprompt
             '''
@@ -6546,7 +6892,8 @@ class CfnMemory(
 
         @builtins.property
         def model_id(self) -> builtins.str:
-            '''
+            '''The memory override configuration model ID.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrockagentcore-memory-semanticoverrideextractionconfigurationinput.html#cfn-bedrockagentcore-memory-semanticoverrideextractionconfigurationinput-modelid
             '''
             result = self._values.get("model_id")
@@ -6576,9 +6923,10 @@ class CfnMemory(
             consolidation: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnMemory.SemanticOverrideConsolidationConfigurationInputProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             extraction: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnMemory.SemanticOverrideExtractionConfigurationInputProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
-            '''
-            :param consolidation: 
-            :param extraction: 
+            '''The memory override.
+
+            :param consolidation: The memory override consolidation.
+            :param extraction: The memory override extraction.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrockagentcore-memory-semanticoverride.html
             :exampleMetadata: fixture=_generated
@@ -6614,7 +6962,8 @@ class CfnMemory(
         def consolidation(
             self,
         ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnMemory.SemanticOverrideConsolidationConfigurationInputProperty"]]:
-            '''
+            '''The memory override consolidation.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrockagentcore-memory-semanticoverride.html#cfn-bedrockagentcore-memory-semanticoverride-consolidation
             '''
             result = self._values.get("consolidation")
@@ -6624,7 +6973,8 @@ class CfnMemory(
         def extraction(
             self,
         ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnMemory.SemanticOverrideExtractionConfigurationInputProperty"]]:
-            '''
+            '''The memory override extraction.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrockagentcore-memory-semanticoverride.html#cfn-bedrockagentcore-memory-semanticoverride-extraction
             '''
             result = self._values.get("extraction")
@@ -6668,15 +7018,16 @@ class CfnMemory(
             type: typing.Optional[builtins.str] = None,
             updated_at: typing.Optional[builtins.str] = None,
         ) -> None:
-            '''
-            :param name: Name of the Memory resource.
+            '''The memory strategy.
+
+            :param name: The memory strategy name.
             :param created_at: Creation timestamp of the memory strategy.
-            :param description: Description of the Memory resource.
-            :param namespaces: List of namespaces for memory strategy.
-            :param status: Status of the memory strategy.
-            :param strategy_id: Unique identifier for the memory strategy.
-            :param type: Type of memory strategy.
-            :param updated_at: Last update timestamp of the memory strategy.
+            :param description: The memory strategy description.
+            :param namespaces: The summary memory strategy.
+            :param status: The memory strategy status.
+            :param strategy_id: The memory strategy ID.
+            :param type: The memory strategy type.
+            :param updated_at: The memory strategy update date and time.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrockagentcore-memory-summarymemorystrategy.html
             :exampleMetadata: fixture=_generated
@@ -6730,7 +7081,7 @@ class CfnMemory(
 
         @builtins.property
         def name(self) -> builtins.str:
-            '''Name of the Memory resource.
+            '''The memory strategy name.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrockagentcore-memory-summarymemorystrategy.html#cfn-bedrockagentcore-memory-summarymemorystrategy-name
             '''
@@ -6749,7 +7100,7 @@ class CfnMemory(
 
         @builtins.property
         def description(self) -> typing.Optional[builtins.str]:
-            '''Description of the Memory resource.
+            '''The memory strategy description.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrockagentcore-memory-summarymemorystrategy.html#cfn-bedrockagentcore-memory-summarymemorystrategy-description
             '''
@@ -6758,7 +7109,7 @@ class CfnMemory(
 
         @builtins.property
         def namespaces(self) -> typing.Optional[typing.List[builtins.str]]:
-            '''List of namespaces for memory strategy.
+            '''The summary memory strategy.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrockagentcore-memory-summarymemorystrategy.html#cfn-bedrockagentcore-memory-summarymemorystrategy-namespaces
             '''
@@ -6767,7 +7118,7 @@ class CfnMemory(
 
         @builtins.property
         def status(self) -> typing.Optional[builtins.str]:
-            '''Status of the memory strategy.
+            '''The memory strategy status.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrockagentcore-memory-summarymemorystrategy.html#cfn-bedrockagentcore-memory-summarymemorystrategy-status
             '''
@@ -6776,7 +7127,7 @@ class CfnMemory(
 
         @builtins.property
         def strategy_id(self) -> typing.Optional[builtins.str]:
-            '''Unique identifier for the memory strategy.
+            '''The memory strategy ID.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrockagentcore-memory-summarymemorystrategy.html#cfn-bedrockagentcore-memory-summarymemorystrategy-strategyid
             '''
@@ -6785,7 +7136,7 @@ class CfnMemory(
 
         @builtins.property
         def type(self) -> typing.Optional[builtins.str]:
-            '''Type of memory strategy.
+            '''The memory strategy type.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrockagentcore-memory-summarymemorystrategy.html#cfn-bedrockagentcore-memory-summarymemorystrategy-type
             '''
@@ -6794,7 +7145,7 @@ class CfnMemory(
 
         @builtins.property
         def updated_at(self) -> typing.Optional[builtins.str]:
-            '''Last update timestamp of the memory strategy.
+            '''The memory strategy update date and time.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrockagentcore-memory-summarymemorystrategy.html#cfn-bedrockagentcore-memory-summarymemorystrategy-updatedat
             '''
@@ -6824,9 +7175,10 @@ class CfnMemory(
             append_to_prompt: builtins.str,
             model_id: builtins.str,
         ) -> None:
-            '''
-            :param append_to_prompt: Text prompt for model instructions.
-            :param model_id: 
+            '''The consolidation configuration.
+
+            :param append_to_prompt: The memory override configuration.
+            :param model_id: The memory override configuration model ID.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrockagentcore-memory-summaryoverrideconsolidationconfigurationinput.html
             :exampleMetadata: fixture=_generated
@@ -6853,7 +7205,7 @@ class CfnMemory(
 
         @builtins.property
         def append_to_prompt(self) -> builtins.str:
-            '''Text prompt for model instructions.
+            '''The memory override configuration.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrockagentcore-memory-summaryoverrideconsolidationconfigurationinput.html#cfn-bedrockagentcore-memory-summaryoverrideconsolidationconfigurationinput-appendtoprompt
             '''
@@ -6863,7 +7215,8 @@ class CfnMemory(
 
         @builtins.property
         def model_id(self) -> builtins.str:
-            '''
+            '''The memory override configuration model ID.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrockagentcore-memory-summaryoverrideconsolidationconfigurationinput.html#cfn-bedrockagentcore-memory-summaryoverrideconsolidationconfigurationinput-modelid
             '''
             result = self._values.get("model_id")
@@ -6892,8 +7245,9 @@ class CfnMemory(
             *,
             consolidation: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnMemory.SummaryOverrideConsolidationConfigurationInputProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
-            '''
-            :param consolidation: 
+            '''The memory summary override.
+
+            :param consolidation: The memory override consolidation.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrockagentcore-memory-summaryoverride.html
             :exampleMetadata: fixture=_generated
@@ -6922,7 +7276,8 @@ class CfnMemory(
         def consolidation(
             self,
         ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnMemory.SummaryOverrideConsolidationConfigurationInputProperty"]]:
-            '''
+            '''The memory override consolidation.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrockagentcore-memory-summaryoverride.html#cfn-bedrockagentcore-memory-summaryoverride-consolidation
             '''
             result = self._values.get("consolidation")
@@ -6936,6 +7291,213 @@ class CfnMemory(
 
         def __repr__(self) -> str:
             return "SummaryOverrideProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_bedrockagentcore.CfnMemory.TimeBasedTriggerInputProperty",
+        jsii_struct_bases=[],
+        name_mapping={"idle_session_timeout": "idleSessionTimeout"},
+    )
+    class TimeBasedTriggerInputProperty:
+        def __init__(
+            self,
+            *,
+            idle_session_timeout: typing.Optional[jsii.Number] = None,
+        ) -> None:
+            '''The memory trigger condition input for the time based trigger.
+
+            :param idle_session_timeout: The memory trigger condition input for the session timeout.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrockagentcore-memory-timebasedtriggerinput.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_bedrockagentcore as bedrockagentcore
+                
+                time_based_trigger_input_property = bedrockagentcore.CfnMemory.TimeBasedTriggerInputProperty(
+                    idle_session_timeout=123
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__0cf65bf0b7de7a122f8fdf3c50a61ba88dd5248ad841dd004cb6bd0f7174ec45)
+                check_type(argname="argument idle_session_timeout", value=idle_session_timeout, expected_type=type_hints["idle_session_timeout"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if idle_session_timeout is not None:
+                self._values["idle_session_timeout"] = idle_session_timeout
+
+        @builtins.property
+        def idle_session_timeout(self) -> typing.Optional[jsii.Number]:
+            '''The memory trigger condition input for the session timeout.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrockagentcore-memory-timebasedtriggerinput.html#cfn-bedrockagentcore-memory-timebasedtriggerinput-idlesessiontimeout
+            '''
+            result = self._values.get("idle_session_timeout")
+            return typing.cast(typing.Optional[jsii.Number], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "TimeBasedTriggerInputProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_bedrockagentcore.CfnMemory.TokenBasedTriggerInputProperty",
+        jsii_struct_bases=[],
+        name_mapping={"token_count": "tokenCount"},
+    )
+    class TokenBasedTriggerInputProperty:
+        def __init__(self, *, token_count: typing.Optional[jsii.Number] = None) -> None:
+            '''The token based trigger input.
+
+            :param token_count: The token based trigger token count.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrockagentcore-memory-tokenbasedtriggerinput.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_bedrockagentcore as bedrockagentcore
+                
+                token_based_trigger_input_property = bedrockagentcore.CfnMemory.TokenBasedTriggerInputProperty(
+                    token_count=123
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__171b0765936a13c6e7c17456605ec3e2bc9c36685a864e8c11187bfd9a4bc89a)
+                check_type(argname="argument token_count", value=token_count, expected_type=type_hints["token_count"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if token_count is not None:
+                self._values["token_count"] = token_count
+
+        @builtins.property
+        def token_count(self) -> typing.Optional[jsii.Number]:
+            '''The token based trigger token count.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrockagentcore-memory-tokenbasedtriggerinput.html#cfn-bedrockagentcore-memory-tokenbasedtriggerinput-tokencount
+            '''
+            result = self._values.get("token_count")
+            return typing.cast(typing.Optional[jsii.Number], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "TokenBasedTriggerInputProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_bedrockagentcore.CfnMemory.TriggerConditionInputProperty",
+        jsii_struct_bases=[],
+        name_mapping={
+            "message_based_trigger": "messageBasedTrigger",
+            "time_based_trigger": "timeBasedTrigger",
+            "token_based_trigger": "tokenBasedTrigger",
+        },
+    )
+    class TriggerConditionInputProperty:
+        def __init__(
+            self,
+            *,
+            message_based_trigger: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnMemory.MessageBasedTriggerInputProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            time_based_trigger: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnMemory.TimeBasedTriggerInputProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            token_based_trigger: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnMemory.TokenBasedTriggerInputProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        ) -> None:
+            '''The memory trigger condition input.
+
+            :param message_based_trigger: The memory trigger condition input for the message based trigger.
+            :param time_based_trigger: The memory trigger condition input.
+            :param token_based_trigger: The trigger condition information for a token based trigger.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrockagentcore-memory-triggerconditioninput.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_bedrockagentcore as bedrockagentcore
+                
+                trigger_condition_input_property = bedrockagentcore.CfnMemory.TriggerConditionInputProperty(
+                    message_based_trigger=bedrockagentcore.CfnMemory.MessageBasedTriggerInputProperty(
+                        message_count=123
+                    ),
+                    time_based_trigger=bedrockagentcore.CfnMemory.TimeBasedTriggerInputProperty(
+                        idle_session_timeout=123
+                    ),
+                    token_based_trigger=bedrockagentcore.CfnMemory.TokenBasedTriggerInputProperty(
+                        token_count=123
+                    )
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__9ca3b096b467bf1778a21961da57f12ce16cf0ef63aeee1b912577f66fdb48cb)
+                check_type(argname="argument message_based_trigger", value=message_based_trigger, expected_type=type_hints["message_based_trigger"])
+                check_type(argname="argument time_based_trigger", value=time_based_trigger, expected_type=type_hints["time_based_trigger"])
+                check_type(argname="argument token_based_trigger", value=token_based_trigger, expected_type=type_hints["token_based_trigger"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if message_based_trigger is not None:
+                self._values["message_based_trigger"] = message_based_trigger
+            if time_based_trigger is not None:
+                self._values["time_based_trigger"] = time_based_trigger
+            if token_based_trigger is not None:
+                self._values["token_based_trigger"] = token_based_trigger
+
+        @builtins.property
+        def message_based_trigger(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnMemory.MessageBasedTriggerInputProperty"]]:
+            '''The memory trigger condition input for the message based trigger.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrockagentcore-memory-triggerconditioninput.html#cfn-bedrockagentcore-memory-triggerconditioninput-messagebasedtrigger
+            '''
+            result = self._values.get("message_based_trigger")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnMemory.MessageBasedTriggerInputProperty"]], result)
+
+        @builtins.property
+        def time_based_trigger(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnMemory.TimeBasedTriggerInputProperty"]]:
+            '''The memory trigger condition input.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrockagentcore-memory-triggerconditioninput.html#cfn-bedrockagentcore-memory-triggerconditioninput-timebasedtrigger
+            '''
+            result = self._values.get("time_based_trigger")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnMemory.TimeBasedTriggerInputProperty"]], result)
+
+        @builtins.property
+        def token_based_trigger(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnMemory.TokenBasedTriggerInputProperty"]]:
+            '''The trigger condition information for a token based trigger.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrockagentcore-memory-triggerconditioninput.html#cfn-bedrockagentcore-memory-triggerconditioninput-tokenbasedtrigger
+            '''
+            result = self._values.get("token_based_trigger")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnMemory.TokenBasedTriggerInputProperty"]], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "TriggerConditionInputProperty(%s)" % ", ".join(
                 k + "=" + repr(v) for k, v in self._values.items()
             )
 
@@ -6966,15 +7528,16 @@ class CfnMemory(
             type: typing.Optional[builtins.str] = None,
             updated_at: typing.Optional[builtins.str] = None,
         ) -> None:
-            '''
-            :param name: Name of the Memory resource.
+            '''The memory strategy.
+
+            :param name: The memory strategy name.
             :param created_at: Creation timestamp of the memory strategy.
-            :param description: Description of the Memory resource.
-            :param namespaces: List of namespaces for memory strategy.
-            :param status: Status of the memory strategy.
-            :param strategy_id: Unique identifier for the memory strategy.
-            :param type: Type of memory strategy.
-            :param updated_at: Last update timestamp of the memory strategy.
+            :param description: The memory strategy description.
+            :param namespaces: The memory namespaces.
+            :param status: The memory strategy status.
+            :param strategy_id: The memory strategy ID.
+            :param type: The memory strategy type.
+            :param updated_at: The memory strategy update date and time.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrockagentcore-memory-userpreferencememorystrategy.html
             :exampleMetadata: fixture=_generated
@@ -7028,7 +7591,7 @@ class CfnMemory(
 
         @builtins.property
         def name(self) -> builtins.str:
-            '''Name of the Memory resource.
+            '''The memory strategy name.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrockagentcore-memory-userpreferencememorystrategy.html#cfn-bedrockagentcore-memory-userpreferencememorystrategy-name
             '''
@@ -7047,7 +7610,7 @@ class CfnMemory(
 
         @builtins.property
         def description(self) -> typing.Optional[builtins.str]:
-            '''Description of the Memory resource.
+            '''The memory strategy description.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrockagentcore-memory-userpreferencememorystrategy.html#cfn-bedrockagentcore-memory-userpreferencememorystrategy-description
             '''
@@ -7056,7 +7619,7 @@ class CfnMemory(
 
         @builtins.property
         def namespaces(self) -> typing.Optional[typing.List[builtins.str]]:
-            '''List of namespaces for memory strategy.
+            '''The memory namespaces.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrockagentcore-memory-userpreferencememorystrategy.html#cfn-bedrockagentcore-memory-userpreferencememorystrategy-namespaces
             '''
@@ -7065,7 +7628,7 @@ class CfnMemory(
 
         @builtins.property
         def status(self) -> typing.Optional[builtins.str]:
-            '''Status of the memory strategy.
+            '''The memory strategy status.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrockagentcore-memory-userpreferencememorystrategy.html#cfn-bedrockagentcore-memory-userpreferencememorystrategy-status
             '''
@@ -7074,7 +7637,7 @@ class CfnMemory(
 
         @builtins.property
         def strategy_id(self) -> typing.Optional[builtins.str]:
-            '''Unique identifier for the memory strategy.
+            '''The memory strategy ID.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrockagentcore-memory-userpreferencememorystrategy.html#cfn-bedrockagentcore-memory-userpreferencememorystrategy-strategyid
             '''
@@ -7083,7 +7646,7 @@ class CfnMemory(
 
         @builtins.property
         def type(self) -> typing.Optional[builtins.str]:
-            '''Type of memory strategy.
+            '''The memory strategy type.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrockagentcore-memory-userpreferencememorystrategy.html#cfn-bedrockagentcore-memory-userpreferencememorystrategy-type
             '''
@@ -7092,7 +7655,7 @@ class CfnMemory(
 
         @builtins.property
         def updated_at(self) -> typing.Optional[builtins.str]:
-            '''Last update timestamp of the memory strategy.
+            '''The memory strategy update date and time.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrockagentcore-memory-userpreferencememorystrategy.html#cfn-bedrockagentcore-memory-userpreferencememorystrategy-updatedat
             '''
@@ -7122,9 +7685,10 @@ class CfnMemory(
             append_to_prompt: builtins.str,
             model_id: builtins.str,
         ) -> None:
-            '''
-            :param append_to_prompt: Text prompt for model instructions.
-            :param model_id: 
+            '''The configuration input.
+
+            :param append_to_prompt: The memory configuration.
+            :param model_id: The memory override configuration model ID.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrockagentcore-memory-userpreferenceoverrideconsolidationconfigurationinput.html
             :exampleMetadata: fixture=_generated
@@ -7151,7 +7715,7 @@ class CfnMemory(
 
         @builtins.property
         def append_to_prompt(self) -> builtins.str:
-            '''Text prompt for model instructions.
+            '''The memory configuration.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrockagentcore-memory-userpreferenceoverrideconsolidationconfigurationinput.html#cfn-bedrockagentcore-memory-userpreferenceoverrideconsolidationconfigurationinput-appendtoprompt
             '''
@@ -7161,7 +7725,8 @@ class CfnMemory(
 
         @builtins.property
         def model_id(self) -> builtins.str:
-            '''
+            '''The memory override configuration model ID.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrockagentcore-memory-userpreferenceoverrideconsolidationconfigurationinput.html#cfn-bedrockagentcore-memory-userpreferenceoverrideconsolidationconfigurationinput-modelid
             '''
             result = self._values.get("model_id")
@@ -7191,9 +7756,10 @@ class CfnMemory(
             append_to_prompt: builtins.str,
             model_id: builtins.str,
         ) -> None:
-            '''
-            :param append_to_prompt: Text prompt for model instructions.
-            :param model_id: 
+            '''The memory override configuration.
+
+            :param append_to_prompt: The extraction configuration.
+            :param model_id: The memory override for the model ID.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrockagentcore-memory-userpreferenceoverrideextractionconfigurationinput.html
             :exampleMetadata: fixture=_generated
@@ -7220,7 +7786,7 @@ class CfnMemory(
 
         @builtins.property
         def append_to_prompt(self) -> builtins.str:
-            '''Text prompt for model instructions.
+            '''The extraction configuration.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrockagentcore-memory-userpreferenceoverrideextractionconfigurationinput.html#cfn-bedrockagentcore-memory-userpreferenceoverrideextractionconfigurationinput-appendtoprompt
             '''
@@ -7230,7 +7796,8 @@ class CfnMemory(
 
         @builtins.property
         def model_id(self) -> builtins.str:
-            '''
+            '''The memory override for the model ID.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrockagentcore-memory-userpreferenceoverrideextractionconfigurationinput.html#cfn-bedrockagentcore-memory-userpreferenceoverrideextractionconfigurationinput-modelid
             '''
             result = self._values.get("model_id")
@@ -7260,9 +7827,10 @@ class CfnMemory(
             consolidation: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnMemory.UserPreferenceOverrideConsolidationConfigurationInputProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             extraction: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnMemory.UserPreferenceOverrideExtractionConfigurationInputProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
-            '''
-            :param consolidation: 
-            :param extraction: 
+            '''The memory user preference override.
+
+            :param consolidation: The memory override consolidation information.
+            :param extraction: The memory user preferences for extraction.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrockagentcore-memory-userpreferenceoverride.html
             :exampleMetadata: fixture=_generated
@@ -7298,7 +7866,8 @@ class CfnMemory(
         def consolidation(
             self,
         ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnMemory.UserPreferenceOverrideConsolidationConfigurationInputProperty"]]:
-            '''
+            '''The memory override consolidation information.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrockagentcore-memory-userpreferenceoverride.html#cfn-bedrockagentcore-memory-userpreferenceoverride-consolidation
             '''
             result = self._values.get("consolidation")
@@ -7308,7 +7877,8 @@ class CfnMemory(
         def extraction(
             self,
         ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnMemory.UserPreferenceOverrideExtractionConfigurationInputProperty"]]:
-            '''
+            '''The memory user preferences for extraction.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrockagentcore-memory-userpreferenceoverride.html#cfn-bedrockagentcore-memory-userpreferenceoverride-extraction
             '''
             result = self._values.get("extraction")
@@ -7332,11 +7902,7 @@ class CfnRuntime(
     metaclass=jsii.JSIIMeta,
     jsii_type="aws-cdk-lib.aws_bedrockagentcore.CfnRuntime",
 ):
-    '''.. epigraph::
-
-   Amazon Bedrock AgentCore is in preview release and is subject to change.
-
-    Contains information about an agent runtime. An agent runtime is the execution environment for a Amazon Bedrock Agent.
+    '''Contains information about an agent runtime. An agent runtime is the execution environment for a Amazon Bedrock Agent.
 
     AgentCore Runtime is a secure, serverless runtime purpose-built for deploying and scaling dynamic AI agents and tools using any open-source framework including LangGraph, CrewAI, and Strands Agents, any protocol, and any model.
 
@@ -8166,11 +8732,7 @@ class CfnRuntimeEndpoint(
     metaclass=jsii.JSIIMeta,
     jsii_type="aws-cdk-lib.aws_bedrockagentcore.CfnRuntimeEndpoint",
 ):
-    '''.. epigraph::
-
-   Amazon Bedrock AgentCore is in preview release and is subject to change.
-
-    AgentCore Runtime is a secure, serverless runtime purpose-built for deploying and scaling dynamic AI agents and tools using any open-source framework including LangGraph, CrewAI, and Strands Agents, any protocol, and any model.
+    '''AgentCore Runtime is a secure, serverless runtime purpose-built for deploying and scaling dynamic AI agents and tools using any open-source framework including LangGraph, CrewAI, and Strands Agents, any protocol, and any model.
 
     For more information about using agent runtime endpoints in Amazon Bedrock AgentCore, see `AgentCore Runtime versioning and endpoints <https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/agent-runtime-versioning.html>`_ .
 
@@ -9143,6 +9705,7 @@ def _typecheckingstub__20937c3b9ee32cb1df4d7eaf09c5da2b921076b8dab073c8f61380cb9
 
 def _typecheckingstub__80b393ad440afaf6b639d0ad3fdd1431e23bc8fa4658d92c51bbe3ae892ec72e(
     *,
+    self_managed_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnMemory.SelfManagedConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     semantic_override: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnMemory.SemanticOverrideProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     summary_override: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnMemory.SummaryOverrideProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     user_preference_override: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnMemory.UserPreferenceOverrideProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -9165,12 +9728,36 @@ def _typecheckingstub__68f9ef2809f813258bef3dcd9ec460d2f237f2127d9f7cb9aae325616
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__44e7fa751a69795001dc84cc0fd23b36ae6952ce8c475d549b7599b3353a7c9a(
+    *,
+    payload_delivery_bucket_name: typing.Optional[builtins.str] = None,
+    topic_arn: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__c7fa25b2413ebaf6794a4e0d96d4404f578a37b86cd501369f7c93f8d049e8e7(
     *,
     custom_memory_strategy: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnMemory.CustomMemoryStrategyProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     semantic_memory_strategy: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnMemory.SemanticMemoryStrategyProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     summary_memory_strategy: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnMemory.SummaryMemoryStrategyProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     user_preference_memory_strategy: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnMemory.UserPreferenceMemoryStrategyProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__f26f0bfb6bb91a96529926b34610d43ded0571d826aa8ac6cb6e63367e9ea089(
+    *,
+    message_count: typing.Optional[jsii.Number] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__e4fcd7b9f7c5c0bb0c80ff54635936b78ada2b3d24596ba7cd43b9ece93f804c(
+    *,
+    historical_context_window_size: typing.Optional[jsii.Number] = None,
+    invocation_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnMemory.InvocationConfigurationInputProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    trigger_conditions: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnMemory.TriggerConditionInputProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -9238,6 +9825,29 @@ def _typecheckingstub__c990b6378d188092fe95d78caab0eb586836dc0ca2194f9cbf3788c24
 def _typecheckingstub__b23ed198bcd958ec3a014c4dd2d6c418b82bc1895ca1b0af24503f002e61d492(
     *,
     consolidation: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnMemory.SummaryOverrideConsolidationConfigurationInputProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__0cf65bf0b7de7a122f8fdf3c50a61ba88dd5248ad841dd004cb6bd0f7174ec45(
+    *,
+    idle_session_timeout: typing.Optional[jsii.Number] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__171b0765936a13c6e7c17456605ec3e2bc9c36685a864e8c11187bfd9a4bc89a(
+    *,
+    token_count: typing.Optional[jsii.Number] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__9ca3b096b467bf1778a21961da57f12ce16cf0ef63aeee1b912577f66fdb48cb(
+    *,
+    message_based_trigger: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnMemory.MessageBasedTriggerInputProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    time_based_trigger: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnMemory.TimeBasedTriggerInputProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    token_based_trigger: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnMemory.TokenBasedTriggerInputProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -9470,3 +10080,6 @@ def _typecheckingstub__1df913b08f181c8777324479d4caab3dc1c0e41137ac1db4a0b10f478
 ) -> None:
     """Type checking stubs"""
     pass
+
+for cls in [IBrowserCustomRef, ICodeInterpreterCustomRef, IGatewayRef, IGatewayTargetRef, IMemoryRef, IRuntimeEndpointRef, IRuntimeRef]:
+    typing.cast(typing.Any, cls).__protocol_attrs__ = typing.cast(typing.Any, cls).__protocol_attrs__ - set(['__jsii_proxy_class__', '__jsii_type__'])

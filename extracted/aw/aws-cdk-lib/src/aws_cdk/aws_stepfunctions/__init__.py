@@ -1747,6 +1747,7 @@ from ..aws_iam import (
     IGrantable as _IGrantable_71c4f5de,
     IPrincipal as _IPrincipal_539bb2fd,
     IRole as _IRole_235f5d8e,
+    IRoleRef as _IRoleRef_613dafc2,
     PolicyStatement as _PolicyStatement_0fe33853,
 )
 from ..aws_kms import IKey as _IKey_5f11635f, IKeyRef as _IKeyRef_1e82344b
@@ -6404,20 +6405,14 @@ class JsonPath(
 
     Example::
 
-        #
-        # JSON state input:
-        #  {
-        #    "bucketName": "my-bucket",
-        #    "prefix": "item"
-        #  }
-        #
-        distributed_map = sfn.DistributedMap(self, "DistributedMap",
-            item_reader=sfn.S3ObjectsItemReader(
-                bucket_name_path=sfn.JsonPath.string_at("$.bucketName"),
-                prefix=sfn.JsonPath.string_at("$.prefix")
+        tasks.SageMakerCreateModel(self, "Sagemaker",
+            model_name="MyModel",
+            primary_container=tasks.ContainerDefinition(
+                image=tasks.DockerImage.from_json_expression(sfn.JsonPath.string_at("$.Model.imageName")),
+                mode=tasks.Mode.SINGLE_MODEL,
+                model_s3_location=tasks.S3Location.from_json_expression("$.TrainingJob.ModelArtifacts.S3ModelArtifacts")
             )
         )
-        distributed_map.item_processor(sfn.Pass(self, "Pass"))
     '''
 
     @jsii.member(jsii_name="array")
@@ -10296,7 +10291,7 @@ class StateMachine(
         logs: typing.Optional[typing.Union[LogOptions, typing.Dict[builtins.str, typing.Any]]] = None,
         query_language: typing.Optional[QueryLanguage] = None,
         removal_policy: typing.Optional[_RemovalPolicy_9f93c814] = None,
-        role: typing.Optional[_IRole_235f5d8e] = None,
+        role: typing.Optional['__IRoleRef_613dafc2__IGrantable_71c4f5de'] = None,
         state_machine_name: typing.Optional[builtins.str] = None,
         state_machine_type: typing.Optional["StateMachineType"] = None,
         timeout: typing.Optional[_Duration_4839e8c3] = None,
@@ -10917,7 +10912,10 @@ class StateMachine(
     @builtins.property
     @jsii.member(jsii_name="role")
     def role(self) -> _IRole_235f5d8e:
-        '''Execution role of this state machine.'''
+        '''Execution role of this state machine.
+
+        Will throw if the Role object that was given does not implement IRole
+        '''
         return typing.cast(_IRole_235f5d8e, jsii.get(self, "role"))
 
     @builtins.property
@@ -11211,7 +11209,7 @@ class StateMachineProps:
         logs: typing.Optional[typing.Union[LogOptions, typing.Dict[builtins.str, typing.Any]]] = None,
         query_language: typing.Optional[QueryLanguage] = None,
         removal_policy: typing.Optional[_RemovalPolicy_9f93c814] = None,
-        role: typing.Optional[_IRole_235f5d8e] = None,
+        role: typing.Optional['__IRoleRef_613dafc2__IGrantable_71c4f5de'] = None,
         state_machine_name: typing.Optional[builtins.str] = None,
         state_machine_type: typing.Optional["StateMachineType"] = None,
         timeout: typing.Optional[_Duration_4839e8c3] = None,
@@ -11375,13 +11373,13 @@ class StateMachineProps:
         return typing.cast(typing.Optional[_RemovalPolicy_9f93c814], result)
 
     @builtins.property
-    def role(self) -> typing.Optional[_IRole_235f5d8e]:
+    def role(self) -> typing.Optional['__IRoleRef_613dafc2__IGrantable_71c4f5de']:
         '''The execution role for the state machine service.
 
         :default: A role is automatically created
         '''
         result = self._values.get("role")
-        return typing.cast(typing.Optional[_IRole_235f5d8e], result)
+        return typing.cast(typing.Optional['__IRoleRef_613dafc2__IGrantable_71c4f5de'], result)
 
     @builtins.property
     def state_machine_name(self) -> typing.Optional[builtins.str]:
@@ -27789,7 +27787,7 @@ def _typecheckingstub__efdfc02291401a50a1d945e5208e9becb9828352fec32bc109ccebafc
     logs: typing.Optional[typing.Union[LogOptions, typing.Dict[builtins.str, typing.Any]]] = None,
     query_language: typing.Optional[QueryLanguage] = None,
     removal_policy: typing.Optional[_RemovalPolicy_9f93c814] = None,
-    role: typing.Optional[_IRole_235f5d8e] = None,
+    role: typing.Optional['__IRoleRef_613dafc2__IGrantable_71c4f5de'] = None,
     state_machine_name: typing.Optional[builtins.str] = None,
     state_machine_type: typing.Optional[StateMachineType] = None,
     timeout: typing.Optional[_Duration_4839e8c3] = None,
@@ -27919,7 +27917,7 @@ def _typecheckingstub__24d23b501c893898901860f31ff1a0a0fa81eb89f06a7acf3eef4f15e
     logs: typing.Optional[typing.Union[LogOptions, typing.Dict[builtins.str, typing.Any]]] = None,
     query_language: typing.Optional[QueryLanguage] = None,
     removal_policy: typing.Optional[_RemovalPolicy_9f93c814] = None,
-    role: typing.Optional[_IRole_235f5d8e] = None,
+    role: typing.Optional['__IRoleRef_613dafc2__IGrantable_71c4f5de'] = None,
     state_machine_name: typing.Optional[builtins.str] = None,
     state_machine_type: typing.Optional[StateMachineType] = None,
     timeout: typing.Optional[_Duration_4839e8c3] = None,
@@ -29762,3 +29760,9 @@ def _typecheckingstub__0d5f089eaa441d0e3ee41bfd31bf52dcf81f27d026fe808208da7e964
 ) -> None:
     """Type checking stubs"""
     pass
+
+class __IRoleRef_613dafc2__IGrantable_71c4f5de(_IRoleRef_613dafc2, _IGrantable_71c4f5de, typing_extensions.Protocol):
+    pass
+
+for cls in [IActivity, IActivityRef, IChainable, IItemReader, INextable, IStateMachine, IStateMachineAliasRef, IStateMachineRef, IStateMachineVersionRef, __IRoleRef_613dafc2__IGrantable_71c4f5de]:
+    typing.cast(typing.Any, cls).__protocol_attrs__ = typing.cast(typing.Any, cls).__protocol_attrs__ - set(['__jsii_proxy_class__', '__jsii_type__'])

@@ -4866,27 +4866,6 @@ class CfnEventStream(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
-    @jsii.member(jsii_name="fromEventStreamArn")
-    @builtins.classmethod
-    def from_event_stream_arn(
-        cls,
-        scope: _constructs_77d1e7e8.Construct,
-        id: builtins.str,
-        arn: builtins.str,
-    ) -> IEventStreamRef:
-        '''Creates a new IEventStreamRef from an ARN.
-
-        :param scope: -
-        :param id: -
-        :param arn: -
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__2912fbac0dc25602737bb6c243466334029e11fcfdf5487fc65c1a0029b6f9e1)
-            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
-            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
-            check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
-        return typing.cast(IEventStreamRef, jsii.sinvoke(cls, "fromEventStreamArn", [scope, id, arn]))
-
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -11673,14 +11652,6 @@ def _typecheckingstub__ab29d0d747428994b84491cb3989a05a67bcb4cf0b84ebeba8fd19114
     """Type checking stubs"""
     pass
 
-def _typecheckingstub__2912fbac0dc25602737bb6c243466334029e11fcfdf5487fc65c1a0029b6f9e1(
-    scope: _constructs_77d1e7e8.Construct,
-    id: builtins.str,
-    arn: builtins.str,
-) -> None:
-    """Type checking stubs"""
-    pass
-
 def _typecheckingstub__5d37a000675ecf626a3348ff78d7f60db4441f2bb16c208d8dea0d1a4ecbd88f(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -12393,3 +12364,6 @@ def _typecheckingstub__002c938fccce270fc597ae5653583b8a9910031239e0daaf523e0c443
 ) -> None:
     """Type checking stubs"""
     pass
+
+for cls in [ICalculatedAttributeDefinitionRef, IDomainRef, IEventStreamRef, IEventTriggerRef, IIntegrationRef, IObjectTypeRef, ISegmentDefinitionRef]:
+    typing.cast(typing.Any, cls).__protocol_attrs__ = typing.cast(typing.Any, cls).__protocol_attrs__ - set(['__jsii_proxy_class__', '__jsii_type__'])

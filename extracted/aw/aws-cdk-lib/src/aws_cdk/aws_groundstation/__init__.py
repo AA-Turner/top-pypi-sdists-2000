@@ -4539,3 +4539,6 @@ def _typecheckingstub__9b72d6af08de28c6ebdf730f46ed7f026b1f417a505f1cd3c52737731
 ) -> None:
     """Type checking stubs"""
     pass
+
+for cls in [IConfigRef, IDataflowEndpointGroupRef, IMissionProfileRef]:
+    typing.cast(typing.Any, cls).__protocol_attrs__ = typing.cast(typing.Any, cls).__protocol_attrs__ - set(['__jsii_proxy_class__', '__jsii_type__'])

@@ -28700,3 +28700,6 @@ def _typecheckingstub__b7df3aca94dedaeba54fe7b775b3935c8ba1292a6334855a44eadaaf7
 ) -> None:
     """Type checking stubs"""
     pass
+
+for cls in [ICustomAttribute, IIdentityPoolPrincipalTagRef, IIdentityPoolRef, IIdentityPoolRoleAttachmentRef, ILogDeliveryConfigurationRef, IManagedLoginBrandingRef, IUserPool, IUserPoolClient, IUserPoolClientRef, IUserPoolDomain, IUserPoolDomainRef, IUserPoolGroup, IUserPoolGroupRef, IUserPoolIdentityProvider, IUserPoolIdentityProviderRef, IUserPoolRef, IUserPoolResourceServer, IUserPoolResourceServerRef, IUserPoolRiskConfigurationAttachmentRef, IUserPoolUICustomizationAttachmentRef, IUserPoolUserRef, IUserPoolUserToGroupAttachmentRef]:
+    typing.cast(typing.Any, cls).__protocol_attrs__ = typing.cast(typing.Any, cls).__protocol_attrs__ - set(['__jsii_proxy_class__', '__jsii_type__'])

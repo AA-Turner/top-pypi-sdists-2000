@@ -1852,10 +1852,10 @@ class CfnEventBusPolicyProps:
         '''Properties for defining a ``CfnEventBusPolicy``.
 
         :param statement_id: An identifier string for the external account that you are granting permissions to. If you later want to revoke the permission for this external account, specify this ``StatementId`` when you run `RemovePermission <https://docs.aws.amazon.com/eventbridge/latest/APIReference/API_RemovePermission.html>`_ . .. epigraph:: Each ``StatementId`` must be unique.
-        :param action: The action that you are enabling the other account to perform.
-        :param condition: This parameter enables you to limit the permission to accounts that fulfill a certain condition, such as being a member of a certain AWS organization. For more information about AWS Organizations, see `What Is AWS Organizations <https://docs.aws.amazon.com/organizations/latest/userguide/orgs_introduction.html>`_ in the *AWS Organizations User Guide* . If you specify ``Condition`` with an AWS organization ID, and specify "*" as the value for ``Principal`` , you grant permission to all the accounts in the named organization. The ``Condition`` is a JSON string which must contain ``Type`` , ``Key`` , and ``Value`` fields.
+        :param action: (deprecated) The action that you are enabling the other account to perform.
+        :param condition: (deprecated) This parameter enables you to limit the permission to accounts that fulfill a certain condition, such as being a member of a certain AWS organization. For more information about AWS Organizations, see `What Is AWS Organizations <https://docs.aws.amazon.com/organizations/latest/userguide/orgs_introduction.html>`_ in the *AWS Organizations User Guide* . If you specify ``Condition`` with an AWS organization ID, and specify "*" as the value for ``Principal`` , you grant permission to all the accounts in the named organization. The ``Condition`` is a JSON string which must contain ``Type`` , ``Key`` , and ``Value`` fields.
         :param event_bus_name: The name of the event bus associated with the rule. If you omit this, the default event bus is used.
-        :param principal: The 12-digit AWS account ID that you are permitting to put events to your default event bus. Specify "*" to permit any account to put events to your default event bus. If you specify "*" without specifying ``Condition`` , avoid creating rules that may match undesirable events. To create more secure rules, make sure that the event pattern for each rule contains an ``account`` field with a specific account ID from which to receive events. Rules with an account field do not match any events sent from other accounts.
+        :param principal: (deprecated) The 12-digit AWS account ID that you are permitting to put events to your default event bus. Specify "*" to permit any account to put events to your default event bus. If you specify "*" without specifying ``Condition`` , avoid creating rules that may match undesirable events. To create more secure rules, make sure that the event pattern for each rule contains an ``account`` field with a specific account ID from which to receive events. Rules with an account field do not match any events sent from other accounts.
         :param statement: A JSON string that describes the permission policy statement. You can include a ``Policy`` parameter in the request instead of using the ``StatementId`` , ``Action`` , ``Principal`` , or ``Condition`` parameters.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-events-eventbuspolicy.html
@@ -1923,9 +1923,12 @@ class CfnEventBusPolicyProps:
 
     @builtins.property
     def action(self) -> typing.Optional[builtins.str]:
-        '''The action that you are enabling the other account to perform.
+        '''(deprecated) The action that you are enabling the other account to perform.
+
+        :deprecated: this property has been deprecated
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-events-eventbuspolicy.html#cfn-events-eventbuspolicy-action
+        :stability: deprecated
         '''
         result = self._values.get("action")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -1934,7 +1937,7 @@ class CfnEventBusPolicyProps:
     def condition(
         self,
     ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnEventBusPolicy.ConditionProperty"]]:
-        '''This parameter enables you to limit the permission to accounts that fulfill a certain condition, such as being a member of a certain AWS organization.
+        '''(deprecated) This parameter enables you to limit the permission to accounts that fulfill a certain condition, such as being a member of a certain AWS organization.
 
         For more information about AWS Organizations, see `What Is AWS Organizations <https://docs.aws.amazon.com/organizations/latest/userguide/orgs_introduction.html>`_ in the *AWS Organizations User Guide* .
 
@@ -1942,7 +1945,10 @@ class CfnEventBusPolicyProps:
 
         The ``Condition`` is a JSON string which must contain ``Type`` , ``Key`` , and ``Value`` fields.
 
+        :deprecated: this property has been deprecated
+
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-events-eventbuspolicy.html#cfn-events-eventbuspolicy-condition
+        :stability: deprecated
         '''
         result = self._values.get("condition")
         return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnEventBusPolicy.ConditionProperty"]], result)
@@ -1960,13 +1966,16 @@ class CfnEventBusPolicyProps:
 
     @builtins.property
     def principal(self) -> typing.Optional[builtins.str]:
-        '''The 12-digit AWS account ID that you are permitting to put events to your default event bus.
+        '''(deprecated) The 12-digit AWS account ID that you are permitting to put events to your default event bus.
 
         Specify "*" to permit any account to put events to your default event bus.
 
         If you specify "*" without specifying ``Condition`` , avoid creating rules that may match undesirable events. To create more secure rules, make sure that the event pattern for each rule contains an ``account`` field with a specific account ID from which to receive events. Rules with an account field do not match any events sent from other accounts.
 
+        :deprecated: this property has been deprecated
+
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-events-eventbuspolicy.html#cfn-events-eventbuspolicy-principal
+        :stability: deprecated
         '''
         result = self._values.get("principal")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -3349,13 +3358,19 @@ class EventBusPolicyProps:
 @jsii.data_type(
     jsii_type="aws-cdk-lib.aws_events.EventBusPolicyReference",
     jsii_struct_bases=[],
-    name_mapping={"event_bus_policy_id": "eventBusPolicyId"},
+    name_mapping={"event_bus_name": "eventBusName", "statement_id": "statementId"},
 )
 class EventBusPolicyReference:
-    def __init__(self, *, event_bus_policy_id: builtins.str) -> None:
+    def __init__(
+        self,
+        *,
+        event_bus_name: builtins.str,
+        statement_id: builtins.str,
+    ) -> None:
         '''A reference to a EventBusPolicy resource.
 
-        :param event_bus_policy_id: The Id of the EventBusPolicy resource.
+        :param event_bus_name: The EventBusName of the EventBusPolicy resource.
+        :param statement_id: The StatementId of the EventBusPolicy resource.
 
         :exampleMetadata: fixture=_generated
 
@@ -3366,21 +3381,31 @@ class EventBusPolicyReference:
             from aws_cdk import aws_events as events
             
             event_bus_policy_reference = events.EventBusPolicyReference(
-                event_bus_policy_id="eventBusPolicyId"
+                event_bus_name="eventBusName",
+                statement_id="statementId"
             )
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__19c9d9c8efa21ce278b518a9e2bdc78537f74146fda2a922ca6a3e076ab6e91f)
-            check_type(argname="argument event_bus_policy_id", value=event_bus_policy_id, expected_type=type_hints["event_bus_policy_id"])
+            check_type(argname="argument event_bus_name", value=event_bus_name, expected_type=type_hints["event_bus_name"])
+            check_type(argname="argument statement_id", value=statement_id, expected_type=type_hints["statement_id"])
         self._values: typing.Dict[builtins.str, typing.Any] = {
-            "event_bus_policy_id": event_bus_policy_id,
+            "event_bus_name": event_bus_name,
+            "statement_id": statement_id,
         }
 
     @builtins.property
-    def event_bus_policy_id(self) -> builtins.str:
-        '''The Id of the EventBusPolicy resource.'''
-        result = self._values.get("event_bus_policy_id")
-        assert result is not None, "Required property 'event_bus_policy_id' is missing"
+    def event_bus_name(self) -> builtins.str:
+        '''The EventBusName of the EventBusPolicy resource.'''
+        result = self._values.get("event_bus_name")
+        assert result is not None, "Required property 'event_bus_name' is missing"
+        return typing.cast(builtins.str, result)
+
+    @builtins.property
+    def statement_id(self) -> builtins.str:
+        '''The StatementId of the EventBusPolicy resource.'''
+        result = self._values.get("statement_id")
+        assert result is not None, "Required property 'statement_id' is missing"
         return typing.cast(builtins.str, result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
@@ -10226,10 +10251,10 @@ class CfnEventBusPolicy(
         :param scope: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
         :param statement_id: An identifier string for the external account that you are granting permissions to. If you later want to revoke the permission for this external account, specify this ``StatementId`` when you run `RemovePermission <https://docs.aws.amazon.com/eventbridge/latest/APIReference/API_RemovePermission.html>`_ . .. epigraph:: Each ``StatementId`` must be unique.
-        :param action: The action that you are enabling the other account to perform.
-        :param condition: This parameter enables you to limit the permission to accounts that fulfill a certain condition, such as being a member of a certain AWS organization. For more information about AWS Organizations, see `What Is AWS Organizations <https://docs.aws.amazon.com/organizations/latest/userguide/orgs_introduction.html>`_ in the *AWS Organizations User Guide* . If you specify ``Condition`` with an AWS organization ID, and specify "*" as the value for ``Principal`` , you grant permission to all the accounts in the named organization. The ``Condition`` is a JSON string which must contain ``Type`` , ``Key`` , and ``Value`` fields.
+        :param action: (deprecated) The action that you are enabling the other account to perform.
+        :param condition: (deprecated) This parameter enables you to limit the permission to accounts that fulfill a certain condition, such as being a member of a certain AWS organization. For more information about AWS Organizations, see `What Is AWS Organizations <https://docs.aws.amazon.com/organizations/latest/userguide/orgs_introduction.html>`_ in the *AWS Organizations User Guide* . If you specify ``Condition`` with an AWS organization ID, and specify "*" as the value for ``Principal`` , you grant permission to all the accounts in the named organization. The ``Condition`` is a JSON string which must contain ``Type`` , ``Key`` , and ``Value`` fields.
         :param event_bus_name: The name of the event bus associated with the rule. If you omit this, the default event bus is used.
-        :param principal: The 12-digit AWS account ID that you are permitting to put events to your default event bus. Specify "*" to permit any account to put events to your default event bus. If you specify "*" without specifying ``Condition`` , avoid creating rules that may match undesirable events. To create more secure rules, make sure that the event pattern for each rule contains an ``account`` field with a specific account ID from which to receive events. Rules with an account field do not match any events sent from other accounts.
+        :param principal: (deprecated) The 12-digit AWS account ID that you are permitting to put events to your default event bus. Specify "*" to permit any account to put events to your default event bus. If you specify "*" without specifying ``Condition`` , avoid creating rules that may match undesirable events. To create more secure rules, make sure that the event pattern for each rule contains an ``account`` field with a specific account ID from which to receive events. Rules with an account field do not match any events sent from other accounts.
         :param statement: A JSON string that describes the permission policy statement. You can include a ``Policy`` parameter in the request instead of using the ``StatementId`` , ``Action`` , ``Principal`` , or ``Condition`` parameters.
         '''
         if __debug__:
@@ -10312,7 +10337,12 @@ class CfnEventBusPolicy(
     @builtins.property
     @jsii.member(jsii_name="action")
     def action(self) -> typing.Optional[builtins.str]:
-        '''The action that you are enabling the other account to perform.'''
+        '''(deprecated) The action that you are enabling the other account to perform.
+
+        :deprecated: this property has been deprecated
+
+        :stability: deprecated
+        '''
         return typing.cast(typing.Optional[builtins.str], jsii.get(self, "action"))
 
     @action.setter
@@ -10327,7 +10357,12 @@ class CfnEventBusPolicy(
     def condition(
         self,
     ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnEventBusPolicy.ConditionProperty"]]:
-        '''This parameter enables you to limit the permission to accounts that fulfill a certain condition, such as being a member of a certain AWS organization.'''
+        '''(deprecated) This parameter enables you to limit the permission to accounts that fulfill a certain condition, such as being a member of a certain AWS organization.
+
+        :deprecated: this property has been deprecated
+
+        :stability: deprecated
+        '''
         return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnEventBusPolicy.ConditionProperty"]], jsii.get(self, "condition"))
 
     @condition.setter
@@ -10356,7 +10391,12 @@ class CfnEventBusPolicy(
     @builtins.property
     @jsii.member(jsii_name="principal")
     def principal(self) -> typing.Optional[builtins.str]:
-        '''The 12-digit AWS account ID that you are permitting to put events to your default event bus.'''
+        '''(deprecated) The 12-digit AWS account ID that you are permitting to put events to your default event bus.
+
+        :deprecated: this property has been deprecated
+
+        :stability: deprecated
+        '''
         return typing.cast(typing.Optional[builtins.str], jsii.get(self, "principal"))
 
     @principal.setter
@@ -12755,9 +12795,9 @@ class CfnRule(
     )
     class SqsParametersProperty:
         def __init__(self, *, message_group_id: builtins.str) -> None:
-            '''This structure includes the custom parameter to be used when the target is an SQS FIFO queue.
+            '''The custom parameters for EventBridge to use for a target that is an Amazon SQS fair or FIFO queue.
 
-            :param message_group_id: The FIFO message group ID to use as the target.
+            :param message_group_id: The ID of the message group to use as the target.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-events-rule-sqsparameters.html
             :exampleMetadata: fixture=_generated
@@ -12781,7 +12821,7 @@ class CfnRule(
 
         @builtins.property
         def message_group_id(self) -> builtins.str:
-            '''The FIFO message group ID to use as the target.
+            '''The ID of the message group to use as the target.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-events-rule-sqsparameters.html#cfn-events-rule-sqsparameters-messagegroupid
             '''
@@ -12944,7 +12984,7 @@ class CfnRule(
             :param role_arn: The Amazon Resource Name (ARN) of the IAM role to be used for this target when the rule is triggered. If one rule triggers multiple targets, you can use a different IAM role for each target.
             :param run_command_parameters: Parameters used when you are using the rule to invoke Amazon EC2 Run Command.
             :param sage_maker_pipeline_parameters: Contains the SageMaker AI Model Building Pipeline parameters to start execution of a SageMaker AI Model Building Pipeline. If you specify a SageMaker AI Model Building Pipeline as a target, you can use this to specify parameters to start a pipeline execution based on EventBridge events.
-            :param sqs_parameters: Contains the message group ID to use when the target is a FIFO queue. If you specify an SQS FIFO queue as a target, the queue must have content-based deduplication enabled.
+            :param sqs_parameters: Contains the message group ID to use when the target is an Amazon SQS fair or FIFO queue. If you specify a fair or FIFO queue as a target, the queue must have content-based deduplication enabled.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-events-rule-target.html
             :exampleMetadata: fixture=_generated
@@ -13322,9 +13362,9 @@ class CfnRule(
         def sqs_parameters(
             self,
         ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRule.SqsParametersProperty"]]:
-            '''Contains the message group ID to use when the target is a FIFO queue.
+            '''Contains the message group ID to use when the target is an Amazon SQS fair or FIFO queue.
 
-            If you specify an SQS FIFO queue as a target, the queue must have content-based deduplication enabled.
+            If you specify a fair or FIFO queue as a target, the queue must have content-based deduplication enabled.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-events-rule-target.html#cfn-events-rule-target-sqsparameters
             '''
@@ -14064,7 +14104,8 @@ def _typecheckingstub__30683f3da3ccc9235ea663f165631b4ac57c807c1878517c5051bcd78
 
 def _typecheckingstub__19c9d9c8efa21ce278b518a9e2bdc78537f74146fda2a922ca6a3e076ab6e91f(
     *,
-    event_bus_policy_id: builtins.str,
+    event_bus_name: builtins.str,
+    statement_id: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -15516,3 +15557,6 @@ def _typecheckingstub__f55b55b311ab4cc3f0aabb9339086b97d1f1340dcc28209fe5e78777c
 ) -> None:
     """Type checking stubs"""
     pass
+
+for cls in [IApiDestination, IApiDestinationRef, IArchiveRef, IConnection, IConnectionRef, IEndpointRef, IEventBus, IEventBusPolicyRef, IEventBusRef, IRule, IRuleRef, IRuleTarget]:
+    typing.cast(typing.Any, cls).__protocol_attrs__ = typing.cast(typing.Any, cls).__protocol_attrs__ - set(['__jsii_proxy_class__', '__jsii_type__'])

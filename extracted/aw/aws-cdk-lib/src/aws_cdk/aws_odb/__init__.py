@@ -5349,7 +5349,7 @@ class CfnOdbPeeringConnection(
     metaclass=jsii.JSIIMeta,
     jsii_type="aws-cdk-lib.aws_odb.CfnOdbPeeringConnection",
 ):
-    '''Creates a peering connection between an ODB network and either another ODB network or a customer-owned VPC.
+    '''Creates a peering connection between an ODB network and a VPC.
 
     A peering connection enables private connectivity between the networks for application-tier communication.
 
@@ -6356,3 +6356,6 @@ def _typecheckingstub__e52d668f36d0789e49c0196d151e22c497a4f1c0a77cff71369f51481
 ) -> None:
     """Type checking stubs"""
     pass
+
+for cls in [ICloudAutonomousVmClusterRef, ICloudExadataInfrastructureRef, ICloudVmClusterRef, IOdbNetworkRef, IOdbPeeringConnectionRef]:
+    typing.cast(typing.Any, cls).__protocol_attrs__ = typing.cast(typing.Any, cls).__protocol_attrs__ - set(['__jsii_proxy_class__', '__jsii_type__'])

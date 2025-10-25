@@ -8722,3 +8722,6 @@ def _typecheckingstub__ed6e084870d225a53477b08097053cc5b851f59b0c1d2ac3ce50dcb61
 ) -> None:
     """Type checking stubs"""
     pass
+
+for cls in [IFirewallPolicyRef, IFirewallRef, ILoggingConfigurationRef, IRuleGroupRef, ITLSInspectionConfigurationRef, IVpcEndpointAssociationRef]:
+    typing.cast(typing.Any, cls).__protocol_attrs__ = typing.cast(typing.Any, cls).__protocol_attrs__ - set(['__jsii_proxy_class__', '__jsii_type__'])

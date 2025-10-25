@@ -128,11 +128,50 @@ By using these methods, you can grant specific operational permissions on the EC
 
 ### Image tag immutability
 
-You can set tag immutability on images in our repository using the `imageTagMutability` construct prop.
+You can set tag immutability on images in your repository using the `imageTagMutability` construct prop.
 
 ```python
 ecr.Repository(self, "Repo", image_tag_mutability=ecr.TagMutability.IMMUTABLE)
 ```
+
+#### Image tag mutability with exclusion filters
+
+ECR supports more granular control over image tag mutability by allowing you to specify exclusion filters. This enables you to make your repository immutable while allowing specific tag patterns to remain mutable (or vice versa).
+
+There are two new mutability options that work with exclusion filters:
+
+* `MUTABLE_WITH_EXCLUSION`: Tags are mutable by default, except those matching the exclusion filters
+* `IMMUTABLE_WITH_EXCLUSION`: Tags are immutable by default, except those matching the exclusion filters
+
+Use `ImageTagMutabilityExclusionFilter.wildcard()` to create filters with wildcard patterns:
+
+```python
+# Make all tags immutable except for those starting with 'dev-' or 'test-'
+ecr.Repository(self, "Repo",
+    image_tag_mutability=ecr.TagMutability.IMMUTABLE_WITH_EXCLUSION,
+    image_tag_mutability_exclusion_filters=[
+        ecr.ImageTagMutabilityExclusionFilter.wildcard("dev-*"),
+        ecr.ImageTagMutabilityExclusionFilter.wildcard("test-*")
+    ]
+)
+```
+
+```python
+# Make all tags mutable except for production releases
+ecr.Repository(self, "Repo",
+    image_tag_mutability=ecr.TagMutability.MUTABLE_WITH_EXCLUSION,
+    image_tag_mutability_exclusion_filters=[
+        ecr.ImageTagMutabilityExclusionFilter.wildcard("prod-*"),
+        ecr.ImageTagMutabilityExclusionFilter.wildcard("release-v*")
+    ]
+)
+```
+
+##### Exclusion filter pattern rules
+
+* Patterns can contain alphanumeric characters, dots (.), underscores (_), hyphens (-), and asterisks (*) as wildcards
+* Maximum pattern length is 128 characters
+* You can specify up to 5 exclusion filters per repository
 
 ### Encryption
 
@@ -856,7 +895,7 @@ class CfnRepositoryCreationTemplateProps:
         :param description: The description associated with the repository creation template.
         :param encryption_configuration: The encryption configuration associated with the repository creation template.
         :param image_tag_mutability: The tag mutability setting for the repository. If this parameter is omitted, the default setting of ``MUTABLE`` will be used which will allow image tags to be overwritten. If ``IMMUTABLE`` is specified, all image tags within the repository will be immutable which will prevent them from being overwritten.
-        :param image_tag_mutability_exclusion_filters: Defines the image tag mutability exclusion filters to apply when creating repositories from this template. These filters specify which image tags can override the repository's default image tag mutability setting.
+        :param image_tag_mutability_exclusion_filters: A list of filters that specify which image tags are excluded from the repository creation template's image tag mutability setting.
         :param lifecycle_policy: The lifecycle policy to use for repositories created using the template.
         :param repository_policy: The repository policy to apply to repositories created using the template. A repository policy is a permissions policy associated with a repository to control access permissions.
         :param resource_tags: The metadata to apply to the repository to help you categorize and organize. Each tag consists of a key and an optional value, both of which you define. Tag keys can have a maximum character length of 128 characters, and tag values can have a maximum length of 256 characters.
@@ -997,9 +1036,7 @@ class CfnRepositoryCreationTemplateProps:
     def image_tag_mutability_exclusion_filters(
         self,
     ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnRepositoryCreationTemplate.ImageTagMutabilityExclusionFilterProperty"]]]]:
-        '''Defines the image tag mutability exclusion filters to apply when creating repositories from this template.
-
-        These filters specify which image tags can override the repository's default image tag mutability setting.
+        '''A list of filters that specify which image tags are excluded from the repository creation template's image tag mutability setting.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecr-repositorycreationtemplate.html#cfn-ecr-repositorycreationtemplate-imagetagmutabilityexclusionfilters
         '''
@@ -1084,9 +1121,9 @@ class CfnRepositoryProps:
 
         :param empty_on_delete: If true, deleting the repository force deletes the contents of the repository. If false, the repository must be empty before attempting to delete it.
         :param encryption_configuration: The encryption configuration for the repository. This determines how the contents of your repository are encrypted at rest.
-        :param image_scanning_configuration: The image scanning configuration for the repository. This determines whether images are scanned for known vulnerabilities after being pushed to the repository.
+        :param image_scanning_configuration: .. epigraph:: The ``imageScanningConfiguration`` parameter is being deprecated, in favor of specifying the image scanning configuration at the registry level. For more information, see ``PutRegistryScanningConfiguration`` . The image scanning configuration for the repository. This determines whether images are scanned for known vulnerabilities after being pushed to the repository.
         :param image_tag_mutability: The tag mutability setting for the repository. If this parameter is omitted, the default setting of ``MUTABLE`` will be used which will allow image tags to be overwritten. If ``IMMUTABLE`` is specified, all image tags within the repository will be immutable which will prevent them from being overwritten.
-        :param image_tag_mutability_exclusion_filters: The image tag mutability exclusion filters associated with the repository. These filters specify which image tags can override the repository's default image tag mutability setting.
+        :param image_tag_mutability_exclusion_filters: A list of filters that specify which image tags are excluded from the repository's image tag mutability setting.
         :param lifecycle_policy: Creates or updates a lifecycle policy. For information about lifecycle policy syntax, see `Lifecycle policy template <https://docs.aws.amazon.com/AmazonECR/latest/userguide/LifecyclePolicies.html>`_ .
         :param repository_name: The name to use for the repository. The repository name may be specified on its own (such as ``nginx-web-app`` ) or it can be prepended with a namespace to group the repository into a category (such as ``project-a/nginx-web-app`` ). If you don't specify a name, AWS CloudFormation generates a unique physical ID and uses that ID for the repository name. For more information, see `Name type <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-name.html>`_ . The repository name must start with a letter and can only contain lowercase letters, numbers, hyphens, underscores, and forward slashes. .. epigraph:: If you specify a name, you cannot perform updates that require replacement of this resource. You can perform updates that require no or some interruption. If you must replace the resource, specify a new name.
         :param repository_policy_text: The JSON repository policy text to apply to the repository. For more information, see `Amazon ECR repository policies <https://docs.aws.amazon.com/AmazonECR/latest/userguide/repository-policy-examples.html>`_ in the *Amazon Elastic Container Registry User Guide* .
@@ -1192,9 +1229,13 @@ class CfnRepositoryProps:
     def image_scanning_configuration(
         self,
     ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRepository.ImageScanningConfigurationProperty"]]:
-        '''The image scanning configuration for the repository.
+        '''.. epigraph::
 
-        This determines whether images are scanned for known vulnerabilities after being pushed to the repository.
+   The ``imageScanningConfiguration`` parameter is being deprecated, in favor of specifying the image scanning configuration at the registry level.
+
+        For more information, see ``PutRegistryScanningConfiguration`` .
+
+        The image scanning configuration for the repository. This determines whether images are scanned for known vulnerabilities after being pushed to the repository.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecr-repository.html#cfn-ecr-repository-imagescanningconfiguration
         '''
@@ -1216,9 +1257,7 @@ class CfnRepositoryProps:
     def image_tag_mutability_exclusion_filters(
         self,
     ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnRepository.ImageTagMutabilityExclusionFilterProperty"]]]]:
-        '''The image tag mutability exclusion filters associated with the repository.
-
-        These filters specify which image tags can override the repository's default image tag mutability setting.
+        '''A list of filters that specify which image tags are excluded from the repository's image tag mutability setting.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecr-repository.html#cfn-ecr-repository-imagetagmutabilityexclusionfilters
         '''
@@ -2148,6 +2187,39 @@ class _IRepositoryRefProxy(
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IRepositoryRef).__jsii_proxy_class__ = lambda : _IRepositoryRefProxy
+
+
+class ImageTagMutabilityExclusionFilter(
+    metaclass=jsii.JSIIMeta,
+    jsii_type="aws-cdk-lib.aws_ecr.ImageTagMutabilityExclusionFilter",
+):
+    '''Represents an image tag mutability exclusion filter for ECR repository.
+
+    :exampleMetadata: infused
+
+    Example::
+
+        # Make all tags immutable except for those starting with 'dev-' or 'test-'
+        ecr.Repository(self, "Repo",
+            image_tag_mutability=ecr.TagMutability.IMMUTABLE_WITH_EXCLUSION,
+            image_tag_mutability_exclusion_filters=[
+                ecr.ImageTagMutabilityExclusionFilter.wildcard("dev-*"),
+                ecr.ImageTagMutabilityExclusionFilter.wildcard("test-*")
+            ]
+        )
+    '''
+
+    @jsii.member(jsii_name="wildcard")
+    @builtins.classmethod
+    def wildcard(cls, pattern: builtins.str) -> "ImageTagMutabilityExclusionFilter":
+        '''Creates a wildcard filter for image tag mutability exclusion.
+
+        :param pattern: The wildcard pattern to match image tags (e.g., 'dev-*', 'release-v*').
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__506e41b81658bfe386f74207c24c3216542f105c02a9deeef0aa17031ffd52ef)
+            check_type(argname="argument pattern", value=pattern, expected_type=type_hints["pattern"])
+        return typing.cast("ImageTagMutabilityExclusionFilter", jsii.sinvoke(cls, "wildcard", [pattern]))
 
 
 @jsii.data_type(
@@ -3572,6 +3644,7 @@ class RepositoryLookupOptions:
         "encryption_key": "encryptionKey",
         "image_scan_on_push": "imageScanOnPush",
         "image_tag_mutability": "imageTagMutability",
+        "image_tag_mutability_exclusion_filters": "imageTagMutabilityExclusionFilters",
         "lifecycle_registry_id": "lifecycleRegistryId",
         "lifecycle_rules": "lifecycleRules",
         "removal_policy": "removalPolicy",
@@ -3588,6 +3661,7 @@ class RepositoryProps:
         encryption_key: typing.Optional[_IKeyRef_1e82344b] = None,
         image_scan_on_push: typing.Optional[builtins.bool] = None,
         image_tag_mutability: typing.Optional["TagMutability"] = None,
+        image_tag_mutability_exclusion_filters: typing.Optional[typing.Sequence[ImageTagMutabilityExclusionFilter]] = None,
         lifecycle_registry_id: typing.Optional[builtins.str] = None,
         lifecycle_rules: typing.Optional[typing.Sequence[typing.Union[LifecycleRule, typing.Dict[builtins.str, typing.Any]]]] = None,
         removal_policy: typing.Optional[_RemovalPolicy_9f93c814] = None,
@@ -3600,6 +3674,7 @@ class RepositoryProps:
         :param encryption_key: External KMS key to use for repository encryption. The 'encryption' property must be either not specified or set to "KMS". An error will be emitted if encryption is set to "AES256". Default: - If encryption is set to ``KMS`` and this property is undefined, an AWS managed KMS key is used.
         :param image_scan_on_push: Enable the scan on push when creating the repository. Default: false
         :param image_tag_mutability: The tag mutability setting for the repository. If this parameter is omitted, the default setting of MUTABLE will be used which will allow image tags to be overwritten. Default: TagMutability.MUTABLE
+        :param image_tag_mutability_exclusion_filters: The image tag mutability exclusion filters for the repository. These filters specify which image tags can override the repository's default image tag mutability setting. Default: undefined - AWS ECR default is no exclusion filters
         :param lifecycle_registry_id: The AWS account ID associated with the registry that contains the repository. Default: The default registry is assumed.
         :param lifecycle_rules: Life cycle rules to apply to this registry. Default: No life cycle rules
         :param removal_policy: Determine what happens to the repository when the resource/stack is deleted. Default: RemovalPolicy.Retain
@@ -3609,7 +3684,17 @@ class RepositoryProps:
 
         Example::
 
-            ecr.Repository(self, "Repo", image_tag_mutability=ecr.TagMutability.IMMUTABLE)
+            repository = ecr.Repository(self, "TestRepository",
+                repository_name="test-agent-runtime"
+            )
+            agent_runtime_artifact = agentcore.AgentRuntimeArtifact.from_ecr_repository(repository, "v1.0.0")
+            
+            # Explicitly using public network (this is the default)
+            runtime = agentcore.Runtime(self, "MyAgentRuntime",
+                runtime_name="myAgent",
+                agent_runtime_artifact=agent_runtime_artifact,
+                network_configuration=agentcore.RuntimeNetworkConfiguration.using_public_network()
+            )
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__638b63dd5eb589e01019ee47c63d6335810d02b0d769f767f2bf2fddc285af28)
@@ -3619,6 +3704,7 @@ class RepositoryProps:
             check_type(argname="argument encryption_key", value=encryption_key, expected_type=type_hints["encryption_key"])
             check_type(argname="argument image_scan_on_push", value=image_scan_on_push, expected_type=type_hints["image_scan_on_push"])
             check_type(argname="argument image_tag_mutability", value=image_tag_mutability, expected_type=type_hints["image_tag_mutability"])
+            check_type(argname="argument image_tag_mutability_exclusion_filters", value=image_tag_mutability_exclusion_filters, expected_type=type_hints["image_tag_mutability_exclusion_filters"])
             check_type(argname="argument lifecycle_registry_id", value=lifecycle_registry_id, expected_type=type_hints["lifecycle_registry_id"])
             check_type(argname="argument lifecycle_rules", value=lifecycle_rules, expected_type=type_hints["lifecycle_rules"])
             check_type(argname="argument removal_policy", value=removal_policy, expected_type=type_hints["removal_policy"])
@@ -3636,6 +3722,8 @@ class RepositoryProps:
             self._values["image_scan_on_push"] = image_scan_on_push
         if image_tag_mutability is not None:
             self._values["image_tag_mutability"] = image_tag_mutability
+        if image_tag_mutability_exclusion_filters is not None:
+            self._values["image_tag_mutability_exclusion_filters"] = image_tag_mutability_exclusion_filters
         if lifecycle_registry_id is not None:
             self._values["lifecycle_registry_id"] = lifecycle_registry_id
         if lifecycle_rules is not None:
@@ -3717,6 +3805,21 @@ class RepositoryProps:
         '''
         result = self._values.get("image_tag_mutability")
         return typing.cast(typing.Optional["TagMutability"], result)
+
+    @builtins.property
+    def image_tag_mutability_exclusion_filters(
+        self,
+    ) -> typing.Optional[typing.List[ImageTagMutabilityExclusionFilter]]:
+        '''The image tag mutability exclusion filters for the repository.
+
+        These filters specify which image tags can override the repository's default image tag mutability setting.
+
+        :default: undefined - AWS ECR default is no exclusion filters
+
+        :see: https://docs.aws.amazon.com/AmazonECR/latest/userguide/image-tag-mutability.html
+        '''
+        result = self._values.get("image_tag_mutability_exclusion_filters")
+        return typing.cast(typing.Optional[typing.List[ImageTagMutabilityExclusionFilter]], result)
 
     @builtins.property
     def lifecycle_registry_id(self) -> typing.Optional[builtins.str]:
@@ -3849,7 +3952,14 @@ class TagMutability(enum.Enum):
 
     Example::
 
-        ecr.Repository(self, "Repo", image_tag_mutability=ecr.TagMutability.IMMUTABLE)
+        # Make all tags immutable except for those starting with 'dev-' or 'test-'
+        ecr.Repository(self, "Repo",
+            image_tag_mutability=ecr.TagMutability.IMMUTABLE_WITH_EXCLUSION,
+            image_tag_mutability_exclusion_filters=[
+                ecr.ImageTagMutabilityExclusionFilter.wildcard("dev-*"),
+                ecr.ImageTagMutabilityExclusionFilter.wildcard("test-*")
+            ]
+        )
     '''
 
     MUTABLE = "MUTABLE"
@@ -5304,9 +5414,9 @@ class CfnRepository(
         :param id: Construct identifier for this resource (unique in its scope).
         :param empty_on_delete: If true, deleting the repository force deletes the contents of the repository. If false, the repository must be empty before attempting to delete it.
         :param encryption_configuration: The encryption configuration for the repository. This determines how the contents of your repository are encrypted at rest.
-        :param image_scanning_configuration: The image scanning configuration for the repository. This determines whether images are scanned for known vulnerabilities after being pushed to the repository.
+        :param image_scanning_configuration: .. epigraph:: The ``imageScanningConfiguration`` parameter is being deprecated, in favor of specifying the image scanning configuration at the registry level. For more information, see ``PutRegistryScanningConfiguration`` . The image scanning configuration for the repository. This determines whether images are scanned for known vulnerabilities after being pushed to the repository.
         :param image_tag_mutability: The tag mutability setting for the repository. If this parameter is omitted, the default setting of ``MUTABLE`` will be used which will allow image tags to be overwritten. If ``IMMUTABLE`` is specified, all image tags within the repository will be immutable which will prevent them from being overwritten.
-        :param image_tag_mutability_exclusion_filters: The image tag mutability exclusion filters associated with the repository. These filters specify which image tags can override the repository's default image tag mutability setting.
+        :param image_tag_mutability_exclusion_filters: A list of filters that specify which image tags are excluded from the repository's image tag mutability setting.
         :param lifecycle_policy: Creates or updates a lifecycle policy. For information about lifecycle policy syntax, see `Lifecycle policy template <https://docs.aws.amazon.com/AmazonECR/latest/userguide/LifecyclePolicies.html>`_ .
         :param repository_name: The name to use for the repository. The repository name may be specified on its own (such as ``nginx-web-app`` ) or it can be prepended with a namespace to group the repository into a category (such as ``project-a/nginx-web-app`` ). If you don't specify a name, AWS CloudFormation generates a unique physical ID and uses that ID for the repository name. For more information, see `Name type <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-name.html>`_ . The repository name must start with a letter and can only contain lowercase letters, numbers, hyphens, underscores, and forward slashes. .. epigraph:: If you specify a name, you cannot perform updates that require replacement of this resource. You can perform updates that require no or some interruption. If you must replace the resource, specify a new name.
         :param repository_policy_text: The JSON repository policy text to apply to the repository. For more information, see `Amazon ECR repository policies <https://docs.aws.amazon.com/AmazonECR/latest/userguide/repository-policy-examples.html>`_ in the *Amazon Elastic Container Registry User Guide* .
@@ -5482,7 +5592,9 @@ class CfnRepository(
     def image_scanning_configuration(
         self,
     ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRepository.ImageScanningConfigurationProperty"]]:
-        '''The image scanning configuration for the repository.'''
+        '''.. epigraph::
+
+   The ``imageScanningConfiguration`` parameter is being deprecated, in favor of specifying the image scanning configuration at the registry level.'''
         return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRepository.ImageScanningConfigurationProperty"]], jsii.get(self, "imageScanningConfiguration"))
 
     @image_scanning_configuration.setter
@@ -5513,7 +5625,7 @@ class CfnRepository(
     def image_tag_mutability_exclusion_filters(
         self,
     ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnRepository.ImageTagMutabilityExclusionFilterProperty"]]]]:
-        '''The image tag mutability exclusion filters associated with the repository.'''
+        '''A list of filters that specify which image tags are excluded from the repository's image tag mutability setting.'''
         return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnRepository.ImageTagMutabilityExclusionFilterProperty"]]]], jsii.get(self, "imageTagMutabilityExclusionFilters"))
 
     @image_tag_mutability_exclusion_filters.setter
@@ -5744,7 +5856,7 @@ class CfnRepository(
             image_tag_mutability_exclusion_filter_type: builtins.str,
             image_tag_mutability_exclusion_filter_value: builtins.str,
         ) -> None:
-            '''Overrides the default image tag mutability setting of the repository for image tags that match the specified filters.
+            '''A filter that specifies which image tags should be excluded from the repository's image tag mutability setting.
 
             :param image_tag_mutability_exclusion_filter_type: Specifies the type of filter to use for excluding image tags from the repository's mutability setting.
             :param image_tag_mutability_exclusion_filter_value: The value to use when filtering image tags.
@@ -5951,7 +6063,7 @@ class CfnRepositoryCreationTemplate(
         :param description: The description associated with the repository creation template.
         :param encryption_configuration: The encryption configuration associated with the repository creation template.
         :param image_tag_mutability: The tag mutability setting for the repository. If this parameter is omitted, the default setting of ``MUTABLE`` will be used which will allow image tags to be overwritten. If ``IMMUTABLE`` is specified, all image tags within the repository will be immutable which will prevent them from being overwritten.
-        :param image_tag_mutability_exclusion_filters: Defines the image tag mutability exclusion filters to apply when creating repositories from this template. These filters specify which image tags can override the repository's default image tag mutability setting.
+        :param image_tag_mutability_exclusion_filters: A list of filters that specify which image tags are excluded from the repository creation template's image tag mutability setting.
         :param lifecycle_policy: The lifecycle policy to use for repositories created using the template.
         :param repository_policy: The repository policy to apply to repositories created using the template. A repository policy is a permissions policy associated with a repository to control access permissions.
         :param resource_tags: The metadata to apply to the repository to help you categorize and organize. Each tag consists of a key and an optional value, both of which you define. Tag keys can have a maximum character length of 128 characters, and tag values can have a maximum length of 256 characters.
@@ -6122,7 +6234,7 @@ class CfnRepositoryCreationTemplate(
     def image_tag_mutability_exclusion_filters(
         self,
     ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnRepositoryCreationTemplate.ImageTagMutabilityExclusionFilterProperty"]]]]:
-        '''Defines the image tag mutability exclusion filters to apply when creating repositories from this template.'''
+        '''A list of filters that specify which image tags are excluded from the repository creation template's image tag mutability setting.'''
         return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnRepositoryCreationTemplate.ImageTagMutabilityExclusionFilterProperty"]]]], jsii.get(self, "imageTagMutabilityExclusionFilters"))
 
     @image_tag_mutability_exclusion_filters.setter
@@ -6281,7 +6393,7 @@ class CfnRepositoryCreationTemplate(
             image_tag_mutability_exclusion_filter_type: builtins.str,
             image_tag_mutability_exclusion_filter_value: builtins.str,
         ) -> None:
-            '''Overrides the default image tag mutability setting of the repository for image tags that match the specified filters.
+            '''A filter that specifies which image tags should be excluded from the repository's image tag mutability setting.
 
             :param image_tag_mutability_exclusion_filter_type: 
             :param image_tag_mutability_exclusion_filter_value: 
@@ -6350,19 +6462,15 @@ class Repository(
 
     Example::
 
-        import aws_cdk.aws_lambda as lambda_
-        from aws_cdk.aws_events_targets import LambdaFunction
-        
-        
-        repo = ecr.Repository(self, "Repo")
-        lambda_handler = lambda_.Function(self, "LambdaFunction",
-            runtime=lambda_.Runtime.PYTHON_3_12,
-            code=lambda_.Code.from_inline("# dummy func"),
-            handler="index.handler"
+        repository = ecr.Repository(self, "TestRepository",
+            repository_name="test-agent-runtime"
         )
+        agent_runtime_artifact = agentcore.AgentRuntimeArtifact.from_ecr_repository(repository, "v1.0.0")
         
-        repo.on_event("OnEventTargetLambda",
-            target=LambdaFunction(lambda_handler)
+        runtime = agentcore.Runtime(self, "MyAgentRuntime",
+            runtime_name="myAgent",
+            agent_runtime_artifact=agent_runtime_artifact,
+            authorizer_configuration=agentcore.RuntimeAuthorizerConfiguration.using_oAuth("https://github.com/.well-known/openid-configuration", "oauth_client_123")
         )
     '''
 
@@ -6377,6 +6485,7 @@ class Repository(
         encryption_key: typing.Optional[_IKeyRef_1e82344b] = None,
         image_scan_on_push: typing.Optional[builtins.bool] = None,
         image_tag_mutability: typing.Optional[TagMutability] = None,
+        image_tag_mutability_exclusion_filters: typing.Optional[typing.Sequence[ImageTagMutabilityExclusionFilter]] = None,
         lifecycle_registry_id: typing.Optional[builtins.str] = None,
         lifecycle_rules: typing.Optional[typing.Sequence[typing.Union[LifecycleRule, typing.Dict[builtins.str, typing.Any]]]] = None,
         removal_policy: typing.Optional[_RemovalPolicy_9f93c814] = None,
@@ -6391,6 +6500,7 @@ class Repository(
         :param encryption_key: External KMS key to use for repository encryption. The 'encryption' property must be either not specified or set to "KMS". An error will be emitted if encryption is set to "AES256". Default: - If encryption is set to ``KMS`` and this property is undefined, an AWS managed KMS key is used.
         :param image_scan_on_push: Enable the scan on push when creating the repository. Default: false
         :param image_tag_mutability: The tag mutability setting for the repository. If this parameter is omitted, the default setting of MUTABLE will be used which will allow image tags to be overwritten. Default: TagMutability.MUTABLE
+        :param image_tag_mutability_exclusion_filters: The image tag mutability exclusion filters for the repository. These filters specify which image tags can override the repository's default image tag mutability setting. Default: undefined - AWS ECR default is no exclusion filters
         :param lifecycle_registry_id: The AWS account ID associated with the registry that contains the repository. Default: The default registry is assumed.
         :param lifecycle_rules: Life cycle rules to apply to this registry. Default: No life cycle rules
         :param removal_policy: Determine what happens to the repository when the resource/stack is deleted. Default: RemovalPolicy.Retain
@@ -6407,6 +6517,7 @@ class Repository(
             encryption_key=encryption_key,
             image_scan_on_push=image_scan_on_push,
             image_tag_mutability=image_tag_mutability,
+            image_tag_mutability_exclusion_filters=image_tag_mutability_exclusion_filters,
             lifecycle_registry_id=lifecycle_registry_id,
             lifecycle_rules=lifecycle_rules,
             removal_policy=removal_policy,
@@ -6628,6 +6739,7 @@ __all__ = [
     "IRepository",
     "IRepositoryCreationTemplateRef",
     "IRepositoryRef",
+    "ImageTagMutabilityExclusionFilter",
     "LifecycleRule",
     "OnCloudTrailImagePushedOptions",
     "OnImageScanCompletedOptions",
@@ -6833,6 +6945,12 @@ def _typecheckingstub__43ac1e08a24281d72c0ed626aa4a3d8becdaeb21dc0117029ed9cb5e9
 
 def _typecheckingstub__894e1dc0284d8788d4bcf980d7755525e14fbcec8b305670af1a388f39980974(
     tag_or_digest: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__506e41b81658bfe386f74207c24c3216542f105c02a9deeef0aa17031ffd52ef(
+    pattern: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -7070,6 +7188,7 @@ def _typecheckingstub__638b63dd5eb589e01019ee47c63d6335810d02b0d769f767f2bf2fddc
     encryption_key: typing.Optional[_IKeyRef_1e82344b] = None,
     image_scan_on_push: typing.Optional[builtins.bool] = None,
     image_tag_mutability: typing.Optional[TagMutability] = None,
+    image_tag_mutability_exclusion_filters: typing.Optional[typing.Sequence[ImageTagMutabilityExclusionFilter]] = None,
     lifecycle_registry_id: typing.Optional[builtins.str] = None,
     lifecycle_rules: typing.Optional[typing.Sequence[typing.Union[LifecycleRule, typing.Dict[builtins.str, typing.Any]]]] = None,
     removal_policy: typing.Optional[_RemovalPolicy_9f93c814] = None,
@@ -7604,6 +7723,7 @@ def _typecheckingstub__0fcb489ea7ac91914ff0429ef13d64f8bd29978872d9ce4754ee9d397
     encryption_key: typing.Optional[_IKeyRef_1e82344b] = None,
     image_scan_on_push: typing.Optional[builtins.bool] = None,
     image_tag_mutability: typing.Optional[TagMutability] = None,
+    image_tag_mutability_exclusion_filters: typing.Optional[typing.Sequence[ImageTagMutabilityExclusionFilter]] = None,
     lifecycle_registry_id: typing.Optional[builtins.str] = None,
     lifecycle_rules: typing.Optional[typing.Sequence[typing.Union[LifecycleRule, typing.Dict[builtins.str, typing.Any]]]] = None,
     removal_policy: typing.Optional[_RemovalPolicy_9f93c814] = None,
@@ -7661,3 +7781,6 @@ def _typecheckingstub__a4c2e425a71ed909d2a0bfefe861aad7c34b251f3ef1f93f5dd7f2be5
 ) -> None:
     """Type checking stubs"""
     pass
+
+for cls in [IPublicRepositoryRef, IPullThroughCacheRuleRef, IRegistryPolicyRef, IRegistryScanningConfigurationRef, IReplicationConfigurationRef, IRepository, IRepositoryCreationTemplateRef, IRepositoryRef]:
+    typing.cast(typing.Any, cls).__protocol_attrs__ = typing.cast(typing.Any, cls).__protocol_attrs__ - set(['__jsii_proxy_class__', '__jsii_type__'])

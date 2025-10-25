@@ -1488,3 +1488,6 @@ def _typecheckingstub__3ea826525df0e7912a2b2f0156891d9d00bda155e8b35634621c6e059
 ) -> None:
     """Type checking stubs"""
     pass
+
+for cls in [IMonitorRef]:
+    typing.cast(typing.Any, cls).__protocol_attrs__ = typing.cast(typing.Any, cls).__protocol_attrs__ - set(['__jsii_proxy_class__', '__jsii_type__'])

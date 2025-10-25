@@ -926,3 +926,6 @@ def _typecheckingstub__2c3a6bd4b3d8e5bf2caff9ee149924611c25e8417d8ee48a520417fd9
 ) -> None:
     """Type checking stubs"""
     pass
+
+for cls in [IReportDefinitionRef]:
+    typing.cast(typing.Any, cls).__protocol_attrs__ = typing.cast(typing.Any, cls).__protocol_attrs__ - set(['__jsii_proxy_class__', '__jsii_type__'])

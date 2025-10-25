@@ -3228,8 +3228,8 @@ class CfnAccessGrantsLocationProps:
     def __init__(
         self,
         *,
-        iam_role_arn: typing.Optional[builtins.str] = None,
-        location_scope: typing.Optional[builtins.str] = None,
+        iam_role_arn: builtins.str,
+        location_scope: builtins.str,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnAccessGrantsLocation``.
@@ -3250,6 +3250,8 @@ class CfnAccessGrantsLocationProps:
             cfn_access_grants_location_props = s3.CfnAccessGrantsLocationProps(
                 iam_role_arn="iamRoleArn",
                 location_scope="locationScope",
+            
+                # the properties below are optional
                 tags=[CfnTag(
                     key="key",
                     value="value"
@@ -3261,16 +3263,15 @@ class CfnAccessGrantsLocationProps:
             check_type(argname="argument iam_role_arn", value=iam_role_arn, expected_type=type_hints["iam_role_arn"])
             check_type(argname="argument location_scope", value=location_scope, expected_type=type_hints["location_scope"])
             check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
-        self._values: typing.Dict[builtins.str, typing.Any] = {}
-        if iam_role_arn is not None:
-            self._values["iam_role_arn"] = iam_role_arn
-        if location_scope is not None:
-            self._values["location_scope"] = location_scope
+        self._values: typing.Dict[builtins.str, typing.Any] = {
+            "iam_role_arn": iam_role_arn,
+            "location_scope": location_scope,
+        }
         if tags is not None:
             self._values["tags"] = tags
 
     @builtins.property
-    def iam_role_arn(self) -> typing.Optional[builtins.str]:
+    def iam_role_arn(self) -> builtins.str:
         '''The Amazon Resource Name (ARN) of the IAM role for the registered location.
 
         S3 Access Grants assumes this role to manage access to the registered location.
@@ -3278,10 +3279,11 @@ class CfnAccessGrantsLocationProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-s3-accessgrantslocation.html#cfn-s3-accessgrantslocation-iamrolearn
         '''
         result = self._values.get("iam_role_arn")
-        return typing.cast(typing.Optional[builtins.str], result)
+        assert result is not None, "Required property 'iam_role_arn' is missing"
+        return typing.cast(builtins.str, result)
 
     @builtins.property
-    def location_scope(self) -> typing.Optional[builtins.str]:
+    def location_scope(self) -> builtins.str:
         '''The S3 URI path to the location that you are registering.
 
         The location scope can be the default S3 location ``s3://`` , the S3 path to a bucket, or the S3 path to a bucket and prefix. A prefix in S3 is a string of characters at the beginning of an object key name used to organize the objects that you store in your S3 buckets. For example, object key names that start with the ``engineering/`` prefix or object key names that start with the ``marketing/campaigns/`` prefix.
@@ -3289,7 +3291,8 @@ class CfnAccessGrantsLocationProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-s3-accessgrantslocation.html#cfn-s3-accessgrantslocation-locationscope
         '''
         result = self._values.get("location_scope")
-        return typing.cast(typing.Optional[builtins.str], result)
+        assert result is not None, "Required property 'location_scope' is missing"
+        return typing.cast(builtins.str, result)
 
     @builtins.property
     def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
@@ -6514,26 +6517,28 @@ class Location:
         :param object_key: The path inside the Bucket where the object is located at.
         :param object_version: The S3 object version.
 
-        :exampleMetadata: infused
+        :exampleMetadata: fixture=default infused
 
         Example::
 
-            start_query_execution_job = tasks.AthenaStartQueryExecution(self, "Start Athena Query",
-                query_string=sfn.JsonPath.string_at("$.queryString"),
-                query_execution_context=tasks.QueryExecutionContext(
-                    database_name="mydatabase"
-                ),
-                result_configuration=tasks.ResultConfiguration(
-                    encryption_configuration=tasks.EncryptionConfiguration(
-                        encryption_option=tasks.EncryptionOption.S3_MANAGED
-                    ),
-                    output_location=s3.Location(
-                        bucket_name="query-results-bucket",
-                        object_key="folder"
+            # Create an S3 bucket for recordings
+            recording_bucket = s3.Bucket(self, "RecordingBucket",
+                bucket_name="my-browser-recordings",
+                removal_policy=RemovalPolicy.DESTROY
+            )
+            
+            # Create browser with recording enabled
+            browser = agentcore.BrowserCustom(self, "MyBrowser",
+                browser_custom_name="my_browser",
+                description="Browser with recording enabled",
+                network_configuration=agentcore.BrowserNetworkConfiguration.using_public_network(),
+                recording_config=agentcore.RecordingConfig(
+                    enabled=True,
+                    s3_location=s3.Location(
+                        bucket_name=recording_bucket.bucket_name,
+                        object_key="browser-recordings/"
                     )
-                ),
-                execution_parameters=["param1", "param2"],
-                result_reuse_configuration_max_age=Duration.minutes(100)
+                )
             )
         '''
         if __debug__:
@@ -9232,6 +9237,8 @@ class CfnAccessGrantsLocation(
         cfn_access_grants_location = s3.CfnAccessGrantsLocation(self, "MyCfnAccessGrantsLocation",
             iam_role_arn="iamRoleArn",
             location_scope="locationScope",
+        
+            # the properties below are optional
             tags=[CfnTag(
                 key="key",
                 value="value"
@@ -9244,8 +9251,8 @@ class CfnAccessGrantsLocation(
         scope: _constructs_77d1e7e8.Construct,
         id: builtins.str,
         *,
-        iam_role_arn: typing.Optional[builtins.str] = None,
-        location_scope: typing.Optional[builtins.str] = None,
+        iam_role_arn: builtins.str,
+        location_scope: builtins.str,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''
@@ -9334,12 +9341,12 @@ class CfnAccessGrantsLocation(
 
     @builtins.property
     @jsii.member(jsii_name="iamRoleArn")
-    def iam_role_arn(self) -> typing.Optional[builtins.str]:
+    def iam_role_arn(self) -> builtins.str:
         '''The Amazon Resource Name (ARN) of the IAM role for the registered location.'''
-        return typing.cast(typing.Optional[builtins.str], jsii.get(self, "iamRoleArn"))
+        return typing.cast(builtins.str, jsii.get(self, "iamRoleArn"))
 
     @iam_role_arn.setter
-    def iam_role_arn(self, value: typing.Optional[builtins.str]) -> None:
+    def iam_role_arn(self, value: builtins.str) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__c6ad3ea630d95d457364fa227ccc4159df9b2fe48cab3fd14afc7301612ddce6)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -9347,12 +9354,12 @@ class CfnAccessGrantsLocation(
 
     @builtins.property
     @jsii.member(jsii_name="locationScope")
-    def location_scope(self) -> typing.Optional[builtins.str]:
+    def location_scope(self) -> builtins.str:
         '''The S3 URI path to the location that you are registering.'''
-        return typing.cast(typing.Optional[builtins.str], jsii.get(self, "locationScope"))
+        return typing.cast(builtins.str, jsii.get(self, "locationScope"))
 
     @location_scope.setter
-    def location_scope(self, value: typing.Optional[builtins.str]) -> None:
+    def location_scope(self, value: builtins.str) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__80f4ecc1c277ca36e62d80157ee09c7e5856bf9bc1e1542588d3449f958c3302)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -23743,8 +23750,8 @@ def _typecheckingstub__60225afff484a18da279540c306f31ca28ba21d38e2e53a434a570988
 
 def _typecheckingstub__5f891152429263f2b2cdf0641e18212de422d1b020ebb0f7ffbac1e255090f5d(
     *,
-    iam_role_arn: typing.Optional[builtins.str] = None,
-    location_scope: typing.Optional[builtins.str] = None,
+    iam_role_arn: builtins.str,
+    location_scope: builtins.str,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
 ) -> None:
     """Type checking stubs"""
@@ -24254,8 +24261,8 @@ def _typecheckingstub__f63f8766c3f622205e3ea04592d9dbd1cdfdf34d2e6b1aca405f1b211
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     *,
-    iam_role_arn: typing.Optional[builtins.str] = None,
-    location_scope: typing.Optional[builtins.str] = None,
+    iam_role_arn: builtins.str,
+    location_scope: builtins.str,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
 ) -> None:
     """Type checking stubs"""
@@ -24274,13 +24281,13 @@ def _typecheckingstub__41246c53313d09c72689110109c1c02c98b558c613dd50d35f19becfa
     pass
 
 def _typecheckingstub__c6ad3ea630d95d457364fa227ccc4159df9b2fe48cab3fd14afc7301612ddce6(
-    value: typing.Optional[builtins.str],
+    value: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass
 
 def _typecheckingstub__80f4ecc1c277ca36e62d80157ee09c7e5856bf9bc1e1542588d3449f958c3302(
-    value: typing.Optional[builtins.str],
+    value: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -26096,3 +26103,6 @@ def _typecheckingstub__3cb691a849de33681a4f0021424f266609c2785cf8cbf5306c98726a6
 ) -> None:
     """Type checking stubs"""
     pass
+
+for cls in [IAccessGrantRef, IAccessGrantsInstanceRef, IAccessGrantsLocationRef, IAccessPointRef, IBucket, IBucketNotificationDestination, IBucketPolicyRef, IBucketRef, IMultiRegionAccessPointPolicyRef, IMultiRegionAccessPointRef, IStorageLensGroupRef, IStorageLensRef]:
+    typing.cast(typing.Any, cls).__protocol_attrs__ = typing.cast(typing.Any, cls).__protocol_attrs__ - set(['__jsii_proxy_class__', '__jsii_type__'])

@@ -8094,27 +8094,6 @@ class CfnCampaign(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
-    @jsii.member(jsii_name="fromCampaignArn")
-    @builtins.classmethod
-    def from_campaign_arn(
-        cls,
-        scope: _constructs_77d1e7e8.Construct,
-        id: builtins.str,
-        arn: builtins.str,
-    ) -> ICampaignRef:
-        '''Creates a new ICampaignRef from an ARN.
-
-        :param scope: -
-        :param id: -
-        :param arn: -
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__ab591ee16a73472ae59021eed25e4aed98dd4fa5ba18769df90d60eb0376628e)
-            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
-            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
-            check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
-        return typing.cast(ICampaignRef, jsii.sinvoke(cls, "fromCampaignArn", [scope, id, arn]))
-
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -14755,27 +14734,6 @@ class CfnSegment(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
-    @jsii.member(jsii_name="fromSegmentArn")
-    @builtins.classmethod
-    def from_segment_arn(
-        cls,
-        scope: _constructs_77d1e7e8.Construct,
-        id: builtins.str,
-        arn: builtins.str,
-    ) -> ISegmentRef:
-        '''Creates a new ISegmentRef from an ARN.
-
-        :param scope: -
-        :param id: -
-        :param arn: -
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__bc304a7477cb00665c766619671fb5c20dbf4598b1c401d36d4cda5b8640cf6b)
-            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
-            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
-            check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
-        return typing.cast(ISegmentRef, jsii.sinvoke(cls, "fromSegmentArn", [scope, id, arn]))
-
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -17544,14 +17502,6 @@ def _typecheckingstub__37daefd9aecddac1551b6da8a771d74af1f7a13678f1d1fb2d351fab8
     """Type checking stubs"""
     pass
 
-def _typecheckingstub__ab591ee16a73472ae59021eed25e4aed98dd4fa5ba18769df90d60eb0376628e(
-    scope: _constructs_77d1e7e8.Construct,
-    id: builtins.str,
-    arn: builtins.str,
-) -> None:
-    """Type checking stubs"""
-    pass
-
 def _typecheckingstub__9e15e4e500736a6e94e0b0439baae0e844c072ad04e21f846e6d90b4d664758f(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -18477,14 +18427,6 @@ def _typecheckingstub__f709a034a24c1bdbcf2c3ad69a8ec499d4a31c52228cfccf041a018ef
     """Type checking stubs"""
     pass
 
-def _typecheckingstub__bc304a7477cb00665c766619671fb5c20dbf4598b1c401d36d4cda5b8640cf6b(
-    scope: _constructs_77d1e7e8.Construct,
-    id: builtins.str,
-    arn: builtins.str,
-) -> None:
-    """Type checking stubs"""
-    pass
-
 def _typecheckingstub__ab85436978fff9eb6b667bf369ce182d580e19493d318100b008eac7b205fad6(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -18720,3 +18662,6 @@ def _typecheckingstub__55f9072e4ea10db6545a901f75a87f0db23d51ed4c12907c8203b488b
 ) -> None:
     """Type checking stubs"""
     pass
+
+for cls in [IADMChannelRef, IAPNSChannelRef, IAPNSSandboxChannelRef, IAPNSVoipChannelRef, IAPNSVoipSandboxChannelRef, IAppRef, IApplicationSettingsRef, IBaiduChannelRef, ICampaignRef, IEmailChannelRef, IEmailTemplateRef, IEventStreamRef, IGCMChannelRef, IInAppTemplateRef, IPushTemplateRef, ISMSChannelRef, ISegmentRef, ISmsTemplateRef, IVoiceChannelRef]:
+    typing.cast(typing.Any, cls).__protocol_attrs__ = typing.cast(typing.Any, cls).__protocol_attrs__ - set(['__jsii_proxy_class__', '__jsii_type__'])

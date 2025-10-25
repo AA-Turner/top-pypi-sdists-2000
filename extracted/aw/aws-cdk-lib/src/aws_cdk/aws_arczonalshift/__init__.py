@@ -1075,3 +1075,6 @@ def _typecheckingstub__09d714a4c978f7c2d70e24869d7ce300d549509a8b35174736a9571be
 ) -> None:
     """Type checking stubs"""
     pass
+
+for cls in [IAutoshiftObserverNotificationStatusRef, IZonalAutoshiftConfigurationRef]:
+    typing.cast(typing.Any, cls).__protocol_attrs__ = typing.cast(typing.Any, cls).__protocol_attrs__ - set(['__jsii_proxy_class__', '__jsii_type__'])

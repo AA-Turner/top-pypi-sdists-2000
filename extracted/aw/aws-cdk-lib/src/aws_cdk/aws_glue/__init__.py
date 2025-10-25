@@ -15912,90 +15912,18 @@ class CfnTable(
 
     :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-glue-table.html
     :cloudformationResource: AWS::Glue::Table
-    :exampleMetadata: fixture=_generated
+    :exampleMetadata: infused
 
     Example::
 
-        # The code below shows an example of how to instantiate this type.
-        # The values are placeholders you should change.
-        from aws_cdk import aws_glue as glue
+        # bucket: s3.Bucket
+        # schema_glue_table: glue.CfnTable
         
-        # parameters: Any
-        # skewed_column_value_location_maps: Any
-        
-        cfn_table = glue.CfnTable(self, "MyCfnTable",
-            catalog_id="catalogId",
-            database_name="databaseName",
-            table_input=glue.CfnTable.TableInputProperty(
-                description="description",
-                name="name",
-                owner="owner",
-                parameters=parameters,
-                partition_keys=[glue.CfnTable.ColumnProperty(
-                    name="name",
-        
-                    # the properties below are optional
-                    comment="comment",
-                    type="type"
-                )],
-                retention=123,
-                storage_descriptor=glue.CfnTable.StorageDescriptorProperty(
-                    bucket_columns=["bucketColumns"],
-                    columns=[glue.CfnTable.ColumnProperty(
-                        name="name",
-        
-                        # the properties below are optional
-                        comment="comment",
-                        type="type"
-                    )],
-                    compressed=False,
-                    input_format="inputFormat",
-                    location="location",
-                    number_of_buckets=123,
-                    output_format="outputFormat",
-                    parameters=parameters,
-                    schema_reference=glue.CfnTable.SchemaReferenceProperty(
-                        schema_id=glue.CfnTable.SchemaIdProperty(
-                            registry_name="registryName",
-                            schema_arn="schemaArn",
-                            schema_name="schemaName"
-                        ),
-                        schema_version_id="schemaVersionId",
-                        schema_version_number=123
-                    ),
-                    serde_info=glue.CfnTable.SerdeInfoProperty(
-                        name="name",
-                        parameters=parameters,
-                        serialization_library="serializationLibrary"
-                    ),
-                    skewed_info=glue.CfnTable.SkewedInfoProperty(
-                        skewed_column_names=["skewedColumnNames"],
-                        skewed_column_value_location_maps=skewed_column_value_location_maps,
-                        skewed_column_values=["skewedColumnValues"]
-                    ),
-                    sort_columns=[glue.CfnTable.OrderProperty(
-                        column="column",
-                        sort_order=123
-                    )],
-                    stored_as_sub_directories=False
-                ),
-                table_type="tableType",
-                target_table=glue.CfnTable.TableIdentifierProperty(
-                    catalog_id="catalogId",
-                    database_name="databaseName",
-                    name="name",
-                    region="region"
-                ),
-                view_expanded_text="viewExpandedText",
-                view_original_text="viewOriginalText"
-            ),
-        
-            # the properties below are optional
-            open_table_format_input=glue.CfnTable.OpenTableFormatInputProperty(
-                iceberg_input=glue.CfnTable.IcebergInputProperty(
-                    metadata_operation="metadataOperation",
-                    version="version"
-                )
+        s3_destination = firehose.S3Bucket(bucket,
+            data_format_conversion=firehose.DataFormatConversionProps(
+                schema_configuration=firehose.SchemaConfiguration.from_cfn_table(schema_glue_table),
+                input_format=firehose.InputFormat.OPENX_JSON,
+                output_format=firehose.OutputFormat.PARQUET
             )
         )
     '''
@@ -22279,3 +22207,6 @@ def _typecheckingstub__588bdefa1fb0e0005b05a203dd64a0a1b8395bced0853eefec4b19438
 ) -> None:
     """Type checking stubs"""
     pass
+
+for cls in [IClassifierRef, IConnectionRef, ICrawlerRef, ICustomEntityTypeRef, IDataCatalogEncryptionSettingsRef, IDataQualityRulesetRef, IDatabaseRef, IDevEndpointRef, IJobRef, IMLTransformRef, IPartitionRef, IRegistryRef, ISchemaRef, ISchemaVersionMetadataRef, ISchemaVersionRef, ISecurityConfigurationRef, ITableOptimizerRef, ITableRef, ITriggerRef, IUsageProfileRef, IWorkflowRef]:
+    typing.cast(typing.Any, cls).__protocol_attrs__ = typing.cast(typing.Any, cls).__protocol_attrs__ - set(['__jsii_proxy_class__', '__jsii_type__'])

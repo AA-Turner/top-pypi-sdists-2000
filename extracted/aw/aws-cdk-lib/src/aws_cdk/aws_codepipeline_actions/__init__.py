@@ -16563,3 +16563,6 @@ def _typecheckingstub__f767a7af4c7a4c7e8b968b8d74d0bedaa20760581e9bc35fda6834632
 ) -> None:
     """Type checking stubs"""
     pass
+
+for cls in [ICustomEventRule, IJenkinsProvider]:
+    typing.cast(typing.Any, cls).__protocol_attrs__ = typing.cast(typing.Any, cls).__protocol_attrs__ - set(['__jsii_proxy_class__', '__jsii_type__'])

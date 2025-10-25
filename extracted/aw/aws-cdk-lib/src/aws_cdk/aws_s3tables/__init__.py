@@ -2883,3 +2883,6 @@ def _typecheckingstub__87d38159ba1fcdcd6a78891e84e79fef3b2492c5066559f8f91cd5cc6
 ) -> None:
     """Type checking stubs"""
     pass
+
+for cls in [INamespaceRef, ITableBucketPolicyRef, ITableBucketRef, ITablePolicyRef, ITableRef]:
+    typing.cast(typing.Any, cls).__protocol_attrs__ = typing.cast(typing.Any, cls).__protocol_attrs__ - set(['__jsii_proxy_class__', '__jsii_type__'])

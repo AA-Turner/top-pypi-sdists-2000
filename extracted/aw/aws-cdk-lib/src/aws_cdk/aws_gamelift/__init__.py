@@ -13982,3 +13982,6 @@ def _typecheckingstub__1bc9de7e6777aff8308976cae56a2f5dd2d0e14f8555821f0396e5b81
 ) -> None:
     """Type checking stubs"""
     pass
+
+for cls in [IAliasRef, IBuildRef, IContainerFleetRef, IContainerGroupDefinitionRef, IFleetRef, IGameServerGroupRef, IGameSessionQueueRef, ILocationRef, IMatchmakingConfigurationRef, IMatchmakingRuleSetRef, IScriptRef]:
+    typing.cast(typing.Any, cls).__protocol_attrs__ = typing.cast(typing.Any, cls).__protocol_attrs__ - set(['__jsii_proxy_class__', '__jsii_type__'])

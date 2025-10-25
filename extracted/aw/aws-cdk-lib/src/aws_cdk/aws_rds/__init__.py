@@ -712,7 +712,7 @@ cloudwatch.Alarm(self, "HighCPU",
 fn = lambda_.Function(self, "Function",
     code=lambda_.Code.from_inline("exports.handler = (event) => console.log(event);"),
     handler="index.handler",
-    runtime=lambda_.Runtime.NODEJS_18_X
+    runtime=lambda_.Runtime.NODEJS_20_X
 )
 
 availability_rule = instance.on_event("Availability", target=targets.LambdaFunction(fn))
@@ -790,7 +790,7 @@ cloudwatch.Alarm(self, "HighCPU",
 fn = lambda_.Function(self, "Function",
     code=lambda_.Code.from_inline("exports.handler = (event) => console.log(event);"),
     handler="index.handler",
-    runtime=lambda_.Runtime.NODEJS_18_X
+    runtime=lambda_.Runtime.NODEJS_20_X
 )
 
 availability_rule = instance.on_event("Availability", target=targets.LambdaFunction(fn))
@@ -5422,7 +5422,7 @@ class CfnDBClusterProps:
         :param port: The port number on which the DB instances in the DB cluster accept connections. Default: - When ``EngineMode`` is ``provisioned`` , ``3306`` (for both Aurora MySQL and Aurora PostgreSQL) - When ``EngineMode`` is ``serverless`` : - ``3306`` when ``Engine`` is ``aurora`` or ``aurora-mysql`` - ``5432`` when ``Engine`` is ``aurora-postgresql`` .. epigraph:: The ``No interruption`` on update behavior only applies to DB clusters. If you are updating a DB instance, see `Port <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-rds-database-instance.html#cfn-rds-dbinstance-port>`_ for the AWS::RDS::DBInstance resource. Valid for: Aurora DB clusters and Multi-AZ DB clusters
         :param preferred_backup_window: The daily time range during which automated backups are created. For more information, see `Backup Window <https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/Aurora.Managing.Backups.html#Aurora.Managing.Backups.BackupWindow>`_ in the *Amazon Aurora User Guide.* Constraints: - Must be in the format ``hh24:mi-hh24:mi`` . - Must be in Universal Coordinated Time (UTC). - Must not conflict with the preferred maintenance window. - Must be at least 30 minutes. Valid for: Aurora DB clusters and Multi-AZ DB clusters
         :param preferred_maintenance_window: The weekly time range during which system maintenance can occur, in Universal Coordinated Time (UTC). Format: ``ddd:hh24:mi-ddd:hh24:mi`` The default is a 30-minute window selected at random from an 8-hour block of time for each AWS Region, occurring on a random day of the week. To see the time blocks available, see `Maintaining an Amazon Aurora DB cluster <https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/USER_UpgradeDBInstance.Maintenance.html#AdjustingTheMaintenanceWindow.Aurora>`_ in the *Amazon Aurora User Guide.* Valid Days: Mon, Tue, Wed, Thu, Fri, Sat, Sun. Constraints: Minimum 30-minute window. Valid for: Aurora DB clusters and Multi-AZ DB clusters
-        :param publicly_accessible: Specifies whether the DB cluster is publicly accessible. When the DB cluster is publicly accessible and you connect from outside of the DB cluster's virtual private cloud (VPC), its Domain Name System (DNS) endpoint resolves to the public IP address. When you connect from within the same VPC as the DB cluster, the endpoint resolves to the private IP address. Access to the DB cluster is ultimately controlled by the security group it uses. That public access isn't permitted if the security group assigned to the DB cluster doesn't permit it. When the DB cluster isn't publicly accessible, it is an internal DB cluster with a DNS name that resolves to a private IP address. Valid for Cluster Type: Multi-AZ DB clusters only Default: The default behavior varies depending on whether ``DBSubnetGroupName`` is specified. If ``DBSubnetGroupName`` isn't specified, and ``PubliclyAccessible`` isn't specified, the following applies: - If the default VPC in the target Region doesn’t have an internet gateway attached to it, the DB cluster is private. - If the default VPC in the target Region has an internet gateway attached to it, the DB cluster is public. If ``DBSubnetGroupName`` is specified, and ``PubliclyAccessible`` isn't specified, the following applies: - If the subnets are part of a VPC that doesn’t have an internet gateway attached to it, the DB cluster is private. - If the subnets are part of a VPC that has an internet gateway attached to it, the DB cluster is public.
+        :param publicly_accessible: Specifies whether the DB cluster is publicly accessible. Valid for Cluster Type: Multi-AZ DB clusters only When the DB cluster is publicly accessible and you connect from outside of the DB cluster's virtual private cloud (VPC), its domain name system (DNS) endpoint resolves to the public IP address. When you connect from within the same VPC as the DB cluster, the endpoint resolves to the private IP address. Access to the DB cluster is controlled by its security group settings. When the DB cluster isn't publicly accessible, it is an internal DB cluster with a DNS name that resolves to a private IP address. The default behavior when ``PubliclyAccessible`` is not specified depends on whether a ``DBSubnetGroup`` is specified. If ``DBSubnetGroup`` isn't specified, ``PubliclyAccessible`` defaults to ``true`` . If ``DBSubnetGroup`` is specified, ``PubliclyAccessible`` defaults to ``false`` unless the value of ``DBSubnetGroup`` is ``default`` , in which case ``PubliclyAccessible`` defaults to ``true`` . If ``PubliclyAccessible`` is true and the VPC that the ``DBSubnetGroup`` is in doesn't have an internet gateway attached to it, Amazon RDS returns an error.
         :param replication_source_identifier: The Amazon Resource Name (ARN) of the source DB instance or DB cluster if this DB cluster is created as a read replica. Valid for: Aurora DB clusters only
         :param restore_to_time: The date and time to restore the DB cluster to. Valid Values: Value must be a time in Universal Coordinated Time (UTC) format Constraints: - Must be before the latest restorable time for the DB instance - Must be specified if ``UseLatestRestorableTime`` parameter isn't provided - Can't be specified if the ``UseLatestRestorableTime`` parameter is enabled - Can't be specified if the ``RestoreType`` parameter is ``copy-on-write`` This property must be used with ``SourceDBClusterIdentifier`` property. The resulting cluster will have the identifier that matches the value of the ``DBclusterIdentifier`` property. Example: ``2015-03-07T23:45:00Z`` Valid for: Aurora DB clusters and Multi-AZ DB clusters
         :param restore_type: The type of restore to be performed. You can specify one of the following values:. - ``full-copy`` - The new DB cluster is restored as a full copy of the source DB cluster. - ``copy-on-write`` - The new DB cluster is restored as a clone of the source DB cluster. If you don't specify a ``RestoreType`` value, then the new DB cluster is restored as a full copy of the source DB cluster. Valid for: Aurora DB clusters and Multi-AZ DB clusters
@@ -6531,23 +6531,19 @@ class CfnDBClusterProps:
     ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
         '''Specifies whether the DB cluster is publicly accessible.
 
-        When the DB cluster is publicly accessible and you connect from outside of the DB cluster's virtual private cloud (VPC), its Domain Name System (DNS) endpoint resolves to the public IP address. When you connect from within the same VPC as the DB cluster, the endpoint resolves to the private IP address. Access to the DB cluster is ultimately controlled by the security group it uses. That public access isn't permitted if the security group assigned to the DB cluster doesn't permit it.
+        Valid for Cluster Type: Multi-AZ DB clusters only
+
+        When the DB cluster is publicly accessible and you connect from outside of the DB cluster's virtual private cloud (VPC), its domain name system (DNS) endpoint resolves to the public IP address. When you connect from within the same VPC as the DB cluster, the endpoint resolves to the private IP address. Access to the DB cluster is controlled by its security group settings.
 
         When the DB cluster isn't publicly accessible, it is an internal DB cluster with a DNS name that resolves to a private IP address.
 
-        Valid for Cluster Type: Multi-AZ DB clusters only
+        The default behavior when ``PubliclyAccessible`` is not specified depends on whether a ``DBSubnetGroup`` is specified.
 
-        Default: The default behavior varies depending on whether ``DBSubnetGroupName`` is specified.
+        If ``DBSubnetGroup`` isn't specified, ``PubliclyAccessible`` defaults to ``true`` .
 
-        If ``DBSubnetGroupName`` isn't specified, and ``PubliclyAccessible`` isn't specified, the following applies:
+        If ``DBSubnetGroup`` is specified, ``PubliclyAccessible`` defaults to ``false`` unless the value of ``DBSubnetGroup`` is ``default`` , in which case ``PubliclyAccessible`` defaults to ``true`` .
 
-        - If the default VPC in the target Region doesn’t have an internet gateway attached to it, the DB cluster is private.
-        - If the default VPC in the target Region has an internet gateway attached to it, the DB cluster is public.
-
-        If ``DBSubnetGroupName`` is specified, and ``PubliclyAccessible`` isn't specified, the following applies:
-
-        - If the subnets are part of a VPC that doesn’t have an internet gateway attached to it, the DB cluster is private.
-        - If the subnets are part of a VPC that has an internet gateway attached to it, the DB cluster is public.
+        If ``PubliclyAccessible`` is true and the VPC that the ``DBSubnetGroup`` is in doesn't have an internet gateway attached to it, Amazon RDS returns an error.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-rds-dbcluster.html#cfn-rds-dbcluster-publiclyaccessible
         '''
@@ -26295,7 +26291,7 @@ class LicenseModel(enum.Enum):
         fn = lambda_.Function(self, "Function",
             code=lambda_.Code.from_inline("exports.handler = (event) => console.log(event);"),
             handler="index.handler",
-            runtime=lambda_.Runtime.NODEJS_18_X
+            runtime=lambda_.Runtime.NODEJS_20_X
         )
         
         availability_rule = instance.on_event("Availability", target=targets.LambdaFunction(fn))
@@ -28227,7 +28223,7 @@ class OptionGroup(
         fn = lambda_.Function(self, "Function",
             code=lambda_.Code.from_inline("exports.handler = (event) => console.log(event);"),
             handler="index.handler",
-            runtime=lambda_.Runtime.NODEJS_18_X
+            runtime=lambda_.Runtime.NODEJS_20_X
         )
         
         availability_rule = instance.on_event("Availability", target=targets.LambdaFunction(fn))
@@ -28428,7 +28424,7 @@ class OptionGroupProps:
             fn = lambda_.Function(self, "Function",
                 code=lambda_.Code.from_inline("exports.handler = (event) => console.log(event);"),
                 handler="index.handler",
-                runtime=lambda_.Runtime.NODEJS_18_X
+                runtime=lambda_.Runtime.NODEJS_20_X
             )
             
             availability_rule = instance.on_event("Availability", target=targets.LambdaFunction(fn))
@@ -30063,7 +30059,7 @@ class ParameterGroupProps:
             fn = lambda_.Function(self, "Function",
                 code=lambda_.Code.from_inline("exports.handler = (event) => console.log(event);"),
                 handler="index.handler",
-                runtime=lambda_.Runtime.NODEJS_18_X
+                runtime=lambda_.Runtime.NODEJS_20_X
             )
             
             availability_rule = instance.on_event("Availability", target=targets.LambdaFunction(fn))
@@ -35501,6 +35497,12 @@ class SqlServerEngineVersion(
         return typing.cast("SqlServerEngineVersion", jsii.sget(cls, "VER_13_00_6465_1_V1"))
 
     @jsii.python.classproperty
+    @jsii.member(jsii_name="VER_13_00_6470_1_V1")
+    def VER_13_00_6470_1_V1(cls) -> "SqlServerEngineVersion":
+        '''Version "13.00.6470.1.v1".'''
+        return typing.cast("SqlServerEngineVersion", jsii.sget(cls, "VER_13_00_6470_1_V1"))
+
+    @jsii.python.classproperty
     @jsii.member(jsii_name="VER_14")
     def VER_14(cls) -> "SqlServerEngineVersion":
         '''Version "14.00" (only a major version, without a specific minor version).'''
@@ -35663,6 +35665,12 @@ class SqlServerEngineVersion(
         return typing.cast("SqlServerEngineVersion", jsii.sget(cls, "VER_14_00_3500_1_V1"))
 
     @jsii.python.classproperty
+    @jsii.member(jsii_name="VER_14_00_3505_1_V1")
+    def VER_14_00_3505_1_V1(cls) -> "SqlServerEngineVersion":
+        '''Version "14.00.3505.1.v1".'''
+        return typing.cast("SqlServerEngineVersion", jsii.sget(cls, "VER_14_00_3505_1_V1"))
+
+    @jsii.python.classproperty
     @jsii.member(jsii_name="VER_15")
     def VER_15(cls) -> "SqlServerEngineVersion":
         '''Version "15.00" (only a major version, without a specific minor version).'''
@@ -35807,6 +35815,12 @@ class SqlServerEngineVersion(
         return typing.cast("SqlServerEngineVersion", jsii.sget(cls, "VER_15_00_4440_1_V1"))
 
     @jsii.python.classproperty
+    @jsii.member(jsii_name="VER_15_00_4445_1_V1")
+    def VER_15_00_4445_1_V1(cls) -> "SqlServerEngineVersion":
+        '''Version "15.00.4445.1.v1".'''
+        return typing.cast("SqlServerEngineVersion", jsii.sget(cls, "VER_15_00_4445_1_V1"))
+
+    @jsii.python.classproperty
     @jsii.member(jsii_name="VER_16")
     def VER_16(cls) -> "SqlServerEngineVersion":
         '''Version "16.00" (only a major version, without a specific minor version).'''
@@ -35907,6 +35921,12 @@ class SqlServerEngineVersion(
     def VER_16_00_4210_1_V1(cls) -> "SqlServerEngineVersion":
         '''Version "16.00.4210.1.v1".'''
         return typing.cast("SqlServerEngineVersion", jsii.sget(cls, "VER_16_00_4210_1_V1"))
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="VER_16_00_4215_2_V1")
+    def VER_16_00_4215_2_V1(cls) -> "SqlServerEngineVersion":
+        '''Version "16.00.4215.2.v1".'''
+        return typing.cast("SqlServerEngineVersion", jsii.sget(cls, "VER_16_00_4215_2_V1"))
 
     @builtins.property
     @jsii.member(jsii_name="sqlServerFullVersion")
@@ -37000,7 +37020,7 @@ class CfnDBCluster(
         :param port: The port number on which the DB instances in the DB cluster accept connections. Default: - When ``EngineMode`` is ``provisioned`` , ``3306`` (for both Aurora MySQL and Aurora PostgreSQL) - When ``EngineMode`` is ``serverless`` : - ``3306`` when ``Engine`` is ``aurora`` or ``aurora-mysql`` - ``5432`` when ``Engine`` is ``aurora-postgresql`` .. epigraph:: The ``No interruption`` on update behavior only applies to DB clusters. If you are updating a DB instance, see `Port <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-rds-database-instance.html#cfn-rds-dbinstance-port>`_ for the AWS::RDS::DBInstance resource. Valid for: Aurora DB clusters and Multi-AZ DB clusters
         :param preferred_backup_window: The daily time range during which automated backups are created. For more information, see `Backup Window <https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/Aurora.Managing.Backups.html#Aurora.Managing.Backups.BackupWindow>`_ in the *Amazon Aurora User Guide.* Constraints: - Must be in the format ``hh24:mi-hh24:mi`` . - Must be in Universal Coordinated Time (UTC). - Must not conflict with the preferred maintenance window. - Must be at least 30 minutes. Valid for: Aurora DB clusters and Multi-AZ DB clusters
         :param preferred_maintenance_window: The weekly time range during which system maintenance can occur, in Universal Coordinated Time (UTC). Format: ``ddd:hh24:mi-ddd:hh24:mi`` The default is a 30-minute window selected at random from an 8-hour block of time for each AWS Region, occurring on a random day of the week. To see the time blocks available, see `Maintaining an Amazon Aurora DB cluster <https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/USER_UpgradeDBInstance.Maintenance.html#AdjustingTheMaintenanceWindow.Aurora>`_ in the *Amazon Aurora User Guide.* Valid Days: Mon, Tue, Wed, Thu, Fri, Sat, Sun. Constraints: Minimum 30-minute window. Valid for: Aurora DB clusters and Multi-AZ DB clusters
-        :param publicly_accessible: Specifies whether the DB cluster is publicly accessible. When the DB cluster is publicly accessible and you connect from outside of the DB cluster's virtual private cloud (VPC), its Domain Name System (DNS) endpoint resolves to the public IP address. When you connect from within the same VPC as the DB cluster, the endpoint resolves to the private IP address. Access to the DB cluster is ultimately controlled by the security group it uses. That public access isn't permitted if the security group assigned to the DB cluster doesn't permit it. When the DB cluster isn't publicly accessible, it is an internal DB cluster with a DNS name that resolves to a private IP address. Valid for Cluster Type: Multi-AZ DB clusters only Default: The default behavior varies depending on whether ``DBSubnetGroupName`` is specified. If ``DBSubnetGroupName`` isn't specified, and ``PubliclyAccessible`` isn't specified, the following applies: - If the default VPC in the target Region doesn’t have an internet gateway attached to it, the DB cluster is private. - If the default VPC in the target Region has an internet gateway attached to it, the DB cluster is public. If ``DBSubnetGroupName`` is specified, and ``PubliclyAccessible`` isn't specified, the following applies: - If the subnets are part of a VPC that doesn’t have an internet gateway attached to it, the DB cluster is private. - If the subnets are part of a VPC that has an internet gateway attached to it, the DB cluster is public.
+        :param publicly_accessible: Specifies whether the DB cluster is publicly accessible. Valid for Cluster Type: Multi-AZ DB clusters only When the DB cluster is publicly accessible and you connect from outside of the DB cluster's virtual private cloud (VPC), its domain name system (DNS) endpoint resolves to the public IP address. When you connect from within the same VPC as the DB cluster, the endpoint resolves to the private IP address. Access to the DB cluster is controlled by its security group settings. When the DB cluster isn't publicly accessible, it is an internal DB cluster with a DNS name that resolves to a private IP address. The default behavior when ``PubliclyAccessible`` is not specified depends on whether a ``DBSubnetGroup`` is specified. If ``DBSubnetGroup`` isn't specified, ``PubliclyAccessible`` defaults to ``true`` . If ``DBSubnetGroup`` is specified, ``PubliclyAccessible`` defaults to ``false`` unless the value of ``DBSubnetGroup`` is ``default`` , in which case ``PubliclyAccessible`` defaults to ``true`` . If ``PubliclyAccessible`` is true and the VPC that the ``DBSubnetGroup`` is in doesn't have an internet gateway attached to it, Amazon RDS returns an error.
         :param replication_source_identifier: The Amazon Resource Name (ARN) of the source DB instance or DB cluster if this DB cluster is created as a read replica. Valid for: Aurora DB clusters only
         :param restore_to_time: The date and time to restore the DB cluster to. Valid Values: Value must be a time in Universal Coordinated Time (UTC) format Constraints: - Must be before the latest restorable time for the DB instance - Must be specified if ``UseLatestRestorableTime`` parameter isn't provided - Can't be specified if the ``UseLatestRestorableTime`` parameter is enabled - Can't be specified if the ``RestoreType`` parameter is ``copy-on-write`` This property must be used with ``SourceDBClusterIdentifier`` property. The resulting cluster will have the identifier that matches the value of the ``DBclusterIdentifier`` property. Example: ``2015-03-07T23:45:00Z`` Valid for: Aurora DB clusters and Multi-AZ DB clusters
         :param restore_type: The type of restore to be performed. You can specify one of the following values:. - ``full-copy`` - The new DB cluster is restored as a full copy of the source DB cluster. - ``copy-on-write`` - The new DB cluster is restored as a clone of the source DB cluster. If you don't specify a ``RestoreType`` value, then the new DB cluster is restored as a full copy of the source DB cluster. Valid for: Aurora DB clusters and Multi-AZ DB clusters
@@ -57084,3 +57104,6 @@ def _typecheckingstub__84d6de235f7d15c552af4bc77a663d18a20524641c0cf9a49a093c712
 ) -> None:
     """Type checking stubs"""
     pass
+
+for cls in [IAuroraClusterInstance, IClusterEngine, IClusterInstance, ICustomDBEngineVersionRef, IDBClusterParameterGroupRef, IDBClusterRef, IDBInstanceRef, IDBParameterGroupRef, IDBProxyEndpointRef, IDBProxyRef, IDBProxyTargetGroupRef, IDBSecurityGroupIngressRef, IDBSecurityGroupRef, IDBShardGroupRef, IDBSubnetGroupRef, IDatabaseCluster, IDatabaseInstance, IDatabaseProxy, IDatabaseProxyEndpoint, IEngine, IEventSubscriptionRef, IGlobalClusterRef, IInstanceEngine, IIntegrationRef, IOptionGroup, IOptionGroupRef, IParameterGroup, IServerlessCluster, ISubnetGroup]:
+    typing.cast(typing.Any, cls).__protocol_attrs__ = typing.cast(typing.Any, cls).__protocol_attrs__ - set(['__jsii_proxy_class__', '__jsii_type__'])

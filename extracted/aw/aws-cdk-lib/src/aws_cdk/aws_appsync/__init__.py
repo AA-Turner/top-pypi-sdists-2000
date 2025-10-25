@@ -31232,3 +31232,6 @@ def _typecheckingstub__fca5d6afc67603703e938a4f127d82a052b1172c6c07cab72c6e3bded
 ) -> None:
     """Type checking stubs"""
     pass
+
+for cls in [IApi, IApiCacheRef, IApiKeyRef, IApiRef, IAppSyncAuthConfig, IAppsyncFunction, IChannelNamespace, IChannelNamespaceRef, IDataSourceRef, IDomainNameApiAssociationRef, IDomainNameRef, IEventApi, IFunctionConfigurationRef, IGraphQLApiRef, IGraphQLSchemaRef, IGraphqlApi, IResolverRef, ISchema, ISchemaConfig, ISourceApiAssociation, ISourceApiAssociationRef]:
+    typing.cast(typing.Any, cls).__protocol_attrs__ = typing.cast(typing.Any, cls).__protocol_attrs__ - set(['__jsii_proxy_class__', '__jsii_type__'])

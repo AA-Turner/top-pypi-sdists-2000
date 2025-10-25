@@ -606,6 +606,7 @@ class CfnAppProps:
         "orchestrator": "orchestrator",
         "restricted_instance_groups": "restrictedInstanceGroups",
         "tags": "tags",
+        "tiered_storage_config": "tieredStorageConfig",
         "vpc_config": "vpcConfig",
     },
 )
@@ -622,6 +623,7 @@ class CfnClusterProps:
         orchestrator: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCluster.OrchestratorProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         restricted_instance_groups: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCluster.ClusterRestrictedInstanceGroupProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tiered_storage_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCluster.TieredStorageConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         vpc_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCluster.VpcConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnCluster``.
@@ -635,6 +637,7 @@ class CfnClusterProps:
         :param orchestrator: The orchestrator type for the SageMaker HyperPod cluster. Currently, ``'eks'`` is the only available option.
         :param restricted_instance_groups: The restricted instance groups of the SageMaker HyperPod cluster.
         :param tags: A tag object that consists of a key and an optional value, used to manage metadata for SageMaker AWS resources. You can add tags to notebook instances, training jobs, hyperparameter tuning jobs, batch transform jobs, models, labeling jobs, work teams, endpoint configurations, and endpoints. For more information on adding tags to SageMaker resources, see `AddTags <https://docs.aws.amazon.com/sagemaker/latest/APIReference/API_AddTags.html>`_ . For more information on adding metadata to your AWS resources with tagging, see `Tagging AWS resources <https://docs.aws.amazon.com/general/latest/gr/aws_tagging.html>`_ . For advice on best practices for managing AWS resources with tagging, see `Tagging Best Practices: Implement an Effective AWS Resource Tagging Strategy <https://docs.aws.amazon.com/https://d1.awsstatic.com/whitepapers/aws-tagging-best-practices.pdf>`_ .
+        :param tiered_storage_config: Configuration for tiered storage in the SageMaker HyperPod cluster.
         :param vpc_config: Specifies an Amazon Virtual Private Cloud (VPC) that your SageMaker jobs, hosted models, and compute resources have access to. You can control access to and from your resources by configuring a VPC. For more information, see `Give SageMaker Access to Resources in your Amazon VPC <https://docs.aws.amazon.com/sagemaker/latest/dg/infrastructure-give-access.html>`_ .
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-sagemaker-cluster.html
@@ -746,6 +749,12 @@ class CfnClusterProps:
                     key="key",
                     value="value"
                 )],
+                tiered_storage_config=sagemaker.CfnCluster.TieredStorageConfigProperty(
+                    mode="mode",
+            
+                    # the properties below are optional
+                    instance_memory_allocation_percentage=123
+                ),
                 vpc_config=sagemaker.CfnCluster.VpcConfigProperty(
                     security_group_ids=["securityGroupIds"],
                     subnets=["subnets"]
@@ -763,6 +772,7 @@ class CfnClusterProps:
             check_type(argname="argument orchestrator", value=orchestrator, expected_type=type_hints["orchestrator"])
             check_type(argname="argument restricted_instance_groups", value=restricted_instance_groups, expected_type=type_hints["restricted_instance_groups"])
             check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
+            check_type(argname="argument tiered_storage_config", value=tiered_storage_config, expected_type=type_hints["tiered_storage_config"])
             check_type(argname="argument vpc_config", value=vpc_config, expected_type=type_hints["vpc_config"])
         self._values: typing.Dict[builtins.str, typing.Any] = {}
         if auto_scaling is not None:
@@ -783,6 +793,8 @@ class CfnClusterProps:
             self._values["restricted_instance_groups"] = restricted_instance_groups
         if tags is not None:
             self._values["tags"] = tags
+        if tiered_storage_config is not None:
+            self._values["tiered_storage_config"] = tiered_storage_config
         if vpc_config is not None:
             self._values["vpc_config"] = vpc_config
 
@@ -886,6 +898,17 @@ class CfnClusterProps:
         '''
         result = self._values.get("tags")
         return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+
+    @builtins.property
+    def tiered_storage_config(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCluster.TieredStorageConfigProperty"]]:
+        '''Configuration for tiered storage in the SageMaker HyperPod cluster.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-sagemaker-cluster.html#cfn-sagemaker-cluster-tieredstorageconfig
+        '''
+        result = self._values.get("tiered_storage_config")
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCluster.TieredStorageConfigProperty"]], result)
 
     @builtins.property
     def vpc_config(
@@ -1886,6 +1909,7 @@ class CfnDomainProps:
                         vpc_only_trusted_accounts=["vpcOnlyTrustedAccounts"]
                     ),
                     execution_role_identity_config="executionRoleIdentityConfig",
+                    ip_address_type="ipAddressType",
                     r_studio_server_pro_domain_settings=sagemaker.CfnDomain.RStudioServerProDomainSettingsProperty(
                         domain_execution_role_arn="domainExecutionRoleArn",
             
@@ -12366,27 +12390,6 @@ class CfnApp(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
-    @jsii.member(jsii_name="fromAppArn")
-    @builtins.classmethod
-    def from_app_arn(
-        cls,
-        scope: _constructs_77d1e7e8.Construct,
-        id: builtins.str,
-        arn: builtins.str,
-    ) -> IAppRef:
-        '''Creates a new IAppRef from an ARN.
-
-        :param scope: -
-        :param id: -
-        :param arn: -
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__2c3e82de2f25dd3057712c96b8bc4d8a306baaf5ce1d39997d027965d7d6a967)
-            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
-            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
-            check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
-        return typing.cast(IAppRef, jsii.sinvoke(cls, "fromAppArn", [scope, id, arn]))
-
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -13623,6 +13626,12 @@ class CfnCluster(
                 key="key",
                 value="value"
             )],
+            tiered_storage_config=sagemaker.CfnCluster.TieredStorageConfigProperty(
+                mode="mode",
+        
+                # the properties below are optional
+                instance_memory_allocation_percentage=123
+            ),
             vpc_config=sagemaker.CfnCluster.VpcConfigProperty(
                 security_group_ids=["securityGroupIds"],
                 subnets=["subnets"]
@@ -13644,6 +13653,7 @@ class CfnCluster(
         orchestrator: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCluster.OrchestratorProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         restricted_instance_groups: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCluster.ClusterRestrictedInstanceGroupProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tiered_storage_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCluster.TieredStorageConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         vpc_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCluster.VpcConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''
@@ -13658,6 +13668,7 @@ class CfnCluster(
         :param orchestrator: The orchestrator type for the SageMaker HyperPod cluster. Currently, ``'eks'`` is the only available option.
         :param restricted_instance_groups: The restricted instance groups of the SageMaker HyperPod cluster.
         :param tags: A tag object that consists of a key and an optional value, used to manage metadata for SageMaker AWS resources. You can add tags to notebook instances, training jobs, hyperparameter tuning jobs, batch transform jobs, models, labeling jobs, work teams, endpoint configurations, and endpoints. For more information on adding tags to SageMaker resources, see `AddTags <https://docs.aws.amazon.com/sagemaker/latest/APIReference/API_AddTags.html>`_ . For more information on adding metadata to your AWS resources with tagging, see `Tagging AWS resources <https://docs.aws.amazon.com/general/latest/gr/aws_tagging.html>`_ . For advice on best practices for managing AWS resources with tagging, see `Tagging Best Practices: Implement an Effective AWS Resource Tagging Strategy <https://docs.aws.amazon.com/https://d1.awsstatic.com/whitepapers/aws-tagging-best-practices.pdf>`_ .
+        :param tiered_storage_config: Configuration for tiered storage in the SageMaker HyperPod cluster.
         :param vpc_config: Specifies an Amazon Virtual Private Cloud (VPC) that your SageMaker jobs, hosted models, and compute resources have access to. You can control access to and from your resources by configuring a VPC. For more information, see `Give SageMaker Access to Resources in your Amazon VPC <https://docs.aws.amazon.com/sagemaker/latest/dg/infrastructure-give-access.html>`_ .
         '''
         if __debug__:
@@ -13674,6 +13685,7 @@ class CfnCluster(
             orchestrator=orchestrator,
             restricted_instance_groups=restricted_instance_groups,
             tags=tags,
+            tiered_storage_config=tiered_storage_config,
             vpc_config=vpc_config,
         )
 
@@ -13898,6 +13910,24 @@ class CfnCluster(
             type_hints = typing.get_type_hints(_typecheckingstub__d084f139dda46e8f580a7b39f59ba1634670f397fa2aa5cb51e1f2f0cb2b6cbe)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
         jsii.set(self, "tags", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="tieredStorageConfig")
+    def tiered_storage_config(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCluster.TieredStorageConfigProperty"]]:
+        '''Configuration for tiered storage in the SageMaker HyperPod cluster.'''
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCluster.TieredStorageConfigProperty"]], jsii.get(self, "tieredStorageConfig"))
+
+    @tiered_storage_config.setter
+    def tiered_storage_config(
+        self,
+        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCluster.TieredStorageConfigProperty"]],
+    ) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__417e5054c002112b482e7766dc9cc9693a0744a811c4973323619b1524db5402)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "tieredStorageConfig", value) # pyright: ignore[reportArgumentType]
 
     @builtins.property
     @jsii.member(jsii_name="vpcConfig")
@@ -15449,6 +15479,82 @@ class CfnCluster(
 
         def __repr__(self) -> str:
             return "ScheduledUpdateConfigProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_sagemaker.CfnCluster.TieredStorageConfigProperty",
+        jsii_struct_bases=[],
+        name_mapping={
+            "mode": "mode",
+            "instance_memory_allocation_percentage": "instanceMemoryAllocationPercentage",
+        },
+    )
+    class TieredStorageConfigProperty:
+        def __init__(
+            self,
+            *,
+            mode: builtins.str,
+            instance_memory_allocation_percentage: typing.Optional[jsii.Number] = None,
+        ) -> None:
+            '''Configuration for tiered storage in the SageMaker HyperPod cluster.
+
+            :param mode: The mode of tiered storage.
+            :param instance_memory_allocation_percentage: The percentage of instance memory to allocate for tiered storage.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-sagemaker-cluster-tieredstorageconfig.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_sagemaker as sagemaker
+                
+                tiered_storage_config_property = sagemaker.CfnCluster.TieredStorageConfigProperty(
+                    mode="mode",
+                
+                    # the properties below are optional
+                    instance_memory_allocation_percentage=123
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__ec2724ab5fe58a48d5a0c3d1d276cd362c60999d58706a5c048ade7d93792deb)
+                check_type(argname="argument mode", value=mode, expected_type=type_hints["mode"])
+                check_type(argname="argument instance_memory_allocation_percentage", value=instance_memory_allocation_percentage, expected_type=type_hints["instance_memory_allocation_percentage"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "mode": mode,
+            }
+            if instance_memory_allocation_percentage is not None:
+                self._values["instance_memory_allocation_percentage"] = instance_memory_allocation_percentage
+
+        @builtins.property
+        def mode(self) -> builtins.str:
+            '''The mode of tiered storage.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-sagemaker-cluster-tieredstorageconfig.html#cfn-sagemaker-cluster-tieredstorageconfig-mode
+            '''
+            result = self._values.get("mode")
+            assert result is not None, "Required property 'mode' is missing"
+            return typing.cast(builtins.str, result)
+
+        @builtins.property
+        def instance_memory_allocation_percentage(self) -> typing.Optional[jsii.Number]:
+            '''The percentage of instance memory to allocate for tiered storage.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-sagemaker-cluster-tieredstorageconfig.html#cfn-sagemaker-cluster-tieredstorageconfig-instancememoryallocationpercentage
+            '''
+            result = self._values.get("instance_memory_allocation_percentage")
+            return typing.cast(typing.Optional[jsii.Number], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "TieredStorageConfigProperty(%s)" % ", ".join(
                 k + "=" + repr(v) for k, v in self._values.items()
             )
 
@@ -18656,6 +18762,7 @@ class CfnDomain(
                     vpc_only_trusted_accounts=["vpcOnlyTrustedAccounts"]
                 ),
                 execution_role_identity_config="executionRoleIdentityConfig",
+                ip_address_type="ipAddressType",
                 r_studio_server_pro_domain_settings=sagemaker.CfnDomain.RStudioServerProDomainSettingsProperty(
                     domain_execution_role_arn="domainExecutionRoleArn",
         
@@ -20089,6 +20196,7 @@ class CfnDomain(
         name_mapping={
             "docker_settings": "dockerSettings",
             "execution_role_identity_config": "executionRoleIdentityConfig",
+            "ip_address_type": "ipAddressType",
             "r_studio_server_pro_domain_settings": "rStudioServerProDomainSettings",
             "security_group_ids": "securityGroupIds",
             "unified_studio_settings": "unifiedStudioSettings",
@@ -20100,6 +20208,7 @@ class CfnDomain(
             *,
             docker_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDomain.DockerSettingsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             execution_role_identity_config: typing.Optional[builtins.str] = None,
+            ip_address_type: typing.Optional[builtins.str] = None,
             r_studio_server_pro_domain_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDomain.RStudioServerProDomainSettingsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             security_group_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
             unified_studio_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDomain.UnifiedStudioSettingsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -20110,6 +20219,7 @@ class CfnDomain(
 
             :param docker_settings: A collection of settings that configure the domain's Docker interaction.
             :param execution_role_identity_config: The configuration for attaching a SageMaker AI user profile name to the execution role as a `sts:SourceIdentity key <https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_temp_control-access_monitor.html>`_ .
+            :param ip_address_type: The IP address type for the domain. Specify ``ipv4`` for IPv4-only connectivity or ``dualstack`` for both IPv4 and IPv6 connectivity. When you specify ``dualstack`` , the subnet must support IPv6 CIDR blocks. If not specified, defaults to ``ipv4`` .
             :param r_studio_server_pro_domain_settings: A collection of settings that configure the ``RStudioServerPro`` Domain-level app.
             :param security_group_ids: The security groups for the Amazon Virtual Private Cloud that the ``Domain`` uses for communication between Domain-level apps and user apps.
             :param unified_studio_settings: The settings that apply to an SageMaker AI domain when you use it in Amazon SageMaker Unified Studio.
@@ -20129,6 +20239,7 @@ class CfnDomain(
                         vpc_only_trusted_accounts=["vpcOnlyTrustedAccounts"]
                     ),
                     execution_role_identity_config="executionRoleIdentityConfig",
+                    ip_address_type="ipAddressType",
                     r_studio_server_pro_domain_settings=sagemaker.CfnDomain.RStudioServerProDomainSettingsProperty(
                         domain_execution_role_arn="domainExecutionRoleArn",
                 
@@ -20158,6 +20269,7 @@ class CfnDomain(
                 type_hints = typing.get_type_hints(_typecheckingstub__b23323cc301476d59d77a279da88bfc3d14a3c21fb8709a0ecc6db6074a56cf9)
                 check_type(argname="argument docker_settings", value=docker_settings, expected_type=type_hints["docker_settings"])
                 check_type(argname="argument execution_role_identity_config", value=execution_role_identity_config, expected_type=type_hints["execution_role_identity_config"])
+                check_type(argname="argument ip_address_type", value=ip_address_type, expected_type=type_hints["ip_address_type"])
                 check_type(argname="argument r_studio_server_pro_domain_settings", value=r_studio_server_pro_domain_settings, expected_type=type_hints["r_studio_server_pro_domain_settings"])
                 check_type(argname="argument security_group_ids", value=security_group_ids, expected_type=type_hints["security_group_ids"])
                 check_type(argname="argument unified_studio_settings", value=unified_studio_settings, expected_type=type_hints["unified_studio_settings"])
@@ -20166,6 +20278,8 @@ class CfnDomain(
                 self._values["docker_settings"] = docker_settings
             if execution_role_identity_config is not None:
                 self._values["execution_role_identity_config"] = execution_role_identity_config
+            if ip_address_type is not None:
+                self._values["ip_address_type"] = ip_address_type
             if r_studio_server_pro_domain_settings is not None:
                 self._values["r_studio_server_pro_domain_settings"] = r_studio_server_pro_domain_settings
             if security_group_ids is not None:
@@ -20191,6 +20305,17 @@ class CfnDomain(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-sagemaker-domain-domainsettings.html#cfn-sagemaker-domain-domainsettings-executionroleidentityconfig
             '''
             result = self._values.get("execution_role_identity_config")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        @builtins.property
+        def ip_address_type(self) -> typing.Optional[builtins.str]:
+            '''The IP address type for the domain.
+
+            Specify ``ipv4`` for IPv4-only connectivity or ``dualstack`` for both IPv4 and IPv6 connectivity. When you specify ``dualstack`` , the subnet must support IPv6 CIDR blocks. If not specified, defaults to ``ipv4`` .
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-sagemaker-domain-domainsettings.html#cfn-sagemaker-domain-domainsettings-ipaddresstype
+            '''
+            result = self._values.get("ip_address_type")
             return typing.cast(typing.Optional[builtins.str], result)
 
         @builtins.property
@@ -53722,27 +53847,6 @@ class CfnSpace(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
-    @jsii.member(jsii_name="fromSpaceArn")
-    @builtins.classmethod
-    def from_space_arn(
-        cls,
-        scope: _constructs_77d1e7e8.Construct,
-        id: builtins.str,
-        arn: builtins.str,
-    ) -> ISpaceRef:
-        '''Creates a new ISpaceRef from an ARN.
-
-        :param scope: -
-        :param id: -
-        :param arn: -
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__8a1fb67c7e1a507a782b0599fe6469d0887b1d847ae1f67216b645c96d2aa2ba)
-            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
-            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
-            check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
-        return typing.cast(ISpaceRef, jsii.sinvoke(cls, "fromSpaceArn", [scope, id, arn]))
-
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -55867,27 +55971,6 @@ class CfnUserProfile(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
-
-    @jsii.member(jsii_name="fromUserProfileArn")
-    @builtins.classmethod
-    def from_user_profile_arn(
-        cls,
-        scope: _constructs_77d1e7e8.Construct,
-        id: builtins.str,
-        arn: builtins.str,
-    ) -> IUserProfileRef:
-        '''Creates a new IUserProfileRef from an ARN.
-
-        :param scope: -
-        :param id: -
-        :param arn: -
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__c2e35b6c0e820169e7045ae3de44cd0daabf16062bcfa71c8c760a03c630807f)
-            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
-            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
-            check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
-        return typing.cast(IUserProfileRef, jsii.sinvoke(cls, "fromUserProfileArn", [scope, id, arn]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -59044,6 +59127,7 @@ def _typecheckingstub__c8126a53dc1741a2edde75d8d4eca79c53a2294746ea237dfba0097a7
     orchestrator: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCluster.OrchestratorProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     restricted_instance_groups: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCluster.ClusterRestrictedInstanceGroupProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+    tiered_storage_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCluster.TieredStorageConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     vpc_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCluster.VpcConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
 ) -> None:
     """Type checking stubs"""
@@ -59764,14 +59848,6 @@ def _typecheckingstub__da207547ea530dc451bd8f33c6174b52ddcb5c9c348d4df84894bf6a2
     """Type checking stubs"""
     pass
 
-def _typecheckingstub__2c3e82de2f25dd3057712c96b8bc4d8a306baaf5ce1d39997d027965d7d6a967(
-    scope: _constructs_77d1e7e8.Construct,
-    id: builtins.str,
-    arn: builtins.str,
-) -> None:
-    """Type checking stubs"""
-    pass
-
 def _typecheckingstub__76b99b25d5846497c07368fb764a277782458a65eed58ef9398494227f100421(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -59976,6 +60052,7 @@ def _typecheckingstub__b1441bbec1bb60460bda62b43765e140885fbb36e13b090ded31c919b
     orchestrator: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCluster.OrchestratorProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     restricted_instance_groups: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCluster.ClusterRestrictedInstanceGroupProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+    tiered_storage_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCluster.TieredStorageConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     vpc_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCluster.VpcConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
 ) -> None:
     """Type checking stubs"""
@@ -60043,6 +60120,12 @@ def _typecheckingstub__eb098436cfb738855f83865dfef39e1aa3903e59cbc86da6e0a424615
 
 def _typecheckingstub__d084f139dda46e8f580a7b39f59ba1634670f397fa2aa5cb51e1f2f0cb2b6cbe(
     value: typing.Optional[typing.List[_CfnTag_f6864754]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__417e5054c002112b482e7766dc9cc9693a0744a811c4973323619b1524db5402(
+    value: typing.Optional[typing.Union[_IResolvable_da3f097b, CfnCluster.TieredStorageConfigProperty]],
 ) -> None:
     """Type checking stubs"""
     pass
@@ -60186,6 +60269,14 @@ def _typecheckingstub__81dc9ecbde9bb4b8c0eba924792ecc3f847c8f654d60156a7fde757af
     *,
     schedule_expression: builtins.str,
     deployment_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCluster.DeploymentConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__ec2724ab5fe58a48d5a0c3d1d276cd362c60999d58706a5c048ade7d93792deb(
+    *,
+    mode: builtins.str,
+    instance_memory_allocation_percentage: typing.Optional[jsii.Number] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -60832,6 +60923,7 @@ def _typecheckingstub__b23323cc301476d59d77a279da88bfc3d14a3c21fb8709a0ecc6db607
     *,
     docker_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDomain.DockerSettingsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     execution_role_identity_config: typing.Optional[builtins.str] = None,
+    ip_address_type: typing.Optional[builtins.str] = None,
     r_studio_server_pro_domain_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDomain.RStudioServerProDomainSettingsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     security_group_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
     unified_studio_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDomain.UnifiedStudioSettingsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -65032,14 +65124,6 @@ def _typecheckingstub__f4cf36c039bdacba2a059b01ad6ca85e87e6d521f09ca1f75b0131027
     """Type checking stubs"""
     pass
 
-def _typecheckingstub__8a1fb67c7e1a507a782b0599fe6469d0887b1d847ae1f67216b645c96d2aa2ba(
-    scope: _constructs_77d1e7e8.Construct,
-    id: builtins.str,
-    arn: builtins.str,
-) -> None:
-    """Type checking stubs"""
-    pass
-
 def _typecheckingstub__7dddb84aee67953eeae7ef9e4de9ff319c579f67a161e906e49503007dd5ac31(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -65315,14 +65399,6 @@ def _typecheckingstub__beda07bea319cc25c84f5e77bce363c97996e606a26b7a70b22536955
     single_sign_on_user_value: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     user_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnUserProfile.UserSettingsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-) -> None:
-    """Type checking stubs"""
-    pass
-
-def _typecheckingstub__c2e35b6c0e820169e7045ae3de44cd0daabf16062bcfa71c8c760a03c630807f(
-    scope: _constructs_77d1e7e8.Construct,
-    id: builtins.str,
-    arn: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -65662,3 +65738,6 @@ def _typecheckingstub__74f817ac3b5bece92b045cdf0b84972864f8be367364ba082cd53e173
 ) -> None:
     """Type checking stubs"""
     pass
+
+for cls in [IAppImageConfigRef, IAppRef, IClusterRef, ICodeRepositoryRef, IDataQualityJobDefinitionRef, IDeviceFleetRef, IDeviceRef, IDomainRef, IEndpoint, IEndpointConfigRef, IEndpointRef, IFeatureGroupRef, IImageRef, IImageVersionRef, IInferenceComponentRef, IInferenceExperimentRef, IMlflowTrackingServerRef, IModelBiasJobDefinitionRef, IModelCardRef, IModelExplainabilityJobDefinitionRef, IModelPackageGroupRef, IModelPackageRef, IModelQualityJobDefinitionRef, IModelRef, IMonitoringScheduleRef, INotebookInstanceLifecycleConfigRef, INotebookInstanceRef, IPartnerAppRef, IPipeline, IPipelineRef, IProcessingJobRef, IProjectRef, ISpaceRef, IStudioLifecycleConfigRef, IUserProfileRef, IWorkteamRef]:
+    typing.cast(typing.Any, cls).__protocol_attrs__ = typing.cast(typing.Any, cls).__protocol_attrs__ - set(['__jsii_proxy_class__', '__jsii_type__'])

@@ -4996,3 +4996,6 @@ def _typecheckingstub__aa34370ea71108b33b5119b9fcb8ca5029e1349c5ec4e2fb3d74745ed
 ) -> None:
     """Type checking stubs"""
     pass
+
+for cls in [IAPIKeyRef, IGeofenceCollectionRef, IMapRef, IPlaceIndexRef, IRouteCalculatorRef, ITrackerConsumerRef, ITrackerRef]:
+    typing.cast(typing.Any, cls).__protocol_attrs__ = typing.cast(typing.Any, cls).__protocol_attrs__ - set(['__jsii_proxy_class__', '__jsii_type__'])

@@ -40674,3 +40674,6 @@ def _typecheckingstub__e4e0dd5a5563a97619c37342a77235f5f54af4a7b6324b1a4257fe268
 ) -> None:
     """Type checking stubs"""
     pass
+
+for cls in [IAccessLogDestination, IAccountRef, IApiKey, IApiKeyRef, IAuthorizer, IAuthorizerRef, IBasePathMappingRef, IBasePathMappingV2Ref, IClientCertificateRef, IDeploymentRef, IDocumentationPartRef, IDocumentationVersionRef, IDomainName, IDomainNameAccessAssociationRef, IDomainNameRef, IDomainNameV2Ref, IGatewayResponse, IGatewayResponseRef, IMethodRef, IModel, IModelRef, IRequestValidator, IRequestValidatorRef, IResource, IResourceRef, IRestApi, IRestApiRef, IStage, IStageRef, IUsagePlan, IUsagePlanKeyRef, IUsagePlanRef, IVpcLink, IVpcLinkRef]:
+    typing.cast(typing.Any, cls).__protocol_attrs__ = typing.cast(typing.Any, cls).__protocol_attrs__ - set(['__jsii_proxy_class__', '__jsii_type__'])

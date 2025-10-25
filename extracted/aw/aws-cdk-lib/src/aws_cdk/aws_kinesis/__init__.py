@@ -6600,3 +6600,6 @@ def _typecheckingstub__741a97d9ae28403dd10b071c7777bb76448096ad2b30f06325c121d82
 ) -> None:
     """Type checking stubs"""
     pass
+
+for cls in [IResourcePolicyRef, IStream, IStreamConsumer, IStreamConsumerRef, IStreamRef]:
+    typing.cast(typing.Any, cls).__protocol_attrs__ = typing.cast(typing.Any, cls).__protocol_attrs__ - set(['__jsii_proxy_class__', '__jsii_type__'])

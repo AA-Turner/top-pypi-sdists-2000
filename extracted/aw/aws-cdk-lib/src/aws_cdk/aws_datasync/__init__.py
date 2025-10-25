@@ -12490,3 +12490,6 @@ def _typecheckingstub__85b602e4eeecb093e03804ba0a072531ddddf4c7a2a1bbcf685fd0ff2
 ) -> None:
     """Type checking stubs"""
     pass
+
+for cls in [IAgentRef, ILocationAzureBlobRef, ILocationEFSRef, ILocationFSxLustreRef, ILocationFSxONTAPRef, ILocationFSxOpenZFSRef, ILocationFSxWindowsRef, ILocationHDFSRef, ILocationNFSRef, ILocationObjectStorageRef, ILocationS3Ref, ILocationSMBRef, ITaskRef]:
+    typing.cast(typing.Any, cls).__protocol_attrs__ = typing.cast(typing.Any, cls).__protocol_attrs__ - set(['__jsii_proxy_class__', '__jsii_type__'])

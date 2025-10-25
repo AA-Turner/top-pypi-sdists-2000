@@ -2412,3 +2412,6 @@ def _typecheckingstub__be54682f3b71055b15a50a83ac3cb959dac840823bb036ddd8f40b086
 ) -> None:
     """Type checking stubs"""
     pass
+
+for cls in [IApplicationRef, IDeploymentRef, IEnvironmentRef]:
+    typing.cast(typing.Any, cls).__protocol_attrs__ = typing.cast(typing.Any, cls).__protocol_attrs__ - set(['__jsii_proxy_class__', '__jsii_type__'])

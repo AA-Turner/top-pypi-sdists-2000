@@ -1172,3 +1172,6 @@ def _typecheckingstub__ddeddf28afa132e70cf3cdeca1b03ad8c2e5de2f7786f5db94037eb39
 ) -> None:
     """Type checking stubs"""
     pass
+
+for cls in [IFHIRDatastoreRef]:
+    typing.cast(typing.Any, cls).__protocol_attrs__ = typing.cast(typing.Any, cls).__protocol_attrs__ - set(['__jsii_proxy_class__', '__jsii_type__'])

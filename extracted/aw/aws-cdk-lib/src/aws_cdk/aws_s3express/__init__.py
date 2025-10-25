@@ -2804,3 +2804,6 @@ def _typecheckingstub__cb4bc307ba12040c7d9910685d8ea50fd2f9f3f34fdecd3ca61c34ccd
 ) -> None:
     """Type checking stubs"""
     pass
+
+for cls in [IAccessPointRef, IBucketPolicyRef, IDirectoryBucketRef]:
+    typing.cast(typing.Any, cls).__protocol_attrs__ = typing.cast(typing.Any, cls).__protocol_attrs__ - set(['__jsii_proxy_class__', '__jsii_type__'])

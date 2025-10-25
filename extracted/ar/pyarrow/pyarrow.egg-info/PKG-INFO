@@ -1,6 +1,6 @@
-Metadata-Version: 2.1
+Metadata-Version: 2.4
 Name: pyarrow
-Version: 21.0.0
+Version: 22.0.0
 Summary: Python library for Apache Arrow
 Maintainer-email: Apache Arrow Developers <dev@arrow.apache.org>
 License: Apache Software License
@@ -9,21 +9,15 @@ Project-URL: Documentation, https://arrow.apache.org/docs/python
 Project-URL: Repository, https://github.com/apache/arrow
 Project-URL: Issues, https://github.com/apache/arrow/issues
 Classifier: License :: OSI Approved :: Apache Software License
-Classifier: Programming Language :: Python :: 3.9
 Classifier: Programming Language :: Python :: 3.10
 Classifier: Programming Language :: Python :: 3.11
 Classifier: Programming Language :: Python :: 3.12
 Classifier: Programming Language :: Python :: 3.13
-Requires-Python: >=3.9
+Classifier: Programming Language :: Python :: 3.14
+Classifier: Programming Language :: Python :: Free Threading :: 2 - Beta
+Requires-Python: >=3.10
 Description-Content-Type: text/markdown
-License-File: ../LICENSE.txt
-License-File: ../NOTICE.txt
-Provides-Extra: test
-Requires-Dist: pytest; extra == "test"
-Requires-Dist: hypothesis; extra == "test"
-Requires-Dist: cffi; extra == "test"
-Requires-Dist: pytz; extra == "test"
-Requires-Dist: pandas; extra == "test"
+Dynamic: license-file
 
 <!---
   Licensed to the Apache Software Foundation (ASF) under one
@@ -69,7 +63,7 @@ pip install pyarrow
 ```
 
 If you encounter any issues importing the pip wheels on Windows, you may need
-to install the [Visual C++ Redistributable for Visual Studio 2015][6].
+to install the latest [Visual C++ Redistributable for Visual Studio][6].
 
 ## Development
 
@@ -80,7 +74,7 @@ See [Python Development][2] in the documentation subproject.
 See [documentation build instructions][1] in the documentation subproject.
 
 [1]: https://github.com/apache/arrow/blob/main/docs/source/developers/documentation.rst
-[2]: https://github.com/apache/arrow/blob/main/docs/source/developers/python.rst
+[2]: https://arrow.apache.org/docs/developers/python.html
 [3]: https://github.com/pandas-dev/pandas
 [5]: https://arrow.apache.org/docs/latest/python/benchmarks.html
-[6]: https://www.microsoft.com/en-us/download/details.aspx?id=48145
+[6]: https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist?view=msvc-170#latest-microsoft-visual-c-redistributable-version

@@ -2097,3 +2097,6 @@ def _typecheckingstub__8ebb0ce3955d4416c7a704b1a825b845e02eef926e8c0da3592ea7cce
 ) -> None:
     """Type checking stubs"""
     pass
+
+for cls in [IAnomalyMonitorRef, IAnomalySubscriptionRef, ICostCategoryRef]:
+    typing.cast(typing.Any, cls).__protocol_attrs__ = typing.cast(typing.Any, cls).__protocol_attrs__ - set(['__jsii_proxy_class__', '__jsii_type__'])

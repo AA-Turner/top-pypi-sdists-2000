@@ -625,3 +625,6 @@ def _typecheckingstub__6a681fa857411b5b813fd3ea51ba3c2278b7c1fb3b2c743dbcaf4c754
 ) -> None:
     """Type checking stubs"""
     pass
+
+for cls in [IExecutionPlanRef]:
+    typing.cast(typing.Any, cls).__protocol_attrs__ = typing.cast(typing.Any, cls).__protocol_attrs__ - set(['__jsii_proxy_class__', '__jsii_type__'])

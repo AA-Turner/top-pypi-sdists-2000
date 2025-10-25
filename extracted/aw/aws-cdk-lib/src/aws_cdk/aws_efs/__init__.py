@@ -6077,3 +6077,6 @@ def _typecheckingstub__020e1ad6a612ae3b94c3b53afd9ca3e8710c6a621174024a66a4889b0
 ) -> None:
     """Type checking stubs"""
     pass
+
+for cls in [IAccessPoint, IAccessPointRef, IFileSystem, IFileSystemRef, IMountTargetRef]:
+    typing.cast(typing.Any, cls).__protocol_attrs__ = typing.cast(typing.Any, cls).__protocol_attrs__ - set(['__jsii_proxy_class__', '__jsii_type__'])

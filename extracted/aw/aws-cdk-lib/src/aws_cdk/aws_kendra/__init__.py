@@ -2021,27 +2021,6 @@ class CfnDataSource(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
-    @jsii.member(jsii_name="fromDataSourceArn")
-    @builtins.classmethod
-    def from_data_source_arn(
-        cls,
-        scope: _constructs_77d1e7e8.Construct,
-        id: builtins.str,
-        arn: builtins.str,
-    ) -> IDataSourceRef:
-        '''Creates a new IDataSourceRef from an ARN.
-
-        :param scope: -
-        :param id: -
-        :param arn: -
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__706fff372dcf2263b3ab788506e7c77792e4a5cae5211288f1733c9303ece68d)
-            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
-            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
-            check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
-        return typing.cast(IDataSourceRef, jsii.sinvoke(cls, "fromDataSourceArn", [scope, id, arn]))
-
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -8956,27 +8935,6 @@ class CfnFaq(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
-    @jsii.member(jsii_name="fromFaqArn")
-    @builtins.classmethod
-    def from_faq_arn(
-        cls,
-        scope: _constructs_77d1e7e8.Construct,
-        id: builtins.str,
-        arn: builtins.str,
-    ) -> IFaqRef:
-        '''Creates a new IFaqRef from an ARN.
-
-        :param scope: -
-        :param id: -
-        :param arn: -
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__2b40544b7dfa36a1b1244afc2843ba70c752aae5f6c21935fec914da6fd7f074)
-            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
-            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
-            check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
-        return typing.cast(IFaqRef, jsii.sinvoke(cls, "fromFaqArn", [scope, id, arn]))
-
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -10643,14 +10601,6 @@ def _typecheckingstub__db7b870c602f215572ec4f7667cd46c2ae4e2c6035e16924c08cf6d68
     """Type checking stubs"""
     pass
 
-def _typecheckingstub__706fff372dcf2263b3ab788506e7c77792e4a5cae5211288f1733c9303ece68d(
-    scope: _constructs_77d1e7e8.Construct,
-    id: builtins.str,
-    arn: builtins.str,
-) -> None:
-    """Type checking stubs"""
-    pass
-
 def _typecheckingstub__857c3d47368883ad30477d4c7721d4f448bafe37d7457ab7e8fa7ab0c70e6c2a(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -11238,14 +11188,6 @@ def _typecheckingstub__da52634bf448f13a8dfdf111b1193f46a241ac941af460a15585386c0
     """Type checking stubs"""
     pass
 
-def _typecheckingstub__2b40544b7dfa36a1b1244afc2843ba70c752aae5f6c21935fec914da6fd7f074(
-    scope: _constructs_77d1e7e8.Construct,
-    id: builtins.str,
-    arn: builtins.str,
-) -> None:
-    """Type checking stubs"""
-    pass
-
 def _typecheckingstub__11ca22cd6dac6125f6c23af39c883b9555dc5ca8feff5890bbf847c4d2ec1afa(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -11502,3 +11444,6 @@ def _typecheckingstub__062de87b3e323244109a14768e5e37dc72be812535477b570bfaaad65
 ) -> None:
     """Type checking stubs"""
     pass
+
+for cls in [IDataSourceRef, IFaqRef, IIndexRef]:
+    typing.cast(typing.Any, cls).__protocol_attrs__ = typing.cast(typing.Any, cls).__protocol_attrs__ - set(['__jsii_proxy_class__', '__jsii_type__'])

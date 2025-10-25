@@ -4636,27 +4636,6 @@ class CfnSenderId(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
-    @jsii.member(jsii_name="fromSenderIdArn")
-    @builtins.classmethod
-    def from_sender_id_arn(
-        cls,
-        scope: _constructs_77d1e7e8.Construct,
-        id: builtins.str,
-        arn: builtins.str,
-    ) -> ISenderIdRef:
-        '''Creates a new ISenderIdRef from an ARN.
-
-        :param scope: -
-        :param id: -
-        :param arn: -
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__0ed9f9558b69ae7c6d0f56f6f39794502d3498877fe17676f324c53d33940707)
-            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
-            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
-            check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
-        return typing.cast(ISenderIdRef, jsii.sinvoke(cls, "fromSenderIdArn", [scope, id, arn]))
-
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -5492,14 +5471,6 @@ def _typecheckingstub__579e8861eeec43305720b40c1d4cd3b273ca5261f965f0fa1cc4ee0e0
     """Type checking stubs"""
     pass
 
-def _typecheckingstub__0ed9f9558b69ae7c6d0f56f6f39794502d3498877fe17676f324c53d33940707(
-    scope: _constructs_77d1e7e8.Construct,
-    id: builtins.str,
-    arn: builtins.str,
-) -> None:
-    """Type checking stubs"""
-    pass
-
 def _typecheckingstub__824bd75372c0cb805352438204088f4be0bdaf1e2b369e61edb178255f394f92(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -5535,3 +5506,6 @@ def _typecheckingstub__032142149c9722a7758daf53b4af657dc1c49bbf0817db09eaabeb307
 ) -> None:
     """Type checking stubs"""
     pass
+
+for cls in [IConfigurationSetRef, IOptOutListRef, IPhoneNumberRef, IPoolRef, IProtectConfigurationRef, IResourcePolicyRef, ISenderIdRef]:
+    typing.cast(typing.Any, cls).__protocol_attrs__ = typing.cast(typing.Any, cls).__protocol_attrs__ - set(['__jsii_proxy_class__', '__jsii_type__'])

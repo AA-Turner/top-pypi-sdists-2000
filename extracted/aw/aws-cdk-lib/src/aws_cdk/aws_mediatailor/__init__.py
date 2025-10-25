@@ -2876,27 +2876,6 @@ class CfnLiveSource(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
-    @jsii.member(jsii_name="fromLiveSourceArn")
-    @builtins.classmethod
-    def from_live_source_arn(
-        cls,
-        scope: _constructs_77d1e7e8.Construct,
-        id: builtins.str,
-        arn: builtins.str,
-    ) -> ILiveSourceRef:
-        '''Creates a new ILiveSourceRef from an ARN.
-
-        :param scope: -
-        :param id: -
-        :param arn: -
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__ce2a67ecd4c245755079e42b97b7e2aa073536881db7521a5e4b7de0ffb37207)
-            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
-            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
-            check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
-        return typing.cast(ILiveSourceRef, jsii.sinvoke(cls, "fromLiveSourceArn", [scope, id, arn]))
-
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -5264,27 +5243,6 @@ class CfnVodSource(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
-    @jsii.member(jsii_name="fromVodSourceArn")
-    @builtins.classmethod
-    def from_vod_source_arn(
-        cls,
-        scope: _constructs_77d1e7e8.Construct,
-        id: builtins.str,
-        arn: builtins.str,
-    ) -> IVodSourceRef:
-        '''Creates a new IVodSourceRef from an ARN.
-
-        :param scope: -
-        :param id: -
-        :param arn: -
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__1a17313f366fcbedb212dc92da65e6f4b4b11de884adbf251ff66d76e815968e)
-            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
-            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
-            check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
-        return typing.cast(IVodSourceRef, jsii.sinvoke(cls, "fromVodSourceArn", [scope, id, arn]))
-
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -5842,14 +5800,6 @@ def _typecheckingstub__caad9e925cf2074f54088c0241999fdbc5c194736555867b7765527f3
     """Type checking stubs"""
     pass
 
-def _typecheckingstub__ce2a67ecd4c245755079e42b97b7e2aa073536881db7521a5e4b7de0ffb37207(
-    scope: _constructs_77d1e7e8.Construct,
-    id: builtins.str,
-    arn: builtins.str,
-) -> None:
-    """Type checking stubs"""
-    pass
-
 def _typecheckingstub__ed469803ff91fff7fc3040fc3d0bb3fa9a21fd4b59da12961328098a4c73f954(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -6265,14 +6215,6 @@ def _typecheckingstub__456acf01c6ad372c9c8ba7c229fe88f13ceaab57f8599ae26cb522443
     """Type checking stubs"""
     pass
 
-def _typecheckingstub__1a17313f366fcbedb212dc92da65e6f4b4b11de884adbf251ff66d76e815968e(
-    scope: _constructs_77d1e7e8.Construct,
-    id: builtins.str,
-    arn: builtins.str,
-) -> None:
-    """Type checking stubs"""
-    pass
-
 def _typecheckingstub__09f36c1aa9a889afe2053c87ff538aaf36dd3ae8b29c1a426f2f27df0c755587(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -6317,3 +6259,6 @@ def _typecheckingstub__0eb3dfa97b84bfa86c7915674bc55816a5f4e9bec9047c683b97e5bd6
 ) -> None:
     """Type checking stubs"""
     pass
+
+for cls in [IChannelPolicyRef, IChannelRef, ILiveSourceRef, IPlaybackConfigurationRef, ISourceLocationRef, IVodSourceRef]:
+    typing.cast(typing.Any, cls).__protocol_attrs__ = typing.cast(typing.Any, cls).__protocol_attrs__ - set(['__jsii_proxy_class__', '__jsii_type__'])
