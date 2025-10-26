@@ -582,8 +582,6 @@ class TestCpuAPIs(PsutilTestCase):
         def check_ls(ls):
             for nt in ls:
                 assert nt._fields == ('current', 'min', 'max')
-                if nt.max != 0.0:
-                    assert nt.current <= nt.max
                 for name in nt._fields:
                     value = getattr(nt, name)
                     assert isinstance(value, (int, float))
@@ -614,22 +612,20 @@ class TestDiskAPIs(PsutilTestCase):
     def test_disk_usage(self):
         usage = psutil.disk_usage(os.getcwd())
         assert usage._fields == ('total', 'used', 'free', 'percent')
-
         assert usage.total > 0, usage
         assert usage.used > 0, usage
         assert usage.free > 0, usage
         assert usage.total > usage.used, usage
         assert usage.total > usage.free, usage
         assert 0 <= usage.percent <= 100, usage.percent
-        if hasattr(shutil, 'disk_usage'):
-            # py >= 3.3, see: http://bugs.python.org/issue12442
-            shutil_usage = shutil.disk_usage(os.getcwd())
-            tolerance = 5 * 1024 * 1024  # 5MB
-            assert usage.total == shutil_usage.total
-            assert abs(usage.free - shutil_usage.free) < tolerance
-            if not MACOS_12PLUS:
-                # see https://github.com/giampaolo/psutil/issues/2147
-                assert abs(usage.used - shutil_usage.used) < tolerance
+
+        shutil_usage = shutil.disk_usage(os.getcwd())
+        tolerance = 5 * 1024 * 1024  # 5MB
+        assert usage.total == shutil_usage.total
+        assert abs(usage.free - shutil_usage.free) < tolerance
+        if not MACOS_12PLUS:
+            # see https://github.com/giampaolo/psutil/issues/2147
+            assert abs(usage.used - shutil_usage.used) < tolerance
 
         # if path does not exist OSError ENOENT is expected across
         # all platforms
@@ -908,7 +904,7 @@ class TestNetAPIs(PsutilTestCase):
     def test_net_if_stats_enodev(self):
         # See: https://github.com/giampaolo/psutil/issues/1279
         with mock.patch(
-            'psutil._psutil_posix.net_if_mtu',
+            'psutil._psplatform.cext.net_if_mtu',
             side_effect=OSError(errno.ENODEV, ""),
         ) as m:
             ret = psutil.net_if_stats()

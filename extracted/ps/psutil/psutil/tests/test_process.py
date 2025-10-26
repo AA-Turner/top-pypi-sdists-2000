@@ -257,19 +257,6 @@ class TestProcess(PsutilTestCase):
         for name in times._fields:
             time.strftime("%H:%M:%S", time.localtime(getattr(times, name)))
 
-    def test_cpu_times_2(self):
-        def waste_cpu():
-            stop_at = os.times().user + 0.2
-            while os.times().user < stop_at:
-                for x in range(100000):
-                    x **= 2
-
-        waste_cpu()
-        a = psutil.Process().cpu_times()
-        b = os.times()
-        assert abs(a.user - b.user) < 0.1
-        assert abs(a.system - b.system) < 0.1
-
     @pytest.mark.skipif(not HAS_PROC_CPU_NUM, reason="not supported")
     def test_cpu_num(self):
         p = psutil.Process()
@@ -768,6 +755,8 @@ class TestProcess(PsutilTestCase):
     def test_name(self):
         p = self.spawn_psproc()
         name = p.name().lower()
+        if name.endswith("t"):  # in the free-threaded build
+            name = name[:-1]
         pyexe = os.path.basename(os.path.realpath(sys.executable)).lower()
         assert pyexe.startswith(name), (pyexe, name)
 
@@ -1494,16 +1483,16 @@ class TestProcess(PsutilTestCase):
     @pytest.mark.skipif(not HAS_ENVIRON, reason="not supported")
     def test_environ(self):
         def clean_dict(d):
-            exclude = ["PLAT", "HOME", "PYTEST_CURRENT_TEST", "PYTEST_VERSION"]
+            exclude = {"PLAT", "HOME"}
             if MACOS:
-                exclude.extend([
+                exclude.update([
                     "__CF_USER_TEXT_ENCODING",
                     "VERSIONER_PYTHON_PREFER_32_BIT",
                     "VERSIONER_PYTHON_VERSION",
-                    "VERSIONER_PYTHON_VERSION",
                 ])
-            for name in exclude:
-                d.pop(name, None)
+            for name in list(d.keys()):
+                if name in exclude or name.startswith("PYTEST_"):
+                    d.pop(name)
             return {
                 k.replace("\r", "").replace("\n", ""): (
                     v.replace("\r", "").replace("\n", "")

@@ -3,13 +3,13 @@
 # See "LICENSE" for further details.
 #
 # --------------------( SYNOPSIS                           )--------------------
-# Project-wide packager-agnostic configuration. Unlike all other top-level
-# configuration files (e.g., "setup.py", "MANIFEST.in") specific to some
-# utility in Python's package management ecosystem (e.g., "pip", "setuptools"),
-# this file strictly conforms to a standards-compliant PEP and hence
-# generically applies to *ALL* such utilities.
+# Packager-agnostic package build configuration. Unlike obsolete package build
+# configarution formats (e.g., "setup.py", "MANIFEST.in") unique to a subset of
+# third-party package management devtools (e.g., "pip", "setuptools"), this file
+# conforms to official standards (e.g., PEPs 517, 518, 621) and hence
+# generically supports *ALL* such devtools.
 #
-# Welcome to project distribution hell, where only twenty distinct files in
+# Say goodbye to project distribution hell, where only twenty distinct files in
 # twenty distinct formats suffice to distribute a single project.
 #
 # --------------------( USAGE                              )--------------------
@@ -128,10 +128,33 @@ dynamic = [
 #   * The "jobs/tests/strategy/matrix/{tox-env,include/python-version}"
 #     settings of the GitHub Actions-specific
 #     ".github/workflows/python_test.yml" file.
+# * Integration test data, including:
+#   * The "beartype_test/a90_func/data/external/poetry/pyproject.toml" file.
 # * Front-facing documentation (e.g., "doc/src/pep.rst").
 # * Signs declared by the private "beartype._data.hint.pep.datapepsign"
 #   submodule, which *MUST* be synchronized against the "__all__" dunder list
 #   global of the "typing" module bundled with the most recent CPython release.
+#!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+# WARNING: Downstream consumers leveraging Poetry effectively require this
+# version to be *SIMPLE* rather than *VERBOSE*. Why? Because Poetry enforces
+# transitive Python interpreter version constraints. Previously, we attempted to
+# require exact versions by blacklisting problematic Python release candidates
+# known to be incompatible with beartype: e.g.,
+#     requires-python = ">=3.10,!=3.14.0rc1,!=3.14.0rc2"
+#
+# Technically, doing so resolved problematic incompatibilities with users.
+# Pragmatically, doing so also then required *EVERY* Poetry user to adopt the
+# same requirement string in their own "pyproject.toml" files -- even though
+# literally no one cared about those problematic Python release candidates at
+# that point, because the next stable Python release had already been published.
+# Poetry greeted users failing to do so with crazy walls of text beginning with:
+#     The current project's supported Python range (>=3.10) is not compatible
+#     with some of the required packages Python requirement:
+#       - beartype requires Python !=3.14.0rc1,!=3.14.0rc2,>=3.10, so it will
+#         not be installable for Python 3.14.0rc1 || 3.14.0rc2
+#
+# To prevent beartype requirements from polluting the entire Python ecosystem,
+# simple version requirements are strongly preferable.
 #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 # Minimum Python interpreter version required by this package.
 #
@@ -148,7 +171,7 @@ dynamic = [
 #   release candidates are non-compliant with the official Python 3.14 release
 #   and thus @beartype itself. See also:
 #       https://github.com/beartype/beartype/issues/561#issuecomment-3379278748
-requires-python = ">=3.10,!=3.14rc1,!=3.14rc2"
+requires-python = ">=3.10"
 
 # Mandatory runtime dependencies. This package intentionally requires no
 # mandatory runtime dependencies and hopefully never will.
@@ -334,7 +357,13 @@ test-tox = [
     # old by now. I feel depressed just reading comments like this...
     "pytest >=4.0.0",
 
-    # ....................{ DOCOS                          }....................
+    # ....................{ BUILD                          }....................
+    # Build-centric optional test-time dependencies.
+
+    # Required by optional Poetry-specific integration tests.
+    "poetry",
+
+    # ....................{ DOCUMENTATION                  }....................
     # Documentation-centric optional test-time dependencies.
 
     # Required by optional Sphinx-specific integration tests.

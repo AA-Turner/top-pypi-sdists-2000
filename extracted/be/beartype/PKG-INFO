@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: beartype
-Version: 0.22.3
+Version: 0.22.4
 Summary: Unbearably fast near-real-time pure-Python runtime-static type-checker.
 Project-URL: Docs, https://beartype.readthedocs.io
 Project-URL: GitHub, https://github.com/beartype/beartype
@@ -42,7 +42,7 @@ Classifier: Topic :: Software Development :: Code Generators
 Classifier: Topic :: Software Development :: Libraries :: Python Modules
 Classifier: Topic :: Software Development :: Quality Assurance
 Classifier: Typing :: Typed
-Requires-Python: !=3.14rc1,!=3.14rc2,>=3.10
+Requires-Python: >=3.10
 Provides-Extra: dev
 Requires-Dist: autoapi>=0.9.0; extra == 'dev'
 Requires-Dist: celery; extra == 'dev'
@@ -58,6 +58,7 @@ Requires-Dist: nuitka>=1.2.6; (sys_platform == 'linux' and python_version < '3.1
 Requires-Dist: numba; (python_version < '3.14.0') and extra == 'dev'
 Requires-Dist: numpy; (python_version < '3.14.0' and sys_platform != 'darwin' and platform_python_implementation != 'PyPy') and extra == 'dev'
 Requires-Dist: pandera>=0.26.0; (python_version < '3.14.0') and extra == 'dev'
+Requires-Dist: poetry; extra == 'dev'
 Requires-Dist: polars; (python_version < '3.14.0') and extra == 'dev'
 Requires-Dist: pydata-sphinx-theme<=0.7.2; extra == 'dev'
 Requires-Dist: pygments; extra == 'dev'
@@ -99,6 +100,7 @@ Requires-Dist: nuitka>=1.2.6; (sys_platform == 'linux' and python_version < '3.1
 Requires-Dist: numba; (python_version < '3.14.0') and extra == 'test'
 Requires-Dist: numpy; (python_version < '3.14.0' and sys_platform != 'darwin' and platform_python_implementation != 'PyPy') and extra == 'test'
 Requires-Dist: pandera>=0.26.0; (python_version < '3.14.0') and extra == 'test'
+Requires-Dist: poetry; extra == 'test'
 Requires-Dist: polars; (python_version < '3.14.0') and extra == 'test'
 Requires-Dist: pygments; extra == 'test'
 Requires-Dist: pyright>=1.1.370; extra == 'test'
@@ -125,6 +127,7 @@ Requires-Dist: nuitka>=1.2.6; (sys_platform == 'linux' and python_version < '3.1
 Requires-Dist: numba; (python_version < '3.14.0') and extra == 'test-tox'
 Requires-Dist: numpy; (python_version < '3.14.0' and sys_platform != 'darwin' and platform_python_implementation != 'PyPy') and extra == 'test-tox'
 Requires-Dist: pandera>=0.26.0; (python_version < '3.14.0') and extra == 'test-tox'
+Requires-Dist: poetry; extra == 'test-tox'
 Requires-Dist: polars; (python_version < '3.14.0') and extra == 'test-tox'
 Requires-Dist: pygments; extra == 'test-tox'
 Requires-Dist: pyright>=1.1.370; extra == 'test-tox'

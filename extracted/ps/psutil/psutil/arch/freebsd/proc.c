@@ -42,6 +42,9 @@ psutil_kinfo_proc(pid_t pid, struct kinfo_proc *proc) {
     mib[2] = KERN_PROC_PID;
     mib[3] = pid;
 
+    if (pid < 0 || !proc)
+        psutil_badargs("psutil_kinfo_proc");
+
     size = sizeof(struct kinfo_proc);
     if (sysctl((int *)mib, 4, proc, &size, NULL, 0) == -1) {
         psutil_PyErr_SetFromOSErrnoWithSyscall("sysctl(KERN_PROC_PID)");
@@ -71,20 +74,6 @@ static void psutil_remove_spaces(char *str) {
 // ============================================================================
 // APIS
 // ============================================================================
-
-
-int _psutil_pids(struct kinfo_proc **proc_list, size_t *proc_count) {
-    int mib[4] = { CTL_KERN, KERN_PROC, KERN_PROC_PROC, 0 };
-    size_t length = 0;
-    char *buf = NULL;
-
-    if (psutil_sysctl_malloc(mib, 4, &buf, &length) != 0)
-        return 1;
-
-    *proc_list = (struct kinfo_proc *)buf;
-    *proc_count = length / sizeof(struct kinfo_proc);
-    return 0;
-}
 
 /*
  * Borrowed from psi Python System Information project

@@ -166,12 +166,8 @@ if CI_TESTING:
 
 # --- file names
 
-# Disambiguate TESTFN for parallel testing.
-if os.name == 'java':
-    # Jython disallows @ in module names
-    TESTFN_PREFIX = f"$psutil-{os.getpid()}-"
-else:
-    TESTFN_PREFIX = f"@psutil-{os.getpid()}-"
+# Disambiguate TESTFN with PID for parallel testing.
+TESTFN_PREFIX = f"@psutil-{os.getpid()}-"
 UNICODE_SUFFIX = "-ƒőő"
 # An invalid unicode string.
 INVALID_UNICODE_SUFFIX = b"f\xc0\x80".decode('utf8', 'surrogateescape')
@@ -179,12 +175,10 @@ ASCII_FS = sys.getfilesystemencoding().lower() in {"ascii", "us-ascii"}
 
 # --- paths
 
-ROOT_DIR = os.path.realpath(
-    os.path.join(os.path.dirname(__file__), '..', '..')
+ROOT_DIR = os.environ.get("PSUTIL_ROOT_DIR") or os.path.realpath(
+    os.path.join(os.path.dirname(__file__), "..", "..")
 )
-SCRIPTS_DIR = os.environ.get(
-    "PSUTIL_SCRIPTS_DIR", os.path.join(ROOT_DIR, 'scripts')
-)
+SCRIPTS_DIR = os.path.join(ROOT_DIR, 'scripts')
 HERE = os.path.realpath(os.path.dirname(__file__))
 
 # --- support
@@ -1056,13 +1050,16 @@ class PsutilTestCase(unittest.TestCase):
         repr(exc)
 
     def assert_pid_gone(self, pid):
-        with pytest.raises(psutil.NoSuchProcess) as cm:
-            try:
-                psutil.Process(pid)
-            except psutil.ZombieProcess:
-                return pytest.fail("wasn't supposed to raise ZombieProcess")
-        assert cm.value.pid == pid
-        assert cm.value.name is None
+        try:
+            proc = psutil.Process(pid)
+        except psutil.ZombieProcess:
+            raise AssertionError("wasn't supposed to raise ZombieProcess")
+        except psutil.NoSuchProcess as exc:
+            assert exc.pid == pid  # noqa: PT017
+            assert exc.name is None  # noqa: PT017
+        else:
+            raise AssertionError(f"did not raise NoSuchProcess ({proc})")
+
         assert not psutil.pid_exists(pid), pid
         assert pid not in psutil.pids()
         assert pid not in [x.pid for x in psutil.process_iter()]
@@ -1087,6 +1084,15 @@ class PsutilTestCase(unittest.TestCase):
         proc.wait(timeout=0)  # assert not raise TimeoutExpired
 
     def assert_proc_zombie(self, proc):
+        def assert_in_pids(proc):
+            if MACOS:
+                # Even ps does not show zombie PIDs for some reason. Weird...
+                return
+            assert proc.pid in psutil.pids()
+            assert proc.pid in [x.pid for x in psutil.process_iter()]
+            psutil._pmap = {}
+            assert proc.pid in [x.pid for x in psutil.process_iter()]
+
         # A zombie process should always be instantiable.
         clone = psutil.Process(proc.pid)
         # Cloned zombie on Open/NetBSD/illumos/Solaris has null creation
@@ -1104,10 +1110,7 @@ class PsutilTestCase(unittest.TestCase):
         # as_dict() shouldn't crash.
         proc.as_dict()
         # It should show up in pids() and process_iter().
-        assert proc.pid in psutil.pids()
-        assert proc.pid in [x.pid for x in psutil.process_iter()]
-        psutil._pmap = {}
-        assert proc.pid in [x.pid for x in psutil.process_iter()]
+        assert_in_pids(proc)
         # Call all methods.
         ns = process_namespace(proc)
         for fun, name in ns.iter(ns.all, clear_cache=True):
@@ -1134,10 +1137,7 @@ class PsutilTestCase(unittest.TestCase):
         proc.kill()
         assert proc.is_running()
         assert psutil.pid_exists(proc.pid)
-        assert proc.pid in psutil.pids()
-        assert proc.pid in [x.pid for x in psutil.process_iter()]
-        psutil._pmap = {}
-        assert proc.pid in [x.pid for x in psutil.process_iter()]
+        assert_in_pids(proc)
 
         # Its parent should 'see' it (edit: not true on BSD and MACOS).
         # descendants = [x.pid for x in psutil.Process().children(
@@ -1155,6 +1155,7 @@ class PsutilTestCase(unittest.TestCase):
 
 
 @pytest.mark.skipif(PYPY, reason="unreliable on PYPY")
+@pytest.mark.xdist_group(name="serial")
 class TestMemoryLeak(PsutilTestCase):
     """Test framework class for detecting function memory leaks,
     typically functions implemented in C which forgot to free() memory

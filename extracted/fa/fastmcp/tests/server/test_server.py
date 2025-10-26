@@ -76,7 +76,7 @@ class TestTools:
         def fn(x: int) -> int:
             return x + 1
 
-        mcp_tools = await mcp._mcp_list_tools()
+        mcp_tools = await mcp._list_tools_mcp()
         assert len(mcp_tools) == 1
         assert mcp_tools[0].name == "fn"
 
@@ -89,7 +89,7 @@ class TestTools:
         def fn(x: int) -> int:
             return x + 1
 
-        mcp_tools = await mcp._mcp_list_tools()
+        mcp_tools = await mcp._list_tools_mcp()
         assert len(mcp_tools) == 1
         assert mcp_tools[0].name == "custom_name"
 
@@ -110,7 +110,7 @@ class TestTools:
         assert "adder" not in mcp_tools
 
         with pytest.raises(NotFoundError, match="Unknown tool: adder"):
-            await mcp._mcp_call_tool("adder", {"a": 1, "b": 2})
+            await mcp._call_tool_mcp("adder", {"a": 1, "b": 2})
 
     async def test_add_tool_at_init(self):
         def f(x: int) -> int:
@@ -136,7 +136,7 @@ class TestToolDecorator:
         mcp = FastMCP()
 
         with pytest.raises(NotFoundError, match="Unknown tool: add"):
-            await mcp._mcp_call_tool("add", {"x": 1, "y": 2})
+            await mcp._call_tool_mcp("add", {"x": 1, "y": 2})
 
     async def test_tool_decorator(self):
         mcp = FastMCP()
@@ -185,7 +185,7 @@ class TestToolDecorator:
         def add(x: int, y: int) -> int:
             return x + y
 
-        tools = await mcp._mcp_list_tools()
+        tools = await mcp._list_tools_mcp()
         assert len(tools) == 1
         tool = tools[0]
         assert tool.description == "Add two numbers"
@@ -307,10 +307,11 @@ class TestToolDecorator:
         def sample_tool(x: int) -> int:
             return x * 2
 
-        # Verify the tags were set correctly
-        tools = await mcp._tool_manager.list_tools()
-        assert len(tools) == 1
-        assert tools[0].tags == {"example", "test-tag"}
+        # Verify the tags were set correctly (local inventory)
+        tools_dict = await mcp._tool_manager.get_tools()
+        assert len(tools_dict) == 1
+        only_tool = next(iter(tools_dict.values()))
+        assert only_tool.tags == {"example", "test-tag"}
 
     async def test_add_tool_with_custom_name(self):
         """Test adding a tool with a custom name using server.add_tool()."""
@@ -1607,6 +1608,7 @@ class TestSettingsFromEnvironment:
         os.environ["FASTMCP_SERVER_AUTH_AZURE_REDIRECT_PATH"] = "/auth/callback"
         os.environ["FASTMCP_SERVER_AUTH_AZURE_BASE_URL"] = "http://localhost:8000"
         os.environ["FASTMCP_SERVER_AUTH_AZURE_REQUIRED_SCOPES"] = "User.Read,email,profile"
+        os.environ["FASTMCP_SERVER_AUTH_AZURE_JWT_SIGNING_KEY"] = "test-secret"
 
         import fastmcp
         
@@ -1635,3 +1637,50 @@ class TestSettingsFromEnvironment:
         auth_class = settings.server_auth_class
 
         assert auth_class is AzureProvider
+
+
+class TestAbstractCollectionTypes:
+    """Test that FastMCP accepts abstract collection types from collections.abc."""
+
+    async def test_fastmcp_init_with_tuples(self):
+        """Test FastMCP accepts tuples for sequence parameters."""
+
+        def dummy_tool() -> str:
+            return "test"
+
+        # Test with tuples and other abstract types
+        mcp = FastMCP(
+            "test",
+            middleware=(),  # Empty tuple
+            tools=(Tool.from_function(dummy_tool),),  # Tuple of tools
+            include_tags={"tag1", "tag2"},  # Set
+            exclude_tags=frozenset({"tag3"}),  # Frozen set
+        )
+        assert mcp is not None
+        assert mcp.name == "test"
+        assert isinstance(mcp.middleware, list)  # Should be converted to list
+
+    async def test_fastmcp_init_with_readonly_mapping(self):
+        """Test FastMCP accepts read-only mappings."""
+        from types import MappingProxyType
+
+        # Test with read-only mapping
+        mcp = FastMCP(
+            "test2",
+            tool_transformations=MappingProxyType({}),  # Read-only mapping
+        )
+        assert mcp is not None
+
+    async def test_fastmcp_works_with_abstract_types(self):
+        """Test that abstract types work end-to-end with a client."""
+
+        def greet(name: str) -> str:
+            return f"Hello, {name}!"
+
+        # Create server with tuple of tools
+        mcp = FastMCP("test", tools=(Tool.from_function(greet),))
+
+        # Verify it works with a client
+        async with Client(mcp) as client:
+            result = await client.call_tool("greet", {"name": "World"})
+            assert result.content[0].text == "Hello, World!"  # type: ignore[attr-defined]

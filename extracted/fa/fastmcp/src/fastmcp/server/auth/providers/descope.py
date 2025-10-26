@@ -7,8 +7,6 @@ for seamless MCP client authentication.
 
 from __future__ import annotations
 
-from typing import Any
-
 import httpx
 from pydantic import AnyHttpUrl
 from pydantic_settings import BaseSettings, SettingsConfigDict
@@ -17,6 +15,7 @@ from starlette.routing import Route
 
 from fastmcp.server.auth import RemoteAuthProvider, TokenVerifier
 from fastmcp.server.auth.providers.jwt import JWTVerifier
+from fastmcp.settings import ENV_FILE
 from fastmcp.utilities.logging import get_logger
 from fastmcp.utilities.types import NotSet, NotSetT
 
@@ -26,7 +25,7 @@ logger = get_logger(__name__)
 class DescopeProviderSettings(BaseSettings):
     model_config = SettingsConfigDict(
         env_prefix="FASTMCP_SERVER_AUTH_DESCOPEPROVIDER_",
-        env_file=".env",
+        env_file=ENV_FILE,
         extra="ignore",
     )
 
@@ -127,7 +126,6 @@ class DescopeProvider(RemoteAuthProvider):
     def get_routes(
         self,
         mcp_path: str | None = None,
-        mcp_endpoint: Any | None = None,
     ) -> list[Route]:
         """Get OAuth routes including Descope authorization server metadata forwarding.
 
@@ -136,10 +134,10 @@ class DescopeProvider(RemoteAuthProvider):
 
         Args:
             mcp_path: The path where the MCP endpoint is mounted (e.g., "/mcp")
-            mcp_endpoint: The MCP endpoint handler to protect with auth
+                This is used to advertise the resource URL in metadata.
         """
         # Get the standard protected resource routes from RemoteAuthProvider
-        routes = super().get_routes(mcp_path, mcp_endpoint)
+        routes = super().get_routes(mcp_path)
 
         async def oauth_authorization_server_metadata(request):
             """Forward Descope OAuth authorization server metadata with FastMCP customizations."""

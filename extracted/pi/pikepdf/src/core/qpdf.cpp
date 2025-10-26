@@ -32,8 +32,6 @@
 #include "pipeline.h"
 #include "utils.h"
 
-extern bool MMAP_DEFAULT;
-
 enum access_mode_e { access_default, access_stream, access_mmap, access_mmap_only };
 
 void qpdf_basic_settings(QPDF &q) // LCOV_EXCL_LINE
@@ -69,7 +67,7 @@ std::shared_ptr<QPDF> open_pdf(py::object stream,
 
     bool success = false;
     if (access_mode == access_default)
-        access_mode = MMAP_DEFAULT ? access_mmap : access_stream;
+        access_mode = get_mmap_default() ? access_mmap : access_stream;
 
     if (access_mode == access_mmap || access_mode == access_mmap_only) {
         try {
@@ -418,8 +416,8 @@ void save_pdf(QPDF &q,
     }
 
     if (!progress.is_none()) {
-        auto reporter = std::shared_ptr<QPDFWriter::ProgressReporter>(
-            new PikeProgressReporter(progress));
+        std::shared_ptr<QPDFWriter::ProgressReporter> reporter =
+            std::make_shared<PikeProgressReporter>(progress);
         w.registerProgressReporter(reporter);
     }
 
@@ -598,11 +596,18 @@ void init_qpdf(py::module_ &m)
             [](QPDF &q) { q.closeInputSource(); },
             "Used to implement Pdf.close().")
         .def("_decode_all_streams_and_discard",
-            [](QPDF &q) {
+            [](QPDF &q, py::object progress = py::none()) {
                 QPDFWriter w(q);
                 Pl_Discard discard;
                 w.setOutputPipeline(&discard);
                 w.setDecodeLevel(qpdf_dl_all);
+                w.setLinearization(false);
+                w.setCompressStreams(false);
+                w.setRecompressFlate(false);
+                if (!progress.is_none()) {
+                    w.registerProgressReporter(
+                        std::make_shared<PikeProgressReporter>(progress));
+                }
                 try {
                     w.write();
                 } catch (py::error_already_set &e) {

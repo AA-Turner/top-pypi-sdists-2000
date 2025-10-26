@@ -56,7 +56,7 @@ def open_deeplink(deeplink: str) -> bool:
             subprocess.run(["open", deeplink], check=True, capture_output=True)
         elif sys.platform == "win32":  # Windows
             subprocess.run(
-                ["start", deeplink], shell=True, check=True, capture_output=True
+                ["cmd", "/c", "start", deeplink], check=True, capture_output=True
             )
         else:  # Linux and others
             subprocess.run(["xdg-open", deeplink], check=True, capture_output=True)
@@ -110,9 +110,9 @@ def install_cursor_workspace(
     env_config = UVEnvironment(
         python=python_version,
         dependencies=(with_packages or []) + ["fastmcp"],
-        requirements=str(with_requirements.resolve()) if with_requirements else None,
-        project=str(project.resolve()) if project else None,
-        editable=[str(p.resolve()) for p in with_editable] if with_editable else None,
+        requirements=with_requirements,
+        project=project,
+        editable=with_editable,
     )
     # Build server spec from parsed components
     if server_object:
@@ -180,9 +180,9 @@ def install_cursor(
     env_config = UVEnvironment(
         python=python_version,
         dependencies=(with_packages or []) + ["fastmcp"],
-        requirements=str(with_requirements.resolve()) if with_requirements else None,
-        project=str(project.resolve()) if project else None,
-        editable=[str(p.resolve()) for p in with_editable] if with_editable else None,
+        requirements=with_requirements,
+        project=project,
+        editable=with_editable,
     )
     # Build server spec from parsed components
     if server_object:

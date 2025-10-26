@@ -29,7 +29,7 @@ psutil_sys_vminfo(vm_statistics64_t vmstat) {
     if (mport == MACH_PORT_NULL) {
         PyErr_SetString(PyExc_RuntimeError,
                         "mach_host_self() returned MACH_PORT_NULL");
-        return 1;
+        return -1;
     }
 
     ret = host_statistics64(mport, HOST_VM_INFO64, (host_info64_t)vmstat, &count);
@@ -40,7 +40,7 @@ psutil_sys_vminfo(vm_statistics64_t vmstat) {
             "host_statistics64(HOST_VM_INFO64) syscall failed: %s",
             mach_error_string(ret)
         );
-        return 1;
+        return -1;
     }
     return 0;
 }
@@ -89,14 +89,14 @@ PyObject *
 psutil_swap_mem(PyObject *self, PyObject *args) {
     int mib[2];
     struct xsw_usage totals;
-    vm_statistics64_data_t  vmstat;
+    vm_statistics64_data_t vmstat;
     long pagesize = psutil_getpagesize();
 
     mib[0] = CTL_VM;
     mib[1] = VM_SWAPUSAGE;
 
     if (psutil_sysctl(mib, 2, &totals, sizeof(totals)) != 0)
-        return psutil_PyErr_SetFromOSErrnoWithSyscall("sysctl(HW_CPU_FREQ)");
+        return psutil_PyErr_SetFromOSErrnoWithSyscall("sysctl(VM_SWAPUSAGE)");
 
     if (psutil_sys_vminfo(&vmstat) != 0)
         return NULL;
@@ -107,5 +107,6 @@ psutil_swap_mem(PyObject *self, PyObject *args) {
         (unsigned long long) totals.xsu_used,
         (unsigned long long) totals.xsu_avail,
         (unsigned long long) vmstat.pageins * pagesize,
-        (unsigned long long) vmstat.pageouts * pagesize);
+        (unsigned long long) vmstat.pageouts * pagesize
+    );
 }

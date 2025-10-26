@@ -11,21 +11,20 @@ import warnings
 from abc import ABC, abstractmethod
 from time import monotonic
 from types import TracebackType
-from typing import Any, AsyncIterator, cast, Dict, Generic, List
-from typing import Optional, Type
+from typing import Any, AsyncIterator, Generic, cast
 from weakref import ref
 from contextlib import asynccontextmanager
 
-from psycopg import errors as e
 from psycopg import AsyncConnection
+from psycopg import errors as e
 from psycopg.pq import TransactionStatus
 
-from .abc import ACT, AsyncConnectionCB, AsyncConnectFailedCB
+from .abc import ACT, AsyncConnectFailedCB, AsyncConnectionCB
 from .base import AttemptWithBackoff, BasePool
 from .errors import PoolClosed, PoolTimeout, TooManyRequests
 from ._compat import Deque, Self
-from ._acompat import ACondition, AEvent, ALock, AQueue, AWorker, aspawn, agather
-from ._acompat import asleep, current_task_name
+from ._acompat import ACondition, AEvent, ALock, AQueue, AWorker, agather, asleep
+from ._acompat import aspawn, current_task_name
 from .sched_async import AsyncScheduler
 
 if True:  # ASYNC
@@ -41,21 +40,21 @@ class AsyncConnectionPool(Generic[ACT], BasePool):
         self,
         conninfo: str = "",
         *,
-        connection_class: Type[ACT] = cast(Type[ACT], AsyncConnection),
-        kwargs: Optional[Dict[str, Any]] = None,
+        connection_class: type[ACT] = cast("type[ACT]", AsyncConnection),
+        kwargs: dict[str, Any] | None = None,
         min_size: int = 4,
-        max_size: Optional[int] = None,
+        max_size: int | None = None,
         open: bool | None = None,
-        configure: Optional[AsyncConnectionCB[ACT]] = None,
-        check: Optional[AsyncConnectionCB[ACT]] = None,
-        reset: Optional[AsyncConnectionCB[ACT]] = None,
-        name: Optional[str] = None,
+        configure: AsyncConnectionCB[ACT] | None = None,
+        check: AsyncConnectionCB[ACT] | None = None,
+        reset: AsyncConnectionCB[ACT] | None = None,
+        name: str | None = None,
         timeout: float = 30.0,
         max_waiting: int = 0,
         max_lifetime: float = 60 * 60.0,
         max_idle: float = 10 * 60.0,
         reconnect_timeout: float = 5 * 60.0,
-        reconnect_failed: Optional[AsyncConnectFailedCB] = None,
+        reconnect_failed: AsyncConnectFailedCB | None = None,
         num_workers: int = 3,
     ):
         self.connection_class = connection_class
@@ -74,10 +73,10 @@ class AsyncConnectionPool(Generic[ACT], BasePool):
         self._waiting = Deque[WaitingClient[ACT]]()
 
         # to notify that the pool is full
-        self._pool_full_event: Optional[AEvent] = None
+        self._pool_full_event: AEvent | None = None
 
-        self._sched_runner: Optional[AWorker] = None
-        self._workers: List[AWorker] = []
+        self._sched_runner: AWorker | None = None
+        self._workers: list[AWorker] = []
 
         super().__init__(
             conninfo,
@@ -180,7 +179,7 @@ class AsyncConnectionPool(Generic[ACT], BasePool):
         logger.info("pool %r is ready to use", self.name)
 
     @asynccontextmanager
-    async def connection(self, timeout: Optional[float] = None) -> AsyncIterator[ACT]:
+    async def connection(self, timeout: float | None = None) -> AsyncIterator[ACT]:
         """Context manager to obtain a connection from the pool.
 
         Return the connection immediately if available, otherwise wait up to
@@ -202,7 +201,7 @@ class AsyncConnectionPool(Generic[ACT], BasePool):
             t1 = monotonic()
             self._stats[self._USAGE_MS] += int(1000.0 * (t1 - t0))
 
-    async def getconn(self, timeout: Optional[float] = None) -> ACT:
+    async def getconn(self, timeout: float | None = None) -> ACT:
         """Obtain a connection from the pool.
 
         You should preferably use `connection()`. Use this function only if
@@ -261,8 +260,7 @@ class AsyncConnectionPool(Generic[ACT], BasePool):
         # Critical section: decide here if there's a connection ready
         # or if the client needs to wait.
         async with self._lock:
-            conn = await self._get_ready_connection(timeout)
-            if not conn:
+            if not (conn := (await self._get_ready_connection(timeout))):
                 # No connection available: put the client in the waiting queue
                 t0 = monotonic()
                 pos: WaitingClient[ACT] = WaitingClient()
@@ -290,12 +288,12 @@ class AsyncConnectionPool(Generic[ACT], BasePool):
         conn._pool = self
         return conn
 
-    async def _get_ready_connection(self, timeout: Optional[float]) -> Optional[ACT]:
+    async def _get_ready_connection(self, timeout: float | None) -> ACT | None:
         """Return a connection, if the client deserves one."""
         if timeout is not None and timeout <= 0.0:
             raise PoolTimeout()
 
-        conn: Optional[ACT] = None
+        conn: ACT | None = None
         if self._pool:
             # Take a connection ready out of the pool
             conn = self._pool.popleft()
@@ -475,6 +473,7 @@ class AsyncConnectionPool(Generic[ACT], BasePool):
 
         # Close the connections that were still in the pool
         for conn in connections:
+            conn._pool = None
             await conn.close()
 
         # Signal to eventual clients in the queue that business is closed.
@@ -503,13 +502,13 @@ class AsyncConnectionPool(Generic[ACT], BasePool):
 
     async def __aexit__(
         self,
-        exc_type: Optional[Type[BaseException]],
-        exc_val: Optional[BaseException],
-        exc_tb: Optional[TracebackType],
+        exc_type: type[BaseException] | None,
+        exc_val: BaseException | None,
+        exc_tb: TracebackType | None,
     ) -> None:
         await self.close()
 
-    async def resize(self, min_size: int, max_size: Optional[int] = None) -> None:
+    async def resize(self, min_size: int, max_size: int | None = None) -> None:
         """Change the size of the pool during runtime."""
         min_size, max_size = self._check_size(min_size, max_size)
 
@@ -547,6 +546,7 @@ class AsyncConnectionPool(Generic[ACT], BasePool):
             # Check for expired connections
             if conn._expire_at <= monotonic():
                 logger.info("discarding expired connection %s", conn)
+                conn._pool = None
                 await conn.close()
                 self.run_task(AddConnection(self))
                 continue
@@ -599,7 +599,9 @@ class AsyncConnectionPool(Generic[ACT], BasePool):
             return
 
         if True:  # ASYNC
-            if asyncio.iscoroutinefunction(self._reconnect_failed):
+            import inspect
+
+            if inspect.iscoroutinefunction(self._reconnect_failed):
                 await self._reconnect_failed(self)
             else:
                 self._reconnect_failed(self)
@@ -624,9 +626,7 @@ class AsyncConnectionPool(Generic[ACT], BasePool):
         StopWorker is received.
         """
         while True:
-            task = await q.get()
-
-            if isinstance(task, StopWorker):
+            if isinstance((task := (await q.get())), StopWorker):
                 logger.debug("terminating working task %s", current_task_name())
                 return
 
@@ -638,7 +638,7 @@ class AsyncConnectionPool(Generic[ACT], BasePool):
                     "task run %s failed: %s: %s", task, ex.__class__.__name__, ex
                 )
 
-    async def _connect(self, timeout: Optional[float] = None) -> ACT:
+    async def _connect(self, timeout: float | None = None) -> ACT:
         """Return a new connection configured for the pool."""
         self._stats[self._CONNECTIONS_NUM] += 1
         kwargs = self.kwargs
@@ -659,8 +659,7 @@ class AsyncConnectionPool(Generic[ACT], BasePool):
 
         if self._configure:
             await self._configure(conn)
-            status = conn.pgconn.transaction_status
-            if status != TransactionStatus.IDLE:
+            if (status := conn.pgconn.transaction_status) != TransactionStatus.IDLE:
                 sname = TransactionStatus(status).name
                 raise e.ProgrammingError(
                     f"connection left in status {sname} by configure function"
@@ -672,7 +671,7 @@ class AsyncConnectionPool(Generic[ACT], BasePool):
         return conn
 
     async def _add_connection(
-        self, attempt: Optional[AttemptWithBackoff], growing: bool = False
+        self, attempt: AttemptWithBackoff | None, growing: bool = False
     ) -> None:
         """Try to connect and add the connection to the pool.
 
@@ -732,23 +731,24 @@ class AsyncConnectionPool(Generic[ACT], BasePool):
             if conn.pgconn.transaction_status == TransactionStatus.UNKNOWN:
                 self._stats[self._CONNECTIONS_LOST] += 1
                 # Connection no more in working state: create a new one.
-                self.run_task(AddConnection(self))
                 logger.info("not serving connection found broken")
+                self.run_task(AddConnection(self))
                 return
 
         else:
             if conn.pgconn.transaction_status == TransactionStatus.UNKNOWN:
                 self._stats[self._RETURNS_BAD] += 1
                 # Connection no more in working state: create a new one.
-                self.run_task(AddConnection(self))
                 logger.warning("discarding closed connection: %s", conn)
+                self.run_task(AddConnection(self))
                 return
 
         # Check if the connection is past its best before date
         if conn._expire_at <= monotonic():
-            self.run_task(AddConnection(self))
             logger.info("discarding expired connection")
+            conn._pool = None
             await conn.close()
+            self.run_task(AddConnection(self))
             return
 
         await self._add_to_pool(conn)
@@ -790,13 +790,12 @@ class AsyncConnectionPool(Generic[ACT], BasePool):
             while self._waiting:
                 # If there is a client waiting (which is still waiting and
                 # hasn't timed out), give it the connection and notify it.
-                pos = self._waiting.popleft()
-                if await pos.set(conn):
+
+                if await self._waiting.popleft().set(conn):
                     break
             else:
                 # No client waiting for a connection: put it back into the pool
                 self._pool.append(conn)
-
                 # If we have been asked to wait for pool init, notify the
                 # waiter if the pool is full.
                 if self._pool_full_event and len(self._pool) >= self._min_size:
@@ -806,10 +805,8 @@ class AsyncConnectionPool(Generic[ACT], BasePool):
         """
         Bring a connection to IDLE state or close it.
         """
-        status = conn.pgconn.transaction_status
-        if status == TransactionStatus.IDLE:
+        if (status := conn.pgconn.transaction_status) == TransactionStatus.IDLE:
             pass
-
         elif status == TransactionStatus.UNKNOWN:
             # Connection closed
             return
@@ -826,18 +823,19 @@ class AsyncConnectionPool(Generic[ACT], BasePool):
                     ex,
                     conn,
                 )
+                conn._pool = None
                 await conn.close()
 
         elif status == TransactionStatus.ACTIVE:
             # Connection returned during an operation. Bad... just close it.
             logger.warning("closing returned connection: %s", conn)
+            conn._pool = None
             await conn.close()
 
         if self._reset:
             try:
                 await self._reset(conn)
-                status = conn.pgconn.transaction_status
-                if status != TransactionStatus.IDLE:
+                if (status := conn.pgconn.transaction_status) != TransactionStatus.IDLE:
                     sname = TransactionStatus(status).name
                     raise e.ProgrammingError(
                         f"connection left in status {sname} by reset function"
@@ -845,10 +843,11 @@ class AsyncConnectionPool(Generic[ACT], BasePool):
                     )
             except Exception as ex:
                 logger.warning(f"error resetting connection: {ex}")
+                conn._pool = None
                 await conn.close()
 
     async def _shrink_pool(self) -> None:
-        to_close: Optional[ACT] = None
+        to_close: ACT | None = None
 
         async with self._lock:
             # Reset the min number of connections used
@@ -870,9 +869,10 @@ class AsyncConnectionPool(Generic[ACT], BasePool):
                 nconns_min,
                 self.max_idle,
             )
+            to_close._pool = None
             await to_close.close()
 
-    def _get_measures(self) -> Dict[str, int]:
+    def _get_measures(self) -> dict[str, int]:
         rv = super()._get_measures()
         rv[self._REQUESTS_WAITING] = len(self._waiting)
         return rv
@@ -884,8 +884,8 @@ class WaitingClient(Generic[ACT]):
     __slots__ = ("conn", "error", "_cond")
 
     def __init__(self) -> None:
-        self.conn: Optional[ACT] = None
-        self.error: Optional[BaseException] = None
+        self.conn: ACT | None = None
+        self.error: BaseException | None = None
 
         # The WaitingClient behaves in a way similar to an Event, but we need
         # to notify reliably the flagger that the waiter has "accepted" the
@@ -999,7 +999,7 @@ class AddConnection(MaintenanceTask):
     def __init__(
         self,
         pool: AsyncConnectionPool[Any],
-        attempt: Optional[AttemptWithBackoff] = None,
+        attempt: AttemptWithBackoff | None = None,
         growing: bool = False,
     ):
         super().__init__(pool)
