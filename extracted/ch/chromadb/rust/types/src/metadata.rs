@@ -1,5 +1,5 @@
 use chroma_error::{ChromaError, ErrorCodes};
-use serde::{Deserialize, Deserializer, Serialize, Serializer};
+use serde::{ser::SerializeMap, Deserialize, Deserializer, Serialize, Serializer};
 use serde_json::{Number, Value};
 use sprs::CsVec;
 use std::{
@@ -9,7 +9,6 @@ use std::{
     ops::{BitAnd, BitOr},
 };
 use thiserror::Error;
-use utoipa::ToSchema;
 
 use crate::chroma_proto;
 
@@ -33,7 +32,8 @@ struct SparseVectorSerdeHelper {
 /// and new format `{"#type": "sparse_vector", "indices": [...], "values": [...]}`.
 ///
 /// On serialization: always includes `#type` field with value `"sparse_vector"`.
-#[derive(Clone, Debug, PartialEq, ToSchema)]
+#[derive(Clone, Debug, PartialEq)]
+#[cfg_attr(feature = "utoipa", derive(utoipa::ToSchema))]
 pub struct SparseVector {
     /// Dimension indices
     pub indices: Vec<u32>,
@@ -204,7 +204,8 @@ impl<'py> pyo3::FromPyObject<'py> for SparseVector {
     }
 }
 
-#[derive(Clone, Debug, PartialEq, Deserialize, Serialize, ToSchema)]
+#[derive(Clone, Debug, PartialEq, Deserialize, Serialize)]
+#[cfg_attr(feature = "utoipa", derive(utoipa::ToSchema))]
 #[cfg_attr(feature = "testing", derive(proptest_derive::Arbitrary))]
 #[serde(untagged)]
 pub enum UpdateMetadataValue {
@@ -243,6 +244,54 @@ impl<'py> pyo3::FromPyObject<'py> for UpdateMetadataValue {
                 "Cannot convert Python object to UpdateMetadataValue",
             ))
         }
+    }
+}
+
+impl From<bool> for UpdateMetadataValue {
+    fn from(b: bool) -> Self {
+        Self::Bool(b)
+    }
+}
+
+impl From<i64> for UpdateMetadataValue {
+    fn from(v: i64) -> Self {
+        Self::Int(v)
+    }
+}
+
+impl From<i32> for UpdateMetadataValue {
+    fn from(v: i32) -> Self {
+        Self::Int(v as i64)
+    }
+}
+
+impl From<f64> for UpdateMetadataValue {
+    fn from(v: f64) -> Self {
+        Self::Float(v)
+    }
+}
+
+impl From<f32> for UpdateMetadataValue {
+    fn from(v: f32) -> Self {
+        Self::Float(v as f64)
+    }
+}
+
+impl From<String> for UpdateMetadataValue {
+    fn from(v: String) -> Self {
+        Self::Str(v)
+    }
+}
+
+impl From<&str> for UpdateMetadataValue {
+    fn from(v: &str) -> Self {
+        Self::Str(v.to_string())
+    }
+}
+
+impl From<SparseVector> for UpdateMetadataValue {
+    fn from(v: SparseVector) -> Self {
+        Self::SparseVector(v)
     }
 }
 
@@ -340,7 +389,8 @@ MetadataValue
 ===========================================
 */
 
-#[derive(Clone, Debug, Deserialize, PartialEq, Serialize, ToSchema)]
+#[derive(Clone, Debug, Deserialize, PartialEq, Serialize)]
+#[cfg_attr(feature = "utoipa", derive(utoipa::ToSchema))]
 #[cfg_attr(feature = "testing", derive(proptest_derive::Arbitrary))]
 #[cfg_attr(feature = "pyo3", derive(pyo3::FromPyObject, pyo3::IntoPyObject))]
 #[serde(untagged)]
@@ -865,7 +915,8 @@ impl WhereConversionError {
 /// present we simply create a conjunction of both clauses as the actual filter. This is consistent with
 /// the semantics we used to have when the `where` and `where_document` clauses are treated seperately.
 // TODO: Remove this note once the `where` clause and `where_document` clause is unified in the API level.
-#[derive(Clone, Debug, PartialEq, ToSchema)]
+#[derive(Clone, Debug, PartialEq)]
+#[cfg_attr(feature = "utoipa", derive(utoipa::ToSchema))]
 pub enum Where {
     Composite(CompositeExpression),
     Document(DocumentExpression),
@@ -873,11 +924,74 @@ pub enum Where {
 }
 
 impl serde::Serialize for Where {
-    fn serialize<S>(&self, _serializer: S) -> Result<S::Ok, S::Error>
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
     where
         S: Serializer,
     {
-        todo!()
+        match self {
+            Where::Composite(composite) => {
+                let mut map = serializer.serialize_map(Some(1))?;
+                let op_key = match composite.operator {
+                    BooleanOperator::And => "$and",
+                    BooleanOperator::Or => "$or",
+                };
+                map.serialize_entry(op_key, &composite.children)?;
+                map.end()
+            }
+            Where::Document(doc) => {
+                let mut outer_map = serializer.serialize_map(Some(1))?;
+                let mut inner_map = serde_json::Map::new();
+                let op_key = match doc.operator {
+                    DocumentOperator::Contains => "$contains",
+                    DocumentOperator::NotContains => "$not_contains",
+                    DocumentOperator::Regex => "$regex",
+                    DocumentOperator::NotRegex => "$not_regex",
+                };
+                inner_map.insert(
+                    op_key.to_string(),
+                    serde_json::Value::String(doc.pattern.clone()),
+                );
+                outer_map.serialize_entry("#document", &inner_map)?;
+                outer_map.end()
+            }
+            Where::Metadata(meta) => {
+                let mut outer_map = serializer.serialize_map(Some(1))?;
+                let mut inner_map = serde_json::Map::new();
+
+                match &meta.comparison {
+                    MetadataComparison::Primitive(op, value) => {
+                        let op_key = match op {
+                            PrimitiveOperator::Equal => "$eq",
+                            PrimitiveOperator::NotEqual => "$ne",
+                            PrimitiveOperator::GreaterThan => "$gt",
+                            PrimitiveOperator::GreaterThanOrEqual => "$gte",
+                            PrimitiveOperator::LessThan => "$lt",
+                            PrimitiveOperator::LessThanOrEqual => "$lte",
+                        };
+                        let value_json =
+                            serde_json::to_value(value).map_err(serde::ser::Error::custom)?;
+                        inner_map.insert(op_key.to_string(), value_json);
+                    }
+                    MetadataComparison::Set(op, set_value) => {
+                        let op_key = match op {
+                            SetOperator::In => "$in",
+                            SetOperator::NotIn => "$nin",
+                        };
+                        let values_json = match set_value {
+                            MetadataSetValue::Bool(v) => serde_json::to_value(v),
+                            MetadataSetValue::Int(v) => serde_json::to_value(v),
+                            MetadataSetValue::Float(v) => serde_json::to_value(v),
+                            MetadataSetValue::Str(v) => serde_json::to_value(v),
+                        }
+                        .map_err(serde::ser::Error::custom)?;
+                        inner_map.insert(op_key.to_string(), values_json);
+                    }
+                }
+
+                outer_map.serialize_entry(&meta.key, &inner_map)?;
+                outer_map.end()
+            }
+        }
     }
 }
 
@@ -1062,7 +1176,8 @@ impl TryFrom<Where> for chroma_proto::Where {
     }
 }
 
-#[derive(Clone, Debug, PartialEq, ToSchema)]
+#[derive(Clone, Debug, PartialEq)]
+#[cfg_attr(feature = "utoipa", derive(utoipa::ToSchema))]
 pub struct CompositeExpression {
     pub operator: BooleanOperator,
     pub children: Vec<Where>,
@@ -1098,7 +1213,8 @@ impl TryFrom<CompositeExpression> for chroma_proto::WhereChildren {
     }
 }
 
-#[derive(Clone, Debug, PartialEq, ToSchema)]
+#[derive(Clone, Debug, PartialEq)]
+#[cfg_attr(feature = "utoipa", derive(utoipa::ToSchema))]
 pub enum BooleanOperator {
     And,
     Or,
@@ -1122,7 +1238,8 @@ impl From<BooleanOperator> for chroma_proto::BooleanOperator {
     }
 }
 
-#[derive(Clone, Debug, PartialEq, ToSchema)]
+#[derive(Clone, Debug, PartialEq)]
+#[cfg_attr(feature = "utoipa", derive(utoipa::ToSchema))]
 pub struct DocumentExpression {
     pub operator: DocumentOperator,
     pub pattern: String,
@@ -1146,7 +1263,8 @@ impl From<DocumentExpression> for chroma_proto::DirectWhereDocument {
     }
 }
 
-#[derive(Clone, Debug, PartialEq, ToSchema)]
+#[derive(Clone, Debug, PartialEq)]
+#[cfg_attr(feature = "utoipa", derive(utoipa::ToSchema))]
 pub enum DocumentOperator {
     Contains,
     NotContains,
@@ -1175,7 +1293,8 @@ impl From<DocumentOperator> for chroma_proto::WhereDocumentOperator {
     }
 }
 
-#[derive(Clone, Debug, PartialEq, ToSchema)]
+#[derive(Clone, Debug, PartialEq)]
+#[cfg_attr(feature = "utoipa", derive(utoipa::ToSchema))]
 pub struct MetadataExpression {
     pub key: String,
     pub comparison: MetadataComparison,
@@ -1306,7 +1425,8 @@ impl TryFrom<MetadataExpression> for chroma_proto::DirectComparison {
     }
 }
 
-#[derive(Clone, Debug, PartialEq, ToSchema)]
+#[derive(Clone, Debug, PartialEq)]
+#[cfg_attr(feature = "utoipa", derive(utoipa::ToSchema))]
 pub enum MetadataComparison {
     Primitive(PrimitiveOperator, MetadataValue),
     Set(SetOperator, MetadataSetValue),

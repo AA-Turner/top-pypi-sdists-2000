@@ -418,16 +418,12 @@ class Decimal(NumericType):
     """
     Decimal 128-bit type with an optional precision and non-negative scale.
 
-    .. warning::
-        This functionality is considered **unstable**.
-        It is a work-in-progress feature and may not always work as expected.
-        It may be changed at any point without it being considered a breaking change.
-
     Parameters
     ----------
     precision
         Maximum number of digits in each number.
-        If set to `None` (default), the precision is inferred.
+        If set to `None` (default), the precision is set to 38 (the maximum
+        supported by Polars).
     scale
         Number of digits to the right of the decimal point in each number.
     """
@@ -440,15 +436,6 @@ class Decimal(NumericType):
         precision: int | None = None,
         scale: int = 0,
     ) -> None:
-        # Issuing the warning on `__init__` does not trigger when the class is used
-        # without being instantiated, but it's better than nothing
-        from polars._utils.unstable import issue_unstable_warning
-
-        issue_unstable_warning(
-            "the Decimal data type is considered unstable."
-            " It is a work-in-progress feature and may not always work as expected."
-        )
-
         if precision is None:
             precision = 38
 
