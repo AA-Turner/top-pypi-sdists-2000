@@ -15,6 +15,8 @@ from datadog_api_client.v2.api.csm_agents_api import CSMAgentsApi
 from datadog_api_client.v2.api.csm_coverage_analysis_api import CSMCoverageAnalysisApi
 from datadog_api_client.v2.api.csm_threats_api import CSMThreatsApi
 from datadog_api_client.v2.api.case_management_api import CaseManagementApi
+from datadog_api_client.v2.api.case_management_attribute_api import CaseManagementAttributeApi
+from datadog_api_client.v2.api.case_management_type_api import CaseManagementTypeApi
 from datadog_api_client.v2.api.cloud_cost_management_api import CloudCostManagementApi
 from datadog_api_client.v2.api.cloud_network_monitoring_api import CloudNetworkMonitoringApi
 from datadog_api_client.v2.api.cloudflare_integration_api import CloudflareIntegrationApi
@@ -30,6 +32,7 @@ from datadog_api_client.v2.api.downtimes_api import DowntimesApi
 from datadog_api_client.v2.api.error_tracking_api import ErrorTrackingApi
 from datadog_api_client.v2.api.events_api import EventsApi
 from datadog_api_client.v2.api.fastly_integration_api import FastlyIntegrationApi
+from datadog_api_client.v2.api.fleet_automation_api import FleetAutomationApi
 from datadog_api_client.v2.api.gcp_integration_api import GCPIntegrationApi
 from datadog_api_client.v2.api.ip_allowlist_api import IPAllowlistApi
 from datadog_api_client.v2.api.incident_services_api import IncidentServicesApi
@@ -54,6 +57,7 @@ from datadog_api_client.v2.api.organizations_api import OrganizationsApi
 from datadog_api_client.v2.api.powerpack_api import PowerpackApi
 from datadog_api_client.v2.api.processes_api import ProcessesApi
 from datadog_api_client.v2.api.rum_api import RUMApi
+from datadog_api_client.v2.api.reference_tables_api import ReferenceTablesApi
 from datadog_api_client.v2.api.restriction_policies_api import RestrictionPoliciesApi
 from datadog_api_client.v2.api.roles_api import RolesApi
 from datadog_api_client.v2.api.rum_metrics_api import RumMetricsApi
@@ -68,8 +72,10 @@ from datadog_api_client.v2.api.software_catalog_api import SoftwareCatalogApi
 from datadog_api_client.v2.api.spa_api import SpaApi
 from datadog_api_client.v2.api.spans_api import SpansApi
 from datadog_api_client.v2.api.spans_metrics_api import SpansMetricsApi
+from datadog_api_client.v2.api.static_analysis_api import StaticAnalysisApi
 from datadog_api_client.v2.api.synthetics_api import SyntheticsApi
 from datadog_api_client.v2.api.teams_api import TeamsApi
+from datadog_api_client.v2.api.test_optimization_api import TestOptimizationApi
 from datadog_api_client.v2.api.usage_metering_api import UsageMeteringApi
 from datadog_api_client.v2.api.users_api import UsersApi
 from datadog_api_client.v2.api.workflow_automation_api import WorkflowAutomationApi
@@ -93,6 +99,8 @@ __all__ = [
     "CSMCoverageAnalysisApi",
     "CSMThreatsApi",
     "CaseManagementApi",
+    "CaseManagementAttributeApi",
+    "CaseManagementTypeApi",
     "CloudCostManagementApi",
     "CloudNetworkMonitoringApi",
     "CloudflareIntegrationApi",
@@ -108,6 +116,7 @@ __all__ = [
     "ErrorTrackingApi",
     "EventsApi",
     "FastlyIntegrationApi",
+    "FleetAutomationApi",
     "GCPIntegrationApi",
     "IPAllowlistApi",
     "IncidentServicesApi",
@@ -132,6 +141,7 @@ __all__ = [
     "PowerpackApi",
     "ProcessesApi",
     "RUMApi",
+    "ReferenceTablesApi",
     "RestrictionPoliciesApi",
     "RolesApi",
     "RumMetricsApi",
@@ -146,8 +156,10 @@ __all__ = [
     "SpaApi",
     "SpansApi",
     "SpansMetricsApi",
+    "StaticAnalysisApi",
     "SyntheticsApi",
     "TeamsApi",
+    "TestOptimizationApi",
     "UsageMeteringApi",
     "UsersApi",
     "WorkflowAutomationApi",

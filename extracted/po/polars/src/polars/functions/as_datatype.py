@@ -830,5 +830,19 @@ def format(f_string: str, *args: Expr | str) -> Expr:
     │ foo_c_bar_3 │
     └─────────────┘
     """
-    exprs = [parse_into_expression(arg) for arg in args]
-    return wrap_expr(plr.PyExpr.str_format(f_string, exprs))
+    if f_string.count("{}") != len(args):
+        msg = "number of placeholders should equal the number of arguments"
+        raise ValueError(msg)
+
+    exprs = []
+
+    arguments = iter(args)
+    for i, s in enumerate(f_string.split("{}")):
+        if i > 0:
+            e = wrap_expr(parse_into_expression(next(arguments)))
+            exprs.append(e)
+
+        if len(s) > 0:
+            exprs.append(F.lit(s))
+
+    return concat_str(exprs, separator="")

@@ -1205,7 +1205,7 @@ class StringNameSpace:
         value
             String that will replace the matched substring.
         literal
-            Treat `pattern` as a literal string, not a regex.
+            Treat `pattern` as a literal string.
         n
             Number of matches to replace.
 
@@ -1312,7 +1312,7 @@ class StringNameSpace:
         value
             String that will replace the matched substring.
         literal
-            Treat `pattern` as a literal string, not a regex.
+            Treat `pattern` as a literal string.
 
         See Also
         --------

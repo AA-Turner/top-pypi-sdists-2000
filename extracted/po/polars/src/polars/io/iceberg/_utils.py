@@ -54,7 +54,7 @@ ICEBERG_TIME_TO_NS: int = 1000
 def _scan_pyarrow_dataset_impl(
     tbl: Table,
     with_columns: list[str] | None = None,
-    iceberg_table_filter: Any | None = None,
+    predicate: str | None = None,
     n_rows: int | None = None,
     snapshot_id: int | None = None,
     **kwargs: Any,
@@ -68,8 +68,8 @@ def _scan_pyarrow_dataset_impl(
         pyarrow dataset
     with_columns
         Columns that are projected
-    iceberg_table_filter
-        PyIceberg filter expression
+    predicate
+        pyarrow expression that can be evaluated with eval
     n_rows:
         Materialize only n rows from the arrow dataset.
     snapshot_id:
@@ -90,18 +90,17 @@ def _scan_pyarrow_dataset_impl(
     if with_columns is not None:
         scan = scan.select(*with_columns)
 
-    if iceberg_table_filter is not None:
-        scan = scan.filter(iceberg_table_filter)
+    if predicate is not None:
+        try:
+            expr_ast = _to_ast(predicate)
+            pyiceberg_expr = _convert_predicate(expr_ast)
+        except ValueError as e:
+            msg = f"Could not convert predicate to PyIceberg: {predicate}"
+            raise ValueError(msg) from e
+
+        scan = scan.filter(pyiceberg_expr)
 
     return from_arrow(scan.to_arrow())
-
-
-def try_convert_pyarrow_predicate(pyarrow_predicate: str) -> Any | None:
-    with contextlib.suppress(Exception):
-        expr_ast = _to_ast(pyarrow_predicate)
-        return _convert_predicate(expr_ast)
-
-    return None
 
 
 def _to_ast(expr: str) -> ast.expr:

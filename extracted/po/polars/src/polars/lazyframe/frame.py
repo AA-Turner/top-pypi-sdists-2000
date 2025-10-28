@@ -1307,11 +1307,6 @@ naive plan: (run LazyFrame.explain(optimized=True) to see the optimized plan)
 
             .. deprecated:: 1.30.0
                 Use the `optimizations` parameters.
-        streaming
-            Unused parameter, kept for backward compatibility.
-
-           ... deprecated:: 1.30.0
-                Use the `engine` parameter instead.
         engine
             Select the engine used to process the query, optional.
             At the moment, if set to `"auto"` (default), the query
@@ -1503,8 +1498,6 @@ naive plan: (run LazyFrame.explain(optimized=True) to see the optimized plan)
             Select the stage to display. Currently only the streaming engine has a
             separate physical stage, for the other engines both IR and physical are the
             same.
-        optimizations
-            The set of the optimizations considered during query optimization.
 
 
         Examples
@@ -2685,8 +2678,10 @@ naive plan: (run LazyFrame.explain(optimized=True) to see the optimized plan)
             - `True`: enable default set of statistics (default). Some
               statistics may be disabled.
             - `False`: disable all statistics
-            - "full": calculate and write all available statistics.
-            - `{ "statistic-key": True / False, ... }`. Available keys:
+            - "full": calculate and write all available statistics. Cannot be
+              combined with `use_pyarrow`.
+            - `{ "statistic-key": True / False, ... }`. Cannot be combined with
+              `use_pyarrow`. Available keys:
 
               - "min": column minimum value (default: `True`)
               - "max": column maximum value (default: `True`)
@@ -2794,23 +2789,6 @@ naive plan: (run LazyFrame.explain(optimized=True) to see the optimized plan)
         --------
         >>> lf = pl.scan_csv("/path/to/my_larger_than_ram_file.csv")  # doctest: +SKIP
         >>> lf.sink_parquet("out.parquet")  # doctest: +SKIP
-
-        Sink to a `BytesIO` object.
-
-        >>> import io
-        >>> buf = io.BytesIO()  # doctest: +SKIP
-        >>> pl.LazyFrame({"x": [1, 2, 1]}).sink_parquet(buf)  # doctest: +SKIP
-
-        Split into a hive-partitioning style partition:
-
-        >>> pl.LazyFrame({"x": [1, 2, 1], "y": [3, 4, 5]}).sink_parquet(
-        ...     pl.PartitionByKey("./out/", by="x"),
-        ...     mkdir=True
-        ... )  # doctest: +SKIP
-
-        See Also
-        --------
-        PartitionByKey
         """
         engine = _select_engine(engine)
         if metadata is not None:
@@ -3068,23 +3046,6 @@ naive plan: (run LazyFrame.explain(optimized=True) to see the optimized plan)
         --------
         >>> lf = pl.scan_csv("/path/to/my_larger_than_ram_file.csv")  # doctest: +SKIP
         >>> lf.sink_ipc("out.arrow")  # doctest: +SKIP
-
-        Sink to a `BytesIO` object.
-
-        >>> import io
-        >>> buf = io.BytesIO()  # doctest: +SKIP
-        >>> pl.LazyFrame({"x": [1, 2, 1]}).sink_ipc(buf)  # doctest: +SKIP
-
-        Split into a hive-partitioning style partition:
-
-        >>> pl.LazyFrame({"x": [1, 2, 1], "y": [3, 4, 5]}).sink_ipc(
-        ...     pl.PartitionByKey("./out/", by="x"),
-        ...     mkdir=True
-        ... )  # doctest: +SKIP
-
-        See Also
-        --------
-        PartitionByKey
         """
         engine = _select_engine(engine)
 
@@ -3374,23 +3335,6 @@ naive plan: (run LazyFrame.explain(optimized=True) to see the optimized plan)
         --------
         >>> lf = pl.scan_csv("/path/to/my_larger_than_ram_file.csv")  # doctest: +SKIP
         >>> lf.sink_csv("out.csv")  # doctest: +SKIP
-
-        Sink to a `BytesIO` object.
-
-        >>> import io
-        >>> buf = io.BytesIO()  # doctest: +SKIP
-        >>> pl.LazyFrame({"x": [1, 2, 1]}).sink_csv(buf)  # doctest: +SKIP
-
-        Split into a hive-partitioning style partition:
-
-        >>> pl.LazyFrame({"x": [1, 2, 1], "y": [3, 4, 5]}).sink_csv(
-        ...     pl.PartitionByKey("./out/", by="x"),
-        ...     mkdir=True
-        ... )  # doctest: +SKIP
-
-        See Also
-        --------
-        PartitionByKey
         """
         from polars.io.csv._utils import _check_arg_is_1byte
 
@@ -3590,23 +3534,6 @@ naive plan: (run LazyFrame.explain(optimized=True) to see the optimized plan)
         --------
         >>> lf = pl.scan_csv("/path/to/my_larger_than_ram_file.csv")  # doctest: +SKIP
         >>> lf.sink_ndjson("out.ndjson")  # doctest: +SKIP
-
-        Sink to a `BytesIO` object.
-
-        >>> import io
-        >>> buf = io.BytesIO()  # doctest: +SKIP
-        >>> pl.LazyFrame({"x": [1, 2, 1]}).sink_ndjson(buf)  # doctest: +SKIP
-
-        Split into a hive-partitioning style partition:
-
-        >>> pl.LazyFrame({"x": [1, 2, 1], "y": [3, 4, 5]}).sink_ndjson(
-        ...     pl.PartitionByKey("./out/", by="x"),
-        ...     mkdir=True
-        ... )  # doctest: +SKIP
-
-        See Also
-        --------
-        PartitionByKey
         """
         engine = _select_engine(engine)
 
@@ -6348,10 +6275,6 @@ naive plan: (run LazyFrame.explain(optimized=True) to see the optimized plan)
             and throw an exception if any do not. (Note that this parameter
             is a no-op when passing a function to `mapping`).
 
-        See Also
-        --------
-        Expr.name.replace
-
         Notes
         -----
         If existing names are swapped (e.g. 'A' points to 'B' and 'B' points to 'A'),
@@ -6770,7 +6693,7 @@ naive plan: (run LazyFrame.explain(optimized=True) to see the optimized plan)
         Notes
         -----
         The resulting column does not have any special properties. It is a regular
-        column of type `UInt32` (or `UInt64` in `polars[rt64]`).
+        column of type `UInt32` (or `UInt64` in `polars-u64-idx`).
 
         Examples
         --------
@@ -7893,7 +7816,6 @@ naive plan: (run LazyFrame.explain(optimized=True) to see the optimized plan)
         self,
         columns: ColumnNameOrSelector | Collection[ColumnNameOrSelector],
         *more_columns: ColumnNameOrSelector,
-        separator: str | None = None,
     ) -> LazyFrame:
         """
         Decompose struct columns into separate columns for each of their fields.
@@ -7907,9 +7829,6 @@ naive plan: (run LazyFrame.explain(optimized=True) to see the optimized plan)
             Name of the struct column(s) that should be unnested.
         *more_columns
             Additional columns to unnest, specified as positional arguments.
-        separator
-            Rename output column names as combination of the struct column name,
-            name separator and field name.
 
         Examples
         --------
@@ -7943,35 +7862,11 @@ naive plan: (run LazyFrame.explain(optimized=True) to see the optimized plan)
         │ foo    ┆ 1   ┆ a   ┆ true ┆ [1, 2]    ┆ baz   │
         │ bar    ┆ 2   ┆ b   ┆ null ┆ [3]       ┆ womp  │
         └────────┴─────┴─────┴──────┴───────────┴───────┘
-        >>> df = pl.LazyFrame(
-        ...     {
-        ...         "before": ["foo", "bar"],
-        ...         "t_a": [1, 2],
-        ...         "t_b": ["a", "b"],
-        ...         "t_c": [True, None],
-        ...         "t_d": [[1, 2], [3]],
-        ...         "after": ["baz", "womp"],
-        ...     }
-        ... ).select(
-        ...     "before",
-        ...     pl.struct(pl.col("^t_.$").name.map(lambda t: t[2:])).alias("t"),
-        ...     "after",
-        ... )
-        >>> df.unnest("t", separator="::").collect()
-        shape: (2, 6)
-        ┌────────┬──────┬──────┬──────┬───────────┬───────┐
-        │ before ┆ t::a ┆ t::b ┆ t::c ┆ t::d      ┆ after │
-        │ ---    ┆ ---  ┆ ---  ┆ ---  ┆ ---       ┆ ---   │
-        │ str    ┆ i64  ┆ str  ┆ bool ┆ list[i64] ┆ str   │
-        ╞════════╪══════╪══════╪══════╪═══════════╪═══════╡
-        │ foo    ┆ 1    ┆ a    ┆ true ┆ [1, 2]    ┆ baz   │
-        │ bar    ┆ 2    ┆ b    ┆ null ┆ [3]       ┆ womp  │
-        └────────┴──────┴──────┴──────┴───────────┴───────┘
         """
         subset = parse_list_into_selector(columns) | parse_list_into_selector(
             more_columns
         )
-        return self._from_pyldf(self._ldf.unnest(subset._pyselector, separator))
+        return self._from_pyldf(self._ldf.unnest(subset._pyselector))
 
     def merge_sorted(self, other: LazyFrame, key: str) -> LazyFrame:
         """
@@ -8051,9 +7946,8 @@ naive plan: (run LazyFrame.explain(optimized=True) to see the optimized plan)
     def set_sorted(
         self,
         column: str,
-        *more_columns: str,
-        descending: bool | list[bool] = False,
-        nulls_last: bool | list[bool] = False,
+        *,
+        descending: bool = False,
     ) -> LazyFrame:
         """
         Flag a column as sorted.
@@ -8064,12 +7958,8 @@ naive plan: (run LazyFrame.explain(optimized=True) to see the optimized plan)
         ----------
         column
             Column that is sorted
-        more_columns
-            Columns that are sorted over after `column`.
         descending
             Whether the column is sorted in descending order.
-        nulls_last
-            Whether the nulls are at the end.
 
         Warnings
         --------
@@ -8082,23 +7972,7 @@ naive plan: (run LazyFrame.explain(optimized=True) to see the optimized plan)
         if not isinstance(column, str):
             msg = "expected a 'str' for argument 'column' in 'set_sorted'"
             raise TypeError(msg)
-
-        ds: list[bool]
-        nl: list[bool]
-        if isinstance(descending, bool):
-            ds = [descending]
-        else:
-            ds = descending
-        if isinstance(nulls_last, bool):
-            nl = [nulls_last]
-        else:
-            nl = nulls_last
-
-        return self._from_pyldf(
-            self._ldf.hint_sorted(
-                [column] + list(more_columns), descending=ds, nulls_last=nl
-            )
-        )
+        return self.with_columns(F.col(column).set_sorted(descending=descending))
 
     @unstable()
     def update(

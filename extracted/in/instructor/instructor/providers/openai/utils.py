@@ -439,22 +439,23 @@ def handle_json_modes(
         )
         new_kwargs["messages"] = merge_consecutive_messages(new_kwargs["messages"])
 
-    if new_kwargs["messages"][0]["role"] != "system":
-        new_kwargs["messages"].insert(
-            0,
-            {
-                "role": "system",
-                "content": message,
-            },
-        )
-    elif isinstance(new_kwargs["messages"][0]["content"], str):
-        new_kwargs["messages"][0]["content"] += f"\n\n{message}"
-    elif isinstance(new_kwargs["messages"][0]["content"], list):
-        new_kwargs["messages"][0]["content"][0]["text"] += f"\n\n{message}"
-    else:
-        raise ValueError(
-            "Invalid message format, must be a string or a list of messages"
-        )
+    if mode != Mode.JSON_SCHEMA:
+        if new_kwargs["messages"][0]["role"] != "system":
+            new_kwargs["messages"].insert(
+                0,
+                {
+                    "role": "system",
+                    "content": message,
+                },
+            )
+        elif isinstance(new_kwargs["messages"][0]["content"], str):
+            new_kwargs["messages"][0]["content"] += f"\n\n{message}"
+        elif isinstance(new_kwargs["messages"][0]["content"], list):
+            new_kwargs["messages"][0]["content"][0]["text"] += f"\n\n{message}"
+        else:
+            raise ValueError(
+                "Invalid message format, must be a string or a list of messages"
+            )
 
     return response_model, new_kwargs
 

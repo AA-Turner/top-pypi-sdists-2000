@@ -52,10 +52,8 @@ def when(
 
     Notes
     -----
-    * String inputs e.g. `when("string")`, `then("string")` or `otherwise("string")`
-      are parsed as column names. :func:`lit` can be used to create string values.
-    * The expression output name is taken from the first `then` statement. It is
-      not affected by `predicates`, nor by `constraints`.
+    String inputs e.g. `when("string")`, `then("string")` or `otherwise("string")`
+    are parsed as column names. :func:`lit` can be used to create string values.
 
     Examples
     --------

@@ -7,7 +7,7 @@ import json
 import typing as t
 import uuid
 from functools import partial
-from threading import Lock, current_thread, main_thread
+from threading import Lock, current_thread
 
 import zmq
 from tornado.ioloop import IOLoop
@@ -15,6 +15,7 @@ from tornado.ioloop import IOLoop
 from .socket_pair import SocketPair
 from .subshell import SubshellThread
 from .thread import SHELL_CHANNEL_THREAD_NAME
+from .utils import _async_in_context
 
 
 class SubshellManager:
@@ -41,7 +42,7 @@ class SubshellManager:
         shell_socket: zmq.Socket[t.Any],
     ):
         """Initialize the subshell manager."""
-        assert current_thread() == main_thread()
+        self._parent_thread = current_thread()
 
         self._context: zmq.Context[t.Any] = context
         self._shell_channel_io_loop = shell_channel_io_loop
@@ -127,9 +128,11 @@ class SubshellManager:
         """Set the callback used by the main shell and all subshells to receive
         messages sent from the shell channel thread.
         """
-        assert current_thread() == main_thread()
+        assert current_thread() == self._parent_thread
         self._on_recv_callback = on_recv_callback
-        self._shell_channel_to_main.on_recv(IOLoop.current(), partial(self._on_recv_callback, None))
+        self._shell_channel_to_main.on_recv(
+            IOLoop.current(), _async_in_context(partial(on_recv_callback, None))
+        )
 
     def set_subshell_aborting(self, subshell_id: str, aborting: bool) -> None:
         """Set the aborting flag of the specified subshell."""
@@ -144,7 +147,7 @@ class SubshellManager:
         Only used by %subshell magic so does not have to be fast/cached.
         """
         with self._lock_cache:
-            if thread_id == main_thread().ident:
+            if thread_id == self._parent_thread.ident:
                 return None
             for id, subshell in self._cache.items():
                 if subshell.ident == thread_id:
@@ -165,7 +168,7 @@ class SubshellManager:
 
         subshell_thread.shell_channel_to_subshell.on_recv(
             subshell_thread.io_loop,
-            partial(self._on_recv_callback, subshell_id),
+            _async_in_context(partial(self._on_recv_callback, subshell_id)),
         )
 
         subshell_thread.subshell_to_shell_channel.on_recv(

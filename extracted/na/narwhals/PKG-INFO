@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: narwhals
-Version: 2.9.0
+Version: 2.10.0
 Summary: Extremely lightweight compatibility layer between dataframe libraries
 Project-URL: Homepage, https://github.com/narwhals-dev/narwhals
 Project-URL: Documentation, https://narwhals-dev.github.io/narwhals/
@@ -214,6 +214,7 @@ Join the party!
 - [altair](https://github.com/vega/altair/)
 - [bokeh](https://github.com/bokeh/bokeh)
 - [darts](https://github.com/unit8co/darts)
+- [fairlearn](https://github.com/fairlearn/fairlearn)
 - [formulaic](https://github.com/matthewwardrop/formulaic)
 - [gt-extras](https://github.com/posit-dev/gt-extras)
 - [hierarchicalforecast](https://github.com/Nixtla/hierarchicalforecast)

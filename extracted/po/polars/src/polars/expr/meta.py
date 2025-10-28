@@ -380,7 +380,7 @@ class ExprMetaNameSpace:
         self, *, return_as_string: Literal[True], schema: None | SchemaDict = None
     ) -> str: ...
 
-    def tree_format(  # noqa: D417 (TODO: document schema parameter)
+    def tree_format(
         self, *, return_as_string: bool = False, schema: None | SchemaDict = None
     ) -> str | None:
         """
@@ -403,7 +403,7 @@ class ExprMetaNameSpace:
             print(s)
             return None
 
-    def show_graph(  # noqa: D417 (TODO: document schema parameter)
+    def show_graph(
         self,
         *,
         show: bool = True,

@@ -236,6 +236,10 @@ class Configuration:
         # Keep track of unstable operations
         self.unstable_operations = _UnstableOperations(
             {
+                "v2.cancel_fleet_deployment": False,
+                "v2.create_fleet_deployment_configure": False,
+                "v2.get_fleet_deployment": False,
+                "v2.list_fleet_deployments": False,
                 "v2.create_open_api": False,
                 "v2.delete_open_api": False,
                 "v2.get_open_api": False,
@@ -253,6 +257,7 @@ class Configuration:
                 "v2.list_assets_sbo_ms": False,
                 "v2.list_findings": False,
                 "v2.list_historical_jobs": False,
+                "v2.list_scanned_assets_metadata": False,
                 "v2.list_security_monitoring_histsignals": False,
                 "v2.list_vulnerabilities": False,
                 "v2.list_vulnerable_assets": False,
@@ -310,6 +315,7 @@ class Configuration:
                 "v2.update_monitor_user_template": False,
                 "v2.validate_existing_monitor_user_template": False,
                 "v2.validate_monitor_user_template": False,
+                "v2.list_role_templates": False,
                 "v2.create_pipeline": False,
                 "v2.delete_pipeline": False,
                 "v2.get_pipeline": False,
@@ -332,6 +338,8 @@ class Configuration:
                 "v2.get_slo_report": False,
                 "v2.get_slo_report_job_status": False,
                 "v2.get_spa_recommendations": False,
+                "v2.create_sca_resolve_vulnerable_symbols": False,
+                "v2.create_sca_result": False,
                 "v2.add_member_team": False,
                 "v2.list_member_teams": False,
                 "v2.remove_member_team": False,
@@ -341,6 +349,7 @@ class Configuration:
                 "v2.get_incident_team": False,
                 "v2.list_incident_teams": False,
                 "v2.update_incident_team": False,
+                "v2.search_flaky_tests": False,
             }
         )
 

@@ -824,6 +824,7 @@ def handle_genai_structured_outputs(
     new_kwargs.pop("messages", None)
     new_kwargs.pop("generation_config", None)
     new_kwargs.pop("safety_settings", None)
+    new_kwargs.pop("thinking_config", None)
 
     return response_model, new_kwargs
 
@@ -896,6 +897,7 @@ def handle_genai_tools(
     new_kwargs.pop("messages", None)
     new_kwargs.pop("generation_config", None)
     new_kwargs.pop("safety_settings", None)
+    new_kwargs.pop("thinking_config", None)
 
     return response_model, new_kwargs
 
@@ -959,7 +961,7 @@ def handle_vertexai_tools(
 def handle_vertexai_json(
     response_model: type[Any] | None, new_kwargs: dict[str, Any]
 ) -> tuple[type[Any] | None, dict[str, Any]]:
-    from instructor.client_vertexai import vertexai_process_json_response
+    from instructor.providers.vertexai.client import vertexai_process_json_response
 
     """
     Handle Vertex AI JSON mode.
