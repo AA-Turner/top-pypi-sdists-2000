@@ -105,9 +105,11 @@ class OperatorControlAssignmentClient(object):
             'base_path': '/20200630',
             'service_endpoint_template': 'https://operator-access-control.{region}.oci.{secondLevelDomain}',
             'service_endpoint_template_per_realm': {  },  # noqa: E201 E202
+            'service_uses_dualstack_endpoints_by_default': False,
             'skip_deserialization': kwargs.get('skip_deserialization', False),
             'circuit_breaker_strategy': kwargs.get('circuit_breaker_strategy', circuit_breaker.GLOBAL_CIRCUIT_BREAKER_STRATEGY),
-            'client_level_realm_specific_endpoint_template_enabled': kwargs.get('client_level_realm_specific_endpoint_template_enabled')
+            'client_level_realm_specific_endpoint_template_enabled': kwargs.get('client_level_realm_specific_endpoint_template_enabled'),
+            'client_level_dualstack_endpoints_enabled': kwargs.get('client_level_dualstack_endpoints_enabled')
         }
         if 'timeout' in kwargs:
             base_client_init_kwargs['timeout'] = kwargs.get('timeout')
@@ -163,7 +165,7 @@ class OperatorControlAssignmentClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/operatoraccesscontrol/change_operator_control_assignment_compartment.py.html>`__ to see an example of how to use change_operator_control_assignment_compartment API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/operatoraccesscontrol/change_operator_control_assignment_compartment.py.html>`__ to see an example of how to use change_operator_control_assignment_compartment API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['operatorControlAssignmentId']
@@ -273,7 +275,7 @@ class OperatorControlAssignmentClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/operatoraccesscontrol/create_operator_control_assignment.py.html>`__ to see an example of how to use create_operator_control_assignment API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/operatoraccesscontrol/create_operator_control_assignment.py.html>`__ to see an example of how to use create_operator_control_assignment API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -374,7 +376,7 @@ class OperatorControlAssignmentClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/operatoraccesscontrol/delete_operator_control_assignment.py.html>`__ to see an example of how to use delete_operator_control_assignment API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/operatoraccesscontrol/delete_operator_control_assignment.py.html>`__ to see an example of how to use delete_operator_control_assignment API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['operatorControlAssignmentId']
@@ -480,7 +482,7 @@ class OperatorControlAssignmentClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/operatoraccesscontrol/get_assignment_validation_status.py.html>`__ to see an example of how to use get_assignment_validation_status API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/operatoraccesscontrol/get_assignment_validation_status.py.html>`__ to see an example of how to use get_assignment_validation_status API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['operatorControlAssignmentId']
@@ -578,7 +580,7 @@ class OperatorControlAssignmentClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/operatoraccesscontrol/get_operator_control_assignment.py.html>`__ to see an example of how to use get_operator_control_assignment API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/operatoraccesscontrol/get_operator_control_assignment.py.html>`__ to see an example of how to use get_operator_control_assignment API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['operatorControlAssignmentId']
@@ -706,7 +708,7 @@ class OperatorControlAssignmentClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/operatoraccesscontrol/list_operator_control_assignments.py.html>`__ to see an example of how to use list_operator_control_assignments API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/operatoraccesscontrol/list_operator_control_assignments.py.html>`__ to see an example of how to use list_operator_control_assignments API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['compartmentId']
@@ -846,7 +848,7 @@ class OperatorControlAssignmentClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/operatoraccesscontrol/update_operator_control_assignment.py.html>`__ to see an example of how to use update_operator_control_assignment API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/operatoraccesscontrol/update_operator_control_assignment.py.html>`__ to see an example of how to use update_operator_control_assignment API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['operatorControlAssignmentId']
@@ -965,7 +967,7 @@ class OperatorControlAssignmentClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/operatoraccesscontrol/validate_operator_assignment.py.html>`__ to see an example of how to use validate_operator_assignment API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/operatoraccesscontrol/validate_operator_assignment.py.html>`__ to see an example of how to use validate_operator_assignment API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['operatorControlAssignmentId']

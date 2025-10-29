@@ -103,9 +103,11 @@ class FleetSoftwareUpdateClient(object):
             'base_path': '/20220528',
             'service_endpoint_template': 'https://fleet-software-update.{region}.oci.{secondLevelDomain}',
             'service_endpoint_template_per_realm': {  },  # noqa: E201 E202
+            'service_uses_dualstack_endpoints_by_default': False,
             'skip_deserialization': kwargs.get('skip_deserialization', False),
             'circuit_breaker_strategy': kwargs.get('circuit_breaker_strategy', circuit_breaker.GLOBAL_CIRCUIT_BREAKER_STRATEGY),
-            'client_level_realm_specific_endpoint_template_enabled': kwargs.get('client_level_realm_specific_endpoint_template_enabled')
+            'client_level_realm_specific_endpoint_template_enabled': kwargs.get('client_level_realm_specific_endpoint_template_enabled'),
+            'client_level_dualstack_endpoints_enabled': kwargs.get('client_level_dualstack_endpoints_enabled')
         }
         if 'timeout' in kwargs:
             base_client_init_kwargs['timeout'] = kwargs.get('timeout')
@@ -158,7 +160,7 @@ class FleetSoftwareUpdateClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/fleetsoftwareupdate/abort_fsu_discovery.py.html>`__ to see an example of how to use abort_fsu_discovery API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/fleetsoftwareupdate/abort_fsu_discovery.py.html>`__ to see an example of how to use abort_fsu_discovery API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['fsuDiscoveryId']
@@ -279,7 +281,7 @@ class FleetSoftwareUpdateClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/fleetsoftwareupdate/add_fsu_collection_targets.py.html>`__ to see an example of how to use add_fsu_collection_targets API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/fleetsoftwareupdate/add_fsu_collection_targets.py.html>`__ to see an example of how to use add_fsu_collection_targets API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['fsuCollectionId']
@@ -396,7 +398,7 @@ class FleetSoftwareUpdateClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/fleetsoftwareupdate/cancel_fsu_action.py.html>`__ to see an example of how to use cancel_fsu_action API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/fleetsoftwareupdate/cancel_fsu_action.py.html>`__ to see an example of how to use cancel_fsu_action API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['fsuActionId']
@@ -515,7 +517,7 @@ class FleetSoftwareUpdateClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/fleetsoftwareupdate/change_fsu_action_compartment.py.html>`__ to see an example of how to use change_fsu_action_compartment API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/fleetsoftwareupdate/change_fsu_action_compartment.py.html>`__ to see an example of how to use change_fsu_action_compartment API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['fsuActionId']
@@ -636,7 +638,7 @@ class FleetSoftwareUpdateClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/fleetsoftwareupdate/change_fsu_collection_compartment.py.html>`__ to see an example of how to use change_fsu_collection_compartment API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/fleetsoftwareupdate/change_fsu_collection_compartment.py.html>`__ to see an example of how to use change_fsu_collection_compartment API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['fsuCollectionId']
@@ -757,7 +759,7 @@ class FleetSoftwareUpdateClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/fleetsoftwareupdate/change_fsu_cycle_compartment.py.html>`__ to see an example of how to use change_fsu_cycle_compartment API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/fleetsoftwareupdate/change_fsu_cycle_compartment.py.html>`__ to see an example of how to use change_fsu_cycle_compartment API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['fsuCycleId']
@@ -878,7 +880,7 @@ class FleetSoftwareUpdateClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/fleetsoftwareupdate/change_fsu_discovery_compartment.py.html>`__ to see an example of how to use change_fsu_discovery_compartment API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/fleetsoftwareupdate/change_fsu_discovery_compartment.py.html>`__ to see an example of how to use change_fsu_discovery_compartment API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['fsuDiscoveryId']
@@ -991,7 +993,7 @@ class FleetSoftwareUpdateClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/fleetsoftwareupdate/clone_fsu_cycle.py.html>`__ to see an example of how to use clone_fsu_cycle API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/fleetsoftwareupdate/clone_fsu_cycle.py.html>`__ to see an example of how to use clone_fsu_cycle API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['fsuCycleId']
@@ -1101,7 +1103,7 @@ class FleetSoftwareUpdateClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/fleetsoftwareupdate/create_fsu_action.py.html>`__ to see an example of how to use create_fsu_action API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/fleetsoftwareupdate/create_fsu_action.py.html>`__ to see an example of how to use create_fsu_action API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -1199,7 +1201,7 @@ class FleetSoftwareUpdateClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/fleetsoftwareupdate/create_fsu_collection.py.html>`__ to see an example of how to use create_fsu_collection API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/fleetsoftwareupdate/create_fsu_collection.py.html>`__ to see an example of how to use create_fsu_collection API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -1298,7 +1300,7 @@ class FleetSoftwareUpdateClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/fleetsoftwareupdate/create_fsu_cycle.py.html>`__ to see an example of how to use create_fsu_cycle API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/fleetsoftwareupdate/create_fsu_cycle.py.html>`__ to see an example of how to use create_fsu_cycle API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -1396,7 +1398,7 @@ class FleetSoftwareUpdateClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/fleetsoftwareupdate/create_fsu_discovery.py.html>`__ to see an example of how to use create_fsu_discovery API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/fleetsoftwareupdate/create_fsu_discovery.py.html>`__ to see an example of how to use create_fsu_discovery API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -1494,7 +1496,7 @@ class FleetSoftwareUpdateClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/fleetsoftwareupdate/delete_fsu_action.py.html>`__ to see an example of how to use delete_fsu_action API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/fleetsoftwareupdate/delete_fsu_action.py.html>`__ to see an example of how to use delete_fsu_action API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['fsuActionId']
@@ -1599,7 +1601,7 @@ class FleetSoftwareUpdateClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/fleetsoftwareupdate/delete_fsu_collection.py.html>`__ to see an example of how to use delete_fsu_collection API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/fleetsoftwareupdate/delete_fsu_collection.py.html>`__ to see an example of how to use delete_fsu_collection API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['fsuCollectionId']
@@ -1709,7 +1711,7 @@ class FleetSoftwareUpdateClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/fleetsoftwareupdate/delete_fsu_collection_target.py.html>`__ to see an example of how to use delete_fsu_collection_target API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/fleetsoftwareupdate/delete_fsu_collection_target.py.html>`__ to see an example of how to use delete_fsu_collection_target API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['fsuCollectionId', 'targetId']
@@ -1815,7 +1817,7 @@ class FleetSoftwareUpdateClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/fleetsoftwareupdate/delete_fsu_cycle.py.html>`__ to see an example of how to use delete_fsu_cycle API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/fleetsoftwareupdate/delete_fsu_cycle.py.html>`__ to see an example of how to use delete_fsu_cycle API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['fsuCycleId']
@@ -1920,7 +1922,7 @@ class FleetSoftwareUpdateClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/fleetsoftwareupdate/delete_fsu_discovery.py.html>`__ to see an example of how to use delete_fsu_discovery API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/fleetsoftwareupdate/delete_fsu_discovery.py.html>`__ to see an example of how to use delete_fsu_discovery API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['fsuDiscoveryId']
@@ -2025,7 +2027,7 @@ class FleetSoftwareUpdateClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/fleetsoftwareupdate/delete_fsu_job.py.html>`__ to see an example of how to use delete_fsu_job API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/fleetsoftwareupdate/delete_fsu_job.py.html>`__ to see an example of how to use delete_fsu_job API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['fsuJobId']
@@ -2123,7 +2125,7 @@ class FleetSoftwareUpdateClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/fleetsoftwareupdate/get_fsu_action.py.html>`__ to see an example of how to use get_fsu_action API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/fleetsoftwareupdate/get_fsu_action.py.html>`__ to see an example of how to use get_fsu_action API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['fsuActionId']
@@ -2222,7 +2224,7 @@ class FleetSoftwareUpdateClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/fleetsoftwareupdate/get_fsu_action_output_content.py.html>`__ to see an example of how to use get_fsu_action_output_content API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/fleetsoftwareupdate/get_fsu_action_output_content.py.html>`__ to see an example of how to use get_fsu_action_output_content API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['fsuActionId']
@@ -2320,7 +2322,7 @@ class FleetSoftwareUpdateClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/fleetsoftwareupdate/get_fsu_collection.py.html>`__ to see an example of how to use get_fsu_collection API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/fleetsoftwareupdate/get_fsu_collection.py.html>`__ to see an example of how to use get_fsu_collection API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['fsuCollectionId']
@@ -2421,7 +2423,7 @@ class FleetSoftwareUpdateClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/fleetsoftwareupdate/get_fsu_collection_target.py.html>`__ to see an example of how to use get_fsu_collection_target API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/fleetsoftwareupdate/get_fsu_collection_target.py.html>`__ to see an example of how to use get_fsu_collection_target API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['fsuCollectionId', 'targetId']
@@ -2520,7 +2522,7 @@ class FleetSoftwareUpdateClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/fleetsoftwareupdate/get_fsu_cycle.py.html>`__ to see an example of how to use get_fsu_cycle API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/fleetsoftwareupdate/get_fsu_cycle.py.html>`__ to see an example of how to use get_fsu_cycle API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['fsuCycleId']
@@ -2618,7 +2620,7 @@ class FleetSoftwareUpdateClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/fleetsoftwareupdate/get_fsu_discovery.py.html>`__ to see an example of how to use get_fsu_discovery API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/fleetsoftwareupdate/get_fsu_discovery.py.html>`__ to see an example of how to use get_fsu_discovery API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['fsuDiscoveryId']
@@ -2716,7 +2718,7 @@ class FleetSoftwareUpdateClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/fleetsoftwareupdate/get_fsu_job.py.html>`__ to see an example of how to use get_fsu_job API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/fleetsoftwareupdate/get_fsu_job.py.html>`__ to see an example of how to use get_fsu_job API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['fsuJobId']
@@ -2814,7 +2816,7 @@ class FleetSoftwareUpdateClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/fleetsoftwareupdate/get_fsu_job_output_content.py.html>`__ to see an example of how to use get_fsu_job_output_content API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/fleetsoftwareupdate/get_fsu_job_output_content.py.html>`__ to see an example of how to use get_fsu_job_output_content API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['fsuJobId']
@@ -2912,7 +2914,7 @@ class FleetSoftwareUpdateClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/fleetsoftwareupdate/get_work_request.py.html>`__ to see an example of how to use get_work_request API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/fleetsoftwareupdate/get_work_request.py.html>`__ to see an example of how to use get_work_request API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workRequestId']
@@ -3043,7 +3045,7 @@ class FleetSoftwareUpdateClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/fleetsoftwareupdate/list_fsu_actions.py.html>`__ to see an example of how to use list_fsu_actions API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/fleetsoftwareupdate/list_fsu_actions.py.html>`__ to see an example of how to use list_fsu_actions API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['compartmentId']
@@ -3208,7 +3210,7 @@ class FleetSoftwareUpdateClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/fleetsoftwareupdate/list_fsu_collection_targets.py.html>`__ to see an example of how to use list_fsu_collection_targets API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/fleetsoftwareupdate/list_fsu_collection_targets.py.html>`__ to see an example of how to use list_fsu_collection_targets API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['fsuCollectionId']
@@ -3377,7 +3379,7 @@ class FleetSoftwareUpdateClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/fleetsoftwareupdate/list_fsu_collections.py.html>`__ to see an example of how to use list_fsu_collections API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/fleetsoftwareupdate/list_fsu_collections.py.html>`__ to see an example of how to use list_fsu_collections API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['compartmentId']
@@ -3548,7 +3550,7 @@ class FleetSoftwareUpdateClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/fleetsoftwareupdate/list_fsu_cycles.py.html>`__ to see an example of how to use list_fsu_cycles API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/fleetsoftwareupdate/list_fsu_cycles.py.html>`__ to see an example of how to use list_fsu_cycles API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['compartmentId']
@@ -3712,7 +3714,7 @@ class FleetSoftwareUpdateClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/fleetsoftwareupdate/list_fsu_discoveries.py.html>`__ to see an example of how to use list_fsu_discoveries API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/fleetsoftwareupdate/list_fsu_discoveries.py.html>`__ to see an example of how to use list_fsu_discoveries API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['compartmentId']
@@ -3866,7 +3868,7 @@ class FleetSoftwareUpdateClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/fleetsoftwareupdate/list_fsu_discovery_targets.py.html>`__ to see an example of how to use list_fsu_discovery_targets API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/fleetsoftwareupdate/list_fsu_discovery_targets.py.html>`__ to see an example of how to use list_fsu_discovery_targets API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['fsuDiscoveryId']
@@ -4012,7 +4014,7 @@ class FleetSoftwareUpdateClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/fleetsoftwareupdate/list_fsu_job_outputs.py.html>`__ to see an example of how to use list_fsu_job_outputs API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/fleetsoftwareupdate/list_fsu_job_outputs.py.html>`__ to see an example of how to use list_fsu_job_outputs API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['fsuJobId']
@@ -4145,7 +4147,7 @@ class FleetSoftwareUpdateClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/fleetsoftwareupdate/list_fsu_jobs.py.html>`__ to see an example of how to use list_fsu_jobs API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/fleetsoftwareupdate/list_fsu_jobs.py.html>`__ to see an example of how to use list_fsu_jobs API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['fsuActionId']
@@ -4288,7 +4290,7 @@ class FleetSoftwareUpdateClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/fleetsoftwareupdate/list_work_request_errors.py.html>`__ to see an example of how to use list_work_request_errors API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/fleetsoftwareupdate/list_work_request_errors.py.html>`__ to see an example of how to use list_work_request_errors API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workRequestId']
@@ -4431,7 +4433,7 @@ class FleetSoftwareUpdateClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/fleetsoftwareupdate/list_work_request_logs.py.html>`__ to see an example of how to use list_work_request_logs API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/fleetsoftwareupdate/list_work_request_logs.py.html>`__ to see an example of how to use list_work_request_logs API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workRequestId']
@@ -4585,7 +4587,7 @@ class FleetSoftwareUpdateClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/fleetsoftwareupdate/list_work_requests.py.html>`__ to see an example of how to use list_work_requests API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/fleetsoftwareupdate/list_work_requests.py.html>`__ to see an example of how to use list_work_requests API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['compartmentId']
@@ -4732,7 +4734,7 @@ class FleetSoftwareUpdateClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/fleetsoftwareupdate/remove_fsu_collection_targets.py.html>`__ to see an example of how to use remove_fsu_collection_targets API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/fleetsoftwareupdate/remove_fsu_collection_targets.py.html>`__ to see an example of how to use remove_fsu_collection_targets API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['fsuCollectionId']
@@ -4849,7 +4851,7 @@ class FleetSoftwareUpdateClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/fleetsoftwareupdate/resume_fsu_action.py.html>`__ to see an example of how to use resume_fsu_action API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/fleetsoftwareupdate/resume_fsu_action.py.html>`__ to see an example of how to use resume_fsu_action API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['fsuActionId']
@@ -4965,7 +4967,7 @@ class FleetSoftwareUpdateClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/fleetsoftwareupdate/retry_fsu_job.py.html>`__ to see an example of how to use retry_fsu_job API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/fleetsoftwareupdate/retry_fsu_job.py.html>`__ to see an example of how to use retry_fsu_job API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['fsuJobId']
@@ -5076,7 +5078,7 @@ class FleetSoftwareUpdateClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/fleetsoftwareupdate/update_fsu_action.py.html>`__ to see an example of how to use update_fsu_action API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/fleetsoftwareupdate/update_fsu_action.py.html>`__ to see an example of how to use update_fsu_action API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['fsuActionId']
@@ -5186,7 +5188,7 @@ class FleetSoftwareUpdateClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/fleetsoftwareupdate/update_fsu_collection.py.html>`__ to see an example of how to use update_fsu_collection API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/fleetsoftwareupdate/update_fsu_collection.py.html>`__ to see an example of how to use update_fsu_collection API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['fsuCollectionId']
@@ -5296,7 +5298,7 @@ class FleetSoftwareUpdateClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/fleetsoftwareupdate/update_fsu_cycle.py.html>`__ to see an example of how to use update_fsu_cycle API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/fleetsoftwareupdate/update_fsu_cycle.py.html>`__ to see an example of how to use update_fsu_cycle API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['fsuCycleId']
@@ -5406,7 +5408,7 @@ class FleetSoftwareUpdateClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/fleetsoftwareupdate/update_fsu_discovery.py.html>`__ to see an example of how to use update_fsu_discovery API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/fleetsoftwareupdate/update_fsu_discovery.py.html>`__ to see an example of how to use update_fsu_discovery API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['fsuDiscoveryId']
@@ -5516,7 +5518,7 @@ class FleetSoftwareUpdateClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/fleetsoftwareupdate/update_fsu_job.py.html>`__ to see an example of how to use update_fsu_job API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/fleetsoftwareupdate/update_fsu_job.py.html>`__ to see an example of how to use update_fsu_job API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['fsuJobId']

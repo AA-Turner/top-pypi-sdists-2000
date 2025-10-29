@@ -102,9 +102,11 @@ class EkmClient(object):
             'base_path': '/',
             'service_endpoint_template': 'https://kms.{region}.{secondLevelDomain}',
             'service_endpoint_template_per_realm': {  },  # noqa: E201 E202
+            'service_uses_dualstack_endpoints_by_default': False,
             'skip_deserialization': kwargs.get('skip_deserialization', False),
             'circuit_breaker_strategy': kwargs.get('circuit_breaker_strategy', circuit_breaker.GLOBAL_CIRCUIT_BREAKER_STRATEGY),
-            'client_level_realm_specific_endpoint_template_enabled': kwargs.get('client_level_realm_specific_endpoint_template_enabled')
+            'client_level_realm_specific_endpoint_template_enabled': kwargs.get('client_level_realm_specific_endpoint_template_enabled'),
+            'client_level_dualstack_endpoints_enabled': kwargs.get('client_level_dualstack_endpoints_enabled')
         }
         if 'timeout' in kwargs:
             base_client_init_kwargs['timeout'] = kwargs.get('timeout')
@@ -153,7 +155,7 @@ class EkmClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/keymanagement/create_ekms_private_endpoint.py.html>`__ to see an example of how to use create_ekms_private_endpoint API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/keymanagement/create_ekms_private_endpoint.py.html>`__ to see an example of how to use create_ekms_private_endpoint API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -251,7 +253,7 @@ class EkmClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/keymanagement/delete_ekms_private_endpoint.py.html>`__ to see an example of how to use delete_ekms_private_endpoint API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/keymanagement/delete_ekms_private_endpoint.py.html>`__ to see an example of how to use delete_ekms_private_endpoint API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['ekmsPrivateEndpointId']
@@ -349,7 +351,7 @@ class EkmClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/keymanagement/get_ekms_private_endpoint.py.html>`__ to see an example of how to use get_ekms_private_endpoint API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/keymanagement/get_ekms_private_endpoint.py.html>`__ to see an example of how to use get_ekms_private_endpoint API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['ekmsPrivateEndpointId']
@@ -466,7 +468,7 @@ class EkmClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/keymanagement/list_ekms_private_endpoints.py.html>`__ to see an example of how to use list_ekms_private_endpoints API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/keymanagement/list_ekms_private_endpoints.py.html>`__ to see an example of how to use list_ekms_private_endpoints API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['compartmentId']
@@ -591,7 +593,7 @@ class EkmClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/keymanagement/update_ekms_private_endpoint.py.html>`__ to see an example of how to use update_ekms_private_endpoint API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/keymanagement/update_ekms_private_endpoint.py.html>`__ to see an example of how to use update_ekms_private_endpoint API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['ekmsPrivateEndpointId']

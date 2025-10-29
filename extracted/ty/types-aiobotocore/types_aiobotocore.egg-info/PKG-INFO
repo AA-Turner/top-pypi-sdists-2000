@@ -1,7 +1,7 @@
 Metadata-Version: 2.4
 Name: types-aiobotocore
-Version: 2.25.0
-Summary: Type annotations for aiobotocore 2.25.0 generated with mypy-boto3-builder 8.11.0
+Version: 2.25.1
+Summary: Type annotations for aiobotocore 2.25.1 generated with mypy-boto3-builder 8.11.0
 Home-page: https://github.com/youtype/mypy_boto3_builder
 Author: Vlad Emelianov
 Author-email: vlad.emelianov.nz@gmail.com
@@ -35,7 +35,7 @@ Requires-Dist: typing-extensions>=4.1.0; python_version < "3.12"
 Provides-Extra: full
 Requires-Dist: types-aiobotocore-full<2.26.0,>=2.25.0; extra == "full"
 Provides-Extra: aiobotocore
-Requires-Dist: aiobotocore==2.25.0; extra == "aiobotocore"
+Requires-Dist: aiobotocore==2.25.1; extra == "aiobotocore"
 Provides-Extra: all
 Requires-Dist: types-aiobotocore-accessanalyzer<2.26.0,>=2.25.0; extra == "all"
 Requires-Dist: types-aiobotocore-account<2.26.0,>=2.25.0; extra == "all"
@@ -62,7 +62,6 @@ Requires-Dist: types-aiobotocore-appmesh<2.26.0,>=2.25.0; extra == "all"
 Requires-Dist: types-aiobotocore-apprunner<2.26.0,>=2.25.0; extra == "all"
 Requires-Dist: types-aiobotocore-appstream<2.26.0,>=2.25.0; extra == "all"
 Requires-Dist: types-aiobotocore-appsync<2.26.0,>=2.25.0; extra == "all"
-Requires-Dist: types-aiobotocore-apptest<2.26.0,>=2.25.0; extra == "all"
 Requires-Dist: types-aiobotocore-arc-region-switch<2.26.0,>=2.25.0; extra == "all"
 Requires-Dist: types-aiobotocore-arc-zonal-shift<2.26.0,>=2.25.0; extra == "all"
 Requires-Dist: types-aiobotocore-artifact<2.26.0,>=2.25.0; extra == "all"
@@ -230,7 +229,6 @@ Requires-Dist: types-aiobotocore-iotanalytics<2.26.0,>=2.25.0; extra == "all"
 Requires-Dist: types-aiobotocore-iotdeviceadvisor<2.26.0,>=2.25.0; extra == "all"
 Requires-Dist: types-aiobotocore-iotevents<2.26.0,>=2.25.0; extra == "all"
 Requires-Dist: types-aiobotocore-iotevents-data<2.26.0,>=2.25.0; extra == "all"
-Requires-Dist: types-aiobotocore-iotfleethub<2.26.0,>=2.25.0; extra == "all"
 Requires-Dist: types-aiobotocore-iotfleetwise<2.26.0,>=2.25.0; extra == "all"
 Requires-Dist: types-aiobotocore-iotsecuretunneling<2.26.0,>=2.25.0; extra == "all"
 Requires-Dist: types-aiobotocore-iotsitewise<2.26.0,>=2.25.0; extra == "all"
@@ -269,8 +267,6 @@ Requires-Dist: types-aiobotocore-lightsail<2.26.0,>=2.25.0; extra == "all"
 Requires-Dist: types-aiobotocore-location<2.26.0,>=2.25.0; extra == "all"
 Requires-Dist: types-aiobotocore-logs<2.26.0,>=2.25.0; extra == "all"
 Requires-Dist: types-aiobotocore-lookoutequipment<2.26.0,>=2.25.0; extra == "all"
-Requires-Dist: types-aiobotocore-lookoutmetrics<2.26.0,>=2.25.0; extra == "all"
-Requires-Dist: types-aiobotocore-lookoutvision<2.26.0,>=2.25.0; extra == "all"
 Requires-Dist: types-aiobotocore-m2<2.26.0,>=2.25.0; extra == "all"
 Requires-Dist: types-aiobotocore-machinelearning<2.26.0,>=2.25.0; extra == "all"
 Requires-Dist: types-aiobotocore-macie2<2.26.0,>=2.25.0; extra == "all"
@@ -345,8 +341,6 @@ Requires-Dist: types-aiobotocore-proton<2.26.0,>=2.25.0; extra == "all"
 Requires-Dist: types-aiobotocore-qapps<2.26.0,>=2.25.0; extra == "all"
 Requires-Dist: types-aiobotocore-qbusiness<2.26.0,>=2.25.0; extra == "all"
 Requires-Dist: types-aiobotocore-qconnect<2.26.0,>=2.25.0; extra == "all"
-Requires-Dist: types-aiobotocore-qldb<2.26.0,>=2.25.0; extra == "all"
-Requires-Dist: types-aiobotocore-qldb-session<2.26.0,>=2.25.0; extra == "all"
 Requires-Dist: types-aiobotocore-quicksight<2.26.0,>=2.25.0; extra == "all"
 Requires-Dist: types-aiobotocore-ram<2.26.0,>=2.25.0; extra == "all"
 Requires-Dist: types-aiobotocore-rbin<2.26.0,>=2.25.0; extra == "all"
@@ -361,7 +355,6 @@ Requires-Dist: types-aiobotocore-resiliencehub<2.26.0,>=2.25.0; extra == "all"
 Requires-Dist: types-aiobotocore-resource-explorer-2<2.26.0,>=2.25.0; extra == "all"
 Requires-Dist: types-aiobotocore-resource-groups<2.26.0,>=2.25.0; extra == "all"
 Requires-Dist: types-aiobotocore-resourcegroupstaggingapi<2.26.0,>=2.25.0; extra == "all"
-Requires-Dist: types-aiobotocore-robomaker<2.26.0,>=2.25.0; extra == "all"
 Requires-Dist: types-aiobotocore-rolesanywhere<2.26.0,>=2.25.0; extra == "all"
 Requires-Dist: types-aiobotocore-route53<2.26.0,>=2.25.0; extra == "all"
 Requires-Dist: types-aiobotocore-route53-recovery-cluster<2.26.0,>=2.25.0; extra == "all"
@@ -370,6 +363,7 @@ Requires-Dist: types-aiobotocore-route53-recovery-readiness<2.26.0,>=2.25.0; ext
 Requires-Dist: types-aiobotocore-route53domains<2.26.0,>=2.25.0; extra == "all"
 Requires-Dist: types-aiobotocore-route53profiles<2.26.0,>=2.25.0; extra == "all"
 Requires-Dist: types-aiobotocore-route53resolver<2.26.0,>=2.25.0; extra == "all"
+Requires-Dist: types-aiobotocore-rtbfabric<2.26.0,>=2.25.0; extra == "all"
 Requires-Dist: types-aiobotocore-rum<2.26.0,>=2.25.0; extra == "all"
 Requires-Dist: types-aiobotocore-s3<2.26.0,>=2.25.0; extra == "all"
 Requires-Dist: types-aiobotocore-s3control<2.26.0,>=2.25.0; extra == "all"
@@ -507,8 +501,6 @@ Provides-Extra: appstream
 Requires-Dist: types-aiobotocore-appstream<2.26.0,>=2.25.0; extra == "appstream"
 Provides-Extra: appsync
 Requires-Dist: types-aiobotocore-appsync<2.26.0,>=2.25.0; extra == "appsync"
-Provides-Extra: apptest
-Requires-Dist: types-aiobotocore-apptest<2.26.0,>=2.25.0; extra == "apptest"
 Provides-Extra: arc-region-switch
 Requires-Dist: types-aiobotocore-arc-region-switch<2.26.0,>=2.25.0; extra == "arc-region-switch"
 Provides-Extra: arc-zonal-shift
@@ -843,8 +835,6 @@ Provides-Extra: iotevents
 Requires-Dist: types-aiobotocore-iotevents<2.26.0,>=2.25.0; extra == "iotevents"
 Provides-Extra: iotevents-data
 Requires-Dist: types-aiobotocore-iotevents-data<2.26.0,>=2.25.0; extra == "iotevents-data"
-Provides-Extra: iotfleethub
-Requires-Dist: types-aiobotocore-iotfleethub<2.26.0,>=2.25.0; extra == "iotfleethub"
 Provides-Extra: iotfleetwise
 Requires-Dist: types-aiobotocore-iotfleetwise<2.26.0,>=2.25.0; extra == "iotfleetwise"
 Provides-Extra: iotsecuretunneling
@@ -921,10 +911,6 @@ Provides-Extra: logs
 Requires-Dist: types-aiobotocore-logs<2.26.0,>=2.25.0; extra == "logs"
 Provides-Extra: lookoutequipment
 Requires-Dist: types-aiobotocore-lookoutequipment<2.26.0,>=2.25.0; extra == "lookoutequipment"
-Provides-Extra: lookoutmetrics
-Requires-Dist: types-aiobotocore-lookoutmetrics<2.26.0,>=2.25.0; extra == "lookoutmetrics"
-Provides-Extra: lookoutvision
-Requires-Dist: types-aiobotocore-lookoutvision<2.26.0,>=2.25.0; extra == "lookoutvision"
 Provides-Extra: m2
 Requires-Dist: types-aiobotocore-m2<2.26.0,>=2.25.0; extra == "m2"
 Provides-Extra: machinelearning
@@ -1073,10 +1059,6 @@ Provides-Extra: qbusiness
 Requires-Dist: types-aiobotocore-qbusiness<2.26.0,>=2.25.0; extra == "qbusiness"
 Provides-Extra: qconnect
 Requires-Dist: types-aiobotocore-qconnect<2.26.0,>=2.25.0; extra == "qconnect"
-Provides-Extra: qldb
-Requires-Dist: types-aiobotocore-qldb<2.26.0,>=2.25.0; extra == "qldb"
-Provides-Extra: qldb-session
-Requires-Dist: types-aiobotocore-qldb-session<2.26.0,>=2.25.0; extra == "qldb-session"
 Provides-Extra: quicksight
 Requires-Dist: types-aiobotocore-quicksight<2.26.0,>=2.25.0; extra == "quicksight"
 Provides-Extra: ram
@@ -1105,8 +1087,6 @@ Provides-Extra: resource-groups
 Requires-Dist: types-aiobotocore-resource-groups<2.26.0,>=2.25.0; extra == "resource-groups"
 Provides-Extra: resourcegroupstaggingapi
 Requires-Dist: types-aiobotocore-resourcegroupstaggingapi<2.26.0,>=2.25.0; extra == "resourcegroupstaggingapi"
-Provides-Extra: robomaker
-Requires-Dist: types-aiobotocore-robomaker<2.26.0,>=2.25.0; extra == "robomaker"
 Provides-Extra: rolesanywhere
 Requires-Dist: types-aiobotocore-rolesanywhere<2.26.0,>=2.25.0; extra == "rolesanywhere"
 Provides-Extra: route53
@@ -1123,6 +1103,8 @@ Provides-Extra: route53profiles
 Requires-Dist: types-aiobotocore-route53profiles<2.26.0,>=2.25.0; extra == "route53profiles"
 Provides-Extra: route53resolver
 Requires-Dist: types-aiobotocore-route53resolver<2.26.0,>=2.25.0; extra == "route53resolver"
+Provides-Extra: rtbfabric
+Requires-Dist: types-aiobotocore-rtbfabric<2.26.0,>=2.25.0; extra == "rtbfabric"
 Provides-Extra: rum
 Requires-Dist: types-aiobotocore-rum<2.26.0,>=2.25.0; extra == "rum"
 Provides-Extra: s3
@@ -1308,7 +1290,7 @@ Dynamic: summary
 ![boto3.typed](https://github.com/youtype/mypy_boto3_builder/raw/main/logo.png)
 
 Type annotations for
-[aiobotocore 2.25.0](https://pypi.org/project/aiobotocore/) compatible with
+[aiobotocore 2.25.1](https://pypi.org/project/aiobotocore/) compatible with
 [VSCode](https://code.visualstudio.com/),
 [PyCharm](https://www.jetbrains.com/pycharm/),
 [Emacs](https://www.gnu.org/software/emacs/),
@@ -1364,7 +1346,7 @@ You can generate type annotations for `aiobotocore` package locally with
 isolation.
 
 1. Run mypy-boto3-builder in your package root directory:
-   `uvx --with 'aiobotocore==2.25.0' mypy-boto3-builder`
+   `uvx --with 'aiobotocore==2.25.1' mypy-boto3-builder`
 2. Select `aiobotocore` AWS SDK.
 3. Select services you use in the current project.
 4. Use provided commands to install generated packages.
@@ -1660,9 +1642,9 @@ repository.
 
 ## Submodules
 
-- `types-aiobotocore[full]` - Type annotations for all 412 services in one
+- `types-aiobotocore[full]` - Type annotations for all 406 services in one
   package (recommended).
-- `types-aiobotocore[all]` - Type annotations for all 412 services in separate
+- `types-aiobotocore[all]` - Type annotations for all 406 services in separate
   packages.
 - `types-aiobotocore[essential]` - Type annotations for
   [CloudFormation](https://youtype.github.io/types_aiobotocore_docs/types_aiobotocore_cloudformation/),
@@ -1751,9 +1733,6 @@ repository.
 - `types-aiobotocore[appsync]` - Type annotations for
   [AppSync](https://youtype.github.io/types_aiobotocore_docs/types_aiobotocore_appsync/)
   service.
-- `types-aiobotocore[apptest]` - Type annotations for
-  [MainframeModernizationApplicationTesting](https://youtype.github.io/types_aiobotocore_docs/types_aiobotocore_apptest/)
-  service.
 - `types-aiobotocore[arc-region-switch]` - Type annotations for
   [ARCRegionswitch](https://youtype.github.io/types_aiobotocore_docs/types_aiobotocore_arc_region_switch/)
   service.
@@ -1812,10 +1791,10 @@ repository.
   [AgentsforBedrockRuntime](https://youtype.github.io/types_aiobotocore_docs/types_aiobotocore_bedrock_agent_runtime/)
   service.
 - `types-aiobotocore[bedrock-agentcore]` - Type annotations for
-  [BedrockAgentCoreDataPlaneFrontingLayer](https://youtype.github.io/types_aiobotocore_docs/types_aiobotocore_bedrock_agentcore/)
+  [BedrockAgentCore](https://youtype.github.io/types_aiobotocore_docs/types_aiobotocore_bedrock_agentcore/)
   service.
 - `types-aiobotocore[bedrock-agentcore-control]` - Type annotations for
-  [BedrockAgentCoreControlPlaneFrontingLayer](https://youtype.github.io/types_aiobotocore_docs/types_aiobotocore_bedrock_agentcore_control/)
+  [BedrockAgentCoreControl](https://youtype.github.io/types_aiobotocore_docs/types_aiobotocore_bedrock_agentcore_control/)
   service.
 - `types-aiobotocore[bedrock-data-automation]` - Type annotations for
   [DataAutomationforBedrock](https://youtype.github.io/types_aiobotocore_docs/types_aiobotocore_bedrock_data_automation/)
@@ -2255,9 +2234,6 @@ repository.
 - `types-aiobotocore[iotevents-data]` - Type annotations for
   [IoTEventsData](https://youtype.github.io/types_aiobotocore_docs/types_aiobotocore_iotevents_data/)
   service.
-- `types-aiobotocore[iotfleethub]` - Type annotations for
-  [IoTFleetHub](https://youtype.github.io/types_aiobotocore_docs/types_aiobotocore_iotfleethub/)
-  service.
 - `types-aiobotocore[iotfleetwise]` - Type annotations for
   [IoTFleetWise](https://youtype.github.io/types_aiobotocore_docs/types_aiobotocore_iotfleetwise/)
   service.
@@ -2373,12 +2349,6 @@ repository.
   service.
 - `types-aiobotocore[lookoutequipment]` - Type annotations for
   [LookoutEquipment](https://youtype.github.io/types_aiobotocore_docs/types_aiobotocore_lookoutequipment/)
-  service.
-- `types-aiobotocore[lookoutmetrics]` - Type annotations for
-  [LookoutMetrics](https://youtype.github.io/types_aiobotocore_docs/types_aiobotocore_lookoutmetrics/)
-  service.
-- `types-aiobotocore[lookoutvision]` - Type annotations for
-  [LookoutforVision](https://youtype.github.io/types_aiobotocore_docs/types_aiobotocore_lookoutvision/)
   service.
 - `types-aiobotocore[m2]` - Type annotations for
   [MainframeModernization](https://youtype.github.io/types_aiobotocore_docs/types_aiobotocore_m2/)
@@ -2602,12 +2572,6 @@ repository.
 - `types-aiobotocore[qconnect]` - Type annotations for
   [QConnect](https://youtype.github.io/types_aiobotocore_docs/types_aiobotocore_qconnect/)
   service.
-- `types-aiobotocore[qldb]` - Type annotations for
-  [QLDB](https://youtype.github.io/types_aiobotocore_docs/types_aiobotocore_qldb/)
-  service.
-- `types-aiobotocore[qldb-session]` - Type annotations for
-  [QLDBSession](https://youtype.github.io/types_aiobotocore_docs/types_aiobotocore_qldb_session/)
-  service.
 - `types-aiobotocore[quicksight]` - Type annotations for
   [QuickSight](https://youtype.github.io/types_aiobotocore_docs/types_aiobotocore_quicksight/)
   service.
@@ -2650,9 +2614,6 @@ repository.
 - `types-aiobotocore[resourcegroupstaggingapi]` - Type annotations for
   [ResourceGroupsTaggingAPI](https://youtype.github.io/types_aiobotocore_docs/types_aiobotocore_resourcegroupstaggingapi/)
   service.
-- `types-aiobotocore[robomaker]` - Type annotations for
-  [RoboMaker](https://youtype.github.io/types_aiobotocore_docs/types_aiobotocore_robomaker/)
-  service.
 - `types-aiobotocore[rolesanywhere]` - Type annotations for
   [IAMRolesAnywhere](https://youtype.github.io/types_aiobotocore_docs/types_aiobotocore_rolesanywhere/)
   service.
@@ -2676,6 +2637,9 @@ repository.
   service.
 - `types-aiobotocore[route53resolver]` - Type annotations for
   [Route53Resolver](https://youtype.github.io/types_aiobotocore_docs/types_aiobotocore_route53resolver/)
+  service.
+- `types-aiobotocore[rtbfabric]` - Type annotations for
+  [RTBFabric](https://youtype.github.io/types_aiobotocore_docs/types_aiobotocore_rtbfabric/)
   service.
 - `types-aiobotocore[rum]` - Type annotations for
   [CloudWatchRUM](https://youtype.github.io/types_aiobotocore_docs/types_aiobotocore_rum/)

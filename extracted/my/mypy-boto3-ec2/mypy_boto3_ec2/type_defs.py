@@ -616,6 +616,7 @@ __all__ = (
     "CapacityReservationStatusTypeDef",
     "CapacityReservationTargetResponseTypeDef",
     "CapacityReservationTargetTypeDef",
+    "CapacityReservationTopologyTypeDef",
     "CapacityReservationTypeDef",
     "CarrierGatewayTypeDef",
     "CertificateAuthenticationRequestTypeDef",
@@ -1144,6 +1145,8 @@ __all__ = (
     "DescribeCapacityReservationFleetsRequestPaginateTypeDef",
     "DescribeCapacityReservationFleetsRequestTypeDef",
     "DescribeCapacityReservationFleetsResultTypeDef",
+    "DescribeCapacityReservationTopologyRequestTypeDef",
+    "DescribeCapacityReservationTopologyResultTypeDef",
     "DescribeCapacityReservationsRequestPaginateTypeDef",
     "DescribeCapacityReservationsRequestTypeDef",
     "DescribeCapacityReservationsResultTypeDef",
@@ -3849,6 +3852,17 @@ class CapacityReservationTargetResponseTypeDef(TypedDict):
 class CapacityReservationTargetTypeDef(TypedDict):
     CapacityReservationId: NotRequired[str]
     CapacityReservationResourceGroupArn: NotRequired[str]
+
+
+class CapacityReservationTopologyTypeDef(TypedDict):
+    CapacityReservationId: NotRequired[str]
+    CapacityBlockId: NotRequired[str]
+    State: NotRequired[str]
+    InstanceType: NotRequired[str]
+    GroupName: NotRequired[str]
+    NetworkNodes: NotRequired[List[str]]
+    AvailabilityZoneId: NotRequired[str]
+    AvailabilityZone: NotRequired[str]
 
 
 class CertificateAuthenticationRequestTypeDef(TypedDict):
@@ -11054,6 +11068,12 @@ class LaunchTemplateCapacityReservationSpecificationRequestTypeDef(TypedDict):
     CapacityReservationTarget: NotRequired[CapacityReservationTargetTypeDef]
 
 
+class DescribeCapacityReservationTopologyResultTypeDef(TypedDict):
+    CapacityReservations: List[CapacityReservationTopologyTypeDef]
+    ResponseMetadata: ResponseMetadataTypeDef
+    NextToken: NotRequired[str]
+
+
 class DescribeVpcClassicLinkDnsSupportResultTypeDef(TypedDict):
     Vpcs: List[ClassicLinkDnsSupportTypeDef]
     ResponseMetadata: ResponseMetadataTypeDef
@@ -11782,6 +11802,14 @@ class DescribeCapacityReservationFleetsRequestTypeDef(TypedDict):
     MaxResults: NotRequired[int]
     Filters: NotRequired[Sequence[FilterTypeDef]]
     DryRun: NotRequired[bool]
+
+
+class DescribeCapacityReservationTopologyRequestTypeDef(TypedDict):
+    DryRun: NotRequired[bool]
+    NextToken: NotRequired[str]
+    MaxResults: NotRequired[int]
+    CapacityReservationIds: NotRequired[Sequence[str]]
+    Filters: NotRequired[Sequence[FilterTypeDef]]
 
 
 class DescribeCapacityReservationsRequestPaginateTypeDef(TypedDict):

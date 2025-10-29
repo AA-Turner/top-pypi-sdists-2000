@@ -103,9 +103,11 @@ class KmsVaultClient(object):
             'base_path': '/',
             'service_endpoint_template': 'https://kms.{region}.{secondLevelDomain}',
             'service_endpoint_template_per_realm': {  },  # noqa: E201 E202
+            'service_uses_dualstack_endpoints_by_default': False,
             'skip_deserialization': kwargs.get('skip_deserialization', False),
             'circuit_breaker_strategy': kwargs.get('circuit_breaker_strategy', circuit_breaker.GLOBAL_CIRCUIT_BREAKER_STRATEGY),
-            'client_level_realm_specific_endpoint_template_enabled': kwargs.get('client_level_realm_specific_endpoint_template_enabled')
+            'client_level_realm_specific_endpoint_template_enabled': kwargs.get('client_level_realm_specific_endpoint_template_enabled'),
+            'client_level_dualstack_endpoints_enabled': kwargs.get('client_level_dualstack_endpoints_enabled')
         }
         if 'timeout' in kwargs:
             base_client_init_kwargs['timeout'] = kwargs.get('timeout')
@@ -166,7 +168,7 @@ class KmsVaultClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/keymanagement/backup_vault.py.html>`__ to see an example of how to use backup_vault API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/keymanagement/backup_vault.py.html>`__ to see an example of how to use backup_vault API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['vaultId']
@@ -295,7 +297,7 @@ class KmsVaultClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/keymanagement/cancel_vault_deletion.py.html>`__ to see an example of how to use cancel_vault_deletion API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/keymanagement/cancel_vault_deletion.py.html>`__ to see an example of how to use cancel_vault_deletion API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['vaultId']
@@ -426,7 +428,7 @@ class KmsVaultClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/keymanagement/change_vault_compartment.py.html>`__ to see an example of how to use change_vault_compartment API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/keymanagement/change_vault_compartment.py.html>`__ to see an example of how to use change_vault_compartment API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['vaultId']
@@ -545,7 +547,7 @@ class KmsVaultClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/keymanagement/create_vault.py.html>`__ to see an example of how to use create_vault API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/keymanagement/create_vault.py.html>`__ to see an example of how to use create_vault API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -663,7 +665,7 @@ class KmsVaultClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/keymanagement/create_vault_replica.py.html>`__ to see an example of how to use create_vault_replica API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/keymanagement/create_vault_replica.py.html>`__ to see an example of how to use create_vault_replica API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['vaultId']
@@ -789,7 +791,7 @@ class KmsVaultClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/keymanagement/delete_vault_replica.py.html>`__ to see an example of how to use delete_vault_replica API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/keymanagement/delete_vault_replica.py.html>`__ to see an example of how to use delete_vault_replica API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['vaultId']
@@ -897,7 +899,7 @@ class KmsVaultClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/keymanagement/get_vault.py.html>`__ to see an example of how to use get_vault API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/keymanagement/get_vault.py.html>`__ to see an example of how to use get_vault API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['vaultId']
@@ -995,7 +997,7 @@ class KmsVaultClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/keymanagement/get_vault_usage.py.html>`__ to see an example of how to use get_vault_usage API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/keymanagement/get_vault_usage.py.html>`__ to see an example of how to use get_vault_usage API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['vaultId']
@@ -1132,7 +1134,7 @@ class KmsVaultClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/keymanagement/list_vault_replicas.py.html>`__ to see an example of how to use list_vault_replicas API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/keymanagement/list_vault_replicas.py.html>`__ to see an example of how to use list_vault_replicas API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['vaultId']
@@ -1287,7 +1289,7 @@ class KmsVaultClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/keymanagement/list_vaults.py.html>`__ to see an example of how to use list_vaults API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/keymanagement/list_vaults.py.html>`__ to see an example of how to use list_vaults API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['compartmentId']
@@ -1441,7 +1443,7 @@ class KmsVaultClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/keymanagement/restore_vault_from_file.py.html>`__ to see an example of how to use restore_vault_from_file API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/keymanagement/restore_vault_from_file.py.html>`__ to see an example of how to use restore_vault_from_file API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['compartmentId']
@@ -1586,7 +1588,7 @@ class KmsVaultClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/keymanagement/restore_vault_from_object_store.py.html>`__ to see an example of how to use restore_vault_from_object_store API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/keymanagement/restore_vault_from_object_store.py.html>`__ to see an example of how to use restore_vault_from_object_store API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['compartmentId']
@@ -1714,7 +1716,7 @@ class KmsVaultClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/keymanagement/schedule_vault_deletion.py.html>`__ to see an example of how to use schedule_vault_deletion API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/keymanagement/schedule_vault_deletion.py.html>`__ to see an example of how to use schedule_vault_deletion API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['vaultId']
@@ -1836,7 +1838,7 @@ class KmsVaultClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/keymanagement/update_vault.py.html>`__ to see an example of how to use update_vault API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/keymanagement/update_vault.py.html>`__ to see an example of how to use update_vault API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['vaultId']

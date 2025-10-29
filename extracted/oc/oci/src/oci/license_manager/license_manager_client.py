@@ -102,9 +102,11 @@ class LicenseManagerClient(object):
             'base_path': '/20220430',
             'service_endpoint_template': 'https://licensemanager.{region}.oci.{secondLevelDomain}',
             'service_endpoint_template_per_realm': {  },  # noqa: E201 E202
+            'service_uses_dualstack_endpoints_by_default': False,
             'skip_deserialization': kwargs.get('skip_deserialization', False),
             'circuit_breaker_strategy': kwargs.get('circuit_breaker_strategy', circuit_breaker.GLOBAL_CIRCUIT_BREAKER_STRATEGY),
-            'client_level_realm_specific_endpoint_template_enabled': kwargs.get('client_level_realm_specific_endpoint_template_enabled')
+            'client_level_realm_specific_endpoint_template_enabled': kwargs.get('client_level_realm_specific_endpoint_template_enabled'),
+            'client_level_dualstack_endpoints_enabled': kwargs.get('client_level_dualstack_endpoints_enabled')
         }
         if 'timeout' in kwargs:
             base_client_init_kwargs['timeout'] = kwargs.get('timeout')
@@ -144,7 +146,7 @@ class LicenseManagerClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/licensemanager/bulk_upload_license_records.py.html>`__ to see an example of how to use bulk_upload_license_records API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/licensemanager/bulk_upload_license_records.py.html>`__ to see an example of how to use bulk_upload_license_records API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -242,7 +244,7 @@ class LicenseManagerClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/licensemanager/create_license_record.py.html>`__ to see an example of how to use create_license_record API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/licensemanager/create_license_record.py.html>`__ to see an example of how to use create_license_record API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['productLicenseId']
@@ -347,7 +349,7 @@ class LicenseManagerClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/licensemanager/create_product_license.py.html>`__ to see an example of how to use create_product_license API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/licensemanager/create_product_license.py.html>`__ to see an example of how to use create_product_license API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -444,7 +446,7 @@ class LicenseManagerClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/licensemanager/delete_license_record.py.html>`__ to see an example of how to use delete_license_record API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/licensemanager/delete_license_record.py.html>`__ to see an example of how to use delete_license_record API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['licenseRecordId']
@@ -548,7 +550,7 @@ class LicenseManagerClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/licensemanager/delete_product_license.py.html>`__ to see an example of how to use delete_product_license API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/licensemanager/delete_product_license.py.html>`__ to see an example of how to use delete_product_license API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['productLicenseId']
@@ -644,7 +646,7 @@ class LicenseManagerClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/licensemanager/get_bulk_upload_template.py.html>`__ to see an example of how to use get_bulk_upload_template API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/licensemanager/get_bulk_upload_template.py.html>`__ to see an example of how to use get_bulk_upload_template API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -733,7 +735,7 @@ class LicenseManagerClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/licensemanager/get_configuration.py.html>`__ to see an example of how to use get_configuration API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/licensemanager/get_configuration.py.html>`__ to see an example of how to use get_configuration API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['compartmentId']
@@ -832,7 +834,7 @@ class LicenseManagerClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/licensemanager/get_license_metric.py.html>`__ to see an example of how to use get_license_metric API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/licensemanager/get_license_metric.py.html>`__ to see an example of how to use get_license_metric API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['compartmentId']
@@ -928,7 +930,7 @@ class LicenseManagerClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/licensemanager/get_license_record.py.html>`__ to see an example of how to use get_license_record API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/licensemanager/get_license_record.py.html>`__ to see an example of how to use get_license_record API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['licenseRecordId']
@@ -1027,7 +1029,7 @@ class LicenseManagerClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/licensemanager/get_product_license.py.html>`__ to see an example of how to use get_product_license API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/licensemanager/get_product_license.py.html>`__ to see an example of how to use get_product_license API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['productLicenseId']
@@ -1146,7 +1148,7 @@ class LicenseManagerClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/licensemanager/list_license_records.py.html>`__ to see an example of how to use list_license_records API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/licensemanager/list_license_records.py.html>`__ to see an example of how to use list_license_records API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['productLicenseId']
@@ -1290,7 +1292,7 @@ class LicenseManagerClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/licensemanager/list_product_license_consumers.py.html>`__ to see an example of how to use list_product_license_consumers API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/licensemanager/list_product_license_consumers.py.html>`__ to see an example of how to use list_product_license_consumers API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['productLicenseId', 'compartmentId']
@@ -1434,7 +1436,7 @@ class LicenseManagerClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/licensemanager/list_product_licenses.py.html>`__ to see an example of how to use list_product_licenses API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/licensemanager/list_product_licenses.py.html>`__ to see an example of how to use list_product_licenses API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['compartmentId']
@@ -1577,7 +1579,7 @@ class LicenseManagerClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/licensemanager/list_top_utilized_product_licenses.py.html>`__ to see an example of how to use list_top_utilized_product_licenses API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/licensemanager/list_top_utilized_product_licenses.py.html>`__ to see an example of how to use list_top_utilized_product_licenses API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['compartmentId']
@@ -1725,7 +1727,7 @@ class LicenseManagerClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/licensemanager/list_top_utilized_resources.py.html>`__ to see an example of how to use list_top_utilized_resources API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/licensemanager/list_top_utilized_resources.py.html>`__ to see an example of how to use list_top_utilized_resources API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['compartmentId']
@@ -1862,7 +1864,7 @@ class LicenseManagerClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/licensemanager/update_configuration.py.html>`__ to see an example of how to use update_configuration API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/licensemanager/update_configuration.py.html>`__ to see an example of how to use update_configuration API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['compartmentId']
@@ -1968,7 +1970,7 @@ class LicenseManagerClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/licensemanager/update_license_record.py.html>`__ to see an example of how to use update_license_record API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/licensemanager/update_license_record.py.html>`__ to see an example of how to use update_license_record API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['licenseRecordId']
@@ -2079,7 +2081,7 @@ class LicenseManagerClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/licensemanager/update_product_license.py.html>`__ to see an example of how to use update_product_license API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/licensemanager/update_product_license.py.html>`__ to see an example of how to use update_product_license API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['productLicenseId']

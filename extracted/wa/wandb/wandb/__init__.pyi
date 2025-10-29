@@ -107,7 +107,7 @@ if TYPE_CHECKING:
     import wandb
     from wandb.plot import CustomChart
 
-__version__: str = "0.22.2"
+__version__: str = "0.22.3"
 
 run: Run | None
 config: wandb_config.Config
@@ -580,7 +580,7 @@ def log(
         run.log({"accuracy": 0.8}, step=current_step)
         current_step += 1
         run.log({"train-loss": 0.4}, step=current_step)
-        run.log({"accuracy": 0.9}, step=current_step)
+        run.log({"accuracy": 0.9}, step=current_step, commit=True)
     ```
 
     Args:

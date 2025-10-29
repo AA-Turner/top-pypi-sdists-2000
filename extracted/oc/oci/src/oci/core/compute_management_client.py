@@ -108,9 +108,11 @@ class ComputeManagementClient(object):
             'base_path': '/20160918',
             'service_endpoint_template': 'https://iaas.{region}.{secondLevelDomain}',
             'service_endpoint_template_per_realm': {  },  # noqa: E201 E202
+            'service_uses_dualstack_endpoints_by_default': False,
             'skip_deserialization': kwargs.get('skip_deserialization', False),
             'circuit_breaker_strategy': kwargs.get('circuit_breaker_strategy', circuit_breaker.GLOBAL_CIRCUIT_BREAKER_STRATEGY),
-            'client_level_realm_specific_endpoint_template_enabled': kwargs.get('client_level_realm_specific_endpoint_template_enabled')
+            'client_level_realm_specific_endpoint_template_enabled': kwargs.get('client_level_realm_specific_endpoint_template_enabled'),
+            'client_level_dualstack_endpoints_enabled': kwargs.get('client_level_dualstack_endpoints_enabled')
         }
         if 'timeout' in kwargs:
             base_client_init_kwargs['timeout'] = kwargs.get('timeout')
@@ -164,7 +166,7 @@ class ComputeManagementClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/core/attach_instance_pool_instance.py.html>`__ to see an example of how to use attach_instance_pool_instance API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/core/attach_instance_pool_instance.py.html>`__ to see an example of how to use attach_instance_pool_instance API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['instancePoolId']
@@ -277,7 +279,7 @@ class ComputeManagementClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/core/attach_load_balancer.py.html>`__ to see an example of how to use attach_load_balancer API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/core/attach_load_balancer.py.html>`__ to see an example of how to use attach_load_balancer API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['instancePoolId']
@@ -405,7 +407,7 @@ class ComputeManagementClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/core/change_cluster_network_compartment.py.html>`__ to see an example of how to use change_cluster_network_compartment API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/core/change_cluster_network_compartment.py.html>`__ to see an example of how to use change_cluster_network_compartment API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['clusterNetworkId']
@@ -537,7 +539,7 @@ class ComputeManagementClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/core/change_instance_configuration_compartment.py.html>`__ to see an example of how to use change_instance_configuration_compartment API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/core/change_instance_configuration_compartment.py.html>`__ to see an example of how to use change_instance_configuration_compartment API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['instanceConfigurationId']
@@ -663,7 +665,7 @@ class ComputeManagementClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/core/change_instance_pool_compartment.py.html>`__ to see an example of how to use change_instance_pool_compartment API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/core/change_instance_pool_compartment.py.html>`__ to see an example of how to use change_instance_pool_compartment API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['instancePoolId']
@@ -784,7 +786,7 @@ class ComputeManagementClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/core/create_cluster_network.py.html>`__ to see an example of how to use create_cluster_network API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/core/create_cluster_network.py.html>`__ to see an example of how to use create_cluster_network API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -876,7 +878,7 @@ class ComputeManagementClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/core/create_instance_configuration.py.html>`__ to see an example of how to use create_instance_configuration API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/core/create_instance_configuration.py.html>`__ to see an example of how to use create_instance_configuration API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -971,7 +973,7 @@ class ComputeManagementClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/core/create_instance_pool.py.html>`__ to see an example of how to use create_instance_pool API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/core/create_instance_pool.py.html>`__ to see an example of how to use create_instance_pool API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -1060,7 +1062,7 @@ class ComputeManagementClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/core/delete_instance_configuration.py.html>`__ to see an example of how to use delete_instance_configuration API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/core/delete_instance_configuration.py.html>`__ to see an example of how to use delete_instance_configuration API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['instanceConfigurationId']
@@ -1163,7 +1165,7 @@ class ComputeManagementClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/core/detach_instance_pool_instance.py.html>`__ to see an example of how to use detach_instance_pool_instance API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/core/detach_instance_pool_instance.py.html>`__ to see an example of how to use detach_instance_pool_instance API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['instancePoolId']
@@ -1274,7 +1276,7 @@ class ComputeManagementClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/core/detach_load_balancer.py.html>`__ to see an example of how to use detach_load_balancer API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/core/detach_load_balancer.py.html>`__ to see an example of how to use detach_load_balancer API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['instancePoolId']
@@ -1376,7 +1378,7 @@ class ComputeManagementClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/core/get_cluster_network.py.html>`__ to see an example of how to use get_cluster_network API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/core/get_cluster_network.py.html>`__ to see an example of how to use get_cluster_network API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['clusterNetworkId']
@@ -1462,7 +1464,7 @@ class ComputeManagementClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/core/get_instance_configuration.py.html>`__ to see an example of how to use get_instance_configuration API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/core/get_instance_configuration.py.html>`__ to see an example of how to use get_instance_configuration API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['instanceConfigurationId']
@@ -1550,7 +1552,7 @@ class ComputeManagementClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/core/get_instance_pool.py.html>`__ to see an example of how to use get_instance_pool API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/core/get_instance_pool.py.html>`__ to see an example of how to use get_instance_pool API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['instancePoolId']
@@ -1643,7 +1645,7 @@ class ComputeManagementClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/core/get_instance_pool_instance.py.html>`__ to see an example of how to use get_instance_pool_instance API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/core/get_instance_pool_instance.py.html>`__ to see an example of how to use get_instance_pool_instance API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['instancePoolId', 'instanceId']
@@ -1735,7 +1737,7 @@ class ComputeManagementClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/core/get_instance_pool_load_balancer_attachment.py.html>`__ to see an example of how to use get_instance_pool_load_balancer_attachment API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/core/get_instance_pool_load_balancer_attachment.py.html>`__ to see an example of how to use get_instance_pool_load_balancer_attachment API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['instancePoolId', 'instancePoolLoadBalancerAttachmentId']
@@ -1842,7 +1844,7 @@ class ComputeManagementClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/core/launch_instance_configuration.py.html>`__ to see an example of how to use launch_instance_configuration API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/core/launch_instance_configuration.py.html>`__ to see an example of how to use launch_instance_configuration API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['instanceConfigurationId']
@@ -1984,7 +1986,7 @@ class ComputeManagementClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/core/list_cluster_network_instances.py.html>`__ to see an example of how to use list_cluster_network_instances API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/core/list_cluster_network_instances.py.html>`__ to see an example of how to use list_cluster_network_instances API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['clusterNetworkId', 'compartmentId']
@@ -2153,7 +2155,7 @@ class ComputeManagementClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/core/list_cluster_networks.py.html>`__ to see an example of how to use list_cluster_networks API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/core/list_cluster_networks.py.html>`__ to see an example of how to use list_cluster_networks API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['compartmentId']
@@ -2307,7 +2309,7 @@ class ComputeManagementClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/core/list_instance_configurations.py.html>`__ to see an example of how to use list_instance_configurations API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/core/list_instance_configurations.py.html>`__ to see an example of how to use list_instance_configurations API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['compartmentId']
@@ -2458,7 +2460,7 @@ class ComputeManagementClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/core/list_instance_pool_instances.py.html>`__ to see an example of how to use list_instance_pool_instances API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/core/list_instance_pool_instances.py.html>`__ to see an example of how to use list_instance_pool_instances API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['instancePoolId', 'compartmentId']
@@ -2624,7 +2626,7 @@ class ComputeManagementClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/core/list_instance_pools.py.html>`__ to see an example of how to use list_instance_pools API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/core/list_instance_pools.py.html>`__ to see an example of how to use list_instance_pools API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['compartmentId']
@@ -2757,7 +2759,7 @@ class ComputeManagementClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/core/reset_instance_pool.py.html>`__ to see an example of how to use reset_instance_pool API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/core/reset_instance_pool.py.html>`__ to see an example of how to use reset_instance_pool API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['instancePoolId']
@@ -2871,7 +2873,7 @@ class ComputeManagementClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/core/softreset_instance_pool.py.html>`__ to see an example of how to use softreset_instance_pool API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/core/softreset_instance_pool.py.html>`__ to see an example of how to use softreset_instance_pool API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['instancePoolId']
@@ -2985,7 +2987,7 @@ class ComputeManagementClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/core/softstop_instance_pool.py.html>`__ to see an example of how to use softstop_instance_pool API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/core/softstop_instance_pool.py.html>`__ to see an example of how to use softstop_instance_pool API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['instancePoolId']
@@ -3096,7 +3098,7 @@ class ComputeManagementClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/core/start_instance_pool.py.html>`__ to see an example of how to use start_instance_pool API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/core/start_instance_pool.py.html>`__ to see an example of how to use start_instance_pool API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['instancePoolId']
@@ -3207,7 +3209,7 @@ class ComputeManagementClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/core/stop_instance_pool.py.html>`__ to see an example of how to use stop_instance_pool API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/core/stop_instance_pool.py.html>`__ to see an example of how to use stop_instance_pool API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['instancePoolId']
@@ -3315,7 +3317,7 @@ class ComputeManagementClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/core/terminate_cluster_network.py.html>`__ to see an example of how to use terminate_cluster_network API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/core/terminate_cluster_network.py.html>`__ to see an example of how to use terminate_cluster_network API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['clusterNetworkId']
@@ -3420,7 +3422,7 @@ class ComputeManagementClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/core/terminate_instance_pool.py.html>`__ to see an example of how to use terminate_instance_pool API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/core/terminate_instance_pool.py.html>`__ to see an example of how to use terminate_instance_pool API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['instancePoolId']
@@ -3531,7 +3533,7 @@ class ComputeManagementClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/core/update_cluster_network.py.html>`__ to see an example of how to use update_cluster_network API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/core/update_cluster_network.py.html>`__ to see an example of how to use update_cluster_network API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['clusterNetworkId']
@@ -3644,7 +3646,7 @@ class ComputeManagementClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/core/update_instance_configuration.py.html>`__ to see an example of how to use update_instance_configuration API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/core/update_instance_configuration.py.html>`__ to see an example of how to use update_instance_configuration API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['instanceConfigurationId']
@@ -3761,7 +3763,7 @@ class ComputeManagementClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/core/update_instance_pool.py.html>`__ to see an example of how to use update_instance_pool API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/core/update_instance_pool.py.html>`__ to see an example of how to use update_instance_pool API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['instancePoolId']

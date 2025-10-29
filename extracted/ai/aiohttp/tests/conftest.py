@@ -1,13 +1,17 @@
 import asyncio
 import base64
 import os
+import platform
 import socket
 import ssl
 import sys
+import time
+from collections.abc import AsyncIterator, Callable, Iterator
+from concurrent.futures import Future, ThreadPoolExecutor
 from hashlib import md5, sha1, sha256
 from pathlib import Path
 from tempfile import TemporaryDirectory
-from typing import Any, AsyncIterator, Generator, Iterator
+from typing import Any, Generator
 from unittest import mock
 from uuid import uuid4
 
@@ -309,6 +313,23 @@ def netrc_other_host(monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> Path:
 
 
 @pytest.fixture
+def netrc_home_directory(monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> Path:
+    """Create a netrc file in a mocked home directory without setting NETRC env var."""
+    home_dir = tmp_path / "home"
+    home_dir.mkdir()
+    netrc_filename = "_netrc" if platform.system() == "Windows" else ".netrc"
+    netrc_file = home_dir / netrc_filename
+    netrc_file.write_text("default login netrc_user password netrc_pass\n")
+
+    home_env_var = "USERPROFILE" if platform.system() == "Windows" else "HOME"
+    monkeypatch.setenv(home_env_var, str(home_dir))
+    # Ensure NETRC env var is not set
+    monkeypatch.delenv("NETRC", raising=False)
+
+    return netrc_file
+
+
+@pytest.fixture
 def start_connection() -> Iterator[mock.Mock]:
     with mock.patch(
         "aiohttp.connector.aiohappyeyeballs.start_connection",
@@ -383,3 +404,27 @@ async def cleanup_payload_pending_file_closes(
         loop_futures = [f for f in payload._CLOSE_FUTURES if f.get_loop() is loop]
         if loop_futures:
             await asyncio.gather(*loop_futures, return_exceptions=True)
+
+
+@pytest.fixture
+def slow_executor() -> Iterator[ThreadPoolExecutor]:
+    """Executor that adds delay to simulate slow operations.
+
+    Useful for testing cancellation and race conditions in compression tests.
+    """
+
+    class SlowExecutor(ThreadPoolExecutor):
+        """Executor that adds delay to operations."""
+
+        def submit(
+            self, fn: Callable[..., Any], /, *args: Any, **kwargs: Any
+        ) -> Future[Any]:
+            def slow_fn(*args: Any, **kwargs: Any) -> Any:
+                time.sleep(0.05)  # Add delay to simulate slow operation
+                return fn(*args, **kwargs)
+
+            return super().submit(slow_fn, *args, **kwargs)
+
+    executor = SlowExecutor(max_workers=10)
+    yield executor
+    executor.shutdown(wait=True)

@@ -102,9 +102,11 @@ class RoverClusterClient(object):
             'base_path': '/20201210',
             'service_endpoint_template': 'https://rover.{region}.oci.{secondLevelDomain}',
             'service_endpoint_template_per_realm': {  },  # noqa: E201 E202
+            'service_uses_dualstack_endpoints_by_default': False,
             'skip_deserialization': kwargs.get('skip_deserialization', False),
             'circuit_breaker_strategy': kwargs.get('circuit_breaker_strategy', circuit_breaker.GLOBAL_CIRCUIT_BREAKER_STRATEGY),
-            'client_level_realm_specific_endpoint_template_enabled': kwargs.get('client_level_realm_specific_endpoint_template_enabled')
+            'client_level_realm_specific_endpoint_template_enabled': kwargs.get('client_level_realm_specific_endpoint_template_enabled'),
+            'client_level_dualstack_endpoints_enabled': kwargs.get('client_level_dualstack_endpoints_enabled')
         }
         if 'timeout' in kwargs:
             base_client_init_kwargs['timeout'] = kwargs.get('timeout')
@@ -160,7 +162,7 @@ class RoverClusterClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/rover/change_rover_cluster_compartment.py.html>`__ to see an example of how to use change_rover_cluster_compartment API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/rover/change_rover_cluster_compartment.py.html>`__ to see an example of how to use change_rover_cluster_compartment API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['roverClusterId']
@@ -270,7 +272,7 @@ class RoverClusterClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/rover/create_rover_cluster.py.html>`__ to see an example of how to use create_rover_cluster API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/rover/create_rover_cluster.py.html>`__ to see an example of how to use create_rover_cluster API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -375,7 +377,7 @@ class RoverClusterClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/rover/delete_rover_cluster.py.html>`__ to see an example of how to use delete_rover_cluster API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/rover/delete_rover_cluster.py.html>`__ to see an example of how to use delete_rover_cluster API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['roverClusterId']
@@ -476,7 +478,7 @@ class RoverClusterClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/rover/get_rover_cluster.py.html>`__ to see an example of how to use get_rover_cluster API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/rover/get_rover_cluster.py.html>`__ to see an example of how to use get_rover_cluster API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['roverClusterId']
@@ -574,7 +576,7 @@ class RoverClusterClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/rover/get_rover_cluster_certificate.py.html>`__ to see an example of how to use get_rover_cluster_certificate API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/rover/get_rover_cluster_certificate.py.html>`__ to see an example of how to use get_rover_cluster_certificate API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['roverClusterId']
@@ -701,7 +703,7 @@ class RoverClusterClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/rover/list_rover_clusters.py.html>`__ to see an example of how to use list_rover_clusters API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/rover/list_rover_clusters.py.html>`__ to see an example of how to use list_rover_clusters API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['compartmentId']
@@ -853,7 +855,7 @@ class RoverClusterClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/rover/request_additional_nodes.py.html>`__ to see an example of how to use request_additional_nodes API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/rover/request_additional_nodes.py.html>`__ to see an example of how to use request_additional_nodes API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['roverClusterId']
@@ -966,7 +968,7 @@ class RoverClusterClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/rover/update_rover_cluster.py.html>`__ to see an example of how to use update_rover_cluster API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/rover/update_rover_cluster.py.html>`__ to see an example of how to use update_rover_cluster API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['roverClusterId']

@@ -1,4 +1,4 @@
-from chromadb.api import ClientAPI
+from chromadb.api import ClientAPI, ServerAPI
 from chromadb.api.types import (
     Schema,
     SparseVectorIndexConfig,
@@ -19,6 +19,7 @@ from chromadb.test.conftest import (
     is_spann_disabled_mode,
     skip_if_not_cluster,
     skip_reason_spann_disabled,
+    skip_reason_spann_enabled,
 )
 from chromadb.test.utils.wait_for_version_increase import (
     get_collection_version,
@@ -29,8 +30,10 @@ from chromadb.utils.embedding_functions import (
     register_sparse_embedding_function,
 )
 from chromadb.api.models.Collection import Collection
-from chromadb.errors import InvalidArgumentError
+from chromadb.api.models.CollectionCommon import CollectionCommon
+from chromadb.errors import InvalidArgumentError, InternalError
 from chromadb.execution.expression import Knn, Search
+from chromadb.types import Collection as CollectionModel
 from typing import Any, Callable, Dict, List, Mapping, Optional, Tuple, cast
 from uuid import uuid4
 import numpy as np
@@ -94,8 +97,7 @@ class RecordingSearchEmbeddingFunction(EmbeddingFunction[List[str]]):
         return RecordingSearchEmbeddingFunction(config.get("label", "default"))
 
 
-@pytest.mark.skipif(is_spann_disabled_mode, reason=skip_reason_spann_disabled)
-def test_schema_spann_vector_config_persistence(
+def test_schema_vector_config_persistence(
     client_factories: "ClientFactories",
 ) -> None:
     """Ensure schema-provided SPANN settings persist across client restarts."""
@@ -136,12 +138,24 @@ def test_schema_spann_vector_config_persistence(
     assert vector_index is not None
     assert vector_index.enabled is True
     assert vector_index.config is not None
-    assert vector_index.config.spann is not None
-    spann_config = vector_index.config.spann
-    assert spann_config.search_nprobe == 16
-    assert spann_config.write_nprobe == 32
-    assert spann_config.ef_construction == 120
-    assert spann_config.max_neighbors == 24
+    assert vector_index.config.space is not None
+    assert vector_index.config.space == "cosine"
+
+    if not is_spann_disabled_mode:
+        assert vector_index.config.spann is not None
+        spann_config = vector_index.config.spann
+        assert spann_config.search_nprobe == 16
+        assert spann_config.write_nprobe == 32
+        assert spann_config.ef_construction == 120
+        assert spann_config.max_neighbors == 24
+    else:
+        assert vector_index.config.spann is None
+        assert vector_index.config.hnsw is not None
+        hnsw_config = vector_index.config.hnsw
+        assert hnsw_config.ef_construction == 100
+        assert hnsw_config.ef_search == 100
+        assert hnsw_config.max_neighbors == 16
+        assert hnsw_config.resize_factor == 1.2
 
     ef = vector_index.config.embedding_function
     assert ef is not None
@@ -149,16 +163,23 @@ def test_schema_spann_vector_config_persistence(
     assert ef.get_config() == {"dim": 6}
 
     persisted_json = persisted_schema.serialize_to_json()
-    spann_json = persisted_json["keys"]["#embedding"]["float_list"]["vector_index"][
-        "config"
-    ]["spann"]
-    assert spann_json["search_nprobe"] == 16
-    assert spann_json["write_nprobe"] == 32
+    if not is_spann_disabled_mode:
+        spann_json = persisted_json["keys"]["#embedding"]["float_list"]["vector_index"][
+            "config"
+        ]["spann"]
+        assert spann_json["search_nprobe"] == 16
+        assert spann_json["write_nprobe"] == 32
+    else:
+        hnsw_json = persisted_json["keys"]["#embedding"]["float_list"]["vector_index"][
+            "config"
+        ]["hnsw"]
+        assert hnsw_json["ef_construction"] == 100
+        assert hnsw_json["ef_search"] == 100
+        assert hnsw_json["max_neighbors"] == 16
 
     client_reloaded = client_factories.create_client_from_system()
     reloaded_collection = client_reloaded.get_collection(
         name=collection_name,
-        embedding_function=SimpleEmbeddingFunction(dim=6),  # type: ignore[arg-type]
     )
 
     reloaded_schema = reloaded_collection.schema
@@ -168,9 +189,25 @@ def test_schema_spann_vector_config_persistence(
     reloaded_vector_index = reloaded_embedding_override.vector_index
     assert reloaded_vector_index is not None
     assert reloaded_vector_index.config is not None
-    assert reloaded_vector_index.config.spann is not None
-    assert reloaded_vector_index.config.spann.search_nprobe == 16
-    assert reloaded_vector_index.config.spann.write_nprobe == 32
+    assert reloaded_vector_index.config.space is not None
+    assert reloaded_vector_index.config.space == "cosine"
+    if not is_spann_disabled_mode:
+        assert reloaded_vector_index.config.spann is not None
+        assert reloaded_vector_index.config.spann.search_nprobe == 16
+        assert reloaded_vector_index.config.spann.write_nprobe == 32
+    else:
+        assert reloaded_vector_index.config.hnsw is not None
+        assert reloaded_vector_index.config.hnsw.ef_construction == 100
+        assert reloaded_vector_index.config.hnsw.ef_search == 100
+        assert reloaded_vector_index.config.hnsw.max_neighbors == 16
+        assert reloaded_vector_index.config.hnsw.resize_factor == 1.2
+
+    config = reloaded_collection.configuration
+    assert config is not None
+    config_ef = config.get("embedding_function")
+    assert config_ef is not None
+    assert config_ef.name() == "simple_ef"
+    assert config_ef.get_config() == {"dim": 6}
 
 
 @register_sparse_embedding_function
@@ -258,7 +295,6 @@ def _collect_knn_queries(rank: Any) -> List[Any]:
     return queries
 
 
-@pytest.mark.skipif(is_spann_disabled_mode, reason=skip_reason_spann_disabled)
 def test_schema_defaults_enable_indexed_operations(
     client_factories: "ClientFactories",
 ) -> None:
@@ -333,10 +369,10 @@ def test_schema_defaults_enable_indexed_operations(
     # Ensure underlying schema persisted across fetches
     reloaded = client.get_collection(collection.name)
     assert reloaded.schema is not None
-    assert reloaded.schema.serialize_to_json() == schema.serialize_to_json()
+    if not is_spann_disabled_mode:
+        assert reloaded.schema.serialize_to_json() == schema.serialize_to_json()
 
 
-@pytest.mark.skipif(is_spann_disabled_mode, reason=skip_reason_spann_disabled)
 def test_get_or_create_and_get_collection_preserve_schema(
     client_factories: "ClientFactories",
 ) -> None:
@@ -379,7 +415,6 @@ def test_get_or_create_and_get_collection_preserve_schema(
     assert set(stored["ids"]) == {"schema-preserve"}
 
 
-@pytest.mark.skipif(is_spann_disabled_mode, reason=skip_reason_spann_disabled)
 def test_delete_collection_resets_schema_configuration(
     client_factories: "ClientFactories",
 ) -> None:
@@ -406,6 +441,19 @@ def test_delete_collection_resets_schema_configuration(
     baseline_json = Schema().serialize_to_json()
     assert "transient_key" not in recreated_json["keys"]
     assert set(recreated_json["keys"].keys()) == set(baseline_json["keys"].keys())
+
+
+@pytest.mark.skipif(not is_spann_disabled_mode, reason=skip_reason_spann_enabled)
+def test_sparse_vector_not_allowed_locally(
+    client_factories: "ClientFactories",
+) -> None:
+    """Sparse vector configs are not allowed to be created locally."""
+    schema = Schema()
+    schema.create_index(key="sparse_metadata", config=SparseVectorIndexConfig())
+    with pytest.raises(
+        InternalError, match="Sparse vector indexing is not enabled in local"
+    ):
+        _create_isolated_collection(client_factories, schema=schema)
 
 
 @pytest.mark.skipif(is_spann_disabled_mode, reason=skip_reason_spann_disabled)
@@ -466,7 +514,6 @@ def test_sparse_vector_source_key_and_index_constraints(
     assert set(string_filter["ids"]) == {"sparse-1"}
 
 
-@pytest.mark.skipif(is_spann_disabled_mode, reason=skip_reason_spann_disabled)
 def test_schema_persistence_with_custom_overrides(
     client_factories: "ClientFactories",
 ) -> None:
@@ -501,13 +548,13 @@ def test_schema_persistence_with_custom_overrides(
     reloaded_client = client_factories.create_client_from_system()
     reloaded_collection = reloaded_client.get_collection(name=collection.name)
     assert reloaded_collection.schema is not None
-    assert reloaded_collection.schema.serialize_to_json() == expected_schema_json
+    if not is_spann_disabled_mode:
+        assert reloaded_collection.schema.serialize_to_json() == expected_schema_json
 
     fetched = reloaded_collection.get(where={"title": "Schema Persistence"})
     assert set(fetched["ids"]) == {"persist-1"}
 
 
-@pytest.mark.skipif(is_spann_disabled_mode, reason=skip_reason_spann_disabled)
 def test_collection_embed_uses_schema_or_collection_embedding_function(
     client_factories: "ClientFactories",
 ) -> None:
@@ -566,6 +613,36 @@ def test_search_embeds_string_knn_queries(
 
 
 @pytest.mark.skipif(is_spann_disabled_mode, reason=skip_reason_spann_disabled)
+def test_search_embeds_string_knn_queries_with_sparse_embedding_function(
+    client_factories: "ClientFactories",
+) -> None:
+    """_embed_search_string_queries should embed string KNN queries using collection EF."""
+
+    sparse_ef = DeterministicSparseEmbeddingFunction(label="sparse")
+    schema = Schema().create_index(
+        key="sparse_metadata",
+        config=SparseVectorIndexConfig(
+            source_key="raw_text", embedding_function=sparse_ef
+        ),
+    )
+    collection, _ = _create_isolated_collection(client_factories, schema=schema)
+
+    search = Search().rank(Knn(key="sparse_metadata", query="hello world"))
+
+    embedded_search = collection._embed_search_string_queries(search)
+
+    assert isinstance(search._rank, Knn)
+    assert search._rank.key == "sparse_metadata"
+    assert search._rank.query == "hello world"
+
+    embedded_rank = embedded_search._rank
+    assert isinstance(embedded_rank, Knn)
+    assert embedded_rank.key == "sparse_metadata"
+    print(embedded_rank.query)
+    assert embedded_rank.query == SparseVector(indices=[0], values=[11.0])
+
+
+@pytest.mark.skipif(is_spann_disabled_mode, reason=skip_reason_spann_disabled)
 def test_search_embeds_string_queries_in_nested_ranks(
     client_factories: "ClientFactories",
 ) -> None:
@@ -594,7 +671,6 @@ def test_search_embeds_string_queries_in_nested_ranks(
     assert all(isinstance(query, list) for query in all_queries)
 
 
-@pytest.mark.skipif(is_spann_disabled_mode, reason=skip_reason_spann_disabled)
 def test_schema_delete_index_and_restore(
     client_factories: "ClientFactories",
 ) -> None:
@@ -651,6 +727,52 @@ def test_schema_delete_index_and_restore(
     assert set(search["ids"]) == {"key-enabled"}
 
 
+def test_disabled_metadata_index_filters_raise_invalid_argument_all_modes(
+    client_factories: "ClientFactories",
+) -> None:
+    """Disabled metadata inverted index should block filter-based operations in get, query, and delete for local, single node, and distributed."""
+    schema = Schema().delete_index(
+        key="restricted_tag", config=StringInvertedIndexConfig()
+    )
+    collection, _ = _create_isolated_collection(client_factories, schema=schema)
+
+    collection.add(
+        ids=["restricted-doc"],
+        embeddings=cast(Embeddings, [[0.1, 0.2, 0.3, 0.4]]),
+        metadatas=[{"restricted_tag": "blocked"}],
+        documents=["doc"],
+    )
+
+    assert collection.schema is not None
+    schema_entry = collection.schema.keys["restricted_tag"].string
+    assert schema_entry is not None
+    index_config = schema_entry.string_inverted_index
+    assert index_config is not None
+    assert index_config.enabled is False
+
+    filter_payload: Dict[str, Any] = {"restricted_tag": "blocked"}
+
+    def _expect_disabled_error(operation: Callable[[], Any]) -> None:
+        with pytest.raises(InvalidArgumentError) as exc_info:
+            operation()
+        assert "Cannot filter using metadata key 'restricted_tag'" in str(
+            exc_info.value
+        )
+
+    operations: List[Callable[[], Any]] = [
+        lambda: collection.get(where=filter_payload),
+        lambda: collection.query(
+            query_embeddings=cast(Embeddings, [[0.1, 0.2, 0.3, 0.4]]),
+            n_results=1,
+            where=filter_payload,
+        ),
+        lambda: collection.delete(where=filter_payload),
+    ]
+
+    for operation in operations:
+        _expect_disabled_error(operation)
+
+
 @pytest.mark.skipif(is_spann_disabled_mode, reason=skip_reason_spann_disabled)
 def test_disabled_metadata_index_filters_raise_invalid_argument(
     client_factories: "ClientFactories",
@@ -700,7 +822,6 @@ def test_disabled_metadata_index_filters_raise_invalid_argument(
         _expect_disabled_error(operation)
 
 
-@pytest.mark.skipif(is_spann_disabled_mode, reason=skip_reason_spann_disabled)
 def test_schema_discovers_new_keys_after_compaction(
     client_factories: "ClientFactories",
 ) -> None:
@@ -718,7 +839,8 @@ def test_schema_discovers_new_keys_after_compaction(
 
     collection.add(ids=ids, documents=documents, metadatas=metadatas)
 
-    wait_for_version_increase(client, collection.name, initial_version)
+    if not is_spann_disabled_mode:
+        wait_for_version_increase(client, collection.name, initial_version)
 
     reloaded = client.get_collection(collection.name)
     assert reloaded.schema is not None
@@ -744,7 +866,8 @@ def test_schema_discovers_new_keys_after_compaction(
         metadatas=upsert_metadatas,
     )
 
-    wait_for_version_increase(client, collection.name, next_version)
+    if not is_spann_disabled_mode:
+        wait_for_version_increase(client, collection.name, next_version)
 
     post_upsert = client.get_collection(collection.name)
     assert post_upsert.schema is not None
@@ -768,7 +891,6 @@ def test_schema_discovers_new_keys_after_compaction(
     assert "discover_upsert" in persisted.schema.keys
 
 
-@pytest.mark.skipif(is_spann_disabled_mode, reason=skip_reason_spann_disabled)
 def test_schema_rejects_conflicting_discoverable_key_types(
     client_factories: "ClientFactories",
 ) -> None:
@@ -784,7 +906,8 @@ def test_schema_rejects_conflicting_discoverable_key_types(
     documents = [f"doc {i}" for i in range(251)]
     collection.add(ids=ids, documents=documents, metadatas=metadatas)
 
-    wait_for_version_increase(client, collection.name, initial_version)
+    if not is_spann_disabled_mode:
+        wait_for_version_increase(client, collection.name, initial_version)
 
     collection.upsert(
         ids=["conflict-bad"],
@@ -945,7 +1068,6 @@ def test_schema_embedding_configuration_enforced(
     assert "sparse_auto" not in numeric_metadata
 
 
-@pytest.mark.skipif(is_spann_disabled_mode, reason=skip_reason_spann_disabled)
 def test_schema_precedence_for_overrides_discoverables_and_defaults(
     client_factories: "ClientFactories",
 ) -> None:
@@ -970,7 +1092,9 @@ def test_schema_precedence_for_overrides_discoverables_and_defaults(
 
     initial_version = get_collection_version(client, collection.name)
     collection.add(ids=ids, documents=documents, metadatas=metadatas)
-    wait_for_version_increase(client, collection.name, initial_version)
+
+    if not is_spann_disabled_mode:
+        wait_for_version_increase(client, collection.name, initial_version)
 
     schema_state = client.get_collection(collection.name).schema
     assert schema_state is not None
@@ -1548,7 +1672,6 @@ def test_sparse_auto_embedding_with_empty_documents(
     assert "empty_sparse" in metadata
 
 
-@pytest.mark.skipif(is_spann_disabled_mode, reason=skip_reason_spann_disabled)
 def test_default_embedding_function_when_no_schema_provided(
     client_factories: "ClientFactories",
 ) -> None:
@@ -1568,6 +1691,8 @@ def test_default_embedding_function_when_no_schema_provided(
     assert vector_index is not None
     assert vector_index.enabled is True
     assert vector_index.config is not None
+    assert vector_index.config.space is not None
+    assert vector_index.config.space == "l2"
 
     # Get the embedding function
     ef = vector_index.config.embedding_function
@@ -1604,7 +1729,6 @@ def test_default_embedding_function_when_no_schema_provided(
     assert sparse_ef_config["type"] == "unknown"
 
 
-@pytest.mark.skipif(is_spann_disabled_mode, reason=skip_reason_spann_disabled)
 def test_custom_embedding_function_without_schema(
     client_factories: "ClientFactories",
 ) -> None:
@@ -1641,6 +1765,8 @@ def test_custom_embedding_function_without_schema(
     assert vector_index is not None
     assert vector_index.enabled is True
     assert vector_index.config is not None
+    assert vector_index.config.space is not None
+    assert vector_index.config.space == "cosine"
 
     # Get the embedding function from schema
     ef = vector_index.config.embedding_function
@@ -1679,7 +1805,6 @@ def test_custom_embedding_function_without_schema(
     assert len(result["embeddings"][0]) == 8
 
 
-@pytest.mark.skipif(is_spann_disabled_mode, reason=skip_reason_spann_disabled)
 def test_custom_embedding_function_with_default_schema(
     client_factories: "ClientFactories",
 ) -> None:
@@ -1717,6 +1842,8 @@ def test_custom_embedding_function_with_default_schema(
     assert vector_index is not None
     assert vector_index.enabled is True
     assert vector_index.config is not None
+    assert vector_index.config.space is not None
+    assert vector_index.config.space == "cosine"
 
     # Get the embedding function from schema
     ef = vector_index.config.embedding_function
@@ -1755,7 +1882,6 @@ def test_custom_embedding_function_with_default_schema(
     assert len(result["embeddings"][0]) == 8
 
 
-@pytest.mark.skipif(is_spann_disabled_mode, reason=skip_reason_spann_disabled)
 def test_conflicting_embedding_functions_in_schema_and_config_fails(
     client_factories: "ClientFactories",
 ) -> None:
@@ -1877,6 +2003,8 @@ def test_vector_index_config_with_key_document_source(
     embedding_config = collection.schema.keys["#embedding"].float_list
     assert embedding_config is not None
     assert embedding_config.vector_index is not None
+    assert embedding_config.vector_index.config.space is not None
+    assert embedding_config.vector_index.config.space == "cosine"
     assert embedding_config.vector_index.config.source_key == "#document"
 
     # Add test data
@@ -1964,7 +2092,9 @@ def test_sparse_vector_index_config_with_key_types(
     )
 
     # Verify sparse embeddings were generated from text_field
-    result2 = collection2.get(ids=["sparse-key-1", "sparse-key-2"], include=["metadatas"])
+    result2 = collection2.get(
+        ids=["sparse-key-1", "sparse-key-2"], include=["metadatas"]
+    )
     assert result2["metadatas"] is not None
     assert "sparse2" in result2["metadatas"][0]
     assert "sparse2" in result2["metadatas"][1]
@@ -1988,7 +2118,9 @@ def test_schema_rejects_special_key_in_create_index() -> None:
         schema.create_index(config=StringInvertedIndexConfig(), key="#custom_field")
 
     # Test with Key object starting with #
-    with pytest.raises(ValueError, match="Cannot create index on special key '#embedding'"):
+    with pytest.raises(
+        ValueError, match="Cannot create index on special key '#embedding'"
+    ):
         schema.create_index(config=StringInvertedIndexConfig(), key=Key.EMBEDDING)
 
 
@@ -2000,7 +2132,9 @@ def test_schema_rejects_special_key_in_delete_index() -> None:
         schema.delete_index(config=StringInvertedIndexConfig(), key="#custom_field")
 
     # Test with Key object starting with #
-    with pytest.raises(ValueError, match="Cannot delete index on special key '#document'"):
+    with pytest.raises(
+        ValueError, match="Cannot delete index on special key '#document'"
+    ):
         schema.delete_index(config=StringInvertedIndexConfig(), key=Key.DOCUMENT)
 
 
@@ -2038,7 +2172,13 @@ def test_server_validates_schema_with_special_keys(
     # This should be caught server-side by validate_schema()
     schema = Schema()
     # Bypass client-side validation by directly manipulating schema.keys
-    from chromadb.api.types import ValueTypes, StringValueType, StringInvertedIndexType, StringInvertedIndexConfig
+    from chromadb.api.types import (
+        ValueTypes,
+        StringValueType,
+        StringInvertedIndexType,
+        StringInvertedIndexConfig,
+    )
+
     schema.keys["#invalid_key"] = ValueTypes(
         string=StringValueType(
             string_inverted_index=StringInvertedIndexType(
@@ -2054,7 +2194,9 @@ def test_server_validates_schema_with_special_keys(
 
     # Verify server caught the invalid key
     error_msg = str(exc_info.value)
-    assert "#" in error_msg or "key" in error_msg.lower() or "invalid" in error_msg.lower()
+    assert (
+        "#" in error_msg or "key" in error_msg.lower() or "invalid" in error_msg.lower()
+    )
 
 
 @pytest.mark.skipif(is_spann_disabled_mode, reason=skip_reason_spann_disabled)
@@ -2069,14 +2211,18 @@ def test_server_validates_invalid_source_key_in_sparse_vector_config(
 
     # Create schema with invalid source_key
     # Bypass client-side validation by directly creating the config
-    from chromadb.api.types import ValueTypes, SparseVectorValueType, SparseVectorIndexType
+    from chromadb.api.types import (
+        ValueTypes,
+        SparseVectorValueType,
+        SparseVectorIndexType,
+    )
 
     schema = Schema()
     # Manually construct config with invalid source_key using model_construct to bypass validation
     invalid_config = SparseVectorIndexConfig.model_construct(
         embedding_function=None,
         source_key="#embedding",  # Invalid - should be rejected
-        bm25=None
+        bm25=None,
     )
 
     schema.keys["test_sparse"] = ValueTypes(
@@ -2094,11 +2240,17 @@ def test_server_validates_invalid_source_key_in_sparse_vector_config(
 
     # Verify server caught the invalid source_key
     error_msg = str(exc_info.value)
-    assert "source_key" in error_msg.lower() or "#" in error_msg or "document" in error_msg.lower()
+    assert (
+        "source_key" in error_msg.lower()
+        or "#" in error_msg
+        or "document" in error_msg.lower()
+    )
 
 
 @pytest.mark.skipif(is_spann_disabled_mode, reason=skip_reason_spann_disabled)
-def test_modify_collection_no_initial_config_creates_default_schema(client: ClientAPI) -> None:
+def test_modify_collection_no_initial_config_creates_default_schema(
+    client: ClientAPI,
+) -> None:
     """Test that modifying a collection without initial config/schema creates and updates default schema."""
     collection_name = f"test_modify_no_init_{uuid4()}"
 
@@ -2127,6 +2279,40 @@ def test_modify_collection_no_initial_config_creates_default_schema(client: Clie
     refreshed_schema = collection_refreshed.schema
     assert refreshed_schema is not None
     assert refreshed_schema.defaults.float_list.vector_index.config.spann.search_nprobe == 32  # type: ignore
+
+
+@pytest.mark.skipif(not is_spann_disabled_mode, reason="SPANN is disabled")
+def test_modify_collection_no_initial_config_creates_default_schema_local(
+    client: ClientAPI,
+) -> None:
+    """Test that modifying a collection without initial config/schema creates and updates default schema."""
+    collection_name = f"test_modify_no_init_{uuid4()}"
+
+    # Create collection WITHOUT any configuration (uses defaults)
+    collection = client.create_collection(name=collection_name)
+
+    # Verify default schema was created (SPANN by default in SPANN mode)
+    schema = collection.schema
+    assert schema is not None
+    assert schema.defaults.float_list is not None
+    assert schema.defaults.float_list.vector_index is not None
+    # Should have SPANN config by default
+    assert schema.defaults.float_list.vector_index.config.hnsw is not None
+
+    # Modify configuration
+    collection.modify(configuration={"hnsw": {"ef_search": 100}})
+
+    # Verify schema was updated
+    updated_schema = collection.schema
+    assert updated_schema is not None
+    assert updated_schema.defaults.float_list.vector_index.config.hnsw.ef_search == 100  # type: ignore
+    assert updated_schema.keys["#embedding"].float_list.vector_index.config.hnsw.ef_search == 100  # type: ignore
+
+    # Re-fetch from server
+    collection_refreshed = client.get_collection(collection_name)
+    refreshed_schema = collection_refreshed.schema
+    assert refreshed_schema is not None
+    assert refreshed_schema.defaults.float_list.vector_index.config.hnsw.ef_search == 100  # type: ignore
 
 
 @pytest.mark.skipif(is_spann_disabled_mode, reason=skip_reason_spann_disabled)
@@ -2175,7 +2361,9 @@ def test_modify_collection_with_initial_spann_schema(client: ClientAPI) -> None:
 
 
 @pytest.mark.skipif(is_spann_disabled_mode, reason=skip_reason_spann_disabled)
-def test_modify_collection_updates_schema_spann_multiple_fields(client: ClientAPI) -> None:
+def test_modify_collection_updates_schema_spann_multiple_fields(
+    client: ClientAPI,
+) -> None:
     """Test that modifying multiple SPANN fields updates schema correctly."""
     collection_name = f"test_modify_schema_multi_{uuid4()}"
 
@@ -2275,10 +2463,10 @@ def test_modify_collection_preserves_other_schema_fields(client: ClientAPI) -> N
     collection_refreshed = client.get_collection(collection_name)
     refreshed_schema = collection_refreshed.schema
     assert refreshed_schema is not None
-    
+
     # Verify vector index was updated on server
     assert refreshed_schema.defaults.float_list.vector_index.config.spann.search_nprobe == 128  # type: ignore
-    
+
     # Verify other value types are still intact on server
     assert refreshed_schema.defaults.string is not None
     assert refreshed_schema.defaults.string.string_inverted_index is not None
@@ -2288,3 +2476,37 @@ def test_modify_collection_preserves_other_schema_fields(client: ClientAPI) -> N
     assert refreshed_schema.defaults.boolean is not None
     assert refreshed_schema.defaults.sparse_vector is not None
     assert refreshed_schema.keys["#document"] is not None
+
+
+def test_embeds_using_schema_embedding_function() -> None:
+    """Test that embeddings are using the schema embedding function."""
+    schema = Schema().create_index(
+        config=VectorIndexConfig(embedding_function=SimpleEmbeddingFunction()),
+    )
+
+    collection_model = CollectionModel(
+        id=uuid4(),
+        name="schema_only_collection",
+        configuration_json={},
+        serialized_schema=schema.serialize_to_json(),
+        metadata=None,
+        dimension=4,
+        tenant="tenant",
+        database="database",
+        version=0,
+        log_position=0,
+    )
+
+    collection = CollectionCommon(
+        client=cast(ServerAPI, object()),
+        model=collection_model,
+        embedding_function=None,
+    )
+
+    assert collection._embedding_function is None
+    assert collection.configuration is not None
+    assert collection.configuration.get("embedding_function") is None
+
+    embeddings = collection._embed(["hello world"])
+    assert embeddings is not None
+    assert np.allclose(embeddings[0], [0.0, 1.0, 2.0, 3.0])

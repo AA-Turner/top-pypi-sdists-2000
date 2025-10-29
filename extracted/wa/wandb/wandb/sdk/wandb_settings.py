@@ -254,7 +254,40 @@ class Settings(BaseModel, validate_assignment=True):
     """
 
     console_multipart: bool = False
-    """Whether to produce multipart console log files."""
+    """Enable multipart console logging.
+
+    When True, the SDK writes console output to timestamped files
+    under the `logs/` directory instead of a single `output.log`.
+
+    Each part is uploaded as soon as it is closed, giving users live
+    access to logs while the run is active. Rollover cadence is
+    controlled by `console_chunk_max_bytes` and/or `console_chunk_max_seconds`.
+    If both limits are `0`, all logs are uploaded once at run finish.
+
+    Note: Uploaded chunks are immutable; terminal control sequences
+    that modify previous lines (e.g., progress bars using carriage returns)
+    only affect the current chunk.
+    """
+
+    console_chunk_max_bytes: int = 0
+    """Size-based rollover threshold for multipart console logs, in bytes.
+
+    Starts a new console log file when the current part reaches this
+    size. Has an effect only when `console_multipart` is `True`.
+    Can be combined with `console_chunk_max_seconds`; whichever limit is
+    hit first triggers the rollover. A value of `0` disables the
+    size-based limit.
+    """
+
+    console_chunk_max_seconds: int = 0
+    """Time-based rollover threshold for multipart console logs, in seconds.
+
+    Starts a new console log file after this many seconds have elapsed
+    since the current part began. Requires `console_multipart` to be
+    `True`.  May be used with `console_chunk_max_bytes`; the first limit
+    reached closes the part. A value of `0` disables the time-based
+    limit.
+    """
 
     credentials_file: str = Field(
         default_factory=lambda: str(credentials.DEFAULT_WANDB_CREDENTIALS_FILE)
@@ -1083,6 +1116,30 @@ class Settings(BaseModel, validate_assignment=True):
             return value
 
         return "wrap"
+
+    @field_validator("console_chunk_max_bytes", mode="after")
+    @classmethod
+    def validate_console_chunk_max_bytes(cls, value):
+        """Validate the console_chunk_max_bytes value.
+
+        <!-- lazydoc-ignore: internal -->
+        """
+        if value < 0:
+            raise ValueError("console_chunk_max_bytes must be non-negative")
+
+        return value
+
+    @field_validator("console_chunk_max_seconds", mode="after")
+    @classmethod
+    def validate_console_chunk_max_seconds(cls, value):
+        """Validate the console_chunk_max_seconds value.
+
+        <!-- lazydoc-ignore: internal -->
+        """
+        if value < 0:
+            raise ValueError("console_chunk_max_seconds must be non-negative")
+
+        return value
 
     @field_validator("x_executable", mode="before")
     @classmethod
@@ -1914,24 +1971,7 @@ class Settings(BaseModel, validate_assignment=True):
         program = self.program or self._get_program()
 
         if program is not None:
-            try:
-                root = (
-                    GitRepo().root or os.getcwd()
-                    if not self.disable_git
-                    else os.getcwd()
-                )
-            except Exception:
-                # if the git command fails, fall back to the current working directory
-                root = os.getcwd()
-
-            self.program_relpath = self.program_relpath or self._get_program_relpath(
-                program, root
-            )
-            program_abspath = os.path.abspath(
-                os.path.join(root, os.path.relpath(os.getcwd(), root), program)
-            )
-            if os.path.exists(program_abspath):
-                self.program_abspath = program_abspath
+            self._setup_code_paths(program)
         else:
             program = "<python with no main file>"
 
@@ -2196,3 +2236,46 @@ class Settings(BaseModel, validate_assignment=True):
             This is a compatibility property for Pydantic v1 to mimic v2's model_fields_set.
             """
             return getattr(self, "__fields_set__", set())
+
+    def _setup_code_paths(self, program: str):
+        """Sets the program_abspath and program_relpath settings."""
+        if self._jupyter and self.x_jupyter_root:
+            self._infer_code_paths_for_jupyter(program)
+        else:
+            self._infer_code_path_for_program(program)
+
+    def _infer_code_path_for_program(self, program: str):
+        """Finds the program's absolute and relative paths."""
+        try:
+            root = (
+                GitRepo().root or os.getcwd() if not self.disable_git else os.getcwd()
+            )
+        except Exception:
+            # if the git command fails, fall back to the current working directory
+            root = os.getcwd()
+
+        self.program_relpath = self.program_relpath or self._get_program_relpath(
+            program, root
+        )
+
+        program_abspath = os.path.abspath(
+            os.path.join(root, os.path.relpath(os.getcwd(), root), program)
+        )
+
+        if os.path.exists(program_abspath):
+            self.program_abspath = program_abspath
+
+    def _infer_code_paths_for_jupyter(self, program: str):
+        """Find the notebook's absolute and relative paths.
+
+        Since the notebook's execution environment
+        is not the same as the current working directory.
+        We utilize the metadata provided by the jupyter server.
+        """
+        if not self.x_jupyter_root or not program:
+            return None
+
+        self.program_abspath = os.path.abspath(
+            os.path.join(self.x_jupyter_root, program)
+        )
+        self.program_relpath = program

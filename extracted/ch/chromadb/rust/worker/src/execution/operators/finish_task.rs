@@ -12,13 +12,27 @@ use thiserror::Error;
 pub struct FinishTaskOperator {
     log_client: Log,
     sysdb: SysDb,
+    heap_service: s3heap_service::client::GrpcHeapService,
 }
 
 impl FinishTaskOperator {
     /// Create a new finish task operator.
+    ///
+    /// # Parameters
+    /// * `log_client` - Log client for scouting log records
+    /// * `sysdb` - SysDB client for task state management
+    /// * `heap_service` - Heap service client for scheduling next task runs (required)
     #[allow(dead_code)]
-    pub fn new(log_client: Log, sysdb: SysDb) -> Box<Self> {
-        Box::new(FinishTaskOperator { log_client, sysdb })
+    pub fn new(
+        log_client: Log,
+        sysdb: SysDb,
+        heap_service: s3heap_service::client::GrpcHeapService,
+    ) -> Box<Self> {
+        Box::new(FinishTaskOperator {
+            log_client,
+            sysdb,
+            heap_service,
+        })
     }
 }
 
@@ -35,7 +49,6 @@ pub struct FinishTaskInput {
 
 impl FinishTaskInput {
     /// Create a new finish task input.
-    #[allow(dead_code)]
     pub fn new(updated_task: Task) -> Self {
         FinishTaskInput { updated_task }
     }
@@ -54,6 +67,8 @@ pub enum FinishTaskError {
     ScoutLogs(String),
     #[error("Failed to finish task in SysDB: {0}")]
     SysDb(#[from] SysDbFinishTaskError),
+    #[error("Failed to schedule task in heap service: {0}")]
+    HeapService(#[from] s3heap_service::client::GrpcHeapServiceError),
 }
 
 impl ChromaError for FinishTaskError {
@@ -61,6 +76,7 @@ impl ChromaError for FinishTaskError {
         match self {
             FinishTaskError::ScoutLogs(_) => ErrorCodes::Internal,
             FinishTaskError::SysDb(e) => e.code(),
+            FinishTaskError::HeapService(e) => e.code(),
         }
     }
 }
@@ -115,7 +131,30 @@ impl Operator<FinishTaskInput, FinishTaskOutput> for FinishTaskOperator {
                 "Detected new records written during task execution that exceed threshold"
             );
 
-            // TODO: Schedule a new task for next nonce by pushing to the heap
+            // Schedule a new task for next nonce by pushing to the heap
+            let mut heap_service = self.heap_service.clone();
+            let schedule = chroma_types::chroma_proto::Schedule {
+                triggerable: Some(chroma_types::chroma_proto::Triggerable {
+                    partitioning_uuid: input.updated_task.input_collection_id.to_string(),
+                    scheduling_uuid: input.updated_task.id.0.to_string(),
+                }),
+                next_scheduled: Some(prost_types::Timestamp::from(input.updated_task.next_run)),
+                nonce: input.updated_task.next_nonce.0.to_string(),
+            };
+
+            heap_service
+                .push(
+                    vec![schedule],
+                    &input.updated_task.input_collection_id.to_string(),
+                )
+                .await?;
+
+            tracing::info!(
+                task_id = %input.updated_task.id.0,
+                collection_id = %input.updated_task.input_collection_id,
+                next_nonce = %input.updated_task.next_nonce.0,
+                "Successfully scheduled next task run in heap"
+            );
         }
 
         // Step 2: Update lowest_live_nonce to equal next_nonce
@@ -159,6 +198,30 @@ mod tests {
                 .await
                 .unwrap(),
         )
+    }
+
+    async fn get_test_heap_service() -> s3heap_service::client::GrpcHeapService {
+        use chroma_system::System;
+
+        let system = System::new();
+        let registry = chroma_config::registry::Registry::default();
+        let config = s3heap_service::client::GrpcHeapServiceConfig {
+            enabled: true,
+            port: 50052,
+            connect_timeout_ms: 5000,
+            request_timeout_ms: 5000,
+            ..Default::default()
+        };
+
+        let port = config.port;
+        s3heap_service::client::GrpcHeapService::try_from_config(
+            &(config, system),
+            &registry,
+        )
+        .await
+        .unwrap_or_else(|_| {
+            panic!("Failed to create test heap service client - ensure heap service is running on localhost:{}", port)
+        })
     }
 
     async fn setup_tenant_and_database(
@@ -222,12 +285,26 @@ mod tests {
             .await
             .unwrap();
 
+        let heap_service = get_test_heap_service().await;
         let task_initial = sysdb.get_task_by_uuid(task_id).await.unwrap();
-        let initial_nonce = task_initial.next_nonce;
+
+        let operator1 = FinishTaskOperator::new(log.clone(), sysdb.clone(), heap_service.clone());
+        let res1 = operator1
+            .run(&FinishTaskInput::new(task_initial.clone()))
+            .await;
+        assert!(res1.is_ok());
+
+        let task_finished = sysdb.get_task_by_uuid(task_id).await.unwrap();
+        assert_eq!(
+            task_finished.lowest_live_nonce.unwrap(),
+            task_finished.next_nonce
+        );
+
+        let initial_nonce = task_finished.next_nonce;
 
         // Advance the task once to set lowest_live_nonce
         sysdb
-            .advance_task(task_id, initial_nonce.0, 0, 60)
+            .advance_task(task_id, task_finished.next_nonce.0, 0, 60)
             .await
             .unwrap();
 
@@ -238,7 +315,7 @@ mod tests {
         assert_ne!(task_advanced.next_nonce, initial_nonce);
 
         let input = FinishTaskInput::new(task_advanced.clone());
-        let operator = FinishTaskOperator::new(log.clone(), sysdb.clone());
+        let operator = FinishTaskOperator::new(log.clone(), sysdb.clone(), heap_service.clone());
 
         // Run finish_task - should move lowest_live_nonce up to match next_nonce
         let result = operator.run(&input).await;
@@ -250,58 +327,6 @@ mod tests {
         let task_after = sysdb.get_task_by_uuid(task_id).await.unwrap();
         assert_eq!(task_after.lowest_live_nonce, Some(task_advanced.next_nonce));
         assert_eq!(task_after.next_nonce, task_advanced.next_nonce);
-    }
-
-    #[tokio::test]
-    async fn test_k8s_integration_finish_task_updates_lowest_live_nonce_from_old_value() {
-        // Setup: Task with lowest_live_nonce = A and next_nonce = B
-        let mut sysdb = get_grpc_sysdb().await;
-        let log = Log::InMemory(InMemoryLog::new());
-
-        let collection_id = setup_tenant_and_database(&mut sysdb, "test_tenant", "test_db").await;
-
-        // Create a task
-        let task_id = sysdb
-            .create_task(
-                format!("test_task_{}", Uuid::new_v4()),
-                "record_counter".to_string(),
-                collection_id,
-                format!("test_output_{}", Uuid::new_v4()),
-                serde_json::Value::Null,
-                "test_tenant".to_string(),
-                "test_db".to_string(),
-                10,
-            )
-            .await
-            .unwrap();
-
-        // Advance task once: lowest_live_nonce = A, next_nonce = B
-        let task_initial = sysdb.get_task_by_uuid(task_id).await.unwrap();
-        let nonce_a = task_initial.next_nonce;
-
-        sysdb.advance_task(task_id, nonce_a.0, 0, 60).await.unwrap();
-
-        let task_after_advance = sysdb.get_task_by_uuid(task_id).await.unwrap();
-        let nonce_b = task_after_advance.next_nonce;
-
-        // Verify initial state: lowest_live_nonce is at A, next_nonce is at B
-        assert_eq!(task_after_advance.lowest_live_nonce, Some(nonce_a));
-        assert_eq!(task_after_advance.next_nonce, nonce_b);
-        assert_ne!(nonce_a, nonce_b);
-
-        let input = FinishTaskInput::new(task_after_advance.clone());
-        let operator = FinishTaskOperator::new(log.clone(), sysdb.clone());
-
-        // Run finish_task
-        let result = operator.run(&input).await;
-
-        // Assert: Operation succeeded
-        assert!(result.is_ok());
-
-        // Assert: lowest_live_nonce was moved from A to B (now equals next_nonce)
-        let task_after = sysdb.get_task_by_uuid(task_id).await.unwrap();
-        assert_eq!(task_after.lowest_live_nonce, Some(nonce_b));
-        assert_eq!(task_after.next_nonce, nonce_b);
     }
 
     #[tokio::test]
@@ -338,7 +363,8 @@ mod tests {
         };
 
         let input = FinishTaskInput::new(fake_task.clone());
-        let operator = FinishTaskOperator::new(log.clone(), sysdb.clone());
+        let heap_service = get_test_heap_service().await;
+        let operator = FinishTaskOperator::new(log.clone(), sysdb.clone(), heap_service);
 
         // Run
         let result = operator.run(&input).await;

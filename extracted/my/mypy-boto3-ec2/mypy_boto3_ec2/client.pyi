@@ -686,6 +686,8 @@ from .type_defs import (
     DescribeCapacityReservationFleetsResultTypeDef,
     DescribeCapacityReservationsRequestTypeDef,
     DescribeCapacityReservationsResultTypeDef,
+    DescribeCapacityReservationTopologyRequestTypeDef,
+    DescribeCapacityReservationTopologyResultTypeDef,
     DescribeCarrierGatewaysRequestTypeDef,
     DescribeCarrierGatewaysResultTypeDef,
     DescribeClassicLinkInstancesRequestTypeDef,
@@ -4321,6 +4323,18 @@ class EC2Client(BaseClient):
 
         [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/ec2/client/describe_capacity_reservation_fleets.html)
         [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_ec2/client/#describe_capacity_reservation_fleets)
+        """
+
+    def describe_capacity_reservation_topology(
+        self, **kwargs: Unpack[DescribeCapacityReservationTopologyRequestTypeDef]
+    ) -> DescribeCapacityReservationTopologyResultTypeDef:
+        """
+        Describes a tree-based hierarchy that represents the physical host placement of
+        your pending or active Capacity Reservations within an Availability Zone or
+        Local Zone.
+
+        [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/ec2/client/describe_capacity_reservation_topology.html)
+        [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_ec2/client/#describe_capacity_reservation_topology)
         """
 
     def describe_capacity_reservations(

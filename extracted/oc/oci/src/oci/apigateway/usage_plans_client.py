@@ -104,9 +104,11 @@ class UsagePlansClient(object):
             'base_path': '/20190501',
             'service_endpoint_template': 'https://apigateway.{region}.oci.{secondLevelDomain}',
             'service_endpoint_template_per_realm': {  },  # noqa: E201 E202
+            'service_uses_dualstack_endpoints_by_default': False,
             'skip_deserialization': kwargs.get('skip_deserialization', False),
             'circuit_breaker_strategy': kwargs.get('circuit_breaker_strategy', circuit_breaker.GLOBAL_CIRCUIT_BREAKER_STRATEGY),
-            'client_level_realm_specific_endpoint_template_enabled': kwargs.get('client_level_realm_specific_endpoint_template_enabled')
+            'client_level_realm_specific_endpoint_template_enabled': kwargs.get('client_level_realm_specific_endpoint_template_enabled'),
+            'client_level_dualstack_endpoints_enabled': kwargs.get('client_level_dualstack_endpoints_enabled')
         }
         if 'timeout' in kwargs:
             base_client_init_kwargs['timeout'] = kwargs.get('timeout')
@@ -154,7 +156,7 @@ class UsagePlansClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/apigateway/add_usage_plan_lock.py.html>`__ to see an example of how to use add_usage_plan_lock API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/apigateway/add_usage_plan_lock.py.html>`__ to see an example of how to use add_usage_plan_lock API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['usagePlanId']
@@ -274,7 +276,7 @@ class UsagePlansClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/apigateway/change_usage_plan_compartment.py.html>`__ to see an example of how to use change_usage_plan_compartment API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/apigateway/change_usage_plan_compartment.py.html>`__ to see an example of how to use change_usage_plan_compartment API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['usagePlanId']
@@ -390,7 +392,7 @@ class UsagePlansClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/apigateway/create_usage_plan.py.html>`__ to see an example of how to use create_usage_plan API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/apigateway/create_usage_plan.py.html>`__ to see an example of how to use create_usage_plan API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -491,7 +493,7 @@ class UsagePlansClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/apigateway/delete_usage_plan.py.html>`__ to see an example of how to use delete_usage_plan API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/apigateway/delete_usage_plan.py.html>`__ to see an example of how to use delete_usage_plan API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['usagePlanId']
@@ -595,7 +597,7 @@ class UsagePlansClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/apigateway/get_usage_plan.py.html>`__ to see an example of how to use get_usage_plan API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/apigateway/get_usage_plan.py.html>`__ to see an example of how to use get_usage_plan API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['usagePlanId']
@@ -723,7 +725,7 @@ class UsagePlansClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/apigateway/list_usage_plans.py.html>`__ to see an example of how to use list_usage_plans API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/apigateway/list_usage_plans.py.html>`__ to see an example of how to use list_usage_plans API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['compartmentId']
@@ -858,7 +860,7 @@ class UsagePlansClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/apigateway/remove_usage_plan_lock.py.html>`__ to see an example of how to use remove_usage_plan_lock API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/apigateway/remove_usage_plan_lock.py.html>`__ to see an example of how to use remove_usage_plan_lock API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['usagePlanId']
@@ -971,7 +973,7 @@ class UsagePlansClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/apigateway/update_usage_plan.py.html>`__ to see an example of how to use update_usage_plan API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/apigateway/update_usage_plan.py.html>`__ to see an example of how to use update_usage_plan API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['usagePlanId']

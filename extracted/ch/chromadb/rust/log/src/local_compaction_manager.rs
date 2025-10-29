@@ -14,7 +14,9 @@ use chroma_sqlite::db::SqliteDb;
 use chroma_sysdb::SysDb;
 use chroma_system::Handler;
 use chroma_system::{Component, ComponentContext};
-use chroma_types::{Chunk, CollectionUuid, GetCollectionWithSegmentsError, LogRecord};
+use chroma_types::{
+    Chunk, CollectionUuid, GetCollectionWithSegmentsError, KnnIndex, LogRecord, SchemaError,
+};
 use serde::{Deserialize, Serialize};
 use thiserror::Error;
 
@@ -94,6 +96,8 @@ pub enum CompactionManagerError {
     HnswReaderConstructionError(#[from] LocalSegmentManagerError),
     #[error("Error purging logs")]
     PurgeLogsFailure,
+    #[error("Failed to reconcile collection schema: {0}")]
+    SchemaReconcileError(#[from] SchemaError),
 }
 
 impl ChromaError for CompactionManagerError {
@@ -108,6 +112,7 @@ impl ChromaError for CompactionManagerError {
             CompactionManagerError::HnswReaderError(e) => e.code(),
             CompactionManagerError::HnswReaderConstructionError(e) => e.code(),
             CompactionManagerError::PurgeLogsFailure => ErrorCodes::Internal,
+            CompactionManagerError::SchemaReconcileError(e) => e.code(),
         }
     }
 }
@@ -131,10 +136,14 @@ impl Handler<BackfillMessage> for LocalCompactionManager {
         message: BackfillMessage,
         _: &ComponentContext<LocalCompactionManager>,
     ) -> Self::Result {
-        let collection_and_segments = self
+        let mut collection_and_segments = self
             .sysdb
             .get_collection_with_segments(message.collection_id)
             .await?;
+        let schema_previously_persisted = collection_and_segments.collection.schema.is_some();
+        collection_and_segments
+            .collection
+            .reconcile_schema_with_config(KnnIndex::Hnsw)?;
         // If collection is uninitialized, that means nothing has been written yet.
         let dim = match collection_and_segments.collection.dimension {
             Some(dim) => dim,
@@ -198,14 +207,31 @@ impl Handler<BackfillMessage> for LocalCompactionManager {
             .begin()
             .await
             .map_err(|_| CompactionManagerError::MetadataApplyLogsFailed)?;
-        metadata_writer
+        let apply_outcome = metadata_writer
             .apply_logs(
                 mt_data_chunk,
                 collection_and_segments.metadata_segment.id,
+                if schema_previously_persisted {
+                    collection_and_segments.collection.schema.clone()
+                } else {
+                    None
+                },
                 &mut *tx,
             )
             .await
             .map_err(|_| CompactionManagerError::MetadataApplyLogsFailed)?;
+        if schema_previously_persisted {
+            if let Some(updated_schema) = apply_outcome.schema_update {
+                metadata_writer
+                    .update_collection_schema(
+                        collection_and_segments.collection.collection_id,
+                        &updated_schema,
+                        &mut *tx,
+                    )
+                    .await
+                    .map_err(|_| CompactionManagerError::MetadataApplyLogsFailed)?;
+            }
+        }
         tx.commit()
             .await
             .map_err(|_| CompactionManagerError::MetadataApplyLogsFailed)?;
@@ -240,8 +266,10 @@ impl Handler<PurgeLogsMessage> for LocalCompactionManager {
             .sysdb
             .get_collection_with_segments(message.collection_id)
             .await?;
+        let mut collection = collection_segments.collection.clone();
+        collection.reconcile_schema_with_config(KnnIndex::Hnsw)?;
         // If dimension is None, that means nothing has been written yet.
-        let dim = match collection_segments.collection.dimension {
+        let dim = match collection.dimension {
             Some(dim) => dim,
             None => return Ok(()),
         };
@@ -252,7 +280,7 @@ impl Handler<PurgeLogsMessage> for LocalCompactionManager {
         let hnsw_reader = self
             .hnsw_segment_manager
             .get_hnsw_reader(
-                &collection_segments.collection,
+                &collection,
                 &collection_segments.vector_segment,
                 dim as usize,
             )

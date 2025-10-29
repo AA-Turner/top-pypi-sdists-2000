@@ -7,14 +7,25 @@ collections.
 from __future__ import annotations
 
 import json
-import re
 from copy import copy
-from typing import TYPE_CHECKING, Any, Iterable, Literal, Mapping, Sequence
+from typing import (
+    TYPE_CHECKING,
+    Any,
+    ClassVar,
+    Collection,
+    Iterable,
+    List,
+    Literal,
+    Mapping,
+    Sequence,
+)
 
 from typing_extensions import override
-from wandb_gql import Client, gql
+from wandb_gql import gql
 
 import wandb
+from wandb._iterutils import always_list
+from wandb._pydantic import ConnectionWithTotal, Edge
 from wandb._strutils import nameof
 from wandb.apis import public
 from wandb.apis.normalize import normalize_exceptions
@@ -23,13 +34,12 @@ from wandb.errors.term import termlog
 from wandb.proto.wandb_deprecated import Deprecated
 from wandb.proto.wandb_internal_pb2 import ServerFeature
 from wandb.sdk.artifacts._generated import (
+    ADD_ARTIFACT_COLLECTION_TAGS_GQL,
     ARTIFACT_COLLECTION_MEMBERSHIP_FILES_GQL,
     ARTIFACT_VERSION_FILES_GQL,
-    CREATE_ARTIFACT_COLLECTION_TAG_ASSIGNMENTS_GQL,
-    DELETE_ARTIFACT_COLLECTION_TAG_ASSIGNMENTS_GQL,
+    DELETE_ARTIFACT_COLLECTION_TAGS_GQL,
     DELETE_ARTIFACT_PORTFOLIO_GQL,
     DELETE_ARTIFACT_SEQUENCE_GQL,
-    MOVE_ARTIFACT_COLLECTION_GQL,
     PROJECT_ARTIFACT_COLLECTION_GQL,
     PROJECT_ARTIFACT_COLLECTIONS_GQL,
     PROJECT_ARTIFACT_TYPE_GQL,
@@ -37,36 +47,42 @@ from wandb.sdk.artifacts._generated import (
     PROJECT_ARTIFACTS_GQL,
     RUN_INPUT_ARTIFACTS_GQL,
     RUN_OUTPUT_ARTIFACTS_GQL,
+    UPDATE_ARTIFACT_COLLECTION_TYPE_GQL,
     UPDATE_ARTIFACT_PORTFOLIO_GQL,
     UPDATE_ARTIFACT_SEQUENCE_GQL,
+    ArtifactCollectionFragment,
     ArtifactCollectionMembershipFiles,
-    ArtifactCollectionsFragment,
-    ArtifactsFragment,
+    ArtifactFragment,
     ArtifactTypeFragment,
-    ArtifactTypesFragment,
     ArtifactVersionFiles,
-    FilesFragment,
+    CreateArtifactCollectionTagAssignmentsInput,
+    DeleteArtifactCollectionTagAssignmentsInput,
+    MoveArtifactSequenceInput,
     ProjectArtifactCollection,
     ProjectArtifactCollections,
     ProjectArtifacts,
     ProjectArtifactType,
     ProjectArtifactTypes,
-    RunInputArtifactConnectionFragment,
-    RunOutputArtifactConnectionFragment,
+    UpdateArtifactPortfolioInput,
+    UpdateArtifactSequenceInput,
 )
 from wandb.sdk.artifacts._gqlutils import omit_artifact_fields
-from wandb.sdk.artifacts._validators import (
-    SOURCE_ARTIFACT_COLLECTION_TYPE,
-    FullArtifactPath,
-    validate_artifact_name,
-    validate_artifact_type,
+from wandb.sdk.artifacts._models import ArtifactCollectionData
+from wandb.sdk.artifacts._models.pagination import (
+    ArtifactCollectionConnection,
+    ArtifactFileConnection,
+    ArtifactTypeConnection,
+    RunArtifactConnection,
 )
+from wandb.sdk.artifacts._validators import FullArtifactPath, validate_artifact_type
 from wandb.sdk.internal.internal_api import Api as InternalApi
 from wandb.sdk.lib import deprecate
 
 from .utils import gql_compat
 
 if TYPE_CHECKING:
+    from wandb_gql import Client
+
     from wandb.sdk.artifacts.artifact import Artifact
 
     from . import RetryingClient, Run
@@ -80,7 +96,7 @@ class ArtifactTypes(Paginator["ArtifactType"]):
 
     QUERY = gql(PROJECT_ARTIFACT_TYPES_GQL)
 
-    last_response: ArtifactTypesFragment | None
+    last_response: ArtifactTypeConnection | None
 
     def __init__(
         self,
@@ -108,7 +124,7 @@ class ArtifactTypes(Paginator["ArtifactType"]):
         if not ((proj := result.project) and (conn := proj.artifact_types)):
             raise ValueError(f"Unable to parse {nameof(type(self))!r} response data")
 
-        self.last_response = ArtifactTypesFragment.model_validate(conn)
+        self.last_response = ArtifactTypeConnection.model_validate(conn)
 
     @property
     def _length(self) -> None:
@@ -125,9 +141,7 @@ class ArtifactTypes(Paginator["ArtifactType"]):
 
         <!-- lazydoc-ignore: internal -->
         """
-        if self.last_response is None:
-            return True
-        return self.last_response.page_info.has_next_page
+        return (conn := self.last_response) is None or conn.has_next
 
     @property
     def cursor(self) -> str | None:
@@ -135,9 +149,7 @@ class ArtifactTypes(Paginator["ArtifactType"]):
 
         <!-- lazydoc-ignore: internal -->
         """
-        if self.last_response is None:
-            return None
-        return self.last_response.edges[-1].cursor
+        return conn.next_cursor if (conn := self.last_response) else None
 
     def update_variables(self) -> None:
         """Update the cursor variable for pagination.
@@ -160,10 +172,9 @@ class ArtifactTypes(Paginator["ArtifactType"]):
                 entity=self.entity,
                 project=self.project,
                 type_name=node.name,
-                attrs=node.model_dump(exclude_unset=True),
+                attrs=node,
             )
-            for edge in self.last_response.edges
-            if edge.node and (node := ArtifactTypeFragment.model_validate(edge.node))
+            for node in self.last_response.nodes()
         ]
 
 
@@ -181,51 +192,50 @@ class ArtifactType:
     <!-- lazydoc-ignore-init: internal -->
     """
 
+    _attrs: ArtifactTypeFragment
+
     def __init__(
         self,
         client: Client,
         entity: str,
         project: str,
         type_name: str,
-        attrs: Mapping[str, Any] | None = None,
+        attrs: ArtifactTypeFragment | None = None,
     ):
         self.client = client
         self.entity = entity
         self.project = project
         self.type = type_name
-        self._attrs = attrs
-        if self._attrs is None:
-            self.load()
 
-    def load(self) -> Mapping[str, Any]:
+        # FIXME: Make this lazy, so we don't (re-)fetch the attributes until they are needed
+        self._attrs = ArtifactTypeFragment.model_validate(attrs or self.load())
+
+    def load(self) -> ArtifactTypeFragment:
         """Load the artifact type attributes from W&B.
 
         <!-- lazydoc-ignore: internal -->
         """
-        data: Mapping[str, Any] | None = self.client.execute(
-            gql(PROJECT_ARTIFACT_TYPE_GQL),
-            variable_values={
-                "entityName": self.entity,
-                "projectName": self.project,
-                "artifactTypeName": self.type,
-            },
-        )
+        gql_op = gql(PROJECT_ARTIFACT_TYPE_GQL)
+        gql_vars = {
+            "entityName": self.entity,
+            "projectName": self.project,
+            "artifactTypeName": self.type,
+        }
+        data = self.client.execute(gql_op, variable_values=gql_vars)
         result = ProjectArtifactType.model_validate(data)
         if not ((proj := result.project) and (artifact_type := proj.artifact_type)):
-            raise ValueError(f"Could not find artifact type {self.type}")
-
-        self._attrs = artifact_type.model_dump(exclude_unset=True)
-        return self._attrs
+            raise ValueError(f"Could not find artifact type {self.type!r}")
+        return ArtifactTypeFragment.model_validate(artifact_type)
 
     @property
     def id(self) -> str:
         """The unique identifier of the artifact type."""
-        return self._attrs["id"]
+        return self._attrs.id
 
     @property
     def name(self) -> str:
         """The name of the artifact type."""
-        return self._attrs["name"]
+        return self._attrs.name
 
     @normalize_exceptions
     def collections(self, per_page: int = 50) -> ArtifactCollections:
@@ -235,7 +245,12 @@ class ArtifactType:
             per_page (int): The number of artifact collections to fetch per page.
                 Default is 50.
         """
-        return ArtifactCollections(self.client, self.entity, self.project, self.type)
+        return ArtifactCollections(
+            self.client,
+            entity=self.entity,
+            project=self.project,
+            type_name=self.type,
+        )
 
     def collection(self, name: str) -> ArtifactCollection:
         """Get a specific artifact collection by name.
@@ -244,7 +259,11 @@ class ArtifactType:
             name (str): The name of the artifact collection to retrieve.
         """
         return ArtifactCollection(
-            self.client, self.entity, self.project, name, self.type
+            self.client,
+            entity=self.entity,
+            project=self.project,
+            name=name,
+            type=self.type,
         )
 
     def __repr__(self) -> str:
@@ -264,7 +283,7 @@ class ArtifactCollections(SizedPaginator["ArtifactCollection"]):
     <!-- lazydoc-ignore-init: internal -->
     """
 
-    last_response: ArtifactCollectionsFragment | None
+    last_response: ArtifactCollectionConnection | None
 
     def __init__(
         self,
@@ -278,11 +297,7 @@ class ArtifactCollections(SizedPaginator["ArtifactCollection"]):
         self.project = project
         self.type_name = type_name
 
-        variable_values = {
-            "entityName": entity,
-            "projectName": project,
-            "artifactTypeName": type_name,
-        }
+        variables = {"entity": entity, "project": project, "artifactType": type_name}
 
         if server_supports_artifact_collections_gql_edges(client):
             rename_fields = None
@@ -293,7 +308,7 @@ class ArtifactCollections(SizedPaginator["ArtifactCollection"]):
             PROJECT_ARTIFACT_COLLECTIONS_GQL, rename_fields=rename_fields
         )
 
-        super().__init__(client, variable_values, per_page)
+        super().__init__(client, variables, per_page)
 
     @override
     def _update_response(self) -> None:
@@ -304,12 +319,12 @@ class ArtifactCollections(SizedPaginator["ArtifactCollection"]):
         # Extract the inner `*Connection` result for faster/easier access.
         if not (
             (proj := result.project)
-            and (type_ := proj.artifact_type)
-            and (conn := type_.artifact_collections)
+            and (artifact_type := proj.artifact_type)
+            and (conn := artifact_type.artifact_collections)
         ):
             raise ValueError(f"Unable to parse {nameof(type(self))!r} response data")
 
-        self.last_response = ArtifactCollectionsFragment.model_validate(conn)
+        self.last_response = ArtifactCollectionConnection.model_validate(conn)
 
     @property
     def _length(self) -> int:
@@ -322,24 +337,20 @@ class ArtifactCollections(SizedPaginator["ArtifactCollection"]):
         return self.last_response.total_count
 
     @property
-    def more(self):
+    def more(self) -> bool:
         """Returns whether there are more artifacts to fetch.
 
         <!-- lazydoc-ignore: internal -->
         """
-        if self.last_response is None:
-            return True
-        return self.last_response.page_info.has_next_page
+        return (conn := self.last_response) is None or conn.has_next
 
     @property
-    def cursor(self):
+    def cursor(self) -> str | None:
         """Returns the cursor for the next page of results.
 
         <!-- lazydoc-ignore: internal -->
         """
-        if self.last_response is None:
-            return None
-        return self.last_response.edges[-1].cursor
+        return conn.next_cursor if (conn := self.last_response) else None
 
     def update_variables(self) -> None:
         """Update the cursor variable for pagination.
@@ -358,13 +369,14 @@ class ArtifactCollections(SizedPaginator["ArtifactCollection"]):
         return [
             ArtifactCollection(
                 client=self.client,
-                entity=self.entity,
-                project=self.project,
+                entity=node.project.entity.name,
+                project=node.project.name,
                 name=node.name,
-                type=self.type_name,
+                type=node.type.name,
+                attrs=node,
             )
-            for edge in self.last_response.edges
-            if (node := edge.node)
+            for node in self.last_response.nodes()
+            if node.project
         ]
 
 
@@ -385,6 +397,12 @@ class ArtifactCollection:
     <!-- lazydoc-ignore-init: internal -->
     """
 
+    _saved: ArtifactCollectionData
+    """The saved artifact collection data as last fetched from the W&B server."""
+
+    _current: ArtifactCollectionData
+    """The local, editable artifact collection data."""
+
     def __init__(
         self,
         client: Client,
@@ -393,32 +411,34 @@ class ArtifactCollection:
         name: str,
         type: str,
         organization: str | None = None,
-        attrs: Mapping[str, Any] | None = None,
-        is_sequence: bool | None = None,
+        attrs: ArtifactCollectionFragment | None = None,
     ):
         self.client = client
-        self.entity = entity
-        self.project = project
-        self._name = validate_artifact_name(name)
-        self._saved_name = name
-        self._type = type
-        self._saved_type = type
-        self._attrs = attrs
-        if is_sequence is not None:
-            self._is_sequence = is_sequence
-        if (attrs is None) or (is_sequence is None):
-            self.load()
-        self._aliases = [a["node"]["alias"] for a in self._attrs["aliases"]["edges"]]
-        self._description = self._attrs["description"]
-        self._created_at = self._attrs["createdAt"]
-        self._tags = [a["node"]["name"] for a in self._attrs["tags"]["edges"]]
-        self._saved_tags = copy(self._tags)
+
+        # FIXME: Make this lazy, so we don't (re-)fetch the attributes until they are needed
+        fragment = attrs or self.load(entity, project, type, name)
+
+        # Separate "saved" vs "current" copies of the artifact collection data
+        validated = ArtifactCollectionData.from_fragment(fragment)
+        self._saved = validated
+        self._current = validated.model_copy(deep=True)
+
         self.organization = organization
 
     @property
     def id(self) -> str:
         """The unique identifier of the artifact collection."""
-        return self._attrs["id"]
+        return self._current.id
+
+    @property
+    def entity(self) -> str:
+        """The entity (user or team) that owns the project."""
+        return self._current.entity
+
+    @property
+    def project(self) -> str:
+        """The project that contains the artifact collection."""
+        return self._current.project
 
     @normalize_exceptions
     def artifacts(self, per_page: int = 50) -> Artifacts:
@@ -427,23 +447,26 @@ class ArtifactCollection:
             client=self.client,
             entity=self.entity,
             project=self.project,
-            collection_name=self._saved_name,
-            type=self._saved_type,
+            # Use the saved name and type, since they're mutable and may have been edited locally.
+            collection_name=self._saved.name,
+            type=self._saved.type,
             per_page=per_page,
         )
 
     @property
     def aliases(self) -> list[str]:
         """Artifact Collection Aliases."""
-        return self._aliases
+        return list(self._saved.aliases)
 
     @property
     def created_at(self) -> str:
         """The creation date of the artifact collection."""
-        return self._created_at
+        return self._saved.created_at
 
-    def load(self):
-        """Load the artifact collection attributes from W&B.
+    def load(
+        self, entity: str, project: str, artifact_type: str, name: str
+    ) -> ArtifactCollectionFragment:
+        """Fetch and return the validated artifact collection data from W&B.
 
         <!-- lazydoc-ignore: internal -->
         """
@@ -452,34 +475,25 @@ class ArtifactCollection:
         else:
             rename_fields = {"artifactCollection": "artifactSequence"}
 
-        response = self.client.execute(
-            gql_compat(PROJECT_ARTIFACT_COLLECTION_GQL, rename_fields=rename_fields),
-            variable_values={
-                "entityName": self.entity,
-                "projectName": self.project,
-                "artifactTypeName": self._saved_type,
-                "artifactCollectionName": self._saved_name,
-            },
+        gql_op = gql_compat(
+            PROJECT_ARTIFACT_COLLECTION_GQL, rename_fields=rename_fields
         )
-
-        result = ProjectArtifactCollection.model_validate(response)
-
+        gql_vars = {
+            "entity": entity,
+            "project": project,
+            "artifactType": artifact_type,
+            "name": name,
+        }
+        data = self.client.execute(gql_op, variable_values=gql_vars)
+        result = ProjectArtifactCollection.model_validate(data)
         if not (
             result.project
             and (proj := result.project)
             and (type_ := proj.artifact_type)
             and (collection := type_.artifact_collection)
         ):
-            raise ValueError(f"Could not find artifact type {self._saved_type}")
-
-        sequence = type_.artifact_sequence
-        self._is_sequence = (
-            sequence is not None
-        ) and sequence.typename__ == SOURCE_ARTIFACT_COLLECTION_TYPE
-
-        if self._attrs is None:
-            self._attrs = collection.model_dump(exclude_unset=True)
-        return self._attrs
+            raise ValueError(f"Could not find artifact type {artifact_type!s}")
+        return collection
 
     @normalize_exceptions
     def change_type(self, new_type: str) -> None:
@@ -489,174 +503,178 @@ class ArtifactCollection:
             warning_message="ArtifactCollection.change_type(type) is deprecated, use ArtifactCollection.save() instead.",
         )
 
-        if self._saved_type != new_type:
+        if (old_type := self._saved.type) != new_type:
             try:
-                validate_artifact_type(self._saved_type, self.name)
+                validate_artifact_type(old_type, self.name)
             except ValueError as e:
                 raise ValueError(
-                    f"The current type '{self._saved_type!r}' is an internal type and cannot be changed."
+                    f"The current type {old_type!r} is an internal type and cannot be changed."
                 ) from e
 
         # Check that the new type is not going to conflict with internal types
-        validate_artifact_type(new_type, self.name)
+        new_type = validate_artifact_type(new_type, self.name)
 
         if not self.is_sequence():
             raise ValueError("Artifact collection needs to be a sequence")
-        termlog(
-            f"Changing artifact collection type of {self._saved_type} to {new_type}"
+
+        termlog(f"Changing artifact collection type of {old_type!r} to {new_type!r}")
+
+        gql_op = gql(UPDATE_ARTIFACT_COLLECTION_TYPE_GQL)
+        gql_input = MoveArtifactSequenceInput(
+            artifact_sequence_id=self.id,
+            destination_artifact_type_name=new_type,
         )
-        self.client.execute(
-            gql(MOVE_ARTIFACT_COLLECTION_GQL),
-            variable_values={
-                "artifactSequenceID": self.id,
-                "destinationArtifactTypeName": new_type,
-            },
-        )
-        self._saved_type = new_type
-        self._type = new_type
+        self.client.execute(gql_op, variable_values={"input": gql_input.model_dump()})
+        self._saved.type = new_type
+        self._current.type = new_type
 
     def is_sequence(self) -> bool:
         """Return whether the artifact collection is a sequence."""
-        return self._is_sequence
+        return self._saved.is_sequence
 
     @normalize_exceptions
     def delete(self) -> None:
         """Delete the entire artifact collection."""
-        self.client.execute(
-            gql(
-                DELETE_ARTIFACT_SEQUENCE_GQL
-                if self.is_sequence()
-                else DELETE_ARTIFACT_PORTFOLIO_GQL
-            ),
-            variable_values={"id": self.id},
+        gql_op = gql(
+            DELETE_ARTIFACT_SEQUENCE_GQL
+            if self.is_sequence()
+            else DELETE_ARTIFACT_PORTFOLIO_GQL
         )
+        self.client.execute(gql_op, variable_values={"id": self.id})
 
     @property
-    def description(self) -> str:
+    def description(self) -> str | None:
         """A description of the artifact collection."""
-        return self._description
+        return self._current.description
 
     @description.setter
     def description(self, description: str | None) -> None:
         """Set the description of the artifact collection."""
-        self._description = description
+        self._current.description = description
 
     @property
     def tags(self) -> list[str]:
         """The tags associated with the artifact collection."""
-        return self._tags
+        return self._current.tags
 
     @tags.setter
-    def tags(self, tags: list[str]) -> None:
+    def tags(self, tags: Collection[str]) -> None:
         """Set the tags associated with the artifact collection."""
-        if any(not re.match(r"^[-\w]+([ ]+[-\w]+)*$", tag) for tag in tags):
-            raise ValueError(
-                "Tags must only contain alphanumeric characters or underscores separated by spaces or hyphens"
-            )
-        self._tags = tags
+        self._current.tags = tags
 
     @property
     def name(self) -> str:
         """The name of the artifact collection."""
-        return self._name
+        return self._current.name
 
     @name.setter
     def name(self, name: str) -> None:
         """Set the name of the artifact collection."""
-        self._name = validate_artifact_name(name)
+        self._current.name = name
 
     @property
     def type(self):
         """Returns the type of the artifact collection."""
-        return self._type
+        return self._current.type
 
     @type.setter
-    def type(self, type: list[str]) -> None:
+    def type(self, type: str) -> None:
         """Set the type of the artifact collection."""
         if not self.is_sequence():
             raise ValueError(
                 "Type can only be changed if the artifact collection is a sequence."
             )
-        self._type = type
+        self._current.type = type
 
     def _update_collection(self) -> None:
-        self.client.execute(
-            gql(
-                UPDATE_ARTIFACT_SEQUENCE_GQL
-                if self.is_sequence()
-                else UPDATE_ARTIFACT_PORTFOLIO_GQL
-            ),
-            variable_values={
-                "id": self.id,
-                "name": self.name,
-                "description": self.description,
-            },
-        )
-        self._saved_name = self._name
+        if self.is_sequence():
+            gql_op = gql(UPDATE_ARTIFACT_SEQUENCE_GQL)
+            gql_input = UpdateArtifactSequenceInput(
+                artifact_sequence_id=self.id,
+                name=self.name,
+                description=self.description,
+            )
+        else:
+            gql_op = gql(UPDATE_ARTIFACT_PORTFOLIO_GQL)
+            gql_input = UpdateArtifactPortfolioInput(
+                artifact_portfolio_id=self.id,
+                name=self.name,
+                description=self.description,
+            )
+        self.client.execute(gql_op, variable_values={"input": gql_input.model_dump()})
+        self._saved.name = self._current.name
 
     def _update_collection_type(self) -> None:
-        self.client.execute(
-            gql(MOVE_ARTIFACT_COLLECTION_GQL),
-            variable_values={
-                "artifactSequenceID": self.id,
-                "destinationArtifactTypeName": self.type,
-            },
+        gql_op = gql(UPDATE_ARTIFACT_COLLECTION_TYPE_GQL)
+        gql_input = MoveArtifactSequenceInput(
+            artifact_sequence_id=self.id,
+            destination_artifact_type_name=self.type,
         )
-        self._saved_type = self._type
+        self.client.execute(gql_op, variable_values={"input": gql_input.model_dump()})
+        self._saved.type = self._current.type
 
-    def _add_tags(self, tags_to_add: Iterable[str]) -> None:
-        self.client.execute(
-            gql(CREATE_ARTIFACT_COLLECTION_TAG_ASSIGNMENTS_GQL),
-            variable_values={
-                "entityName": self.entity,
-                "projectName": self.project,
-                "artifactCollectionName": self._saved_name,
-                "tags": [{"tagName": tag} for tag in tags_to_add],
-            },
+    def _add_tags(self, tag_names: Iterable[str]) -> None:
+        gql_op = gql(ADD_ARTIFACT_COLLECTION_TAGS_GQL)
+        gql_input = CreateArtifactCollectionTagAssignmentsInput(
+            entity_name=self.entity,
+            project_name=self.project,
+            artifact_collection_name=self._saved.name,
+            tags=[{"tagName": tag} for tag in tag_names],
         )
+        self.client.execute(gql_op, variable_values={"input": gql_input.model_dump()})
 
-    def _delete_tags(self, tags_to_delete: Iterable[str]) -> None:
-        self.client.execute(
-            gql(DELETE_ARTIFACT_COLLECTION_TAG_ASSIGNMENTS_GQL),
-            variable_values={
-                "entityName": self.entity,
-                "projectName": self.project,
-                "artifactCollectionName": self._saved_name,
-                "tags": [{"tagName": tag} for tag in tags_to_delete],
-            },
+    def _delete_tags(self, tag_names: Iterable[str]) -> None:
+        gql_op = gql(DELETE_ARTIFACT_COLLECTION_TAGS_GQL)
+        gql_input = DeleteArtifactCollectionTagAssignmentsInput(
+            entity_name=self.entity,
+            project_name=self.project,
+            artifact_collection_name=self._saved.name,
+            tags=[{"tagName": tag} for tag in tag_names],
         )
+        self.client.execute(gql_op, variable_values={"input": gql_input.model_dump()})
 
     @normalize_exceptions
     def save(self) -> None:
         """Persist any changes made to the artifact collection."""
-        if self._saved_type != self.type:
+        if (old_type := self._saved.type) != (new_type := self.type):
             try:
-                validate_artifact_type(self.type, self._name)
+                validate_artifact_type(new_type, self.name)
             except ValueError as e:
-                raise ValueError(f"Failed to save artifact collection: {e}") from e
-            try:
-                validate_artifact_type(self._saved_type, self._name)
-            except ValueError as e:
+                reason = str(e)
                 raise ValueError(
-                    f"Failed to save artifact collection '{self._name}': "
-                    f"The current type '{self._saved_type!r}' is an internal type and cannot be changed."
+                    f"Failed to save artifact collection {self.name!r}: {reason}"
+                ) from e
+            try:
+                validate_artifact_type(old_type, self.name)
+            except ValueError as e:
+                reason = f"The current type {old_type!r} is an internal type and cannot be changed."
+                raise ValueError(
+                    f"Failed to save artifact collection {self.name!r}: {reason}"
                 ) from e
 
+        # FIXME: Consider consolidating the multiple GQL mutations into a single call.
         self._update_collection()
 
-        if self.is_sequence() and (self._saved_type != self._type):
+        if self.is_sequence() and (old_type != new_type):
             self._update_collection_type()
 
-        current_tags = set(self._tags)
-        saved_tags = set(self._saved_tags)
-        if tags_to_add := (current_tags - saved_tags):
-            self._add_tags(tags_to_add)
-        if tags_to_delete := (saved_tags - current_tags):
-            self._delete_tags(tags_to_delete)
-        self._saved_tags = copy(self._tags)
+        if (new_tags := set(self._current.tags)) != (old_tags := set(self._saved.tags)):
+            if added_tags := (new_tags - old_tags):
+                self._add_tags(added_tags)
+            if deleted_tags := (old_tags - new_tags):
+                self._delete_tags(deleted_tags)
+            self._saved.tags = copy(new_tags)
 
     def __repr__(self) -> str:
-        return f"<ArtifactCollection {self._name} ({self._type})>"
+        return f"<ArtifactCollection {self.name} ({self.type})>"
+
+
+class _ArtifactEdge(Edge[ArtifactFragment]):
+    version: str  # Extra field defined only on VersionedArtifactEdge
+
+
+class _ArtifactConnection(ConnectionWithTotal[ArtifactFragment]):
+    edges: List[_ArtifactEdge]  # noqa: UP006
 
 
 class Artifacts(SizedPaginator["Artifact"]):
@@ -679,7 +697,7 @@ class Artifacts(SizedPaginator["Artifact"]):
     <!-- lazydoc-ignore-init: internal -->
     """
 
-    last_response: ArtifactsFragment | None
+    last_response: _ArtifactConnection | None
 
     def __init__(
         self,
@@ -698,7 +716,7 @@ class Artifacts(SizedPaginator["Artifact"]):
         self.type = type
         self.project = project
         self.filters = {"state": "COMMITTED"} if filters is None else filters
-        self.tags = [tags] if isinstance(tags, str) else tags
+        self.tags = always_list(tags or [])
         self.order = order
         variables = {
             "project": self.project,
@@ -736,7 +754,7 @@ class Artifacts(SizedPaginator["Artifact"]):
         ):
             raise ValueError(f"Unable to parse {nameof(type(self))!r} response data")
 
-        self.last_response = ArtifactsFragment.model_validate(conn)
+        self.last_response = _ArtifactConnection.model_validate(conn)
 
     @property
     def _length(self) -> int:
@@ -754,9 +772,7 @@ class Artifacts(SizedPaginator["Artifact"]):
 
         <!-- lazydoc-ignore: internal -->
         """
-        if self.last_response is None:
-            return True
-        return self.last_response.page_info.has_next_page
+        return (conn := self.last_response) is None or conn.has_next
 
     @property
     def cursor(self) -> str | None:
@@ -764,9 +780,7 @@ class Artifacts(SizedPaginator["Artifact"]):
 
         <!-- lazydoc-ignore: internal -->
         """
-        if self.last_response is None:
-            return None
-        return self.last_response.edges[-1].cursor
+        return conn.next_cursor if (conn := self.last_response) else None
 
     def convert_objects(self) -> list[Artifact]:
         """Convert the raw response data into a list of wandb.Artifact objects.
@@ -799,14 +813,13 @@ class RunArtifacts(SizedPaginator["Artifact"]):
     <!-- lazydoc-ignore-init: internal -->
     """
 
-    last_response: (
-        RunOutputArtifactConnectionFragment | RunInputArtifactConnectionFragment
-    )
+    last_response: RunArtifactConnection | None
 
-    #: The pydantic model used to parse the (inner part of the) raw response.
-    _response_cls: type[
-        RunOutputArtifactConnectionFragment | RunInputArtifactConnectionFragment
-    ]
+    _mode2gqlstr: ClassVar[dict[Literal["logged", "used"], str]] = {
+        "logged": RUN_OUTPUT_ARTIFACTS_GQL,
+        "used": RUN_INPUT_ARTIFACTS_GQL,
+    }
+    """Maps the mode ("logged" or "used") to the corresponding GraphQL query string."""
 
     def __init__(
         self,
@@ -817,20 +830,12 @@ class RunArtifacts(SizedPaginator["Artifact"]):
     ):
         self.run = run
 
-        if mode == "logged":
-            self.run_key = "outputArtifacts"
-            self.QUERY = gql_compat(
-                RUN_OUTPUT_ARTIFACTS_GQL, omit_fields=omit_artifact_fields(client)
-            )
-            self._response_cls = RunOutputArtifactConnectionFragment
-        elif mode == "used":
-            self.run_key = "inputArtifacts"
-            self.QUERY = gql_compat(
-                RUN_INPUT_ARTIFACTS_GQL, omit_fields=omit_artifact_fields(client)
-            )
-            self._response_cls = RunInputArtifactConnectionFragment
-        else:
+        try:
+            query_str = self._mode2gqlstr[mode]
+        except LookupError:
             raise ValueError("mode must be logged or used")
+        else:
+            self.QUERY = gql_compat(query_str, omit_fields=omit_artifact_fields(client))
 
         variable_values = {
             "entity": run.entity,
@@ -844,8 +849,8 @@ class RunArtifacts(SizedPaginator["Artifact"]):
         data = self.client.execute(self.QUERY, variable_values=self.variables)
 
         # Extract the inner `*Connection` result for faster/easier access.
-        inner_data = data["project"]["run"][self.run_key]
-        self.last_response = self._response_cls.model_validate(inner_data)
+        inner_data = data["project"]["run"]["artifacts"]
+        self.last_response = RunArtifactConnection.model_validate(inner_data)
 
     @property
     def _length(self) -> int:
@@ -863,9 +868,7 @@ class RunArtifacts(SizedPaginator["Artifact"]):
 
         <!-- lazydoc-ignore: internal -->
         """
-        if self.last_response is None:
-            return True
-        return self.last_response.page_info.has_next_page
+        return (conn := self.last_response) is None or conn.has_next
 
     @property
     def cursor(self) -> str | None:
@@ -873,9 +876,7 @@ class RunArtifacts(SizedPaginator["Artifact"]):
 
         <!-- lazydoc-ignore: internal -->
         """
-        if self.last_response is None:
-            return None
-        return self.last_response.edges[-1].cursor
+        return conn.next_cursor if (conn := self.last_response) else None
 
     def convert_objects(self) -> list[Artifact]:
         """Convert the raw response data into a list of wandb.Artifact objects.
@@ -888,16 +889,15 @@ class RunArtifacts(SizedPaginator["Artifact"]):
         return [
             wandb.Artifact._from_attrs(
                 path=FullArtifactPath(
-                    prefix=proj.entity_name,
+                    prefix=proj.entity.name,
                     project=proj.name,
                     name=f"{artifact_seq.name}:v{node.version_index}",
                 ),
                 attrs=node,
                 client=self.client,
             )
-            for edge in self.last_response.edges
-            if (node := edge.node)
-            and (artifact_seq := node.artifact_sequence)
+            for node in self.last_response.nodes()
+            if (artifact_seq := node.artifact_sequence)
             and (proj := artifact_seq.project)
         ]
 
@@ -908,7 +908,7 @@ class ArtifactFiles(SizedPaginator["public.File"]):
     <!-- lazydoc-ignore-init: internal -->
     """
 
-    last_response: FilesFragment | None
+    last_response: ArtifactFileConnection | None
 
     def __init__(
         self,
@@ -965,7 +965,7 @@ class ArtifactFiles(SizedPaginator["public.File"]):
         if conn is None:
             raise ValueError(f"Unable to parse {nameof(type(self))!r} response data")
 
-        self.last_response = FilesFragment.model_validate(conn)
+        self.last_response = ArtifactFileConnection.model_validate(conn)
 
     @property
     def path(self) -> list[str]:
@@ -974,12 +974,12 @@ class ArtifactFiles(SizedPaginator["public.File"]):
 
     @property
     def _length(self) -> int:
-        if self.last_response is None:
-            self._load_page()
         """Returns the total number of files in the artifact.
 
         <!-- lazydoc-ignore: internal -->
         """
+        if self.last_response is None:
+            self._load_page()
         return self.artifact.file_count
 
     @property
@@ -988,9 +988,7 @@ class ArtifactFiles(SizedPaginator["public.File"]):
 
         <!-- lazydoc-ignore: internal -->
         """
-        if self.last_response is None:
-            return True
-        return self.last_response.page_info.has_next_page
+        return (conn := self.last_response) is None or conn.has_next
 
     @property
     def cursor(self) -> str | None:
@@ -998,19 +996,10 @@ class ArtifactFiles(SizedPaginator["public.File"]):
 
         <!-- lazydoc-ignore: internal -->
         """
-        if self.last_response is None:
-            return None
-        return self.last_response.edges[-1].cursor
-
-    def update_variables(self) -> None:
-        """Update the variables dictionary with the cursor.
-
-        <!-- lazydoc-ignore: internal -->
-        """
-        self.variables.update({"fileLimit": self.per_page, "fileCursor": self.cursor})
+        return conn.next_cursor if (conn := self.last_response) else None
 
     def convert_objects(self) -> list[public.File]:
-        """Convert the raw response data into a list of public.File objects.
+        """Convert the raw response data into a list of File objects.
 
         <!-- lazydoc-ignore: internal -->
         """

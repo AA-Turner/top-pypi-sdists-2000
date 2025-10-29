@@ -27,6 +27,7 @@ from cyclopts.annotations import (
     is_enum_flag,
     is_namedtuple,
     is_pydantic,
+    is_pydantic_secret,
     is_typeddict,
     resolve,
     resolve_annotated,
@@ -233,7 +234,11 @@ def _attrs_field_infos(hint) -> dict[str, FieldInfo]:
             required = False
             default = attribute.default
 
-        out[field_info.name] = field_info.evolve(names=(attribute.alias,), required=required, default=default)
+        help = attribute.metadata.get("help") if attribute.metadata else None
+
+        out[field_info.name] = field_info.evolve(
+            names=(attribute.alias,), required=required, default=default, help=help
+        )
     return out
 
 
@@ -258,12 +263,15 @@ def _dataclass_field_infos(hint) -> dict[str, FieldInfo]:
 
         kind = FieldInfo.KEYWORD_ONLY if f.kw_only else FieldInfo.POSITIONAL_OR_KEYWORD
 
+        help = f.metadata.get("help") if f.metadata else None
+
         out[f.name] = FieldInfo(
             names=(f.name,),
             kind=kind,
             required=required,
             annotation=annotation,
             default=default,
+            help=help,
         )
     return out
 
@@ -290,6 +298,15 @@ def get_field_infos(hint) -> dict[str, FieldInfo]:
     # Provides ~5-6x speedup for argument parsing by skipping signature_parameters() calls.
     if is_builtin(hint):
         return {}
+
+    # Pydantic secret types (SecretStr, SecretBytes) should be treated as simple types
+    if is_pydantic_secret(hint):
+        return {}
+
+    # NewType is a runtime identity function that returns its argument unchanged.
+    # Use the field_infos of the underlying supertype instead of NewType's misleading __init__.
+    if hasattr(hint, "__supertype__"):
+        return get_field_infos(hint.__supertype__)
 
     if is_dataclass(hint):
         # This must be before ``is_pydantic`` check so that we

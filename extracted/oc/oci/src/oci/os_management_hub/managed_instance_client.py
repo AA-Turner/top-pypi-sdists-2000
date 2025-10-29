@@ -103,9 +103,11 @@ class ManagedInstanceClient(object):
             'base_path': '/20220901',
             'service_endpoint_template': 'https://osmh.{region}.oci.{secondLevelDomain}',
             'service_endpoint_template_per_realm': {  },  # noqa: E201 E202
+            'service_uses_dualstack_endpoints_by_default': False,
             'skip_deserialization': kwargs.get('skip_deserialization', False),
             'circuit_breaker_strategy': kwargs.get('circuit_breaker_strategy', circuit_breaker.GLOBAL_CIRCUIT_BREAKER_STRATEGY),
-            'client_level_realm_specific_endpoint_template_enabled': kwargs.get('client_level_realm_specific_endpoint_template_enabled')
+            'client_level_realm_specific_endpoint_template_enabled': kwargs.get('client_level_realm_specific_endpoint_template_enabled'),
+            'client_level_dualstack_endpoints_enabled': kwargs.get('client_level_dualstack_endpoints_enabled')
         }
         if 'timeout' in kwargs:
             base_client_init_kwargs['timeout'] = kwargs.get('timeout')
@@ -165,7 +167,7 @@ class ManagedInstanceClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/osmanagementhub/associate_managed_instances_with_management_station.py.html>`__ to see an example of how to use associate_managed_instances_with_management_station API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/osmanagementhub/associate_managed_instances_with_management_station.py.html>`__ to see an example of how to use associate_managed_instances_with_management_station API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['managementStationId']
@@ -288,7 +290,7 @@ class ManagedInstanceClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/osmanagementhub/attach_profile_to_managed_instance.py.html>`__ to see an example of how to use attach_profile_to_managed_instance API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/osmanagementhub/attach_profile_to_managed_instance.py.html>`__ to see an example of how to use attach_profile_to_managed_instance API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['managedInstanceId']
@@ -411,7 +413,7 @@ class ManagedInstanceClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/osmanagementhub/attach_software_sources_to_managed_instance.py.html>`__ to see an example of how to use attach_software_sources_to_managed_instance API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/osmanagementhub/attach_software_sources_to_managed_instance.py.html>`__ to see an example of how to use attach_software_sources_to_managed_instance API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['managedInstanceId']
@@ -524,7 +526,7 @@ class ManagedInstanceClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/osmanagementhub/delete_managed_instance.py.html>`__ to see an example of how to use delete_managed_instance API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/osmanagementhub/delete_managed_instance.py.html>`__ to see an example of how to use delete_managed_instance API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['managedInstanceId']
@@ -639,7 +641,7 @@ class ManagedInstanceClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/osmanagementhub/detach_profile_from_managed_instance.py.html>`__ to see an example of how to use detach_profile_from_managed_instance API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/osmanagementhub/detach_profile_from_managed_instance.py.html>`__ to see an example of how to use detach_profile_from_managed_instance API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['managedInstanceId']
@@ -760,7 +762,7 @@ class ManagedInstanceClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/osmanagementhub/detach_software_sources_from_managed_instance.py.html>`__ to see an example of how to use detach_software_sources_from_managed_instance API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/osmanagementhub/detach_software_sources_from_managed_instance.py.html>`__ to see an example of how to use detach_software_sources_from_managed_instance API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['managedInstanceId']
@@ -885,7 +887,7 @@ class ManagedInstanceClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/osmanagementhub/disable_module_stream_on_managed_instance.py.html>`__ to see an example of how to use disable_module_stream_on_managed_instance API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/osmanagementhub/disable_module_stream_on_managed_instance.py.html>`__ to see an example of how to use disable_module_stream_on_managed_instance API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['managedInstanceId']
@@ -1011,7 +1013,7 @@ class ManagedInstanceClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/osmanagementhub/enable_module_stream_on_managed_instance.py.html>`__ to see an example of how to use enable_module_stream_on_managed_instance API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/osmanagementhub/enable_module_stream_on_managed_instance.py.html>`__ to see an example of how to use enable_module_stream_on_managed_instance API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['managedInstanceId']
@@ -1116,7 +1118,7 @@ class ManagedInstanceClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/osmanagementhub/get_managed_instance.py.html>`__ to see an example of how to use get_managed_instance API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/osmanagementhub/get_managed_instance.py.html>`__ to see an example of how to use get_managed_instance API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['managedInstanceId']
@@ -1215,7 +1217,7 @@ class ManagedInstanceClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/osmanagementhub/get_windows_update.py.html>`__ to see an example of how to use get_windows_update API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/osmanagementhub/get_windows_update.py.html>`__ to see an example of how to use get_windows_update API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['windowsUpdateId']
@@ -1327,7 +1329,7 @@ class ManagedInstanceClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/osmanagementhub/install_all_windows_updates_on_managed_instances_in_compartment.py.html>`__ to see an example of how to use install_all_windows_updates_on_managed_instances_in_compartment API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/osmanagementhub/install_all_windows_updates_on_managed_instances_in_compartment.py.html>`__ to see an example of how to use install_all_windows_updates_on_managed_instances_in_compartment API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -1439,7 +1441,7 @@ class ManagedInstanceClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/osmanagementhub/install_module_stream_profile_on_managed_instance.py.html>`__ to see an example of how to use install_module_stream_profile_on_managed_instance API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/osmanagementhub/install_module_stream_profile_on_managed_instance.py.html>`__ to see an example of how to use install_module_stream_profile_on_managed_instance API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['managedInstanceId']
@@ -1561,7 +1563,7 @@ class ManagedInstanceClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/osmanagementhub/install_packages_on_managed_instance.py.html>`__ to see an example of how to use install_packages_on_managed_instance API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/osmanagementhub/install_packages_on_managed_instance.py.html>`__ to see an example of how to use install_packages_on_managed_instance API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['managedInstanceId']
@@ -1683,7 +1685,7 @@ class ManagedInstanceClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/osmanagementhub/install_windows_updates_on_managed_instance.py.html>`__ to see an example of how to use install_windows_updates_on_managed_instance API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/osmanagementhub/install_windows_updates_on_managed_instance.py.html>`__ to see an example of how to use install_windows_updates_on_managed_instance API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['managedInstanceId']
@@ -1823,7 +1825,7 @@ class ManagedInstanceClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/osmanagementhub/list_managed_instance_available_packages.py.html>`__ to see an example of how to use list_managed_instance_available_packages API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/osmanagementhub/list_managed_instance_available_packages.py.html>`__ to see an example of how to use list_managed_instance_available_packages API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['managedInstanceId']
@@ -1992,7 +1994,7 @@ class ManagedInstanceClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/osmanagementhub/list_managed_instance_available_software_sources.py.html>`__ to see an example of how to use list_managed_instance_available_software_sources API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/osmanagementhub/list_managed_instance_available_software_sources.py.html>`__ to see an example of how to use list_managed_instance_available_software_sources API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['managedInstanceId']
@@ -2175,7 +2177,7 @@ class ManagedInstanceClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/osmanagementhub/list_managed_instance_available_windows_updates.py.html>`__ to see an example of how to use list_managed_instance_available_windows_updates API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/osmanagementhub/list_managed_instance_available_windows_updates.py.html>`__ to see an example of how to use list_managed_instance_available_windows_updates API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['managedInstanceId']
@@ -2372,7 +2374,7 @@ class ManagedInstanceClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/osmanagementhub/list_managed_instance_errata.py.html>`__ to see an example of how to use list_managed_instance_errata API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/osmanagementhub/list_managed_instance_errata.py.html>`__ to see an example of how to use list_managed_instance_errata API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['managedInstanceId']
@@ -2561,7 +2563,7 @@ class ManagedInstanceClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/osmanagementhub/list_managed_instance_installed_packages.py.html>`__ to see an example of how to use list_managed_instance_installed_packages API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/osmanagementhub/list_managed_instance_installed_packages.py.html>`__ to see an example of how to use list_managed_instance_installed_packages API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['managedInstanceId']
@@ -2738,7 +2740,7 @@ class ManagedInstanceClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/osmanagementhub/list_managed_instance_installed_windows_updates.py.html>`__ to see an example of how to use list_managed_instance_installed_windows_updates API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/osmanagementhub/list_managed_instance_installed_windows_updates.py.html>`__ to see an example of how to use list_managed_instance_installed_windows_updates API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['managedInstanceId']
@@ -2909,7 +2911,7 @@ class ManagedInstanceClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/osmanagementhub/list_managed_instance_modules.py.html>`__ to see an example of how to use list_managed_instance_modules API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/osmanagementhub/list_managed_instance_modules.py.html>`__ to see an example of how to use list_managed_instance_modules API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['managedInstanceId']
@@ -3088,7 +3090,7 @@ class ManagedInstanceClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/osmanagementhub/list_managed_instance_updatable_packages.py.html>`__ to see an example of how to use list_managed_instance_updatable_packages API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/osmanagementhub/list_managed_instance_updatable_packages.py.html>`__ to see an example of how to use list_managed_instance_updatable_packages API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['managedInstanceId']
@@ -3360,7 +3362,7 @@ class ManagedInstanceClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/osmanagementhub/list_managed_instances.py.html>`__ to see an example of how to use list_managed_instances API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/osmanagementhub/list_managed_instances.py.html>`__ to see an example of how to use list_managed_instances API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -3608,7 +3610,7 @@ class ManagedInstanceClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/osmanagementhub/list_windows_updates.py.html>`__ to see an example of how to use list_windows_updates API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/osmanagementhub/list_windows_updates.py.html>`__ to see an example of how to use list_windows_updates API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['compartmentId']
@@ -3759,7 +3761,7 @@ class ManagedInstanceClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/osmanagementhub/manage_module_streams_on_managed_instance.py.html>`__ to see an example of how to use manage_module_streams_on_managed_instance API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/osmanagementhub/manage_module_streams_on_managed_instance.py.html>`__ to see an example of how to use manage_module_streams_on_managed_instance API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['managedInstanceId']
@@ -3883,7 +3885,7 @@ class ManagedInstanceClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/osmanagementhub/reboot_managed_instance.py.html>`__ to see an example of how to use reboot_managed_instance API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/osmanagementhub/reboot_managed_instance.py.html>`__ to see an example of how to use reboot_managed_instance API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['managedInstanceId']
@@ -4002,7 +4004,7 @@ class ManagedInstanceClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/osmanagementhub/refresh_software_on_managed_instance.py.html>`__ to see an example of how to use refresh_software_on_managed_instance API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/osmanagementhub/refresh_software_on_managed_instance.py.html>`__ to see an example of how to use refresh_software_on_managed_instance API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['managedInstanceId']
@@ -4124,7 +4126,7 @@ class ManagedInstanceClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/osmanagementhub/remove_module_stream_profile_from_managed_instance.py.html>`__ to see an example of how to use remove_module_stream_profile_from_managed_instance API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/osmanagementhub/remove_module_stream_profile_from_managed_instance.py.html>`__ to see an example of how to use remove_module_stream_profile_from_managed_instance API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['managedInstanceId']
@@ -4246,7 +4248,7 @@ class ManagedInstanceClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/osmanagementhub/remove_packages_from_managed_instance.py.html>`__ to see an example of how to use remove_packages_from_managed_instance API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/osmanagementhub/remove_packages_from_managed_instance.py.html>`__ to see an example of how to use remove_packages_from_managed_instance API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['managedInstanceId']
@@ -4371,7 +4373,7 @@ class ManagedInstanceClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/osmanagementhub/switch_module_stream_on_managed_instance.py.html>`__ to see an example of how to use switch_module_stream_on_managed_instance API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/osmanagementhub/switch_module_stream_on_managed_instance.py.html>`__ to see an example of how to use switch_module_stream_on_managed_instance API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['managedInstanceId']
@@ -4488,7 +4490,7 @@ class ManagedInstanceClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/osmanagementhub/update_all_packages_on_managed_instances_in_compartment.py.html>`__ to see an example of how to use update_all_packages_on_managed_instances_in_compartment API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/osmanagementhub/update_all_packages_on_managed_instances_in_compartment.py.html>`__ to see an example of how to use update_all_packages_on_managed_instances_in_compartment API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -4591,7 +4593,7 @@ class ManagedInstanceClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/osmanagementhub/update_managed_instance.py.html>`__ to see an example of how to use update_managed_instance API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/osmanagementhub/update_managed_instance.py.html>`__ to see an example of how to use update_managed_instance API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['managedInstanceId']
@@ -4712,7 +4714,7 @@ class ManagedInstanceClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/osmanagementhub/update_packages_on_managed_instance.py.html>`__ to see an example of how to use update_packages_on_managed_instance API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/osmanagementhub/update_packages_on_managed_instance.py.html>`__ to see an example of how to use update_packages_on_managed_instance API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['managedInstanceId']

@@ -102,9 +102,11 @@ class ManagementClient(object):
             'base_path': '/20190506',
             'service_endpoint_template': 'https://digitalassistant-api.{region}.oci.{secondLevelDomain}',
             'service_endpoint_template_per_realm': {  },  # noqa: E201 E202
+            'service_uses_dualstack_endpoints_by_default': False,
             'skip_deserialization': kwargs.get('skip_deserialization', False),
             'circuit_breaker_strategy': kwargs.get('circuit_breaker_strategy', circuit_breaker.GLOBAL_CIRCUIT_BREAKER_STRATEGY),
-            'client_level_realm_specific_endpoint_template_enabled': kwargs.get('client_level_realm_specific_endpoint_template_enabled')
+            'client_level_realm_specific_endpoint_template_enabled': kwargs.get('client_level_realm_specific_endpoint_template_enabled'),
+            'client_level_dualstack_endpoints_enabled': kwargs.get('client_level_dualstack_endpoints_enabled')
         }
         if 'timeout' in kwargs:
             base_client_init_kwargs['timeout'] = kwargs.get('timeout')
@@ -157,7 +159,7 @@ class ManagementClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/oda/bulk_create_skill_entities.py.html>`__ to see an example of how to use bulk_create_skill_entities API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/oda/bulk_create_skill_entities.py.html>`__ to see an example of how to use bulk_create_skill_entities API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['odaInstanceId', 'skillId']
@@ -278,7 +280,7 @@ class ManagementClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/oda/cascading_delete_skill_custom_entities.py.html>`__ to see an example of how to use cascading_delete_skill_custom_entities API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/oda/cascading_delete_skill_custom_entities.py.html>`__ to see an example of how to use cascading_delete_skill_custom_entities API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['odaInstanceId', 'skillId']
@@ -405,7 +407,7 @@ class ManagementClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/oda/change_oda_private_endpoint_compartment.py.html>`__ to see an example of how to use change_oda_private_endpoint_compartment API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/oda/change_oda_private_endpoint_compartment.py.html>`__ to see an example of how to use change_oda_private_endpoint_compartment API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['odaPrivateEndpointId']
@@ -511,7 +513,7 @@ class ManagementClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/oda/configure_digital_assistant_parameters.py.html>`__ to see an example of how to use configure_digital_assistant_parameters API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/oda/configure_digital_assistant_parameters.py.html>`__ to see an example of how to use configure_digital_assistant_parameters API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['odaInstanceId']
@@ -620,7 +622,7 @@ class ManagementClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/oda/create_authentication_provider.py.html>`__ to see an example of how to use create_authentication_provider API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/oda/create_authentication_provider.py.html>`__ to see an example of how to use create_authentication_provider API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['odaInstanceId']
@@ -734,7 +736,7 @@ class ManagementClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/oda/create_channel.py.html>`__ to see an example of how to use create_channel API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/oda/create_channel.py.html>`__ to see an example of how to use create_channel API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['odaInstanceId']
@@ -848,7 +850,7 @@ class ManagementClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/oda/create_digital_assistant.py.html>`__ to see an example of how to use create_digital_assistant API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/oda/create_digital_assistant.py.html>`__ to see an example of how to use create_digital_assistant API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['odaInstanceId']
@@ -960,7 +962,7 @@ class ManagementClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/oda/create_oda_private_endpoint.py.html>`__ to see an example of how to use create_oda_private_endpoint API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/oda/create_oda_private_endpoint.py.html>`__ to see an example of how to use create_oda_private_endpoint API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -1062,7 +1064,7 @@ class ManagementClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/oda/create_oda_private_endpoint_attachment.py.html>`__ to see an example of how to use create_oda_private_endpoint_attachment API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/oda/create_oda_private_endpoint_attachment.py.html>`__ to see an example of how to use create_oda_private_endpoint_attachment API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -1169,7 +1171,7 @@ class ManagementClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/oda/create_oda_private_endpoint_scan_proxy.py.html>`__ to see an example of how to use create_oda_private_endpoint_scan_proxy API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/oda/create_oda_private_endpoint_scan_proxy.py.html>`__ to see an example of how to use create_oda_private_endpoint_scan_proxy API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['odaPrivateEndpointId']
@@ -1283,7 +1285,7 @@ class ManagementClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/oda/create_skill.py.html>`__ to see an example of how to use create_skill API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/oda/create_skill.py.html>`__ to see an example of how to use create_skill API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['odaInstanceId']
@@ -1398,7 +1400,7 @@ class ManagementClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/oda/create_skill_parameter.py.html>`__ to see an example of how to use create_skill_parameter API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/oda/create_skill_parameter.py.html>`__ to see an example of how to use create_skill_parameter API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['odaInstanceId', 'skillId']
@@ -1513,7 +1515,7 @@ class ManagementClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/oda/create_translator.py.html>`__ to see an example of how to use create_translator API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/oda/create_translator.py.html>`__ to see an example of how to use create_translator API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['odaInstanceId']
@@ -1627,7 +1629,7 @@ class ManagementClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/oda/delete_authentication_provider.py.html>`__ to see an example of how to use delete_authentication_provider API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/oda/delete_authentication_provider.py.html>`__ to see an example of how to use delete_authentication_provider API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['odaInstanceId', 'authenticationProviderId']
@@ -1737,7 +1739,7 @@ class ManagementClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/oda/delete_channel.py.html>`__ to see an example of how to use delete_channel API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/oda/delete_channel.py.html>`__ to see an example of how to use delete_channel API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['odaInstanceId', 'channelId']
@@ -1847,7 +1849,7 @@ class ManagementClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/oda/delete_digital_assistant.py.html>`__ to see an example of how to use delete_digital_assistant API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/oda/delete_digital_assistant.py.html>`__ to see an example of how to use delete_digital_assistant API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['odaInstanceId', 'digitalAssistantId']
@@ -1957,7 +1959,7 @@ class ManagementClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/oda/delete_oda_private_endpoint.py.html>`__ to see an example of how to use delete_oda_private_endpoint API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/oda/delete_oda_private_endpoint.py.html>`__ to see an example of how to use delete_oda_private_endpoint API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['odaPrivateEndpointId']
@@ -2066,7 +2068,7 @@ class ManagementClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/oda/delete_oda_private_endpoint_attachment.py.html>`__ to see an example of how to use delete_oda_private_endpoint_attachment API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/oda/delete_oda_private_endpoint_attachment.py.html>`__ to see an example of how to use delete_oda_private_endpoint_attachment API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['odaPrivateEndpointAttachmentId']
@@ -2178,7 +2180,7 @@ class ManagementClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/oda/delete_oda_private_endpoint_scan_proxy.py.html>`__ to see an example of how to use delete_oda_private_endpoint_scan_proxy API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/oda/delete_oda_private_endpoint_scan_proxy.py.html>`__ to see an example of how to use delete_oda_private_endpoint_scan_proxy API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['odaPrivateEndpointScanProxyId', 'odaPrivateEndpointId']
@@ -2288,7 +2290,7 @@ class ManagementClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/oda/delete_skill.py.html>`__ to see an example of how to use delete_skill API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/oda/delete_skill.py.html>`__ to see an example of how to use delete_skill API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['odaInstanceId', 'skillId']
@@ -2401,7 +2403,7 @@ class ManagementClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/oda/delete_skill_parameter.py.html>`__ to see an example of how to use delete_skill_parameter API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/oda/delete_skill_parameter.py.html>`__ to see an example of how to use delete_skill_parameter API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['odaInstanceId', 'skillId', 'parameterName']
@@ -2512,7 +2514,7 @@ class ManagementClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/oda/delete_translator.py.html>`__ to see an example of how to use delete_translator API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/oda/delete_translator.py.html>`__ to see an example of how to use delete_translator API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['odaInstanceId', 'translatorId']
@@ -2617,7 +2619,7 @@ class ManagementClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/oda/export_digital_assistant.py.html>`__ to see an example of how to use export_digital_assistant API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/oda/export_digital_assistant.py.html>`__ to see an example of how to use export_digital_assistant API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['odaInstanceId', 'digitalAssistantId']
@@ -2722,7 +2724,7 @@ class ManagementClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/oda/export_skill.py.html>`__ to see an example of how to use export_skill API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/oda/export_skill.py.html>`__ to see an example of how to use export_skill API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['odaInstanceId', 'skillId']
@@ -2829,7 +2831,7 @@ class ManagementClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/oda/get_authentication_provider.py.html>`__ to see an example of how to use get_authentication_provider API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/oda/get_authentication_provider.py.html>`__ to see an example of how to use get_authentication_provider API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['odaInstanceId', 'authenticationProviderId']
@@ -2938,7 +2940,7 @@ class ManagementClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/oda/get_channel.py.html>`__ to see an example of how to use get_channel API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/oda/get_channel.py.html>`__ to see an example of how to use get_channel API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['odaInstanceId', 'channelId']
@@ -3047,7 +3049,7 @@ class ManagementClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/oda/get_digital_assistant.py.html>`__ to see an example of how to use get_digital_assistant API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/oda/get_digital_assistant.py.html>`__ to see an example of how to use get_digital_assistant API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['odaInstanceId', 'digitalAssistantId']
@@ -3159,7 +3161,7 @@ class ManagementClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/oda/get_digital_assistant_parameter.py.html>`__ to see an example of how to use get_digital_assistant_parameter API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/oda/get_digital_assistant_parameter.py.html>`__ to see an example of how to use get_digital_assistant_parameter API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['odaInstanceId', 'digitalAssistantId', 'parameterName']
@@ -3263,7 +3265,7 @@ class ManagementClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/oda/get_oda_private_endpoint.py.html>`__ to see an example of how to use get_oda_private_endpoint API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/oda/get_oda_private_endpoint.py.html>`__ to see an example of how to use get_oda_private_endpoint API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['odaPrivateEndpointId']
@@ -3363,7 +3365,7 @@ class ManagementClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/oda/get_oda_private_endpoint_attachment.py.html>`__ to see an example of how to use get_oda_private_endpoint_attachment API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/oda/get_oda_private_endpoint_attachment.py.html>`__ to see an example of how to use get_oda_private_endpoint_attachment API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['odaPrivateEndpointAttachmentId']
@@ -3466,7 +3468,7 @@ class ManagementClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/oda/get_oda_private_endpoint_scan_proxy.py.html>`__ to see an example of how to use get_oda_private_endpoint_scan_proxy API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/oda/get_oda_private_endpoint_scan_proxy.py.html>`__ to see an example of how to use get_oda_private_endpoint_scan_proxy API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['odaPrivateEndpointScanProxyId', 'odaPrivateEndpointId']
@@ -3573,7 +3575,7 @@ class ManagementClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/oda/get_skill.py.html>`__ to see an example of how to use get_skill API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/oda/get_skill.py.html>`__ to see an example of how to use get_skill API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['odaInstanceId', 'skillId']
@@ -3685,7 +3687,7 @@ class ManagementClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/oda/get_skill_parameter.py.html>`__ to see an example of how to use get_skill_parameter API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/oda/get_skill_parameter.py.html>`__ to see an example of how to use get_skill_parameter API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['odaInstanceId', 'skillId', 'parameterName']
@@ -3795,7 +3797,7 @@ class ManagementClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/oda/get_translator.py.html>`__ to see an example of how to use get_translator API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/oda/get_translator.py.html>`__ to see an example of how to use get_translator API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['odaInstanceId', 'translatorId']
@@ -3907,7 +3909,7 @@ class ManagementClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/oda/import_bot.py.html>`__ to see an example of how to use import_bot API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/oda/import_bot.py.html>`__ to see an example of how to use import_bot API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['odaInstanceId']
@@ -4054,7 +4056,7 @@ class ManagementClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/oda/list_authentication_providers.py.html>`__ to see an example of how to use list_authentication_providers API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/oda/list_authentication_providers.py.html>`__ to see an example of how to use list_authentication_providers API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['odaInstanceId']
@@ -4252,7 +4254,7 @@ class ManagementClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/oda/list_channels.py.html>`__ to see an example of how to use list_channels API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/oda/list_channels.py.html>`__ to see an example of how to use list_channels API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['odaInstanceId']
@@ -4447,7 +4449,7 @@ class ManagementClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/oda/list_digital_assistant_parameters.py.html>`__ to see an example of how to use list_digital_assistant_parameters API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/oda/list_digital_assistant_parameters.py.html>`__ to see an example of how to use list_digital_assistant_parameters API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['odaInstanceId', 'digitalAssistantId']
@@ -4645,7 +4647,7 @@ class ManagementClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/oda/list_digital_assistants.py.html>`__ to see an example of how to use list_digital_assistants API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/oda/list_digital_assistants.py.html>`__ to see an example of how to use list_digital_assistants API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['odaInstanceId']
@@ -4831,7 +4833,7 @@ class ManagementClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/oda/list_oda_private_endpoint_attachments.py.html>`__ to see an example of how to use list_oda_private_endpoint_attachments API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/oda/list_oda_private_endpoint_attachments.py.html>`__ to see an example of how to use list_oda_private_endpoint_attachments API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['odaPrivateEndpointId', 'compartmentId']
@@ -4991,7 +4993,7 @@ class ManagementClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/oda/list_oda_private_endpoint_scan_proxies.py.html>`__ to see an example of how to use list_oda_private_endpoint_scan_proxies API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/oda/list_oda_private_endpoint_scan_proxies.py.html>`__ to see an example of how to use list_oda_private_endpoint_scan_proxies API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['odaPrivateEndpointId']
@@ -5164,7 +5166,7 @@ class ManagementClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/oda/list_oda_private_endpoints.py.html>`__ to see an example of how to use list_oda_private_endpoints API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/oda/list_oda_private_endpoints.py.html>`__ to see an example of how to use list_oda_private_endpoints API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['compartmentId']
@@ -5328,7 +5330,7 @@ class ManagementClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/oda/list_skill_parameters.py.html>`__ to see an example of how to use list_skill_parameters API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/oda/list_skill_parameters.py.html>`__ to see an example of how to use list_skill_parameters API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['odaInstanceId', 'skillId']
@@ -5526,7 +5528,7 @@ class ManagementClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/oda/list_skills.py.html>`__ to see an example of how to use list_skills API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/oda/list_skills.py.html>`__ to see an example of how to use list_skills API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['odaInstanceId']
@@ -5721,7 +5723,7 @@ class ManagementClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/oda/list_translators.py.html>`__ to see an example of how to use list_translators API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/oda/list_translators.py.html>`__ to see an example of how to use list_translators API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['odaInstanceId']
@@ -5881,7 +5883,7 @@ class ManagementClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/oda/publish_digital_assistant.py.html>`__ to see an example of how to use publish_digital_assistant API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/oda/publish_digital_assistant.py.html>`__ to see an example of how to use publish_digital_assistant API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['odaInstanceId', 'digitalAssistantId']
@@ -5994,7 +5996,7 @@ class ManagementClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/oda/publish_skill.py.html>`__ to see an example of how to use publish_skill API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/oda/publish_skill.py.html>`__ to see an example of how to use publish_skill API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['odaInstanceId', 'skillId']
@@ -6108,7 +6110,7 @@ class ManagementClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/oda/rotate_channel_keys.py.html>`__ to see an example of how to use rotate_channel_keys API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/oda/rotate_channel_keys.py.html>`__ to see an example of how to use rotate_channel_keys API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['odaInstanceId', 'channelId']
@@ -6220,7 +6222,7 @@ class ManagementClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/oda/start_channel.py.html>`__ to see an example of how to use start_channel API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/oda/start_channel.py.html>`__ to see an example of how to use start_channel API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['odaInstanceId', 'channelId']
@@ -6332,7 +6334,7 @@ class ManagementClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/oda/stop_channel.py.html>`__ to see an example of how to use stop_channel API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/oda/stop_channel.py.html>`__ to see an example of how to use stop_channel API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['odaInstanceId', 'channelId']
@@ -6455,7 +6457,7 @@ class ManagementClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/oda/train_skill.py.html>`__ to see an example of how to use train_skill API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/oda/train_skill.py.html>`__ to see an example of how to use train_skill API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['odaInstanceId', 'skillId']
@@ -6573,7 +6575,7 @@ class ManagementClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/oda/update_authentication_provider.py.html>`__ to see an example of how to use update_authentication_provider API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/oda/update_authentication_provider.py.html>`__ to see an example of how to use update_authentication_provider API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['odaInstanceId', 'authenticationProviderId']
@@ -6690,7 +6692,7 @@ class ManagementClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/oda/update_channel.py.html>`__ to see an example of how to use update_channel API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/oda/update_channel.py.html>`__ to see an example of how to use update_channel API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['odaInstanceId', 'channelId']
@@ -6807,7 +6809,7 @@ class ManagementClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/oda/update_digital_assistant.py.html>`__ to see an example of how to use update_digital_assistant API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/oda/update_digital_assistant.py.html>`__ to see an example of how to use update_digital_assistant API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['odaInstanceId', 'digitalAssistantId']
@@ -6927,7 +6929,7 @@ class ManagementClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/oda/update_digital_assistant_parameter.py.html>`__ to see an example of how to use update_digital_assistant_parameter API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/oda/update_digital_assistant_parameter.py.html>`__ to see an example of how to use update_digital_assistant_parameter API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['odaInstanceId', 'digitalAssistantId', 'parameterName']
@@ -7044,7 +7046,7 @@ class ManagementClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/oda/update_oda_private_endpoint.py.html>`__ to see an example of how to use update_oda_private_endpoint API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/oda/update_oda_private_endpoint.py.html>`__ to see an example of how to use update_oda_private_endpoint API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['odaPrivateEndpointId']
@@ -7158,7 +7160,7 @@ class ManagementClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/oda/update_skill.py.html>`__ to see an example of how to use update_skill API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/oda/update_skill.py.html>`__ to see an example of how to use update_skill API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['odaInstanceId', 'skillId']
@@ -7278,7 +7280,7 @@ class ManagementClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/oda/update_skill_parameter.py.html>`__ to see an example of how to use update_skill_parameter API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/oda/update_skill_parameter.py.html>`__ to see an example of how to use update_skill_parameter API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['odaInstanceId', 'skillId', 'parameterName']
@@ -7396,7 +7398,7 @@ class ManagementClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/oda/update_translator.py.html>`__ to see an example of how to use update_translator API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/oda/update_translator.py.html>`__ to see an example of how to use update_translator API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['odaInstanceId', 'translatorId']

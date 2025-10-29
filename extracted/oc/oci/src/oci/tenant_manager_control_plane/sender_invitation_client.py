@@ -102,9 +102,11 @@ class SenderInvitationClient(object):
             'base_path': '/20230401',
             'service_endpoint_template': 'https://organizations.{region}.oci.{secondLevelDomain}',
             'service_endpoint_template_per_realm': {  },  # noqa: E201 E202
+            'service_uses_dualstack_endpoints_by_default': False,
             'skip_deserialization': kwargs.get('skip_deserialization', False),
             'circuit_breaker_strategy': kwargs.get('circuit_breaker_strategy', circuit_breaker.GLOBAL_CIRCUIT_BREAKER_STRATEGY),
-            'client_level_realm_specific_endpoint_template_enabled': kwargs.get('client_level_realm_specific_endpoint_template_enabled')
+            'client_level_realm_specific_endpoint_template_enabled': kwargs.get('client_level_realm_specific_endpoint_template_enabled'),
+            'client_level_dualstack_endpoints_enabled': kwargs.get('client_level_dualstack_endpoints_enabled')
         }
         if 'timeout' in kwargs:
             base_client_init_kwargs['timeout'] = kwargs.get('timeout')
@@ -157,7 +159,7 @@ class SenderInvitationClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/tenantmanagercontrolplane/cancel_sender_invitation.py.html>`__ to see an example of how to use cancel_sender_invitation API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/tenantmanagercontrolplane/cancel_sender_invitation.py.html>`__ to see an example of how to use cancel_sender_invitation API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['senderInvitationId']
@@ -263,7 +265,7 @@ class SenderInvitationClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/tenantmanagercontrolplane/create_sender_invitation.py.html>`__ to see an example of how to use create_sender_invitation API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/tenantmanagercontrolplane/create_sender_invitation.py.html>`__ to see an example of how to use create_sender_invitation API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -352,7 +354,7 @@ class SenderInvitationClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/tenantmanagercontrolplane/get_sender_invitation.py.html>`__ to see an example of how to use get_sender_invitation API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/tenantmanagercontrolplane/get_sender_invitation.py.html>`__ to see an example of how to use get_sender_invitation API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['senderInvitationId']
@@ -483,7 +485,7 @@ class SenderInvitationClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/tenantmanagercontrolplane/list_sender_invitations.py.html>`__ to see an example of how to use list_sender_invitations API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/tenantmanagercontrolplane/list_sender_invitations.py.html>`__ to see an example of how to use list_sender_invitations API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['compartmentId']
@@ -628,7 +630,7 @@ class SenderInvitationClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/tenantmanagercontrolplane/update_sender_invitation.py.html>`__ to see an example of how to use update_sender_invitation API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/tenantmanagercontrolplane/update_sender_invitation.py.html>`__ to see an example of how to use update_sender_invitation API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['senderInvitationId']

@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: apache-beam
-Version: 2.68.0
+Version: 2.69.0
 Summary: Apache Beam SDK for Python
 Home-page: https://beam.apache.org
 Download-URL: https://pypi.python.org/pypi/apache-beam
@@ -21,8 +21,8 @@ Classifier: Topic :: Software Development :: Libraries :: Python Modules
 Requires-Python: >=3.9
 Description-Content-Type: text/markdown
 Requires-Dist: crcmod<2.0,>=1.7
+Requires-Dist: cryptography<48.0.0,>=39.0.0
 Requires-Dist: orjson<4,>=3.9.7
-Requires-Dist: dill<0.3.2,>=0.3.1.1
 Requires-Dist: fastavro<2,>=0.23.6
 Requires-Dist: fasteners<1.0,>=0.3
 Requires-Dist: grpcio!=1.48.0,!=1.59.*,!=1.60.*,!=1.61.*,!=1.62.0,!=1.62.1,<1.66.0,<2,>=1.33.1; python_version <= "3.12"
@@ -36,7 +36,7 @@ Requires-Dist: objsize<0.8.0,>=0.6.1
 Requires-Dist: packaging>=22.0
 Requires-Dist: pymongo<5.0.0,>=3.8.0
 Requires-Dist: proto-plus<2,>=1.7.1
-Requires-Dist: protobuf!=4.0.*,!=4.21.*,!=4.22.0,!=4.23.*,!=4.24.*,<6.0.0.dev0,>=3.20.3
+Requires-Dist: protobuf!=4.0.*,!=4.21.*,!=4.22.0,!=4.23.*,!=4.24.*,<7.0.0.dev0,>=3.20.3
 Requires-Dist: pydot<2,>=1.2.0
 Requires-Dist: python-dateutil<3,>=2.8.0
 Requires-Dist: pytz>=2018.3
@@ -50,6 +50,8 @@ Requires-Dist: pyyaml<7.0.0,>=3.12
 Requires-Dist: beartype<0.22.0,>=0.21.0
 Requires-Dist: pyarrow<19.0.0,>=3.0.0
 Requires-Dist: pyarrow-hotfix<1
+Provides-Extra: dill
+Requires-Dist: dill<0.3.2,>=0.3.1.1; extra == "dill"
 Provides-Extra: docs
 Requires-Dist: jinja2<3.2,>=3.0; extra == "docs"
 Requires-Dist: Sphinx<8.0,>=7.0.0; extra == "docs"
@@ -71,7 +73,7 @@ Requires-Dist: parameterized<0.10.0,>=0.7.1; extra == "test"
 Requires-Dist: pyhamcrest!=1.10.0,<3.0.0,>=1.9; extra == "test"
 Requires-Dist: requests_mock<2.0,>=1.7; extra == "test"
 Requires-Dist: tenacity<9,>=8.0.0; extra == "test"
-Requires-Dist: pytest<8.0,>=7.1.2; extra == "test"
+Requires-Dist: pytest<9.0,>=7.1.2; extra == "test"
 Requires-Dist: pytest-xdist<4,>=2.5.0; extra == "test"
 Requires-Dist: pytest-timeout<3,>=2.1.0; extra == "test"
 Requires-Dist: scikit-learn>=0.20.0; extra == "test"
@@ -92,7 +94,7 @@ Provides-Extra: gcp
 Requires-Dist: cachetools<7,>=3.1.0; extra == "gcp"
 Requires-Dist: google-api-core<3,>=2.0.0; extra == "gcp"
 Requires-Dist: google-apitools<0.5.32,>=0.5.31; python_version < "3.13" and extra == "gcp"
-Requires-Dist: google-apitools<0.5.33,>=0.5.32; python_version >= "3.13" and extra == "gcp"
+Requires-Dist: google-apitools>=0.5.35; python_version >= "3.13" and extra == "gcp"
 Requires-Dist: google-auth<3,>=1.18.0; extra == "gcp"
 Requires-Dist: google-auth-httplib2<0.3.0,>=0.1.0; extra == "gcp"
 Requires-Dist: google-cloud-datastore<3,>=2.0.0; extra == "gcp"
@@ -106,6 +108,7 @@ Requires-Dist: google-cloud-bigtable<3,>=2.19.0; extra == "gcp"
 Requires-Dist: google-cloud-spanner<4,>=3.0.0; extra == "gcp"
 Requires-Dist: google-cloud-dlp<4,>=3.0.0; extra == "gcp"
 Requires-Dist: google-cloud-language<3,>=2.0; extra == "gcp"
+Requires-Dist: google-cloud-secret-manager<3,>=2.0; extra == "gcp"
 Requires-Dist: google-cloud-videointelligence<3,>=2.0; extra == "gcp"
 Requires-Dist: google-cloud-vision<4,>=2; extra == "gcp"
 Requires-Dist: google-cloud-recommendations-ai<0.11.0,>=0.1.0; extra == "gcp"
@@ -133,16 +136,18 @@ Requires-Dist: pillow<10,>=7.1.1; extra == "interactive-test"
 Requires-Dist: urllib3<2,>=1.21.1; extra == "interactive-test"
 Provides-Extra: ml-test
 Requires-Dist: datatable; extra == "ml-test"
+Requires-Dist: dill; extra == "ml-test"
+Requires-Dist: tensorflow-transform; extra == "ml-test"
 Requires-Dist: embeddings; extra == "ml-test"
-Requires-Dist: langchain; extra == "ml-test"
 Requires-Dist: onnxruntime; extra == "ml-test"
-Requires-Dist: sentence-transformers; extra == "ml-test"
+Requires-Dist: langchain; extra == "ml-test"
+Requires-Dist: sentence-transformers<3.0.0,>=2.2.2; python_version < "3.10" and extra == "ml-test"
+Requires-Dist: sentence-transformers>=2.2.2; python_version >= "3.10" and extra == "ml-test"
 Requires-Dist: skl2onnx; extra == "ml-test"
 Requires-Dist: pillow; extra == "ml-test"
 Requires-Dist: pyod; extra == "ml-test"
 Requires-Dist: tensorflow; extra == "ml-test"
 Requires-Dist: tensorflow-hub; extra == "ml-test"
-Requires-Dist: tensorflow-transform; extra == "ml-test"
 Requires-Dist: tf2onnx; extra == "ml-test"
 Requires-Dist: torch; extra == "ml-test"
 Requires-Dist: transformers; extra == "ml-test"
@@ -151,7 +156,8 @@ Requires-Dist: datatable; extra == "p312-ml-test"
 Requires-Dist: embeddings; extra == "p312-ml-test"
 Requires-Dist: onnxruntime; extra == "p312-ml-test"
 Requires-Dist: langchain; extra == "p312-ml-test"
-Requires-Dist: sentence-transformers; extra == "p312-ml-test"
+Requires-Dist: sentence-transformers<3.0.0,>=2.2.2; python_version < "3.10" and extra == "p312-ml-test"
+Requires-Dist: sentence-transformers>=2.2.2; python_version >= "3.10" and extra == "p312-ml-test"
 Requires-Dist: skl2onnx; extra == "p312-ml-test"
 Requires-Dist: pillow; extra == "p312-ml-test"
 Requires-Dist: pyod; extra == "p312-ml-test"
@@ -160,6 +166,20 @@ Requires-Dist: tensorflow-hub; extra == "p312-ml-test"
 Requires-Dist: tf2onnx; extra == "p312-ml-test"
 Requires-Dist: torch; extra == "p312-ml-test"
 Requires-Dist: transformers; extra == "p312-ml-test"
+Provides-Extra: p313-ml-test
+Requires-Dist: embeddings; extra == "p313-ml-test"
+Requires-Dist: onnxruntime; extra == "p313-ml-test"
+Requires-Dist: langchain; extra == "p313-ml-test"
+Requires-Dist: sentence-transformers<3.0.0,>=2.2.2; python_version < "3.10" and extra == "p313-ml-test"
+Requires-Dist: sentence-transformers>=2.2.2; python_version >= "3.10" and extra == "p313-ml-test"
+Requires-Dist: skl2onnx; extra == "p313-ml-test"
+Requires-Dist: pillow; extra == "p313-ml-test"
+Requires-Dist: pyod; extra == "p313-ml-test"
+Requires-Dist: tensorflow; extra == "p313-ml-test"
+Requires-Dist: tensorflow-hub; extra == "p313-ml-test"
+Requires-Dist: tf2onnx; extra == "p313-ml-test"
+Requires-Dist: torch; extra == "p313-ml-test"
+Requires-Dist: transformers; extra == "p313-ml-test"
 Provides-Extra: aws
 Requires-Dist: boto3<2,>=1.9; extra == "aws"
 Provides-Extra: azure
@@ -180,13 +200,15 @@ Requires-Dist: pandas!=1.5.0,!=1.5.1,<2.3,>=1.4.3; extra == "yaml"
 Provides-Extra: torch
 Requires-Dist: torch<2.8.0,>=1.9.0; extra == "torch"
 Provides-Extra: tensorflow
-Requires-Dist: tensorflow<2.17,>=2.12rc1; extra == "tensorflow"
+Requires-Dist: tensorflow<2.21,>=2.12rc1; extra == "tensorflow"
 Provides-Extra: transformers
-Requires-Dist: transformers<4.56.0,>=4.28.0; extra == "transformers"
+Requires-Dist: transformers<4.55.0,>=4.28.0; python_version < "3.10" and extra == "transformers"
+Requires-Dist: transformers<4.56.0,>=4.28.0; python_version >= "3.10" and extra == "transformers"
 Requires-Dist: tensorflow>=2.12.0; extra == "transformers"
 Requires-Dist: torch>=1.9.0; extra == "transformers"
 Provides-Extra: tft
 Requires-Dist: tensorflow_transform<1.15.0,>=1.14.0; extra == "tft"
+Requires-Dist: dill; extra == "tft"
 Provides-Extra: onnx
 Requires-Dist: onnxruntime==1.13.1; extra == "onnx"
 Requires-Dist: torch==1.13.1; extra == "onnx"

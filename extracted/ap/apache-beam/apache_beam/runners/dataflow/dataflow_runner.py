@@ -378,6 +378,14 @@ class DataflowRunner(PipelineRunner):
       # contain any added PTransforms.
       pipeline.replace_all(DataflowRunner._PTRANSFORM_OVERRIDES)
 
+      # Apply DataflowRunner-specific overrides (e.g., streaming PubSub
+      # optimizations)
+      from apache_beam.runners.dataflow.ptransform_overrides import (
+          get_dataflow_transform_overrides)
+      dataflow_overrides = get_dataflow_transform_overrides(options)
+      if dataflow_overrides:
+        pipeline.replace_all(dataflow_overrides)
+
       if options.view_as(DebugOptions).lookup_experiment('use_legacy_bq_sink'):
         warnings.warn(
             "Native sinks no longer implemented; "
@@ -594,8 +602,15 @@ def _check_and_add_missing_options(options):
   debug_options = options.view_as(DebugOptions)
   dataflow_service_options = options.view_as(
       GoogleCloudOptions).dataflow_service_options or []
-  options.view_as(
-      GoogleCloudOptions).dataflow_service_options = dataflow_service_options
+
+  # Add use_gbek to dataflow_service_options if gbek is set.
+  if options.view_as(SetupOptions).gbek:
+    if 'use_gbek' not in dataflow_service_options:
+      dataflow_service_options.append('use_gbek')
+  elif 'use_gbek' in dataflow_service_options:
+    raise ValueError(
+        'Do not set use_gbek directly, pass in the --gbek pipeline option '
+        'with a valid secret instead.')
 
   _add_runner_v2_missing_options(options)
 
@@ -605,6 +620,9 @@ def _check_and_add_missing_options(options):
     debug_options.add_experiment('enable_prime')
   elif debug_options.lookup_experiment('enable_prime'):
     dataflow_service_options.append('enable_prime')
+
+  options.view_as(
+      GoogleCloudOptions).dataflow_service_options = dataflow_service_options
 
   sdk_location = options.view_as(SetupOptions).sdk_location
   if 'dev' in beam.version.__version__ and sdk_location == 'default':

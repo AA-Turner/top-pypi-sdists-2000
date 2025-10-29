@@ -206,6 +206,7 @@ class Exceptions(BaseClientExceptions):
     ResourceInUseException: Type[BotocoreClientError]
     ResourceNotFoundException: Type[BotocoreClientError]
     ResourceNotReadyException: Type[BotocoreClientError]
+    SerializedRequestEntityTooLargeException: Type[BotocoreClientError]
     ServiceException: Type[BotocoreClientError]
     SnapStartException: Type[BotocoreClientError]
     SnapStartNotReadyException: Type[BotocoreClientError]
@@ -627,7 +628,7 @@ class LambdaClient(BaseClient):
         self, **kwargs: Unpack[InvokeAsyncRequestTypeDef]
     ) -> InvokeAsyncResponseTypeDef:
         """
-        <important> <p>For asynchronous function invocation, use <a>Invoke</a>.
+        <note> <p>For asynchronous function invocation, use <a>Invoke</a>.
 
         [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/lambda/client/invoke_async.html)
         [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_lambda/client/#invoke_async)

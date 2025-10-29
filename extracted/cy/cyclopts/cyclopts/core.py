@@ -129,6 +129,8 @@ def _apply_parent_defaults_to_app(app: "App", parent_app: "App") -> None:
         app._group_parameters = copy(parent_app._group_parameters)
     if app._group_arguments is None:
         app._group_arguments = copy(parent_app._group_arguments)
+    if app.version is None and parent_app.version is not None:
+        app.version = parent_app.version
 
 
 def _apply_parent_groups_to_kwargs(kwargs: dict[str, Any], parent_app: "App") -> None:
@@ -273,6 +275,7 @@ class App:
         default=None, kw_only=True
     )
     help_on_error: bool | None = field(default=None, kw_only=True)
+    help_epilogue: str | None = field(default=None, kw_only=True)
 
     version_format: Literal["markdown", "md", "plaintext", "restructuredtext", "rst", "rich"] | None = field(
         default=None, kw_only=True
@@ -424,8 +427,8 @@ class App:
 
     @version_flags.setter
     def version_flags(self, value):
-        self._version_flags = value
         self._delete_commands(self._version_flags)
+        self._version_flags = value
         if self._version_flags:
             self.command(
                 self.version_print,
@@ -442,8 +445,8 @@ class App:
 
     @help_flags.setter
     def help_flags(self, value):
-        self._help_flags = value
         self._delete_commands(self._help_flags)
+        self._help_flags = value
         if self._help_flags:
             self.command(
                 self.help_print,
@@ -688,7 +691,7 @@ class App:
 
     def version_print(
         self,
-        console: Optional["Console"] = None,
+        console: Annotated[Optional["Console"], Parameter(parse=False)] = None,
     ) -> None:
         """Print the application version.
 
@@ -714,7 +717,7 @@ class App:
 
     async def _version_print_async(
         self,
-        console: Optional["Console"] = None,
+        console: Annotated[Optional["Console"], Parameter(parse=False)] = None,
     ) -> None:
         """Async version of version_print for handling async version callables.
 
@@ -1262,6 +1265,8 @@ class App:
         else:
             kwargs.setdefault("help_flags", self.help_flags)
             kwargs.setdefault("version_flags", self.version_flags)
+            if "version" not in kwargs and self.version is not None:
+                kwargs["version"] = self.version
 
             _apply_parent_groups_to_kwargs(kwargs, self)
             app = type(self)(**kwargs)  # pyright: ignore
@@ -1474,12 +1479,15 @@ class App:
         # We don't want the command_app to be the version/help handler; we handle those specially
         command_app = execution_apps[-1]
         with suppress(IndexError):
-            # command_chain can be empty when app is invoked at root level with no commands (e.g., "myapp --help")
-            # Check what the user actually typed (command_chain) rather than the app's declared name
-            if command_chain and command_chain[-1] in set(
+            # Remove trailing help/version commands from the execution chain.
+            # When users provide multiple flags (e.g., "myapp cmd --help --help"), the parser
+            # may treat trailing help/version flags as commands in the chain. We must remove ALL
+            # such trailing commands and keep command_chain synchronized with execution_apps.
+            while command_chain and command_chain[-1] in set(
                 execution_apps[-2].help_flags + execution_apps[-2].version_flags  # pyright: ignore[reportOperatorIssue]
             ):
                 execution_apps = execution_apps[:-1]
+                command_chain = command_chain[:-1]
 
         command_app = execution_apps[-1]
         del execution_apps  # Always use AppStack from here-on.
@@ -1498,20 +1506,13 @@ class App:
 
             try:
                 if help_flag_index is not None:
-                    tokens.pop(help_flag_index)
-
-                    help_flag_index = _get_help_flag_index(
-                        unused_tokens, command_app.help_flags, end_of_options_delimiter
-                    )
-                    if help_flag_index is not None:
-                        unused_tokens.pop(help_flag_index)
-
-                    # Remove version flags when help is present to ensure help takes priority
-                    for version_flag in command_app.version_flags:
-                        with suppress(ValueError):
-                            tokens.remove(version_flag)
-                        with suppress(ValueError):
-                            unused_tokens.remove(version_flag)
+                    # Remove ALL help and version flags from both token lists.
+                    # Users can provide multiple flags (e.g., "myapp --help --help --version").
+                    # When help is requested, it takes priority over version, so we remove all
+                    # occurrences of both flag types to prevent downstream parsing errors.
+                    flags_to_remove = set(command_app.help_flags + command_app.version_flags)  # pyright: ignore[reportOperatorIssue]
+                    tokens[:] = [t for t in tokens if t not in flags_to_remove]
+                    unused_tokens[:] = [t for t in unused_tokens if t not in flags_to_remove]
 
                     command = self.help_print
                     while meta_parent := meta_parent._meta_parent:
@@ -1520,7 +1521,7 @@ class App:
                     unused_tokens = []
                     argument_collection = ArgumentCollection()
                 elif any(flag in tokens for flag in command_app.version_flags):
-                    command = _get_version_command(self)
+                    command = _get_version_command(command_app)
                     while meta_parent := meta_parent._meta_parent:
                         command = _get_version_command(meta_parent)
 
@@ -1995,6 +1996,14 @@ class App:
                     formatter = default_formatter
                 formatter = cast("HelpFormatter", formatter)
                 formatter(console, console.options, panel)
+
+            # Render epilogue
+            if help_epilogue := executing_app.app_stack.resolve("help_epilogue"):
+                from cyclopts.help import InlineText
+
+                console.print()  # Add blank line before epilogue
+                epilogue = InlineText.from_format(help_epilogue, format=help_format)
+                console.print(epilogue)
 
     def _assemble_help_panels(
         self,

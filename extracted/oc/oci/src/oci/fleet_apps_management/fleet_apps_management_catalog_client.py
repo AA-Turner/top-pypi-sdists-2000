@@ -102,9 +102,11 @@ class FleetAppsManagementCatalogClient(object):
             'base_path': '/20250228',
             'service_endpoint_template': 'https://fams.{region}.oci.{secondLevelDomain}',
             'service_endpoint_template_per_realm': {  },  # noqa: E201 E202
+            'service_uses_dualstack_endpoints_by_default': False,
             'skip_deserialization': kwargs.get('skip_deserialization', False),
             'circuit_breaker_strategy': kwargs.get('circuit_breaker_strategy', circuit_breaker.GLOBAL_CIRCUIT_BREAKER_STRATEGY),
-            'client_level_realm_specific_endpoint_template_enabled': kwargs.get('client_level_realm_specific_endpoint_template_enabled')
+            'client_level_realm_specific_endpoint_template_enabled': kwargs.get('client_level_realm_specific_endpoint_template_enabled'),
+            'client_level_dualstack_endpoints_enabled': kwargs.get('client_level_dualstack_endpoints_enabled')
         }
         if 'timeout' in kwargs:
             base_client_init_kwargs['timeout'] = kwargs.get('timeout')
@@ -165,7 +167,7 @@ class FleetAppsManagementCatalogClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/fleetappsmanagement/change_catalog_item_compartment.py.html>`__ to see an example of how to use change_catalog_item_compartment API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/fleetappsmanagement/change_catalog_item_compartment.py.html>`__ to see an example of how to use change_catalog_item_compartment API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['catalogItemId']
@@ -290,7 +292,7 @@ class FleetAppsManagementCatalogClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/fleetappsmanagement/clone_catalog_item.py.html>`__ to see an example of how to use clone_catalog_item API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/fleetappsmanagement/clone_catalog_item.py.html>`__ to see an example of how to use clone_catalog_item API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['catalogItemId']
@@ -402,7 +404,7 @@ class FleetAppsManagementCatalogClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/fleetappsmanagement/create_catalog_item.py.html>`__ to see an example of how to use create_catalog_item API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/fleetappsmanagement/create_catalog_item.py.html>`__ to see an example of how to use create_catalog_item API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -502,7 +504,7 @@ class FleetAppsManagementCatalogClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/fleetappsmanagement/delete_catalog_item.py.html>`__ to see an example of how to use delete_catalog_item API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/fleetappsmanagement/delete_catalog_item.py.html>`__ to see an example of how to use delete_catalog_item API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['catalogItemId']
@@ -602,7 +604,7 @@ class FleetAppsManagementCatalogClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/fleetappsmanagement/get_catalog_item.py.html>`__ to see an example of how to use get_catalog_item API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/fleetappsmanagement/get_catalog_item.py.html>`__ to see an example of how to use get_catalog_item API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['catalogItemId']
@@ -742,7 +744,7 @@ class FleetAppsManagementCatalogClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/fleetappsmanagement/list_catalog_items.py.html>`__ to see an example of how to use list_catalog_items API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/fleetappsmanagement/list_catalog_items.py.html>`__ to see an example of how to use list_catalog_items API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['compartmentId']
@@ -895,7 +897,7 @@ class FleetAppsManagementCatalogClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/fleetappsmanagement/update_catalog_item.py.html>`__ to see an example of how to use update_catalog_item API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/fleetappsmanagement/update_catalog_item.py.html>`__ to see an example of how to use update_catalog_item API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['catalogItemId']

@@ -128,14 +128,8 @@ class TestMessages:
                     "input_schema": {
                         "type": "object",
                         "properties": {
-                            "location": {
-                                "description": "The city and state, e.g. San Francisco, CA",
-                                "type": "string",
-                            },
-                            "unit": {
-                                "description": "Unit for the output - one of (celsius, fahrenheit)",
-                                "type": "string",
-                            },
+                            "location": "bar",
+                            "unit": "bar",
                         },
                         "required": ["location"],
                     },
@@ -303,14 +297,8 @@ class TestMessages:
                     "input_schema": {
                         "type": "object",
                         "properties": {
-                            "location": {
-                                "description": "The city and state, e.g. San Francisco, CA",
-                                "type": "string",
-                            },
-                            "unit": {
-                                "description": "Unit for the output - one of (celsius, fahrenheit)",
-                                "type": "string",
-                            },
+                            "location": "bar",
+                            "unit": "bar",
                         },
                         "required": ["location"],
                     },
@@ -380,7 +368,7 @@ class TestMessages:
                     "role": "user",
                 }
             ],
-            model="claude-3-7-sonnet-latest",
+            model="claude-sonnet-4-5",
         )
         assert_matches_type(BetaMessageTokensCount, message, path=["response"])
 
@@ -394,7 +382,7 @@ class TestMessages:
                     "role": "user",
                 }
             ],
-            model="claude-3-7-sonnet-latest",
+            model="claude-sonnet-4-5",
             context_management={
                 "edits": [
                     {
@@ -461,14 +449,8 @@ class TestMessages:
                     "input_schema": {
                         "type": "object",
                         "properties": {
-                            "location": {
-                                "description": "The city and state, e.g. San Francisco, CA",
-                                "type": "string",
-                            },
-                            "unit": {
-                                "description": "Unit for the output - one of (celsius, fahrenheit)",
-                                "type": "string",
-                            },
+                            "location": "bar",
+                            "unit": "bar",
                         },
                         "required": ["location"],
                     },
@@ -495,7 +477,7 @@ class TestMessages:
                     "role": "user",
                 }
             ],
-            model="claude-3-7-sonnet-latest",
+            model="claude-sonnet-4-5",
         )
 
         assert response.is_closed is True
@@ -513,7 +495,7 @@ class TestMessages:
                     "role": "user",
                 }
             ],
-            model="claude-3-7-sonnet-latest",
+            model="claude-sonnet-4-5",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -637,14 +619,8 @@ class TestAsyncMessages:
                     "input_schema": {
                         "type": "object",
                         "properties": {
-                            "location": {
-                                "description": "The city and state, e.g. San Francisco, CA",
-                                "type": "string",
-                            },
-                            "unit": {
-                                "description": "Unit for the output - one of (celsius, fahrenheit)",
-                                "type": "string",
-                            },
+                            "location": "bar",
+                            "unit": "bar",
                         },
                         "required": ["location"],
                     },
@@ -812,14 +788,8 @@ class TestAsyncMessages:
                     "input_schema": {
                         "type": "object",
                         "properties": {
-                            "location": {
-                                "description": "The city and state, e.g. San Francisco, CA",
-                                "type": "string",
-                            },
-                            "unit": {
-                                "description": "Unit for the output - one of (celsius, fahrenheit)",
-                                "type": "string",
-                            },
+                            "location": "bar",
+                            "unit": "bar",
                         },
                         "required": ["location"],
                     },
@@ -889,7 +859,7 @@ class TestAsyncMessages:
                     "role": "user",
                 }
             ],
-            model="claude-3-7-sonnet-latest",
+            model="claude-sonnet-4-5",
         )
         assert_matches_type(BetaMessageTokensCount, message, path=["response"])
 
@@ -903,7 +873,7 @@ class TestAsyncMessages:
                     "role": "user",
                 }
             ],
-            model="claude-3-7-sonnet-latest",
+            model="claude-sonnet-4-5",
             context_management={
                 "edits": [
                     {
@@ -970,14 +940,8 @@ class TestAsyncMessages:
                     "input_schema": {
                         "type": "object",
                         "properties": {
-                            "location": {
-                                "description": "The city and state, e.g. San Francisco, CA",
-                                "type": "string",
-                            },
-                            "unit": {
-                                "description": "Unit for the output - one of (celsius, fahrenheit)",
-                                "type": "string",
-                            },
+                            "location": "bar",
+                            "unit": "bar",
                         },
                         "required": ["location"],
                     },
@@ -1004,7 +968,7 @@ class TestAsyncMessages:
                     "role": "user",
                 }
             ],
-            model="claude-3-7-sonnet-latest",
+            model="claude-sonnet-4-5",
         )
 
         assert response.is_closed is True
@@ -1022,7 +986,7 @@ class TestAsyncMessages:
                     "role": "user",
                 }
             ],
-            model="claude-3-7-sonnet-latest",
+            model="claude-sonnet-4-5",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"

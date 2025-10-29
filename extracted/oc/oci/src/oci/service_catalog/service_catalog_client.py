@@ -102,9 +102,11 @@ class ServiceCatalogClient(object):
             'base_path': '/20210527',
             'service_endpoint_template': 'https://service-catalog.{region}.oci.{secondLevelDomain}',
             'service_endpoint_template_per_realm': {  },  # noqa: E201 E202
+            'service_uses_dualstack_endpoints_by_default': False,
             'skip_deserialization': kwargs.get('skip_deserialization', False),
             'circuit_breaker_strategy': kwargs.get('circuit_breaker_strategy', circuit_breaker.GLOBAL_CIRCUIT_BREAKER_STRATEGY),
-            'client_level_realm_specific_endpoint_template_enabled': kwargs.get('client_level_realm_specific_endpoint_template_enabled')
+            'client_level_realm_specific_endpoint_template_enabled': kwargs.get('client_level_realm_specific_endpoint_template_enabled'),
+            'client_level_dualstack_endpoints_enabled': kwargs.get('client_level_dualstack_endpoints_enabled')
         }
         if 'timeout' in kwargs:
             base_client_init_kwargs['timeout'] = kwargs.get('timeout')
@@ -152,7 +154,7 @@ class ServiceCatalogClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/servicecatalog/bulk_replace_service_catalog_associations.py.html>`__ to see an example of how to use bulk_replace_service_catalog_associations API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/servicecatalog/bulk_replace_service_catalog_associations.py.html>`__ to see an example of how to use bulk_replace_service_catalog_associations API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['serviceCatalogId']
@@ -259,7 +261,7 @@ class ServiceCatalogClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/servicecatalog/change_private_application_compartment.py.html>`__ to see an example of how to use change_private_application_compartment API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/servicecatalog/change_private_application_compartment.py.html>`__ to see an example of how to use change_private_application_compartment API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['privateApplicationId']
@@ -366,7 +368,7 @@ class ServiceCatalogClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/servicecatalog/change_service_catalog_compartment.py.html>`__ to see an example of how to use change_service_catalog_compartment API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/servicecatalog/change_service_catalog_compartment.py.html>`__ to see an example of how to use change_service_catalog_compartment API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['serviceCatalogId']
@@ -471,7 +473,7 @@ class ServiceCatalogClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/servicecatalog/create_private_application.py.html>`__ to see an example of how to use create_private_application API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/servicecatalog/create_private_application.py.html>`__ to see an example of how to use create_private_application API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -567,7 +569,7 @@ class ServiceCatalogClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/servicecatalog/create_service_catalog.py.html>`__ to see an example of how to use create_service_catalog API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/servicecatalog/create_service_catalog.py.html>`__ to see an example of how to use create_service_catalog API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -663,7 +665,7 @@ class ServiceCatalogClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/servicecatalog/create_service_catalog_association.py.html>`__ to see an example of how to use create_service_catalog_association API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/servicecatalog/create_service_catalog_association.py.html>`__ to see an example of how to use create_service_catalog_association API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -758,7 +760,7 @@ class ServiceCatalogClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/servicecatalog/delete_private_application.py.html>`__ to see an example of how to use delete_private_application API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/servicecatalog/delete_private_application.py.html>`__ to see an example of how to use delete_private_application API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['privateApplicationId']
@@ -860,7 +862,7 @@ class ServiceCatalogClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/servicecatalog/delete_service_catalog.py.html>`__ to see an example of how to use delete_service_catalog API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/servicecatalog/delete_service_catalog.py.html>`__ to see an example of how to use delete_service_catalog API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['serviceCatalogId']
@@ -962,7 +964,7 @@ class ServiceCatalogClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/servicecatalog/delete_service_catalog_association.py.html>`__ to see an example of how to use delete_service_catalog_association API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/servicecatalog/delete_service_catalog_association.py.html>`__ to see an example of how to use delete_service_catalog_association API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['serviceCatalogAssociationId']
@@ -1059,7 +1061,7 @@ class ServiceCatalogClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/servicecatalog/get_private_application.py.html>`__ to see an example of how to use get_private_application API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/servicecatalog/get_private_application.py.html>`__ to see an example of how to use get_private_application API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['privateApplicationId']
@@ -1156,7 +1158,7 @@ class ServiceCatalogClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/servicecatalog/get_private_application_action_download_logo.py.html>`__ to see an example of how to use get_private_application_action_download_logo API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/servicecatalog/get_private_application_action_download_logo.py.html>`__ to see an example of how to use get_private_application_action_download_logo API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['privateApplicationId']
@@ -1253,7 +1255,7 @@ class ServiceCatalogClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/servicecatalog/get_private_application_package.py.html>`__ to see an example of how to use get_private_application_package API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/servicecatalog/get_private_application_package.py.html>`__ to see an example of how to use get_private_application_package API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['privateApplicationPackageId']
@@ -1350,7 +1352,7 @@ class ServiceCatalogClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/servicecatalog/get_private_application_package_action_download_config.py.html>`__ to see an example of how to use get_private_application_package_action_download_config API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/servicecatalog/get_private_application_package_action_download_config.py.html>`__ to see an example of how to use get_private_application_package_action_download_config API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['privateApplicationPackageId']
@@ -1447,7 +1449,7 @@ class ServiceCatalogClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/servicecatalog/get_service_catalog.py.html>`__ to see an example of how to use get_service_catalog API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/servicecatalog/get_service_catalog.py.html>`__ to see an example of how to use get_service_catalog API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['serviceCatalogId']
@@ -1544,7 +1546,7 @@ class ServiceCatalogClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/servicecatalog/get_service_catalog_association.py.html>`__ to see an example of how to use get_service_catalog_association API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/servicecatalog/get_service_catalog_association.py.html>`__ to see an example of how to use get_service_catalog_association API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['serviceCatalogAssociationId']
@@ -1641,7 +1643,7 @@ class ServiceCatalogClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/servicecatalog/get_work_request.py.html>`__ to see an example of how to use get_work_request API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/servicecatalog/get_work_request.py.html>`__ to see an example of how to use get_work_request API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workRequestId']
@@ -1781,7 +1783,7 @@ class ServiceCatalogClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/servicecatalog/list_applications.py.html>`__ to see an example of how to use list_applications API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/servicecatalog/list_applications.py.html>`__ to see an example of how to use list_applications API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -1949,7 +1951,7 @@ class ServiceCatalogClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/servicecatalog/list_private_application_packages.py.html>`__ to see an example of how to use list_private_application_packages API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/servicecatalog/list_private_application_packages.py.html>`__ to see an example of how to use list_private_application_packages API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['privateApplicationId']
@@ -2100,7 +2102,7 @@ class ServiceCatalogClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/servicecatalog/list_private_applications.py.html>`__ to see an example of how to use list_private_applications API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/servicecatalog/list_private_applications.py.html>`__ to see an example of how to use list_private_applications API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['compartmentId']
@@ -2243,7 +2245,7 @@ class ServiceCatalogClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/servicecatalog/list_service_catalog_associations.py.html>`__ to see an example of how to use list_service_catalog_associations API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/servicecatalog/list_service_catalog_associations.py.html>`__ to see an example of how to use list_service_catalog_associations API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -2386,7 +2388,7 @@ class ServiceCatalogClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/servicecatalog/list_service_catalogs.py.html>`__ to see an example of how to use list_service_catalogs API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/servicecatalog/list_service_catalogs.py.html>`__ to see an example of how to use list_service_catalogs API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['compartmentId']
@@ -2520,7 +2522,7 @@ class ServiceCatalogClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/servicecatalog/list_work_request_errors.py.html>`__ to see an example of how to use list_work_request_errors API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/servicecatalog/list_work_request_errors.py.html>`__ to see an example of how to use list_work_request_errors API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workRequestId']
@@ -2661,7 +2663,7 @@ class ServiceCatalogClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/servicecatalog/list_work_request_logs.py.html>`__ to see an example of how to use list_work_request_logs API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/servicecatalog/list_work_request_logs.py.html>`__ to see an example of how to use list_work_request_logs API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workRequestId']
@@ -2813,7 +2815,7 @@ class ServiceCatalogClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/servicecatalog/list_work_requests.py.html>`__ to see an example of how to use list_work_requests API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/servicecatalog/list_work_requests.py.html>`__ to see an example of how to use list_work_requests API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -2949,7 +2951,7 @@ class ServiceCatalogClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/servicecatalog/update_private_application.py.html>`__ to see an example of how to use update_private_application API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/servicecatalog/update_private_application.py.html>`__ to see an example of how to use update_private_application API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['privateApplicationId']
@@ -3058,7 +3060,7 @@ class ServiceCatalogClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/servicecatalog/update_service_catalog.py.html>`__ to see an example of how to use update_service_catalog API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/servicecatalog/update_service_catalog.py.html>`__ to see an example of how to use update_service_catalog API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['serviceCatalogId']

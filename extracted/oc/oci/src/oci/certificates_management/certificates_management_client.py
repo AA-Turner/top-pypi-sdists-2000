@@ -102,9 +102,11 @@ class CertificatesManagementClient(object):
             'base_path': '/20210224',
             'service_endpoint_template': 'https://certificatesmanagement.{region}.oci.{secondLevelDomain}',
             'service_endpoint_template_per_realm': {  },  # noqa: E201 E202
+            'service_uses_dualstack_endpoints_by_default': False,
             'skip_deserialization': kwargs.get('skip_deserialization', False),
             'circuit_breaker_strategy': kwargs.get('circuit_breaker_strategy', circuit_breaker.GLOBAL_CIRCUIT_BREAKER_STRATEGY),
-            'client_level_realm_specific_endpoint_template_enabled': kwargs.get('client_level_realm_specific_endpoint_template_enabled')
+            'client_level_realm_specific_endpoint_template_enabled': kwargs.get('client_level_realm_specific_endpoint_template_enabled'),
+            'client_level_dualstack_endpoints_enabled': kwargs.get('client_level_dualstack_endpoints_enabled')
         }
         if 'timeout' in kwargs:
             base_client_init_kwargs['timeout'] = kwargs.get('timeout')
@@ -152,7 +154,7 @@ class CertificatesManagementClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/certificatesmanagement/cancel_certificate_authority_deletion.py.html>`__ to see an example of how to use cancel_certificate_authority_deletion API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/certificatesmanagement/cancel_certificate_authority_deletion.py.html>`__ to see an example of how to use cancel_certificate_authority_deletion API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['certificateAuthorityId']
@@ -262,7 +264,7 @@ class CertificatesManagementClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/certificatesmanagement/cancel_certificate_authority_version_deletion.py.html>`__ to see an example of how to use cancel_certificate_authority_version_deletion API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/certificatesmanagement/cancel_certificate_authority_version_deletion.py.html>`__ to see an example of how to use cancel_certificate_authority_version_deletion API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['certificateAuthorityId', 'certificateAuthorityVersionNumber']
@@ -370,7 +372,7 @@ class CertificatesManagementClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/certificatesmanagement/cancel_certificate_deletion.py.html>`__ to see an example of how to use cancel_certificate_deletion API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/certificatesmanagement/cancel_certificate_deletion.py.html>`__ to see an example of how to use cancel_certificate_deletion API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['certificateId']
@@ -478,7 +480,7 @@ class CertificatesManagementClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/certificatesmanagement/cancel_certificate_version_deletion.py.html>`__ to see an example of how to use cancel_certificate_version_deletion API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/certificatesmanagement/cancel_certificate_version_deletion.py.html>`__ to see an example of how to use cancel_certificate_version_deletion API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['certificateId', 'certificateVersionNumber']
@@ -600,7 +602,7 @@ class CertificatesManagementClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/certificatesmanagement/change_ca_bundle_compartment.py.html>`__ to see an example of how to use change_ca_bundle_compartment API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/certificatesmanagement/change_ca_bundle_compartment.py.html>`__ to see an example of how to use change_ca_bundle_compartment API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['caBundleId']
@@ -726,7 +728,7 @@ class CertificatesManagementClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/certificatesmanagement/change_certificate_authority_compartment.py.html>`__ to see an example of how to use change_certificate_authority_compartment API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/certificatesmanagement/change_certificate_authority_compartment.py.html>`__ to see an example of how to use change_certificate_authority_compartment API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['certificateAuthorityId']
@@ -852,7 +854,7 @@ class CertificatesManagementClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/certificatesmanagement/change_certificate_compartment.py.html>`__ to see an example of how to use change_certificate_compartment API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/certificatesmanagement/change_certificate_compartment.py.html>`__ to see an example of how to use change_certificate_compartment API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['certificateId']
@@ -963,7 +965,7 @@ class CertificatesManagementClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/certificatesmanagement/create_ca_bundle.py.html>`__ to see an example of how to use create_ca_bundle API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/certificatesmanagement/create_ca_bundle.py.html>`__ to see an example of how to use create_ca_bundle API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -1062,7 +1064,7 @@ class CertificatesManagementClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/certificatesmanagement/create_certificate.py.html>`__ to see an example of how to use create_certificate API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/certificatesmanagement/create_certificate.py.html>`__ to see an example of how to use create_certificate API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -1161,7 +1163,7 @@ class CertificatesManagementClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/certificatesmanagement/create_certificate_authority.py.html>`__ to see an example of how to use create_certificate_authority API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/certificatesmanagement/create_certificate_authority.py.html>`__ to see an example of how to use create_certificate_authority API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -1259,7 +1261,7 @@ class CertificatesManagementClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/certificatesmanagement/delete_ca_bundle.py.html>`__ to see an example of how to use delete_ca_bundle API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/certificatesmanagement/delete_ca_bundle.py.html>`__ to see an example of how to use delete_ca_bundle API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['caBundleId']
@@ -1357,7 +1359,7 @@ class CertificatesManagementClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/certificatesmanagement/get_association.py.html>`__ to see an example of how to use get_association API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/certificatesmanagement/get_association.py.html>`__ to see an example of how to use get_association API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['associationId']
@@ -1455,7 +1457,7 @@ class CertificatesManagementClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/certificatesmanagement/get_ca_bundle.py.html>`__ to see an example of how to use get_ca_bundle API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/certificatesmanagement/get_ca_bundle.py.html>`__ to see an example of how to use get_ca_bundle API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['caBundleId']
@@ -1553,7 +1555,7 @@ class CertificatesManagementClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/certificatesmanagement/get_certificate.py.html>`__ to see an example of how to use get_certificate API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/certificatesmanagement/get_certificate.py.html>`__ to see an example of how to use get_certificate API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['certificateId']
@@ -1651,7 +1653,7 @@ class CertificatesManagementClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/certificatesmanagement/get_certificate_authority.py.html>`__ to see an example of how to use get_certificate_authority API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/certificatesmanagement/get_certificate_authority.py.html>`__ to see an example of how to use get_certificate_authority API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['certificateAuthorityId']
@@ -1752,7 +1754,7 @@ class CertificatesManagementClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/certificatesmanagement/get_certificate_authority_version.py.html>`__ to see an example of how to use get_certificate_authority_version API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/certificatesmanagement/get_certificate_authority_version.py.html>`__ to see an example of how to use get_certificate_authority_version API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['certificateAuthorityId', 'certificateAuthorityVersionNumber']
@@ -1854,7 +1856,7 @@ class CertificatesManagementClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/certificatesmanagement/get_certificate_version.py.html>`__ to see an example of how to use get_certificate_version API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/certificatesmanagement/get_certificate_version.py.html>`__ to see an example of how to use get_certificate_version API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['certificateId', 'certificateVersionNumber']
@@ -1989,7 +1991,7 @@ class CertificatesManagementClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/certificatesmanagement/list_associations.py.html>`__ to see an example of how to use list_associations API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/certificatesmanagement/list_associations.py.html>`__ to see an example of how to use list_associations API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -2152,7 +2154,7 @@ class CertificatesManagementClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/certificatesmanagement/list_ca_bundles.py.html>`__ to see an example of how to use list_ca_bundles API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/certificatesmanagement/list_ca_bundles.py.html>`__ to see an example of how to use list_ca_bundles API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -2315,7 +2317,7 @@ class CertificatesManagementClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/certificatesmanagement/list_certificate_authorities.py.html>`__ to see an example of how to use list_certificate_authorities API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/certificatesmanagement/list_certificate_authorities.py.html>`__ to see an example of how to use list_certificate_authorities API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -2467,7 +2469,7 @@ class CertificatesManagementClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/certificatesmanagement/list_certificate_authority_versions.py.html>`__ to see an example of how to use list_certificate_authority_versions API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/certificatesmanagement/list_certificate_authority_versions.py.html>`__ to see an example of how to use list_certificate_authority_versions API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['certificateAuthorityId']
@@ -2616,7 +2618,7 @@ class CertificatesManagementClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/certificatesmanagement/list_certificate_versions.py.html>`__ to see an example of how to use list_certificate_versions API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/certificatesmanagement/list_certificate_versions.py.html>`__ to see an example of how to use list_certificate_versions API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['certificateId']
@@ -2778,7 +2780,7 @@ class CertificatesManagementClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/certificatesmanagement/list_certificates.py.html>`__ to see an example of how to use list_certificates API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/certificatesmanagement/list_certificates.py.html>`__ to see an example of how to use list_certificates API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -2930,7 +2932,7 @@ class CertificatesManagementClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/certificatesmanagement/revoke_certificate_authority_version.py.html>`__ to see an example of how to use revoke_certificate_authority_version API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/certificatesmanagement/revoke_certificate_authority_version.py.html>`__ to see an example of how to use revoke_certificate_authority_version API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['certificateAuthorityId', 'certificateAuthorityVersionNumber']
@@ -3055,7 +3057,7 @@ class CertificatesManagementClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/certificatesmanagement/revoke_certificate_version.py.html>`__ to see an example of how to use revoke_certificate_version API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/certificatesmanagement/revoke_certificate_version.py.html>`__ to see an example of how to use revoke_certificate_version API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['certificateId', 'certificateVersionNumber']
@@ -3169,7 +3171,7 @@ class CertificatesManagementClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/certificatesmanagement/schedule_certificate_authority_deletion.py.html>`__ to see an example of how to use schedule_certificate_authority_deletion API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/certificatesmanagement/schedule_certificate_authority_deletion.py.html>`__ to see an example of how to use schedule_certificate_authority_deletion API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['certificateAuthorityId']
@@ -3284,7 +3286,7 @@ class CertificatesManagementClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/certificatesmanagement/schedule_certificate_authority_version_deletion.py.html>`__ to see an example of how to use schedule_certificate_authority_version_deletion API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/certificatesmanagement/schedule_certificate_authority_version_deletion.py.html>`__ to see an example of how to use schedule_certificate_authority_version_deletion API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['certificateAuthorityId', 'certificateAuthorityVersionNumber']
@@ -3400,7 +3402,7 @@ class CertificatesManagementClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/certificatesmanagement/schedule_certificate_deletion.py.html>`__ to see an example of how to use schedule_certificate_deletion API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/certificatesmanagement/schedule_certificate_deletion.py.html>`__ to see an example of how to use schedule_certificate_deletion API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['certificateId']
@@ -3516,7 +3518,7 @@ class CertificatesManagementClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/certificatesmanagement/schedule_certificate_version_deletion.py.html>`__ to see an example of how to use schedule_certificate_version_deletion API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/certificatesmanagement/schedule_certificate_version_deletion.py.html>`__ to see an example of how to use schedule_certificate_version_deletion API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['certificateId', 'certificateVersionNumber']
@@ -3627,7 +3629,7 @@ class CertificatesManagementClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/certificatesmanagement/update_ca_bundle.py.html>`__ to see an example of how to use update_ca_bundle API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/certificatesmanagement/update_ca_bundle.py.html>`__ to see an example of how to use update_ca_bundle API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['caBundleId']
@@ -3739,7 +3741,7 @@ class CertificatesManagementClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/certificatesmanagement/update_certificate.py.html>`__ to see an example of how to use update_certificate API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/certificatesmanagement/update_certificate.py.html>`__ to see an example of how to use update_certificate API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['certificateId']
@@ -3851,7 +3853,7 @@ class CertificatesManagementClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/certificatesmanagement/update_certificate_authority.py.html>`__ to see an example of how to use update_certificate_authority API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/certificatesmanagement/update_certificate_authority.py.html>`__ to see an example of how to use update_certificate_authority API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['certificateAuthorityId']

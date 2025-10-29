@@ -102,9 +102,11 @@ class AnnouncementSubscriptionClient(object):
             'base_path': '/20180904',
             'service_endpoint_template': 'https://announcements.{region}.{secondLevelDomain}',
             'service_endpoint_template_per_realm': {  },  # noqa: E201 E202
+            'service_uses_dualstack_endpoints_by_default': False,
             'skip_deserialization': kwargs.get('skip_deserialization', False),
             'circuit_breaker_strategy': kwargs.get('circuit_breaker_strategy', circuit_breaker.GLOBAL_CIRCUIT_BREAKER_STRATEGY),
-            'client_level_realm_specific_endpoint_template_enabled': kwargs.get('client_level_realm_specific_endpoint_template_enabled')
+            'client_level_realm_specific_endpoint_template_enabled': kwargs.get('client_level_realm_specific_endpoint_template_enabled'),
+            'client_level_dualstack_endpoints_enabled': kwargs.get('client_level_dualstack_endpoints_enabled')
         }
         if 'timeout' in kwargs:
             base_client_init_kwargs['timeout'] = kwargs.get('timeout')
@@ -152,7 +154,7 @@ class AnnouncementSubscriptionClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/announcementsservice/change_announcement_subscription_compartment.py.html>`__ to see an example of how to use change_announcement_subscription_compartment API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/announcementsservice/change_announcement_subscription_compartment.py.html>`__ to see an example of how to use change_announcement_subscription_compartment API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['announcementSubscriptionId']
@@ -260,7 +262,7 @@ class AnnouncementSubscriptionClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/announcementsservice/create_announcement_subscription.py.html>`__ to see an example of how to use create_announcement_subscription API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/announcementsservice/create_announcement_subscription.py.html>`__ to see an example of how to use create_announcement_subscription API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -365,7 +367,7 @@ class AnnouncementSubscriptionClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/announcementsservice/create_filter_group.py.html>`__ to see an example of how to use create_filter_group API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/announcementsservice/create_filter_group.py.html>`__ to see an example of how to use create_filter_group API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['announcementSubscriptionId']
@@ -474,7 +476,7 @@ class AnnouncementSubscriptionClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/announcementsservice/delete_announcement_subscription.py.html>`__ to see an example of how to use delete_announcement_subscription API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/announcementsservice/delete_announcement_subscription.py.html>`__ to see an example of how to use delete_announcement_subscription API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['announcementSubscriptionId']
@@ -579,7 +581,7 @@ class AnnouncementSubscriptionClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/announcementsservice/delete_filter_group.py.html>`__ to see an example of how to use delete_filter_group API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/announcementsservice/delete_filter_group.py.html>`__ to see an example of how to use delete_filter_group API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['announcementSubscriptionId', 'filterGroupName']
@@ -679,7 +681,7 @@ class AnnouncementSubscriptionClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/announcementsservice/get_announcement_subscription.py.html>`__ to see an example of how to use get_announcement_subscription API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/announcementsservice/get_announcement_subscription.py.html>`__ to see an example of how to use get_announcement_subscription API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['announcementSubscriptionId']
@@ -805,7 +807,7 @@ class AnnouncementSubscriptionClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/announcementsservice/list_announcement_subscriptions.py.html>`__ to see an example of how to use list_announcement_subscriptions API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/announcementsservice/list_announcement_subscriptions.py.html>`__ to see an example of how to use list_announcement_subscriptions API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['compartmentId']
@@ -940,7 +942,7 @@ class AnnouncementSubscriptionClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/announcementsservice/update_announcement_subscription.py.html>`__ to see an example of how to use update_announcement_subscription API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/announcementsservice/update_announcement_subscription.py.html>`__ to see an example of how to use update_announcement_subscription API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['announcementSubscriptionId']
@@ -1052,7 +1054,7 @@ class AnnouncementSubscriptionClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/announcementsservice/update_filter_group.py.html>`__ to see an example of how to use update_filter_group API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/announcementsservice/update_filter_group.py.html>`__ to see an example of how to use update_filter_group API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['announcementSubscriptionId', 'filterGroupName']

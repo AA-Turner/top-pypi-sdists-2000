@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: huggingface_hub
-Version: 1.0.0
+Version: 1.0.1
 Summary: Client library to download and publish models, datasets and other repos on the huggingface.co hub
 Home-page: https://github.com/huggingface/huggingface_hub
 Author: Hugging Face, Inc.
@@ -23,7 +23,6 @@ Classifier: Programming Language :: Python :: 3.13
 Classifier: Topic :: Scientific/Engineering :: Artificial Intelligence
 Requires-Python: >=3.9.0
 Description-Content-Type: text/markdown
-Provides-Extra: inference
 Provides-Extra: oauth
 Provides-Extra: torch
 Provides-Extra: fastai

@@ -104,9 +104,11 @@ class ModelDeploymentClient(object):
             'base_path': '/',
             'service_endpoint_template': 'https://md.datascience.{region}.oci.{secondLevelDomain}',
             'service_endpoint_template_per_realm': { 'oc1': 'https://modeldeployment.{region}.oci.customer-oci.com' },  # noqa: E201 E202
+            'service_uses_dualstack_endpoints_by_default': False,
             'skip_deserialization': kwargs.get('skip_deserialization', False),
             'circuit_breaker_strategy': kwargs.get('circuit_breaker_strategy', circuit_breaker.GLOBAL_CIRCUIT_BREAKER_STRATEGY),
-            'client_level_realm_specific_endpoint_template_enabled': kwargs.get('client_level_realm_specific_endpoint_template_enabled')
+            'client_level_realm_specific_endpoint_template_enabled': kwargs.get('client_level_realm_specific_endpoint_template_enabled'),
+            'client_level_dualstack_endpoints_enabled': kwargs.get('client_level_dualstack_endpoints_enabled')
         }
         if 'timeout' in kwargs:
             base_client_init_kwargs['timeout'] = kwargs.get('timeout')
@@ -151,7 +153,7 @@ class ModelDeploymentClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/modeldeployment/predict.py.html>`__ to see an example of how to use predict API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/modeldeployment/predict.py.html>`__ to see an example of how to use predict API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['modelDeploymentId']
@@ -257,7 +259,7 @@ class ModelDeploymentClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/modeldeployment/predict_with_response_stream.py.html>`__ to see an example of how to use predict_with_response_stream API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/modeldeployment/predict_with_response_stream.py.html>`__ to see an example of how to use predict_with_response_stream API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['modelDeploymentId']

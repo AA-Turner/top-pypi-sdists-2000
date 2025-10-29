@@ -37,7 +37,6 @@ from types_boto3_appmesh.client import AppMeshClient
 from types_boto3_apprunner.client import AppRunnerClient
 from types_boto3_appstream.client import AppStreamClient
 from types_boto3_appsync.client import AppSyncClient
-from types_boto3_apptest.client import MainframeModernizationApplicationTestingClient
 from types_boto3_arc_region_switch.client import ARCRegionswitchClient
 from types_boto3_arc_zonal_shift.client import ARCZonalShiftClient
 from types_boto3_artifact.client import ArtifactClient
@@ -217,7 +216,6 @@ from types_boto3_iotanalytics.client import IoTAnalyticsClient
 from types_boto3_iotdeviceadvisor.client import IoTDeviceAdvisorClient
 from types_boto3_iotevents.client import IoTEventsClient
 from types_boto3_iotevents_data.client import IoTEventsDataClient
-from types_boto3_iotfleethub.client import IoTFleetHubClient
 from types_boto3_iotfleetwise.client import IoTFleetWiseClient
 from types_boto3_iotsecuretunneling.client import IoTSecureTunnelingClient
 from types_boto3_iotsitewise.client import IoTSiteWiseClient
@@ -260,8 +258,6 @@ from types_boto3_lightsail.client import LightsailClient
 from types_boto3_location.client import LocationServiceClient
 from types_boto3_logs.client import CloudWatchLogsClient
 from types_boto3_lookoutequipment.client import LookoutEquipmentClient
-from types_boto3_lookoutmetrics.client import LookoutMetricsClient
-from types_boto3_lookoutvision.client import LookoutforVisionClient
 from types_boto3_m2.client import MainframeModernizationClient
 from types_boto3_machinelearning.client import MachineLearningClient
 from types_boto3_macie2.client import Macie2Client
@@ -336,8 +332,6 @@ from types_boto3_proton.client import ProtonClient
 from types_boto3_qapps.client import QAppsClient
 from types_boto3_qbusiness.client import QBusinessClient
 from types_boto3_qconnect.client import QConnectClient
-from types_boto3_qldb.client import QLDBClient
-from types_boto3_qldb_session.client import QLDBSessionClient
 from types_boto3_quicksight.client import QuickSightClient
 from types_boto3_ram.client import RAMClient
 from types_boto3_rbin.client import RecycleBinClient
@@ -352,7 +346,6 @@ from types_boto3_resiliencehub.client import ResilienceHubClient
 from types_boto3_resource_explorer_2.client import ResourceExplorerClient
 from types_boto3_resource_groups.client import ResourceGroupsClient
 from types_boto3_resourcegroupstaggingapi.client import ResourceGroupsTaggingAPIClient
-from types_boto3_robomaker.client import RoboMakerClient
 from types_boto3_rolesanywhere.client import IAMRolesAnywhereClient
 from types_boto3_route53.client import Route53Client
 from types_boto3_route53_recovery_cluster.client import Route53RecoveryClusterClient
@@ -920,24 +913,6 @@ def client(
 ) -> AppSyncClient:
     """
     Create client for AppSync service.
-    """
-
-@overload
-def client(
-    service_name: Literal["apptest"],
-    region_name: str | None = ...,
-    api_version: str | None = ...,
-    use_ssl: bool | None = ...,
-    verify: bool | str | None = ...,
-    endpoint_url: str | None = ...,
-    aws_access_key_id: str | None = ...,
-    aws_secret_access_key: str | None = ...,
-    aws_session_token: str | None = ...,
-    config: Config | None = ...,
-    aws_account_id: str | None = ...,
-) -> MainframeModernizationApplicationTestingClient:
-    """
-    Create client for MainframeModernizationApplicationTesting service.
     """
 
 @overload
@@ -3948,24 +3923,6 @@ def client(
 
 @overload
 def client(
-    service_name: Literal["iotfleethub"],
-    region_name: str | None = ...,
-    api_version: str | None = ...,
-    use_ssl: bool | None = ...,
-    verify: bool | str | None = ...,
-    endpoint_url: str | None = ...,
-    aws_access_key_id: str | None = ...,
-    aws_secret_access_key: str | None = ...,
-    aws_session_token: str | None = ...,
-    config: Config | None = ...,
-    aws_account_id: str | None = ...,
-) -> IoTFleetHubClient:
-    """
-    Create client for IoTFleetHub service.
-    """
-
-@overload
-def client(
     service_name: Literal["iotfleetwise"],
     region_name: str | None = ...,
     api_version: str | None = ...,
@@ -4646,42 +4603,6 @@ def client(
 ) -> LookoutEquipmentClient:
     """
     Create client for LookoutEquipment service.
-    """
-
-@overload
-def client(
-    service_name: Literal["lookoutmetrics"],
-    region_name: str | None = ...,
-    api_version: str | None = ...,
-    use_ssl: bool | None = ...,
-    verify: bool | str | None = ...,
-    endpoint_url: str | None = ...,
-    aws_access_key_id: str | None = ...,
-    aws_secret_access_key: str | None = ...,
-    aws_session_token: str | None = ...,
-    config: Config | None = ...,
-    aws_account_id: str | None = ...,
-) -> LookoutMetricsClient:
-    """
-    Create client for LookoutMetrics service.
-    """
-
-@overload
-def client(
-    service_name: Literal["lookoutvision"],
-    region_name: str | None = ...,
-    api_version: str | None = ...,
-    use_ssl: bool | None = ...,
-    verify: bool | str | None = ...,
-    endpoint_url: str | None = ...,
-    aws_access_key_id: str | None = ...,
-    aws_secret_access_key: str | None = ...,
-    aws_session_token: str | None = ...,
-    config: Config | None = ...,
-    aws_account_id: str | None = ...,
-) -> LookoutforVisionClient:
-    """
-    Create client for LookoutforVision service.
     """
 
 @overload
@@ -6018,42 +5939,6 @@ def client(
 
 @overload
 def client(
-    service_name: Literal["qldb"],
-    region_name: str | None = ...,
-    api_version: str | None = ...,
-    use_ssl: bool | None = ...,
-    verify: bool | str | None = ...,
-    endpoint_url: str | None = ...,
-    aws_access_key_id: str | None = ...,
-    aws_secret_access_key: str | None = ...,
-    aws_session_token: str | None = ...,
-    config: Config | None = ...,
-    aws_account_id: str | None = ...,
-) -> QLDBClient:
-    """
-    Create client for QLDB service.
-    """
-
-@overload
-def client(
-    service_name: Literal["qldb-session"],
-    region_name: str | None = ...,
-    api_version: str | None = ...,
-    use_ssl: bool | None = ...,
-    verify: bool | str | None = ...,
-    endpoint_url: str | None = ...,
-    aws_access_key_id: str | None = ...,
-    aws_secret_access_key: str | None = ...,
-    aws_session_token: str | None = ...,
-    config: Config | None = ...,
-    aws_account_id: str | None = ...,
-) -> QLDBSessionClient:
-    """
-    Create client for QLDBSession service.
-    """
-
-@overload
-def client(
     service_name: Literal["quicksight"],
     region_name: str | None = ...,
     api_version: str | None = ...,
@@ -6302,24 +6187,6 @@ def client(
 ) -> ResourceGroupsTaggingAPIClient:
     """
     Create client for ResourceGroupsTaggingAPI service.
-    """
-
-@overload
-def client(
-    service_name: Literal["robomaker"],
-    region_name: str | None = ...,
-    api_version: str | None = ...,
-    use_ssl: bool | None = ...,
-    verify: bool | str | None = ...,
-    endpoint_url: str | None = ...,
-    aws_access_key_id: str | None = ...,
-    aws_secret_access_key: str | None = ...,
-    aws_session_token: str | None = ...,
-    config: Config | None = ...,
-    aws_account_id: str | None = ...,
-) -> RoboMakerClient:
-    """
-    Create client for RoboMaker service.
     """
 
 @overload

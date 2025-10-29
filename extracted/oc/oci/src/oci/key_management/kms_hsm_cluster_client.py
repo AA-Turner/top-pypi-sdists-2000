@@ -102,9 +102,11 @@ class KmsHsmClusterClient(object):
             'base_path': '/',
             'service_endpoint_template': 'https://kms.{region}.{secondLevelDomain}',
             'service_endpoint_template_per_realm': {  },  # noqa: E201 E202
+            'service_uses_dualstack_endpoints_by_default': False,
             'skip_deserialization': kwargs.get('skip_deserialization', False),
             'circuit_breaker_strategy': kwargs.get('circuit_breaker_strategy', circuit_breaker.GLOBAL_CIRCUIT_BREAKER_STRATEGY),
-            'client_level_realm_specific_endpoint_template_enabled': kwargs.get('client_level_realm_specific_endpoint_template_enabled')
+            'client_level_realm_specific_endpoint_template_enabled': kwargs.get('client_level_realm_specific_endpoint_template_enabled'),
+            'client_level_dualstack_endpoints_enabled': kwargs.get('client_level_dualstack_endpoints_enabled')
         }
         if 'timeout' in kwargs:
             base_client_init_kwargs['timeout'] = kwargs.get('timeout')
@@ -160,7 +162,7 @@ class KmsHsmClusterClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/keymanagement/cancel_hsm_cluster_deletion.py.html>`__ to see an example of how to use cancel_hsm_cluster_deletion API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/keymanagement/cancel_hsm_cluster_deletion.py.html>`__ to see an example of how to use cancel_hsm_cluster_deletion API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['hsmClusterId']
@@ -281,7 +283,7 @@ class KmsHsmClusterClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/keymanagement/change_hsm_cluster_compartment.py.html>`__ to see an example of how to use change_hsm_cluster_compartment API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/keymanagement/change_hsm_cluster_compartment.py.html>`__ to see an example of how to use change_hsm_cluster_compartment API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['hsmClusterId']
@@ -392,7 +394,7 @@ class KmsHsmClusterClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/keymanagement/create_hsm_cluster.py.html>`__ to see an example of how to use create_hsm_cluster API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/keymanagement/create_hsm_cluster.py.html>`__ to see an example of how to use create_hsm_cluster API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -498,7 +500,7 @@ class KmsHsmClusterClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/keymanagement/download_certificate_signing_request.py.html>`__ to see an example of how to use download_certificate_signing_request API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/keymanagement/download_certificate_signing_request.py.html>`__ to see an example of how to use download_certificate_signing_request API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['hsmClusterId']
@@ -606,7 +608,7 @@ class KmsHsmClusterClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/keymanagement/get_hsm_cluster.py.html>`__ to see an example of how to use get_hsm_cluster API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/keymanagement/get_hsm_cluster.py.html>`__ to see an example of how to use get_hsm_cluster API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['hsmClusterId']
@@ -715,7 +717,7 @@ class KmsHsmClusterClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/keymanagement/get_hsm_partition.py.html>`__ to see an example of how to use get_hsm_partition API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/keymanagement/get_hsm_partition.py.html>`__ to see an example of how to use get_hsm_partition API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['hsmClusterId', 'hsmPartitionId']
@@ -825,7 +827,7 @@ class KmsHsmClusterClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/keymanagement/get_pre_co_user_credentials.py.html>`__ to see an example of how to use get_pre_co_user_credentials API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/keymanagement/get_pre_co_user_credentials.py.html>`__ to see an example of how to use get_pre_co_user_credentials API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['hsmClusterId']
@@ -950,7 +952,7 @@ class KmsHsmClusterClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/keymanagement/list_hsm_clusters.py.html>`__ to see an example of how to use list_hsm_clusters API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/keymanagement/list_hsm_clusters.py.html>`__ to see an example of how to use list_hsm_clusters API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['compartmentId']
@@ -1089,7 +1091,7 @@ class KmsHsmClusterClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/keymanagement/list_hsm_partitions.py.html>`__ to see an example of how to use list_hsm_partitions API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/keymanagement/list_hsm_partitions.py.html>`__ to see an example of how to use list_hsm_partitions API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['hsmClusterId']
@@ -1243,7 +1245,7 @@ class KmsHsmClusterClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/keymanagement/schedule_hsm_cluster_deletion.py.html>`__ to see an example of how to use schedule_hsm_cluster_deletion API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/keymanagement/schedule_hsm_cluster_deletion.py.html>`__ to see an example of how to use schedule_hsm_cluster_deletion API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['hsmClusterId']
@@ -1363,7 +1365,7 @@ class KmsHsmClusterClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/keymanagement/update_hsm_cluster.py.html>`__ to see an example of how to use update_hsm_cluster API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/keymanagement/update_hsm_cluster.py.html>`__ to see an example of how to use update_hsm_cluster API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['hsmClusterId']
@@ -1483,7 +1485,7 @@ class KmsHsmClusterClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/keymanagement/upload_partition_certificates.py.html>`__ to see an example of how to use upload_partition_certificates API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/keymanagement/upload_partition_certificates.py.html>`__ to see an example of how to use upload_partition_certificates API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['hsmClusterId']

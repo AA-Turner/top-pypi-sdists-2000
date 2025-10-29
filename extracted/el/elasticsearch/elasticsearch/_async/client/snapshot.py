@@ -872,35 +872,40 @@ class SnapshotClient(NamespacedClient):
 
         :param name: The name of the repository.
         :param blob_count: The total number of blobs to write to the repository during
-            the test. For realistic experiments, you should set it to at least `2000`.
+            the test. For realistic experiments, set this parameter to at least `2000`.
         :param concurrency: The number of operations to run concurrently during the test.
+            For realistic experiments, leave this parameter unset.
         :param detailed: Indicates whether to return detailed results, including timing
             information for every operation performed during the analysis. If false,
             it returns only a summary of the analysis.
         :param early_read_node_count: The number of nodes on which to perform an early
             read operation while writing each blob. Early read operations are only rarely
-            performed.
+            performed. For realistic experiments, leave this parameter unset.
         :param max_blob_size: The maximum size of a blob to be written during the test.
-            For realistic experiments, you should set it to at least `2gb`.
+            For realistic experiments, set this parameter to at least `2gb`.
         :param max_total_data_size: An upper limit on the total size of all the blobs
-            written during the test. For realistic experiments, you should set it to
+            written during the test. For realistic experiments, set this parameter to
             at least `1tb`.
         :param rare_action_probability: The probability of performing a rare action such
-            as an early read, an overwrite, or an aborted write on each blob.
+            as an early read, an overwrite, or an aborted write on each blob. For realistic
+            experiments, leave this parameter unset.
         :param rarely_abort_writes: Indicates whether to rarely cancel writes before
-            they complete.
+            they complete. For realistic experiments, leave this parameter unset.
         :param read_node_count: The number of nodes on which to read a blob after writing.
+            For realistic experiments, leave this parameter unset.
         :param register_operation_count: The minimum number of linearizable register
-            operations to perform in total. For realistic experiments, you should set
-            it to at least `100`.
+            operations to perform in total. For realistic experiments, set this parameter
+            to at least `100`.
         :param seed: The seed for the pseudo-random number generator used to generate
             the list of operations performed during the test. To repeat the same set
             of operations in multiple experiments, use the same seed in each experiment.
             Note that the operations are performed concurrently so might not always happen
-            in the same order on each run.
+            in the same order on each run. For realistic experiments, leave this parameter
+            unset.
         :param timeout: The period of time to wait for the test to complete. If no response
             is received before the timeout expires, the test is cancelled and returns
-            an error.
+            an error. For realistic experiments, set this parameter sufficiently long
+            to allow the test to complete.
         """
         if name in SKIP_IN_PATH:
             raise ValueError("Empty value passed for parameter 'name'")
@@ -1266,6 +1271,11 @@ class SnapshotClient(NamespacedClient):
           <p>If you omit the <code>&lt;snapshot&gt;</code> request path parameter, the request retrieves information only for currently running snapshots.
           This usage is preferred.
           If needed, you can specify <code>&lt;repository&gt;</code> and <code>&lt;snapshot&gt;</code> to retrieve information for specific snapshots, even if they're not currently running.</p>
+          <p>Note that the stats will not be available for any shard snapshots in an ongoing snapshot completed by a node that (even momentarily) left the cluster.
+          Loading the stats from the repository is an expensive operation (see the WARNING below).
+          Therefore the stats values for such shards will be -1 even though the &quot;stage&quot; value will be &quot;DONE&quot;, in order to minimize latency.
+          A &quot;description&quot; field will be present for a shard snapshot completed by a departed node explaining why the shard snapshot's stats results are invalid.
+          Consequently, the total stats for the index will be less than expected due to the missing values from these shards.</p>
           <p>WARNING: Using the API to return the status of any snapshots other than currently running snapshots can be expensive.
           The API requires a read from the repository for each shard in each snapshot.
           For example, if you have 100 snapshots with 1,000 shards each, an API request that includes all snapshots will require 100,000 reads (100 snapshots x 1,000 shards).</p>

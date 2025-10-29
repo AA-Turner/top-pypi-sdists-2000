@@ -313,7 +313,9 @@ class Api:
             )
             self.settings["entity"] = _overrides["username"]
 
-        if _thread_local_api_settings.cookies is None:
+        use_api_key = api_key is not None or _thread_local_api_settings.cookies is None
+
+        if use_api_key:
             self.api_key = self._load_api_key(
                 base_url=self.settings["base_url"],
                 init_api_key=api_key,
@@ -331,7 +333,7 @@ class Api:
         self._default_entity = None
         self._timeout = timeout if timeout is not None else self._HTTP_TIMEOUT
         auth = None
-        if not _thread_local_api_settings.cookies:
+        if use_api_key:
             auth = ("api", self.api_key)
         proxies = self.settings.get("_proxies") or json.loads(
             os.environ.get("WANDB__PROXIES", "{}")
@@ -365,17 +367,18 @@ class Api:
         """Attempts to load a configured API key or prompt if one is not found.
 
         The API key is loaded in the following order:
-            1. Thread local api key
-            2. User explicitly provided api key
+            1. User explicitly provided api key
+            2. Thread local api key
             3. Environment variable
             4. Netrc file
             5. Prompt for api key using wandb.login
         """
-        # just use thread local api key if it's set
-        if _thread_local_api_settings.api_key:
-            return _thread_local_api_settings.api_key
+        # Use explicit key before thread local.
+        # This allow user switching keys without picking up the wrong key from thread local.
         if init_api_key is not None:
             return init_api_key
+        if _thread_local_api_settings.api_key:
+            return _thread_local_api_settings.api_key
         if os.getenv("WANDB_API_KEY"):
             return os.environ["WANDB_API_KEY"]
 
@@ -958,8 +961,8 @@ class Api:
             entity: Name of the entity requested.  If None, will fall back to
                 the default entity passed to `Api`.  If no default entity,
                 will raise a `ValueError`.
-            per_page: Sets the page size for query pagination. If set to `None`,
-                use the default size. Usually there is no reason to change this.
+            per_page: Sets the page size for query pagination.
+                Usually there is no reason to change this.
 
         Returns:
             A `Projects` object which is an iterable collection of `Project`objects.
@@ -1015,9 +1018,8 @@ class Api:
                 entity that created the project as a prefix followed by a
                 forward slash.
             name: Name of the report requested.
-            per_page: Sets the page size for query pagination. If set to
-                `None`, use the default size. Usually there is no reason to
-                change this.
+            per_page: Sets the page size for query pagination.
+                Usually there is no reason to change this.
 
         Returns:
             A `Reports` object which is an iterable collection of
@@ -1380,7 +1382,7 @@ class Api:
         Args:
             project_name: The name of the project to filter on.
             type_name: The name of the artifact type to filter on.
-            per_page: Sets the page size for query pagination.  None will use the default size.
+            per_page: Sets the page size for query pagination.
                 Usually there is no reason to change this.
 
         Returns:
@@ -1483,9 +1485,8 @@ class Api:
         name: The artifact's collection name. Optionally append the
             entity that logged the artifact as a prefix followed by
             a forward slash.
-        per_page: Sets the page size for query pagination. If set to
-            `None`, use the default size. Usually there is no reason
-            to change this.
+        per_page: Sets the page size for query pagination. Usually
+            there is no reason to change this.
         tags: Only return artifacts with all of these tags.
 
         Returns:
@@ -1788,6 +1789,7 @@ class Api:
         self,
         organization: str | None = None,
         filter: dict[str, Any] | None = None,
+        per_page: int = 100,
     ) -> Registries:
         """Returns a lazy iterator of `Registry` objects.
 
@@ -1804,6 +1806,7 @@ class Api:
                     `name`, `tag`, `description`, `created_at`, `updated_at`
                 Fields available to filter for versions are
                     `tag`, `alias`, `created_at`, `updated_at`, `metadata`
+            per_page: Sets the page size for query pagination.
 
         Returns:
             A lazy iterator of `Registry` objects.
@@ -1849,7 +1852,9 @@ class Api:
         organization = organization or fetch_org_from_settings_or_entity(
             self.settings, self.default_entity
         )
-        return Registries(self.client, organization, filter)
+        return Registries(
+            self.client, organization=organization, filter=filter, per_page=per_page
+        )
 
     @tracked
     def registry(self, name: str, organization: str | None = None) -> Registry:
@@ -2325,7 +2330,7 @@ class Api:
         # If needed, rewrite the GraphQL field selection set to omit unsupported fields/fragments/types
         omit_fragments = self._omitted_automation_fragments()
         mutation = gql_compat(CREATE_AUTOMATION_GQL, omit_fragments=omit_fragments)
-        variables = {"params": gql_input.model_dump(exclude_none=True)}
+        variables = {"input": gql_input.model_dump()}
 
         name = gql_input.name
         try:
@@ -2445,7 +2450,7 @@ class Api:
         # If needed, rewrite the GraphQL field selection set to omit unsupported fields/fragments/types
         omit_fragments = self._omitted_automation_fragments()
         mutation = gql_compat(UPDATE_AUTOMATION_GQL, omit_fragments=omit_fragments)
-        variables = {"params": gql_input.model_dump(exclude_none=True)}
+        variables = {"input": gql_input.model_dump()}
 
         name = gql_input.name
         try:

@@ -102,9 +102,11 @@ class AccessGovernanceCPClient(object):
             'base_path': '/20220518',
             'service_endpoint_template': 'https://cp-prod.access-governance.{region}.oci.{secondLevelDomain}',
             'service_endpoint_template_per_realm': {  },  # noqa: E201 E202
+            'service_uses_dualstack_endpoints_by_default': False,
             'skip_deserialization': kwargs.get('skip_deserialization', False),
             'circuit_breaker_strategy': kwargs.get('circuit_breaker_strategy', circuit_breaker.GLOBAL_CIRCUIT_BREAKER_STRATEGY),
-            'client_level_realm_specific_endpoint_template_enabled': kwargs.get('client_level_realm_specific_endpoint_template_enabled')
+            'client_level_realm_specific_endpoint_template_enabled': kwargs.get('client_level_realm_specific_endpoint_template_enabled'),
+            'client_level_dualstack_endpoints_enabled': kwargs.get('client_level_dualstack_endpoints_enabled')
         }
         if 'timeout' in kwargs:
             base_client_init_kwargs['timeout'] = kwargs.get('timeout')
@@ -160,7 +162,7 @@ class AccessGovernanceCPClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/accessgovernancecp/change_governance_instance_compartment.py.html>`__ to see an example of how to use change_governance_instance_compartment API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/accessgovernancecp/change_governance_instance_compartment.py.html>`__ to see an example of how to use change_governance_instance_compartment API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['governanceInstanceId']
@@ -270,7 +272,7 @@ class AccessGovernanceCPClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/accessgovernancecp/create_governance_instance.py.html>`__ to see an example of how to use create_governance_instance API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/accessgovernancecp/create_governance_instance.py.html>`__ to see an example of how to use create_governance_instance API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -375,7 +377,7 @@ class AccessGovernanceCPClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/accessgovernancecp/delete_governance_instance.py.html>`__ to see an example of how to use delete_governance_instance API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/accessgovernancecp/delete_governance_instance.py.html>`__ to see an example of how to use delete_governance_instance API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['governanceInstanceId']
@@ -476,7 +478,7 @@ class AccessGovernanceCPClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/accessgovernancecp/get_governance_instance.py.html>`__ to see an example of how to use get_governance_instance API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/accessgovernancecp/get_governance_instance.py.html>`__ to see an example of how to use get_governance_instance API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['governanceInstanceId']
@@ -574,7 +576,7 @@ class AccessGovernanceCPClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/accessgovernancecp/get_governance_instance_configuration.py.html>`__ to see an example of how to use get_governance_instance_configuration API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/accessgovernancecp/get_governance_instance_configuration.py.html>`__ to see an example of how to use get_governance_instance_configuration API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['compartmentId']
@@ -692,7 +694,7 @@ class AccessGovernanceCPClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/accessgovernancecp/list_governance_instances.py.html>`__ to see an example of how to use list_governance_instances API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/accessgovernancecp/list_governance_instances.py.html>`__ to see an example of how to use list_governance_instances API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['compartmentId']
@@ -823,7 +825,7 @@ class AccessGovernanceCPClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/accessgovernancecp/update_governance_instance.py.html>`__ to see an example of how to use update_governance_instance API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/accessgovernancecp/update_governance_instance.py.html>`__ to see an example of how to use update_governance_instance API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['governanceInstanceId']
@@ -935,7 +937,7 @@ class AccessGovernanceCPClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.161.1/accessgovernancecp/update_governance_instance_configuration.py.html>`__ to see an example of how to use update_governance_instance_configuration API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/accessgovernancecp/update_governance_instance_configuration.py.html>`__ to see an example of how to use update_governance_instance_configuration API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['compartmentId']
