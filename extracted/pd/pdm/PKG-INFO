@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: pdm
-Version: 2.26.0
+Version: 2.26.1
 Summary: A modern Python package and dependency manager supporting the latest PEP standards
 Keywords: packaging,dependency,workflow
 Author-Email: Frost Ming <mianghong@gmail.com>
@@ -35,7 +35,7 @@ Requires-Dist: installer<0.8,>=0.7
 Requires-Dist: truststore>=0.10.4; python_version >= "3.10"
 Requires-Dist: tomli>=1.1.0; python_version < "3.11"
 Requires-Dist: importlib-metadata>=3.6; python_version < "3.10"
-Requires-Dist: hishel>=0.0.32
+Requires-Dist: hishel<1.0.0,>=0.0.32
 Requires-Dist: pbs-installer>=2025.10.7
 Requires-Dist: httpx[socks]<1,>0.20
 Requires-Dist: filelock>=3.13

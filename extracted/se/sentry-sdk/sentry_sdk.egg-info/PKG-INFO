@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: sentry-sdk
-Version: 2.42.1
+Version: 2.43.0
 Summary: Python client for Sentry (https://sentry.io)
 Home-page: https://github.com/getsentry/sentry-python
 Author: Sentry Team and Contributors
@@ -23,6 +23,7 @@ Classifier: Programming Language :: Python :: 3.10
 Classifier: Programming Language :: Python :: 3.11
 Classifier: Programming Language :: Python :: 3.12
 Classifier: Programming Language :: Python :: 3.13
+Classifier: Programming Language :: Python :: 3.14
 Classifier: Topic :: Software Development :: Libraries :: Python Modules
 Requires-Python: >=3.6
 Description-Content-Type: text/markdown
@@ -82,6 +83,8 @@ Provides-Extra: litestar
 Requires-Dist: litestar>=2.0.0; extra == "litestar"
 Provides-Extra: loguru
 Requires-Dist: loguru>=0.5; extra == "loguru"
+Provides-Extra: mcp
+Requires-Dist: mcp>=1.15.0; extra == "mcp"
 Provides-Extra: openai
 Requires-Dist: openai>=1.0.0; extra == "openai"
 Requires-Dist: tiktoken>=0.3.0; extra == "openai"
@@ -95,6 +98,8 @@ Provides-Extra: pure-eval
 Requires-Dist: pure_eval; extra == "pure-eval"
 Requires-Dist: executing; extra == "pure-eval"
 Requires-Dist: asttokens; extra == "pure-eval"
+Provides-Extra: pydantic-ai
+Requires-Dist: pydantic-ai>=1.0.0; extra == "pydantic-ai"
 Provides-Extra: pymongo
 Requires-Dist: pymongo>=3.1; extra == "pymongo"
 Provides-Extra: pyspark

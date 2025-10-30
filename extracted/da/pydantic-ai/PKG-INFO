@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: pydantic-ai
-Version: 1.7.0
+Version: 1.9.0
 Summary: Agent Framework / shim to use Pydantic with LLMs
 Project-URL: Homepage, https://ai.pydantic.dev
 Project-URL: Source, https://github.com/pydantic/pydantic-ai
@@ -26,15 +26,25 @@ Classifier: Topic :: Internet
 Classifier: Topic :: Scientific/Engineering :: Artificial Intelligence
 Classifier: Topic :: Software Development :: Libraries :: Python Modules
 Requires-Python: >=3.10
-Requires-Dist: pydantic-ai-slim[ag-ui,anthropic,bedrock,cli,cohere,evals,fastmcp,google,groq,huggingface,logfire,mcp,mistral,openai,retries,temporal,vertexai]==1.7.0
+Requires-Dist: pydantic-ai-slim[ag-ui,anthropic,bedrock,cli,cohere,evals,fastmcp,google,groq,huggingface,logfire,mcp,mistral,openai,retries,temporal,ui,vertexai]==1.9.0
 Provides-Extra: a2a
 Requires-Dist: fasta2a>=0.4.1; extra == 'a2a'
 Provides-Extra: dbos
-Requires-Dist: pydantic-ai-slim[dbos]==1.7.0; extra == 'dbos'
+Requires-Dist: pydantic-ai-slim[dbos]==1.9.0; extra == 'dbos'
 Provides-Extra: examples
-Requires-Dist: pydantic-ai-examples==1.7.0; extra == 'examples'
+Requires-Dist: pydantic-ai-examples==1.9.0; extra == 'examples'
+Provides-Extra: outlines-llamacpp
+Requires-Dist: pydantic-ai-slim[outlines-llamacpp]==1.9.0; extra == 'outlines-llamacpp'
+Provides-Extra: outlines-mlxlm
+Requires-Dist: pydantic-ai-slim[outlines-mlxlm]==1.9.0; extra == 'outlines-mlxlm'
+Provides-Extra: outlines-sglang
+Requires-Dist: pydantic-ai-slim[outlines-sglang]==1.9.0; extra == 'outlines-sglang'
+Provides-Extra: outlines-transformers
+Requires-Dist: pydantic-ai-slim[outlines-transformers]==1.9.0; extra == 'outlines-transformers'
+Provides-Extra: outlines-vllm-offline
+Requires-Dist: pydantic-ai-slim[outlines-vllm-offline]==1.9.0; extra == 'outlines-vllm-offline'
 Provides-Extra: prefect
-Requires-Dist: pydantic-ai-slim[prefect]==1.7.0; extra == 'prefect'
+Requires-Dist: pydantic-ai-slim[prefect]==1.9.0; extra == 'prefect'
 Description-Content-Type: text/markdown
 
 <div align="center">
@@ -89,8 +99,8 @@ Designed to give your IDE or AI coding agent as much context as possible for aut
 5. **Powerful Evals**:
 Enables you to systematically test and [evaluate](https://ai.pydantic.dev/evals) the performance and accuracy of the agentic systems you build, and monitor the performance over time in Pydantic Logfire.
 
-6. **MCP, A2A, and AG-UI**:
-Integrates the [Model Context Protocol](https://ai.pydantic.dev/mcp/client), [Agent2Agent](https://ai.pydantic.dev/a2a), and [AG-UI](https://ai.pydantic.dev/ag-ui) standards to give your agent access to external tools and data, let it interoperate with other agents, and build interactive applications with streaming event-based communication.
+6. **MCP, A2A, and UI**:
+Integrates the [Model Context Protocol](https://ai.pydantic.dev/mcp/overview), [Agent2Agent](https://ai.pydantic.dev/a2a), and various [UI event stream](https://ai.pydantic.dev/ui/overview) standards to give your agent access to external tools and data, let it interoperate with other agents, and build interactive applications with streaming event-based communication.
 
 7. **Human-in-the-Loop Tool Approval**:
 Easily lets you flag that certain tool calls [require approval](https://ai.pydantic.dev/deferred-tools#human-in-the-loop-tool-approval) before they can proceed, possibly depending on tool call arguments, conversation history, or user preferences.

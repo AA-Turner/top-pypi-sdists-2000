@@ -364,6 +364,9 @@ class TestDuckDB(Validator):
             exp.Identifier
         )
         self.validate_identity(
+            "MERGE INTO people USING (SELECT 1 AS id, 98000.0 AS salary) AS salary_updates USING (id) WHEN MATCHED THEN UPDATE SET salary = salary_updates.salary"
+        )
+        self.validate_identity(
             "SELECT species, island, COUNT(*) FROM t GROUP BY GROUPING SETS (species), GROUPING SETS (island)"
         )
         self.validate_identity(
@@ -375,6 +378,9 @@ class TestDuckDB(Validator):
         self.validate_identity(
             "SUMMARIZE TABLE 'https://blobs.duckdb.org/data/Star_Trek-Season_1.csv'"
         ).assert_is(exp.Summarize)
+        self.validate_identity(
+            """COPY (SELECT * FROM "input.parquet" USING SAMPLE RESERVOIR (5000 ROWS)) TO 'output.parquet' WITH (FORMAT PARQUET, KV_METADATA {'origin': 'Dagster', 'dagster_run_id': '98c85a11-d05c-4935-bfa2-198214c2204'})"""
+        )
 
         for join_type in ("LEFT", "LEFT OUTER", "INNER"):
             with self.subTest(f"Testing transpilation of join {join_type} with UNNEST"):
@@ -1108,6 +1114,11 @@ class TestDuckDB(Validator):
         self.validate_identity("SELECT * FROM t LIMIT 10 PERCENT")
         self.validate_identity("SELECT * FROM t LIMIT 10%", "SELECT * FROM t LIMIT 10 PERCENT")
 
+        self.validate_identity("SELECT * FROM t LIMIT 10 PERCENT OFFSET 1")
+        self.validate_identity(
+            "SELECT * FROM t LIMIT 10% OFFSET 1", "SELECT * FROM t LIMIT 10 PERCENT OFFSET 1"
+        )
+
         self.validate_identity(
             "SELECT CAST(ROW(1, 2) AS ROW(a INTEGER, b INTEGER))",
             "SELECT CAST(ROW(1, 2) AS STRUCT(a INT, b INT))",
@@ -1169,6 +1180,7 @@ class TestDuckDB(Validator):
             self.validate_identity(
                 "[x.STRING_SPLIT(' ')[i] FOR x IN ['1', '2', 3] IF x.CONTAINS('1')]"
             )
+            self.validate_identity("SELECT [4, 5, 6] AS l, [x FOR x, i IN l IF i = 2] AS filtered")
             self.validate_identity(
                 """SELECT LIST_VALUE(1)[i]""",
                 """SELECT [1][i]""",
@@ -1197,7 +1209,21 @@ class TestDuckDB(Validator):
         self.validate_identity("SELECT CURRENT_TIMESTAMP")
 
         self.validate_all(
-            "SELECT MAKE_DATE(2016, 12, 25)", read={"bigquery": "SELECT DATE(2016, 12, 25)"}
+            "SELECT CAST(CURRENT_TIMESTAMP AT TIME ZONE 'UTC' AS DATE)",
+            read={
+                "bigquery": "SELECT CURRENT_DATE('UTC')",
+                "duckdb": "SELECT CAST(CURRENT_TIMESTAMP AT TIME ZONE 'UTC' AS DATE)",
+            },
+        )
+        self.validate_all(
+            "SELECT MAKE_DATE(2016, 12, 25)",
+            read={
+                "bigquery": "SELECT DATE(2016, 12, 25)",
+            },
+            write={
+                "bigquery": "SELECT DATE(2016, 12, 25)",
+                "duckdb": "SELECT MAKE_DATE(2016, 12, 25)",
+            },
         )
         self.validate_all(
             "SELECT CAST(CAST('2016-12-25 23:59:59' AS TIMESTAMP) AS DATE)",

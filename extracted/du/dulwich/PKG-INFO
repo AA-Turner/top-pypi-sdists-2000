@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: dulwich
-Version: 0.24.7
+Version: 0.24.8
 Summary: Python Git Library
 Author-email: Jelmer Vernooij <jelmer@jelmer.uk>
 License-Expression: Apache-2.0 OR GPL-2.0-or-later
@@ -25,7 +25,7 @@ Requires-Python: >=3.9
 Description-Content-Type: text/x-rst
 License-File: COPYING
 Requires-Dist: urllib3>=2.2.2
-Requires-Dist: typing_extensions>=4.0; python_version < "3.12"
+Requires-Dist: typing_extensions>=4.6.0; python_version < "3.12"
 Provides-Extra: fastimport
 Requires-Dist: fastimport; extra == "fastimport"
 Provides-Extra: https
@@ -146,7 +146,7 @@ mailing list.
 Contributing
 ------------
 
-For a full list of contributors, see the git logs or `AUTHORS <AUTHORS>`_.
+For a full list of contributors, see the git logs.
 
 If you'd like to contribute to Dulwich, see the `CONTRIBUTING <CONTRIBUTING.rst>`_
 file and `list of open issues <https://github.com/dulwich/dulwich/issues>`_.

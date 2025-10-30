@@ -22,10 +22,11 @@ from unittest import mock
 from vertexai._genai import (
     client as vertexai_genai_client_module,
 )
+from vertexai._genai import _agent_engines_utils
 from google.cloud import storage, bigquery
 from google.genai import _replay_api_client
 from google.genai import client as google_genai_client_module
-from vertexai._genai import _evals_utils
+from vertexai._genai import _gcs_utils
 from vertexai._genai import prompt_optimizer
 import pytest
 
@@ -122,6 +123,16 @@ def replays_prefix():
     return "test"
 
 
+@pytest.fixture
+def mock_agent_engine_create_base64_encoded_tarball():
+    """Mocks the _create_base64_encoded_tarball function."""
+    with mock.patch.object(
+        _agent_engines_utils, "_create_base64_encoded_tarball"
+    ) as mock_create_base64_encoded_tarball:
+        mock_create_base64_encoded_tarball.return_value = "H4sIAAAAAAAAA-3UvWrDMBAHcM9-CpEpGRLkD8VQ6JOUElT7LFxkydEHxG9f2V1CKXSyu_x_i6TjJN2gk6N7HByNZIK_hEfINsCTa82zilcNTyMvRSPKao2vBM8KwZu6vJZXITJepGyRMb5FMT9FH6RjLHsM0mpr1CyN-i1vcsMo3aycjdMede0kV9YqTedW29id5TBpGXrrxjep0pO4kVGDIf-e_3edsI1APtxG20VNl2ne5o6_-r-oRer_Ypk2dd0s_Z82oP_3kLdaes-ensFLzpKOenaP5OajJ92fvoMLRyE6ww7LjrTwkzWeDnm-nmA_PqkN7PX5vOMJnwcAAAAAAAAAAAAAAAAAAADAdr4AI-kzQQAoAAA="
+        yield mock_create_base64_encoded_tarball
+
+
 def _get_replay_id(use_vertex: bool, replays_prefix: str) -> str:
     test_name_ending = os.environ.get("PYTEST_CURRENT_TEST").split("::")[-1]
     test_name = test_name_ending.split(" ")[0].split("[")[0] + "." + "vertex"
@@ -133,10 +144,14 @@ EVAL_CONFIG_GCS_URI = (
 )
 EVAL_ITEM_REQUEST_GCS_URI = "gs://lakeyk-limited-bucket/agora_eval_080525/request_"
 EVAL_ITEM_RESULT_GCS_URI = "gs://lakeyk-limited-bucket/agora_eval_080525/result_"
+EVAL_ITEM_REQUEST_GCS_URI_2 = "gs://lakeyk-limited-bucket/eval-data/request_"
+EVAL_ITEM_RESULT_GCS_URI_2 = "gs://lakeyk-limited-bucket/eval-data/result_"
 EVAL_GCS_URI_ITEMS = {
     EVAL_CONFIG_GCS_URI: "test_resources/mock_eval_config.yaml",
     EVAL_ITEM_REQUEST_GCS_URI: "test_resources/request_4813679498589372416.json",
     EVAL_ITEM_RESULT_GCS_URI: "test_resources/result_1486082323915997184.json",
+    EVAL_ITEM_REQUEST_GCS_URI_2: "test_resources/request_4813679498589372416.json",
+    EVAL_ITEM_RESULT_GCS_URI_2: "test_resources/result_1486082323915997184.json",
 }
 
 
@@ -148,11 +163,15 @@ def _mock_read_file_contents_side_effect(uri: str):
     current_dir = os.path.dirname(__file__)
     if uri in EVAL_GCS_URI_ITEMS:
         local_mock_file_path = os.path.join(current_dir, EVAL_GCS_URI_ITEMS[uri])
-    elif uri.startswith(EVAL_ITEM_REQUEST_GCS_URI):
+    elif uri.startswith(EVAL_ITEM_REQUEST_GCS_URI) or uri.startswith(
+        EVAL_ITEM_REQUEST_GCS_URI_2
+    ):
         local_mock_file_path = os.path.join(
             current_dir, EVAL_GCS_URI_ITEMS[EVAL_ITEM_REQUEST_GCS_URI]
         )
-    elif uri.startswith(EVAL_ITEM_RESULT_GCS_URI):
+    elif uri.startswith(EVAL_ITEM_RESULT_GCS_URI) or uri.startswith(
+        EVAL_ITEM_RESULT_GCS_URI_2
+    ):
         local_mock_file_path = os.path.join(
             current_dir, EVAL_GCS_URI_ITEMS[EVAL_ITEM_RESULT_GCS_URI]
         )
@@ -246,7 +265,7 @@ def client(use_vertex, replays_prefix, http_options, request):
                     mock_bigquery_client.return_value = mock.MagicMock()
 
                     with mock.patch.object(
-                        _evals_utils.GcsUtils, "read_file_contents"
+                        _gcs_utils.GcsUtils, "read_file_contents"
                     ) as mock_read_file_contents:
                         mock_read_file_contents.side_effect = (
                             _mock_read_file_contents_side_effect

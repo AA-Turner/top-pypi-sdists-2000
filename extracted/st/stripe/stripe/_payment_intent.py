@@ -4,13 +4,13 @@ from stripe._createable_api_resource import CreateableAPIResource
 from stripe._expandable_field import ExpandableField
 from stripe._list_object import ListObject
 from stripe._listable_api_resource import ListableAPIResource
+from stripe._nested_resource_class_methods import nested_resource_class_methods
 from stripe._search_result_object import SearchResultObject
 from stripe._searchable_api_resource import SearchableAPIResource
 from stripe._stripe_object import StripeObject
 from stripe._updateable_api_resource import UpdateableAPIResource
 from stripe._util import class_method_variant, sanitize_id
 from typing import (
-    Any,
     AsyncIterator,
     ClassVar,
     Dict,
@@ -30,6 +30,9 @@ if TYPE_CHECKING:
     from stripe._card import Card as CardResource
     from stripe._charge import Charge
     from stripe._customer import Customer
+    from stripe._payment_intent_amount_details_line_item import (
+        PaymentIntentAmountDetailsLineItem,
+    )
     from stripe._payment_method import PaymentMethod
     from stripe._review import Review
     from stripe._setup_intent import SetupIntent
@@ -52,6 +55,9 @@ if TYPE_CHECKING:
     from stripe.params._payment_intent_increment_authorization_params import (
         PaymentIntentIncrementAuthorizationParams,
     )
+    from stripe.params._payment_intent_list_amount_details_line_items_params import (
+        PaymentIntentListAmountDetailsLineItemsParams,
+    )
     from stripe.params._payment_intent_list_params import (
         PaymentIntentListParams,
     )
@@ -67,8 +73,10 @@ if TYPE_CHECKING:
     from stripe.params._payment_intent_verify_microdeposits_params import (
         PaymentIntentVerifyMicrodepositsParams,
     )
+    from typing import Any
 
 
+@nested_resource_class_methods("amount_details_line_item")
 class PaymentIntent(
     CreateableAPIResource["PaymentIntent"],
     ListableAPIResource["PaymentIntent"],
@@ -92,14 +100,48 @@ class PaymentIntent(
     OBJECT_NAME: ClassVar[Literal["payment_intent"]] = "payment_intent"
 
     class AmountDetails(StripeObject):
+        class Shipping(StripeObject):
+            amount: Optional[int]
+            """
+            If a physical good is being shipped, the cost of shipping represented in the [smallest currency unit](https://stripe.com/docs/currencies#zero-decimal). An integer greater than or equal to 0.
+            """
+            from_postal_code: Optional[str]
+            """
+            If a physical good is being shipped, the postal code of where it is being shipped from. At most 10 alphanumeric characters long, hyphens are allowed.
+            """
+            to_postal_code: Optional[str]
+            """
+            If a physical good is being shipped, the postal code of where it is being shipped to. At most 10 alphanumeric characters long, hyphens are allowed.
+            """
+
+        class Tax(StripeObject):
+            total_tax_amount: Optional[int]
+            """
+            The total amount of tax on the transaction represented in the [smallest currency unit](https://stripe.com/docs/currencies#zero-decimal). Required for L2 rates. An integer greater than or equal to 0.
+
+            This field is mutually exclusive with the `amount_details[line_items][#][tax][total_tax_amount]` field.
+            """
+
         class Tip(StripeObject):
             amount: Optional[int]
             """
             Portion of the amount that corresponds to a tip.
             """
 
+        discount_amount: Optional[int]
+        """
+        The total discount applied on the transaction represented in the [smallest currency unit](https://stripe.com/docs/currencies#zero-decimal). An integer greater than 0.
+
+        This field is mutually exclusive with the `amount_details[line_items][#][discount_amount]` field.
+        """
+        line_items: Optional[ListObject["PaymentIntentAmountDetailsLineItem"]]
+        """
+        A list of line items, each containing information about a product in the PaymentIntent. There is a maximum of 100 line items.
+        """
+        shipping: Optional[Shipping]
+        tax: Optional[Tax]
         tip: Optional[Tip]
-        _inner_class_types = {"tip": Tip}
+        _inner_class_types = {"shipping": Shipping, "tax": Tax, "tip": Tip}
 
     class AutomaticPaymentMethods(StripeObject):
         allow_redirects: Optional[Literal["always", "never"]]
@@ -234,6 +276,7 @@ class PaymentIntent(
                 "payment_intent_mandate_invalid",
                 "payment_intent_payment_attempt_expired",
                 "payment_intent_payment_attempt_failed",
+                "payment_intent_rate_limit_exceeded",
                 "payment_intent_unexpected_state",
                 "payment_method_bank_account_already_verified",
                 "payment_method_bank_account_blocked",
@@ -1332,7 +1375,7 @@ class PaymentIntent(
         """
         Type of the next action to perform. Refer to the other child attributes under `next_action` for available values. Examples include: `redirect_to_url`, `use_stripe_sdk`, `alipay_handle_redirect`, `oxxo_display_details`, or `verify_with_microdeposits`.
         """
-        use_stripe_sdk: Optional[Dict[str, Any]]
+        use_stripe_sdk: Optional[Dict[str, "Any"]]
         """
         When confirming a PaymentIntent with Stripe.js, Stripe.js depends on the contents of this dictionary to invoke authentication flows. The shape of the contents is subject to change and is only intended to be used by Stripe.js.
         """
@@ -1361,6 +1404,22 @@ class PaymentIntent(
             "wechat_pay_redirect_to_android_app": WechatPayRedirectToAndroidApp,
             "wechat_pay_redirect_to_ios_app": WechatPayRedirectToIosApp,
         }
+
+    class PaymentDetails(StripeObject):
+        customer_reference: Optional[str]
+        """
+        A unique value to identify the customer. This field is available only for card payments.
+
+        This field is truncated to 25 alphanumeric characters, excluding spaces, before being sent to card networks.
+        """
+        order_reference: Optional[str]
+        """
+        A unique value assigned by the business to identify the transaction. Required for L2 and L3 rates.
+
+        Required when the Payment Method Types array contains `card`, including when [automatic_payment_methods.enabled](https://docs.stripe.com/api/payment_intents/create#create_payment_intent-automatic_payment_methods-enabled) is set to `true`.
+
+        For Cards, this field is truncated to 25 alphanumeric characters, excluding spaces, before being sent to card networks. For Klarna, this field is truncated to 255 characters and is visible to customers when they view the order in the Klarna app.
+        """
 
     class PaymentMethodConfigurationDetails(StripeObject):
         id: str
@@ -2797,6 +2856,7 @@ class PaymentIntent(
     """
     The account (if any) for which the funds of the PaymentIntent are intended. See the PaymentIntents [use case for connected accounts](https://stripe.com/docs/payments/connected-accounts) for details.
     """
+    payment_details: Optional[PaymentDetails]
     payment_method: Optional[ExpandableField["PaymentMethod"]]
     """
     ID of the payment method used in this PaymentIntent.
@@ -4243,11 +4303,52 @@ class PaymentIntent(
     ) -> AsyncIterator["PaymentIntent"]:
         return (await cls.search_async(*args, **kwargs)).auto_paging_iter()
 
+    @classmethod
+    def list_amount_details_line_items(
+        cls,
+        intent: str,
+        **params: Unpack["PaymentIntentListAmountDetailsLineItemsParams"],
+    ) -> ListObject["PaymentIntentAmountDetailsLineItem"]:
+        """
+        Lists all LineItems of a given PaymentIntent.
+        """
+        return cast(
+            ListObject["PaymentIntentAmountDetailsLineItem"],
+            cls._static_request(
+                "get",
+                "/v1/payment_intents/{intent}/amount_details_line_items".format(
+                    intent=sanitize_id(intent)
+                ),
+                params=params,
+            ),
+        )
+
+    @classmethod
+    async def list_amount_details_line_items_async(
+        cls,
+        intent: str,
+        **params: Unpack["PaymentIntentListAmountDetailsLineItemsParams"],
+    ) -> ListObject["PaymentIntentAmountDetailsLineItem"]:
+        """
+        Lists all LineItems of a given PaymentIntent.
+        """
+        return cast(
+            ListObject["PaymentIntentAmountDetailsLineItem"],
+            await cls._static_request_async(
+                "get",
+                "/v1/payment_intents/{intent}/amount_details_line_items".format(
+                    intent=sanitize_id(intent)
+                ),
+                params=params,
+            ),
+        )
+
     _inner_class_types = {
         "amount_details": AmountDetails,
         "automatic_payment_methods": AutomaticPaymentMethods,
         "last_payment_error": LastPaymentError,
         "next_action": NextAction,
+        "payment_details": PaymentDetails,
         "payment_method_configuration_details": PaymentMethodConfigurationDetails,
         "payment_method_options": PaymentMethodOptions,
         "presentment_details": PresentmentDetails,

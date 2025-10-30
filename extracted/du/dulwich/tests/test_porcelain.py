@@ -1492,6 +1492,34 @@ class CloneTests(PorcelainTestCase):
         with open(cloned_sub_file) as f:
             self.assertEqual(f.read(), "submodule content")
 
+    def test_clone_with_refspec_kwarg(self) -> None:
+        """Test that clone accepts refspec as a kwarg without TypeError.
+
+        This reproduces a bug where passing refspec as a kwarg to clone()
+        would cause a TypeError because it was being passed to
+        get_transport_and_path() which doesn't accept that parameter.
+        """
+        f1_1 = make_object(Blob, data=b"f1")
+        commit_spec = [[1]]
+        trees = {1: [(b"f1", f1_1)]}
+
+        (c1,) = build_commit_graph(self.repo.object_store, commit_spec, trees)
+        self.repo.refs[b"refs/heads/master"] = c1.id
+        target_path = tempfile.mkdtemp()
+        errstream = BytesIO()
+        self.addCleanup(shutil.rmtree, target_path)
+
+        # This should not raise TypeError
+        r = porcelain.clone(
+            self.repo.path,
+            target_path,
+            checkout=False,
+            errstream=errstream,
+            refspec="refs/heads/master",
+        )
+        self.addCleanup(r.close)
+        self.assertEqual(r.path, target_path)
+
 
 class InitTests(TestCase):
     def test_non_bare(self) -> None:
@@ -4859,6 +4887,118 @@ class SubmoduleTests(PorcelainTestCase):
         with open(submodule_file) as f:
             self.assertEqual(f.read(), "submodule content")
 
+    def test_update_recursive(self) -> None:
+        # Create a nested (innermost) submodule repository
+        nested_repo_path = tempfile.mkdtemp()
+        self.addCleanup(shutil.rmtree, nested_repo_path)
+        nested_repo = Repo.init(nested_repo_path)
+        self.addCleanup(nested_repo.close)
+
+        # Add a file to the nested repo
+        nested_file = os.path.join(nested_repo_path, "nested.txt")
+        with open(nested_file, "w") as f:
+            f.write("nested submodule content")
+
+        porcelain.add(nested_repo, paths=[nested_file])
+        nested_commit = porcelain.commit(
+            nested_repo,
+            message=b"Initial nested commit",
+            author=b"Test Author <test@example.com>",
+            committer=b"Test Committer <test@example.com>",
+        )
+
+        # Create a middle submodule repository
+        middle_repo_path = tempfile.mkdtemp()
+        self.addCleanup(shutil.rmtree, middle_repo_path)
+        middle_repo = Repo.init(middle_repo_path)
+        self.addCleanup(middle_repo.close)
+
+        # Add a file to the middle repo
+        middle_file = os.path.join(middle_repo_path, "middle.txt")
+        with open(middle_file, "w") as f:
+            f.write("middle submodule content")
+
+        porcelain.add(middle_repo, paths=[middle_file])
+
+        # Add the nested submodule to the middle repository
+        porcelain.submodule_add(middle_repo, nested_repo_path, "nested")
+
+        # Manually add the nested submodule to the index
+        from dulwich.index import IndexEntry
+        from dulwich.objects import S_IFGITLINK
+
+        middle_index = middle_repo.open_index()
+        middle_index[b"nested"] = IndexEntry(
+            ctime=0,
+            mtime=0,
+            dev=0,
+            ino=0,
+            mode=S_IFGITLINK,
+            uid=0,
+            gid=0,
+            size=0,
+            sha=nested_commit,
+            flags=0,
+        )
+        middle_index.write()
+
+        porcelain.add(middle_repo, paths=[".gitmodules"])
+        middle_commit = porcelain.commit(
+            middle_repo,
+            message=b"Add nested submodule",
+            author=b"Test Author <test@example.com>",
+            committer=b"Test Committer <test@example.com>",
+        )
+
+        # Add the middle submodule to the main repository
+        porcelain.submodule_add(self.repo, middle_repo_path, "middle")
+
+        # Manually add the middle submodule to the index
+        main_index = self.repo.open_index()
+        main_index[b"middle"] = IndexEntry(
+            ctime=0,
+            mtime=0,
+            dev=0,
+            ino=0,
+            mode=S_IFGITLINK,
+            uid=0,
+            gid=0,
+            size=0,
+            sha=middle_commit,
+            flags=0,
+        )
+        main_index.write()
+
+        porcelain.add(self.repo, paths=[".gitmodules"])
+        porcelain.commit(
+            self.repo,
+            message=b"Add middle submodule",
+            author=b"Test Author <test@example.com>",
+            committer=b"Test Committer <test@example.com>",
+        )
+
+        # Initialize and recursively update the submodules
+        porcelain.submodule_init(self.repo)
+        porcelain.submodule_update(self.repo, recursive=True)
+
+        # Check that the middle submodule directory and file exist
+        middle_submodule_path = os.path.join(self.repo.path, "middle")
+        self.assertTrue(os.path.exists(middle_submodule_path))
+
+        middle_submodule_file = os.path.join(middle_submodule_path, "middle.txt")
+        self.assertTrue(os.path.exists(middle_submodule_file))
+        with open(middle_submodule_file) as f:
+            self.assertEqual(f.read(), "middle submodule content")
+
+        # Check that the nested submodule directory and file exist
+        nested_submodule_path = os.path.join(self.repo.path, "middle", "nested")
+        self.assertTrue(os.path.exists(nested_submodule_path))
+
+        nested_submodule_file = os.path.join(nested_submodule_path, "nested.txt")
+        self.assertTrue(os.path.exists(nested_submodule_file))
+        with open(nested_submodule_file) as f:
+            self.assertEqual(f.read(), "nested submodule content")
+
 
 class PushTests(PorcelainTestCase):
     def test_simple(self) -> None:
@@ -5127,7 +5267,7 @@ class PushTests(PorcelainTestCase):
         )
 
         self.assertEqual(b"", outstream.getvalue())
-        self.assertTrue(re.match(b"Push to .* successful.\n", errstream.getvalue()))
+        self.assertTrue(re.search(b"Push to .* successful.\n", errstream.getvalue()))
 
     def test_push_returns_sendpackresult(self) -> None:
         """Test that push returns a SendPackResult with per-ref information."""
@@ -10594,3 +10734,174 @@ class GrepTests(PorcelainTestCase):
         outstream = StringIO()
         with self.assertRaises(ValueError):
             porcelain.grep(empty_repo, "pattern", outstream=outstream)
+
+
+class ReplaceListTests(PorcelainTestCase):
+    def test_empty(self) -> None:
+        """Test listing replacements when there are none."""
+        replacements = porcelain.replace_list(self.repo)
+        self.assertEqual([], replacements)
+
+    def test_list_replacements(self) -> None:
+        """Test listing replacement refs."""
+        [c1, c2] = build_commit_graph(self.repo.object_store, [[1], [2]])
+        self.repo[b"HEAD"] = c1.id
+
+        # Create a replacement
+        porcelain.replace_create(self.repo, c1.id, c2.id)
+
+        # List replacements
+        replacements = porcelain.replace_list(self.repo)
+        self.assertEqual(1, len(replacements))
+        self.assertEqual((c1.id, c2.id), replacements[0])
+
+
+class ReplaceCreateTests(PorcelainTestCase):
+    def test_create_replacement(self) -> None:
+        """Test creating a replacement ref."""
+        [c1, c2] = build_commit_graph(self.repo.object_store, [[1], [2]])
+        self.repo[b"HEAD"] = c1.id
+
+        # Create a replacement
+        porcelain.replace_create(self.repo, c1.id, c2.id)
+
+        # Verify the replacement ref was created (c1.id is already 40-char hex bytes)
+        replace_ref = b"refs/replace/" + c1.id
+        self.assertIn(replace_ref, self.repo.refs)
+        self.assertEqual(c2.id, self.repo.refs[replace_ref])
+
+    def test_create_replacement_with_bytes(self) -> None:
+        """Test creating a replacement ref with bytes arguments."""
+        [c1, c2] = build_commit_graph(self.repo.object_store, [[1], [2]])
+        self.repo[b"HEAD"] = c1.id
+
+        # Create a replacement using bytes arguments
+        porcelain.replace_create(self.repo, c1.id, c2.id)
+
+        # Verify the replacement ref was created
+        replace_ref = b"refs/replace/" + c1.id
+        self.assertIn(replace_ref, self.repo.refs)
+        self.assertEqual(c2.id, self.repo.refs[replace_ref])
+
+
+class ReplaceDeleteTests(PorcelainTestCase):
+    def test_delete_replacement(self) -> None:
+        """Test deleting a replacement ref."""
+        [c1, c2] = build_commit_graph(self.repo.object_store, [[1], [2]])
+        self.repo[b"HEAD"] = c1.id
+
+        # Create a replacement
+        porcelain.replace_create(self.repo, c1.id, c2.id)
+
+        # Verify it exists
+        replacements = porcelain.replace_list(self.repo)
+        self.assertEqual(1, len(replacements))
+
+        # Delete the replacement
+        porcelain.replace_delete(self.repo, c1.id)
+
+        # Verify it's gone
+        replacements = porcelain.replace_list(self.repo)
+        self.assertEqual(0, len(replacements))
+
+    def test_delete_replacement_with_bytes(self) -> None:
+        """Test deleting a replacement ref with bytes argument."""
+        [c1, c2] = build_commit_graph(self.repo.object_store, [[1], [2]])
+        self.repo[b"HEAD"] = c1.id
+
+        # Create a replacement
+        porcelain.replace_create(self.repo, c1.id, c2.id)
+
+        # Delete using bytes argument
+        porcelain.replace_delete(self.repo, c1.id)
+
+        # Verify it's gone
+        replacements = porcelain.replace_list(self.repo)
+        self.assertEqual(0, len(replacements))
+
+    def test_delete_nonexistent_replacement(self) -> None:
+        """Test deleting a replacement ref that doesn't exist raises KeyError."""
+        [c1] = build_commit_graph(self.repo.object_store, [[1]])
+        self.repo[b"HEAD"] = c1.id
+
+        # Try to delete a non-existent replacement
+        with self.assertRaises(KeyError):
+            porcelain.replace_delete(self.repo, c1.id)
+
+
+class GitReflogActionTests(PorcelainTestCase):
+    """Tests for GIT_REFLOG_ACTION environment variable support."""
+
+    def test_reset_with_git_reflog_action(self) -> None:
+        """Test that reset respects GIT_REFLOG_ACTION environment variable."""
+        [c1, c2] = build_commit_graph(self.repo.object_store, [[1], [2]])
+        self.repo.refs[b"HEAD"] = c2.id
+
+        # Set GIT_REFLOG_ACTION environment variable
+        self.overrideEnv("GIT_REFLOG_ACTION", "custom reset action")
+
+        # Reset to c1
+        porcelain.reset(self.repo, "hard", c1.id.decode())
+
+        # Check reflog message - HEAD is a symref to refs/heads/master
+        entries = list(porcelain.reflog(self.repo_path, b"refs/heads/master"))
+        self.assertEqual(1, len(entries))
+        self.assertEqual(b"custom reset action", entries[0].message)
+
+    def test_commit_amend_with_git_reflog_action(self) -> None:
+        """Test that commit --amend respects GIT_REFLOG_ACTION environment variable."""
+        [c1] = build_commit_graph(self.repo.object_store, [[1]])
+        self.repo.refs[b"HEAD"] = c1.id
+
+        # Set GIT_REFLOG_ACTION environment variable
+        self.overrideEnv("GIT_REFLOG_ACTION", "custom amend action")
+
+        # Amend the commit
+        porcelain.commit(self.repo, b"amended message", amend=True)
+
+        # Check reflog message - HEAD is a symref to refs/heads/master
+        entries = list(porcelain.reflog(self.repo_path, b"refs/heads/master"))
+        self.assertEqual(1, len(entries))
+        self.assertEqual(b"custom amend action", entries[0].message)
+
+    def test_branch_create_with_git_reflog_action(self) -> None:
+        """Test that branch_create respects GIT_REFLOG_ACTION environment variable."""
+        [c1] = build_commit_graph(self.repo.object_store, [[1]])
+        self.repo.refs[b"HEAD"] = c1.id
+
+        # Set GIT_REFLOG_ACTION environment variable
+        self.overrideEnv("GIT_REFLOG_ACTION", "custom branch action")
+
+        # Create a new branch
+        porcelain.branch_create(self.repo, b"test-branch")
+
+        # Check reflog message
+        entries = list(porcelain.reflog(self.repo_path, b"refs/heads/test-branch"))
+        self.assertEqual(1, len(entries))
+        self.assertEqual(b"custom branch action", entries[0].message)
+
+    def test_reset_without_git_reflog_action(self) -> None:
+        """Test that reset uses default message when GIT_REFLOG_ACTION is not set."""
+        [c1, c2] = build_commit_graph(self.repo.object_store, [[1], [2]])
+        self.repo.refs[b"HEAD"] = c2.id
+
+        # Reset to c1 without GIT_REFLOG_ACTION
+        porcelain.reset(self.repo, "hard", c1.id.decode())
+
+        # Check reflog message contains default format - HEAD is a symref to refs/heads/master
+        entries = list(porcelain.reflog(self.repo_path, b"refs/heads/master"))
+        self.assertEqual(1, len(entries))
+        self.assertTrue(entries[0].message.startswith(b"reset: moving to"))
+
+    def test_branch_create_without_git_reflog_action(self) -> None:
+        """Test that branch_create uses default message when GIT_REFLOG_ACTION is not set."""
+        [c1] = build_commit_graph(self.repo.object_store, [[1]])
+        self.repo.refs[b"HEAD"] = c1.id
+
+        # Create a new branch without GIT_REFLOG_ACTION
+        porcelain.branch_create(self.repo, b"test-branch")
+
+        # Check reflog message contains default format
+        entries = list(porcelain.reflog(self.repo_path, b"refs/heads/test-branch"))
+        self.assertEqual(1, len(entries))
+        self.assertTrue(entries[0].message.startswith(b"branch: Created from"))

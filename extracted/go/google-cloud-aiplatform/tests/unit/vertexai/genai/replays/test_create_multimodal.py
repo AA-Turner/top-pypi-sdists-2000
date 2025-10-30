@@ -26,7 +26,7 @@ BIGQUERY_TABLE_NAME = "vertex-sdk-dev.multimodal_dataset.test-table"
 
 
 def test_create_dataset(client):
-    create_dataset_operation = client.multimodal._create_multimodal_dataset(
+    create_dataset_operation = client.datasets._create_multimodal_dataset(
         name="projects/vertex-sdk-dev/locations/us-central1",
         display_name="test-display-name",
         metadata_schema_uri=METADATA_SCHEMA_URI,
@@ -50,7 +50,7 @@ pytest_plugins = ("pytest_asyncio",)
 
 @pytest.mark.asyncio
 async def test_create_dataset_async(client):
-    create_dataset_operation = await client.aio.multimodal._create_multimodal_dataset(
+    create_dataset_operation = await client.aio.datasets._create_multimodal_dataset(
         name="projects/vertex-sdk-dev/locations/us-central1",
         display_name="test-display-name",
         metadata_schema_uri=METADATA_SCHEMA_URI,

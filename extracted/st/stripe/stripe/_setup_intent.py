@@ -7,7 +7,7 @@ from stripe._listable_api_resource import ListableAPIResource
 from stripe._stripe_object import StripeObject
 from stripe._updateable_api_resource import UpdateableAPIResource
 from stripe._util import class_method_variant, sanitize_id
-from typing import Any, ClassVar, Dict, List, Optional, Union, cast, overload
+from typing import ClassVar, Dict, List, Optional, Union, cast, overload
 from typing_extensions import Literal, Unpack, TYPE_CHECKING
 
 if TYPE_CHECKING:
@@ -40,6 +40,7 @@ if TYPE_CHECKING:
     from stripe.params._setup_intent_verify_microdeposits_params import (
         SetupIntentVerifyMicrodepositsParams,
     )
+    from typing import Any
 
 
 class SetupIntent(
@@ -206,6 +207,7 @@ class SetupIntent(
                 "payment_intent_mandate_invalid",
                 "payment_intent_payment_attempt_expired",
                 "payment_intent_payment_attempt_failed",
+                "payment_intent_rate_limit_exceeded",
                 "payment_intent_unexpected_state",
                 "payment_method_bank_account_already_verified",
                 "payment_method_bank_account_blocked",
@@ -431,7 +433,7 @@ class SetupIntent(
         """
         Type of the next action to perform. Refer to the other child attributes under `next_action` for available values. Examples include: `redirect_to_url`, `use_stripe_sdk`, `alipay_handle_redirect`, `oxxo_display_details`, or `verify_with_microdeposits`.
         """
-        use_stripe_sdk: Optional[Dict[str, Any]]
+        use_stripe_sdk: Optional[Dict[str, "Any"]]
         """
         When confirming a SetupIntent with Stripe.js, Stripe.js depends on the contents of this dictionary to invoke authentication flows. The shape of the contents is subject to change and is only intended to be used by Stripe.js.
         """
@@ -731,6 +733,63 @@ class SetupIntent(
     description: Optional[str]
     """
     An arbitrary string attached to the object. Often useful for displaying to users.
+    """
+    excluded_payment_method_types: Optional[
+        List[
+            Literal[
+                "acss_debit",
+                "affirm",
+                "afterpay_clearpay",
+                "alipay",
+                "alma",
+                "amazon_pay",
+                "au_becs_debit",
+                "bacs_debit",
+                "bancontact",
+                "billie",
+                "blik",
+                "boleto",
+                "card",
+                "cashapp",
+                "crypto",
+                "customer_balance",
+                "eps",
+                "fpx",
+                "giropay",
+                "grabpay",
+                "ideal",
+                "kakao_pay",
+                "klarna",
+                "konbini",
+                "kr_card",
+                "mb_way",
+                "mobilepay",
+                "multibanco",
+                "naver_pay",
+                "nz_bank_account",
+                "oxxo",
+                "p24",
+                "pay_by_bank",
+                "payco",
+                "paynow",
+                "paypal",
+                "pix",
+                "promptpay",
+                "revolut_pay",
+                "samsung_pay",
+                "satispay",
+                "sepa_debit",
+                "sofort",
+                "swish",
+                "twint",
+                "us_bank_account",
+                "wechat_pay",
+                "zip",
+            ]
+        ]
+    ]
+    """
+    Payment method types that are excluded from this SetupIntent.
     """
     flow_directions: Optional[List[Literal["inbound", "outbound"]]]
     """

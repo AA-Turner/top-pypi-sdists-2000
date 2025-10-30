@@ -57,7 +57,7 @@ xai_extra_require = ["tensorflow >=2.3.0, <3.0.0; python_version<'3.13'"]
 lit_extra_require = [
     "tensorflow >= 2.3.0, <3.0.0; python_version<'3.13'",
     "pandas >= 1.0.0",
-    "lit-nlp == 0.4.0",
+    "lit-nlp == 0.4.0; python_version<'3.14'",
     "explainable-ai-sdk >= 1.0.0; python_version<'3.13'",
 ]
 featurestore_extra_require = [
@@ -93,7 +93,10 @@ private_endpoints_extra_require = [
     "requests >= 2.28.1",
 ]
 
-autologging_extra_require = ["mlflow>=1.27.0,<=2.16.0"]
+autologging_extra_require = [
+    "mlflow>=1.27.0,<=2.16.0; python_version<'3.13'",
+    "mlflow>=1.27.0; python_version>='3.13'",
+]
 
 preview_extra_require = []
 
@@ -246,7 +249,7 @@ testing_extra_require = (
         # aiohttp is required for async rest tests (need google-auth[aiohttp],
         # but can't specify extras in constraints files)
         "aiohttp",
-        "bigframes; python_version>='3.10'",
+        "bigframes; python_version>='3.10' and python_version<'3.14'",
         # google-api-core 2.x is required since kfp requires protobuf > 4
         "google-api-core >= 2.11, < 3.0.0",
         "grpcio-testing",
@@ -257,6 +260,7 @@ testing_extra_require = (
         "pytest-cov",
         "mock",
         "pytest-xdist",
+        "Pillow",
         "scikit-learn<1.6.0; python_version<='3.10'",
         "scikit-learn; python_version>'3.10'",
         # Lazy import requires > 2.12.0
@@ -303,8 +307,8 @@ setuptools.setup(
         "proto-plus >= 1.22.3, <2.0.0",
         "protobuf>=3.20.2,<7.0.0,!=4.21.0,!=4.21.1,!=4.21.2,!=4.21.3,!=4.21.4,!=4.21.5",
         "packaging >= 14.3",
-        "google-cloud-storage >= 1.32.0, < 3.0.0; python_version<'3.13'",
-        "google-cloud-storage >= 2.10.0, < 3.0.0; python_version>='3.13'",
+        "google-cloud-storage >= 1.32.0, < 4.0.0; python_version<'3.13'",
+        "google-cloud-storage >= 2.10.0, < 4.0.0; python_version>='3.13'",
         "google-cloud-bigquery >= 1.15.0, < 4.0.0, !=3.20.0",
         "google-cloud-resource-manager >= 1.3.3, < 3.0.0",
         "shapely < 3.0.0",
@@ -353,6 +357,7 @@ setuptools.setup(
         "Programming Language :: Python :: 3.11",
         "Programming Language :: Python :: 3.12",
         "Programming Language :: Python :: 3.13",
+        "Programming Language :: Python :: 3.14",
         "Topic :: Internet",
         "Topic :: Software Development :: Libraries :: Python Modules",
     ],

@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: streamlit
-Version: 1.50.0
+Version: 1.51.0
 Summary: A faster way to build and share data apps
 Home-page: https://streamlit.io
 Author: Snowflake Inc
@@ -18,7 +18,6 @@ Classifier: Environment :: Web Environment
 Classifier: Intended Audience :: Developers
 Classifier: Intended Audience :: Science/Research
 Classifier: License :: OSI Approved :: Apache Software License
-Classifier: Programming Language :: Python :: 3.9
 Classifier: Programming Language :: Python :: 3.10
 Classifier: Programming Language :: Python :: 3.11
 Classifier: Programming Language :: Python :: 3.12
@@ -29,7 +28,7 @@ Classifier: Topic :: Scientific/Engineering :: Information Analysis
 Classifier: Topic :: Scientific/Engineering :: Visualization
 Classifier: Topic :: Software Development :: Libraries :: Application Frameworks
 Classifier: Topic :: Software Development :: Widget Sets
-Requires-Python: >=3.9, !=3.9.7
+Requires-Python: >=3.10
 Description-Content-Type: text/markdown
 Requires-Dist: altair!=5.4.0,!=5.4.1,<6,>=4.0
 Requires-Dist: blinker<2,>=1.5.0
@@ -38,9 +37,9 @@ Requires-Dist: click<9,>=7.0
 Requires-Dist: numpy<3,>=1.23
 Requires-Dist: packaging<26,>=20
 Requires-Dist: pandas<3,>=1.4.0
-Requires-Dist: pillow<12,>=7.1.0
+Requires-Dist: pillow<13,>=7.1.0
 Requires-Dist: protobuf<7,>=3.20
-Requires-Dist: pyarrow>=7.0
+Requires-Dist: pyarrow<22,>=7.0
 Requires-Dist: requests<3,>=2.27
 Requires-Dist: tenacity<10,>=8.1.0
 Requires-Dist: toml<2,>=0.10.1

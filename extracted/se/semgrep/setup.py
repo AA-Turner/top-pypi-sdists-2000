@@ -122,6 +122,7 @@ install_requires = [
     "exceptiongroup~=1.2.0",
     "glom~=22.1",
     "mcp==1.16.0",
+    "jsonschema~=4.25.1",
     "opentelemetry-api~=1.37.0",
     "opentelemetry-sdk~=1.37.0",
     "opentelemetry-exporter-otlp-proto-http~=1.37.0",
@@ -142,7 +143,7 @@ install_requires = [
 
 setuptools.setup(
     name="semgrep",
-    version="1.141.0",
+    version="1.141.1",
     author="Semgrep Inc.",
     author_email="support@semgrep.com",
     description="Lightweight static analysis for many languages. Find bug variants with patterns that look like source code.",

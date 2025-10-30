@@ -41,6 +41,7 @@ Currently implemented:
  * for_each_ref
  * grep
  * init
+ * interpret_trailers
  * ls_files
  * ls_remote
  * ls_tree
@@ -54,6 +55,7 @@ Currently implemented:
  * rm
  * remote{_add}
  * receive_pack
+ * replace{_create,_delete,_list}
  * reset
  * revert
  * sparse_checkout
@@ -105,6 +107,7 @@ from typing import (
     Callable,
     Optional,
     TextIO,
+    TypedDict,
     TypeVar,
     Union,
     cast,
@@ -118,8 +121,11 @@ else:
     from typing_extensions import Buffer, override
 
 if TYPE_CHECKING:
+    import urllib3
+
     from .filter_branch import CommitData
     from .gc import GCStats
+    from .maintenance import MaintenanceResult
 
 from . import replace_me
 from .archive import tar_stream
@@ -190,12 +196,14 @@ from .refs import (
     LOCAL_BRANCH_PREFIX,
     LOCAL_NOTES_PREFIX,
     LOCAL_REMOTE_PREFIX,
+    LOCAL_REPLACE_PREFIX,
     LOCAL_TAG_PREFIX,
     Ref,
     SymrefLoop,
     _import_remote_refs,
     filter_ref_prefix,
     local_branch_name,
+    local_replace_name,
     local_tag_name,
     shorten_ref_name,
 )
@@ -212,6 +220,7 @@ from .sparse_patterns import (
     apply_included_paths,
     determine_included_paths,
 )
+from .trailers import add_trailer_to_message, format_trailers, parse_trailers
 
 # Module level tuple definition for status output
 GitStatus = namedtuple("GitStatus", "staged unstaged untracked")
@@ -221,6 +230,21 @@ T = TypeVar("T", bound="BaseRepo")
 
 # Type alias for common repository parameter pattern
 RepoPath = Union[str, os.PathLike[str], Repo]
+
+
+class TransportKwargs(TypedDict, total=False):
+    """Keyword arguments accepted by get_transport_and_path."""
+
+    operation: Optional[str]
+    thin_packs: bool
+    report_activity: Optional[Callable[[int, str], None]]
+    quiet: bool
+    include_tags: bool
+    username: Optional[str]
+    password: Optional[str]
+    key_filename: Optional[str]
+    ssh_command: Optional[str]
+    pool_manager: Optional["urllib3.PoolManager"]
 
 
 @dataclass
@@ -396,6 +420,31 @@ def open_repo(
 def _noop_context_manager(obj: T) -> Iterator[T]:
     """Context manager that has the same api as closing but does nothing."""
     yield obj
+
+
+def _get_reflog_message(
+    default_message: bytes, explicit_message: Optional[bytes] = None
+) -> bytes:
+    """Get reflog message, checking GIT_REFLOG_ACTION environment variable.
+
+    Args:
+      default_message: Default message to use if no explicit message or env var
+      explicit_message: Explicit message passed as argument (takes precedence)
+
+    Returns:
+      The reflog message to use, with priority:
+        1. explicit_message if provided
+        2. GIT_REFLOG_ACTION environment variable if set
+        3. default_message otherwise
+    """
+    if explicit_message is not None:
+        return explicit_message
+
+    env_action = os.environ.get("GIT_REFLOG_ACTION")
+    if env_action is not None:
+        return env_action.encode("utf-8")
+
+    return default_message
 
 
 @overload
@@ -816,11 +865,27 @@ def commit(
                 encoding=encoding,
                 no_verify=no_verify,
                 sign=sign,
+                signoff=signoff,
                 merge_heads=merge_heads,
                 ref=None,
             )
-            # Update HEAD to point to the new commit
-            r.refs[b"HEAD"] = commit_sha
+            # Update HEAD to point to the new commit with reflog message
+            try:
+                old_head = r.refs[b"HEAD"]
+            except KeyError:
+                old_head = None
+
+            # Get the actual commit message from the created commit
+            commit_obj = r[commit_sha]
+            assert isinstance(commit_obj, Commit)
+            commit_message = commit_obj.message
+            default_message = b"commit (amend): " + commit_message
+            # Truncate message if too long for reflog
+            if len(default_message) > 100:
+                default_message = default_message[:97] + b"..."
+            reflog_message = _get_reflog_message(default_message)
+
+            r.refs.set_if_equals(b"HEAD", old_head, commit_sha, message=reflog_message)
             return commit_sha
         else:
             return r.get_worktree().commit(
@@ -832,6 +897,7 @@ def commit(
                 encoding=encoding,
                 no_verify=no_verify,
                 sign=sign,
+                signoff=signoff,
                 merge_heads=merge_heads,
             )
 
@@ -860,6 +926,169 @@ def commit_tree(
         )
 
 
+def interpret_trailers(
+    message: Union[str, bytes],
+    *,
+    trailers: Optional[list[tuple[str, str]]] = None,
+    trim_empty: bool = False,
+    only_trailers: bool = False,
+    only_input: bool = False,
+    unfold: bool = False,
+    parse: bool = False,
+    where: str = "end",
+    if_exists: str = "addIfDifferentNeighbor",
+    if_missing: str = "add",
+    separators: str = ":",
+) -> bytes:
+    r"""Parse and manipulate trailers in a commit message.
+
+    This function implements the functionality of `git interpret-trailers`,
+    allowing parsing and manipulation of structured metadata (trailers) in
+    commit messages.
+
+    Trailers are key-value pairs at the end of commit messages, formatted like:
+        Signed-off-by: Alice <alice@example.com>
+        Reviewed-by: Bob <bob@example.com>
+
+    Args:
+        message: The commit message (string or bytes)
+        trailers: List of (key, value) tuples to add as new trailers
+        trim_empty: Remove trailers with empty values
+        only_trailers: Output only the trailers, not the message body
+        only_input: Don't add new trailers, only parse existing ones
+        unfold: Join multiline trailer values into a single line
+        parse: Shorthand for --only-trailers --only-input --unfold
+        where: Where to add new trailers ('end', 'start', 'after', 'before')
+        if_exists: How to handle duplicate keys
+            - 'add': Always add
+            - 'replace': Replace all existing
+            - 'addIfDifferent': Add only if value differs from all existing
+            - 'addIfDifferentNeighbor': Add only if value differs from neighbors
+            - 'doNothing': Don't add if key exists
+        if_missing: What to do if key doesn't exist ('add' or 'doNothing')
+        separators: Valid separator characters (default ':')
+
+    Returns:
+        The processed message as bytes
+
+    Examples:
+        >>> msg = b"Subject\\n\\nBody text\\n"
+        >>> interpret_trailers(msg, trailers=[("Signed-off-by", "Alice <alice@example.com>")])
+        b'Subject\\n\\nBody text\\n\\nSigned-off-by: Alice <alice@example.com>\\n'
+
+        >>> msg = b"Subject\\n\\nSigned-off-by: Alice\\n"
+        >>> interpret_trailers(msg, only_trailers=True)
+        b'Signed-off-by: Alice\\n'
+    """
+    # Handle --parse shorthand
+    if parse:
+        only_trailers = True
+        only_input = True
+        unfold = True
+
+    # Convert message to bytes
+    if isinstance(message, str):
+        message_bytes = message.encode("utf-8")
+    else:
+        message_bytes = message
+
+    # Parse existing trailers
+    _message_body, parsed_trailers = parse_trailers(message_bytes, separators)
+
+    # Apply unfold if requested
+    if unfold:
+        for trailer in parsed_trailers:
+            # Replace newlines and multiple spaces with single space
+            trailer.value = " ".join(trailer.value.split())
+
+    # Apply trim_empty if requested
+    if trim_empty:
+        parsed_trailers = [t for t in parsed_trailers if t.value.strip()]
+
+    # Add new trailers if requested and not only_input
+    if not only_input and trailers:
+        for key, value in trailers:
+            message_bytes = add_trailer_to_message(
+                message_bytes,
+                key,
+                value,
+                separators[0],  # Use first separator as default
+                where=where,
+                if_exists=if_exists,
+                if_missing=if_missing,
+            )
+        # Re-parse to get updated trailers for output
+        if only_trailers:
+            _message_body, parsed_trailers = parse_trailers(message_bytes, separators)
+
+    # Return based on only_trailers flag
+    if only_trailers:
+        return format_trailers(parsed_trailers)
+    else:
+        return message_bytes
+
+
+def stripspace(
+    text: Union[str, bytes],
+    *,
+    strip_comments: bool = False,
+    comment_char: str = "#",
+    comment_lines: bool = False,
+) -> bytes:
+    r"""Strip unnecessary whitespace from text.
+
+    This function implements the functionality of `git stripspace`, commonly
+    used to clean up commit messages and other text content.
+
+    Args:
+        text: The text to process (string or bytes)
+        strip_comments: If True, remove lines that begin with comment_char
+        comment_char: The comment character to use (default: "#")
+        comment_lines: If True, prepend comment_char to each line
+
+    Returns:
+        The processed text as bytes
+
+    The function performs the following operations:
+        1. If comment_lines is True, prepend comment_char + space to each line
+        2. Strip trailing whitespace from each line
+        3. If strip_comments is True, remove lines starting with comment_char
+        4. Collapse multiple consecutive blank lines into a single blank line
+        5. Remove leading blank lines
+        6. Remove trailing blank lines
+        7. Ensure the text ends with a newline (unless empty)
+
+    Examples:
+        >>> stripspace(b"  hello  \\n\\n\\nworld  \\n\\n")
+        b'hello\\n\\nworld\\n'
+
+        >>> stripspace(b"# comment\\ntext\\n", strip_comments=True)
+        b'text\\n'
+
+        >>> stripspace(b"line\\n", comment_lines=True)
+        b'# line\\n'
+    """
+    from dulwich.stripspace import stripspace as _stripspace
+
+    # Convert text to bytes
+    if isinstance(text, str):
+        text_bytes = text.encode("utf-8")
+    else:
+        text_bytes = text
+
+    # Convert comment_char to bytes
+    comment_char_bytes = (
+        comment_char.encode("utf-8") if isinstance(comment_char, str) else comment_char
+    )
+
+    return _stripspace(
+        text_bytes,
+        strip_comments=strip_comments,
+        comment_char=comment_char_bytes,
+        comment_lines=comment_lines,
+    )
+
+
 def init(
     path: Union[str, os.PathLike[str]] = ".",
     *,
@@ -881,6 +1110,30 @@ def init(
         return Repo.init_bare(path)
     else:
         return Repo.init(path, symlinks=symlinks)
+
+
+def _filter_transport_kwargs(**kwargs: object) -> TransportKwargs:
+    """Filter kwargs to only include parameters accepted by get_transport_and_path.
+
+    Args:
+      **kwargs: Arbitrary keyword arguments
+
+    Returns:
+      Dictionary containing only the kwargs that get_transport_and_path accepts
+    """
+    valid_params = {
+        "operation",
+        "thin_packs",
+        "report_activity",
+        "quiet",
+        "include_tags",
+        "username",
+        "password",
+        "key_filename",
+        "ssh_command",
+        "pool_manager",
+    }
+    return cast(TransportKwargs, {k: v for k, v in kwargs.items() if k in valid_params})
 
 
 def clone(
@@ -963,7 +1216,10 @@ def clone(
         path = source.path
     else:
         source_str = source.decode() if isinstance(source, bytes) else source
-        (client, path) = get_transport_and_path(source_str, config=config, **kwargs)  # type: ignore[arg-type]
+        transport_kwargs = _filter_transport_kwargs(**kwargs)
+        (client, path) = get_transport_and_path(
+            source_str, config=config, **transport_kwargs
+        )
 
     filter_spec_bytes: Optional[bytes] = None
     if filter_spec:
@@ -987,7 +1243,7 @@ def clone(
     if recurse_submodules and not bare:
         try:
             submodule_init(repo)
-            submodule_update(repo, init=True)
+            submodule_update(repo, init=True, recursive=True)
         except FileNotFoundError as e:
             # .gitmodules file doesn't exist - no submodules to process
             logging.debug("No .gitmodules file found: %s", e)
@@ -1962,6 +2218,7 @@ def submodule_update(
     paths: Optional[Sequence[Union[str, bytes, os.PathLike[str]]]] = None,
     init: bool = False,
     force: bool = False,
+    recursive: bool = False,
     errstream: Optional[BinaryIO] = None,
 ) -> None:
     """Update submodules.
@@ -1971,6 +2228,7 @@ def submodule_update(
       paths: Optional list of specific submodule paths to update. If None, updates all.
       init: If True, initialize submodules first
       force: Force update even if local changes exist
+      recursive: If True, recursively update nested submodules
       errstream: Error stream for error messages
     """
     from .submodule import iter_cached_submodules
@@ -2028,7 +2286,7 @@ def submodule_update(
 
             # Get or create the submodule repository paths
             submodule_path = os.path.join(r.path, path_str)
-            submodule_git_dir = os.path.join(r.path, ".git", "modules", path_str)
+            submodule_git_dir = os.path.join(r.controldir(), "modules", path_str)
 
             # Clone or fetch the submodule
             if not os.path.exists(submodule_git_dir):
@@ -2044,8 +2302,7 @@ def submodule_update(
                     os.makedirs(submodule_path)
 
                 # Create .git file in the submodule directory
-                depth = path_str.count("/") + 1
-                relative_git_dir = "../" * depth + ".git/modules/" + path_str
+                relative_git_dir = os.path.relpath(submodule_git_dir, submodule_path)
                 git_file_path = os.path.join(submodule_path, ".git")
                 with open(git_file_path, "w") as f:
                     f.write(f"gitdir: {relative_git_dir}\n")
@@ -2088,6 +2345,19 @@ def submodule_update(
 
                     # Reset the working directory
                     reset(sub_repo, "hard", target_sha)
+
+            # Recursively update nested submodules if requested
+            if recursive:
+                submodule_gitmodules = os.path.join(submodule_path, ".gitmodules")
+                if os.path.exists(submodule_gitmodules):
+                    submodule_update(
+                        submodule_path,
+                        paths=None,
+                        init=True,  # Always initialize nested submodules
+                        force=force,
+                        recursive=True,
+                        errstream=errstream,
+                    )
 
 
 def tag_create(
@@ -2411,6 +2681,77 @@ def notes_list(repo: RepoPath, ref: bytes = b"commits") -> list[tuple[bytes, byt
         return r.notes.list_notes(notes_ref, config=config)
 
 
+def replace_list(repo: RepoPath) -> list[tuple[bytes, bytes]]:
+    """List all replacement refs.
+
+    Args:
+      repo: Path to repository
+
+    Returns:
+      List of tuples of (object_sha, replacement_sha) where object_sha is the
+      object being replaced and replacement_sha is what it's replaced with
+    """
+    with open_repo_closing(repo) as r:
+        replacements = []
+        for ref in r.refs.keys():
+            if ref.startswith(LOCAL_REPLACE_PREFIX):
+                object_sha = ref[len(LOCAL_REPLACE_PREFIX) :]
+                replacement_sha = r.refs[ref]
+                replacements.append((object_sha, replacement_sha))
+        return replacements
+
+
+def replace_delete(repo: RepoPath, object_sha: Union[str, bytes]) -> None:
+    """Delete a replacement ref.
+
+    Args:
+      repo: Path to repository
+      object_sha: SHA of the object whose replacement should be removed
+    """
+    with open_repo_closing(repo) as r:
+        # Convert to bytes if string
+        if isinstance(object_sha, str):
+            object_sha_hex = object_sha.encode("ascii")
+        else:
+            object_sha_hex = object_sha
+
+        replace_ref = _make_replace_ref(object_sha_hex)
+        if replace_ref not in r.refs:
+            raise KeyError(
+                f"No replacement ref found for {object_sha_hex.decode('ascii')}"
+            )
+        del r.refs[replace_ref]
+
+
+def replace_create(
+    repo: RepoPath,
+    object_sha: Union[str, bytes],
+    replacement_sha: Union[str, bytes],
+) -> None:
+    """Create a replacement ref to replace one object with another.
+
+    Args:
+      repo: Path to repository
+      object_sha: SHA of the object to replace
+      replacement_sha: SHA of the replacement object
+    """
+    with open_repo_closing(repo) as r:
+        # Convert to bytes if string
+        if isinstance(object_sha, str):
+            object_sha_hex = object_sha.encode("ascii")
+        else:
+            object_sha_hex = object_sha
+
+        if isinstance(replacement_sha, str):
+            replacement_sha_hex = replacement_sha.encode("ascii")
+        else:
+            replacement_sha_hex = replacement_sha
+
+        # Create the replacement ref
+        replace_ref = _make_replace_ref(object_sha_hex)
+        r.refs[replace_ref] = replacement_sha_hex
+
+
 def reset(
     repo: Union[str, os.PathLike[str], Repo],
     mode: str,
@@ -2435,7 +2776,27 @@ def reset(
 
         # Update HEAD to point to the target commit
         if target_commit is not None:
-            r.refs[b"HEAD"] = target_commit.id
+            # Get the current HEAD value for set_if_equals
+            try:
+                old_head = r.refs[b"HEAD"]
+            except KeyError:
+                old_head = None
+
+            # Create reflog message
+            treeish_str = (
+                treeish.decode("utf-8")
+                if isinstance(treeish, bytes)
+                else str(treeish)
+                if not isinstance(treeish, (Commit, Tree, Tag))
+                else target_commit.id.hex()
+            )
+            default_message = f"reset: moving to {treeish_str}".encode()
+            reflog_message = _get_reflog_message(default_message)
+
+            # Update HEAD with reflog message
+            r.refs.set_if_equals(
+                b"HEAD", old_head, target_commit.id, message=reflog_message
+            )
 
         if mode == "soft":
             # Soft reset: only update HEAD, leave index and working tree unchanged
@@ -2634,10 +2995,11 @@ def push(
                     refspecs_bytes.append(spec)
 
         # Get the client and path
+        transport_kwargs = _filter_transport_kwargs(**kwargs)
         client, path = get_transport_and_path(
             remote_location,
             config=r.get_config_stack(),
-            **kwargs,  # type: ignore[arg-type]
+            **transport_kwargs,
         )
 
         selected_refs = []
@@ -2686,12 +3048,14 @@ def push(
             def generate_pack_data_wrapper(
                 have: AbstractSet[bytes],
                 want: AbstractSet[bytes],
+                *,
                 ofs_delta: bool = False,
+                progress: Optional[Callable[..., None]] = None,
             ) -> tuple[int, Iterator[UnpackedObject]]:
                 # Wrap to match the expected signature
                 # Convert AbstractSet to set since generate_pack_data expects set
                 return r.generate_pack_data(
-                    set(have), set(want), progress=None, ofs_delta=ofs_delta
+                    set(have), set(want), progress=progress, ofs_delta=ofs_delta
                 )
 
             result = client.send_pack(
@@ -2802,10 +3166,11 @@ def pull(
                 and remote_refs[lh] not in r.object_store
             ]
 
+        transport_kwargs = _filter_transport_kwargs(**kwargs)
         client, path = get_transport_and_path(
             remote_location,
             config=r.get_config_stack(),
-            **kwargs,  # type: ignore[arg-type]
+            **transport_kwargs,
         )
         if filter_spec:
             filter_spec_bytes: Optional[bytes] = filter_spec.encode("ascii")
@@ -3490,6 +3855,12 @@ def _make_tag_ref(name: Union[str, bytes]) -> Ref:
     return local_tag_name(name)
 
 
+def _make_replace_ref(name: Union[str, bytes]) -> Ref:
+    if isinstance(name, str):
+        name = name.encode(DEFAULT_ENCODING)
+    return local_replace_name(name)
+
+
 def branch_delete(
     repo: RepoPath, name: Union[str, bytes, Sequence[Union[str, bytes]]]
 ) -> None:
@@ -3541,11 +3912,12 @@ def branch_create(
 
         object = parse_object(r, objectish)
         refname = _make_branch_ref(name)
-        ref_message = (
+        default_message = (
             b"branch: Created from " + original_objectish.encode(DEFAULT_ENCODING)
             if isinstance(original_objectish, str)
             else b"branch: Created from " + original_objectish
         )
+        ref_message = _get_reflog_message(default_message)
         if force:
             r.refs.set_if_equals(refname, None, object.id, message=ref_message)
         else:
@@ -3940,8 +4312,8 @@ def fetch(
     """
     with open_repo_closing(repo) as r:
         (remote_name, remote_location) = get_remote_repo(r, remote_location)
-        if message is None:
-            message = b"fetch: from " + remote_location.encode(DEFAULT_ENCODING)
+        default_message = b"fetch: from " + remote_location.encode(DEFAULT_ENCODING)
+        message = _get_reflog_message(default_message, message)
         client, path = get_transport_and_path(
             remote_location,
             config=r.get_config_stack(),
@@ -6370,6 +6742,60 @@ def prune(
             progress("Pruning temporary files")
         if not dry_run:
             r.object_store.prune(grace_period=grace_period)
+
+
+def maintenance_run(
+    repo: RepoPath,
+    tasks: Optional[list[str]] = None,
+    auto: bool = False,
+    progress: Optional[Callable[[str], None]] = None,
+) -> "MaintenanceResult":
+    """Run maintenance tasks on a repository.
+
+    Args:
+      repo: Path to the repository or a Repo object
+      tasks: Optional list of specific task names to run
+             (e.g., ['gc', 'commit-graph', 'pack-refs'])
+      auto: If True, only run tasks if needed
+      progress: Optional progress callback
+
+    Returns:
+      MaintenanceResult object with task execution results
+    """
+    from .maintenance import run_maintenance
+
+    with open_repo_closing(repo) as r:
+        return run_maintenance(r, tasks=tasks, auto=auto, progress=progress)
+
+
+def maintenance_register(repo: RepoPath) -> None:
+    """Register a repository for background maintenance.
+
+    This adds the repository to the global maintenance.repo config and sets
+    up recommended configuration for scheduled maintenance.
+
+    Args:
+      repo: Path to the repository or repository object
+    """
+    from .maintenance import register_repository
+
+    with open_repo_closing(repo) as r:
+        register_repository(r)
+
+
+def maintenance_unregister(repo: RepoPath, force: bool = False) -> None:
+    """Unregister a repository from background maintenance.
+
+    This removes the repository from the global maintenance.repo config.
+
+    Args:
+      repo: Path to the repository or repository object
+      force: If True, don't error if repository is not registered
+    """
+    from .maintenance import unregister_repository
+
+    with open_repo_closing(repo) as r:
+        unregister_repository(r, force=force)
 
 
 def count_objects(repo: RepoPath = ".", verbose: bool = False) -> CountObjectsResult:

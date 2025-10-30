@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: environs
-Version: 14.3.0
+Version: 14.4.0
 Summary: simplified environment variable parsing
 Author-email: Steven Loria <sloria1@gmail.com>
 Requires-Python: >=3.9

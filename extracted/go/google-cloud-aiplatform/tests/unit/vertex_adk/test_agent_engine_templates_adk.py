@@ -27,6 +27,7 @@ from vertexai.agent_engines import _utils
 from vertexai import agent_engines
 from google.genai import types
 import pytest
+import uuid
 
 
 try:
@@ -263,6 +264,39 @@ class TestAdkApp:
             for operation in operations:
                 assert operation in dir(app)
 
+    def test_stream_query(self):
+        app = agent_engines.AdkApp(agent=_TEST_AGENT)
+        assert app._tmpl_attrs.get("runner") is None
+        app.set_up()
+        app._tmpl_attrs["runner"] = _MockRunner()
+        events = list(
+            app.stream_query(
+                user_id=_TEST_USER_ID,
+                message="test message",
+            )
+        )
+        assert len(events) == 1
+
+    def test_stream_query_with_content(self):
+        app = agent_engines.AdkApp(agent=_TEST_AGENT)
+        assert app._tmpl_attrs.get("runner") is None
+        app.set_up()
+        app._tmpl_attrs["runner"] = _MockRunner()
+        events = list(
+            app.stream_query(
+                user_id=_TEST_USER_ID,
+                message=types.Content(
+                    role="user",
+                    parts=[
+                        types.Part(
+                            text="test message with content",
+                        )
+                    ],
+                ).model_dump(),
+            )
+        )
+        assert len(events) == 1
+
     @pytest.mark.asyncio
     async def test_async_stream_query(self):
         app = agent_engines.AdkApp(agent=_TEST_AGENT)
@@ -382,6 +416,51 @@ class TestAdkApp:
             session_id=session.id,
         )
         response0 = await app.async_list_sessions(user_id=_TEST_USER_ID)
+        assert not response0.sessions
+
+    def test_create_session(self):
+        app = agent_engines.AdkApp(agent=_TEST_AGENT)
+        session1 = app.create_session(user_id=_TEST_USER_ID)
+        assert session1.user_id == _TEST_USER_ID
+        session2 = app.create_session(
+            user_id=_TEST_USER_ID, session_id="test_session_id"
+        )
+        assert session2.user_id == _TEST_USER_ID
+        assert session2.id == "test_session_id"
+
+    def test_get_session(self):
+        app = agent_engines.AdkApp(agent=_TEST_AGENT)
+        session1 = app.create_session(user_id=_TEST_USER_ID)
+        session2 = app.get_session(
+            user_id=_TEST_USER_ID,
+            session_id=session1.id,
+        )
+        assert session2.user_id == _TEST_USER_ID
+        assert session1.id == session2.id
+
+    def test_list_sessions(self):
+        app = agent_engines.AdkApp(agent=_TEST_AGENT)
+        response0 = app.list_sessions(user_id=_TEST_USER_ID)
+        assert not response0.sessions
+        session = app.create_session(user_id=_TEST_USER_ID)
+        response1 = app.list_sessions(user_id=_TEST_USER_ID)
+        assert len(response1.sessions) == 1
+        assert response1.sessions[0].id == session.id
+        session2 = app.create_session(user_id=_TEST_USER_ID)
+        response2 = app.list_sessions(user_id=_TEST_USER_ID)
+        assert len(response2.sessions) == 2
+        assert response2.sessions[0].id == session.id
+        assert response2.sessions[1].id == session2.id
+
+    def test_delete_session(self):
+        app = agent_engines.AdkApp(agent=_TEST_AGENT)
+        response = app.delete_session(user_id=_TEST_USER_ID, session_id="")
+        assert not response
+        session = app.create_session(user_id=_TEST_USER_ID)
+        response1 = app.list_sessions(user_id=_TEST_USER_ID)
+        assert len(response1.sessions) == 1
+        app.delete_session(user_id=_TEST_USER_ID, session_id=session.id)
+        response0 = app.list_sessions(user_id=_TEST_USER_ID)
         assert not response0.sessions
 
     @pytest.mark.asyncio
@@ -521,10 +600,23 @@ class TestAdkApp:
         else:
             custom_instrumentor.assert_not_called()
 
-    @mock.patch.dict(os.environ, {"GOOGLE_CLOUD_AGENT_ENGINE_ID": "test_agent_id"})
+    @mock.patch.dict(
+        os.environ,
+        {
+            "GOOGLE_CLOUD_AGENT_ENGINE_ID": "test_agent_id",
+            "OTEL_RESOURCE_ATTRIBUTES": "some-attribute=some-value",
+        },
+    )
     def test_tracing_setup(
-        self, trace_provider_mock: mock.Mock, cloud_trace_exporter_mock: mock.Mock
+        self,
+        trace_provider_mock: mock.Mock,
+        cloud_trace_exporter_mock: mock.Mock,
+        monkeypatch,
     ):
+        monkeypatch.setattr(
+            "uuid.uuid4", lambda: uuid.UUID("12345678123456781234567812345678")
+        )
+        monkeypatch.setattr("os.getpid", lambda: 123123123)
         app = agent_engines.AdkApp(agent=_TEST_AGENT, enable_tracing=True)
         app.set_up()
 
@@ -533,8 +625,12 @@ class TestAdkApp:
             "telemetry.sdk.name": "opentelemetry",
             "telemetry.sdk.version": "1.36.0",
             "gcp.project_id": "test-project",
+            "cloud.account.id": "test-project",
             "service.name": "test_agent_id",
             "cloud.resource_id": "//aiplatform.googleapis.com/projects/test-project/locations/us-central1/reasoningEngines/test_agent_id",
+            "service.instance.id": "12345678123456781234567812345678-123123123",
+            "cloud.region": "us-central1",
+            "some-attribute": "some-value",
         }
 
         @dataclasses.dataclass
@@ -590,10 +686,10 @@ class TestAdkApp:
     @mock.patch.dict(
         os.environ, {"OTEL_INSTRUMENTATION_GENAI_CAPTURE_MESSAGE_CONTENT": "true"}
     )
-    def test_span_content_capture_enabled_with_env_var(self):
+    def test_span_content_capture_disabled_with_env_var(self):
         app = agent_engines.AdkApp(agent=_TEST_AGENT)
         app.set_up()
-        assert os.environ["ADK_CAPTURE_MESSAGE_CONTENT_IN_SPANS"] == "true"
+        assert os.environ["ADK_CAPTURE_MESSAGE_CONTENT_IN_SPANS"] == "false"
 
     @mock.patch.dict(os.environ)
     def test_span_content_capture_enabled_with_tracing(self):
