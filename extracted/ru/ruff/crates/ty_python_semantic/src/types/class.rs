@@ -71,6 +71,7 @@ use rustc_hash::FxHashSet;
 
 fn explicit_bases_cycle_initial<'db>(
     _db: &'db dyn Db,
+    _id: salsa::Id,
     _self: ClassLiteral<'db>,
 ) -> Box<[Type<'db>]> {
     Box::default()
@@ -78,6 +79,7 @@ fn explicit_bases_cycle_initial<'db>(
 
 fn inheritance_cycle_initial<'db>(
     _db: &'db dyn Db,
+    _id: salsa::Id,
     _self: ClassLiteral<'db>,
 ) -> Option<InheritanceCycle> {
     None
@@ -85,6 +87,7 @@ fn inheritance_cycle_initial<'db>(
 
 fn implicit_attribute_initial<'db>(
     _db: &'db dyn Db,
+    _id: salsa::Id,
     _class_body_scope: ScopeId<'db>,
     _name: String,
     _target_method_decorator: MethodDecorator,
@@ -94,6 +97,7 @@ fn implicit_attribute_initial<'db>(
 
 fn try_mro_cycle_initial<'db>(
     db: &'db dyn Db,
+    _id: salsa::Id,
     self_: ClassLiteral<'db>,
     specialization: Option<Specialization<'db>>,
 ) -> Result<Mro<'db>, MroError<'db>> {
@@ -104,13 +108,18 @@ fn try_mro_cycle_initial<'db>(
 }
 
 #[allow(clippy::unnecessary_wraps)]
-fn is_typed_dict_cycle_initial<'db>(_db: &'db dyn Db, _self: ClassLiteral<'db>) -> bool {
+fn is_typed_dict_cycle_initial<'db>(
+    _db: &'db dyn Db,
+    _id: salsa::Id,
+    _self: ClassLiteral<'db>,
+) -> bool {
     false
 }
 
 #[allow(clippy::unnecessary_wraps)]
 fn try_metaclass_cycle_initial<'db>(
     _db: &'db dyn Db,
+    _id: salsa::Id,
     _self_: ClassLiteral<'db>,
 ) -> Result<(Type<'db>, Option<DataclassTransformerParams<'db>>), MetaclassError<'db>> {
     Err(MetaclassError {
@@ -169,6 +178,7 @@ impl<'db> CodeGeneratorKind<'db> {
 
         fn code_generator_of_class_initial<'db>(
             _db: &'db dyn Db,
+            _id: salsa::Id,
             _class: ClassLiteral<'db>,
             _specialization: Option<Specialization<'db>>,
         ) -> Option<CodeGeneratorKind<'db>> {
@@ -499,7 +509,7 @@ impl<'db> ClassType<'db> {
     /// Return `true` if `other` is present in this class's MRO.
     pub(super) fn is_subclass_of(self, db: &'db dyn Db, other: ClassType<'db>) -> bool {
         self.when_subclass_of(db, other, InferableTypeVars::None)
-            .is_always_satisfied()
+            .is_always_satisfied(db)
     }
 
     pub(super) fn when_subclass_of(
@@ -745,17 +755,6 @@ impl<'db> ClassType<'db> {
                 })
         };
 
-        let synthesize_simple_tuple_method = |return_type| {
-            let parameters =
-                Parameters::new([Parameter::positional_only(Some(Name::new_static("self")))
-                    .with_annotated_type(Type::instance(db, self))]);
-
-            let synthesized_dunder_method =
-                CallableType::function_like(db, Signature::new(parameters, Some(return_type)));
-
-            Member::definitely_declared(synthesized_dunder_method)
-        };
-
         match name {
             "__len__" if class_literal.is_tuple(db) => {
                 let return_type = specialization
@@ -765,16 +764,14 @@ impl<'db> ClassType<'db> {
                     .map(Type::IntLiteral)
                     .unwrap_or_else(|| KnownClass::Int.to_instance(db));
 
-                synthesize_simple_tuple_method(return_type)
-            }
+                let parameters =
+                    Parameters::new([Parameter::positional_only(Some(Name::new_static("self")))
+                        .with_annotated_type(Type::instance(db, self))]);
 
-            "__bool__" if class_literal.is_tuple(db) => {
-                let return_type = specialization
-                    .and_then(|spec| spec.tuple(db))
-                    .map(|tuple| tuple.truthiness().into_type(db))
-                    .unwrap_or_else(|| KnownClass::Bool.to_instance(db));
+                let synthesized_dunder_method =
+                    CallableType::function_like(db, Signature::new(parameters, Some(return_type)));
 
-                synthesize_simple_tuple_method(return_type)
+                Member::definitely_declared(synthesized_dunder_method)
             }
 
             "__getitem__" if class_literal.is_tuple(db) => {
@@ -1054,16 +1051,10 @@ impl<'db> ClassType<'db> {
             return Type::Callable(metaclass_dunder_call_function.into_callable_type(db));
         }
 
-        let dunder_new_function_symbol = self_ty
-            .member_lookup_with_policy(
-                db,
-                "__new__".into(),
-                MemberLookupPolicy::MRO_NO_OBJECT_FALLBACK,
-            )
-            .place;
+        let dunder_new_function_symbol = self_ty.lookup_dunder_new(db);
 
         let dunder_new_signature = dunder_new_function_symbol
-            .ignore_possibly_undefined()
+            .and_then(|place_and_quals| place_and_quals.ignore_possibly_undefined())
             .and_then(|ty| match ty {
                 Type::FunctionLiteral(function) => Some(function.signature(db)),
                 Type::Callable(callable) => Some(callable.signatures(db)),
@@ -1194,7 +1185,11 @@ impl<'db> ClassType<'db> {
     }
 }
 
-fn into_callable_cycle_initial<'db>(_db: &'db dyn Db, _self: ClassType<'db>) -> Type<'db> {
+fn into_callable_cycle_initial<'db>(
+    _db: &'db dyn Db,
+    _id: salsa::Id,
+    _self: ClassType<'db>,
+) -> Type<'db> {
     Type::Never
 }
 
@@ -1308,7 +1303,7 @@ impl<'db> Field<'db> {
     /// <https://docs.python.org/3/library/dataclasses.html#dataclasses.KW_ONLY>
     pub(crate) fn is_kw_only_sentinel(&self, db: &'db dyn Db) -> bool {
         self.declared_ty
-            .into_nominal_instance()
+            .as_nominal_instance()
             .is_some_and(|instance| instance.has_known_class(db, KnownClass::KwOnly))
     }
 }
@@ -1347,6 +1342,7 @@ impl get_size2::GetSize for ClassLiteral<'_> {}
 
 fn generic_context_cycle_initial<'db>(
     _db: &'db dyn Db,
+    _id: salsa::Id,
     _self: ClassLiteral<'db>,
 ) -> Option<GenericContext<'db>> {
     None
@@ -1994,11 +1990,6 @@ impl<'db> ClassLiteral<'db> {
         name: &str,
         policy: MemberLookupPolicy,
     ) -> PlaceAndQualifiers<'db> {
-        if name == "__mro__" {
-            let tuple_elements = self.iter_mro(db, specialization);
-            return Place::bound(Type::heterogeneous_tuple(db, tuple_elements)).into();
-        }
-
         self.class_member_from_mro(db, name, policy, self.iter_mro(db, specialization))
     }
 

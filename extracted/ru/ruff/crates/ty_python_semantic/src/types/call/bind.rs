@@ -17,6 +17,7 @@ use crate::db::Db;
 use crate::dunder_all::dunder_all_names;
 use crate::place::{Definedness, Place};
 use crate::types::call::arguments::{Expansion, is_expandable_type};
+use crate::types::constraints::ConstraintSet;
 use crate::types::diagnostic::{
     CALL_NON_CALLABLE, CONFLICTING_ARGUMENT_FORMS, INVALID_ARGUMENT_TYPE, MISSING_ARGUMENT,
     NO_MATCHING_OVERLOAD, PARAMETER_ALREADY_ASSIGNED, POSITIONAL_ONLY_PARAMETER_AS_KWARG,
@@ -24,8 +25,8 @@ use crate::types::diagnostic::{
 };
 use crate::types::enums::is_enum_class;
 use crate::types::function::{
-    DataclassTransformerFlags, DataclassTransformerParams, FunctionDecorators, FunctionType,
-    KnownFunction, OverloadLiteral,
+    DataclassTransformerFlags, DataclassTransformerParams, FunctionType, KnownFunction,
+    OverloadLiteral,
 };
 use crate::types::generics::{
     InferableTypeVars, Specialization, SpecializationBuilder, SpecializationError,
@@ -98,6 +99,14 @@ impl<'db> Bindings<'db> {
 
     pub(crate) fn iter(&self) -> std::slice::Iter<'_, CallableBinding<'db>> {
         self.elements.iter()
+    }
+
+    pub(crate) fn map(self, f: impl Fn(CallableBinding<'db>) -> CallableBinding<'db>) -> Self {
+        Self {
+            callable_type: self.callable_type,
+            argument_forms: self.argument_forms,
+            elements: self.elements.into_iter().map(f).collect(),
+        }
     }
 
     /// Match the arguments of a call site against the parameters of a collection of possibly
@@ -348,9 +357,7 @@ impl<'db> Bindings<'db> {
 
                                     _ => {}
                                 }
-                            } else if function
-                                .has_known_decorator(db, FunctionDecorators::STATICMETHOD)
-                            {
+                            } else if function.is_staticmethod(db) {
                                 overload.set_return_type(*function_ty);
                             } else {
                                 match overload.parameter_types() {
@@ -1113,6 +1120,60 @@ impl<'db> Bindings<'db> {
                         }
                     },
 
+                    Type::KnownBoundMethod(KnownBoundMethodType::ConstraintSetRange) => {
+                        let [Some(lower), Some(Type::TypeVar(typevar)), Some(upper)] =
+                            overload.parameter_types()
+                        else {
+                            return;
+                        };
+                        let constraints = ConstraintSet::range(db, *lower, *typevar, *upper);
+                        let tracked = TrackedConstraintSet::new(db, constraints);
+                        overload.set_return_type(Type::KnownInstance(
+                            KnownInstanceType::ConstraintSet(tracked),
+                        ));
+                    }
+
+                    Type::KnownBoundMethod(KnownBoundMethodType::ConstraintSetAlways) => {
+                        if !overload.parameter_types().is_empty() {
+                            return;
+                        }
+                        let constraints = ConstraintSet::from(true);
+                        let tracked = TrackedConstraintSet::new(db, constraints);
+                        overload.set_return_type(Type::KnownInstance(
+                            KnownInstanceType::ConstraintSet(tracked),
+                        ));
+                    }
+
+                    Type::KnownBoundMethod(KnownBoundMethodType::ConstraintSetNever) => {
+                        if !overload.parameter_types().is_empty() {
+                            return;
+                        }
+                        let constraints = ConstraintSet::from(false);
+                        let tracked = TrackedConstraintSet::new(db, constraints);
+                        overload.set_return_type(Type::KnownInstance(
+                            KnownInstanceType::ConstraintSet(tracked),
+                        ));
+                    }
+
+                    Type::KnownBoundMethod(
+                        KnownBoundMethodType::ConstraintSetImpliesSubtypeOf(tracked),
+                    ) => {
+                        let [Some(ty_a), Some(ty_b)] = overload.parameter_types() else {
+                            continue;
+                        };
+
+                        let result = tracked.constraints(db).when_subtype_of_given(
+                            db,
+                            *ty_a,
+                            *ty_b,
+                            InferableTypeVars::None,
+                        );
+                        let tracked = TrackedConstraintSet::new(db, result);
+                        overload.set_return_type(Type::KnownInstance(
+                            KnownInstanceType::ConstraintSet(tracked),
+                        ));
+                    }
+
                     Type::ClassLiteral(class) => match class.known(db) {
                         Some(KnownClass::Bool) => match overload.parameter_types() {
                             [Some(arg)] => overload.set_return_type(arg.bool(db).into_type(db)),
@@ -1474,7 +1535,7 @@ impl<'db> CallableBinding<'db> {
                         .unwrap_or(Type::unknown());
                     if argument_type
                         .when_assignable_to(db, parameter_type, overload.inferable_typevars)
-                        .is_always_satisfied()
+                        .is_always_satisfied(db)
                     {
                         is_argument_assignable_to_any_overload = true;
                         break 'overload;
@@ -1707,7 +1768,7 @@ impl<'db> CallableBinding<'db> {
                                 current_parameter_type,
                                 overload.inferable_typevars,
                             )
-                            .is_always_satisfied()
+                            .is_always_satisfied(db)
                         {
                             participating_parameter_indexes.insert(parameter_index);
                         }
@@ -1830,7 +1891,7 @@ impl<'db> CallableBinding<'db> {
                             first_overload_return_type,
                             overload.inferable_typevars,
                         )
-                        .is_always_satisfied()
+                        .is_always_satisfied(db)
                 })
             } else {
                 // No matching overload
@@ -2705,7 +2766,7 @@ impl<'a, 'db> ArgumentTypeChecker<'a, 'db> {
             // building them in an earlier separate step.
             if argument_type
                 .when_assignable_to(self.db, expected_ty, self.inferable_typevars)
-                .is_never_satisfied()
+                .is_never_satisfied(self.db)
             {
                 let positional = matches!(argument, Argument::Positional | Argument::Synthetic)
                     && !parameter.is_variadic();
@@ -2839,7 +2900,7 @@ impl<'a, 'db> ArgumentTypeChecker<'a, 'db> {
                     KnownClass::Str.to_instance(self.db),
                     self.inferable_typevars,
                 )
-                .is_always_satisfied()
+                .is_always_satisfied(self.db)
             {
                 self.errors.push(BindingError::InvalidKeyType {
                     argument_index: adjusted_argument_index,

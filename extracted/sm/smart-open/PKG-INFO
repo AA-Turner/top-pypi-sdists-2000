@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: smart_open
-Version: 7.4.1
+Version: 7.4.2
 Summary: Utils for streaming large files (S3, HDFS, GCS, SFTP, Azure Blob Storage, gzip, bz2, zst...)
 Author-email: Radim Rehurek <me@radimrehurek.com>
 Project-URL: Repository, https://github.com/piskvorky/smart_open
@@ -27,6 +27,7 @@ Provides-Extra: s3
 Requires-Dist: boto3>=1.9.17; extra == "s3"
 Provides-Extra: gcs
 Requires-Dist: google-cloud-storage>=2.6.0; extra == "gcs"
+Requires-Dist: google-api-core<2.28; python_version < "3.10" and extra == "gcs"
 Provides-Extra: azure
 Requires-Dist: azure-storage-blob; extra == "azure"
 Requires-Dist: azure-common; extra == "azure"

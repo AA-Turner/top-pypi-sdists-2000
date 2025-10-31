@@ -173,6 +173,14 @@ def _pydantic_field_infos(model) -> dict[str, FieldInfo]:
             if model.model_config.get("populate_by_name", False):
                 names.append(python_name)
             names.append(pydantic_field.alias)
+
+            # Add legacy-compatible CLI form if not already present.
+            # This allows both "user-name" (new) and "username" (legacy) to work as CLI options.
+            # Old transform behavior: alias.lower() (no pascal_to_snake)
+            # New transform behavior: _pascal_to_snake(alias).lower()
+            legacy_form = pydantic_field.alias.lower()
+            if legacy_form not in names:
+                names.append(legacy_form)
         else:
             names.append(python_name)
 
@@ -263,7 +271,15 @@ def _dataclass_field_infos(hint) -> dict[str, FieldInfo]:
 
         kind = FieldInfo.KEYWORD_ONLY if f.kw_only else FieldInfo.POSITIONAL_OR_KEYWORD
 
-        help = f.metadata.get("help") if f.metadata else None
+        # Extract help text with precedence order:
+        # 1. metadata["help"] - explicit help in metadata
+        # 2. metadata["doc"] - doc stored in metadata
+        # 3. f.doc - Python 3.14+ field(doc=...) parameter
+        help = None
+        if f.metadata:
+            help = f.metadata.get("help") or f.metadata.get("doc")
+        if not help and hasattr(f, "doc"):
+            help = f.doc  # type: ignore[attr-defined]
 
         out[f.name] = FieldInfo(
             names=(f.name,),

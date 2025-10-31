@@ -50,6 +50,7 @@ from opentelemetry.sdk.trace import Span
 from opentelemetry.sdk.trace import SpanProcessor
 from opentelemetry.sdk.trace import TracerProvider
 from opentelemetry.sdk.trace.export import BatchSpanProcessor
+from opentelemetry.trace import SpanContext
 from opentelemetry.trace import SpanKind
 from typing_extensions import ParamSpec
 
@@ -219,7 +220,8 @@ class Traces:
         logger_provider.add_log_record_processor(log_processor)
         tracer_provider.add_span_processor(self.scan_info_span_processor)
 
-        # add logging handler so we can send logs to Otel and therefore datadog
+        # add logging handler to root logger only so we can send logs to Otel and therefore datadog.
+        # child loggers will propagate to root logger by default
         logging_handler = LoggingHandler(
             # COUPLING: we do something similar in Tracing.ml. If we want to
             # enable sending debug logs here we probably want to send them from
@@ -227,15 +229,14 @@ class Traces:
             level=logging.INFO,
             logger_provider=logger_provider,
         )
-        logging.getLogger().addHandler(logging_handler)
-        # get all existing loggers and add the handler to them, since at this
-        # point we will have already set up loggers most/all places NOTE: we
-        # don't set this up beforehand because we need to parse which
-        # environment we're in and then set the resource attributes before we
-        # can setup the logging handler
-        for logger in logging.Logger.manager.loggerDict.values():
-            if isinstance(logger, logging.Logger):
-                logger.addHandler(logging_handler)
+        logging_handler.set_name("otel-logging-handler")
+        # only add handler if it's not already present. it is possible for us to call configure multiple times
+        # from the MCP. in that case, we would add the handler multiple times without this check.
+        if not any(
+            handler.get_name() == "otel-logging-handler"
+            for handler in logging.getLogger().handlers
+        ):
+            logging.getLogger().addHandler(logging_handler)
 
         RequestsInstrumentor().instrument()
         self.extract()
@@ -274,14 +275,20 @@ class Traces:
         os.environ[OTEL_RESOURCE_ATTRIBUTES] = resource_attributes
 
         # Set current context info for semgrep-core
-        current_span = otrace.get_current_span()
-        current_context = current_span.get_span_context()
+        current_context = self._get_current_context()
         os.environ[_SEMGREP_TRACE_PARENT_TRACE_ID] = otrace.format_trace_id(
             current_context.trace_id
         )
         os.environ[_SEMGREP_TRACE_PARENT_SPAN_ID] = otrace.format_span_id(
             current_context.span_id
         )
+
+    def _get_current_context(self) -> SpanContext:
+        current_span = otrace.get_current_span()
+        return current_span.get_span_context()
+
+    def get_trace_id(self) -> int:
+        return self._get_current_context().trace_id
 
     def set_scan_info(self, scan_info: ScanInfo) -> None:
         self.scan_info_span_processor.scan_info = scan_info

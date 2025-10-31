@@ -262,9 +262,14 @@ fn check_name(checker: &Checker, expr: &Expr, range: TextRange) {
                 name: (*rest).to_string(),
             }
         }
-        ["airflow", "models", "Param"] => Replacement::Rename {
+        [
+            "airflow",
+            "models",
+            ..,
+            rest @ ("Param" | "ParamsDict" | "DagParam"),
+        ] => Replacement::SourceModuleMoved {
             module: "airflow.sdk.definitions.param",
-            name: "Param",
+            name: (*rest).to_string(),
         },
 
         // airflow.models.baseoperator
@@ -283,10 +288,12 @@ fn check_name(checker: &Checker, expr: &Expr, range: TextRange) {
         },
 
         // airflow.model..DAG
-        ["airflow", "models", .., "DAG"] => Replacement::SourceModuleMoved {
-            module: "airflow.sdk",
-            name: "DAG".to_string(),
-        },
+        ["airflow", "models", "dag", "DAG"] | ["airflow", "models", "DAG"] | ["airflow", "DAG"] => {
+            Replacement::SourceModuleMoved {
+                module: "airflow.sdk",
+                name: "DAG".to_string(),
+            }
+        }
 
         // airflow.sensors.base
         [

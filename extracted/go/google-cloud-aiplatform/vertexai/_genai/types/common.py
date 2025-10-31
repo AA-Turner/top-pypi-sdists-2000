@@ -354,6 +354,15 @@ class GenerateMemoriesResponseGeneratedMemoryAction(_common.CaseInSensitiveEnum)
     """The memory was deleted."""
 
 
+class PromptOptimizerMethod(_common.CaseInSensitiveEnum):
+    """The method for data driven prompt optimization."""
+
+    VAPO = "VAPO"
+    """The default data driven Vertex AI Prompt Optimizer."""
+    OPTIMIZATION_TARGET_GEMINI_NANO = "OPTIMIZATION_TARGET_GEMINI_NANO"
+    """The data driven prompt optimizer designer for prompts from Android core API."""
+
+
 class CreateEvaluationItemConfig(_common.BaseModel):
     """Config to create an evaluation item."""
 
@@ -1909,19 +1918,17 @@ class EvaluationRun(_common.BaseModel):
         """Shows the evaluation result."""
         from .. import _evals_visualization
 
-        logger.warning(f"Evaluation Run state: {self.state}.")
-        if self.error:
-            logger.warning(f"Evaluation Run error: {self.error.message}")
         if self.state == "SUCCEEDED":
             if self.evaluation_item_results is not None:
                 _evals_visualization.display_evaluation_result(
                     self.evaluation_item_results, None
                 )
             else:
-                logger.warning(f"Evaluation Run state: {self.state}.")
                 logger.warning(
                     "Evaluation Run succeeded but no evaluation item results found. To display results, please set include_evaluation_items to True when calling get_evaluation_run()."
                 )
+        else:
+            _evals_visualization.display_evaluation_run_status(self)
 
 
 class EvaluationRunDict(TypedDict, total=False):
@@ -12025,7 +12032,7 @@ _UpdateDatasetParametersOrDict = Union[
 ]
 
 
-class PromptOptimizerVAPOConfig(_common.BaseModel):
+class PromptOptimizerConfig(_common.BaseModel):
     """VAPO Prompt Optimizer Config."""
 
     config_path: Optional[str] = Field(
@@ -12050,7 +12057,7 @@ class PromptOptimizerVAPOConfig(_common.BaseModel):
     )
 
 
-class PromptOptimizerVAPOConfigDict(TypedDict, total=False):
+class PromptOptimizerConfigDict(TypedDict, total=False):
     """VAPO Prompt Optimizer Config."""
 
     config_path: Optional[str]
@@ -12069,9 +12076,7 @@ class PromptOptimizerVAPOConfigDict(TypedDict, total=False):
     """The display name of the optimization job. If not provided, a display name in the format of "vapo-optimizer-{timestamp}" will be used."""
 
 
-PromptOptimizerVAPOConfigOrDict = Union[
-    PromptOptimizerVAPOConfig, PromptOptimizerVAPOConfigDict
-]
+PromptOptimizerConfigOrDict = Union[PromptOptimizerConfig, PromptOptimizerConfigDict]
 
 
 class ApplicableGuideline(_common.BaseModel):

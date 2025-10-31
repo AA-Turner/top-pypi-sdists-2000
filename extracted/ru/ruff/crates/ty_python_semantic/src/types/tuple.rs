@@ -290,7 +290,11 @@ impl<'db> TupleType<'db> {
     }
 }
 
-fn to_class_type_cycle_initial<'db>(db: &'db dyn Db, self_: TupleType<'db>) -> ClassType<'db> {
+fn to_class_type_cycle_initial<'db>(
+    db: &'db dyn Db,
+    _id: salsa::Id,
+    self_: TupleType<'db>,
+) -> ClassType<'db> {
     let tuple_class = KnownClass::Tuple
         .try_to_class_literal(db)
         .expect("Typeshed should always have a `tuple` class in `builtins.pyi`");
@@ -477,7 +481,7 @@ impl<'db> FixedLengthTuple<Type<'db>> {
                     );
                     if result
                         .intersect(db, element_constraints)
-                        .is_never_satisfied()
+                        .is_never_satisfied(db)
                     {
                         return result;
                     }
@@ -496,7 +500,7 @@ impl<'db> FixedLengthTuple<Type<'db>> {
                     );
                     if result
                         .intersect(db, element_constraints)
-                        .is_never_satisfied()
+                        .is_never_satisfied(db)
                     {
                         return result;
                     }
@@ -834,7 +838,7 @@ impl<'db> VariableLengthTuple<Type<'db>> {
                     );
                     if result
                         .intersect(db, element_constraints)
-                        .is_never_satisfied()
+                        .is_never_satisfied(db)
                     {
                         return result;
                     }
@@ -854,7 +858,7 @@ impl<'db> VariableLengthTuple<Type<'db>> {
                     );
                     if result
                         .intersect(db, element_constraints)
-                        .is_never_satisfied()
+                        .is_never_satisfied(db)
                     {
                         return result;
                     }
@@ -907,7 +911,10 @@ impl<'db> VariableLengthTuple<Type<'db>> {
                             return ConstraintSet::from(false);
                         }
                     };
-                    if result.intersect(db, pair_constraints).is_never_satisfied() {
+                    if result
+                        .intersect(db, pair_constraints)
+                        .is_never_satisfied(db)
+                    {
                         return result;
                     }
                 }
@@ -943,7 +950,10 @@ impl<'db> VariableLengthTuple<Type<'db>> {
                             return ConstraintSet::from(false);
                         }
                     };
-                    if result.intersect(db, pair_constraints).is_never_satisfied() {
+                    if result
+                        .intersect(db, pair_constraints)
+                        .is_never_satisfied(db)
+                    {
                         return result;
                     }
                 }

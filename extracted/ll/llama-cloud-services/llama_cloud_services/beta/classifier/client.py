@@ -1,6 +1,7 @@
 import asyncio
 import time
-from typing import Optional
+import warnings
+from typing import Optional, List, Union
 from pydantic import BaseModel
 from llama_cloud.client import AsyncLlamaCloud
 from llama_cloud.types import (
@@ -14,7 +15,11 @@ from llama_cloud.types import (
 from llama_cloud.resources.classifier.client import OMIT
 from llama_cloud_services.files.client import FileClient
 from llama_cloud_services.constants import POLLING_TIMEOUT_SECONDS
-from llama_cloud_services.utils import is_terminal_status, augment_async_errors
+from llama_cloud_services.utils import (
+    is_terminal_status,
+    augment_async_errors,
+    FileInput,
+)
 from llama_index.core.async_utils import DEFAULT_NUM_WORKERS, run_jobs
 from llama_cloud_services.beta.classifier.types import (
     ClassifyJobResultsWithFiles,
@@ -166,6 +171,98 @@ class ClassifyClient:
                 )
             )
 
+    async def aclassify(
+        self,
+        rules: list[ClassifierRule],
+        files: Union[FileInput, List[FileInput]],
+        parsing_configuration: Optional[ClassifyParsingConfiguration] = None,
+        raise_on_error: bool = True,
+        workers: int = DEFAULT_NUM_WORKERS,
+        show_progress: bool = False,
+    ) -> ClassifyJobResultsWithFiles:
+        """
+        Classify one or more files from various input types.
+
+        Args:
+            rules: The rules to use for classification.
+            files: The file(s) to classify. Can be a single file or list of files. Each can be:
+                - str/Path: File path
+                - SourceText: Text content or file with explicit filename
+                - File: Already uploaded file
+                - BufferedIOBase: File-like object
+            parsing_configuration: The parsing configuration to use for classification.
+            raise_on_error: Whether to raise an error if the classification job fails.
+            workers: Number of parallel workers for uploading files.
+            show_progress: Whether to show progress bars.
+
+        Returns:
+            The results of the classification job with file metadata.
+        """
+        # Normalize to list
+        if not isinstance(files, list):
+            files = [files]
+
+        # Upload all files
+        coroutines = [
+            self.file_client.upload_content(file_input) for file_input in files
+        ]
+        uploaded_files: List[File] = await run_jobs(
+            coroutines,
+            show_progress=show_progress,
+            workers=workers,
+            desc="Uploading files for classification",
+        )
+
+        # Classify
+        results = await self.aclassify_file_ids(
+            rules,
+            [file.id for file in uploaded_files],
+            parsing_configuration,
+            raise_on_error,
+        )
+        return ClassifyJobResultsWithFiles.from_classify_job_results(
+            results, uploaded_files
+        )
+
+    def classify(
+        self,
+        rules: list[ClassifierRule],
+        files: Union[FileInput, List[FileInput]],
+        parsing_configuration: Optional[ClassifyParsingConfiguration] = None,
+        raise_on_error: bool = True,
+        workers: int = DEFAULT_NUM_WORKERS,
+        show_progress: bool = False,
+    ) -> ClassifyJobResultsWithFiles:
+        """
+        Classify one or more files from various input types (synchronous version).
+
+        Args:
+            rules: The rules to use for classification.
+            files: The file(s) to classify. Can be a single file or list of files. Each can be:
+                - str/Path: File path
+                - SourceText: Text content or file with explicit filename
+                - File: Already uploaded file
+                - BufferedIOBase: File-like object
+            parsing_configuration: The parsing configuration to use for classification.
+            raise_on_error: Whether to raise an error if the classification job fails.
+            workers: Number of parallel workers for uploading files.
+            show_progress: Whether to show progress bars.
+
+        Returns:
+            The results of the classification job with file metadata.
+        """
+        with augment_async_errors():
+            return asyncio.run(
+                self.aclassify(
+                    rules,
+                    files,
+                    parsing_configuration,
+                    raise_on_error,
+                    workers,
+                    show_progress,
+                )
+            )
+
     async def aclassify_file_path(
         self,
         rules: list[ClassifierRule],
@@ -173,11 +270,17 @@ class ClassifyClient:
         parsing_configuration: Optional[ClassifyParsingConfiguration] = None,
         raise_on_error: bool = True,
     ) -> ClassifyJobResultsWithFiles:
-        file = await self.file_client.upload_file(file_input_path)
-        results = await self.aclassify_file_ids(
-            rules, [file.id], parsing_configuration, raise_on_error
+        """
+        Deprecated: Use aclassify() instead.
+        """
+        warnings.warn(
+            "aclassify_file_path is deprecated, use aclassify() instead",
+            DeprecationWarning,
+            stacklevel=2,
         )
-        return ClassifyJobResultsWithFiles.from_classify_job_results(results, [file])
+        return await self.aclassify(
+            rules, file_input_path, parsing_configuration, raise_on_error
+        )
 
     def classify_file_path(
         self,
@@ -186,12 +289,17 @@ class ClassifyClient:
         parsing_configuration: Optional[ClassifyParsingConfiguration] = None,
         raise_on_error: bool = True,
     ) -> ClassifyJobResultsWithFiles:
-        with augment_async_errors():
-            return asyncio.run(
-                self.aclassify_file_path(
-                    rules, file_input_path, parsing_configuration, raise_on_error
-                )
-            )
+        """
+        Deprecated: Use classify() instead.
+        """
+        warnings.warn(
+            "classify_file_path is deprecated, use classify() instead",
+            DeprecationWarning,
+            stacklevel=2,
+        )
+        return self.classify(
+            rules, file_input_path, parsing_configuration, raise_on_error
+        )
 
     async def aclassify_file_paths(
         self,
@@ -202,17 +310,22 @@ class ClassifyClient:
         workers: int = DEFAULT_NUM_WORKERS,
         show_progress: bool = False,
     ) -> ClassifyJobResultsWithFiles:
-        coroutines = [self.file_client.upload_file(path) for path in file_input_paths]
-        files: list[File] = await run_jobs(
-            coroutines,
-            show_progress=show_progress,
-            workers=workers,
-            desc="Uploading files for classification",
+        """
+        Deprecated: Use aclassify() instead.
+        """
+        warnings.warn(
+            "aclassify_file_paths is deprecated, use aclassify() instead",
+            DeprecationWarning,
+            stacklevel=2,
         )
-        results = await self.aclassify_file_ids(
-            rules, [file.id for file in files], parsing_configuration, raise_on_error
+        return await self.aclassify(
+            rules,
+            file_input_paths,
+            parsing_configuration,
+            raise_on_error,
+            workers,
+            show_progress,
         )
-        return ClassifyJobResultsWithFiles.from_classify_job_results(results, files)
 
     def classify_file_paths(
         self,
@@ -221,12 +334,17 @@ class ClassifyClient:
         parsing_configuration: Optional[ClassifyParsingConfiguration] = None,
         raise_on_error: bool = True,
     ) -> ClassifyJobResultsWithFiles:
-        with augment_async_errors():
-            return asyncio.run(
-                self.aclassify_file_paths(
-                    rules, file_input_paths, parsing_configuration, raise_on_error
-                )
-            )
+        """
+        Deprecated: Use classify() instead.
+        """
+        warnings.warn(
+            "classify_file_paths is deprecated, use classify() instead",
+            DeprecationWarning,
+            stacklevel=2,
+        )
+        return self.classify(
+            rules, file_input_paths, parsing_configuration, raise_on_error
+        )
 
     async def wait_for_job_completion(self, job_id: str) -> ClassifyJob:
         """

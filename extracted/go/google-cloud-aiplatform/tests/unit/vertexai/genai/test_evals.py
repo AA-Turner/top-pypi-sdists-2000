@@ -1070,9 +1070,7 @@ class TestEvalsRunInference:
         )
 
         mock_agent_engine = mock.Mock()
-        mock_agent_engine.async_create_session = mock.AsyncMock(
-            return_value={"id": "session1"}
-        )
+        mock_agent_engine.create_session.return_value = {"id": "session1"}
         stream_query_return_value = [
             {
                 "id": "1",
@@ -1088,13 +1086,7 @@ class TestEvalsRunInference:
             },
         ]
 
-        async def _async_iterator(iterable):
-            for item in iterable:
-                yield item
-
-        mock_agent_engine.async_stream_query.return_value = _async_iterator(
-            stream_query_return_value
-        )
+        mock_agent_engine.stream_query.return_value = iter(stream_query_return_value)
         mock_vertexai_client.return_value.agent_engines.get.return_value = (
             mock_agent_engine
         )
@@ -1108,10 +1100,10 @@ class TestEvalsRunInference:
         mock_vertexai_client.return_value.agent_engines.get.assert_called_once_with(
             name="projects/test-project/locations/us-central1/reasoningEngines/123"
         )
-        mock_agent_engine.async_create_session.assert_called_once_with(
+        mock_agent_engine.create_session.assert_called_once_with(
             user_id="123", state={"a": "1"}
         )
-        mock_agent_engine.async_stream_query.assert_called_once_with(
+        mock_agent_engine.stream_query.assert_called_once_with(
             user_id="123", session_id="session1", message="agent prompt"
         )
 
@@ -1140,7 +1132,7 @@ class TestEvalsRunInference:
                 }
             ),
         )
-        assert inference_result.candidate_name == "agent"
+        assert inference_result.candidate_name is None
         assert inference_result.gcs_source is None
 
     @mock.patch.object(_evals_metric_loaders, "EvalDatasetLoader")
@@ -1162,9 +1154,7 @@ class TestEvalsRunInference:
         )
 
         mock_agent_engine = mock.Mock()
-        mock_agent_engine.async_create_session = mock.AsyncMock(
-            return_value={"id": "session1"}
-        )
+        mock_agent_engine.create_session.return_value = {"id": "session1"}
         stream_query_return_value = [
             {
                 "id": "1",
@@ -1180,13 +1170,7 @@ class TestEvalsRunInference:
             },
         ]
 
-        async def _async_iterator(iterable):
-            for item in iterable:
-                yield item
-
-        mock_agent_engine.async_stream_query.return_value = _async_iterator(
-            stream_query_return_value
-        )
+        mock_agent_engine.stream_query.return_value = iter(stream_query_return_value)
         mock_vertexai_client.return_value.agent_engines.get.return_value = (
             mock_agent_engine
         )
@@ -1200,10 +1184,10 @@ class TestEvalsRunInference:
         mock_vertexai_client.return_value.agent_engines.get.assert_called_once_with(
             name="projects/test-project/locations/us-central1/reasoningEngines/123"
         )
-        mock_agent_engine.async_create_session.assert_called_once_with(
+        mock_agent_engine.create_session.assert_called_once_with(
             user_id="123", state={"a": "1"}
         )
-        mock_agent_engine.async_stream_query.assert_called_once_with(
+        mock_agent_engine.stream_query.assert_called_once_with(
             user_id="123", session_id="session1", message="agent prompt"
         )
 
@@ -1227,7 +1211,7 @@ class TestEvalsRunInference:
                 }
             ),
         )
-        assert inference_result.candidate_name == "agent"
+        assert inference_result.candidate_name is None
         assert inference_result.gcs_source is None
 
     @mock.patch.object(_evals_utils, "EvalDatasetLoader")
@@ -3765,7 +3749,7 @@ class TestPredefinedMetricHandler:
         assert agent_data.agent_config is None
         assert agent_data.events.event[0].parts[0].text == "intermediate event"
 
-    def test_eval_case_to_agent_data_empty_events(self):
+    def test_eval_case_to_agent_data_empty_event_content(self):
         intermediate_events = [
             vertexai_genai_types.Event(
                 event_id="event1",
@@ -3790,8 +3774,86 @@ class TestPredefinedMetricHandler:
         )
 
         assert agent_data.agent_config is None
-        assert agent_data.events is None
-        assert not agent_data.events_text
+        assert not agent_data.events.event
+
+    def test_eval_case_to_agent_data_empty_intermediate_events_list(self):
+        agent_info = vertexai_genai_types.evals.AgentInfo(
+            name="agent1",
+            instruction="instruction1",
+            tool_declarations=[],
+        )
+
+        eval_case = vertexai_genai_types.EvalCase(
+            prompt=genai_types.Content(parts=[genai_types.Part(text="Hello")]),
+            responses=[
+                vertexai_genai_types.ResponseCandidate(
+                    response=genai_types.Content(parts=[genai_types.Part(text="Hi")])
+                )
+            ],
+            agent_info=agent_info,
+        )
+
+        agent_data = (
+            _evals_metric_handlers.PredefinedMetricHandler._eval_case_to_agent_data(
+                eval_case
+            )
+        )
+
+        assert not agent_data.events.event
+
+    def test_eval_case_to_agent_data_agent_info_empty_tools(self):
+        agent_info = vertexai_genai_types.evals.AgentInfo(
+            name="agent1",
+            instruction="instruction1",
+            tool_declarations=[],
+        )
+        eval_case = vertexai_genai_types.EvalCase(
+            prompt=genai_types.Content(parts=[genai_types.Part(text="Hello")]),
+            responses=[
+                vertexai_genai_types.ResponseCandidate(
+                    response=genai_types.Content(parts=[genai_types.Part(text="Hi")])
+                )
+            ],
+            agent_info=agent_info,
+            intermediate_events=None,
+        )
+
+        agent_data = (
+            _evals_metric_handlers.PredefinedMetricHandler._eval_case_to_agent_data(
+                eval_case
+            )
+        )
+
+        assert agent_data.agent_config.developer_instruction.text == "instruction1"
+        assert not agent_data.agent_config.tools.tool
+
+    def test_eval_case_to_agent_data_agent_info_empty(self):
+        intermediate_events = [
+            vertexai_genai_types.Event(
+                event_id="event1",
+                content=genai_types.Content(
+                    parts=[genai_types.Part(text="intermediate event")]
+                ),
+            )
+        ]
+        eval_case = vertexai_genai_types.EvalCase(
+            prompt=genai_types.Content(parts=[genai_types.Part(text="Hello")]),
+            responses=[
+                vertexai_genai_types.ResponseCandidate(
+                    response=genai_types.Content(parts=[genai_types.Part(text="Hi")])
+                )
+            ],
+            agent_info=None,
+            intermediate_events=intermediate_events,
+        )
+
+        agent_data = (
+            _evals_metric_handlers.PredefinedMetricHandler._eval_case_to_agent_data(
+                eval_case
+            )
+        )
+
+        assert agent_data.agent_config is None
 
 
 @pytest.mark.usefixtures("google_auth_mock")

@@ -2339,6 +2339,7 @@ class CreateDevEndpointRequestTypeDef(TypedDict):
 class CreateGlueIdentityCenterConfigurationRequestTypeDef(TypedDict):
     InstanceArn: str
     Scopes: NotRequired[Sequence[str]]
+    UserBackgroundSessionsEnabled: NotRequired[bool]
 
 
 class TagTypeDef(TypedDict):
@@ -4044,6 +4045,7 @@ class UpdateDataQualityRulesetRequestTypeDef(TypedDict):
 
 class UpdateGlueIdentityCenterConfigurationRequestTypeDef(TypedDict):
     Scopes: NotRequired[Sequence[str]]
+    UserBackgroundSessionsEnabled: NotRequired[bool]
 
 
 class UpdateJobFromSourceControlRequestTypeDef(TypedDict):
@@ -4502,6 +4504,7 @@ class GetGlueIdentityCenterConfigurationResponseTypeDef(TypedDict):
     ApplicationArn: str
     InstanceArn: str
     Scopes: List[str]
+    UserBackgroundSessionsEnabled: bool
     ResponseMetadata: ResponseMetadataTypeDef
 
 

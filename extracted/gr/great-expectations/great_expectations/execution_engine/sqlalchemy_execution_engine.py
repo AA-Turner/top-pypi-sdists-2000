@@ -86,6 +86,7 @@ from great_expectations.execution_engine.sqlalchemy_dialect import GXSqlDialect
 from great_expectations.expectations.conditions import (
     Condition,
     Operator,
+    PassThroughCondition,
     deserialize_row_condition,
 )
 from great_expectations.expectations.row_conditions import (
@@ -642,10 +643,18 @@ class SqlAlchemyExecutionEngine(ExecutionEngine[SQLAColumnClause]):
         # Filtering by row condition.
         if "row_condition" in domain_kwargs and domain_kwargs["row_condition"] is not None:
             row_condition = domain_kwargs["row_condition"]
-            condition_parser = domain_kwargs["condition_parser"]
+            condition_parser = domain_kwargs.get("condition_parser", None)
 
             if isinstance(row_condition, dict):
                 row_condition = deserialize_row_condition(row_condition)
+
+            # PassThroughCondition is not supported for SQLAlchemy
+            if isinstance(row_condition, PassThroughCondition):
+                raise GreatExpectationsError(  # noqa: TRY003 # FIXME
+                    "PassThroughCondition (pandas/spark syntax) is not supported for "
+                    "SqlAlchemyExecutionEngine. Please use the latest documented "
+                    "row_condition syntax, which does not require condition_parser."
+                )
 
             if isinstance(row_condition, Condition):
                 parsed_condition = self.condition_to_filter_clause(row_condition)

@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: mcp
-Version: 1.19.0
+Version: 1.20.0
 Summary: Model Context Protocol SDK
 Project-URL: Homepage, https://modelcontextprotocol.io
 Project-URL: Repository, https://github.com/modelcontextprotocol/python-sdk
@@ -25,6 +25,7 @@ Requires-Dist: httpx>=0.27.1
 Requires-Dist: jsonschema>=4.20.0
 Requires-Dist: pydantic-settings>=2.5.2
 Requires-Dist: pydantic<3.0.0,>=2.11.0
+Requires-Dist: pyjwt[crypto]>=2.10.1
 Requires-Dist: python-multipart>=0.0.9
 Requires-Dist: pywin32>=310; sys_platform == 'win32'
 Requires-Dist: sse-starlette>=1.6.1
@@ -120,7 +121,7 @@ Description-Content-Type: text/markdown
 [protocol-badge]: https://img.shields.io/badge/protocol-modelcontextprotocol.io-blue.svg
 [protocol-url]: https://modelcontextprotocol.io
 [spec-badge]: https://img.shields.io/badge/spec-spec.modelcontextprotocol.io-blue.svg
-[spec-url]: https://spec.modelcontextprotocol.io
+[spec-url]: https://modelcontextprotocol.io/specification/latest
 
 ## Overview
 
@@ -2474,7 +2475,7 @@ MCP servers declare capabilities during initialization:
 
 - [API Reference](https://modelcontextprotocol.github.io/python-sdk/api/)
 - [Model Context Protocol documentation](https://modelcontextprotocol.io)
-- [Model Context Protocol specification](https://spec.modelcontextprotocol.io)
+- [Model Context Protocol specification](https://modelcontextprotocol.io/specification/latest)
 - [Officially supported servers](https://github.com/modelcontextprotocol/servers)
 
 ## Contributing

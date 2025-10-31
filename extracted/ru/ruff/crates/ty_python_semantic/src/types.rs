@@ -371,6 +371,7 @@ impl Default for MemberLookupPolicy {
 
 fn member_lookup_cycle_initial<'db>(
     _db: &'db dyn Db,
+    _id: salsa::Id,
     _self: Type<'db>,
     _name: Name,
     _policy: MemberLookupPolicy,
@@ -380,6 +381,7 @@ fn member_lookup_cycle_initial<'db>(
 
 fn class_lookup_cycle_initial<'db>(
     _db: &'db dyn Db,
+    _id: salsa::Id,
     _self: Type<'db>,
     _name: Name,
     _policy: MemberLookupPolicy,
@@ -389,6 +391,7 @@ fn class_lookup_cycle_initial<'db>(
 
 fn variance_cycle_initial<'db, T>(
     _db: &'db dyn Db,
+    _id: salsa::Id,
     _self: T,
     _typevar: BoundTypeVarInstance<'db>,
 ) -> TypeVarVariance {
@@ -812,17 +815,17 @@ impl<'db> Type<'db> {
     }
 
     fn is_none(&self, db: &'db dyn Db) -> bool {
-        self.into_nominal_instance()
+        self.as_nominal_instance()
             .is_some_and(|instance| instance.has_known_class(db, KnownClass::NoneType))
     }
 
     fn is_bool(&self, db: &'db dyn Db) -> bool {
-        self.into_nominal_instance()
+        self.as_nominal_instance()
             .is_some_and(|instance| instance.has_known_class(db, KnownClass::Bool))
     }
 
     fn is_enum(&self, db: &'db dyn Db) -> bool {
-        self.into_nominal_instance()
+        self.as_nominal_instance()
             .and_then(|instance| crate::types::enums::enum_metadata(db, instance.class_literal(db)))
             .is_some()
     }
@@ -852,7 +855,7 @@ impl<'db> Type<'db> {
     }
 
     pub(crate) fn is_notimplemented(&self, db: &'db dyn Db) -> bool {
-        self.into_nominal_instance()
+        self.as_nominal_instance()
             .is_some_and(|instance| instance.has_known_class(db, KnownClass::NotImplementedType))
     }
 
@@ -899,7 +902,7 @@ impl<'db> Type<'db> {
     ) -> Option<Specialization<'db>> {
         let class_type = match self {
             Type::NominalInstance(instance) => instance,
-            Type::TypeAlias(alias) => alias.value_type(db).into_nominal_instance()?,
+            Type::TypeAlias(alias) => alias.value_type(db).as_nominal_instance()?,
             _ => return None,
         }
         .class(db);
@@ -939,7 +942,7 @@ impl<'db> Type<'db> {
     /// I.e., for the type `tuple[int, str]`, this will return the tuple spec `[int, str]`.
     /// For a subclass of `tuple[int, str]`, it will return the same tuple spec.
     fn tuple_instance_spec(&self, db: &'db dyn Db) -> Option<Cow<'db, TupleSpec<'db>>> {
-        self.into_nominal_instance()
+        self.as_nominal_instance()
             .and_then(|instance| instance.tuple_spec(db))
     }
 
@@ -954,7 +957,7 @@ impl<'db> Type<'db> {
     /// I.e., for the type `tuple[int, str]`, this will return the tuple spec `[int, str]`.
     /// But for a subclass of `tuple[int, str]`, it will return `None`.
     fn exact_tuple_instance_spec(&self, db: &'db dyn Db) -> Option<Cow<'db, TupleSpec<'db>>> {
-        self.into_nominal_instance()
+        self.as_nominal_instance()
             .and_then(|instance| instance.own_tuple_spec(db))
     }
 
@@ -1044,7 +1047,7 @@ impl<'db> Type<'db> {
     }
 
     #[track_caller]
-    pub(crate) fn expect_class_literal(self) -> ClassLiteral<'db> {
+    pub(crate) const fn expect_class_literal(self) -> ClassLiteral<'db> {
         self.as_class_literal()
             .expect("Expected a Type::ClassLiteral variant")
     }
@@ -1058,7 +1061,7 @@ impl<'db> Type<'db> {
         matches!(self, Type::ClassLiteral(..))
     }
 
-    pub(crate) fn as_enum_literal(self) -> Option<EnumLiteralType<'db>> {
+    pub(crate) const fn as_enum_literal(self) -> Option<EnumLiteralType<'db>> {
         match self {
             Type::EnumLiteral(enum_literal) => Some(enum_literal),
             _ => None,
@@ -1067,7 +1070,7 @@ impl<'db> Type<'db> {
 
     #[cfg(test)]
     #[track_caller]
-    pub(crate) fn expect_enum_literal(self) -> EnumLiteralType<'db> {
+    pub(crate) const fn expect_enum_literal(self) -> EnumLiteralType<'db> {
         self.as_enum_literal()
             .expect("Expected a Type::EnumLiteral variant")
     }
@@ -1076,7 +1079,7 @@ impl<'db> Type<'db> {
         matches!(self, Type::TypedDict(..))
     }
 
-    pub(crate) fn as_typed_dict(self) -> Option<TypedDictType<'db>> {
+    pub(crate) const fn as_typed_dict(self) -> Option<TypedDictType<'db>> {
         match self {
             Type::TypedDict(typed_dict) => Some(typed_dict),
             _ => None,
@@ -1126,7 +1129,7 @@ impl<'db> Type<'db> {
 
     #[cfg(test)]
     #[track_caller]
-    pub(crate) fn expect_union(self) -> UnionType<'db> {
+    pub(crate) const fn expect_union(self) -> UnionType<'db> {
         self.as_union().expect("Expected a Type::Union variant")
     }
 
@@ -1234,7 +1237,7 @@ impl<'db> Type<'db> {
         self.filter_union(db, |elem| {
             !elem
                 .when_disjoint_from(db, target, inferable)
-                .is_always_satisfied()
+                .is_always_satisfied(db)
         })
     }
 
@@ -1524,7 +1527,7 @@ impl<'db> Type<'db> {
     /// See [`TypeRelation::Subtyping`] for more details.
     pub(crate) fn is_subtype_of(self, db: &'db dyn Db, target: Type<'db>) -> bool {
         self.when_subtype_of(db, target, InferableTypeVars::None)
-            .is_always_satisfied()
+            .is_always_satisfied(db)
     }
 
     fn when_subtype_of(
@@ -1541,7 +1544,7 @@ impl<'db> Type<'db> {
     /// See [`TypeRelation::Assignability`] for more details.
     pub(crate) fn is_assignable_to(self, db: &'db dyn Db, target: Type<'db>) -> bool {
         self.when_assignable_to(db, target, InferableTypeVars::None)
-            .is_always_satisfied()
+            .is_always_satisfied(db)
     }
 
     fn when_assignable_to(
@@ -1559,7 +1562,7 @@ impl<'db> Type<'db> {
     #[salsa::tracked(cycle_initial=is_redundant_with_cycle_initial, heap_size=ruff_memory_usage::heap_size)]
     pub(crate) fn is_redundant_with(self, db: &'db dyn Db, other: Type<'db>) -> bool {
         self.has_relation_to(db, other, InferableTypeVars::None, TypeRelation::Redundancy)
-            .is_always_satisfied()
+            .is_always_satisfied(db)
     }
 
     fn has_relation_to(
@@ -1724,7 +1727,7 @@ impl<'db> Type<'db> {
             // since subtyping between a TypeVar and an arbitrary other type cannot be guaranteed to be reflexive.
             (Type::TypeVar(lhs_bound_typevar), Type::TypeVar(rhs_bound_typevar))
                 if !lhs_bound_typevar.is_inferable(db, inferable)
-                    && lhs_bound_typevar.identity(db) == rhs_bound_typevar.identity(db) =>
+                    && lhs_bound_typevar.is_same_typevar_as(db, rhs_bound_typevar) =>
             {
                 ConstraintSet::from(true)
             }
@@ -1782,7 +1785,7 @@ impl<'db> Type<'db> {
                                 )
                             })
                         })
-                        .is_never_satisfied() =>
+                        .is_never_satisfied(db) =>
             {
                 // TODO: The repetition here isn't great, but we really need the fallthrough logic,
                 // where this arm only engages if it returns true (or in the world of constraints,
@@ -1925,7 +1928,7 @@ impl<'db> Type<'db> {
                                 relation_visitor,
                                 disjointness_visitor,
                             )
-                            .is_never_satisfied()
+                            .is_never_satisfied(db)
                     }) =>
             {
                 // TODO: record the unification constraints
@@ -2405,7 +2408,7 @@ impl<'db> Type<'db> {
     /// [equivalent to]: https://typing.python.org/en/latest/spec/glossary.html#term-equivalent
     pub(crate) fn is_equivalent_to(self, db: &'db dyn Db, other: Type<'db>) -> bool {
         self.when_equivalent_to(db, other, InferableTypeVars::None)
-            .is_always_satisfied()
+            .is_always_satisfied(db)
     }
 
     fn when_equivalent_to(
@@ -2528,7 +2531,7 @@ impl<'db> Type<'db> {
     /// `false` answers in some cases.
     pub(crate) fn is_disjoint_from(self, db: &'db dyn Db, other: Type<'db>) -> bool {
         self.when_disjoint_from(db, other, InferableTypeVars::None)
-            .is_always_satisfied()
+            .is_always_satisfied(db)
     }
 
     fn when_disjoint_from(
@@ -2621,7 +2624,7 @@ impl<'db> Type<'db> {
             // constraints, which are handled below.
             (Type::TypeVar(self_bound_typevar), Type::TypeVar(other_bound_typevar))
                 if !self_bound_typevar.is_inferable(db, inferable)
-                    && self_bound_typevar.identity(db) == other_bound_typevar.identity(db) =>
+                    && self_bound_typevar.is_same_typevar_as(db, other_bound_typevar) =>
             {
                 ConstraintSet::from(false)
             }
@@ -3581,16 +3584,21 @@ impl<'db> Type<'db> {
         }
     }
 
-    #[salsa::tracked(heap_size=ruff_memory_usage::heap_size)]
-    #[allow(unused_variables)]
-    // If we choose name `_unit`, the macro will generate code that uses `_unit`, causing clippy to fail.
-    fn lookup_dunder_new(self, db: &'db dyn Db, unit: ()) -> Option<PlaceAndQualifiers<'db>> {
-        self.find_name_in_mro_with_policy(
-            db,
-            "__new__",
-            MemberLookupPolicy::MRO_NO_OBJECT_FALLBACK
-                | MemberLookupPolicy::META_CLASS_NO_TYPE_FALLBACK,
-        )
+    fn lookup_dunder_new(self, db: &'db dyn Db) -> Option<PlaceAndQualifiers<'db>> {
+        #[salsa::tracked(heap_size=ruff_memory_usage::heap_size)]
+        fn lookup_dunder_new_inner<'db>(
+            db: &'db dyn Db,
+            ty: Type<'db>,
+            _: (),
+        ) -> Option<PlaceAndQualifiers<'db>> {
+            let mut flags = MemberLookupPolicy::MRO_NO_OBJECT_FALLBACK;
+            if !ty.is_subtype_of(db, KnownClass::Type.to_instance(db)) {
+                flags |= MemberLookupPolicy::META_CLASS_NO_TYPE_FALLBACK;
+            }
+            ty.find_name_in_mro_with_policy(db, "__new__", flags)
+        }
+
+        lookup_dunder_new_inner(db, self, ())
     }
 
     /// Look up an attribute in the MRO of the meta-type of `self`. This returns class-level attributes
@@ -4120,6 +4128,39 @@ impl<'db> Type<'db> {
             }
 
             Type::ClassLiteral(class)
+                if name == "range" && class.is_known(db, KnownClass::ConstraintSet) =>
+            {
+                Place::bound(Type::KnownBoundMethod(
+                    KnownBoundMethodType::ConstraintSetRange,
+                ))
+                .into()
+            }
+            Type::ClassLiteral(class)
+                if name == "always" && class.is_known(db, KnownClass::ConstraintSet) =>
+            {
+                Place::bound(Type::KnownBoundMethod(
+                    KnownBoundMethodType::ConstraintSetAlways,
+                ))
+                .into()
+            }
+            Type::ClassLiteral(class)
+                if name == "never" && class.is_known(db, KnownClass::ConstraintSet) =>
+            {
+                Place::bound(Type::KnownBoundMethod(
+                    KnownBoundMethodType::ConstraintSetNever,
+                ))
+                .into()
+            }
+            Type::KnownInstance(KnownInstanceType::ConstraintSet(tracked))
+                if name == "implies_subtype_of" =>
+            {
+                Place::bound(Type::KnownBoundMethod(
+                    KnownBoundMethodType::ConstraintSetImpliesSubtypeOf(tracked),
+                ))
+                .into()
+            }
+
+            Type::ClassLiteral(class)
                 if name == "__get__" && class.is_known(db, KnownClass::FunctionType) =>
             {
                 Place::bound(Type::WrapperDescriptor(
@@ -4299,7 +4340,7 @@ impl<'db> Type<'db> {
                     // It will need a special handling, so it remember the origin type to properly
                     // resolve the attribute.
                     if matches!(
-                        self.into_nominal_instance()
+                        self.as_nominal_instance()
                             .and_then(|instance| instance.known_class(db)),
                         Some(KnownClass::ModuleType | KnownClass::GenericAlias)
                     ) {
@@ -4364,14 +4405,6 @@ impl<'db> Type<'db> {
             }
 
             Type::ClassLiteral(..) | Type::GenericAlias(..) | Type::SubclassOf(..) => {
-                let class_attr_plain = self.find_name_in_mro_with_policy(db, name_str,policy).expect(
-                    "Calling `find_name_in_mro` on class literals and subclass-of types should always return `Some`",
-                );
-
-                if name == "__mro__" {
-                    return class_attr_plain;
-                }
-
                 if let Some(enum_class) = match self {
                     Type::ClassLiteral(literal) => Some(literal),
                     Type::SubclassOf(subclass_of) => subclass_of
@@ -4391,6 +4424,10 @@ impl<'db> Type<'db> {
                         }
                     }
                 }
+
+                let class_attr_plain = self.find_name_in_mro_with_policy(db, name_str,policy).expect(
+                    "Calling `find_name_in_mro` on class literals and subclass-of types should always return `Some`",
+                );
 
                 let class_attr_fallback = Self::try_call_dunder_get_on_attribute(
                     db,
@@ -4463,18 +4500,15 @@ impl<'db> Type<'db> {
         visitor: &TryBoolVisitor<'db>,
     ) -> Result<Truthiness, BoolError<'db>> {
         let type_to_truthiness = |ty| {
-            if let Type::BooleanLiteral(bool_val) = ty {
-                Truthiness::from(bool_val)
-            } else {
-                Truthiness::Ambiguous
+            match ty {
+                Type::BooleanLiteral(bool_val) => Truthiness::from(bool_val),
+                Type::IntLiteral(int_val) => Truthiness::from(int_val != 0),
+                // anything else is handled lower down
+                _ => Truthiness::Ambiguous,
             }
         };
 
-        let try_dunder_bool = || {
-            // We only check the `__bool__` method for truth testing, even though at
-            // runtime there is a fallback to `__len__`, since `__bool__` takes precedence
-            // and a subclass could add a `__bool__` method.
-
+        let try_dunders = || {
             match self.try_call_dunder(
                 db,
                 "__bool__",
@@ -4509,18 +4543,67 @@ impl<'db> Type<'db> {
                     Ok(Truthiness::Ambiguous)
                 }
 
-                Err(CallDunderError::MethodNotAvailable) => Ok(Truthiness::Ambiguous),
+                Err(CallDunderError::MethodNotAvailable) => {
+                    // We only consider `__len__` for tuples and `@final` types,
+                    // since `__bool__` takes precedence
+                    // and a subclass could add a `__bool__` method.
+                    //
+                    // TODO: with regards to tuple types, we intend to emit a diagnostic
+                    // if a tuple subclass defines a `__bool__` method with a return type
+                    // that is inconsistent with the tuple's length. Otherwise, the special
+                    // handling for tuples here isn't sound.
+                    if let Some(instance) = self.as_nominal_instance() {
+                        if let Some(tuple_spec) = instance.tuple_spec(db) {
+                            Ok(tuple_spec.truthiness())
+                        } else if instance.class(db).is_final(db) {
+                            match self.try_call_dunder(
+                                db,
+                                "__len__",
+                                CallArguments::none(),
+                                TypeContext::default(),
+                            ) {
+                                Ok(outcome) => {
+                                    let return_type = outcome.return_type(db);
+                                    if return_type.is_assignable_to(
+                                        db,
+                                        KnownClass::SupportsIndex.to_instance(db),
+                                    ) {
+                                        Ok(type_to_truthiness(return_type))
+                                    } else {
+                                        // TODO: should report a diagnostic similar to if return type of `__bool__`
+                                        // is not assignable to `bool`
+                                        Ok(Truthiness::Ambiguous)
+                                    }
+                                }
+                                // if a `@final` type does not define `__bool__` or `__len__`, it is always truthy
+                                Err(CallDunderError::MethodNotAvailable) => {
+                                    Ok(Truthiness::AlwaysTrue)
+                                }
+                                // TODO: errors during a `__len__` call (if `__len__` exists) should be reported
+                                // as diagnostics similar to errors during a `__bool__` call (when `__bool__` exists)
+                                Err(_) => Ok(Truthiness::Ambiguous),
+                            }
+                        } else {
+                            Ok(Truthiness::Ambiguous)
+                        }
+                    } else {
+                        Ok(Truthiness::Ambiguous)
+                    }
+                }
+
                 Err(CallDunderError::CallError(CallErrorKind::BindingError, bindings)) => {
                     Err(BoolError::IncorrectArguments {
                         truthiness: type_to_truthiness(bindings.return_type(db)),
                         not_boolable_type: *self,
                     })
                 }
+
                 Err(CallDunderError::CallError(CallErrorKind::NotCallable, _)) => {
                     Err(BoolError::NotCallable {
                         not_boolable_type: *self,
                     })
                 }
+
                 Err(CallDunderError::CallError(CallErrorKind::PossiblyNotCallable, _)) => {
                     Err(BoolError::Other {
                         not_boolable_type: *self,
@@ -4585,7 +4668,7 @@ impl<'db> Type<'db> {
 
             Type::KnownInstance(KnownInstanceType::ConstraintSet(tracked_set)) => {
                 let constraints = tracked_set.constraints(db);
-                Truthiness::from(constraints.is_always_satisfied())
+                Truthiness::from(constraints.is_always_satisfied(db))
             }
 
             Type::FunctionLiteral(_)
@@ -4635,9 +4718,9 @@ impl<'db> Type<'db> {
                 .known_class(db)
                 .and_then(KnownClass::bool)
                 .map(Ok)
-                .unwrap_or_else(try_dunder_bool)?,
+                .unwrap_or_else(try_dunders)?,
 
-            Type::ProtocolInstance(_) => try_dunder_bool()?,
+            Type::ProtocolInstance(_) => try_dunders()?,
 
             Type::Union(union) => try_union(*union)?,
 
@@ -4646,10 +4729,10 @@ impl<'db> Type<'db> {
                 Truthiness::Ambiguous
             }
 
-            Type::EnumLiteral(_) => {
-                // We currently make no attempt to infer the precise truthiness, but it's not impossible to do so.
-                // Note that custom `__bool__` or `__len__` methods on the class or superclasses affect the outcome.
-                Truthiness::Ambiguous
+            Type::EnumLiteral(enum_type) => {
+                enum_type
+                    .enum_class_instance(db)
+                    .try_bool_impl(db, allow_short_circuit, visitor)?
             }
 
             Type::IntLiteral(num) => Truthiness::from(*num != 0),
@@ -4790,27 +4873,6 @@ impl<'db> Type<'db> {
                     ),
                 )
                 .into(),
-
-                Some(KnownFunction::RangeConstraint | KnownFunction::NegatedRangeConstraint) => {
-                    Binding::single(
-                        self,
-                        Signature::new(
-                            Parameters::new([
-                                Parameter::positional_only(Some(Name::new_static("lower_bound")))
-                                    .type_form()
-                                    .with_annotated_type(Type::any()),
-                                Parameter::positional_only(Some(Name::new_static("typevar")))
-                                    .type_form()
-                                    .with_annotated_type(Type::any()),
-                                Parameter::positional_only(Some(Name::new_static("upper_bound")))
-                                    .type_form()
-                                    .with_annotated_type(Type::any()),
-                            ]),
-                            Some(KnownClass::ConstraintSet.to_instance(db)),
-                        ),
-                    )
-                    .into()
-                }
 
                 Some(KnownFunction::IsSingleton | KnownFunction::IsSingleValued) => {
                     Binding::single(
@@ -5961,6 +6023,9 @@ impl<'db> Type<'db> {
     /// Given a class literal or non-dynamic `SubclassOf` type, try calling it (creating an instance)
     /// and return the resulting instance type.
     ///
+    /// The `infer_argument_types` closure should be invoked with the signatures of `__new__` and
+    /// `__init__`, such that the argument types can be inferred with the correct type context.
+    ///
     /// Models `type.__call__` behavior.
     /// TODO: model metaclass `__call__`.
     ///
@@ -5971,10 +6036,10 @@ impl<'db> Type<'db> {
     ///
     /// Foo()
     /// ```
-    fn try_call_constructor(
+    fn try_call_constructor<'ast>(
         self,
         db: &'db dyn Db,
-        argument_types: CallArguments<'_, 'db>,
+        infer_argument_types: impl FnOnce(Option<Bindings<'db>>) -> CallArguments<'ast, 'db>,
         tcx: TypeContext<'db>,
     ) -> Result<Type<'db>, ConstructorCallError<'db>> {
         debug_assert!(matches!(
@@ -6029,12 +6094,64 @@ impl<'db> Type<'db> {
         // An alternative might be to not skip `object.__new__` but instead mark it such that it's
         // easy to check if that's the one we found?
         // Note that `__new__` is a static method, so we must inject the `cls` argument.
-        let new_method = self_type.lookup_dunder_new(db, ());
+        let new_method = self_type.lookup_dunder_new(db);
+
+        // Construct an instance type that we can use to look up the `__init__` instance method.
+        // This performs the same logic as `Type::to_instance`, except for generic class literals.
+        // TODO: we should use the actual return type of `__new__` to determine the instance type
+        let init_ty = self_type
+            .to_instance(db)
+            .expect("type should be convertible to instance type");
+
+        // Lookup the `__init__` instance method in the MRO.
+        let init_method = init_ty.member_lookup_with_policy(
+            db,
+            "__init__".into(),
+            MemberLookupPolicy::NO_INSTANCE_FALLBACK | MemberLookupPolicy::MRO_NO_OBJECT_FALLBACK,
+        );
+
+        // Infer the call argument types, using both `__new__` and `__init__` for type-context.
+        let bindings = match (
+            new_method.as_ref().map(|method| &method.place),
+            &init_method.place,
+        ) {
+            (Some(Place::Defined(new_method, ..)), Place::Undefined) => Some(
+                new_method
+                    .bindings(db)
+                    .map(|binding| binding.with_bound_type(self_type)),
+            ),
+
+            (Some(Place::Undefined) | None, Place::Defined(init_method, ..)) => {
+                Some(init_method.bindings(db))
+            }
+
+            (Some(Place::Defined(new_method, ..)), Place::Defined(init_method, ..)) => {
+                let callable = UnionBuilder::new(db)
+                    .add(*new_method)
+                    .add(*init_method)
+                    .build();
+
+                let new_method_bindings = new_method
+                    .bindings(db)
+                    .map(|binding| binding.with_bound_type(self_type));
+
+                Some(Bindings::from_union(
+                    callable,
+                    [new_method_bindings, init_method.bindings(db)],
+                ))
+            }
+
+            _ => None,
+        };
+
+        let argument_types = infer_argument_types(bindings);
+
         let new_call_outcome = new_method.and_then(|new_method| {
             match new_method.place.try_call_dunder_get(db, self_type) {
                 Place::Defined(new_method, _, boundness) => {
                     let result =
                         new_method.try_call(db, argument_types.with_self(Some(self_type)).as_ref());
+
                     if boundness == Definedness::PossiblyUndefined {
                         Some(Err(DunderNewCallError::PossiblyUnbound(result.err())))
                     } else {
@@ -6045,24 +6162,7 @@ impl<'db> Type<'db> {
             }
         });
 
-        // Construct an instance type that we can use to look up the `__init__` instance method.
-        // This performs the same logic as `Type::to_instance`, except for generic class literals.
-        // TODO: we should use the actual return type of `__new__` to determine the instance type
-        let init_ty = self_type
-            .to_instance(db)
-            .expect("type should be convertible to instance type");
-
-        let init_call_outcome = if new_call_outcome.is_none()
-            || !init_ty
-                .member_lookup_with_policy(
-                    db,
-                    "__init__".into(),
-                    MemberLookupPolicy::NO_INSTANCE_FALLBACK
-                        | MemberLookupPolicy::MRO_NO_OBJECT_FALLBACK,
-                )
-                .place
-                .is_undefined()
-        {
+        let init_call_outcome = if new_call_outcome.is_none() || !init_method.is_undefined() {
             Some(init_ty.try_call_dunder(db, "__init__", argument_types, tcx))
         } else {
             None
@@ -6814,7 +6914,14 @@ impl<'db> Type<'db> {
             | Type::AlwaysTruthy
             | Type::AlwaysFalsy
             | Type::WrapperDescriptor(_)
-            | Type::KnownBoundMethod(KnownBoundMethodType::StrStartswith(_) | KnownBoundMethodType::PathOpen)
+            | Type::KnownBoundMethod(
+                KnownBoundMethodType::StrStartswith(_)
+                | KnownBoundMethodType::PathOpen
+                | KnownBoundMethodType::ConstraintSetRange
+                | KnownBoundMethodType::ConstraintSetAlways
+                | KnownBoundMethodType::ConstraintSetNever
+                | KnownBoundMethodType::ConstraintSetImpliesSubtypeOf(_)
+            )
             | Type::DataclassDecorator(_)
             | Type::DataclassTransformer(_)
             // A non-generic class never needs to be specialized. A generic class is specialized
@@ -6960,7 +7067,12 @@ impl<'db> Type<'db> {
             | Type::AlwaysFalsy
             | Type::WrapperDescriptor(_)
             | Type::KnownBoundMethod(
-                KnownBoundMethodType::StrStartswith(_) | KnownBoundMethodType::PathOpen,
+                KnownBoundMethodType::StrStartswith(_)
+                | KnownBoundMethodType::PathOpen
+                | KnownBoundMethodType::ConstraintSetRange
+                | KnownBoundMethodType::ConstraintSetAlways
+                | KnownBoundMethodType::ConstraintSetNever
+                | KnownBoundMethodType::ConstraintSetImpliesSubtypeOf(_),
             )
             | Type::DataclassDecorator(_)
             | Type::DataclassTransformer(_)
@@ -7316,6 +7428,7 @@ impl<'db> VarianceInferable<'db> for Type<'db> {
 #[allow(clippy::trivially_copy_pass_by_ref)]
 fn is_redundant_with_cycle_initial<'db>(
     _db: &'db dyn Db,
+    _id: salsa::Id,
     _subtype: Type<'db>,
     _supertype: Type<'db>,
 ) -> bool {
@@ -7324,6 +7437,7 @@ fn is_redundant_with_cycle_initial<'db>(
 
 fn apply_specialization_cycle_initial<'db>(
     _db: &'db dyn Db,
+    _id: salsa::Id,
     _self: Type<'db>,
     _specialization: Specialization<'db>,
 ) -> Type<'db> {
@@ -7404,7 +7518,6 @@ impl<'db> TypeMapping<'_, 'db> {
 #[salsa::tracked(debug, heap_size=ruff_memory_usage::heap_size)]
 #[derive(PartialOrd, Ord)]
 pub struct TrackedConstraintSet<'db> {
-    #[returns(ref)]
     constraints: ConstraintSet<'db>,
 }
 
@@ -7600,17 +7713,11 @@ impl<'db> KnownInstanceType<'db> {
                     }
                     KnownInstanceType::ConstraintSet(tracked_set) => {
                         let constraints = tracked_set.constraints(self.db);
-                        if constraints.is_always_satisfied() {
-                            f.write_str("ty_extensions.ConstraintSet[always]")
-                        } else if constraints.is_never_satisfied() {
-                            f.write_str("ty_extensions.ConstraintSet[never]")
-                        } else {
-                            write!(
-                                f,
-                                "ty_extensions.ConstraintSet[{}]",
-                                constraints.display(self.db)
-                            )
-                        }
+                        write!(
+                            f,
+                            "ty_extensions.ConstraintSet[{}]",
+                            constraints.display(self.db)
+                        )
                     }
                 }
             }
@@ -8401,6 +8508,7 @@ impl<'db> TypeVarInstance<'db> {
 
 fn lazy_bound_or_constraints_cycle_initial<'db>(
     _db: &'db dyn Db,
+    _id: salsa::Id,
     _self: TypeVarInstance<'db>,
 ) -> Option<TypeVarBoundOrConstraints<'db>> {
     None
@@ -8408,6 +8516,7 @@ fn lazy_bound_or_constraints_cycle_initial<'db>(
 
 fn lazy_default_cycle_initial<'db>(
     _db: &'db dyn Db,
+    _id: salsa::Id,
     _self: TypeVarInstance<'db>,
 ) -> Option<Type<'db>> {
     None
@@ -8461,7 +8570,6 @@ pub struct BoundTypeVarIdentity<'db> {
 /// A type variable that has been bound to a generic context, and which can be specialized to a
 /// concrete type.
 #[salsa::interned(debug, heap_size=ruff_memory_usage::heap_size)]
-#[derive(PartialOrd, Ord)]
 pub struct BoundTypeVarInstance<'db> {
     pub typevar: TypeVarInstance<'db>,
     binding_context: BindingContext<'db>,
@@ -8480,6 +8588,12 @@ impl<'db> BoundTypeVarInstance<'db> {
             identity: self.typevar(db).identity(db),
             binding_context: self.binding_context(db),
         }
+    }
+
+    /// Returns whether two bound typevars represent the same logical typevar, regardless of e.g.
+    /// differences in their bounds or constraints due to materialization.
+    pub(crate) fn is_same_typevar_as(self, db: &'db dyn Db, other: Self) -> bool {
+        self.identity(db) == other.identity(db)
     }
 
     /// Create a new PEP 695 type variable that can be used in signatures
@@ -9930,6 +10044,7 @@ fn walk_bound_method_type<'db, V: visitor::TypeVisitor<'db> + ?Sized>(
 
 fn into_callable_type_cycle_initial<'db>(
     db: &'db dyn Db,
+    _id: salsa::Id,
     _self: BoundMethodType<'db>,
 ) -> CallableType<'db> {
     CallableType::bottom(db)
@@ -10216,6 +10331,12 @@ pub enum KnownBoundMethodType<'db> {
     StrStartswith(StringLiteralType<'db>),
     /// Method wrapper for `Path.open`,
     PathOpen,
+
+    // ConstraintSet methods
+    ConstraintSetRange,
+    ConstraintSetAlways,
+    ConstraintSetNever,
+    ConstraintSetImpliesSubtypeOf(TrackedConstraintSet<'db>),
 }
 
 pub(super) fn walk_method_wrapper_type<'db, V: visitor::TypeVisitor<'db> + ?Sized>(
@@ -10239,7 +10360,11 @@ pub(super) fn walk_method_wrapper_type<'db, V: visitor::TypeVisitor<'db> + ?Size
         KnownBoundMethodType::StrStartswith(string_literal) => {
             visitor.visit_type(db, Type::StringLiteral(string_literal));
         }
-        KnownBoundMethodType::PathOpen => {}
+        KnownBoundMethodType::PathOpen
+        | KnownBoundMethodType::ConstraintSetRange
+        | KnownBoundMethodType::ConstraintSetAlways
+        | KnownBoundMethodType::ConstraintSetNever
+        | KnownBoundMethodType::ConstraintSetImpliesSubtypeOf(_) => {}
     }
 }
 
@@ -10291,9 +10416,23 @@ impl<'db> KnownBoundMethodType<'db> {
                 ConstraintSet::from(self == other)
             }
 
-            (KnownBoundMethodType::PathOpen, KnownBoundMethodType::PathOpen) => {
-                ConstraintSet::from(true)
-            }
+            (KnownBoundMethodType::PathOpen, KnownBoundMethodType::PathOpen)
+            | (
+                KnownBoundMethodType::ConstraintSetRange,
+                KnownBoundMethodType::ConstraintSetRange,
+            )
+            | (
+                KnownBoundMethodType::ConstraintSetAlways,
+                KnownBoundMethodType::ConstraintSetAlways,
+            )
+            | (
+                KnownBoundMethodType::ConstraintSetNever,
+                KnownBoundMethodType::ConstraintSetNever,
+            )
+            | (
+                KnownBoundMethodType::ConstraintSetImpliesSubtypeOf(_),
+                KnownBoundMethodType::ConstraintSetImpliesSubtypeOf(_),
+            ) => ConstraintSet::from(true),
 
             (
                 KnownBoundMethodType::FunctionTypeDunderGet(_)
@@ -10301,13 +10440,21 @@ impl<'db> KnownBoundMethodType<'db> {
                 | KnownBoundMethodType::PropertyDunderGet(_)
                 | KnownBoundMethodType::PropertyDunderSet(_)
                 | KnownBoundMethodType::StrStartswith(_)
-                | KnownBoundMethodType::PathOpen,
+                | KnownBoundMethodType::PathOpen
+                | KnownBoundMethodType::ConstraintSetRange
+                | KnownBoundMethodType::ConstraintSetAlways
+                | KnownBoundMethodType::ConstraintSetNever
+                | KnownBoundMethodType::ConstraintSetImpliesSubtypeOf(_),
                 KnownBoundMethodType::FunctionTypeDunderGet(_)
                 | KnownBoundMethodType::FunctionTypeDunderCall(_)
                 | KnownBoundMethodType::PropertyDunderGet(_)
                 | KnownBoundMethodType::PropertyDunderSet(_)
                 | KnownBoundMethodType::StrStartswith(_)
-                | KnownBoundMethodType::PathOpen,
+                | KnownBoundMethodType::PathOpen
+                | KnownBoundMethodType::ConstraintSetRange
+                | KnownBoundMethodType::ConstraintSetAlways
+                | KnownBoundMethodType::ConstraintSetNever
+                | KnownBoundMethodType::ConstraintSetImpliesSubtypeOf(_),
             ) => ConstraintSet::from(false),
         }
     }
@@ -10343,9 +10490,26 @@ impl<'db> KnownBoundMethodType<'db> {
                 ConstraintSet::from(self == other)
             }
 
-            (KnownBoundMethodType::PathOpen, KnownBoundMethodType::PathOpen) => {
-                ConstraintSet::from(true)
-            }
+            (KnownBoundMethodType::PathOpen, KnownBoundMethodType::PathOpen)
+            | (
+                KnownBoundMethodType::ConstraintSetRange,
+                KnownBoundMethodType::ConstraintSetRange,
+            )
+            | (
+                KnownBoundMethodType::ConstraintSetAlways,
+                KnownBoundMethodType::ConstraintSetAlways,
+            )
+            | (
+                KnownBoundMethodType::ConstraintSetNever,
+                KnownBoundMethodType::ConstraintSetNever,
+            ) => ConstraintSet::from(true),
+
+            (
+                KnownBoundMethodType::ConstraintSetImpliesSubtypeOf(left_constraints),
+                KnownBoundMethodType::ConstraintSetImpliesSubtypeOf(right_constraints),
+            ) => left_constraints
+                .constraints(db)
+                .iff(db, right_constraints.constraints(db)),
 
             (
                 KnownBoundMethodType::FunctionTypeDunderGet(_)
@@ -10353,13 +10517,21 @@ impl<'db> KnownBoundMethodType<'db> {
                 | KnownBoundMethodType::PropertyDunderGet(_)
                 | KnownBoundMethodType::PropertyDunderSet(_)
                 | KnownBoundMethodType::StrStartswith(_)
-                | KnownBoundMethodType::PathOpen,
+                | KnownBoundMethodType::PathOpen
+                | KnownBoundMethodType::ConstraintSetRange
+                | KnownBoundMethodType::ConstraintSetAlways
+                | KnownBoundMethodType::ConstraintSetNever
+                | KnownBoundMethodType::ConstraintSetImpliesSubtypeOf(_),
                 KnownBoundMethodType::FunctionTypeDunderGet(_)
                 | KnownBoundMethodType::FunctionTypeDunderCall(_)
                 | KnownBoundMethodType::PropertyDunderGet(_)
                 | KnownBoundMethodType::PropertyDunderSet(_)
                 | KnownBoundMethodType::StrStartswith(_)
-                | KnownBoundMethodType::PathOpen,
+                | KnownBoundMethodType::PathOpen
+                | KnownBoundMethodType::ConstraintSetRange
+                | KnownBoundMethodType::ConstraintSetAlways
+                | KnownBoundMethodType::ConstraintSetNever
+                | KnownBoundMethodType::ConstraintSetImpliesSubtypeOf(_),
             ) => ConstraintSet::from(false),
         }
     }
@@ -10378,7 +10550,12 @@ impl<'db> KnownBoundMethodType<'db> {
             KnownBoundMethodType::PropertyDunderSet(property) => {
                 KnownBoundMethodType::PropertyDunderSet(property.normalized_impl(db, visitor))
             }
-            KnownBoundMethodType::StrStartswith(_) | KnownBoundMethodType::PathOpen => self,
+            KnownBoundMethodType::StrStartswith(_)
+            | KnownBoundMethodType::PathOpen
+            | KnownBoundMethodType::ConstraintSetRange
+            | KnownBoundMethodType::ConstraintSetAlways
+            | KnownBoundMethodType::ConstraintSetNever
+            | KnownBoundMethodType::ConstraintSetImpliesSubtypeOf(_) => self,
         }
     }
 
@@ -10391,6 +10568,10 @@ impl<'db> KnownBoundMethodType<'db> {
             | KnownBoundMethodType::PropertyDunderSet(_) => KnownClass::MethodWrapperType,
             KnownBoundMethodType::StrStartswith(_) => KnownClass::BuiltinFunctionType,
             KnownBoundMethodType::PathOpen => KnownClass::MethodType,
+            KnownBoundMethodType::ConstraintSetRange
+            | KnownBoundMethodType::ConstraintSetAlways
+            | KnownBoundMethodType::ConstraintSetNever
+            | KnownBoundMethodType::ConstraintSetImpliesSubtypeOf(_) => KnownClass::ConstraintSet,
         }
     }
 
@@ -10489,6 +10670,45 @@ impl<'db> KnownBoundMethodType<'db> {
             }
             KnownBoundMethodType::PathOpen => {
                 Either::Right(std::iter::once(Signature::todo("`Path.open` return type")))
+            }
+
+            KnownBoundMethodType::ConstraintSetRange => {
+                Either::Right(std::iter::once(Signature::new(
+                    Parameters::new([
+                        Parameter::positional_only(Some(Name::new_static("lower_bound")))
+                            .type_form()
+                            .with_annotated_type(Type::any()),
+                        Parameter::positional_only(Some(Name::new_static("typevar")))
+                            .type_form()
+                            .with_annotated_type(Type::any()),
+                        Parameter::positional_only(Some(Name::new_static("upper_bound")))
+                            .type_form()
+                            .with_annotated_type(Type::any()),
+                    ]),
+                    Some(KnownClass::ConstraintSet.to_instance(db)),
+                )))
+            }
+
+            KnownBoundMethodType::ConstraintSetAlways
+            | KnownBoundMethodType::ConstraintSetNever => {
+                Either::Right(std::iter::once(Signature::new(
+                    Parameters::empty(),
+                    Some(KnownClass::ConstraintSet.to_instance(db)),
+                )))
+            }
+
+            KnownBoundMethodType::ConstraintSetImpliesSubtypeOf(_) => {
+                Either::Right(std::iter::once(Signature::new(
+                    Parameters::new([
+                        Parameter::positional_only(Some(Name::new_static("ty")))
+                            .type_form()
+                            .with_annotated_type(Type::any()),
+                        Parameter::positional_only(Some(Name::new_static("of")))
+                            .type_form()
+                            .with_annotated_type(Type::any()),
+                    ]),
+                    Some(KnownClass::ConstraintSet.to_instance(db)),
+                )))
             }
         }
     }
@@ -10800,12 +11020,17 @@ impl<'db> PEP695TypeAliasType<'db> {
 
 fn generic_context_cycle_initial<'db>(
     _db: &'db dyn Db,
+    _id: salsa::Id,
     _self: PEP695TypeAliasType<'db>,
 ) -> Option<GenericContext<'db>> {
     None
 }
 
-fn value_type_cycle_initial<'db>(_db: &'db dyn Db, _self: PEP695TypeAliasType<'db>) -> Type<'db> {
+fn value_type_cycle_initial<'db>(
+    _db: &'db dyn Db,
+    _id: salsa::Id,
+    _self: PEP695TypeAliasType<'db>,
+) -> Type<'db> {
     Type::Never
 }
 
