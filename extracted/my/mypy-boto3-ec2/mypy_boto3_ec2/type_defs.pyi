@@ -196,6 +196,11 @@ from .literals import (
     IpamPoolCidrStateType,
     IpamPoolPublicIpSourceType,
     IpamPoolStateType,
+    IpamPrefixListResolverRuleConditionOperationType,
+    IpamPrefixListResolverRuleTypeType,
+    IpamPrefixListResolverStateType,
+    IpamPrefixListResolverTargetStateType,
+    IpamPrefixListResolverVersionCreationStatusType,
     IpamPublicAddressAssociationStatusType,
     IpamPublicAddressAwsServiceType,
     IpamPublicAddressTypeType,
@@ -734,6 +739,10 @@ __all__ = (
     "CreateIpamExternalResourceVerificationTokenResultTypeDef",
     "CreateIpamPoolRequestTypeDef",
     "CreateIpamPoolResultTypeDef",
+    "CreateIpamPrefixListResolverRequestTypeDef",
+    "CreateIpamPrefixListResolverResultTypeDef",
+    "CreateIpamPrefixListResolverTargetRequestTypeDef",
+    "CreateIpamPrefixListResolverTargetResultTypeDef",
     "CreateIpamRequestTypeDef",
     "CreateIpamResourceDiscoveryRequestTypeDef",
     "CreateIpamResourceDiscoveryResultTypeDef",
@@ -944,6 +953,10 @@ __all__ = (
     "DeleteIpamExternalResourceVerificationTokenResultTypeDef",
     "DeleteIpamPoolRequestTypeDef",
     "DeleteIpamPoolResultTypeDef",
+    "DeleteIpamPrefixListResolverRequestTypeDef",
+    "DeleteIpamPrefixListResolverResultTypeDef",
+    "DeleteIpamPrefixListResolverTargetRequestTypeDef",
+    "DeleteIpamPrefixListResolverTargetResultTypeDef",
     "DeleteIpamRequestTypeDef",
     "DeleteIpamResourceDiscoveryRequestTypeDef",
     "DeleteIpamResourceDiscoveryResultTypeDef",
@@ -1311,6 +1324,12 @@ __all__ = (
     "DescribeIpamPoolsRequestPaginateTypeDef",
     "DescribeIpamPoolsRequestTypeDef",
     "DescribeIpamPoolsResultTypeDef",
+    "DescribeIpamPrefixListResolverTargetsRequestPaginateTypeDef",
+    "DescribeIpamPrefixListResolverTargetsRequestTypeDef",
+    "DescribeIpamPrefixListResolverTargetsResultTypeDef",
+    "DescribeIpamPrefixListResolversRequestPaginateTypeDef",
+    "DescribeIpamPrefixListResolversRequestTypeDef",
+    "DescribeIpamPrefixListResolversResultTypeDef",
     "DescribeIpamResourceDiscoveriesRequestPaginateTypeDef",
     "DescribeIpamResourceDiscoveriesRequestTypeDef",
     "DescribeIpamResourceDiscoveriesResultTypeDef",
@@ -1930,6 +1949,15 @@ __all__ = (
     "GetIpamPoolCidrsRequestPaginateTypeDef",
     "GetIpamPoolCidrsRequestTypeDef",
     "GetIpamPoolCidrsResultTypeDef",
+    "GetIpamPrefixListResolverRulesRequestPaginateTypeDef",
+    "GetIpamPrefixListResolverRulesRequestTypeDef",
+    "GetIpamPrefixListResolverRulesResultTypeDef",
+    "GetIpamPrefixListResolverVersionEntriesRequestPaginateTypeDef",
+    "GetIpamPrefixListResolverVersionEntriesRequestTypeDef",
+    "GetIpamPrefixListResolverVersionEntriesResultTypeDef",
+    "GetIpamPrefixListResolverVersionsRequestPaginateTypeDef",
+    "GetIpamPrefixListResolverVersionsRequestTypeDef",
+    "GetIpamPrefixListResolverVersionsResultTypeDef",
     "GetIpamResourceCidrsRequestPaginateTypeDef",
     "GetIpamResourceCidrsRequestTypeDef",
     "GetIpamResourceCidrsResultTypeDef",
@@ -2149,6 +2177,14 @@ __all__ = (
     "IpamPoolSourceResourceRequestTypeDef",
     "IpamPoolSourceResourceTypeDef",
     "IpamPoolTypeDef",
+    "IpamPrefixListResolverRuleConditionRequestTypeDef",
+    "IpamPrefixListResolverRuleConditionTypeDef",
+    "IpamPrefixListResolverRuleRequestTypeDef",
+    "IpamPrefixListResolverRuleTypeDef",
+    "IpamPrefixListResolverTargetTypeDef",
+    "IpamPrefixListResolverTypeDef",
+    "IpamPrefixListResolverVersionEntryTypeDef",
+    "IpamPrefixListResolverVersionTypeDef",
     "IpamPublicAddressSecurityGroupTypeDef",
     "IpamPublicAddressTagTypeDef",
     "IpamPublicAddressTagsTypeDef",
@@ -2314,6 +2350,10 @@ __all__ = (
     "ModifyInstancePlacementResultTypeDef",
     "ModifyIpamPoolRequestTypeDef",
     "ModifyIpamPoolResultTypeDef",
+    "ModifyIpamPrefixListResolverRequestTypeDef",
+    "ModifyIpamPrefixListResolverResultTypeDef",
+    "ModifyIpamPrefixListResolverTargetRequestTypeDef",
+    "ModifyIpamPrefixListResolverTargetResultTypeDef",
     "ModifyIpamRequestTypeDef",
     "ModifyIpamResourceCidrRequestTypeDef",
     "ModifyIpamResourceCidrResultTypeDef",
@@ -4340,6 +4380,14 @@ class DeleteIpamPoolRequestTypeDef(TypedDict):
     DryRun: NotRequired[bool]
     Cascade: NotRequired[bool]
 
+class DeleteIpamPrefixListResolverRequestTypeDef(TypedDict):
+    IpamPrefixListResolverId: str
+    DryRun: NotRequired[bool]
+
+class DeleteIpamPrefixListResolverTargetRequestTypeDef(TypedDict):
+    IpamPrefixListResolverTargetId: str
+    DryRun: NotRequired[bool]
+
 class DeleteIpamRequestTypeDef(TypedDict):
     IpamId: str
     DryRun: NotRequired[bool]
@@ -5871,6 +5919,19 @@ class IpamAddressHistoryRecordTypeDef(TypedDict):
     SampledStartTime: NotRequired[datetime]
     SampledEndTime: NotRequired[datetime]
 
+class GetIpamPrefixListResolverVersionEntriesRequestTypeDef(TypedDict):
+    IpamPrefixListResolverId: str
+    IpamPrefixListResolverVersion: int
+    DryRun: NotRequired[bool]
+    MaxResults: NotRequired[int]
+    NextToken: NotRequired[str]
+
+class IpamPrefixListResolverVersionEntryTypeDef(TypedDict):
+    Cidr: NotRequired[str]
+
+class IpamPrefixListResolverVersionTypeDef(TypedDict):
+    Version: NotRequired[int]
+
 class GetLaunchTemplateDataRequestTypeDef(TypedDict):
     InstanceId: str
     DryRun: NotRequired[bool]
@@ -6632,6 +6693,13 @@ class ModifyInstancePlacementRequestTypeDef(TypedDict):
     Tenancy: NotRequired[HostTenancyType]
     Affinity: NotRequired[AffinityType]
     HostId: NotRequired[str]
+
+class ModifyIpamPrefixListResolverTargetRequestTypeDef(TypedDict):
+    IpamPrefixListResolverTargetId: str
+    DryRun: NotRequired[bool]
+    DesiredVersion: NotRequired[int]
+    TrackLatestVersion: NotRequired[bool]
+    ClientToken: NotRequired[str]
 
 RemoveIpamOperatingRegionTypeDef = TypedDict(
     "RemoveIpamOperatingRegionTypeDef",
@@ -8757,6 +8825,33 @@ class IpamExternalResourceVerificationTokenTypeDef(TypedDict):
     Tags: NotRequired[List[TagTypeDef]]
     State: NotRequired[IpamExternalResourceVerificationTokenStateType]
 
+class IpamPrefixListResolverTargetTypeDef(TypedDict):
+    IpamPrefixListResolverTargetId: NotRequired[str]
+    IpamPrefixListResolverTargetArn: NotRequired[str]
+    IpamPrefixListResolverId: NotRequired[str]
+    OwnerId: NotRequired[str]
+    PrefixListId: NotRequired[str]
+    PrefixListRegion: NotRequired[str]
+    DesiredVersion: NotRequired[int]
+    LastSyncedVersion: NotRequired[int]
+    TrackLatestVersion: NotRequired[bool]
+    StateMessage: NotRequired[str]
+    State: NotRequired[IpamPrefixListResolverTargetStateType]
+    Tags: NotRequired[List[TagTypeDef]]
+
+class IpamPrefixListResolverTypeDef(TypedDict):
+    OwnerId: NotRequired[str]
+    IpamPrefixListResolverId: NotRequired[str]
+    IpamPrefixListResolverArn: NotRequired[str]
+    IpamArn: NotRequired[str]
+    IpamRegion: NotRequired[str]
+    Description: NotRequired[str]
+    AddressFamily: NotRequired[AddressFamilyType]
+    State: NotRequired[IpamPrefixListResolverStateType]
+    Tags: NotRequired[List[TagTypeDef]]
+    LastVersionCreationStatus: NotRequired[IpamPrefixListResolverVersionCreationStatusType]
+    LastVersionCreationStatusMessage: NotRequired[str]
+
 class IpamResourceDiscoveryAssociationTypeDef(TypedDict):
     OwnerId: NotRequired[str]
     IpamResourceDiscoveryAssociationId: NotRequired[str]
@@ -8873,6 +8968,8 @@ class ManagedPrefixListTypeDef(TypedDict):
     Version: NotRequired[int]
     Tags: NotRequired[List[TagTypeDef]]
     OwnerId: NotRequired[str]
+    IpamPrefixListResolverTargetId: NotRequired[str]
+    IpamPrefixListResolverSyncEnabled: NotRequired[bool]
 
 class NetworkAclCreateTagsRequestTypeDef(TypedDict):
     Tags: Sequence[TagTypeDef]
@@ -9951,6 +10048,15 @@ class ModifyInstanceEventWindowRequestTypeDef(TypedDict):
     TimeRanges: NotRequired[Sequence[InstanceEventWindowTimeRangeRequestTypeDef]]
     CronExpression: NotRequired[str]
 
+class IpamPrefixListResolverRuleConditionRequestTypeDef(TypedDict):
+    Operation: IpamPrefixListResolverRuleConditionOperationType
+    IpamPoolId: NotRequired[str]
+    ResourceId: NotRequired[str]
+    ResourceOwner: NotRequired[str]
+    ResourceRegion: NotRequired[str]
+    ResourceTag: NotRequired[RequestIpamResourceTagTypeDef]
+    Cidr: NotRequired[str]
+
 class ModifyIpamPoolRequestTypeDef(TypedDict):
     IpamPoolId: str
     DryRun: NotRequired[bool]
@@ -10304,6 +10410,12 @@ class GetIpamAddressHistoryRequestPaginateTypeDef(TypedDict):
     VpcId: NotRequired[str]
     StartTime: NotRequired[TimestampTypeDef]
     EndTime: NotRequired[TimestampTypeDef]
+    PaginationConfig: NotRequired[PaginatorConfigTypeDef]
+
+class GetIpamPrefixListResolverVersionEntriesRequestPaginateTypeDef(TypedDict):
+    IpamPrefixListResolverId: str
+    IpamPrefixListResolverVersion: int
+    DryRun: NotRequired[bool]
     PaginationConfig: NotRequired[PaginatorConfigTypeDef]
 
 class GetManagedPrefixListAssociationsRequestPaginateTypeDef(TypedDict):
@@ -10976,6 +11088,34 @@ class DescribeIpamPoolsRequestTypeDef(TypedDict):
     MaxResults: NotRequired[int]
     NextToken: NotRequired[str]
     IpamPoolIds: NotRequired[Sequence[str]]
+
+class DescribeIpamPrefixListResolverTargetsRequestPaginateTypeDef(TypedDict):
+    DryRun: NotRequired[bool]
+    Filters: NotRequired[Sequence[FilterTypeDef]]
+    IpamPrefixListResolverTargetIds: NotRequired[Sequence[str]]
+    IpamPrefixListResolverId: NotRequired[str]
+    PaginationConfig: NotRequired[PaginatorConfigTypeDef]
+
+class DescribeIpamPrefixListResolverTargetsRequestTypeDef(TypedDict):
+    DryRun: NotRequired[bool]
+    Filters: NotRequired[Sequence[FilterTypeDef]]
+    MaxResults: NotRequired[int]
+    NextToken: NotRequired[str]
+    IpamPrefixListResolverTargetIds: NotRequired[Sequence[str]]
+    IpamPrefixListResolverId: NotRequired[str]
+
+class DescribeIpamPrefixListResolversRequestPaginateTypeDef(TypedDict):
+    DryRun: NotRequired[bool]
+    Filters: NotRequired[Sequence[FilterTypeDef]]
+    IpamPrefixListResolverIds: NotRequired[Sequence[str]]
+    PaginationConfig: NotRequired[PaginatorConfigTypeDef]
+
+class DescribeIpamPrefixListResolversRequestTypeDef(TypedDict):
+    DryRun: NotRequired[bool]
+    Filters: NotRequired[Sequence[FilterTypeDef]]
+    MaxResults: NotRequired[int]
+    NextToken: NotRequired[str]
+    IpamPrefixListResolverIds: NotRequired[Sequence[str]]
 
 class DescribeIpamResourceDiscoveriesRequestPaginateTypeDef(TypedDict):
     DryRun: NotRequired[bool]
@@ -12168,6 +12308,34 @@ class GetIpamPoolCidrsRequestTypeDef(TypedDict):
     MaxResults: NotRequired[int]
     NextToken: NotRequired[str]
 
+class GetIpamPrefixListResolverRulesRequestPaginateTypeDef(TypedDict):
+    IpamPrefixListResolverId: str
+    DryRun: NotRequired[bool]
+    Filters: NotRequired[Sequence[FilterTypeDef]]
+    PaginationConfig: NotRequired[PaginatorConfigTypeDef]
+
+class GetIpamPrefixListResolverRulesRequestTypeDef(TypedDict):
+    IpamPrefixListResolverId: str
+    DryRun: NotRequired[bool]
+    Filters: NotRequired[Sequence[FilterTypeDef]]
+    MaxResults: NotRequired[int]
+    NextToken: NotRequired[str]
+
+class GetIpamPrefixListResolverVersionsRequestPaginateTypeDef(TypedDict):
+    IpamPrefixListResolverId: str
+    DryRun: NotRequired[bool]
+    IpamPrefixListResolverVersions: NotRequired[Sequence[int]]
+    Filters: NotRequired[Sequence[FilterTypeDef]]
+    PaginationConfig: NotRequired[PaginatorConfigTypeDef]
+
+class GetIpamPrefixListResolverVersionsRequestTypeDef(TypedDict):
+    IpamPrefixListResolverId: str
+    DryRun: NotRequired[bool]
+    IpamPrefixListResolverVersions: NotRequired[Sequence[int]]
+    MaxResults: NotRequired[int]
+    Filters: NotRequired[Sequence[FilterTypeDef]]
+    NextToken: NotRequired[str]
+
 class GetIpamResourceCidrsRequestPaginateTypeDef(TypedDict):
     IpamScopeId: str
     DryRun: NotRequired[bool]
@@ -13147,6 +13315,16 @@ class GetIpamAddressHistoryResultTypeDef(TypedDict):
     ResponseMetadata: ResponseMetadataTypeDef
     NextToken: NotRequired[str]
 
+class GetIpamPrefixListResolverVersionEntriesResultTypeDef(TypedDict):
+    Entries: List[IpamPrefixListResolverVersionEntryTypeDef]
+    ResponseMetadata: ResponseMetadataTypeDef
+    NextToken: NotRequired[str]
+
+class GetIpamPrefixListResolverVersionsResultTypeDef(TypedDict):
+    IpamPrefixListResolverVersions: List[IpamPrefixListResolverVersionTypeDef]
+    ResponseMetadata: ResponseMetadataTypeDef
+    NextToken: NotRequired[str]
+
 class GetManagedPrefixListAssociationsResultTypeDef(TypedDict):
     PrefixListAssociations: List[PrefixListAssociationTypeDef]
     ResponseMetadata: ResponseMetadataTypeDef
@@ -13387,6 +13565,15 @@ class IpamDiscoveredResourceCidrTypeDef(TypedDict):
     SampleTime: NotRequired[datetime]
     AvailabilityZoneId: NotRequired[str]
 
+class IpamPrefixListResolverRuleConditionTypeDef(TypedDict):
+    Operation: NotRequired[IpamPrefixListResolverRuleConditionOperationType]
+    IpamPoolId: NotRequired[str]
+    ResourceId: NotRequired[str]
+    ResourceOwner: NotRequired[str]
+    ResourceRegion: NotRequired[str]
+    ResourceTag: NotRequired[IpamResourceTagTypeDef]
+    Cidr: NotRequired[str]
+
 class IpamResourceCidrTypeDef(TypedDict):
     IpamId: NotRequired[str]
     IpamScopeId: NotRequired[str]
@@ -13561,6 +13748,7 @@ class ModifyManagedPrefixListRequestTypeDef(TypedDict):
     AddEntries: NotRequired[Sequence[AddPrefixListEntryTypeDef]]
     RemoveEntries: NotRequired[Sequence[RemovePrefixListEntryTypeDef]]
     MaxEntries: NotRequired[int]
+    IpamPrefixListResolverSyncEnabled: NotRequired[bool]
 
 class ModifyReservedInstancesRequestTypeDef(TypedDict):
     ReservedInstancesIds: Sequence[str]
@@ -14354,6 +14542,9 @@ class VpcEncryptionControlExclusionsTypeDef(TypedDict):
     NatGateway: NotRequired[VpcEncryptionControlExclusionTypeDef]
     VirtualPrivateGateway: NotRequired[VpcEncryptionControlExclusionTypeDef]
     VpcPeering: NotRequired[VpcEncryptionControlExclusionTypeDef]
+    Lambda: NotRequired[VpcEncryptionControlExclusionTypeDef]
+    VpcLattice: NotRequired[VpcEncryptionControlExclusionTypeDef]
+    ElasticFileSystem: NotRequired[VpcEncryptionControlExclusionTypeDef]
 
 class VpcPeeringConnectionVpcInfoTypeDef(TypedDict):
     CidrBlock: NotRequired[str]
@@ -14489,6 +14680,40 @@ class DescribeIpamExternalResourceVerificationTokensResultTypeDef(TypedDict):
     IpamExternalResourceVerificationTokens: List[IpamExternalResourceVerificationTokenTypeDef]
     ResponseMetadata: ResponseMetadataTypeDef
     NextToken: NotRequired[str]
+
+class CreateIpamPrefixListResolverTargetResultTypeDef(TypedDict):
+    IpamPrefixListResolverTarget: IpamPrefixListResolverTargetTypeDef
+    ResponseMetadata: ResponseMetadataTypeDef
+
+class DeleteIpamPrefixListResolverTargetResultTypeDef(TypedDict):
+    IpamPrefixListResolverTarget: IpamPrefixListResolverTargetTypeDef
+    ResponseMetadata: ResponseMetadataTypeDef
+
+class DescribeIpamPrefixListResolverTargetsResultTypeDef(TypedDict):
+    IpamPrefixListResolverTargets: List[IpamPrefixListResolverTargetTypeDef]
+    ResponseMetadata: ResponseMetadataTypeDef
+    NextToken: NotRequired[str]
+
+class ModifyIpamPrefixListResolverTargetResultTypeDef(TypedDict):
+    IpamPrefixListResolverTarget: IpamPrefixListResolverTargetTypeDef
+    ResponseMetadata: ResponseMetadataTypeDef
+
+class CreateIpamPrefixListResolverResultTypeDef(TypedDict):
+    IpamPrefixListResolver: IpamPrefixListResolverTypeDef
+    ResponseMetadata: ResponseMetadataTypeDef
+
+class DeleteIpamPrefixListResolverResultTypeDef(TypedDict):
+    IpamPrefixListResolver: IpamPrefixListResolverTypeDef
+    ResponseMetadata: ResponseMetadataTypeDef
+
+class DescribeIpamPrefixListResolversResultTypeDef(TypedDict):
+    IpamPrefixListResolvers: List[IpamPrefixListResolverTypeDef]
+    ResponseMetadata: ResponseMetadataTypeDef
+    NextToken: NotRequired[str]
+
+class ModifyIpamPrefixListResolverResultTypeDef(TypedDict):
+    IpamPrefixListResolver: IpamPrefixListResolverTypeDef
+    ResponseMetadata: ResponseMetadataTypeDef
 
 class AssociateIpamResourceDiscoveryResultTypeDef(TypedDict):
     IpamResourceDiscoveryAssociation: IpamResourceDiscoveryAssociationTypeDef
@@ -15315,6 +15540,13 @@ CpuPerformanceFactorUnionTypeDef = Union[
 class BaselinePerformanceFactorsRequestTypeDef(TypedDict):
     Cpu: NotRequired[CpuPerformanceFactorRequestTypeDef]
 
+class IpamPrefixListResolverRuleRequestTypeDef(TypedDict):
+    RuleType: IpamPrefixListResolverRuleTypeType
+    StaticCidr: NotRequired[str]
+    IpamScopeId: NotRequired[str]
+    ResourceType: NotRequired[IpamResourceTypeType]
+    Conditions: NotRequired[Sequence[IpamPrefixListResolverRuleConditionRequestTypeDef]]
+
 class NetworkAclTypeDef(TypedDict):
     Associations: NotRequired[List[NetworkAclAssociationTypeDef]]
     Entries: NotRequired[List[NetworkAclEntryTypeDef]]
@@ -15893,6 +16125,13 @@ class GetIpamDiscoveredResourceCidrsResultTypeDef(TypedDict):
     IpamDiscoveredResourceCidrs: List[IpamDiscoveredResourceCidrTypeDef]
     ResponseMetadata: ResponseMetadataTypeDef
     NextToken: NotRequired[str]
+
+class IpamPrefixListResolverRuleTypeDef(TypedDict):
+    RuleType: NotRequired[IpamPrefixListResolverRuleTypeType]
+    StaticCidr: NotRequired[str]
+    IpamScopeId: NotRequired[str]
+    ResourceType: NotRequired[IpamResourceTypeType]
+    Conditions: NotRequired[List[IpamPrefixListResolverRuleConditionTypeDef]]
 
 class GetIpamResourceCidrsResultTypeDef(TypedDict):
     IpamResourceCidrs: List[IpamResourceCidrTypeDef]
@@ -17106,6 +17345,16 @@ class CreateIpamPoolRequestTypeDef(TypedDict):
     PublicIpSource: NotRequired[IpamPoolPublicIpSourceType]
     SourceResource: NotRequired[IpamPoolSourceResourceRequestTypeDef]
 
+class CreateIpamPrefixListResolverTargetRequestTypeDef(TypedDict):
+    IpamPrefixListResolverId: str
+    PrefixListId: str
+    PrefixListRegion: str
+    TrackLatestVersion: bool
+    DryRun: NotRequired[bool]
+    DesiredVersion: NotRequired[int]
+    TagSpecifications: NotRequired[Sequence[TagSpecificationUnionTypeDef]]
+    ClientToken: NotRequired[str]
+
 class CreateIpamRequestTypeDef(TypedDict):
     DryRun: NotRequired[bool]
     Description: NotRequired[str]
@@ -18124,6 +18373,21 @@ class InstanceRequirementsRequestTypeDef(TypedDict):
     MaxSpotPriceAsPercentageOfOptimalOnDemandPrice: NotRequired[int]
     BaselinePerformanceFactors: NotRequired[BaselinePerformanceFactorsRequestTypeDef]
 
+class CreateIpamPrefixListResolverRequestTypeDef(TypedDict):
+    IpamId: str
+    AddressFamily: AddressFamilyType
+    DryRun: NotRequired[bool]
+    Description: NotRequired[str]
+    Rules: NotRequired[Sequence[IpamPrefixListResolverRuleRequestTypeDef]]
+    TagSpecifications: NotRequired[Sequence[TagSpecificationUnionTypeDef]]
+    ClientToken: NotRequired[str]
+
+class ModifyIpamPrefixListResolverRequestTypeDef(TypedDict):
+    IpamPrefixListResolverId: str
+    DryRun: NotRequired[bool]
+    Description: NotRequired[str]
+    Rules: NotRequired[Sequence[IpamPrefixListResolverRuleRequestTypeDef]]
+
 class CreateNetworkAclResultTypeDef(TypedDict):
     NetworkAcl: NetworkAclTypeDef
     ClientToken: str
@@ -18366,6 +18630,11 @@ class UpdateSecurityGroupRuleDescriptionsIngressRequestTypeDef(TypedDict):
 
 class DescribeStaleSecurityGroupsResultTypeDef(TypedDict):
     StaleSecurityGroupSet: List[StaleSecurityGroupTypeDef]
+    ResponseMetadata: ResponseMetadataTypeDef
+    NextToken: NotRequired[str]
+
+class GetIpamPrefixListResolverRulesResultTypeDef(TypedDict):
+    Rules: List[IpamPrefixListResolverRuleTypeDef]
     ResponseMetadata: ResponseMetadataTypeDef
     NextToken: NotRequired[str]
 

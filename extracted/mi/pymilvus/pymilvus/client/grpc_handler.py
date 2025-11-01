@@ -21,7 +21,7 @@ from pymilvus.exceptions import (
 )
 from pymilvus.grpc_gen import common_pb2, milvus_pb2_grpc
 from pymilvus.grpc_gen import milvus_pb2 as milvus_types
-from pymilvus.orm.schema import Function
+from pymilvus.orm.schema import Function, FunctionScore
 from pymilvus.settings import Config
 
 from . import entity_helper, interceptor, ts_utils, utils
@@ -44,6 +44,7 @@ from .check import (
     is_legal_port,
 )
 from .constants import ITERATOR_SESSION_TS_FIELD
+from .embedding_list import EmbeddingList
 from .interceptor import _api_level_md
 from .prepare import Prepare
 from .search_result import SearchResult
@@ -69,7 +70,7 @@ from .types import (
     State,
     Status,
     UserInfo,
-    get_cost_extra,
+    get_extra_info,
 )
 from .utils import (
     check_invalid_binary_vector,
@@ -603,6 +604,7 @@ class GrpcHandler:
             collection_name, schema, timeout
         )
         fields_info = schema.get("fields")
+        struct_fields_info = schema.get("struct_array_fields", [])  # Default to empty list
         enable_dynamic = schema.get("enable_dynamic_field", False)
 
         return Prepare.row_insert_param(
@@ -610,6 +612,7 @@ class GrpcHandler:
             entity_rows,
             partition_name,
             fields_info,
+            struct_fields_info,
             enable_dynamic=enable_dynamic,
             schema_timestamp=schema_timestamp,
         )
@@ -827,12 +830,14 @@ class GrpcHandler:
             collection_name, timeout=timeout
         )
         fields_info = schema.get("fields")
+        struct_fields_info = schema.get("struct_array_fields", [])  # Default to empty list
         enable_dynamic = schema.get("enable_dynamic_field", False)
         return Prepare.row_upsert_param(
             collection_name,
             rows,
             partition_name,
             fields_info,
+            struct_fields_info,
             enable_dynamic=enable_dynamic,
             schema_timestamp=schema_timestamp,
             partial_update=partial_update,
@@ -940,7 +945,7 @@ class GrpcHandler:
         output_fields: Optional[List[str]] = None,
         round_decimal: int = -1,
         timeout: Optional[float] = None,
-        ranker: Optional[Function] = None,
+        ranker: Union[Function, FunctionScore] = None,
         **kwargs,
     ):
         check_pass_param(
@@ -993,9 +998,16 @@ class GrpcHandler:
 
         requests = []
         for req in reqs:
+            # Convert EmbeddingList to flat array if present in the request data
+            data = req.data
+            req_kwargs = dict(kwargs)
+            if isinstance(data, list) and data and isinstance(data[0], EmbeddingList):
+                data = [emb_list.to_flat_array() for emb_list in data]
+                req_kwargs["is_embedding_list"] = True
+
             search_request = Prepare.search_requests_with_expr(
                 collection_name,
-                req.data,
+                data,
                 req.anns_field,
                 req.param,
                 req.limit,
@@ -1003,7 +1015,7 @@ class GrpcHandler:
                 partition_names=partition_names,
                 round_decimal=round_decimal,
                 expr_params=req.expr_params,
-                **kwargs,
+                **req_kwargs,
             )
             requests.append(search_request)
 
@@ -1745,7 +1757,7 @@ class GrpcHandler:
             if lazy_extracted:
                 lazy_field_data.append(field_data)
 
-        extra_dict = get_cost_extra(response.status)
+        extra_dict = get_extra_info(response.status)
         extra_dict[ITERATOR_SESSION_TS_FIELD] = response.session_ts
         return HybridExtraList(
             lazy_field_data,
@@ -1776,12 +1788,13 @@ class GrpcHandler:
         self,
         collection_name: str,
         is_clustering: Optional[bool] = False,
+        is_l0: Optional[bool] = False,
         timeout: Optional[float] = None,
         **kwargs,
     ) -> int:
         meta = _api_level_md(**kwargs)
         # try with only collection_name
-        req = Prepare.manual_compaction(collection_name, is_clustering)
+        req = Prepare.manual_compaction(collection_name, is_clustering, is_l0)
         response = self._stub.ManualCompaction(req, timeout=timeout, metadata=meta)
         if response.status.error_code == common_pb2.CollectionNameNotFound:
             # should be removed, but to be compatible with old milvus server, keep it for now.
@@ -2410,3 +2423,34 @@ class GrpcHandler:
         if isinstance(texts, str):
             return AnalyzeResult(resp.results[0], with_hash, with_detail)
         return [AnalyzeResult(result, with_hash, with_detail) for result in resp.results]
+
+    @retry_on_rpc_failure()
+    def update_replicate_configuration(
+        self,
+        clusters: Optional[List[Dict]] = None,
+        cross_cluster_topology: Optional[List[Dict]] = None,
+        timeout: Optional[float] = None,
+        **kwargs,
+    ):
+        """
+        Update replication configuration across Milvus clusters.
+
+        Args:
+            clusters: The replication configuration to apply
+            cross_cluster_topology: The replication configuration to apply
+            timeout: An optional duration of time in seconds to allow for the RPC
+            **kwargs: Additional arguments
+
+        Returns:
+            Status: The status of the operation
+        """
+        request = Prepare.update_replicate_configuration_request(
+            clusters=clusters,
+            cross_cluster_topology=cross_cluster_topology,
+        )
+
+        status = self._stub.UpdateReplicateConfiguration(
+            request, timeout=timeout, metadata=_api_level_md(**kwargs)
+        )
+        check_status(status)
+        return status

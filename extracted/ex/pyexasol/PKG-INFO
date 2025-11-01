@@ -1,6 +1,6 @@
 Metadata-Version: 2.3
 Name: pyexasol
-Version: 1.2.0
+Version: 1.2.1
 Summary: Exasol python driver with extra features
 License: MIT
 Keywords: exasol,sql,database,performance,websocket,import,export
@@ -31,11 +31,11 @@ Requires-Dist: packaging
 Requires-Dist: pandas (>=2,<3) ; extra == "pandas" or extra == "all"
 Requires-Dist: polars (>=1.10,<2.0) ; extra == "polars" or extra == "all"
 Requires-Dist: pproxy ; extra == "examples" or extra == "all"
-Requires-Dist: pyarrow (>=20.0.0,<21.0.0) ; extra == "pyarrow" or extra == "all"
+Requires-Dist: pyarrow (>=21.0.0,<22.0.0) ; extra == "pyarrow" or extra == "all"
 Requires-Dist: python-rapidjson ; extra == "rapidjson" or extra == "all"
 Requires-Dist: rsa
 Requires-Dist: ujson ; extra == "ujson" or extra == "all"
-Requires-Dist: websocket-client (>=1.0.1)
+Requires-Dist: websocket-client (>=1.0.1,<1.9.0)
 Project-URL: Changelog, https://github.com/exasol/pyexasol/blob/master/CHANGELOG.md
 Project-URL: Documentation, https://github.com/exasol/pyexasol/
 Project-URL: Homepage, https://www.exasol.com/

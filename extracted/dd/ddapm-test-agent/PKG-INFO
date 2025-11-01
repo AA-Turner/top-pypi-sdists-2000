@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: ddapm-test-agent
-Version: 1.36.0
+Version: 1.37.0
 Summary: Test agent for Datadog APM client libraries
 Home-page: https://github.com/Datadog/dd-apm-test-agent
 Author: Kyle Verhoog
@@ -22,12 +22,13 @@ Requires-Dist: typing_extensions
 Requires-Dist: yarl
 Requires-Dist: vcrpy
 Requires-Dist: requests-aws4auth
+Requires-Dist: jinja2>=3.0.0
 Requires-Dist: opentelemetry-proto<1.37.0,>1.33.0
 Requires-Dist: protobuf>=3.19.0
 Requires-Dist: grpcio<2.0,>=1.66.2
 Requires-Dist: pywin32; sys_platform == "win32"
 Provides-Extra: testing
-Requires-Dist: ddtrace==3.11.0; extra == "testing"
+Requires-Dist: ddtrace==3.15.0; extra == "testing"
 Requires-Dist: pytest; extra == "testing"
 Requires-Dist: riot==0.20.1; extra == "testing"
 Requires-Dist: PyYAML==6.0.3; extra == "testing"
@@ -67,8 +68,8 @@ The test agent can be installed from PyPI:
 
     pip install ddapm-test-agent
 
-    # HTTP on port 8126, OTLP HTTP on port 4318, OTLP GRPC on port 4317
-    ddapm-test-agent --port=8126 --otlp-http-port=4318 --otlp-grpc-port=4317
+    # HTTP on port 8126, OTLP HTTP on port 4318, OTLP GRPC on port 4317, with the web-ui enabled
+    ddapm-test-agent --port=8126 --otlp-http-port=4318 --otlp-grpc-port=4317 --web-ui-port=8080
 
 or from Docker:
 
@@ -170,6 +171,15 @@ The traces are normalized and output in JSON to a file. The following transforma
 - Span attributes are otherwise ordered alphanumerically.
 - The span meta and metrics maps if empty are excluded.
 
+
+#### Web UI
+
+The test agent includes an optional and **experimental** Web UI that provides a dashboard for inspecting agent configuration, viewing received requests, exploring traces and snapshots, and managing tracer-flare and remote configuration.
+
+The UI can be enabled with the `--web-ui-port PORT` command-line argument or by setting the `WEB_UI_PORT` environment variable.
+Once enabled, the Web UI can be accessed at `http://localhost:PORT` (default port is `8080`).
+
+There is also a maximum number of requests to store in memory to display in the UI, which can be configured with the `--max-requests` command-line argument or by setting the `MAX_REQUESTS` environment variable (default is `200` requests).
 
 ### Recording 3rd party API requests
 

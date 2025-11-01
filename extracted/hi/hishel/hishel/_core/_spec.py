@@ -1893,7 +1893,7 @@ class NeedRevalidation(State):
 
     def next(
         self, revalidation_response: Response
-    ) -> Union["NeedToBeUpdated", "InvalidateEntries", "CacheMiss", "FromCache"]:
+    ) -> Union["NeedToBeUpdated", "InvalidateEntries", "CacheMiss", "FromCache", "StoreAndUse", "CouldNotBeStored"]:
         """
         Handles the response to a conditional request and determines the next state.
 
@@ -2052,30 +2052,17 @@ class NeedRevalidation(State):
                     revalidation_response,
                 ),
             )
-        elif revalidation_response.status_code // 100 == 3:
-            # 3xx Redirects should have been followed by the HTTP client
-            return FromCache(
-                entry=replace(
-                    self.revalidating_entries[-1],
-                    response=revalidation_response,
-                ),
+        else:
+            # ============================================================================
+            # STEP 4: Handle Unexpected Status Codes
+            # ============================================================================
+            # RFC 9111 does not define behavior for other status codes in this context.
+            # In practice, we need to forward any unexpected responses to the client.
+            return CacheMiss(
+                request=self.revalidating_entries[-1].request,
                 options=self.options,
-            )
-
-        # ============================================================================
-        # STEP 4: Handle Unexpected Status Codes
-        # ============================================================================
-        # This should not happen in normal operation. Valid revalidation responses are:
-        # - 304 Not Modified
-        # - 2xx Success (typically 200 OK)
-        # - 5xx Server Error
-        #
-        # Other status codes (1xx, 3xx, 4xx) are unexpected during revalidation.
-        # 3xx redirects should have been followed by the HTTP client.
-        # 4xx errors (except 404) are unusual during revalidation.
-        raise RuntimeError(
-            f"Unexpected response status code during revalidation: {revalidation_response.status_code}"
-        )  # pragma: nocover
+                after_revalidation=True,
+            ).next(revalidation_response)
 
     def freshening_stored_responses(
         self, revalidation_response: Response

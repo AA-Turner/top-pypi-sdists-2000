@@ -66,6 +66,8 @@ Usage::
         DescribeInstancesPaginator,
         DescribeInternetGatewaysPaginator,
         DescribeIpamPoolsPaginator,
+        DescribeIpamPrefixListResolverTargetsPaginator,
+        DescribeIpamPrefixListResolversPaginator,
         DescribeIpamResourceDiscoveriesPaginator,
         DescribeIpamResourceDiscoveryAssociationsPaginator,
         DescribeIpamScopesPaginator,
@@ -162,6 +164,9 @@ Usage::
         GetIpamDiscoveredResourceCidrsPaginator,
         GetIpamPoolAllocationsPaginator,
         GetIpamPoolCidrsPaginator,
+        GetIpamPrefixListResolverRulesPaginator,
+        GetIpamPrefixListResolverVersionEntriesPaginator,
+        GetIpamPrefixListResolverVersionsPaginator,
         GetIpamResourceCidrsPaginator,
         GetManagedPrefixListAssociationsPaginator,
         GetManagedPrefixListEntriesPaginator,
@@ -309,6 +314,8 @@ Usage::
     describe_instances_paginator: DescribeInstancesPaginator = client.get_paginator("describe_instances")
     describe_internet_gateways_paginator: DescribeInternetGatewaysPaginator = client.get_paginator("describe_internet_gateways")
     describe_ipam_pools_paginator: DescribeIpamPoolsPaginator = client.get_paginator("describe_ipam_pools")
+    describe_ipam_prefix_list_resolver_targets_paginator: DescribeIpamPrefixListResolverTargetsPaginator = client.get_paginator("describe_ipam_prefix_list_resolver_targets")
+    describe_ipam_prefix_list_resolvers_paginator: DescribeIpamPrefixListResolversPaginator = client.get_paginator("describe_ipam_prefix_list_resolvers")
     describe_ipam_resource_discoveries_paginator: DescribeIpamResourceDiscoveriesPaginator = client.get_paginator("describe_ipam_resource_discoveries")
     describe_ipam_resource_discovery_associations_paginator: DescribeIpamResourceDiscoveryAssociationsPaginator = client.get_paginator("describe_ipam_resource_discovery_associations")
     describe_ipam_scopes_paginator: DescribeIpamScopesPaginator = client.get_paginator("describe_ipam_scopes")
@@ -401,6 +408,9 @@ Usage::
     get_ipam_discovered_resource_cidrs_paginator: GetIpamDiscoveredResourceCidrsPaginator = client.get_paginator("get_ipam_discovered_resource_cidrs")
     get_ipam_pool_allocations_paginator: GetIpamPoolAllocationsPaginator = client.get_paginator("get_ipam_pool_allocations")
     get_ipam_pool_cidrs_paginator: GetIpamPoolCidrsPaginator = client.get_paginator("get_ipam_pool_cidrs")
+    get_ipam_prefix_list_resolver_rules_paginator: GetIpamPrefixListResolverRulesPaginator = client.get_paginator("get_ipam_prefix_list_resolver_rules")
+    get_ipam_prefix_list_resolver_version_entries_paginator: GetIpamPrefixListResolverVersionEntriesPaginator = client.get_paginator("get_ipam_prefix_list_resolver_version_entries")
+    get_ipam_prefix_list_resolver_versions_paginator: GetIpamPrefixListResolverVersionsPaginator = client.get_paginator("get_ipam_prefix_list_resolver_versions")
     get_ipam_resource_cidrs_paginator: GetIpamResourceCidrsPaginator = client.get_paginator("get_ipam_resource_cidrs")
     get_managed_prefix_list_associations_paginator: GetManagedPrefixListAssociationsPaginator = client.get_paginator("get_managed_prefix_list_associations")
     get_managed_prefix_list_entries_paginator: GetManagedPrefixListEntriesPaginator = client.get_paginator("get_managed_prefix_list_entries")
@@ -473,6 +483,8 @@ from .paginator import (
     DescribeInstanceTypesPaginator,
     DescribeInternetGatewaysPaginator,
     DescribeIpamPoolsPaginator,
+    DescribeIpamPrefixListResolversPaginator,
+    DescribeIpamPrefixListResolverTargetsPaginator,
     DescribeIpamResourceDiscoveriesPaginator,
     DescribeIpamResourceDiscoveryAssociationsPaginator,
     DescribeIpamScopesPaginator,
@@ -565,6 +577,9 @@ from .paginator import (
     GetIpamDiscoveredResourceCidrsPaginator,
     GetIpamPoolAllocationsPaginator,
     GetIpamPoolCidrsPaginator,
+    GetIpamPrefixListResolverRulesPaginator,
+    GetIpamPrefixListResolverVersionEntriesPaginator,
+    GetIpamPrefixListResolverVersionsPaginator,
     GetIpamResourceCidrsPaginator,
     GetManagedPrefixListAssociationsPaginator,
     GetManagedPrefixListEntriesPaginator,
@@ -694,6 +709,8 @@ __all__ = (
     "DescribeInstancesPaginator",
     "DescribeInternetGatewaysPaginator",
     "DescribeIpamPoolsPaginator",
+    "DescribeIpamPrefixListResolverTargetsPaginator",
+    "DescribeIpamPrefixListResolversPaginator",
     "DescribeIpamResourceDiscoveriesPaginator",
     "DescribeIpamResourceDiscoveryAssociationsPaginator",
     "DescribeIpamScopesPaginator",
@@ -790,6 +807,9 @@ __all__ = (
     "GetIpamDiscoveredResourceCidrsPaginator",
     "GetIpamPoolAllocationsPaginator",
     "GetIpamPoolCidrsPaginator",
+    "GetIpamPrefixListResolverRulesPaginator",
+    "GetIpamPrefixListResolverVersionEntriesPaginator",
+    "GetIpamPrefixListResolverVersionsPaginator",
     "GetIpamResourceCidrsPaginator",
     "GetManagedPrefixListAssociationsPaginator",
     "GetManagedPrefixListEntriesPaginator",

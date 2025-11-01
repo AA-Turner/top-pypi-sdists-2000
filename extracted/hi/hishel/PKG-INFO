@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: hishel
-Version: 1.0.0
+Version: 1.1.0
 Summary:  Elegant HTTP Caching for Python
 Project-URL: Homepage, https://hishel.com
 Project-URL: Source, https://github.com/karpetrosyan/hishel
@@ -409,6 +409,16 @@ Hishel is inspired by and builds upon the excellent work in the Python HTTP ecos
 # Changelog
 
 All notable changes to this project will be documented in this file.
+
+## 1.1.0 - 2025-10-31
+### ⚙️ Miscellaneous Tasks
+- Add in memory example
+
+### 🐛 Bug Fixes
+- Pass any response with non-expected status code on revalidation to client
+
+### 🚀 Features
+- Allow setting storage base with via `database_path` for sqlite storage
 
 ## 1.0.0 - 2025-10-28
 ### ⚙️ Miscellaneous Tasks

@@ -76,6 +76,8 @@ from .paginator import (
     DescribeInstanceTypesPaginator,
     DescribeInternetGatewaysPaginator,
     DescribeIpamPoolsPaginator,
+    DescribeIpamPrefixListResolversPaginator,
+    DescribeIpamPrefixListResolverTargetsPaginator,
     DescribeIpamResourceDiscoveriesPaginator,
     DescribeIpamResourceDiscoveryAssociationsPaginator,
     DescribeIpamScopesPaginator,
@@ -168,6 +170,9 @@ from .paginator import (
     GetIpamDiscoveredResourceCidrsPaginator,
     GetIpamPoolAllocationsPaginator,
     GetIpamPoolCidrsPaginator,
+    GetIpamPrefixListResolverRulesPaginator,
+    GetIpamPrefixListResolverVersionEntriesPaginator,
+    GetIpamPrefixListResolverVersionsPaginator,
     GetIpamResourceCidrsPaginator,
     GetManagedPrefixListAssociationsPaginator,
     GetManagedPrefixListEntriesPaginator,
@@ -358,6 +363,10 @@ from .type_defs import (
     CreateIpamExternalResourceVerificationTokenResultTypeDef,
     CreateIpamPoolRequestTypeDef,
     CreateIpamPoolResultTypeDef,
+    CreateIpamPrefixListResolverRequestTypeDef,
+    CreateIpamPrefixListResolverResultTypeDef,
+    CreateIpamPrefixListResolverTargetRequestTypeDef,
+    CreateIpamPrefixListResolverTargetResultTypeDef,
     CreateIpamRequestTypeDef,
     CreateIpamResourceDiscoveryRequestTypeDef,
     CreateIpamResourceDiscoveryResultTypeDef,
@@ -520,6 +529,10 @@ from .type_defs import (
     DeleteIpamExternalResourceVerificationTokenResultTypeDef,
     DeleteIpamPoolRequestTypeDef,
     DeleteIpamPoolResultTypeDef,
+    DeleteIpamPrefixListResolverRequestTypeDef,
+    DeleteIpamPrefixListResolverResultTypeDef,
+    DeleteIpamPrefixListResolverTargetRequestTypeDef,
+    DeleteIpamPrefixListResolverTargetResultTypeDef,
     DeleteIpamRequestTypeDef,
     DeleteIpamResourceDiscoveryRequestTypeDef,
     DeleteIpamResourceDiscoveryResultTypeDef,
@@ -790,6 +803,10 @@ from .type_defs import (
     DescribeIpamExternalResourceVerificationTokensResultTypeDef,
     DescribeIpamPoolsRequestTypeDef,
     DescribeIpamPoolsResultTypeDef,
+    DescribeIpamPrefixListResolversRequestTypeDef,
+    DescribeIpamPrefixListResolversResultTypeDef,
+    DescribeIpamPrefixListResolverTargetsRequestTypeDef,
+    DescribeIpamPrefixListResolverTargetsResultTypeDef,
     DescribeIpamResourceDiscoveriesRequestTypeDef,
     DescribeIpamResourceDiscoveriesResultTypeDef,
     DescribeIpamResourceDiscoveryAssociationsRequestTypeDef,
@@ -1186,6 +1203,12 @@ from .type_defs import (
     GetIpamPoolAllocationsResultTypeDef,
     GetIpamPoolCidrsRequestTypeDef,
     GetIpamPoolCidrsResultTypeDef,
+    GetIpamPrefixListResolverRulesRequestTypeDef,
+    GetIpamPrefixListResolverRulesResultTypeDef,
+    GetIpamPrefixListResolverVersionEntriesRequestTypeDef,
+    GetIpamPrefixListResolverVersionEntriesResultTypeDef,
+    GetIpamPrefixListResolverVersionsRequestTypeDef,
+    GetIpamPrefixListResolverVersionsResultTypeDef,
     GetIpamResourceCidrsRequestTypeDef,
     GetIpamResourceCidrsResultTypeDef,
     GetLaunchTemplateDataRequestTypeDef,
@@ -1313,6 +1336,10 @@ from .type_defs import (
     ModifyInstancePlacementResultTypeDef,
     ModifyIpamPoolRequestTypeDef,
     ModifyIpamPoolResultTypeDef,
+    ModifyIpamPrefixListResolverRequestTypeDef,
+    ModifyIpamPrefixListResolverResultTypeDef,
+    ModifyIpamPrefixListResolverTargetRequestTypeDef,
+    ModifyIpamPrefixListResolverTargetResultTypeDef,
     ModifyIpamRequestTypeDef,
     ModifyIpamResourceCidrRequestTypeDef,
     ModifyIpamResourceCidrResultTypeDef,
@@ -2542,6 +2569,26 @@ class EC2Client(BaseClient):
         [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_ec2/client/#create_ipam_pool)
         """
 
+    def create_ipam_prefix_list_resolver(
+        self, **kwargs: Unpack[CreateIpamPrefixListResolverRequestTypeDef]
+    ) -> CreateIpamPrefixListResolverResultTypeDef:
+        """
+        Creates an IPAM prefix list resolver.
+
+        [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/ec2/client/create_ipam_prefix_list_resolver.html)
+        [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_ec2/client/#create_ipam_prefix_list_resolver)
+        """
+
+    def create_ipam_prefix_list_resolver_target(
+        self, **kwargs: Unpack[CreateIpamPrefixListResolverTargetRequestTypeDef]
+    ) -> CreateIpamPrefixListResolverTargetResultTypeDef:
+        """
+        Creates an IPAM prefix list resolver target.
+
+        [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/ec2/client/create_ipam_prefix_list_resolver_target.html)
+        [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_ec2/client/#create_ipam_prefix_list_resolver_target)
+        """
+
     def create_ipam_resource_discovery(
         self, **kwargs: Unpack[CreateIpamResourceDiscoveryRequestTypeDef]
     ) -> CreateIpamResourceDiscoveryResultTypeDef:
@@ -3418,6 +3465,26 @@ class EC2Client(BaseClient):
 
         [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/ec2/client/delete_ipam_pool.html)
         [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_ec2/client/#delete_ipam_pool)
+        """
+
+    def delete_ipam_prefix_list_resolver(
+        self, **kwargs: Unpack[DeleteIpamPrefixListResolverRequestTypeDef]
+    ) -> DeleteIpamPrefixListResolverResultTypeDef:
+        """
+        Deletes an IPAM prefix list resolver.
+
+        [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/ec2/client/delete_ipam_prefix_list_resolver.html)
+        [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_ec2/client/#delete_ipam_prefix_list_resolver)
+        """
+
+    def delete_ipam_prefix_list_resolver_target(
+        self, **kwargs: Unpack[DeleteIpamPrefixListResolverTargetRequestTypeDef]
+    ) -> DeleteIpamPrefixListResolverTargetResultTypeDef:
+        """
+        Deletes an IPAM prefix list resolver target.
+
+        [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/ec2/client/delete_ipam_prefix_list_resolver_target.html)
+        [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_ec2/client/#delete_ipam_prefix_list_resolver_target)
         """
 
     def delete_ipam_resource_discovery(
@@ -4886,6 +4953,26 @@ class EC2Client(BaseClient):
 
         [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/ec2/client/describe_ipam_pools.html)
         [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_ec2/client/#describe_ipam_pools)
+        """
+
+    def describe_ipam_prefix_list_resolver_targets(
+        self, **kwargs: Unpack[DescribeIpamPrefixListResolverTargetsRequestTypeDef]
+    ) -> DescribeIpamPrefixListResolverTargetsResultTypeDef:
+        """
+        Describes one or more IPAM prefix list resolver Targets.
+
+        [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/ec2/client/describe_ipam_prefix_list_resolver_targets.html)
+        [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_ec2/client/#describe_ipam_prefix_list_resolver_targets)
+        """
+
+    def describe_ipam_prefix_list_resolvers(
+        self, **kwargs: Unpack[DescribeIpamPrefixListResolversRequestTypeDef]
+    ) -> DescribeIpamPrefixListResolversResultTypeDef:
+        """
+        Describes one or more IPAM prefix list resolvers.
+
+        [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/ec2/client/describe_ipam_prefix_list_resolvers.html)
+        [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_ec2/client/#describe_ipam_prefix_list_resolvers)
         """
 
     def describe_ipam_resource_discoveries(
@@ -6973,6 +7060,37 @@ class EC2Client(BaseClient):
         [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_ec2/client/#get_ipam_pool_cidrs)
         """
 
+    def get_ipam_prefix_list_resolver_rules(
+        self, **kwargs: Unpack[GetIpamPrefixListResolverRulesRequestTypeDef]
+    ) -> GetIpamPrefixListResolverRulesResultTypeDef:
+        """
+        Retrieves the CIDR selection rules for an IPAM prefix list resolver.
+
+        [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/ec2/client/get_ipam_prefix_list_resolver_rules.html)
+        [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_ec2/client/#get_ipam_prefix_list_resolver_rules)
+        """
+
+    def get_ipam_prefix_list_resolver_version_entries(
+        self, **kwargs: Unpack[GetIpamPrefixListResolverVersionEntriesRequestTypeDef]
+    ) -> GetIpamPrefixListResolverVersionEntriesResultTypeDef:
+        """
+        Retrieves the CIDR entries for a specific version of an IPAM prefix list
+        resolver.
+
+        [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/ec2/client/get_ipam_prefix_list_resolver_version_entries.html)
+        [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_ec2/client/#get_ipam_prefix_list_resolver_version_entries)
+        """
+
+    def get_ipam_prefix_list_resolver_versions(
+        self, **kwargs: Unpack[GetIpamPrefixListResolverVersionsRequestTypeDef]
+    ) -> GetIpamPrefixListResolverVersionsResultTypeDef:
+        """
+        Retrieves version information for an IPAM prefix list resolver.
+
+        [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/ec2/client/get_ipam_prefix_list_resolver_versions.html)
+        [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_ec2/client/#get_ipam_prefix_list_resolver_versions)
+        """
+
     def get_ipam_resource_cidrs(
         self, **kwargs: Unpack[GetIpamResourceCidrsRequestTypeDef]
     ) -> GetIpamResourceCidrsResultTypeDef:
@@ -7647,6 +7765,26 @@ class EC2Client(BaseClient):
 
         [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/ec2/client/modify_ipam_pool.html)
         [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_ec2/client/#modify_ipam_pool)
+        """
+
+    def modify_ipam_prefix_list_resolver(
+        self, **kwargs: Unpack[ModifyIpamPrefixListResolverRequestTypeDef]
+    ) -> ModifyIpamPrefixListResolverResultTypeDef:
+        """
+        Modifies an IPAM prefix list resolver.
+
+        [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/ec2/client/modify_ipam_prefix_list_resolver.html)
+        [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_ec2/client/#modify_ipam_prefix_list_resolver)
+        """
+
+    def modify_ipam_prefix_list_resolver_target(
+        self, **kwargs: Unpack[ModifyIpamPrefixListResolverTargetRequestTypeDef]
+    ) -> ModifyIpamPrefixListResolverTargetResultTypeDef:
+        """
+        Modifies an IPAM prefix list resolver target.
+
+        [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/ec2/client/modify_ipam_prefix_list_resolver_target.html)
+        [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_ec2/client/#modify_ipam_prefix_list_resolver_target)
         """
 
     def modify_ipam_resource_cidr(
@@ -8793,7 +8931,7 @@ class EC2Client(BaseClient):
         self, **kwargs: Unpack[TerminateInstancesRequestTypeDef]
     ) -> TerminateInstancesResultTypeDef:
         """
-        Shuts down the specified instances.
+        Terminates (deletes) the specified instances.
 
         [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/ec2/client/terminate_instances.html)
         [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_ec2/client/#terminate_instances)
@@ -9435,6 +9573,28 @@ class EC2Client(BaseClient):
     def get_paginator(  # type: ignore[override]
         self, operation_name: Literal["describe_ipam_pools"]
     ) -> DescribeIpamPoolsPaginator:
+        """
+        Create a paginator for an operation.
+
+        [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/ec2/client/get_paginator.html)
+        [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_ec2/client/#get_paginator)
+        """
+
+    @overload  # type: ignore[override]
+    def get_paginator(  # type: ignore[override]
+        self, operation_name: Literal["describe_ipam_prefix_list_resolver_targets"]
+    ) -> DescribeIpamPrefixListResolverTargetsPaginator:
+        """
+        Create a paginator for an operation.
+
+        [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/ec2/client/get_paginator.html)
+        [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_ec2/client/#get_paginator)
+        """
+
+    @overload  # type: ignore[override]
+    def get_paginator(  # type: ignore[override]
+        self, operation_name: Literal["describe_ipam_prefix_list_resolvers"]
+    ) -> DescribeIpamPrefixListResolversPaginator:
         """
         Create a paginator for an operation.
 
@@ -10450,6 +10610,39 @@ class EC2Client(BaseClient):
     def get_paginator(  # type: ignore[override]
         self, operation_name: Literal["get_ipam_pool_cidrs"]
     ) -> GetIpamPoolCidrsPaginator:
+        """
+        Create a paginator for an operation.
+
+        [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/ec2/client/get_paginator.html)
+        [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_ec2/client/#get_paginator)
+        """
+
+    @overload  # type: ignore[override]
+    def get_paginator(  # type: ignore[override]
+        self, operation_name: Literal["get_ipam_prefix_list_resolver_rules"]
+    ) -> GetIpamPrefixListResolverRulesPaginator:
+        """
+        Create a paginator for an operation.
+
+        [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/ec2/client/get_paginator.html)
+        [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_ec2/client/#get_paginator)
+        """
+
+    @overload  # type: ignore[override]
+    def get_paginator(  # type: ignore[override]
+        self, operation_name: Literal["get_ipam_prefix_list_resolver_version_entries"]
+    ) -> GetIpamPrefixListResolverVersionEntriesPaginator:
+        """
+        Create a paginator for an operation.
+
+        [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/ec2/client/get_paginator.html)
+        [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_ec2/client/#get_paginator)
+        """
+
+    @overload  # type: ignore[override]
+    def get_paginator(  # type: ignore[override]
+        self, operation_name: Literal["get_ipam_prefix_list_resolver_versions"]
+    ) -> GetIpamPrefixListResolverVersionsPaginator:
         """
         Create a paginator for an operation.
 

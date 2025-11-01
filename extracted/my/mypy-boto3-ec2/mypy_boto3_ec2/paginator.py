@@ -62,6 +62,8 @@ Usage::
         DescribeInstancesPaginator,
         DescribeInternetGatewaysPaginator,
         DescribeIpamPoolsPaginator,
+        DescribeIpamPrefixListResolverTargetsPaginator,
+        DescribeIpamPrefixListResolversPaginator,
         DescribeIpamResourceDiscoveriesPaginator,
         DescribeIpamResourceDiscoveryAssociationsPaginator,
         DescribeIpamScopesPaginator,
@@ -154,6 +156,9 @@ Usage::
         GetIpamDiscoveredResourceCidrsPaginator,
         GetIpamPoolAllocationsPaginator,
         GetIpamPoolCidrsPaginator,
+        GetIpamPrefixListResolverRulesPaginator,
+        GetIpamPrefixListResolverVersionEntriesPaginator,
+        GetIpamPrefixListResolverVersionsPaginator,
         GetIpamResourceCidrsPaginator,
         GetManagedPrefixListAssociationsPaginator,
         GetManagedPrefixListEntriesPaginator,
@@ -226,6 +231,8 @@ Usage::
     describe_instances_paginator: DescribeInstancesPaginator = client.get_paginator("describe_instances")
     describe_internet_gateways_paginator: DescribeInternetGatewaysPaginator = client.get_paginator("describe_internet_gateways")
     describe_ipam_pools_paginator: DescribeIpamPoolsPaginator = client.get_paginator("describe_ipam_pools")
+    describe_ipam_prefix_list_resolver_targets_paginator: DescribeIpamPrefixListResolverTargetsPaginator = client.get_paginator("describe_ipam_prefix_list_resolver_targets")
+    describe_ipam_prefix_list_resolvers_paginator: DescribeIpamPrefixListResolversPaginator = client.get_paginator("describe_ipam_prefix_list_resolvers")
     describe_ipam_resource_discoveries_paginator: DescribeIpamResourceDiscoveriesPaginator = client.get_paginator("describe_ipam_resource_discoveries")
     describe_ipam_resource_discovery_associations_paginator: DescribeIpamResourceDiscoveryAssociationsPaginator = client.get_paginator("describe_ipam_resource_discovery_associations")
     describe_ipam_scopes_paginator: DescribeIpamScopesPaginator = client.get_paginator("describe_ipam_scopes")
@@ -318,6 +325,9 @@ Usage::
     get_ipam_discovered_resource_cidrs_paginator: GetIpamDiscoveredResourceCidrsPaginator = client.get_paginator("get_ipam_discovered_resource_cidrs")
     get_ipam_pool_allocations_paginator: GetIpamPoolAllocationsPaginator = client.get_paginator("get_ipam_pool_allocations")
     get_ipam_pool_cidrs_paginator: GetIpamPoolCidrsPaginator = client.get_paginator("get_ipam_pool_cidrs")
+    get_ipam_prefix_list_resolver_rules_paginator: GetIpamPrefixListResolverRulesPaginator = client.get_paginator("get_ipam_prefix_list_resolver_rules")
+    get_ipam_prefix_list_resolver_version_entries_paginator: GetIpamPrefixListResolverVersionEntriesPaginator = client.get_paginator("get_ipam_prefix_list_resolver_version_entries")
+    get_ipam_prefix_list_resolver_versions_paginator: GetIpamPrefixListResolverVersionsPaginator = client.get_paginator("get_ipam_prefix_list_resolver_versions")
     get_ipam_resource_cidrs_paginator: GetIpamResourceCidrsPaginator = client.get_paginator("get_ipam_resource_cidrs")
     get_managed_prefix_list_associations_paginator: GetManagedPrefixListAssociationsPaginator = client.get_paginator("get_managed_prefix_list_associations")
     get_managed_prefix_list_entries_paginator: GetManagedPrefixListEntriesPaginator = client.get_paginator("get_managed_prefix_list_entries")
@@ -446,6 +456,10 @@ from .type_defs import (
     DescribeInternetGatewaysResultTypeDef,
     DescribeIpamPoolsRequestPaginateTypeDef,
     DescribeIpamPoolsResultTypeDef,
+    DescribeIpamPrefixListResolversRequestPaginateTypeDef,
+    DescribeIpamPrefixListResolversResultTypeDef,
+    DescribeIpamPrefixListResolverTargetsRequestPaginateTypeDef,
+    DescribeIpamPrefixListResolverTargetsResultTypeDef,
     DescribeIpamResourceDiscoveriesRequestPaginateTypeDef,
     DescribeIpamResourceDiscoveriesResultTypeDef,
     DescribeIpamResourceDiscoveryAssociationsRequestPaginateTypeDef,
@@ -630,6 +644,12 @@ from .type_defs import (
     GetIpamPoolAllocationsResultTypeDef,
     GetIpamPoolCidrsRequestPaginateTypeDef,
     GetIpamPoolCidrsResultTypeDef,
+    GetIpamPrefixListResolverRulesRequestPaginateTypeDef,
+    GetIpamPrefixListResolverRulesResultTypeDef,
+    GetIpamPrefixListResolverVersionEntriesRequestPaginateTypeDef,
+    GetIpamPrefixListResolverVersionEntriesResultTypeDef,
+    GetIpamPrefixListResolverVersionsRequestPaginateTypeDef,
+    GetIpamPrefixListResolverVersionsResultTypeDef,
     GetIpamResourceCidrsRequestPaginateTypeDef,
     GetIpamResourceCidrsResultTypeDef,
     GetManagedPrefixListAssociationsRequestPaginateTypeDef,
@@ -723,6 +743,8 @@ __all__ = (
     "DescribeInstancesPaginator",
     "DescribeInternetGatewaysPaginator",
     "DescribeIpamPoolsPaginator",
+    "DescribeIpamPrefixListResolverTargetsPaginator",
+    "DescribeIpamPrefixListResolversPaginator",
     "DescribeIpamResourceDiscoveriesPaginator",
     "DescribeIpamResourceDiscoveryAssociationsPaginator",
     "DescribeIpamScopesPaginator",
@@ -815,6 +837,9 @@ __all__ = (
     "GetIpamDiscoveredResourceCidrsPaginator",
     "GetIpamPoolAllocationsPaginator",
     "GetIpamPoolCidrsPaginator",
+    "GetIpamPrefixListResolverRulesPaginator",
+    "GetIpamPrefixListResolverVersionEntriesPaginator",
+    "GetIpamPrefixListResolverVersionsPaginator",
     "GetIpamResourceCidrsPaginator",
     "GetManagedPrefixListAssociationsPaginator",
     "GetManagedPrefixListEntriesPaginator",
@@ -1941,6 +1966,54 @@ class DescribeIpamPoolsPaginator(_DescribeIpamPoolsPaginatorBase):
         """
         [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/ec2/paginator/DescribeIpamPools.html#EC2.Paginator.DescribeIpamPools.paginate)
         [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_ec2/paginators/#describeipampoolspaginator)
+        """
+
+
+if TYPE_CHECKING:
+    _DescribeIpamPrefixListResolverTargetsPaginatorBase = Paginator[
+        DescribeIpamPrefixListResolverTargetsResultTypeDef
+    ]
+else:
+    _DescribeIpamPrefixListResolverTargetsPaginatorBase = Paginator  # type: ignore[assignment]
+
+
+class DescribeIpamPrefixListResolverTargetsPaginator(
+    _DescribeIpamPrefixListResolverTargetsPaginatorBase
+):
+    """
+    [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/ec2/paginator/DescribeIpamPrefixListResolverTargets.html#EC2.Paginator.DescribeIpamPrefixListResolverTargets)
+    [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_ec2/paginators/#describeipamprefixlistresolvertargetspaginator)
+    """
+
+    def paginate(  # type: ignore[override]
+        self, **kwargs: Unpack[DescribeIpamPrefixListResolverTargetsRequestPaginateTypeDef]
+    ) -> PageIterator[DescribeIpamPrefixListResolverTargetsResultTypeDef]:
+        """
+        [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/ec2/paginator/DescribeIpamPrefixListResolverTargets.html#EC2.Paginator.DescribeIpamPrefixListResolverTargets.paginate)
+        [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_ec2/paginators/#describeipamprefixlistresolvertargetspaginator)
+        """
+
+
+if TYPE_CHECKING:
+    _DescribeIpamPrefixListResolversPaginatorBase = Paginator[
+        DescribeIpamPrefixListResolversResultTypeDef
+    ]
+else:
+    _DescribeIpamPrefixListResolversPaginatorBase = Paginator  # type: ignore[assignment]
+
+
+class DescribeIpamPrefixListResolversPaginator(_DescribeIpamPrefixListResolversPaginatorBase):
+    """
+    [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/ec2/paginator/DescribeIpamPrefixListResolvers.html#EC2.Paginator.DescribeIpamPrefixListResolvers)
+    [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_ec2/paginators/#describeipamprefixlistresolverspaginator)
+    """
+
+    def paginate(  # type: ignore[override]
+        self, **kwargs: Unpack[DescribeIpamPrefixListResolversRequestPaginateTypeDef]
+    ) -> PageIterator[DescribeIpamPrefixListResolversResultTypeDef]:
+        """
+        [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/ec2/paginator/DescribeIpamPrefixListResolvers.html#EC2.Paginator.DescribeIpamPrefixListResolvers.paginate)
+        [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_ec2/paginators/#describeipamprefixlistresolverspaginator)
         """
 
 
@@ -4023,6 +4096,77 @@ class GetIpamPoolCidrsPaginator(_GetIpamPoolCidrsPaginatorBase):
         """
         [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/ec2/paginator/GetIpamPoolCidrs.html#EC2.Paginator.GetIpamPoolCidrs.paginate)
         [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_ec2/paginators/#getipampoolcidrspaginator)
+        """
+
+
+if TYPE_CHECKING:
+    _GetIpamPrefixListResolverRulesPaginatorBase = Paginator[
+        GetIpamPrefixListResolverRulesResultTypeDef
+    ]
+else:
+    _GetIpamPrefixListResolverRulesPaginatorBase = Paginator  # type: ignore[assignment]
+
+
+class GetIpamPrefixListResolverRulesPaginator(_GetIpamPrefixListResolverRulesPaginatorBase):
+    """
+    [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/ec2/paginator/GetIpamPrefixListResolverRules.html#EC2.Paginator.GetIpamPrefixListResolverRules)
+    [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_ec2/paginators/#getipamprefixlistresolverrulespaginator)
+    """
+
+    def paginate(  # type: ignore[override]
+        self, **kwargs: Unpack[GetIpamPrefixListResolverRulesRequestPaginateTypeDef]
+    ) -> PageIterator[GetIpamPrefixListResolverRulesResultTypeDef]:
+        """
+        [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/ec2/paginator/GetIpamPrefixListResolverRules.html#EC2.Paginator.GetIpamPrefixListResolverRules.paginate)
+        [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_ec2/paginators/#getipamprefixlistresolverrulespaginator)
+        """
+
+
+if TYPE_CHECKING:
+    _GetIpamPrefixListResolverVersionEntriesPaginatorBase = Paginator[
+        GetIpamPrefixListResolverVersionEntriesResultTypeDef
+    ]
+else:
+    _GetIpamPrefixListResolverVersionEntriesPaginatorBase = Paginator  # type: ignore[assignment]
+
+
+class GetIpamPrefixListResolverVersionEntriesPaginator(
+    _GetIpamPrefixListResolverVersionEntriesPaginatorBase
+):
+    """
+    [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/ec2/paginator/GetIpamPrefixListResolverVersionEntries.html#EC2.Paginator.GetIpamPrefixListResolverVersionEntries)
+    [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_ec2/paginators/#getipamprefixlistresolverversionentriespaginator)
+    """
+
+    def paginate(  # type: ignore[override]
+        self, **kwargs: Unpack[GetIpamPrefixListResolverVersionEntriesRequestPaginateTypeDef]
+    ) -> PageIterator[GetIpamPrefixListResolverVersionEntriesResultTypeDef]:
+        """
+        [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/ec2/paginator/GetIpamPrefixListResolverVersionEntries.html#EC2.Paginator.GetIpamPrefixListResolverVersionEntries.paginate)
+        [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_ec2/paginators/#getipamprefixlistresolverversionentriespaginator)
+        """
+
+
+if TYPE_CHECKING:
+    _GetIpamPrefixListResolverVersionsPaginatorBase = Paginator[
+        GetIpamPrefixListResolverVersionsResultTypeDef
+    ]
+else:
+    _GetIpamPrefixListResolverVersionsPaginatorBase = Paginator  # type: ignore[assignment]
+
+
+class GetIpamPrefixListResolverVersionsPaginator(_GetIpamPrefixListResolverVersionsPaginatorBase):
+    """
+    [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/ec2/paginator/GetIpamPrefixListResolverVersions.html#EC2.Paginator.GetIpamPrefixListResolverVersions)
+    [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_ec2/paginators/#getipamprefixlistresolverversionspaginator)
+    """
+
+    def paginate(  # type: ignore[override]
+        self, **kwargs: Unpack[GetIpamPrefixListResolverVersionsRequestPaginateTypeDef]
+    ) -> PageIterator[GetIpamPrefixListResolverVersionsResultTypeDef]:
+        """
+        [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/ec2/paginator/GetIpamPrefixListResolverVersions.html#EC2.Paginator.GetIpamPrefixListResolverVersions.paginate)
+        [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_ec2/paginators/#getipamprefixlistresolverversionspaginator)
         """
 
 

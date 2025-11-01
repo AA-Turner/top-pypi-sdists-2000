@@ -160,6 +160,8 @@ __all__ = (
     "DescribeInstancesPaginatorName",
     "DescribeInternetGatewaysPaginatorName",
     "DescribeIpamPoolsPaginatorName",
+    "DescribeIpamPrefixListResolverTargetsPaginatorName",
+    "DescribeIpamPrefixListResolversPaginatorName",
     "DescribeIpamResourceDiscoveriesPaginatorName",
     "DescribeIpamResourceDiscoveryAssociationsPaginatorName",
     "DescribeIpamScopesPaginatorName",
@@ -303,6 +305,9 @@ __all__ = (
     "GetIpamDiscoveredResourceCidrsPaginatorName",
     "GetIpamPoolAllocationsPaginatorName",
     "GetIpamPoolCidrsPaginatorName",
+    "GetIpamPrefixListResolverRulesPaginatorName",
+    "GetIpamPrefixListResolverVersionEntriesPaginatorName",
+    "GetIpamPrefixListResolverVersionsPaginatorName",
     "GetIpamResourceCidrsPaginatorName",
     "GetManagedPrefixListAssociationsPaginatorName",
     "GetManagedPrefixListEntriesPaginatorName",
@@ -386,6 +391,11 @@ __all__ = (
     "IpamPoolPublicIpSourceType",
     "IpamPoolSourceResourceTypeType",
     "IpamPoolStateType",
+    "IpamPrefixListResolverRuleConditionOperationType",
+    "IpamPrefixListResolverRuleTypeType",
+    "IpamPrefixListResolverStateType",
+    "IpamPrefixListResolverTargetStateType",
+    "IpamPrefixListResolverVersionCreationStatusType",
     "IpamPublicAddressAssociationStatusType",
     "IpamPublicAddressAwsServiceType",
     "IpamPublicAddressTypeType",
@@ -915,6 +925,10 @@ DescribeInstanceTypesPaginatorName = Literal["describe_instance_types"]
 DescribeInstancesPaginatorName = Literal["describe_instances"]
 DescribeInternetGatewaysPaginatorName = Literal["describe_internet_gateways"]
 DescribeIpamPoolsPaginatorName = Literal["describe_ipam_pools"]
+DescribeIpamPrefixListResolverTargetsPaginatorName = Literal[
+    "describe_ipam_prefix_list_resolver_targets"
+]
+DescribeIpamPrefixListResolversPaginatorName = Literal["describe_ipam_prefix_list_resolvers"]
 DescribeIpamResourceDiscoveriesPaginatorName = Literal["describe_ipam_resource_discoveries"]
 DescribeIpamResourceDiscoveryAssociationsPaginatorName = Literal[
     "describe_ipam_resource_discovery_associations"
@@ -1145,6 +1159,11 @@ GetIpamDiscoveredAccountsPaginatorName = Literal["get_ipam_discovered_accounts"]
 GetIpamDiscoveredResourceCidrsPaginatorName = Literal["get_ipam_discovered_resource_cidrs"]
 GetIpamPoolAllocationsPaginatorName = Literal["get_ipam_pool_allocations"]
 GetIpamPoolCidrsPaginatorName = Literal["get_ipam_pool_cidrs"]
+GetIpamPrefixListResolverRulesPaginatorName = Literal["get_ipam_prefix_list_resolver_rules"]
+GetIpamPrefixListResolverVersionEntriesPaginatorName = Literal[
+    "get_ipam_prefix_list_resolver_version_entries"
+]
+GetIpamPrefixListResolverVersionsPaginatorName = Literal["get_ipam_prefix_list_resolver_versions"]
 GetIpamResourceCidrsPaginatorName = Literal["get_ipam_resource_cidrs"]
 GetManagedPrefixListAssociationsPaginatorName = Literal["get_managed_prefix_list_associations"]
 GetManagedPrefixListEntriesPaginatorName = Literal["get_managed_prefix_list_entries"]
@@ -2413,6 +2432,40 @@ IpamPoolStateType = Literal[
     "modify-in-progress",
     "restore-in-progress",
 ]
+IpamPrefixListResolverRuleConditionOperationType = Literal["equals", "not-equals", "subnet-of"]
+IpamPrefixListResolverRuleTypeType = Literal["ipam-pool-cidr", "ipam-resource-cidr", "static-cidr"]
+IpamPrefixListResolverStateType = Literal[
+    "create-complete",
+    "create-failed",
+    "create-in-progress",
+    "delete-complete",
+    "delete-failed",
+    "delete-in-progress",
+    "isolate-complete",
+    "isolate-in-progress",
+    "modify-complete",
+    "modify-failed",
+    "modify-in-progress",
+    "restore-in-progress",
+]
+IpamPrefixListResolverTargetStateType = Literal[
+    "create-complete",
+    "create-failed",
+    "create-in-progress",
+    "delete-complete",
+    "delete-failed",
+    "delete-in-progress",
+    "isolate-complete",
+    "isolate-in-progress",
+    "modify-complete",
+    "modify-failed",
+    "modify-in-progress",
+    "restore-in-progress",
+    "sync-complete",
+    "sync-failed",
+    "sync-in-progress",
+]
+IpamPrefixListResolverVersionCreationStatusType = Literal["failure", "pending", "success"]
 IpamPublicAddressAssociationStatusType = Literal["associated", "disassociated"]
 IpamPublicAddressAwsServiceType = Literal[
     "database-migration-service",
@@ -2739,6 +2792,8 @@ ResourceTypeType = Literal[
     "ipam",
     "ipam-external-resource-verification-token",
     "ipam-pool",
+    "ipam-prefix-list-resolver",
+    "ipam-prefix-list-resolver-target",
     "ipam-resource-discovery",
     "ipam-resource-discovery-association",
     "ipam-scope",
@@ -3547,6 +3602,8 @@ PaginatorName = Literal[
     "describe_instances",
     "describe_internet_gateways",
     "describe_ipam_pools",
+    "describe_ipam_prefix_list_resolver_targets",
+    "describe_ipam_prefix_list_resolvers",
     "describe_ipam_resource_discoveries",
     "describe_ipam_resource_discovery_associations",
     "describe_ipam_scopes",
@@ -3639,6 +3696,9 @@ PaginatorName = Literal[
     "get_ipam_discovered_resource_cidrs",
     "get_ipam_pool_allocations",
     "get_ipam_pool_cidrs",
+    "get_ipam_prefix_list_resolver_rules",
+    "get_ipam_prefix_list_resolver_version_entries",
+    "get_ipam_prefix_list_resolver_versions",
     "get_ipam_resource_cidrs",
     "get_managed_prefix_list_associations",
     "get_managed_prefix_list_entries",

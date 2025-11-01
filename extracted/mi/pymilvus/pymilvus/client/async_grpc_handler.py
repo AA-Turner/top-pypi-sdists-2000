@@ -5,7 +5,7 @@ import json
 import socket
 import time
 from pathlib import Path
-from typing import Dict, List, Optional, Union
+from typing import Dict, List, Optional, Tuple, Union
 from urllib import parse
 
 import grpc
@@ -15,6 +15,7 @@ from pymilvus.client.types import GrantInfo, ResourceGroupConfig
 from pymilvus.decorators import ignore_unimplemented, retry_on_rpc_failure
 from pymilvus.exceptions import (
     AmbiguousIndexName,
+    DataNotMatchException,
     DescribeCollectionException,
     ErrorCode,
     ExceptionsMessage,
@@ -50,7 +51,7 @@ from .types import (
     Shard,
     State,
     Status,
-    get_cost_extra,
+    get_extra_info,
 )
 from .utils import (
     check_invalid_binary_vector,
@@ -72,6 +73,7 @@ class AsyncGrpcHandler:
     ) -> None:
         self._async_stub = None
         self._async_channel = channel
+        self.schema_cache: Dict[str, dict] = {}
 
         addr = kwargs.get("address")
         self._address = addr if addr is not None else self.__get_address(uri, host, port)
@@ -135,10 +137,15 @@ class AsyncGrpcHandler:
 
     def _setup_db_name(self, db_name: str):
         if db_name is None:
-            self._db_name = None
+            new_db = None
         else:
             check_pass_param(db_name=db_name)
-            self._db_name = db_name
+            new_db = db_name
+
+        if getattr(self, "_db_name", None) != new_db:
+            self.schema_cache.clear()
+
+        self._db_name = new_db
 
     def _setup_grpc_channel(self, **kwargs):
         if self._async_channel is None:
@@ -513,13 +520,46 @@ class AsyncGrpcHandler:
 
     async def _get_info(self, collection_name: str, timeout: Optional[float] = None, **kwargs):
         schema = kwargs.get("schema")
-        if not schema:
-            schema = await self.describe_collection(collection_name, timeout=timeout, **kwargs)
-
+        schema, schema_timestamp = await self._get_schema_from_cache_or_remote(
+            collection_name, schema=schema, timeout=timeout, **kwargs
+        )
         fields_info = schema.get("fields")
+        struct_fields_info = schema.get("struct_array_fields", [])
         enable_dynamic = schema.get("enable_dynamic_field", False)
 
-        return fields_info, enable_dynamic
+        return fields_info, struct_fields_info, enable_dynamic, schema_timestamp
+
+    async def update_schema(
+        self, collection_name: str, timeout: Optional[float] = None, **kwargs
+    ) -> dict:
+        self.schema_cache.pop(collection_name, None)
+        schema = await self.describe_collection(collection_name, timeout=timeout, **kwargs)
+        schema_timestamp = schema.get("update_timestamp", 0)
+        self.schema_cache[collection_name] = {
+            "schema": schema,
+            "schema_timestamp": schema_timestamp,
+        }
+        return schema
+
+    async def _get_schema_from_cache_or_remote(
+        self,
+        collection_name: str,
+        schema: Optional[dict] = None,
+        timeout: Optional[float] = None,
+        **kwargs,
+    ) -> Tuple[dict, int]:
+        if collection_name in self.schema_cache:
+            cached = self.schema_cache[collection_name]
+            return cached["schema"], cached["schema_timestamp"]
+
+        if not isinstance(schema, dict):
+            schema = await self.describe_collection(collection_name, timeout=timeout, **kwargs)
+        schema_timestamp = schema.get("update_timestamp", 0)
+        self.schema_cache[collection_name] = {
+            "schema": schema,
+            "schema_timestamp": schema_timestamp,
+        }
+        return schema, schema_timestamp
 
     @retry_on_rpc_failure()
     async def release_collection(
@@ -543,14 +583,27 @@ class AsyncGrpcHandler:
         timeout: Optional[float] = None,
         **kwargs,
     ):
-        # TODO impl schema change cache policy here
         await self.ensure_channel_ready()
-        request = await self._prepare_row_insert_request(
-            collection_name, entities, partition_name, schema, timeout, **kwargs
-        )
+        try:
+            request = await self._prepare_row_insert_request(
+                collection_name, entities, partition_name, schema, timeout, **kwargs
+            )
+        except DataNotMatchException:
+            schema = await self.update_schema(collection_name, timeout, **kwargs)
+            request = await self._prepare_row_insert_request(
+                collection_name, entities, partition_name, schema, timeout, **kwargs
+            )
         resp = await self._async_stub.Insert(
             request=request, timeout=timeout, metadata=_api_level_md(**kwargs)
         )
+        if resp.status.error_code == common_pb2.SchemaMismatch:
+            schema = await self.update_schema(collection_name, timeout, **kwargs)
+            request = await self._prepare_row_insert_request(
+                collection_name, entities, partition_name, schema, timeout, **kwargs
+            )
+            resp = await self._async_stub.Insert(
+                request=request, timeout=timeout, metadata=_api_level_md(**kwargs)
+            )
         check_status(resp.status)
         ts_utils.update_collection_ts(collection_name, resp.timestamp)
         return MutationResult(resp)
@@ -567,10 +620,11 @@ class AsyncGrpcHandler:
         if isinstance(entity_rows, dict):
             entity_rows = [entity_rows]
 
-        if not isinstance(schema, dict):
-            schema = await self.describe_collection(collection_name, timeout=timeout, **kwargs)
-
+        schema, schema_timestamp = await self._get_schema_from_cache_or_remote(
+            collection_name, schema=schema, timeout=timeout, **kwargs
+        )
         fields_info = schema.get("fields")
+        struct_fields_info = schema.get("struct_array_fields", [])  # Default to empty list
         enable_dynamic = schema.get("enable_dynamic_field", False)
 
         return Prepare.row_insert_param(
@@ -578,7 +632,9 @@ class AsyncGrpcHandler:
             entity_rows,
             partition_name,
             fields_info,
+            struct_fields_info,
             enable_dynamic=enable_dynamic,
+            schema_timestamp=schema_timestamp,
         )
 
     @retry_on_rpc_failure()
@@ -630,8 +686,9 @@ class AsyncGrpcHandler:
         partial_update = kwargs.get("partial_update", False)
 
         schema = kwargs.get("schema")
-        if not schema:
-            schema = await self.describe_collection(collection_name, timeout=timeout, **kwargs)
+        schema, _ = await self._get_schema_from_cache_or_remote(
+            collection_name, schema=schema, timeout=timeout, **kwargs
+        )
 
         fields_info = schema["fields"]
 
@@ -682,17 +739,19 @@ class AsyncGrpcHandler:
         if not isinstance(rows, list):
             raise ParamError(message="'rows' must be a list, please provide valid row data.")
 
-        # Extract partial_update parameter from kwargs
         partial_update = kwargs.get("partial_update", False)
-
-        fields_info, enable_dynamic = await self._get_info(collection_name, timeout, **kwargs)
+        fields_info, struct_fields_info, enable_dynamic, schema_timestamp = await self._get_info(
+            collection_name, timeout, **kwargs
+        )
         return Prepare.row_upsert_param(
             collection_name,
             rows,
             partition_name,
             fields_info,
+            struct_fields_info,
             enable_dynamic=enable_dynamic,
             partial_update=partial_update,
+            schema_timestamp=schema_timestamp,
         )
 
     @retry_on_rpc_failure()
@@ -704,16 +763,29 @@ class AsyncGrpcHandler:
         timeout: Optional[float] = None,
         **kwargs,
     ):
-        # TODO impl schema change cache policy here
         await self.ensure_channel_ready()
         if isinstance(entities, dict):
             entities = [entities]
-        request = await self._prepare_row_upsert_request(
-            collection_name, entities, partition_name, timeout, **kwargs
-        )
+        try:
+            request = await self._prepare_row_upsert_request(
+                collection_name, entities, partition_name, timeout, **kwargs
+            )
+        except DataNotMatchException:
+            schema = await self.update_schema(collection_name, timeout, **kwargs)
+            request = await self._prepare_row_upsert_request(
+                collection_name, entities, partition_name, timeout, schema=schema, **kwargs
+            )
         response = await self._async_stub.Upsert(
             request, timeout=timeout, metadata=_api_level_md(**kwargs)
         )
+        if response.status.error_code == common_pb2.SchemaMismatch:
+            schema = await self.update_schema(collection_name, timeout, **kwargs)
+            request = await self._prepare_row_upsert_request(
+                collection_name, entities, partition_name, timeout, schema=schema, **kwargs
+            )
+            response = await self._async_stub.Upsert(
+                request, timeout=timeout, metadata=_api_level_md(**kwargs)
+            )
         check_status(response.status)
         m = MutationResult(response)
         ts_utils.update_collection_ts(collection_name, m.timestamp)
@@ -1153,7 +1225,7 @@ class AsyncGrpcHandler:
             if lazy_extracted:
                 lazy_field_data.append(field_data)
 
-        extra_dict = get_cost_extra(response.status)
+        extra_dict = get_extra_info(response.status)
         extra_dict[ITERATOR_SESSION_TS_FIELD] = response.session_ts
         return HybridExtraList(
             lazy_field_data,
@@ -1825,6 +1897,7 @@ class AsyncGrpcHandler:
         self,
         collection_name: str,
         is_clustering: Optional[bool] = False,
+        is_l0: Optional[bool] = False,
         timeout: Optional[float] = None,
         **kwargs,
     ) -> int:
@@ -1835,7 +1908,9 @@ class AsyncGrpcHandler:
         )
         check_status(response.status)
 
-        req = Prepare.manual_compaction(collection_name, is_clustering, response.collectionID)
+        req = Prepare.manual_compaction(
+            collection_name, is_clustering, is_l0, response.collectionID
+        )
         response = await self._async_stub.ManualCompaction(req, timeout=timeout, metadata=meta)
         check_status(response.status)
 
