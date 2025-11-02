@@ -32,7 +32,6 @@ Improvements include making WebDriver more robust, reliable, and flexible.
 Page elements are given enough time to load before WebDriver acts on them.
 Code becomes greatly simplified and easier to maintain."""
 
-import codecs
 import colorama
 import fasteners
 import json
@@ -114,9 +113,7 @@ class BaseCase(unittest.TestCase):
         self.driver = None
         self.environment = None
         self.env = None  # Add a shortened version of self.environment
-        self.version_list = [
-            int(i) for i in __version__.split(".") if i.isdigit()
-        ]
+        self.version_list = shared_utils.make_version_list(__version__)
         self.version_tuple = tuple(self.version_list)
         self.version_info = self.version_tuple
         self.time = time.time
@@ -134,6 +131,7 @@ class BaseCase(unittest.TestCase):
         self.__requests_timeout = None
         self.__page_source_count = 0
         self.__screenshot_count = 0
+        self.__saved_pdf_count = 0
         self.__logs_data_count = 0
         self.__last_data_file = None
         self.__level_0_visual_f = False
@@ -1295,8 +1293,11 @@ class BaseCase(unittest.TestCase):
         self.__check_scope()
         return self.execute_script("return window.location.origin;")
 
-    def get_page_source(self):
-        if self.__is_cdp_swap_needed():
+    def get_html(self, *args, **kwargs):
+        return self.get_page_source(*args, **kwargs)
+
+    def get_page_source(self, *args, **kwargs):
+        if self.__is_cdp_swap_needed(*args, **kwargs):
             return self.cdp.get_page_source()
         self.wait_for_ready_state_complete()
         if self.__needs_minimum_wait:
@@ -1502,6 +1503,10 @@ class BaseCase(unittest.TestCase):
     ):
         """Returns True if the element attribute/value is found.
         If the value is not specified, the attribute only needs to exist."""
+        if self.__is_cdp_swap_needed():
+            return self.cdp.is_attribute_present(
+                selector, attribute, value=value
+            )
         self.wait_for_ready_state_complete()
         time.sleep(0.01)
         selector, by = self.__recalculate_selector(selector, by)
@@ -3198,6 +3203,9 @@ class BaseCase(unittest.TestCase):
             timeout = settings.SMALL_TIMEOUT
         if self.timeout_multiplier and timeout == settings.SMALL_TIMEOUT:
             timeout = self.__get_new_timeout(timeout)
+        if self.__is_cdp_swap_needed():
+            self.cdp.select_option_by_index(dropdown_selector, option)
+            return
         self.__select_option(
             dropdown_selector,
             option,
@@ -3222,6 +3230,9 @@ class BaseCase(unittest.TestCase):
             timeout = settings.SMALL_TIMEOUT
         if self.timeout_multiplier and timeout == settings.SMALL_TIMEOUT:
             timeout = self.__get_new_timeout(timeout)
+        if self.__is_cdp_swap_needed():
+            self.cdp.select_option_by_value(dropdown_selector, option)
+            return
         self.__select_option(
             dropdown_selector,
             option,
@@ -3569,8 +3580,17 @@ class BaseCase(unittest.TestCase):
             self.cdp.maximize()
             return
         self._check_browser()
-        self.driver.maximize_window()
+        try:
+            self.driver.maximize_window()
+        except Exception:
+            with suppress(Exception):
+                width = self.execute_script("return screen.availWidth;")
+                height = self.execute_script("return screen.availHeight;")
+                self.set_window_rect(0, 0, width, height)
         self.__demo_mode_pause_if_active(tiny=True)
+
+    def maximize(self):
+        self.maximize_window()
 
     def minimize_window(self):
         self.__check_scope()
@@ -3580,6 +3600,9 @@ class BaseCase(unittest.TestCase):
         self._check_browser()
         self.driver.minimize_window()
         self.__demo_mode_pause_if_active(tiny=True)
+
+    def minimize(self):
+        self.minimize_window()
 
     def reset_window_size(self):
         self.__check_scope()
@@ -4336,7 +4359,7 @@ class BaseCase(unittest.TestCase):
                 if self.is_chromium():
                     try:
                         if self.maximize_option:
-                            self.driver.maximize_window()
+                            self.maximize_window()
                             self.wait_for_ready_state_complete()
                         else:
                             pass  # Now handled in browser_launcher.py
@@ -4346,7 +4369,7 @@ class BaseCase(unittest.TestCase):
                 elif self.browser == "firefox":
                     try:
                         if self.maximize_option:
-                            self.driver.maximize_window()
+                            self.maximize_window()
                             self.wait_for_ready_state_complete()
                         else:
                             with suppress(Exception):
@@ -4356,7 +4379,7 @@ class BaseCase(unittest.TestCase):
                 elif self.browser == "safari":
                     if self.maximize_option:
                         try:
-                            self.driver.maximize_window()
+                            self.maximize_window()
                             self.wait_for_ready_state_complete()
                         except Exception:
                             pass  # Keep existing browser resolution
@@ -4486,7 +4509,8 @@ class BaseCase(unittest.TestCase):
         If a provided selector is not found, then takes a full-page screenshot.
         (The last_page / failure screenshot is always "screenshot.png")
         The screenshot will be in PNG format."""
-        self.wait_for_ready_state_complete()
+        if not self.__is_cdp_swap_needed():
+            self.wait_for_ready_state_complete()
         test_logpath = os.path.join(self.log_path, self.__get_test_id())
         self.__create_log_path_as_needed(test_logpath)
         if name:
@@ -4504,6 +4528,11 @@ class BaseCase(unittest.TestCase):
         if selector and by:
             selector, by = self.__recalculate_selector(selector, by)
             if page_actions.is_element_present(self.driver, selector, by):
+                if self.__is_cdp_swap_needed():
+                    selector = self.convert_to_css_selector(selector, by=by)
+                    return self.cdp.save_screenshot(
+                        name, folder=test_logpath, selector=selector
+                    )
                 return page_actions.save_screenshot(
                     self.driver, name, test_logpath, selector, by
                 )
@@ -4517,7 +4546,48 @@ class BaseCase(unittest.TestCase):
                         action = ["ss_tl", "", origin, time_stamp]
                         self.__extra_actions.append(action)
         sb_config._has_logs = True
+        if self.__is_cdp_swap_needed():
+            return self.cdp.save_screenshot(name, folder=test_logpath)
         return page_actions.save_screenshot(self.driver, name, test_logpath)
+
+    def save_as_pdf(self, name, folder=None):
+        """Same as self.print_to_pdf()"""
+        return self.print_to_pdf(name, folder=folder)
+
+    def save_as_pdf_to_logs(self, name=None):
+        """Saves the page as a PDF to the "latest_logs/" folder.
+        Naming is automatic:
+            If NO NAME provided: "_1_PDF.pdf", "_2_PDF.pdf", etc.
+            If NAME IS provided, then: "_1_name.pdf", "_2_name.pdf", etc."""
+        if not self.__is_cdp_swap_needed():
+            self.wait_for_ready_state_complete()
+        test_logpath = os.path.join(self.log_path, self.__get_test_id())
+        self.__create_log_path_as_needed(test_logpath)
+        if name:
+            name = str(name)
+        self.__saved_pdf_count += 1
+        if not name or len(name) == 0:
+            name = "_%s_PDF.pdf" % self.__saved_pdf_count
+        else:
+            pre_name = "_%s_" % self.__saved_pdf_count
+            if len(name) >= 4 and name[-4:].lower() == ".pdf":
+                name = name[:-4]
+                if len(name) == 0:
+                    name = "PDF"
+            name = "%s%s.pdf" % (pre_name, name)
+        if self.recorder_mode:
+            url = self.get_current_url()
+            if url and len(url) > 0:
+                if ("http:") in url or ("https:") in url or ("file:") in url:
+                    if self.get_session_storage_item("pause_recorder") == "no":
+                        time_stamp = self.execute_script("return Date.now();")
+                        origin = self.get_origin()
+                        action = ["pdftl", "", origin, time_stamp]
+                        self.__extra_actions.append(action)
+        sb_config._has_logs = True
+        if self.__is_cdp_swap_needed():
+            return self.cdp.print_to_pdf(name, folder=test_logpath)
+        return self.print_to_pdf(name, test_logpath)
 
     def save_page_source_to_logs(self, name=None):
         """Saves the page HTML to the "latest_logs/" folder.
@@ -4627,7 +4697,7 @@ class BaseCase(unittest.TestCase):
         if not os.path.exists(file_path):
             os.makedirs(file_path)
         cookies_file_path = os.path.join(file_path, name)
-        cookies_file = codecs.open(cookies_file_path, "w+", encoding="utf-8")
+        cookies_file = open(cookies_file_path, mode="w+", encoding="utf-8")
         cookies_file.writelines(json_cookies)
         cookies_file.close()
 
@@ -4941,6 +5011,9 @@ class BaseCase(unittest.TestCase):
             self.get_new_driver(undetectable=True)
             self.driver.uc_open_with_cdp_mode(url, **kwargs)
         self.cdp = self.driver.cdp
+        if hasattr(self.cdp, "solve_captcha"):
+            self.solve_captcha = self.cdp.solve_captcha
+        self.undetectable = True
 
     def activate_recorder(self):
         """Activate Recorder Mode on the current tab/window.
@@ -5367,6 +5440,20 @@ class BaseCase(unittest.TestCase):
                 srt_actions[n][0] = "_skip"
         for n in range(len(srt_actions)):
             if (
+                (srt_actions[n][0] == "begin" or srt_actions[n][0] == "_url_")
+                and n > 1
+                and (
+                    srt_actions[n - 1][0] == "f_url"
+                    or srt_actions[n - 1][0] == "_url_"
+                )
+                and srt_actions[n][2] == srt_actions[n - 1][2]
+                and (
+                    int(srt_actions[n][3]) - int(srt_actions[n - 1][3]) < 4800
+                )
+            ):
+                srt_actions[n][0] = "_skip"
+        for n in range(len(srt_actions)):
+            if (
                 srt_actions[n][0] == "input"
                 and n > 2
                 and srt_actions[n - 1][0] == "js_cl"
@@ -5511,6 +5598,7 @@ class BaseCase(unittest.TestCase):
         ext_actions.append("s_scr")
         ext_actions.append("ss_tf")
         ext_actions.append("ss_tl")
+        ext_actions.append("pdftl")
         ext_actions.append("spstl")
         ext_actions.append("da_el")
         ext_actions.append("da_ep")
@@ -5666,7 +5754,7 @@ class BaseCase(unittest.TestCase):
         extra_file_name = "__init__.py"
         extra_file_path = os.path.join(recordings_folder, extra_file_name)
         if not os.path.exists(extra_file_path):
-            out_file = codecs.open(extra_file_path, "w+", "utf-8")
+            out_file = open(extra_file_path, mode="w+", encoding="utf-8")
             out_file.writelines("\r\n".join(data))
             out_file.close()
             sys.stdout.write("\nCreated recordings%s__init__.py" % os.sep)
@@ -5714,7 +5802,7 @@ class BaseCase(unittest.TestCase):
         extra_file_name = "pytest.ini"
         extra_file_path = os.path.join(recordings_folder, extra_file_name)
         if not os.path.exists(extra_file_path):
-            out_file = codecs.open(extra_file_path, "w+", "utf-8")
+            out_file = open(extra_file_path, mode="w+", encoding="utf-8")
             out_file.writelines("\r\n".join(data))
             out_file.close()
             sys.stdout.write("\nCreated recordings%spytest.ini" % os.sep)
@@ -5735,7 +5823,7 @@ class BaseCase(unittest.TestCase):
         extra_file_name = "setup.cfg"
         extra_file_path = os.path.join(recordings_folder, extra_file_name)
         if not os.path.exists(extra_file_path):
-            out_file = codecs.open(extra_file_path, "w+", "utf-8")
+            out_file = open(extra_file_path, mode="w+", encoding="utf-8")
             out_file.writelines("\r\n".join(data))
             out_file.close()
             sys.stdout.write("\nCreated recordings%ssetup.cfg" % os.sep)
@@ -5753,7 +5841,7 @@ class BaseCase(unittest.TestCase):
         elif context_filename:
             file_name = context_filename
         file_path = os.path.join(recordings_folder, file_name)
-        out_file = codecs.open(file_path, "w+", "utf-8")
+        out_file = open(file_path, mode="w+", encoding="utf-8")
         out_file.writelines("\r\n".join(data))
         out_file.close()
         rec_message = ">>> RECORDING SAVED as: "
@@ -5855,7 +5943,7 @@ class BaseCase(unittest.TestCase):
             file_name = sb_config.behave_scenario.filename.replace(".", "_")
         file_name = file_name.split("/")[-1].split("\\")[-1] + "_rec.feature"
         file_path = os.path.join(features_folder, file_name)
-        out_file = codecs.open(file_path, "w+", "utf-8")
+        out_file = open(file_path, mode="w+", encoding="utf-8")
         out_file.writelines("\r\n".join(data))
         out_file.close()
 
@@ -5893,7 +5981,7 @@ class BaseCase(unittest.TestCase):
         file_name = "__init__.py"
         file_path = os.path.join(features_folder, file_name)
         if not os.path.exists(file_path):
-            out_file = codecs.open(file_path, "w+", "utf-8")
+            out_file = open(file_path, mode="w+", encoding="utf-8")
             out_file.writelines("\r\n".join(data))
             out_file.close()
             print("Created recordings/features/__init__.py")
@@ -5906,7 +5994,7 @@ class BaseCase(unittest.TestCase):
         file_name = "behave.ini"
         file_path = os.path.join(features_folder, file_name)
         if not os.path.exists(file_path):
-            out_file = codecs.open(file_path, "w+", "utf-8")
+            out_file = open(file_path, mode="w+", encoding="utf-8")
             out_file.writelines("\r\n".join(data))
             out_file.close()
             print("Created recordings/features/behave.ini")
@@ -5945,7 +6033,7 @@ class BaseCase(unittest.TestCase):
         file_name = "environment.py"
         file_path = os.path.join(features_folder, file_name)
         if not os.path.exists(file_path):
-            out_file = codecs.open(file_path, "w+", "utf-8")
+            out_file = open(file_path, mode="w+", encoding="utf-8")
             out_file.writelines("\r\n".join(data))
             out_file.close()
             print("Created recordings/features/environment.py")
@@ -5955,7 +6043,7 @@ class BaseCase(unittest.TestCase):
         file_name = "__init__.py"
         file_path = os.path.join(steps_folder, file_name)
         if not os.path.exists(file_path):
-            out_file = codecs.open(file_path, "w+", "utf-8")
+            out_file = open(file_path, mode="w+", encoding="utf-8")
             out_file.writelines("\r\n".join(data))
             out_file.close()
             print("Created recordings/features/steps/__init__.py")
@@ -5966,7 +6054,7 @@ class BaseCase(unittest.TestCase):
         file_name = "imported.py"
         file_path = os.path.join(steps_folder, file_name)
         if not os.path.exists(file_path):
-            out_file = codecs.open(file_path, "w+", "utf-8")
+            out_file = open(file_path, mode="w+", encoding="utf-8")
             out_file.writelines("\r\n".join(data))
             out_file.close()
             print("Created recordings/features/steps/imported.py")
@@ -6440,6 +6528,34 @@ class BaseCase(unittest.TestCase):
         with suppress(Exception):
             self.execute_script(scroll_script)
             time.sleep(0.012)
+
+    def scroll_by_y(self, y):
+        """Scrolls page by y pixels."""
+        self.__check_scope()
+        y = int(y)
+        if self.__is_cdp_swap_needed():
+            self.cdp.scroll_by_y(y)
+            return
+        scroll_script = "window.scrollBy(0, %s);" % y
+        with suppress(Exception):
+            self.execute_script(scroll_script)
+            time.sleep(0.012)
+
+    def scroll_up(self, amount=25):
+        """Scrolls up as a percentage of the page."""
+        if self.__is_cdp_swap_needed():
+            self.cdp.scroll_up(amount)
+            return
+        amount = self.get_window_size()["height"] * amount / 100
+        self.execute_script("window.scrollBy(0, -%s);" % amount)
+
+    def scroll_down(self, amount=25):
+        """Scrolls down as a percentage of the page."""
+        if self.__is_cdp_swap_needed():
+            self.cdp.scroll_down(amount)
+            return
+        amount = self.get_window_size()["height"] * amount / 100
+        self.execute_script("window.scrollBy(0, %s);" % amount)
 
     def click_xpath(self, xpath):
         """Technically, self.click() automatically detects xpath selectors,
@@ -7239,6 +7355,7 @@ class BaseCase(unittest.TestCase):
             page_search = [page]
         else:
             page_search = None
+        logging.getLogger("pdfminer").setLevel(logging.ERROR)
         pdf_text = extract_text(
             file_path,
             password="",
@@ -7545,6 +7662,47 @@ class BaseCase(unittest.TestCase):
         if not folder:
             folder = constants.Files.DOWNLOADS_FOLDER
         return page_utils._get_file_data(folder, file_name)
+
+    def print_to_pdf(self, name, folder=None):
+        """Saves the current page as a PDF.
+        If no folder is specified, uses the folder where pytest was called.
+        If the folder provided doesn't exist, it will get created.
+        @Params
+        name - The name to give the PDF file. Must end in ".pdf".
+        folder - The directory where you want to save the PDF."""
+        import base64
+        from selenium.webdriver.common.print_page_options import PrintOptions
+
+        if not name.lower().endswith(".pdf"):
+            raise Exception('PDF name {%s} must end in ".pdf"!)' % name)
+        download_file_lock = fasteners.InterProcessLock(
+            constants.MultiBrowser.DOWNLOAD_FILE_LOCK
+        )
+        if self.__is_cdp_swap_needed():
+            with download_file_lock:
+                with suppress(Exception):
+                    shared_utils.make_writable(
+                        constants.MultiBrowser.DOWNLOAD_FILE_LOCK
+                    )
+                if folder and not os.path.exists(folder):
+                    os.makedirs(folder)
+                self.cdp.print_to_pdf(name, folder)
+            return
+        self.wait_for_ready_state_complete()
+        print_options = PrintOptions()
+        pdf_base64 = self.driver.print_page(print_options)
+        with download_file_lock:
+            with suppress(Exception):
+                shared_utils.make_writable(
+                    constants.MultiBrowser.DOWNLOAD_FILE_LOCK
+                )
+            if folder and not os.path.exists(folder):
+                os.makedirs(folder)
+            filename = name
+            if folder:
+                filename = os.path.join(folder, name)
+            with open(filename, "wb") as f:
+                f.write(base64.b64decode(pdf_base64))
 
     def get_downloads_folder(self):
         """Returns the path of the SeleniumBase "downloaded_files/" folder.
@@ -8399,33 +8557,9 @@ class BaseCase(unittest.TestCase):
 
     def get_mfa_code(self, totp_key=None):
         """Same as get_totp_code() and get_google_auth_password().
-        Returns a time-based one-time password based on the
-        Google Authenticator algorithm for multi-factor authentication.
-        If the "totp_key" is not specified, this method defaults
-        to using the one provided in [seleniumbase/config/settings.py].
-        Google Authenticator codes expire & change at 30-sec intervals.
-        If the fetched password expires in the next 1.2 seconds, waits
-        for a new one before returning it (may take up to 1.2 seconds).
-        See https://pyotp.readthedocs.io/en/latest/ for details."""
-        import pyotp
-
-        if not totp_key:
-            totp_key = settings.TOTP_KEY
-
-        epoch_interval = time.time() / 30.0
-        cycle_lifespan = float(epoch_interval) - int(epoch_interval)
-        if float(cycle_lifespan) > 0.96:
-            # Password expires in the next 1.2 seconds. Wait for a new one.
-            for i in range(30):
-                time.sleep(0.04)
-                epoch_interval = time.time() / 30.0
-                cycle_lifespan = float(epoch_interval) - int(epoch_interval)
-                if not float(cycle_lifespan) > 0.96:
-                    # The new password cycle has begun
-                    break
-
-        totp = pyotp.TOTP(totp_key)
-        return str(totp.now())
+        Returns a time-based one-time password based on the Google
+        Authenticator algorithm for multi-factor authentication."""
+        return shared_utils.get_mfa_code(totp_key)
 
     def enter_mfa_code(
         self, selector, totp_key=None, by="css selector", timeout=None
@@ -9114,6 +9248,10 @@ class BaseCase(unittest.TestCase):
         """Same as self.switch_to_newest_window()"""
         self.switch_to_newest_window()
 
+    def save_as_html(self, name, folder=None):
+        """Same as self.save_page_source()"""
+        self.save_page_source(name, folder=folder)
+
     def input(
         self, selector, text, by="css selector", timeout=None, retry=False
     ):
@@ -9563,9 +9701,11 @@ class BaseCase(unittest.TestCase):
 
     def activate_messenger(self):
         self.__check_scope()
-        self._check_browser()
+        if not self.__is_cdp_swap_needed():
+            self._check_browser()
         js_utils.activate_messenger(self.driver)
-        self.wait_for_ready_state_complete()
+        if not self.__is_cdp_swap_needed():
+            self.wait_for_ready_state_complete()
 
     def set_messenger_theme(
         self, theme="default", location="default", max_messages="default"
@@ -10078,7 +10218,7 @@ class BaseCase(unittest.TestCase):
         text = self.__get_type_checked_text(text)
         selector, by = self.__recalculate_selector(selector, by)
         if self.__is_cdp_swap_needed():
-            return self.cdp.find_element(selector, timeout=timeout)
+            return self.cdp.wait_for_text(text, selector, timeout=timeout)
         elif self.__is_shadow_selector(selector):
             return self.__wait_for_shadow_text_visible(text, selector, timeout)
         return page_actions.wait_for_text_visible(
@@ -10435,6 +10575,8 @@ class BaseCase(unittest.TestCase):
             timeout = settings.LARGE_TIMEOUT
         if self.timeout_multiplier and timeout == settings.LARGE_TIMEOUT:
             timeout = self.__get_new_timeout(timeout)
+        if self.__is_cdp_swap_needed():
+            return self.cdp.find_element_by_text(text=link_text, tag_name="a")
         return self.wait_for_element_visible(
             link_text, by="link text", timeout=timeout
         )
@@ -10981,7 +11123,7 @@ class BaseCase(unittest.TestCase):
             return  # Skip the rest when deferred visual asserts are used
         the_html = visual_helper.get_sbs_html()
         file_path = os.path.join(test_logpath, constants.SideBySide.HTML_FILE)
-        out_file = codecs.open(file_path, "w+", encoding="utf-8")
+        out_file = open(file_path, mode="w+", encoding="utf-8")
         out_file.writelines(the_html)
         out_file.close()
 
@@ -11141,16 +11283,16 @@ class BaseCase(unittest.TestCase):
             self.save_screenshot(
                 baseline_png, visual_baseline_path, selector="body"
             )
-            out_file = codecs.open(page_url_file, "w+", encoding="utf-8")
+            out_file = open(page_url_file, mode="w+", encoding="utf-8")
             out_file.writelines(page_url)
             out_file.close()
-            out_file = codecs.open(level_1_file, "w+", encoding="utf-8")
+            out_file = open(level_1_file, mode="w+", encoding="utf-8")
             out_file.writelines(json.dumps(level_1))
             out_file.close()
-            out_file = codecs.open(level_2_file, "w+", encoding="utf-8")
+            out_file = open(level_2_file, mode="w+", encoding="utf-8")
             out_file.writelines(json.dumps(level_2))
             out_file.close()
-            out_file = codecs.open(level_3_file, "w+", encoding="utf-8")
+            out_file = open(level_3_file, mode="w+", encoding="utf-8")
             out_file.writelines(json.dumps(level_3))
             out_file.close()
 
@@ -11289,7 +11431,7 @@ class BaseCase(unittest.TestCase):
             alpha_n_d_name = "".join([x if x.isalnum() else "_" for x in name])
             side_by_side_name = "side_by_side_%s.html" % alpha_n_d_name
             file_path = os.path.join(test_logpath, side_by_side_name)
-            out_file = codecs.open(file_path, "w+", encoding="utf-8")
+            out_file = open(file_path, mode="w+", encoding="utf-8")
             out_file.writelines(the_html)
             out_file.close()
 
@@ -11312,7 +11454,14 @@ class BaseCase(unittest.TestCase):
 
     def __is_cdp_swap_needed(self):
         """If the driver is disconnected, use a CDP method when available."""
-        return shared_utils.is_cdp_swap_needed(self.driver)
+        cdp_swap_needed = shared_utils.is_cdp_swap_needed(self.driver)
+        if cdp_swap_needed:
+            if not self.cdp:
+                self.cdp = self.driver.cdp
+                self.undetectable = True
+            return True
+        else:
+            return False
 
     ############
 
@@ -11974,7 +12123,7 @@ class BaseCase(unittest.TestCase):
             with suppress(Exception):
                 os.makedirs(saved_presentations_folder)
         file_path = os.path.join(saved_presentations_folder, filename)
-        out_file = codecs.open(file_path, "w+", encoding="utf-8")
+        out_file = open(file_path, mode="w+", encoding="utf-8")
         out_file.writelines(the_html)
         out_file.close()
         if self._output_file_saves:
@@ -12669,7 +12818,7 @@ class BaseCase(unittest.TestCase):
             with suppress(Exception):
                 os.makedirs(saved_charts_folder)
         file_path = os.path.join(saved_charts_folder, filename)
-        out_file = codecs.open(file_path, "w+", encoding="utf-8")
+        out_file = open(file_path, mode="w+", encoding="utf-8")
         out_file.writelines(the_html)
         out_file.close()
         if self._output_file_saves:
@@ -13828,6 +13977,9 @@ class BaseCase(unittest.TestCase):
         timeout=None,
         center=None,
     ):
+        if self.__is_cdp_swap_needed():
+            self.cdp.click_with_offset(selector, x, y, center=center)
+            return
         self.wait_for_ready_state_complete()
         if self.__needs_minimum_wait():
             time.sleep(0.14)
@@ -13905,7 +14057,7 @@ class BaseCase(unittest.TestCase):
             )
             raise Exception(message)
         except InvalidArgumentException:
-            if not self.browser == "chrome":
+            if not self.is_chromium():
                 raise
             chrome_version = self.driver.capabilities["browserVersion"]
             major_chrome_version = chrome_version.split(".")[0]
@@ -14394,11 +14546,11 @@ class BaseCase(unittest.TestCase):
                 import pyautogui
                 with suppress(Exception):
                     use_pyautogui_ver = constants.PyAutoGUI.VER
-                    if pyautogui.__version__ != use_pyautogui_ver:
+                    u_pv = shared_utils.make_version_tuple(use_pyautogui_ver)
+                    pv = shared_utils.make_version_tuple(pyautogui.__version__)
+                    if pv < u_pv:
                         del pyautogui  # To get newer ver
-                        shared_utils.pip_install(
-                            "pyautogui", version=use_pyautogui_ver
-                        )
+                        shared_utils.pip_install("pyautogui", version="Latest")
                         import pyautogui
                 pyautogui_is_installed = True
             except Exception:
@@ -14407,9 +14559,7 @@ class BaseCase(unittest.TestCase):
                     "Installing now..."
                 )
                 print("\n" + message)
-                shared_utils.pip_install(
-                    "pyautogui", version=constants.PyAutoGUI.VER
-                )
+                shared_utils.pip_install("pyautogui", version="Latest")
                 import pyautogui
                 pyautogui_is_installed = True
             if (
@@ -14522,7 +14672,7 @@ class BaseCase(unittest.TestCase):
                 try:
                     shadow_root = element.shadow_root
                 except Exception:
-                    if self.browser == "chrome":
+                    if self.is_chromium():
                         chrome_dict = self.driver.capabilities["chrome"]
                         chrome_dr_version = chrome_dict["chromedriverVersion"]
                         chromedriver_version = chrome_dr_version.split(" ")[0]
@@ -15953,7 +16103,7 @@ class BaseCase(unittest.TestCase):
         test_id = test_id.replace(".py::", ".").replace("::", ".")
         test_id = test_id.replace("/", ".").replace("\\", ".")
         test_id = test_id.replace(" ", "_")
-        # Linux filename length limit for `codecs.open(filename)` = 255
+        # Linux filename length limit for `open(filename)` = 255
         # 255 - len("latest_logs/") - len("/basic_test_info.txt") = 223
         if len(test_id) <= 223:
             return test_id
@@ -16231,7 +16381,7 @@ class BaseCase(unittest.TestCase):
                     dash_pie = json.dumps(sb_config._saved_dashboard_pie)
                     dash_pie_loc = constants.Dashboard.DASH_PIE
                     pie_path = os.path.join(abs_path, dash_pie_loc)
-                    pie_file = codecs.open(pie_path, "w+", encoding="utf-8")
+                    pie_file = open(pie_path, mode="w+", encoding="utf-8")
                     pie_file.writelines(dash_pie)
                     pie_file.close()
         DASH_PIE_PNG_1 = constants.Dashboard.get_dash_pie_1()
@@ -16391,7 +16541,7 @@ class BaseCase(unittest.TestCase):
         )
         abs_path = os.path.abspath(".")
         file_path = os.path.join(abs_path, "dashboard.html")
-        out_file = codecs.open(file_path, "w+", encoding="utf-8")
+        out_file = open(file_path, mode="w+", encoding="utf-8")
         out_file.writelines(the_html)
         out_file.close()
         sb_config._dash_html = the_html
@@ -16404,7 +16554,7 @@ class BaseCase(unittest.TestCase):
             dash_json = json.dumps((_results, _display_id, _rt, _tlp, d_stats))
             dash_json_loc = constants.Dashboard.DASH_JSON
             dash_jsonpath = os.path.join(abs_path, dash_json_loc)
-            dash_json_file = codecs.open(dash_jsonpath, "w+", encoding="utf-8")
+            dash_json_file = open(dash_jsonpath, mode="w+", encoding="utf-8")
             dash_json_file.writelines(dash_json)
             dash_json_file.close()
 

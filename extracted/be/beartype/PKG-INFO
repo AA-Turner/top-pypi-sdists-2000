@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: beartype
-Version: 0.22.4
+Version: 0.22.5
 Summary: Unbearably fast near-real-time pure-Python runtime-static type-checker.
 Project-URL: Docs, https://beartype.readthedocs.io
 Project-URL: GitHub, https://github.com/beartype/beartype
@@ -63,7 +63,7 @@ Requires-Dist: polars; (python_version < '3.14.0') and extra == 'dev'
 Requires-Dist: pydata-sphinx-theme<=0.7.2; extra == 'dev'
 Requires-Dist: pygments; extra == 'dev'
 Requires-Dist: pyright>=1.1.370; extra == 'dev'
-Requires-Dist: pytest>=4.0.0; extra == 'dev'
+Requires-Dist: pytest>=6.2.0; extra == 'dev'
 Requires-Dist: redis; extra == 'dev'
 Requires-Dist: rich-click; extra == 'dev'
 Requires-Dist: setuptools; extra == 'dev'
@@ -104,7 +104,7 @@ Requires-Dist: poetry; extra == 'test'
 Requires-Dist: polars; (python_version < '3.14.0') and extra == 'test'
 Requires-Dist: pygments; extra == 'test'
 Requires-Dist: pyright>=1.1.370; extra == 'test'
-Requires-Dist: pytest>=4.0.0; extra == 'test'
+Requires-Dist: pytest>=6.2.0; extra == 'test'
 Requires-Dist: redis; extra == 'test'
 Requires-Dist: rich-click; extra == 'test'
 Requires-Dist: sphinx; extra == 'test'
@@ -131,7 +131,7 @@ Requires-Dist: poetry; extra == 'test-tox'
 Requires-Dist: polars; (python_version < '3.14.0') and extra == 'test-tox'
 Requires-Dist: pygments; extra == 'test-tox'
 Requires-Dist: pyright>=1.1.370; extra == 'test-tox'
-Requires-Dist: pytest>=4.0.0; extra == 'test-tox'
+Requires-Dist: pytest>=6.2.0; extra == 'test-tox'
 Requires-Dist: redis; extra == 'test-tox'
 Requires-Dist: rich-click; extra == 'test-tox'
 Requires-Dist: sphinx; extra == 'test-tox'
@@ -201,7 +201,8 @@ usability, unsubstantiated jargon we just made up, and thrilling puns.
 .. code-block:: bash
 
    # Install beartype.
-   $ pip3 install beartype
+   $ pip install beartype
+
    # Edit the "{your_package}.__init__" submodule with your favourite IDE.
    $ vim {your_package}/__init__.py      # <-- so, i see that you too vim
 
@@ -385,8 +386,8 @@ developed Python versions <Python status_>`__, `all Python package managers
    :align: top
    :target: https://beartype.readthedocs.io
    :alt: bear-ified
-.. |ci-badge| image:: https://github.com/beartype/beartype/workflows/test/badge.svg
-   :target: https://github.com/beartype/beartype/actions?workflow=test
+.. |ci-badge| image:: https://github.com/beartype/beartype/actions/workflows/python_test.yml/badge.svg
+   :target: https://github.com/beartype/beartype/actions?workflow=tests
    :alt: beartype continuous integration (CI) status
 .. |codecov-badge| image:: https://codecov.io/gh/beartype/beartype/branch/main/graph/badge.svg?token=E6F4YSY9ZQ
    :target: https://codecov.io/gh/beartype/beartype

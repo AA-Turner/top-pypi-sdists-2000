@@ -11,6 +11,7 @@ import ast
 import asyncio
 import base64
 import binascii
+import contextvars
 import copy
 import datetime
 import hashlib
@@ -1299,7 +1300,11 @@ def client(original_function):  # noqa: PLR0915
 
             # LOG SUCCESS - handle streaming success logging in the _next_ object, remove `handle_success` once it's deprecated
             verbose_logger.info("Wrapper: Completed Call, calling success_handler")
+            # Copy the current context to propagate it to the background thread
+            # This is essential for OpenTelemetry span context propagation
+            ctx = contextvars.copy_context()
             executor.submit(
+                ctx.run,
                 logging_obj.success_handler,
                 result,
                 start_time,
@@ -7640,6 +7645,12 @@ class ProviderConfigManager:
             )
 
             return LiteLLMProxyImageGenerationConfig()
+        elif LlmProviders.FAL_AI == provider:
+            from litellm.llms.fal_ai.image_generation import (
+                get_fal_ai_image_generation_config,
+            )
+
+            return get_fal_ai_image_generation_config(model)
         return None
 
     @staticmethod

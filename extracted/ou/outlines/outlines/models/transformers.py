@@ -1,20 +1,26 @@
-import dataclasses
-import inspect
-from typing import TYPE_CHECKING, Iterator, List, Optional, Tuple, Union
+"""Integration with the `transformers` library. """
 
-from outlines.generate.api import GenerationParameters, SamplingParameters
+import warnings
+
+from collections import defaultdict
+from functools import singledispatchmethod
+from typing import TYPE_CHECKING, Any, List, Optional, Tuple, Union
+
+from outlines.inputs import Audio, Chat, Image, Video
+from outlines.models.base import Model, ModelTypeAdapter
 from outlines.models.tokenizer import Tokenizer
+from outlines.processors import OutlinesLogitsProcessor
 
 if TYPE_CHECKING:
     import torch
-    from transformers import PreTrainedModel, PreTrainedTokenizer
+    from transformers import (
+        PreTrainedTokenizer,
+        PreTrainedModel,
+        ProcessorMixin,
+        LogitsProcessorList,
+    )
 
-    from outlines.processors import OutlinesLogitsProcessor
-
-__all__ = ["transformers"]
-
-
-KVCacheType = Tuple[Tuple["torch.DoubleTensor", "torch.DoubleTensor"], ...]
+__all__ = ["Transformers", "TransformersMultiModal", "from_transformers"]
 
 
 def get_llama_tokenizer_types():
@@ -25,28 +31,28 @@ def get_llama_tokenizer_types():
     """
     try:
         from transformers.models.llama import LlamaTokenizer
-    except ImportError:
+    except ImportError:  # pragma: no cover
 
         class LlamaTokenizer:  # type: ignore
             pass
 
     try:
         from transformers.models.llama import LlamaTokenizerFast
-    except ImportError:
+    except ImportError:  # pragma: no cover
 
         class LlamaTokenizerFast:  # type: ignore
             pass
 
     try:
         from transformers.models.code_llama import CodeLlamaTokenizer
-    except ImportError:
+    except ImportError:  # pragma: no cover
 
         class CodeLlamaTokenizer:  # type: ignore
             pass
 
     try:
         from transformers.models.code_llama import CodeLlamaTokenizerFast
-    except ImportError:
+    except ImportError:  # pragma: no cover
 
         class CodeLlamaTokenizerFast:  # type: ignore
             pass
@@ -66,6 +72,7 @@ class TransformerTokenizer(Tokenizer):
         self.tokenizer = tokenizer
         self.eos_token_id = self.tokenizer.eos_token_id
         self.eos_token = self.tokenizer.eos_token
+        self.get_vocab = self.tokenizer.get_vocab
 
         if self.tokenizer.pad_token_id is None:
             self.tokenizer.pad_token_id = self.tokenizer.eos_token_id
@@ -126,229 +133,258 @@ class TransformerTokenizer(Tokenizer):
         self.__init__(state["tokenizer"])
 
 
-class Transformers:
-    """Represents a `transformers` model."""
+class TransformersTypeAdapter(ModelTypeAdapter):
+    """Type adapter for the `Transformers` model."""
+
+    def __init__(self, **kwargs):
+        self.tokenizer = kwargs.get("tokenizer")
+
+    @singledispatchmethod
+    def format_input(self, model_input):
+        """Generate the prompt argument to pass to the model.
+
+        Parameters
+        ----------
+        model_input
+            The input passed by the user.
+
+        Returns
+        -------
+        str
+            The formatted input to be passed to the model.
+
+        """
+        raise TypeError(
+            f"The input type {type(model_input)} is not available."
+            "The only available types are `str` and `Chat`."
+        )
+
+    @format_input.register(str)
+    def format_str_input(self, model_input: str) -> str:
+        return model_input
+
+    @format_input.register(Chat)
+    def format_chat_input(self, model_input: Chat) -> str:
+        return self.tokenizer.apply_chat_template(
+            model_input.messages,
+            tokenize=False,
+            add_generation_prompt=True,
+        )
+
+    def format_output_type(
+        self,
+        output_type: Optional[OutlinesLogitsProcessor] = None,
+    ) -> Optional["LogitsProcessorList"]:
+        """Generate the logits processor argument to pass to the model.
+
+        Parameters
+        ----------
+        output_type
+            The logits processor provided.
+
+        Returns
+        -------
+        Optional[LogitsProcessorList]
+            The logits processor to pass to the model.
+
+        """
+        from transformers import LogitsProcessorList
+
+        if output_type is not None:
+            return LogitsProcessorList([output_type])
+        return None
+
+
+class Transformers(Model):
+    """Thin wrapper around a `transformers` model and a `transformers`
+    tokenizer.
+
+    This wrapper is used to convert the input and output types specified by the
+    users at a higher level to arguments to the `transformers` model and
+    tokenizer.
+
+    """
 
     def __init__(
         self,
         model: "PreTrainedModel",
         tokenizer: "PreTrainedTokenizer",
+        *,
+        device_dtype: Optional["torch.dtype"] = None,
     ):
-        self.model = model
-        self.tokenizer = TransformerTokenizer(tokenizer)
-
-    def forward(
-        self,
-        input_ids: "torch.LongTensor",
-        attention_mask: "torch.LongTensor",
-        past_key_values: Optional[Tuple] = None,
-    ) -> Tuple["torch.FloatTensor", Optional[KVCacheType]]:
-        """Compute a forward pass through the transformer model.
-
-        Parameters
+        """
+        Parameters:
         ----------
-        input_ids
-            The input token ids.  Must be one or two dimensional.
-        attention_mask
-            The attention mask.  Must be one or two dimensional.
-        past_key_values
-            A tuple of tuples containing the cached key and value tensors for each
-            attention head.
-
-        Returns
-        -------
-        The computed logits and the new cached key and value tensors.
+        model
+            A `PreTrainedModel`, or any model that is compatible with the
+            `transformers` API for models.
+        tokenizer
+            A `PreTrainedTokenizer`, or any tokenizer that is compatible with
+            the `transformers` API for tokenizers.
+        device_dtype
+            The dtype to use for the model. If not provided, the model will use
+            the default dtype.
 
         """
+        # We need to handle the cases in which jax/flax or tensorflow
+        # is not available in the environment.
         try:
-            import torch
-        except ImportError:
-            ImportError(
-                "The `torch` library needs to be installed to use `transformers` models."
+            from transformers import FlaxPreTrainedModel
+        except ImportError:  # pragma: no cover
+            FlaxPreTrainedModel = None
+
+        try:
+            from transformers import TFPreTrainedModel
+        except ImportError:  # pragma: no cover
+            TFPreTrainedModel = None
+
+        tokenizer.padding_side = "left"
+        self.model = model
+        self.hf_tokenizer = tokenizer
+        self.tokenizer = TransformerTokenizer(tokenizer)
+        self.device_dtype = device_dtype
+        self.type_adapter = TransformersTypeAdapter(tokenizer=tokenizer)
+
+        if (
+            FlaxPreTrainedModel is not None
+            and isinstance(model, FlaxPreTrainedModel)
+        ):  # pragma: no cover
+            self.tensor_library_name = "jax"
+            warnings.warn("""
+                Support for `jax` has been deprecated and will be removed in
+                version 1.4.0 of Outlines. Please use `torch` instead.
+                Transformers models using `jax` do not support structured
+                generation.
+                """,
+                DeprecationWarning,
+                stacklevel=2,
             )
-        assert 0 < input_ids.ndim < 3
-
-        if past_key_values:
-            input_ids = input_ids[..., -1].unsqueeze(-1)
-
-        with torch.inference_mode():
-            output = self.model(
-                input_ids,
-                attention_mask=attention_mask,
-                return_dict=True,
-                output_attentions=False,
-                output_hidden_states=False,
-                past_key_values=past_key_values,
+        elif (
+            TFPreTrainedModel is not None
+            and isinstance(model, TFPreTrainedModel)
+        ):  # pragma: no cover
+            self.tensor_library_name = "tensorflow"
+            warnings.warn("""
+                Support for `tensorflow` has been deprecated and will be removed in
+                version 1.4.0 of Outlines. Please use `torch` instead.
+                Transformers models using `tensorflow` do not support structured
+                generation.
+                """,
+                DeprecationWarning,
+                stacklevel=2,
             )
+        else:
+            self.tensor_library_name = "torch"
 
-        return output.logits, output.past_key_values
-
-    def __call__(
+    def _prepare_model_inputs(
         self,
-        input_ids: "torch.LongTensor",
-        attention_mask: "torch.LongTensor",
-        past_key_values: Optional[Tuple] = None,
-    ) -> "torch.FloatTensor":
-        logits, kv_cache = self.forward(input_ids, attention_mask, past_key_values)
-        next_token_logits = logits[..., -1, :]
+        model_input,
+        is_batch: bool = False,
+    ) -> Tuple[Union[str, List[str]], dict]:
+        """Turn the user input into arguments to pass to the model"""
+        # Format validation
+        if is_batch:
+            prompts = [
+                self.type_adapter.format_input(item)
+                for item in model_input
+            ]
+        else:
+            prompts = self.type_adapter.format_input(model_input)
+        input_ids, attention_mask = self.tokenizer.encode(prompts)
+        inputs = {
+            "input_ids": input_ids.to(self.model.device),
+            "attention_mask": (
+                attention_mask.to(self.model.device, dtype=self.device_dtype)
+                if self.device_dtype is not None
+                else attention_mask.to(self.model.device)
+            ),
+        }
 
-        return next_token_logits, kv_cache
+        return prompts, inputs
 
     def generate(
         self,
-        prompts: Union[str, List[str]],
-        generation_parameters: GenerationParameters,
-        logits_processor: Optional["OutlinesLogitsProcessor"],
-        sampling_parameters: SamplingParameters,
-    ) -> Union[str, List[str], List[List[str]]]:
+        model_input: Union[str, dict, Chat],
+        output_type: Optional[OutlinesLogitsProcessor] = None,
+        **inference_kwargs: Any,
+    ) -> Union[str, List[str]]:
         """Generate text using `transformers`.
 
         Parameters
         ----------
-        prompts
-            A prompt or list of prompts.
-        generation_parameters
-            An instance of `GenerationParameters` that contains the prompt,
-            the maximum number of tokens, stop sequences and seed. All the
-            arguments to `SequenceGeneratorAdapter`'s `__cal__` method.
-        logits_processor
-            The logits processor to use when generating text.
-        sampling_parameters
-            An instance of `SamplingParameters`, a dataclass that contains
-            the name of the sampler to use and related parameters as available
-            in Outlines.
+        model_input
+            The prompt based on which the model will generate a response. For
+            multi-modal models, the input should be a dictionary containing the
+            `text` key with a value of type `Union[str, List[str]]` and the
+            other keys required by the model.
+        output_type
+            The logits processor the model will use to constrain the format of
+            the generated text.
+        inference_kwargs
+            Additional keyword arguments to pass to the `generate` method
+            of the `transformers` model.
 
         Returns
         -------
-        The generated text
+        Union[str, List[str]]
+            The text generated by the model.
+
         """
-        if isinstance(prompts, str):
-            # convert to 2d
-            input_ids, attention_mask = self.tokenizer.encode([prompts])
-        else:
-            input_ids, attention_mask = self.tokenizer.encode(prompts)
+        prompts, inputs = self._prepare_model_inputs(model_input, False)
+        logits_processor = self.type_adapter.format_output_type(output_type)
 
-        inputs = {
-            "input_ids": input_ids.to(self.model.device),
-            "attention_mask": attention_mask.to(self.model.device),
-        }
-        if (
-            "attention_mask"
-            not in inspect.signature(self.model.forward).parameters.keys()
-        ):
-            del inputs["attention_mask"]
-
-        generation_kwargs = self._get_generation_kwargs(
+        generated_ids = self._generate_output_seq(
             prompts,
-            generation_parameters,
-            logits_processor,
-            sampling_parameters,
+            inputs,
+            logits_processor=logits_processor,
+            **inference_kwargs,
         )
-        generated_ids = self._generate_output_seq(prompts, inputs, **generation_kwargs)
 
-        # if single str input and single sample per input, convert to a 1D output
-        if isinstance(prompts, str):
+        # required for multi-modal models that return a 2D tensor even when
+        # num_return_sequences is 1
+        num_samples = inference_kwargs.get("num_return_sequences", 1)
+        if num_samples == 1 and len(generated_ids.shape) == 2:
             generated_ids = generated_ids.squeeze(0)
 
         return self._decode_generation(generated_ids)
 
-    def stream(
+    def generate_batch(
         self,
-        prompts: Union[str, List[str]],
-        generation_parameters: GenerationParameters,
-        logits_processor: Optional["OutlinesLogitsProcessor"],
-        sampling_parameters: SamplingParameters,
-    ) -> Iterator[Union[str, List[str]]]:
-        """
-        Temporary stream stand-in which implements stream() signature
-        and equivalent behaviour but isn't yielded until generation completes.
+        model_input: List[Union[str, dict, Chat]],
+        output_type: Optional[OutlinesLogitsProcessor] = None,
+        **inference_kwargs: Any,
+    ) -> List[Union[str, List[str]]]:
+        """"""
+        prompts, inputs = self._prepare_model_inputs(model_input, True) # type: ignore
+        logits_processor = self.type_adapter.format_output_type(output_type)
+
+        generated_ids = self._generate_output_seq(
+            prompts, inputs, logits_processor=logits_processor, **inference_kwargs
+        )
+
+        # if there are multiple samples per input, convert generated_id to 3D
+        num_samples = inference_kwargs.get("num_return_sequences", 1)
+        if num_samples > 1:
+            generated_ids = generated_ids.view(len(model_input), num_samples, -1)
+
+        return self._decode_generation(generated_ids)
+
+    def generate_stream(self, model_input, output_type, **inference_kwargs):
+        """Not available for `transformers` models.
 
         TODO: implement following completion of https://github.com/huggingface/transformers/issues/30810
+
         """
-        if isinstance(prompts, str):
-            # convert to 2d
-            input_ids, attention_mask = self.tokenizer.encode([prompts])
-        else:
-            input_ids, attention_mask = self.tokenizer.encode(prompts)
-        inputs = {
-            "input_ids": input_ids.to(self.model.device),
-            "attention_mask": attention_mask.to(self.model.device),
-        }
-        if (
-            "attention_mask"
-            not in inspect.signature(self.model.forward).parameters.keys()
-        ):
-            del inputs["attention_mask"]
-
-        generation_kwargs = self._get_generation_kwargs(
-            prompts,
-            generation_parameters,
-            logits_processor,
-            sampling_parameters,
-        )
-        generated_ids = self._generate_output_seq(prompts, inputs, **generation_kwargs)
-
-        # if single str input and single sample per input, convert to a 1D output
-        if isinstance(prompts, str):
-            generated_ids = generated_ids.squeeze(0)
-
-        for i in range(generated_ids.size(-1)):
-            output_group_ids = generated_ids.select(-1, i).unsqueeze(-1)
-            yield self._decode_generation(output_group_ids)
-
-    def _get_generation_kwargs(
-        self,
-        prompts: Union[str, List[str]],
-        generation_parameters: GenerationParameters,
-        logits_processor: Optional["OutlinesLogitsProcessor"],
-        sampling_parameters: SamplingParameters,
-    ) -> dict:
-        """
-        Convert outlines generation parameters into model.generate kwargs
-        """
-        from transformers import GenerationConfig, LogitsProcessorList, set_seed
-
-        max_new_tokens, stop_at, seed = dataclasses.astuple(generation_parameters)
-        sampler, num_samples, top_p, top_k, temperature = dataclasses.astuple(
-            sampling_parameters
-        )
-        if max_new_tokens is None:
-            max_new_tokens = int(2**30)
-
-        # global seed, not desirable
-        if seed is not None:
-            set_seed(seed)
-
-        if logits_processor is not None:
-            logits_processor_list = LogitsProcessorList([logits_processor])
-        else:
-            logits_processor_list = None
-
-        generation_config = GenerationConfig(
-            max_new_tokens=max_new_tokens,
-            stop_strings=stop_at,
-            num_return_sequences=(num_samples or 1),
-            top_p=top_p,
-            top_k=top_k,
-            temperature=temperature,
-            do_sample=(sampler == "multinomial"),
-            num_beams=(num_samples if sampler == "beam_search" else 1),
-            eos_token_id=self.tokenizer.eos_token_id,
-            pad_token_id=self.tokenizer.pad_token_id,
+        raise NotImplementedError(
+            "Streaming is not implemented for Transformers models."
         )
 
-        return dict(
-            logits_processor=logits_processor_list,
-            generation_config=generation_config,
-            tokenizer=self.tokenizer.tokenizer,
-        )
-
-    def _generate_output_seq(
-        self, prompts, inputs, generation_config, **generation_kwargs
-    ):
+    def _generate_output_seq(self, prompts, inputs, **inference_kwargs):
         input_ids = inputs["input_ids"]
+
         output_ids = self.model.generate(
-            **inputs, generation_config=generation_config, **generation_kwargs
+            **inputs,
+            **inference_kwargs,
         )
 
         # encoder-decoder returns output_ids only, decoder-only returns full seq ids
@@ -356,14 +392,6 @@ class Transformers:
             generated_ids = output_ids
         else:
             generated_ids = output_ids[:, input_ids.shape[1] :]
-
-        # if batch list inputs AND multiple samples per input, convert generated_id to 3D view
-        num_samples = generation_config.num_return_sequences or 1
-
-        if num_samples > 1 and isinstance(prompts, list):
-            batch_size = input_ids.size(0)
-            num_return_sequences = generation_config.num_return_sequences or 1
-            generated_ids = generated_ids.view(batch_size, num_return_sequences, -1)
 
         return generated_ids
 
@@ -377,82 +405,329 @@ class Transformers:
                 self.tokenizer.decode(generated_ids[i])
                 for i in range(len(generated_ids))
             ]
-        else:
+        else:  # pragma: no cover
             raise TypeError(
-                f"Generated outputs aren't 1D, 2D or 3D, but instead are {generated_ids.shape}"
+                "Generated outputs aren't 1D, 2D or 3D, but instead are "
+                f"{generated_ids.shape}"
             )
 
 
-def transformers(
-    model_name: str,
-    device: Optional[str] = None,
-    model_kwargs: dict = {},
-    tokenizer_kwargs: dict = {},
-    model_class=None,
-    tokenizer_class=None,
-):
-    """Instantiate a model from the `transformers` library and its tokenizer.
+class TransformersMultiModalTypeAdapter(ModelTypeAdapter):
+    """Type adapter for `TransformersMultiModal` model."""
+
+    def __init__(self, **kwargs):
+        self.tokenizer = kwargs.get("tokenizer")
+
+    @singledispatchmethod
+    def format_input(self, model_input):
+        """Fomat the prompt arguments to pass to the model.
+
+        Argument
+        --------
+        model_input
+            The input passed by the user.
+
+        Returns
+        -------
+        dict
+            The formatted input.
+
+        """
+        raise TypeError(
+            f"The input type {type(model_input)} is not available. Please "
+            + "provide a list containing a text prompt and assets "
+            + "(`Image`, `Audio` or `Video` instances) supported by your "
+            + "model or a `Chat` instance."
+        )
+
+    @format_input.register(Chat)
+    def format_chat_input(self, model_input: Chat) -> dict:
+        conversation = []
+        assets = []
+
+        # process each message, convert if needed to standardized multimodal chat template format
+        # and collect assets for HF processor
+        for message in model_input.messages:
+            processed_message, message_assets = self._prepare_message(
+                message["role"], message["content"]
+            )
+            conversation.append(processed_message)
+            assets.extend(message_assets)
+
+        formatted_prompt = self.tokenizer.apply_chat_template(
+            conversation,
+            tokenize=False,
+            add_generation_prompt=True
+        )
+        # use the formatted prompt and the assets to format the input
+        return self.format_list_input([formatted_prompt, *assets])
+
+    def _prepare_message(self, role: str, content: str | list) -> tuple[dict, list]:
+        """Create a message."""
+        if isinstance(content, str):
+            return {"role": role, "content": content}, []
+
+        elif isinstance(content, list):
+            if all(isinstance(item, dict) for item in content): # HF multimodal chat template
+                return {"role": role, "content": content}, self._extract_assets_from_content(content)
+            else: # list of string + assets
+                prompt = content[0]
+                assets = content[1:]
+                assets_dict = [self._format_asset_for_template(asset) for asset in assets]
+
+                return {"role": role, "content": [
+                    {"type": "text", "text": prompt},
+                    *assets_dict
+                ]}, assets
+        else:
+            raise ValueError(
+                f"Invalid content type: {type(content)}. "
+                + "The content must be a string or a list containing text and assets "
+                + "or a list of dict items with explicit types."
+            )
+
+    def _extract_assets_from_content(self, content: list) -> list:
+        """Process a list of dict items."""
+        assets = []
+
+        for item in content:
+            if len(item) > 2:
+                raise ValueError(
+                    f"Found item with multiple keys: {item}. "
+                    + "Each item in the content list must be a dictionary with a 'type' key and a single asset key. "
+                    + "To include multiple assets, use separate dictionary items. "
+                    + "For example: [{{'type': 'image', 'image': image1}}, {{'type': 'image', 'image': image2}}]. "
+                )
+
+            if "type" not in item:
+                raise ValueError(
+                    "Each item in the content list must be a dictionary with a 'type' key. "
+                    + "Valid types are 'text', 'image', 'video', or 'audio'. "
+                    + "For instance {{'type': 'text', 'text': 'your message'}}. "
+                    + f"Found item without 'type' key: {item}"
+                )
+            if item["type"] == "text":
+                continue
+            elif item["type"] in ["image", "video", "audio"]:
+                asset_key = item["type"]
+                if asset_key not in item:
+                    raise ValueError(
+                        f"Item with type '{asset_key}' must contain a '{asset_key}' key. "
+                        + f"Found item: {item}"
+                    )
+                if isinstance(item[asset_key], (Image, Video, Audio)):
+                    assets.append(item[asset_key])
+                else:
+                    raise ValueError(
+                        "Assets must be of type `Image`, `Video` or `Audio`. "
+                        + f"Unsupported asset type: {type(item[asset_key])}"
+                    )
+            else:
+                raise ValueError(
+                    "Content must be 'text', 'image', 'video' or 'audio'. "
+                    + f"Unsupported content type: {item['type']}")
+        return assets
+
+    def _format_asset_for_template(self, asset: Image | Video | Audio) -> dict:
+        """Process an asset."""
+        if isinstance(asset, Image):
+            return {"type": "image", "image": asset}
+        elif isinstance(asset, Video):
+            return {"type": "video", "video": asset}
+        elif isinstance(asset, Audio):
+            return {"type": "audio", "audio": asset}
+        else:
+            raise ValueError(
+                "Assets must be of type `Image`, `Video` or `Audio`. "
+                + f"Unsupported asset type: {type(asset)}"
+            )
+
+    @format_input.register(list)
+    def format_list_input(self, model_input: list) -> dict:
+        prompt = model_input[0]
+        assets = model_input[1:]
+
+        if not assets:  # handle empty assets case
+            return {"text": prompt}
+
+        asset_types = set(type(asset) for asset in assets)
+        if len(asset_types) > 1:
+            raise ValueError(
+                "All assets must be of the same type. "
+                + f"Found types: {asset_types}"
+            )
+        asset_type = asset_types.pop()
+
+        if asset_type == Image:
+            return {
+                "text": prompt,
+                "images": [asset.image for asset in assets]
+            }
+        elif asset_type == Audio: # pragma: no cover
+            return {
+                "text": prompt,
+                "audio": [asset.audio for asset in assets]
+            }
+        elif asset_type == Video: # pragma: no cover
+            return {
+                "text": prompt,
+                "videos": [asset.video for asset in assets]
+            }
+        else:
+            raise ValueError(f"Unsupported asset type: {asset_type}")
+
+    def format_output_type(
+        self,
+        output_type: Optional[OutlinesLogitsProcessor] = None,
+    ) -> Optional["LogitsProcessorList"]:
+        """Generate the logits processor argument to pass to the model.
+
+        Argument
+        --------
+        output_type
+            The logits processor provided.
+
+        Returns
+        -------
+        Optional[LogitsProcessorList]
+            The logits processor to pass to the model.
+
+        """
+        from transformers import LogitsProcessorList
+
+        if output_type is not None:
+            return LogitsProcessorList([output_type])
+        return None
+
+
+class TransformersMultiModal(Transformers):
+    """Thin wrapper around a `transformers` model and a `transformers`
+    processor.
+
+    This wrapper is used to convert the input and output types specified by the
+    users at a higher level to arguments to the `transformers` model and
+    processor.
+
+    """
+
+    def __init__(
+        self,
+        model: "PreTrainedModel",
+        processor,
+        *,
+        device_dtype: Optional["torch.dtype"] = None,
+    ):
+        """Create a TransformersMultiModal model instance
+
+        We rely on the `__init__` method of the `Transformers` class to handle
+        most of the initialization and then add elements specific to multimodal
+        models.
+
+        Parameters
+        ----------
+        model
+            A `PreTrainedModel`, or any model that is compatible with the
+            `transformers` API for models.
+        processor
+            A `ProcessorMixin` instance.
+        device_dtype
+            The dtype to use for the model. If not provided, the model will use
+            the default dtype.
+
+        """
+        self.processor = processor
+        self.processor.padding_side = "left"
+        self.processor.pad_token = "[PAD]"
+
+        tokenizer: "PreTrainedTokenizer" = self.processor.tokenizer
+
+        super().__init__(model, tokenizer, device_dtype=device_dtype)
+
+        self.type_adapter = TransformersMultiModalTypeAdapter(
+            tokenizer=tokenizer
+        )
+
+    def _prepare_model_inputs(
+        self,
+        model_input,
+        is_batch: bool = False,
+    ) -> Tuple[Union[str, List[str]], dict]:
+        """Turn the user input into arguments to pass to the model"""
+        if is_batch:
+            prompts = [
+                self.type_adapter.format_input(item) for item in model_input
+            ]
+        else:
+            prompts = self.type_adapter.format_input(model_input)
+
+        # The expected format is a single dict
+        if is_batch:
+            merged_prompts = defaultdict(list)
+            for d in prompts:
+                for key, value in d.items():
+                    if key == "text":
+                        merged_prompts[key].append(value)
+                    else:
+                        merged_prompts[key].extend(value)
+        else:
+            merged_prompts = prompts # type: ignore
+
+        inputs = self.processor(
+            **merged_prompts, padding=True, return_tensors="pt"
+        )
+        if self.device_dtype is not None:
+            inputs = inputs.to(self.model.device, dtype=self.device_dtype)
+        else:
+            inputs = inputs.to(self.model.device)
+
+        return merged_prompts["text"], inputs
+
+
+def from_transformers(
+    model: "PreTrainedModel",
+    tokenizer_or_processor: Union["PreTrainedTokenizer", "ProcessorMixin"],
+    *,
+    device_dtype: Optional["torch.dtype"] = None,
+) -> Union[Transformers, TransformersMultiModal]:
+    """Create an Outlines `Transformers` or `TransformersMultiModal` model
+    instance from a `PreTrainedModel` instance and a `PreTrainedTokenizer` or
+    `ProcessorMixin` instance.
+
+    `outlines` supports `PreTrainedModelForCausalLM`,
+    `PreTrainedMambaForCausalLM`, `PreTrainedModelForSeq2Seq` and any model
+    that implements the `transformers` model API.
 
     Parameters
     ----------
-    model_name
-        The name of the model as listed on Hugging Face's model page.
-    device
-        The device(s) on which the model should be loaded. This overrides
-        the `device_map` entry in `model_kwargs` when provided.
-    model_kwargs
-        A dictionary that contains the keyword arguments to pass to the
-        `from_pretrained` method when loading the model.
-    tokenizer_kwargs
-        A dictionary that contains the keyword arguments to pass to the
-        `from_pretrained` method when loading the tokenizer.
+    model
+        A `transformers.PreTrainedModel` instance.
+    tokenizer_or_processor
+        A `transformers.PreTrainedTokenizer` or
+        `transformers.ProcessorMixin` instance.
+    device_dtype
+        The dtype to use for the model. If not provided, the model will use
+        the default dtype.
 
     Returns
     -------
-    A `TransformersModel` model instance.
+    Union[Transformers, TransformersMultiModal]
+        An Outlines `Transformers` or `TransformersMultiModal` model instance.
 
     """
-    if model_class is None or tokenizer_class is None:
-        try:
-            from transformers import AutoModelForCausalLM, AutoTokenizer
-        except ImportError:
-            raise ImportError(
-                "The `transformers` library needs to be installed in order to use `transformers` models."
-            )
-    if model_class is None:
-        model_class = AutoModelForCausalLM
-    if tokenizer_class is None:
-        tokenizer_class = AutoTokenizer
+    from transformers import (
+        PreTrainedTokenizer, PreTrainedTokenizerFast, ProcessorMixin)
 
-    if device is not None:
-        model_kwargs["device_map"] = device
-
-    model = model_class.from_pretrained(model_name, **model_kwargs)
-
-    tokenizer_kwargs.setdefault("padding_side", "left")
-    tokenizer = tokenizer_class.from_pretrained(model_name, **tokenizer_kwargs)
-
-    return Transformers(model, tokenizer)
-
-
-def mamba(
-    model_name: str,
-    device: Optional[str] = None,
-    model_kwargs: dict = {},
-    tokenizer_kwargs: dict = {},
-):
-    try:
-        from transformers import MambaForCausalLM
-
-    except ImportError:
-        raise ImportError(
-            "The `mamba_ssm`, `torch` and `transformer` libraries needs to be installed in order to use Mamba."
+    if isinstance(
+        tokenizer_or_processor, (PreTrainedTokenizer, PreTrainedTokenizerFast)
+    ):
+        tokenizer = tokenizer_or_processor
+        return Transformers(model, tokenizer, device_dtype=device_dtype)
+    elif isinstance(tokenizer_or_processor, ProcessorMixin):
+        processor = tokenizer_or_processor
+        return TransformersMultiModal(model, processor, device_dtype=device_dtype)
+    else:
+        raise ValueError(
+            "We could determine whether the model passed to `from_transformers`"
+            + " is a text-2-text or a multi-modal model. Please provide a "
+            + "a transformers tokenizer or processor."
         )
-
-    return transformers(
-        model_name=model_name,
-        device=device,
-        model_kwargs=model_kwargs,
-        tokenizer_kwargs=tokenizer_kwargs,
-        model_class=MambaForCausalLM,
-    )

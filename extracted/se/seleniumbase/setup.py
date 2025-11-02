@@ -9,7 +9,7 @@ this_dir = os.path.abspath(os.path.dirname(__file__))
 long_description = None
 total_description = None
 try:
-    with open(os.path.join(this_dir, "README.md"), "rb") as f:
+    with open(os.path.join(this_dir, "README.md"), mode="rb") as f:
         total_description = f.read().decode("utf-8")
     description_lines = total_description.split("\n")
     long_description_lines = []
@@ -21,7 +21,9 @@ except IOError:
     long_description = "A complete library for building end-to-end tests."
 about = {}
 # Get the package version from the seleniumbase/__version__.py file
-with open(os.path.join(this_dir, "seleniumbase", "__version__.py"), "rb") as f:
+with open(
+    os.path.join(this_dir, "seleniumbase", "__version__.py"), mode="rb"
+) as f:
     exec(f.read().decode("utf-8"), about)
 
 if sys.argv[-1] == "publish":
@@ -114,7 +116,6 @@ setup(
         "Framework :: Pytest",
         "Intended Audience :: Developers",
         "Intended Audience :: Information Technology",
-        "License :: OSI Approved :: MIT License",
         "Operating System :: MacOS :: MacOS X",
         "Operating System :: Microsoft :: Windows",
         "Operating System :: POSIX :: Linux",
@@ -147,82 +148,91 @@ setup(
     python_requires=">=3.8",
     install_requires=[
         'pip>=25.0.1;python_version<"3.9"',
-        'pip>=25.2;python_version>="3.9"',
+        'pip>=25.3;python_version>="3.9"',
         'packaging>=25.0',
         'setuptools~=70.2;python_version<"3.10"',  # Newer ones had issues
         'setuptools>=80.9.0;python_version>="3.10"',
         'wheel>=0.45.1',
-        'attrs>=25.3.0',
-        "certifi>=2025.8.3",
+        'attrs~=25.3.0;python_version<"3.9"',
+        'attrs>=25.4.0;python_version>="3.9"',
+        "certifi>=2025.10.5",
         "exceptiongroup>=1.3.0",
         'websockets~=13.1;python_version<"3.9"',
         'websockets>=15.0.1;python_version>="3.9"',
         'filelock~=3.16.1;python_version<"3.9"',
-        'filelock>=3.19.1;python_version>="3.9"',
+        'filelock~=3.19.1;python_version>="3.9" and python_version<"3.10"',
+        'filelock>=3.20.0;python_version>="3.10"',
         'fasteners>=0.20',
-        "mycdp>=1.2.0",
-        "pynose>=1.5.4",
-        'platformdirs>=4.3.6;python_version<"3.9"',
-        'platformdirs>=4.4.0;python_version>="3.9"',
-        'typing-extensions>=4.13.2',
+        "mycdp>=1.3.0",
+        "pynose>=1.5.5",
+        'platformdirs~=4.3.6;python_version<"3.9"',
+        'platformdirs~=4.4.0;python_version>="3.9" and python_version<"3.10"',
+        'platformdirs>=4.5.0;python_version>="3.10"',
+        'typing-extensions~=4.13.2;python_version<"3.9"',
+        'typing-extensions>=4.15.0;python_version>="3.9"',
         "sbvirtualdisplay>=1.4.0",
         'MarkupSafe==2.1.5;python_version<"3.9"',
-        'MarkupSafe>=3.0.2;python_version>="3.9"',
+        'MarkupSafe>=3.0.3;python_version>="3.9"',
         "Jinja2>=3.1.6",
         "six>=1.17.0",
         'parse>=1.20.2',
         'parse-type>=0.6.6',
         'colorama>=0.4.6',
-        'pyyaml>=6.0.2',
+        'pyyaml>=6.0.3',
         'pygments>=2.19.2',
-        'pyreadline3>=3.5.3;platform_system=="Windows"',
+        'pyreadline3>=3.5.4;platform_system=="Windows"',
         "tabcompleter>=1.4.0",
-        "pdbp>=1.7.1",
-        "idna==3.10",
+        "pdbp>=1.8.0",
+        "idna>=3.11",
         'chardet==5.2.0',
-        'charset-normalizer>=3.4.3,<4',
+        'charset-normalizer>=3.4.4,<4',
         'urllib3>=1.26.20,<2;python_version<"3.10"',
         'urllib3>=1.26.20,<2.6.0;python_version>="3.10"',
         'requests==2.32.4;python_version<"3.9"',
-        'requests>=2.32.5,<2.33;python_version>="3.9"',
+        'requests~=2.32.5;python_version>="3.9"',
         'sniffio==1.3.1',
         'h11==0.16.0',
         'outcome==1.3.0.post0',
         'trio==0.27.0;python_version<"3.9"',
-        'trio==0.30.0;python_version>="3.9"',
-        'trio-websocket==0.12.2',
+        'trio>=0.31.0,<1;python_version>="3.9" and python_version<"3.10"',
+        'trio>=0.32.0,<1;python_version>="3.10"',
+        'trio-websocket~=0.12.2',
         'wsproto==1.2.0',
-        'websocket-client==1.8.0',
+        'websocket-client~=1.8.0;python_version<"3.9"',
+        'websocket-client~=1.9.0;python_version>="3.9"',
         'selenium==4.27.1;python_version<"3.9"',
         'selenium==4.32.0;python_version>="3.9" and python_version<"3.10"',
-        'selenium==4.35.0;python_version>="3.10"',
+        'selenium==4.38.0;python_version>="3.10"',
         'cssselect==1.2.0;python_version<"3.9"',
         'cssselect==1.3.0;python_version>="3.9"',
         "sortedcontainers==2.4.0",
         'execnet==2.1.1',
-        'iniconfig==2.1.0',
+        'iniconfig==2.1.0;python_version<"3.10"',
+        'iniconfig==2.3.0;python_version>="3.10"',
         'pluggy==1.5.0;python_version<"3.9"',
         'pluggy==1.6.0;python_version>="3.9"',
         'pytest==8.3.5;python_version<"3.9"',
-        'pytest==8.4.1;python_version>="3.9"',
+        'pytest==8.4.2;python_version>="3.9"',
         "pytest-html==4.0.2",  # Newer ones had issues
         'pytest-metadata==3.1.1',
         "pytest-ordering==0.6",
         'pytest-rerunfailures==14.0;python_version<"3.9"',
-        'pytest-rerunfailures==15.1;python_version>="3.9"',
+        'pytest-rerunfailures==16.0.1;python_version>="3.9" and python_version<"3.10"',  # noqa
+        'pytest-rerunfailures==16.1;python_version>="3.10"',
         'pytest-xdist==3.6.1;python_version<"3.9"',
         'pytest-xdist==3.8.0;python_version>="3.9"',
         'parameterized==0.9.0',
         "behave==1.2.6",  # Newer ones had issues
         'soupsieve==2.7;python_version<"3.9"',
         'soupsieve~=2.8;python_version>="3.9"',
-        "beautifulsoup4~=4.13.5",
+        "beautifulsoup4~=4.14.2",
         'pyotp==2.9.0',
         'python-xlib==0.33;platform_system=="Linux"',
+        'PyAutoGUI>=0.9.54;platform_system=="Linux"',
         'markdown-it-py==3.0.0;python_version<"3.10"',
         'markdown-it-py==4.0.0;python_version>="3.10"',
         'mdurl==0.1.2',
-        'rich>=14.1.0,<15',
+        'rich>=14.2.0,<15',
     ],
     extras_require={
         # pip install -e .[allure]
@@ -237,9 +247,10 @@ setup(
         # Usage: coverage run -m pytest; coverage html; coverage report
         "coverage": [
             'coverage>=7.6.1;python_version<"3.9"',
-            'coverage>=7.10.5;python_version>="3.9"',
+            'coverage>=7.10.7;python_version>="3.9" and python_version<"3.10"',
+            'coverage>=7.11.0;python_version>="3.10"',
             'pytest-cov>=5.0.0;python_version<"3.9"',
-            'pytest-cov>=6.2.1;python_version>="3.9"',
+            'pytest-cov>=7.0.0;python_version>="3.9"',
         ],
         # pip install -e .[flake8]
         # Usage: flake8
@@ -270,15 +281,18 @@ setup(
             'pdfminer.six==20250324;python_version<"3.9"',
             'pdfminer.six==20250506;python_version>="3.9"',
             'cryptography==39.0.2;python_version<"3.9"',
-            'cryptography==45.0.6;python_version>="3.9"',
-            'cffi==1.17.1',
-            "pycparser==2.22",
+            'cryptography==46.0.3;python_version>="3.9"',
+            'cffi==1.17.1;python_version<"3.9"',
+            'cffi==2.0.0;python_version>="3.9"',
+            'pycparser==2.22;python_version<"3.9"',
+            'pycparser==2.23;python_version>="3.9"',
         ],
         # pip install -e .[pillow]
         # (An optional library for image-processing.)
         "pillow": [
             'Pillow>=10.4.0;python_version<"3.9"',
-            'Pillow>=11.3.0;python_version>="3.9"',
+            'Pillow>=11.3.0;python_version>="3.9" and python_version<"3.10"',
+            'Pillow>=12.0.0;python_version>="3.10"',
         ],
         # pip install -e .[pip-system-certs]
         # (If you see [SSL: CERTIFICATE_VERIFY_FAILED], then get this.)
@@ -294,11 +308,12 @@ setup(
         ],
         # pip install -e .[psutil]
         "psutil": [
-            "psutil==7.0.0",
+            "psutil==7.1.2",
         ],
         # pip install -e .[pyautogui]
+        # (Already a required dependency on Linux now.)
         "pyautogui": [
-            "PyAutoGUI==0.9.54",
+            'PyAutoGUI>=0.9.54;platform_system!="Linux"',
         ],
         # pip install -e .[selenium-stealth]
         "selenium-stealth": [
@@ -307,7 +322,7 @@ setup(
         # pip install -e .[selenium-wire]
         "selenium-wire": [
             'selenium-wire==5.1.0',
-            'pyOpenSSL==24.2.1',
+            'pyOpenSSL>=24.2.1',
             'pyparsing>=3.1.4',
             'Brotli==1.1.0',
             'blinker==1.7.0',  # Newer ones had issues
@@ -316,7 +331,7 @@ setup(
             'hyperframe==6.0.1',
             'kaitaistruct==0.10',
             'pyasn1==0.6.1',
-            'zstandard==0.23.0',
+            'zstandard>=0.23.0',
         ],
     },
     packages=[
@@ -330,6 +345,10 @@ setup(
         "seleniumbase.drivers",
         "seleniumbase.drivers.cft_drivers",
         "seleniumbase.drivers.chs_drivers",
+        "seleniumbase.drivers.opera_drivers",
+        "seleniumbase.drivers.brave_drivers",
+        "seleniumbase.drivers.comet_drivers",
+        "seleniumbase.drivers.atlas_drivers",
         "seleniumbase.extensions",
         "seleniumbase.fixtures",
         "seleniumbase.js_code",

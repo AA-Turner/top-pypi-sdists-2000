@@ -1,12 +1,83 @@
-import json as json
-import re
-from dataclasses import dataclass
-from typing import Any, List, Union
+"""Regular expression DSL and output types for structured generation.
 
-from pydantic import BaseModel, GetCoreSchemaHandler, GetJsonSchemaHandler
+This module contains elements related to three logical steps in the use of
+output types for structured generation:
+
+1. Definition of `Term` classes that contain output type definitions. That
+   includes both terms intended to be used by themselves such as `JsonSchema`
+   or `CFG` and terms that are part of the regular expression DSL such as
+   `Alternatives` or `KleeneStar` (and the related functions).
+2. Conversion of Python types into `Term` instances (`python_types_to_terms`).
+3. Conversion of a `Term` instance into a regular expression (`to_regex`).
+
+"""
+
+import json
+import re
+import sys
+import warnings
+from dataclasses import dataclass
+from enum import EnumMeta
+from types import FunctionType
+from typing import (
+    Any,
+    List,
+    Literal,
+    Optional as OptionalType,
+    Union,
+    get_args,
+)
+import jsonschema
+from genson import SchemaBuilder
+# TODO: change this once the import issue is fixed in outlines_core
+from outlines_core import outlines_core
+from pydantic import (
+    BaseModel,
+    GetCoreSchemaHandler,
+    GetJsonSchemaHandler,
+    TypeAdapter,
+)
 from pydantic.json_schema import JsonSchemaValue
 from pydantic_core import core_schema as cs
-from outlines_core.fsm.json_schema import build_regex_from_schema
+
+import outlines.types as types
+from outlines import grammars
+from outlines.types.json_schema_utils import (
+    json_schema_dict_to_pydantic,
+    json_schema_dict_to_typeddict,
+    json_schema_dict_to_dataclass,
+)
+from outlines.types.utils import (
+    get_schema_from_signature,
+    is_int,
+    is_int_instance,
+    is_float,
+    is_float_instance,
+    is_str,
+    is_str_instance,
+    is_bool,
+    is_datetime,
+    is_date,
+    is_time,
+    is_native_dict,
+    is_dict_instance,
+    is_dataclass,
+    is_typed_dict,
+    is_pydantic_model,
+    is_genson_schema_builder,
+    is_literal,
+    is_union,
+    is_enum,
+    is_callable,
+    is_typing_list,
+    is_typing_tuple,
+    is_typing_dict,
+)
+
+if sys.version_info >= (3, 12):  # pragma: no cover
+    from typing import _TypedDictMeta  # type: ignore
+else:  # pragma: no cover
+    from typing_extensions import _TypedDictMeta  # type: ignore
 
 
 class Term:
@@ -31,17 +102,29 @@ class Term:
 
     """
 
-    def __add__(self: "Term", other: Union[str, "Term"]) -> "Sequence":
-        if isinstance(other, str):
-            other = String(other)
+    def __add__(self: "Term", other: "Term") -> "Sequence":
+        if is_str_instance(other):
+            other = String(str(other))
 
         return Sequence([self, other])
 
-    def __radd__(self: "Term", other: Union[str, "Term"]) -> "Sequence":
-        if isinstance(other, str):
-            other = String(other)
+    def __radd__(self: "Term", other: "Term") -> "Sequence":
+        if is_str_instance(other):
+            other = String(str(other))
 
         return Sequence([other, self])
+
+    def __or__(self: "Term", other: "Term") -> "Alternatives":
+        if is_str_instance(other):
+            other = String(str(other))
+
+        return Alternatives([self, other])
+
+    def __ror__(self: "Term", other: "Term") -> "Alternatives":
+        if is_str_instance(other):
+            other = String(str(other))
+
+        return Alternatives([other, self])
 
     def __get_validator__(self, _core_schema):
         def validate(input_value):
@@ -138,6 +221,14 @@ class String(Term):
 
 @dataclass
 class Regex(Term):
+    """Class representing a regular expression.
+
+    Parameters
+    ----------
+    pattern
+        The regular expression as a string.
+
+    """
     pattern: str
 
     def _display_node(self) -> str:
@@ -147,28 +238,262 @@ class Regex(Term):
         return f"Regex(pattern='{self.pattern}')"
 
 
+@dataclass
+class CFG(Term):
+    """Class representing a context-free grammar.
+
+    Parameters
+    ----------
+    definition
+        The definition of the context-free grammar as a string.
+
+    """
+    definition: str
+
+    def _display_node(self) -> str:
+        return f"CFG('{self.definition}')"
+
+    def __repr__(self):
+        return f"CFG(definition='{self.definition}')"
+
+    def __eq__(self, other):
+        if not isinstance(other, CFG):
+            return False
+        return self.definition == other.definition
+
+    @classmethod
+    def from_file(cls, path: str) -> "CFG":
+        """Create a CFG instance from a file containing a CFG definition.
+
+        Parameters
+        ----------
+        path : str
+            The path to the file containing the CFG definition.
+        Returns
+        -------
+        CFG
+            A CFG instance.
+
+        """
+        with open(path, "r") as f:
+            definition = f.read()
+        return cls(definition)
+
+
 class JsonSchema(Term):
-    def __init__(self, schema: Union[dict, str, type[BaseModel]]):
-        if isinstance(schema, dict):
-            schema_str = json.dumps(schema)
-        elif isinstance(schema, str):
-            schema_str = schema
-        elif issubclass(schema, BaseModel):
-            schema_str = json.dumps(schema.model_json_schema())
+    """Class representing a JSON schema.
+
+    The JSON schema object from which to instantiate the class can be a
+    dictionary, a string, a Pydantic model, a typed dict, a dataclass, or a
+    genSON schema builder.
+
+    """
+    schema: str
+    whitespace_pattern: OptionalType[str]
+
+    def __init__(
+        self,
+        schema: Union[
+            dict, str, type[BaseModel], _TypedDictMeta, type, SchemaBuilder
+        ],
+        whitespace_pattern: OptionalType[str] = None,
+        ensure_ascii: bool = True,
+    ):
+        """
+        Parameters
+        ----------
+        schema
+            The object containing the JSON schema.
+        whitespace_pattern
+            The pattern to use to match whitespace characters.
+        ensure_ascii
+            Whether to ensure the schema is ASCII-only.
+
+        """
+        schema_str: str
+
+        if is_dict_instance(schema):
+            schema_str = json.dumps(schema, ensure_ascii=ensure_ascii)
+        elif is_str_instance(schema):
+            schema_str = str(schema)
+        elif is_pydantic_model(schema):
+            schema_str = json.dumps(schema.model_json_schema(), ensure_ascii=ensure_ascii) # type: ignore
+        elif is_typed_dict(schema):
+            schema_str = json.dumps(TypeAdapter(schema).json_schema(), ensure_ascii=ensure_ascii)
+        elif is_dataclass(schema):
+            schema_str = json.dumps(TypeAdapter(schema).json_schema(), ensure_ascii=ensure_ascii)
+        elif is_genson_schema_builder(schema):
+            schema_str = schema.to_json(ensure_ascii=ensure_ascii)  # type: ignore
         else:
             raise ValueError(
-                f"Cannot parse schema {json_schema}. The schema must be either "
-                + "a Pydantic class, a dictionary or a string that contains the JSON "
-                + "schema specification"
+                f"Cannot parse schema {schema}. The schema must be either "
+                + "a Pydantic class, typed dict, a dataclass, a genSON schema "
+                + "builder or a string or dict that contains the JSON schema "
+                + "specification"
             )
 
         self.schema = schema_str
+        self.whitespace_pattern = whitespace_pattern
+
+    def __post_init__(self):
+        jsonschema.Draft7Validator.check_schema(json.loads(self.schema))
+
+    @classmethod
+    def is_json_schema(cls, obj: Any) -> bool:
+        """Check if the object provided is a JSON schema type.
+
+        Parameters
+        ----------
+        obj: Any
+            The object to check
+
+        Returns
+        -------
+        bool
+            True if the object is a JSON schema type, False otherwise
+
+        """
+        return (
+            isinstance(obj, cls)
+            or is_pydantic_model(obj)
+            or is_typed_dict(obj)
+            or is_dataclass(obj)
+            or is_genson_schema_builder(obj)
+        )
+
+    @classmethod
+    def convert_to(
+        cls,
+        schema: Union[
+            "JsonSchema",
+            type[BaseModel],
+            _TypedDictMeta,
+            type,
+            SchemaBuilder,
+        ],
+        target_types: List[Literal[
+            "str",
+            "dict",
+            "pydantic",
+            "typeddict",
+            "dataclass",
+            "genson",
+        ]],
+    ) -> Union[str, dict, type[BaseModel], _TypedDictMeta, type, SchemaBuilder]:
+        """Convert a JSON schema type to a different JSON schema type.
+
+        If the schema provided is already of a type in the target_types, return
+        it unchanged.
+
+        Parameters
+        ----------
+        schema: Union[JsonSchema, type[BaseModel], _TypedDictMeta, type, SchemaBuilder]
+            The schema to convert
+        target_types: List[Literal["str", "dict", "pydantic", "typeddict", "dataclass", "genson"]]
+            The target types to convert to
+
+        """
+        # If the schema provided is already of a type in the target_types,
+        # just return it
+        if isinstance(schema, cls):
+            if "str" in target_types:
+                return schema.schema
+            elif "dict" in target_types:
+                return json.loads(schema.schema)
+        elif is_pydantic_model(schema) and "pydantic" in target_types:
+            return schema
+        elif is_typed_dict(schema) and "typeddict" in target_types:
+            return schema
+        elif is_dataclass(schema) and "dataclass" in target_types:
+            return schema
+        elif is_genson_schema_builder(schema) and "genson" in target_types:
+            return schema
+
+        # Convert the schema to a JSON schema string/dict
+        if isinstance(schema, cls):
+            schema_str = schema.schema
+        else:
+            schema_str = cls(schema).schema
+        schema_dict = json.loads(schema_str)
+
+        for target_type in target_types:
+            try:
+                # Convert the JSON schema string to the target type
+                if target_type == "str":
+                    return schema_str
+                elif target_type == "dict":
+                    return schema_dict
+                elif target_type == "pydantic":
+                    return json_schema_dict_to_pydantic(schema_dict)
+                elif target_type == "typeddict":
+                    return json_schema_dict_to_typeddict(schema_dict)
+                elif target_type == "dataclass":
+                    return json_schema_dict_to_dataclass(schema_dict)
+                # No conversion available for genson
+            except Exception as e:  # pragma: no cover
+                warnings.warn(
+                    f"Cannot convert schema type {type(schema)} to {target_type}: {e}"
+                )
+                continue
+
+        raise ValueError(
+            f"Cannot convert schema type {type(schema)} to any of the target "
+            f"types {target_types}"
+        )
 
     def _display_node(self) -> str:
         return f"JsonSchema('{self.schema}')"
 
     def __repr__(self):
         return f"JsonSchema(schema='{self.schema}')"
+
+    def __eq__(self, other):
+        if not isinstance(other, JsonSchema):
+            return False
+        try:
+            self_dict = json.loads(self.schema)
+            other_dict = json.loads(other.schema)
+            return self_dict == other_dict
+        except json.JSONDecodeError:  # pragma: no cover
+            return self.schema == other.schema
+
+    @classmethod
+    def from_file(cls, path: str) -> "JsonSchema":
+        """Create a JsonSchema instance from a .json file containing a JSON
+        schema.
+
+        Parameters
+        ----------
+        path:
+            The path to the file containing the JSON schema.
+        Returns
+        -------
+        JsonSchema
+            A JsonSchema instance.
+
+        """
+        with open(path, "r") as f:
+            schema = json.load(f)
+        return cls(schema)
+
+
+@dataclass
+class Choice(Term):
+    """Class representing a choice between different items.
+
+    Parameters
+    ----------
+    items
+        The items to choose from.
+
+    """
+    items: List[Any]
+
+    def _display_node(self) -> str:
+        return f"Choice({repr(self.items)})"
+
+    def __repr__(self):
+        return f"Choice(items={repr(self.items)})"
 
 
 @dataclass
@@ -322,6 +647,10 @@ def regex(pattern: str):
     return Regex(pattern)
 
 
+def cfg(definition: str):
+    return CFG(definition)
+
+
 def json_schema(schema: Union[str, dict, type[BaseModel]]):
     return JsonSchema(schema)
 
@@ -331,6 +660,7 @@ def either(*terms: Union[str, Term]):
 
     This factory function automatically translates string arguments
     into `String` objects.
+
     """
     terms = [String(arg) if isinstance(arg, str) else arg for arg in terms]
     return Alternatives(terms)
@@ -374,41 +704,245 @@ def one_or_more(term: Union[Term, str]) -> KleenePlus:
     return KleenePlus(term)
 
 
+def python_types_to_terms(ptype: Any, recursion_depth: int = 0) -> Term:
+    """Convert Python types to Outlines DSL terms that constrain LLM output.
+
+    Parameters
+    ----------
+    ptype
+        The Python type to convert
+    recursion_depth
+        Current recursion depth to prevent infinite recursion
+
+    Returns
+    -------
+    Term
+        The corresponding DSL `Term` instance.
+
+    """
+    if recursion_depth > 10:
+        raise RecursionError(
+            f"Maximum recursion depth exceeded when converting {ptype}. "
+            "This might be due to a recursive type definition."
+        )
+
+    # First handle Term instances
+    if isinstance(ptype, Term):
+        return ptype
+
+    # Basic types
+    if is_int(ptype):
+        return types.integer
+    elif is_float(ptype):
+        return types.number
+    elif is_bool(ptype):
+        return types.boolean
+    elif is_str(ptype):
+        return types.string
+    elif is_native_dict(ptype):
+        return CFG(grammars.json)
+    elif is_time(ptype):
+        return types.time
+    elif is_date(ptype):
+        return types.date
+    elif is_datetime(ptype):
+        return types.datetime
+
+    # Basic type instances
+    if is_str_instance(ptype):
+        return String(ptype)
+    elif is_int_instance(ptype) or is_float_instance(ptype):
+        return Regex(str(ptype))
+
+    # Structured types
+    structured_type_checks = [
+        lambda x: is_dataclass(x),
+        lambda x: is_typed_dict(x),
+        lambda x: is_pydantic_model(x),
+    ]
+    if any(check(ptype) for check in structured_type_checks):
+        schema = TypeAdapter(ptype).json_schema()
+        return JsonSchema(schema)
+
+    elif is_genson_schema_builder(ptype):
+        schema = ptype.to_json()
+        return JsonSchema(schema)
+
+    if is_enum(ptype):
+        return Alternatives(
+            [
+                python_types_to_terms(member, recursion_depth + 1)
+                for member in _get_enum_members(ptype)
+            ]
+        )
+
+    args = get_args(ptype)
+    if is_literal(ptype):
+        return _handle_literal(args)
+    elif is_union(ptype):
+        return _handle_union(args, recursion_depth)
+    elif is_typing_list(ptype):
+        return _handle_list(args, recursion_depth)
+    elif is_typing_tuple(ptype):
+        return _handle_tuple(args, recursion_depth)
+    elif is_typing_dict(ptype):
+        return _handle_dict(args, recursion_depth)
+
+    if is_callable(ptype):
+        return JsonSchema(get_schema_from_signature(ptype))
+
+    type_name = getattr(ptype, "__name__", ptype)
+    raise TypeError(
+        f"Type {type_name} is currently not supported. Please open an issue: "
+        "https://github.com/dottxt-ai/outlines/issues"
+    )
+
+
+def _get_enum_members(ptype: EnumMeta) -> List[Any]:
+    regular_members = [member.value for member in ptype]  # type: ignore
+    function_members = []
+    for key, value in ptype.__dict__.items():
+        if (
+            isinstance(value, FunctionType)
+            and not (key.startswith('__') and key.endswith('__'))
+            and key != '_generate_next_value_'  # Skip this specific method that causes issues
+        ):
+            function_members.append(value)
+    return regular_members + function_members
+
+
+def _handle_literal(args: tuple) -> Alternatives:
+    return Alternatives([python_types_to_terms(arg) for arg in args])
+
+
+def _handle_union(args: tuple, recursion_depth: int) -> Alternatives:
+    # Handle the Optional[T] type
+    if len(args) == 2 and (type(None) in args or None in args):
+        other_ptype = next(arg for arg in args if arg not in (type(None), None))
+        return Alternatives(
+            [
+                python_types_to_terms(other_ptype, recursion_depth + 1),
+                String("None"),
+            ]
+        )
+    return Alternatives(
+        [python_types_to_terms(arg, recursion_depth + 1) for arg in args]
+    )
+
+
+def _handle_list(args: tuple, recursion_depth: int) -> Sequence:
+    if args is None or len(args) > 1:
+        raise TypeError(
+            f"Only homogeneous lists are supported. Got multiple type arguments {args}."
+        )
+    item_type = python_types_to_terms(args[0], recursion_depth + 1)
+    return Sequence(
+        [
+            String("["),
+            item_type,
+            KleeneStar(Sequence([String(", "), item_type])),
+            String("]"),
+        ]
+    )
+
+
+def _handle_tuple(args: tuple, recursion_depth: int) -> Union[Sequence, String]:
+    if len(args) == 0 or args == ((),):
+        return String("()")
+    elif len(args) == 2 and args[1] is Ellipsis:
+        item_term = python_types_to_terms(args[0], recursion_depth + 1)
+        return Sequence(
+            [
+                String("("),
+                item_term,
+                KleeneStar(Sequence([String(", "), item_term])),
+                String(")"),
+            ]
+        )
+    else:
+        items = [python_types_to_terms(arg, recursion_depth + 1) for arg in args]
+        separator = String(", ")
+        elements = []
+        for i, item in enumerate(items):
+            elements.append(item)
+            if i < len(items) - 1:
+                elements.append(separator)
+        return Sequence([String("("), *elements, String(")")])
+
+
+def _handle_dict(args: tuple, recursion_depth: int) -> Sequence:
+    if args is None or len(args) != 2:
+        raise TypeError(f"Dict must have exactly two type arguments. Got {args}.")
+    # Add dict support with key:value pairs
+    key_type = python_types_to_terms(args[0], recursion_depth + 1)
+    value_type = python_types_to_terms(args[1], recursion_depth + 1)
+    return Sequence(
+        [
+            String("{"),
+            Optional(
+                Sequence(
+                    [
+                        key_type,
+                        String(":"),
+                        value_type,
+                        KleeneStar(
+                            Sequence([String(", "), key_type, String(":"), value_type])
+                        ),
+                    ]
+                )
+            ),
+            String("}"),
+        ]
+    )
+
+
 def to_regex(term: Term) -> str:
     """Convert a term to a regular expression.
 
     We only consider self-contained terms that do not refer to another rule.
 
+    Parameters
+    ----------
+    term
+        The term to convert to a regular expression.
+
+    Returns
+    -------
+    str
+        The regular expression as a string.
+
     """
-    match term:
-        case String():
-            return re.escape(term.value)
-        case Regex():
-            return f"({term.pattern})"
-        case JsonSchema():
-            regex_str = build_regex_from_schema(term.schema)
-            return f"({regex_str})"
-        case KleeneStar():
-            return f"({to_regex(term.term)})*"
-        case KleenePlus():
-            return f"({to_regex(term.term)})+"
-        case Optional():
-            return f"({to_regex(term.term)})?"
-        case Alternatives():
-            regexes = [to_regex(subterm) for subterm in term.terms]
-            return f"({'|'.join(regexes)})"
-        case Sequence():
-            regexes = [to_regex(subterm) for subterm in term.terms]
-            return f"{''.join(regexes)}"
-        case QuantifyExact():
-            return f"({to_regex(term.term)}){{{term.count}}}"
-        case QuantifyMinimum():
-            return f"({to_regex(term.term)}){{{term.min_count},}}"
-        case QuantifyMaximum():
-            return f"({to_regex(term.term)}){{,{term.max_count}}}"
-        case QuantifyBetween():
-            return f"({to_regex(term.term)}){{{term.min_count},{term.max_count}}}"
-        case _:
-            raise TypeError(
-                f"Cannot convert object {repr(term)} to a regular expression."
-            )
+    if isinstance(term, String):
+        return re.escape(term.value)
+    elif isinstance(term, Regex):
+        return f"({term.pattern})"
+    elif isinstance(term, JsonSchema):
+        regex_str = outlines_core.json_schema.build_regex_from_schema(term.schema, term.whitespace_pattern)
+        return f"({regex_str})"
+    elif isinstance(term, Choice):
+        regexes = [to_regex(python_types_to_terms(item)) for item in term.items]
+        return f"({'|'.join(regexes)})"
+    elif isinstance(term, KleeneStar):
+        return f"({to_regex(term.term)})*"
+    elif isinstance(term, KleenePlus):
+        return f"({to_regex(term.term)})+"
+    elif isinstance(term, Optional):
+        return f"({to_regex(term.term)})?"
+    elif isinstance(term, Alternatives):
+        regexes = [to_regex(subterm) for subterm in term.terms]
+        return f"({'|'.join(regexes)})"
+    elif isinstance(term, Sequence):
+        regexes = [to_regex(subterm) for subterm in term.terms]
+        return f"{''.join(regexes)}"
+    elif isinstance(term, QuantifyExact):
+        return f"({to_regex(term.term)}){{{term.count}}}"
+    elif isinstance(term, QuantifyMinimum):
+        return f"({to_regex(term.term)}){{{term.min_count},}}"
+    elif isinstance(term, QuantifyMaximum):
+        return f"({to_regex(term.term)}){{,{term.max_count}}}"
+    elif isinstance(term, QuantifyBetween):
+        return f"({to_regex(term.term)}){{{term.min_count},{term.max_count}}}"
+    else:
+        raise TypeError(
+            f"Cannot convert object {repr(term)} to a regular expression."
+        )

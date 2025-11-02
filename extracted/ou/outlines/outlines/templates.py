@@ -1,3 +1,5 @@
+"""Create templates to easily build prompts."""
+
 import functools
 import inspect
 import json
@@ -10,7 +12,47 @@ from typing import Any, Callable, Dict, Optional, Type, cast
 import warnings
 
 import jinja2
-import pydantic
+from pydantic import BaseModel
+from PIL import Image as PILImage
+
+from outlines.inputs import Image
+
+
+def Vision(prompt: str, image: PILImage.Image) -> list:
+    """This factory function replaces the deprecated `Vision` class until it is
+    fully removed in outlines v1.2.0.
+
+    Parameters
+    ----------
+    prompt
+        The prompt to use to generate the response.
+    image
+        The image to use to generate the response.
+
+    Returns
+    -------
+    list
+        A list containing the prompt and Image instance.
+    """
+    warnings.warn("""
+        The Vision function is deprecated and will be removed in outlines 1.2.0.
+        Instead of using Vision, please use a prompt along with an
+        outlines.inputs.Image instance.
+        For instance:
+        ```python
+        import openai
+        from outlines import Image, from_openai
+        model = from_openai("gpt-4o")
+        response = model(
+            ["A beautiful image of a cat", Image(my_image)],
+            max_tokens=100
+        )
+        ```
+        """,
+        DeprecationWarning,
+        stacklevel=2,
+    )
+    return [prompt, Image(image)]
 
 
 @dataclass
@@ -21,28 +63,23 @@ class Template:
     template can be accessed by callers.
 
     """
-
     template: jinja2.Template
-    signature: Optional[inspect.Signature]
 
     def __call__(self, *args, **kwargs) -> str:
         """Render and return the template.
 
         Returns
         -------
-        The rendered template as a Python ``str``.
+        str
+            The rendered template as a Python string.
 
         """
-        if self.signature is not None:
-            bound_arguments = self.signature.bind(*args, **kwargs)
-            bound_arguments.apply_defaults()
-            return self.template.render(**bound_arguments.arguments)
-        else:
-            return self.template.render(**kwargs)
+        return self.template.render(**kwargs)
 
     @classmethod
     def from_string(cls, content: str, filters: Dict[str, Callable] = {}):
-        """Create a `Template` instance from a string containing a Jinja template.
+        """Create a `Template` instance from a string containing a Jinja
+        template.
 
         Parameters
         ----------
@@ -51,16 +88,20 @@ class Template:
 
         Returns
         -------
-        An instance of the class with the provided content as a template.
+        Template
+            An instance of the class with the provided content as a template.
+
         """
-        return cls(build_template_from_string(content, filters), None)
+        return cls(build_template_from_string(content, filters))
 
     @classmethod
     def from_file(cls, path: Path, filters: Dict[str, Callable] = {}):
-        """Create a `Template` instance from a file containing a Jinja template.
+        """Create a `Template` instance from a file containing a Jinja
+        template.
 
-        Note: This method does not allow to include and inheritance to reference files
-        that are outside the folder or subfolders of the file given to `from_file`.
+        Note: This method does not allow to include and inheritance to
+        reference files that are outside the folder or subfolders of the file
+        given to `from_file`.
 
         Parameters
         ----------
@@ -70,11 +111,15 @@ class Template:
         Returns
         -------
         Template
-            An instance of the Template class with the template loaded from the file.
+            An instance of the Template class with the template loaded from the
+            file.
+
         """
-        # We don't use a `Signature` here because it seems not feasible to infer one from a Jinja2 environment that is
-        # split across multiple files (since e.g. we support features like Jinja2 includes and template inheritance)
-        return cls(build_template_from_file(path, filters), None)
+        # We don't use a `Signature` here because it seems not feasible to
+        # infer one from a Jinja2 environment that is
+        # split across multiple files (since e.g. we support features like
+        # Jinja2 includes and template inheritance)
+        return cls(build_template_from_file(path, filters))
 
 
 def build_template_from_string(
@@ -108,90 +153,6 @@ def build_template_from_file(
     return env.get_template(os.path.basename(path))
 
 
-def prompt(
-    fn: Optional[Callable] = None,
-    filters: Dict[str, Callable] = {},
-) -> Callable:
-    """Decorate a function that contains a prompt template.
-
-    This allows to define prompts in the docstring of a function and simplify their
-    manipulation by providing some degree of encapsulation. It uses the `render`
-    function internally to render templates.
-
-    ```pycon
-    >>> import outlines
-    >>>
-    >>> @outlines.prompt
-    >>> def build_prompt(question):
-    ...    "I have a ${question}"
-    ...
-    >>> prompt = build_prompt("How are you?")
-    ```
-
-    This API can also be helpful in an "agent" context where parts of the prompt
-    are set when the agent is initialized and never modified later. In this situation
-    we can partially apply the prompt function at initialization.
-
-    ```pycon
-    >>> import outlines
-    >>> import functools as ft
-    ...
-    >>> @outlines.prompt
-    ... def solve_task(name: str, objective: str, task: str):
-    ...     \"""Your name is {{name}}.
-    ...     Your overall objective is to {{objective}}.
-    ...     Please solve the following task: {{task}}
-    ...     \"""
-    ...
-    >>> hal = ft.partial(solve_task, "HAL", "Travel to Jupiter")
-    ```
-
-    Additional Jinja2 filters can be provided as keyword arguments to the decorator.
-
-    ```pycon
-    >>> def reverse(s: str) -> str:
-    ...     return s[::-1]
-    ...
-    >>> @outlines.prompt(filters={ 'reverse': reverse })
-    ... def reverse_prompt(text):
-    ...     \"""{{ text | reverse }}\"""
-    ...
-    >>> prompt = reverse_prompt("Hello")
-    >>> print(prompt)
-    ... "olleH"
-    ```
-
-    Returns
-    -------
-    A `Template` callable class which will render the template when called.
-
-    """
-    warnings.warn(
-        "The @prompt decorator is deprecated and will be removed in outlines 1.1.0. "
-        "Instead of using docstring templates, please use Template.from_file() to "
-        "load your prompts from separate template files, or a simple Python function "
-        "that returns text. This helps keep prompt content separate from code and is "
-        "more maintainable.",
-        DeprecationWarning,
-        stacklevel=2,
-    )
-
-    if fn is None:
-        return lambda fn: prompt(fn, cast(Dict[str, Callable], filters))
-
-    signature = inspect.signature(fn)
-
-    # The docstring contains the template that will be rendered to be used
-    # as a prompt to the language model.
-    docstring = fn.__doc__
-    if docstring is None:
-        raise TypeError("Could not find a template in the function's docstring.")
-
-    template = build_template_from_string(cast(str, docstring), filters)
-
-    return Template(template, signature)
-
-
 def create_jinja_env(
     loader: Optional[jinja2.BaseLoader], filters: Dict[str, Callable]
 ) -> jinja2.Environment:
@@ -203,12 +164,12 @@ def create_jinja_env(
     - `source`: get a function's source code
     - `signature`: get a function's signature
     - `args`: get a function's arguments
-    - `schema`: isplay a JSON Schema
+    - `schema`: display a JSON Schema
 
     Users may pass additional filters, and/or override existing ones.
 
-    Arguments
-    ---------
+    Parameters
+    ----------
     loader
        An optional `BaseLoader` instance
     filters
@@ -287,7 +248,7 @@ def get_fn_source(fn: Callable):
     re_search = re.search(re.compile(r"(\bdef\b.*)", re.DOTALL), source)
     if re_search is not None:
         source = re_search.group(0)
-    else:
+    else:  # pragma: no cover
         raise TypeError("Could not read the function's source code")
 
     return source
@@ -300,7 +261,7 @@ def get_fn_signature(fn: Callable):
 
     source = textwrap.dedent(inspect.getsource(fn))
     re_search = re.search(re.compile(r"\(([^)]+)\)"), source)
-    if re_search is None:
+    if re_search is None:  # pragma: no cover
         signature = ""
     else:
         signature = re_search.group(1)
@@ -321,12 +282,9 @@ def get_schema_dict(model: Dict):
     return json.dumps(model, indent=2)
 
 
-@get_schema.register(type(pydantic.BaseModel))
-def get_schema_pydantic(model: Type[pydantic.BaseModel]):
+@get_schema.register(type(BaseModel))
+def get_schema_pydantic(model: Type[BaseModel]):
     """Return the schema of a Pydantic model."""
-    if not isinstance(model, type(pydantic.BaseModel)):
-        raise TypeError("The `schema` filter only applies to Pydantic models.")
-
     if hasattr(model, "model_json_schema"):
         def_key = "$defs"
         raw_schema = model.model_json_schema()
@@ -352,7 +310,7 @@ def parse_pydantic_schema(raw_schema, definitions):
     for name, value in raw_schema["properties"].items():
         if "description" in value:
             simple_schema[name] = value["description"]
-        elif "$ref" in value:
+        elif "$ref" in value: # pragma: no cover
             refs = value["$ref"].split("/")
             simple_schema[name] = parse_pydantic_schema(
                 definitions[refs[2]], definitions

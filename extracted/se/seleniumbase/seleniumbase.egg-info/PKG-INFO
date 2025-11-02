@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: seleniumbase
-Version: 4.41.3
+Version: 4.44.4
 Summary: A complete web automation framework for end-to-end testing.
 Home-page: https://github.com/seleniumbase/SeleniumBase
 Author: Michael Mintz
@@ -28,7 +28,6 @@ Classifier: Environment :: Web Environment
 Classifier: Framework :: Pytest
 Classifier: Intended Audience :: Developers
 Classifier: Intended Audience :: Information Technology
-Classifier: License :: OSI Approved :: MIT License
 Classifier: Operating System :: MacOS :: MacOS X
 Classifier: Operating System :: Microsoft :: Windows
 Classifier: Operating System :: POSIX :: Linux
@@ -61,91 +60,101 @@ Requires-Python: >=3.8
 Description-Content-Type: text/markdown
 License-File: LICENSE
 Requires-Dist: pip>=25.0.1; python_version < "3.9"
-Requires-Dist: pip>=25.2; python_version >= "3.9"
+Requires-Dist: pip>=25.3; python_version >= "3.9"
 Requires-Dist: packaging>=25.0
 Requires-Dist: setuptools~=70.2; python_version < "3.10"
 Requires-Dist: setuptools>=80.9.0; python_version >= "3.10"
 Requires-Dist: wheel>=0.45.1
-Requires-Dist: attrs>=25.3.0
-Requires-Dist: certifi>=2025.8.3
+Requires-Dist: attrs~=25.3.0; python_version < "3.9"
+Requires-Dist: attrs>=25.4.0; python_version >= "3.9"
+Requires-Dist: certifi>=2025.10.5
 Requires-Dist: exceptiongroup>=1.3.0
 Requires-Dist: websockets~=13.1; python_version < "3.9"
 Requires-Dist: websockets>=15.0.1; python_version >= "3.9"
 Requires-Dist: filelock~=3.16.1; python_version < "3.9"
-Requires-Dist: filelock>=3.19.1; python_version >= "3.9"
+Requires-Dist: filelock~=3.19.1; python_version >= "3.9" and python_version < "3.10"
+Requires-Dist: filelock>=3.20.0; python_version >= "3.10"
 Requires-Dist: fasteners>=0.20
-Requires-Dist: mycdp>=1.2.0
-Requires-Dist: pynose>=1.5.4
-Requires-Dist: platformdirs>=4.3.6; python_version < "3.9"
-Requires-Dist: platformdirs>=4.4.0; python_version >= "3.9"
-Requires-Dist: typing-extensions>=4.13.2
+Requires-Dist: mycdp>=1.3.0
+Requires-Dist: pynose>=1.5.5
+Requires-Dist: platformdirs~=4.3.6; python_version < "3.9"
+Requires-Dist: platformdirs~=4.4.0; python_version >= "3.9" and python_version < "3.10"
+Requires-Dist: platformdirs>=4.5.0; python_version >= "3.10"
+Requires-Dist: typing-extensions~=4.13.2; python_version < "3.9"
+Requires-Dist: typing-extensions>=4.15.0; python_version >= "3.9"
 Requires-Dist: sbvirtualdisplay>=1.4.0
 Requires-Dist: MarkupSafe==2.1.5; python_version < "3.9"
-Requires-Dist: MarkupSafe>=3.0.2; python_version >= "3.9"
+Requires-Dist: MarkupSafe>=3.0.3; python_version >= "3.9"
 Requires-Dist: Jinja2>=3.1.6
 Requires-Dist: six>=1.17.0
 Requires-Dist: parse>=1.20.2
 Requires-Dist: parse-type>=0.6.6
 Requires-Dist: colorama>=0.4.6
-Requires-Dist: pyyaml>=6.0.2
+Requires-Dist: pyyaml>=6.0.3
 Requires-Dist: pygments>=2.19.2
-Requires-Dist: pyreadline3>=3.5.3; platform_system == "Windows"
+Requires-Dist: pyreadline3>=3.5.4; platform_system == "Windows"
 Requires-Dist: tabcompleter>=1.4.0
-Requires-Dist: pdbp>=1.7.1
-Requires-Dist: idna==3.10
+Requires-Dist: pdbp>=1.8.0
+Requires-Dist: idna>=3.11
 Requires-Dist: chardet==5.2.0
-Requires-Dist: charset-normalizer<4,>=3.4.3
+Requires-Dist: charset-normalizer<4,>=3.4.4
 Requires-Dist: urllib3<2,>=1.26.20; python_version < "3.10"
 Requires-Dist: urllib3<2.6.0,>=1.26.20; python_version >= "3.10"
 Requires-Dist: requests==2.32.4; python_version < "3.9"
-Requires-Dist: requests<2.33,>=2.32.5; python_version >= "3.9"
+Requires-Dist: requests~=2.32.5; python_version >= "3.9"
 Requires-Dist: sniffio==1.3.1
 Requires-Dist: h11==0.16.0
 Requires-Dist: outcome==1.3.0.post0
 Requires-Dist: trio==0.27.0; python_version < "3.9"
-Requires-Dist: trio==0.30.0; python_version >= "3.9"
-Requires-Dist: trio-websocket==0.12.2
+Requires-Dist: trio<1,>=0.31.0; python_version >= "3.9" and python_version < "3.10"
+Requires-Dist: trio<1,>=0.32.0; python_version >= "3.10"
+Requires-Dist: trio-websocket~=0.12.2
 Requires-Dist: wsproto==1.2.0
-Requires-Dist: websocket-client==1.8.0
+Requires-Dist: websocket-client~=1.8.0; python_version < "3.9"
+Requires-Dist: websocket-client~=1.9.0; python_version >= "3.9"
 Requires-Dist: selenium==4.27.1; python_version < "3.9"
 Requires-Dist: selenium==4.32.0; python_version >= "3.9" and python_version < "3.10"
-Requires-Dist: selenium==4.35.0; python_version >= "3.10"
+Requires-Dist: selenium==4.38.0; python_version >= "3.10"
 Requires-Dist: cssselect==1.2.0; python_version < "3.9"
 Requires-Dist: cssselect==1.3.0; python_version >= "3.9"
 Requires-Dist: sortedcontainers==2.4.0
 Requires-Dist: execnet==2.1.1
-Requires-Dist: iniconfig==2.1.0
+Requires-Dist: iniconfig==2.1.0; python_version < "3.10"
+Requires-Dist: iniconfig==2.3.0; python_version >= "3.10"
 Requires-Dist: pluggy==1.5.0; python_version < "3.9"
 Requires-Dist: pluggy==1.6.0; python_version >= "3.9"
 Requires-Dist: pytest==8.3.5; python_version < "3.9"
-Requires-Dist: pytest==8.4.1; python_version >= "3.9"
+Requires-Dist: pytest==8.4.2; python_version >= "3.9"
 Requires-Dist: pytest-html==4.0.2
 Requires-Dist: pytest-metadata==3.1.1
 Requires-Dist: pytest-ordering==0.6
 Requires-Dist: pytest-rerunfailures==14.0; python_version < "3.9"
-Requires-Dist: pytest-rerunfailures==15.1; python_version >= "3.9"
+Requires-Dist: pytest-rerunfailures==16.0.1; python_version >= "3.9" and python_version < "3.10"
+Requires-Dist: pytest-rerunfailures==16.1; python_version >= "3.10"
 Requires-Dist: pytest-xdist==3.6.1; python_version < "3.9"
 Requires-Dist: pytest-xdist==3.8.0; python_version >= "3.9"
 Requires-Dist: parameterized==0.9.0
 Requires-Dist: behave==1.2.6
 Requires-Dist: soupsieve==2.7; python_version < "3.9"
 Requires-Dist: soupsieve~=2.8; python_version >= "3.9"
-Requires-Dist: beautifulsoup4~=4.13.5
+Requires-Dist: beautifulsoup4~=4.14.2
 Requires-Dist: pyotp==2.9.0
 Requires-Dist: python-xlib==0.33; platform_system == "Linux"
+Requires-Dist: PyAutoGUI>=0.9.54; platform_system == "Linux"
 Requires-Dist: markdown-it-py==3.0.0; python_version < "3.10"
 Requires-Dist: markdown-it-py==4.0.0; python_version >= "3.10"
 Requires-Dist: mdurl==0.1.2
-Requires-Dist: rich<15,>=14.1.0
+Requires-Dist: rich<15,>=14.2.0
 Provides-Extra: allure
 Requires-Dist: allure-pytest>=2.13.5; extra == "allure"
 Requires-Dist: allure-python-commons>=2.13.5; extra == "allure"
 Requires-Dist: allure-behave>=2.13.5; extra == "allure"
 Provides-Extra: coverage
 Requires-Dist: coverage>=7.6.1; python_version < "3.9" and extra == "coverage"
-Requires-Dist: coverage>=7.10.5; python_version >= "3.9" and extra == "coverage"
+Requires-Dist: coverage>=7.10.7; (python_version >= "3.9" and python_version < "3.10") and extra == "coverage"
+Requires-Dist: coverage>=7.11.0; python_version >= "3.10" and extra == "coverage"
 Requires-Dist: pytest-cov>=5.0.0; python_version < "3.9" and extra == "coverage"
-Requires-Dist: pytest-cov>=6.2.1; python_version >= "3.9" and extra == "coverage"
+Requires-Dist: pytest-cov>=7.0.0; python_version >= "3.9" and extra == "coverage"
 Provides-Extra: flake8
 Requires-Dist: flake8==5.0.4; python_version < "3.9" and extra == "flake8"
 Requires-Dist: flake8==7.3.0; python_version >= "3.9" and extra == "flake8"
@@ -164,25 +173,28 @@ Provides-Extra: pdfminer
 Requires-Dist: pdfminer.six==20250324; python_version < "3.9" and extra == "pdfminer"
 Requires-Dist: pdfminer.six==20250506; python_version >= "3.9" and extra == "pdfminer"
 Requires-Dist: cryptography==39.0.2; python_version < "3.9" and extra == "pdfminer"
-Requires-Dist: cryptography==45.0.6; python_version >= "3.9" and extra == "pdfminer"
-Requires-Dist: cffi==1.17.1; extra == "pdfminer"
-Requires-Dist: pycparser==2.22; extra == "pdfminer"
+Requires-Dist: cryptography==46.0.3; python_version >= "3.9" and extra == "pdfminer"
+Requires-Dist: cffi==1.17.1; python_version < "3.9" and extra == "pdfminer"
+Requires-Dist: cffi==2.0.0; python_version >= "3.9" and extra == "pdfminer"
+Requires-Dist: pycparser==2.22; python_version < "3.9" and extra == "pdfminer"
+Requires-Dist: pycparser==2.23; python_version >= "3.9" and extra == "pdfminer"
 Provides-Extra: pillow
 Requires-Dist: Pillow>=10.4.0; python_version < "3.9" and extra == "pillow"
-Requires-Dist: Pillow>=11.3.0; python_version >= "3.9" and extra == "pillow"
+Requires-Dist: Pillow>=11.3.0; (python_version >= "3.9" and python_version < "3.10") and extra == "pillow"
+Requires-Dist: Pillow>=12.0.0; python_version >= "3.10" and extra == "pillow"
 Provides-Extra: pip-system-certs
 Requires-Dist: pip-system-certs==4.0; platform_system == "Windows" and extra == "pip-system-certs"
 Provides-Extra: proxy
 Requires-Dist: proxy.py==2.4.3; extra == "proxy"
 Provides-Extra: psutil
-Requires-Dist: psutil==7.0.0; extra == "psutil"
+Requires-Dist: psutil==7.1.2; extra == "psutil"
 Provides-Extra: pyautogui
-Requires-Dist: PyAutoGUI==0.9.54; extra == "pyautogui"
+Requires-Dist: PyAutoGUI>=0.9.54; platform_system != "Linux" and extra == "pyautogui"
 Provides-Extra: selenium-stealth
 Requires-Dist: selenium-stealth==1.0.6; extra == "selenium-stealth"
 Provides-Extra: selenium-wire
 Requires-Dist: selenium-wire==5.1.0; extra == "selenium-wire"
-Requires-Dist: pyOpenSSL==24.2.1; extra == "selenium-wire"
+Requires-Dist: pyOpenSSL>=24.2.1; extra == "selenium-wire"
 Requires-Dist: pyparsing>=3.1.4; extra == "selenium-wire"
 Requires-Dist: Brotli==1.1.0; extra == "selenium-wire"
 Requires-Dist: blinker==1.7.0; extra == "selenium-wire"
@@ -191,7 +203,7 @@ Requires-Dist: hpack==4.0.0; extra == "selenium-wire"
 Requires-Dist: hyperframe==6.0.1; extra == "selenium-wire"
 Requires-Dist: kaitaistruct==0.10; extra == "selenium-wire"
 Requires-Dist: pyasn1==0.6.1; extra == "selenium-wire"
-Requires-Dist: zstandard==0.23.0; extra == "selenium-wire"
+Requires-Dist: zstandard>=0.23.0; extra == "selenium-wire"
 Dynamic: author
 Dynamic: author-email
 Dynamic: classifier
@@ -219,9 +231,10 @@ Dynamic: summary
 
 <p align="center"><a href="https://github.com/seleniumbase/SeleniumBase/"><img src="https://seleniumbase.github.io/cdn/img/super_logo_sb3.png" alt="SeleniumBase" title="SeleniumBase" width="350" /></a></p>
 
-<p align="center" class="hero__title"><b>All-in-one Browser Automation Framework:<br />Web Crawling / Testing / Scraping / Stealth</b></p>
+<p align="center" class="hero__title"><b>Automate, test, and scrape the web — on your own terms.<br /></b></p>
 
-<p align="center"><a href="https://pypi.python.org/pypi/seleniumbase" target="_blank"><img src="https://img.shields.io/pypi/v/seleniumbase.svg?color=3399EE" alt="PyPI version" /></a> <a href="https://github.com/seleniumbase/SeleniumBase/releases" target="_blank"><img src="https://img.shields.io/github/v/release/seleniumbase/SeleniumBase.svg?color=22AAEE" alt="GitHub version" /></a> <a href="https://seleniumbase.io"><img src="https://img.shields.io/badge/docs-seleniumbase.io-11BBAA.svg" alt="SeleniumBase Docs" /></a> <a href="https://github.com/seleniumbase/SeleniumBase/actions" target="_blank"><img src="https://github.com/seleniumbase/SeleniumBase/workflows/CI%20build/badge.svg" alt="SeleniumBase GitHub Actions" /></a> <a href="https://discord.gg/EdhQTn3EyE" target="_blank"><img src="https://img.shields.io/discord/727927627830001734?color=7289DA&label=Discord&logo=discord&logoColor=white"/></a></p>
+<p align="center"><a href="https://pypi.python.org/pypi/seleniumbase" target="_blank"><img src="https://img.shields.io/pypi/v/seleniumbase.svg?color=3399EE" alt="PyPI version" /></a> <a href="https://github.com/seleniumbase/SeleniumBase/releases" target="_blank"><img src="https://img.shields.io/github/v/release/seleniumbase/SeleniumBase.svg?color=22AAEE" alt="GitHub version" /></a> <a href="https://seleniumbase.io"><img src="https://img.shields.io/badge/docs-seleniumbase.io-11BBAA.svg" alt="SeleniumBase Docs" /></a></p>
+<p align="center"><a href="https://github.com/seleniumbase/SeleniumBase/actions" target="_blank"><img src="https://github.com/seleniumbase/SeleniumBase/workflows/CI%20build/badge.svg" alt="SeleniumBase GitHub Actions" /></a> <a href="https://github.com/seleniumbase/SeleniumBase/stargazers"><img src="https://img.shields.io/github/stars/seleniumbase/SeleniumBase?style=social"></a> <a href="https://pepy.tech/projects/seleniumbase?timeRange=threeMonths&category=version&includeCIDownloads=true&granularity=daily&viewType=line&versions=*" target="_blank"><img src="https://static.pepy.tech/badge/seleniumbase" alt="SeleniumBase PyPI downloads" /></a> <a href="https://discord.gg/EdhQTn3EyE" target="_blank"><img src="https://img.shields.io/discord/727927627830001734?color=7289DA&label=Discord&logo=discord&logoColor=white"/></a></p>
 
 <p align="center">
 <a href="#python_installation">🚀 Start</a> |
@@ -261,38 +274,43 @@ Dynamic: summary
 <br />
 </p>
 
-<p>SeleniumBase is the professional toolkit for web automation activities. Built for testing websites, bypassing CAPTCHAs, enhancing productivity, completing tasks, and scaling your business.</p>
+<p>SeleniumBase is a browser automation framework for the modern web. Both new and experienced Python users alike can easily get started. With special stealth features like UC Mode and CDP Mode, you'll be evading bot-detection and bypassing CAPTCHAs in minutes.</p>
 
 --------
 
 📚 Learn from [**over 200 examples** in the **SeleniumBase/examples/** folder](https://github.com/seleniumbase/SeleniumBase/tree/master/examples).
 
-🐙 Note that <a translate="no" href="https://github.com/seleniumbase/SeleniumBase/blob/master/help_docs/uc_mode.md"><b>UC Mode</b></a> / <a href="https://github.com/seleniumbase/SeleniumBase/blob/master/examples/cdp_mode/ReadMe.md"><b>CDP Mode</b></a> (Stealth Mode) have their own ReadMe files.
+🐙 Stealth modes: <a translate="no" href="https://github.com/seleniumbase/SeleniumBase/blob/master/help_docs/uc_mode.md"><b>UC Mode</b></a> and <a translate="no" href="https://github.com/seleniumbase/SeleniumBase/blob/master/examples/cdp_mode/ReadMe.md"><b>CDP Mode</b></a> help you evade bot-detection.
 
 ℹ️ Most scripts run with raw <code translate="no"><b>python</b></code>, although some scripts use <a href="https://github.com/seleniumbase/SeleniumBase/blob/master/help_docs/syntax_formats.md">Syntax Formats</a> that expect <a href="https://docs.pytest.org/en/latest/how-to/usage.html" translate="no"><b>pytest</b></a> (a Python unit-testing framework included with SeleniumBase that can discover, collect, and run tests automatically).
 
 --------
 
-<p align="left">📗 Here's <a href="https://github.com/seleniumbase/SeleniumBase/blob/master/examples/raw_google.py">raw_google.py</a>, which performs a Google search:</p>
+<p align="left">📗 Here's a test script that performs a Google Search using SeleniumBase UC Mode:<br /><a href="https://github.com/seleniumbase/SeleniumBase/blob/master/examples/raw_google.py">SeleniumBase/examples/raw_google.py</a> (Results are saved as PDF, HTML, and PNG)</p>
 
 ```python
 from seleniumbase import SB
 
 with SB(test=True, uc=True) as sb:
     sb.open("https://google.com/ncr")
-    sb.type('[title="Search"]', "SeleniumBase GitHub page\n")
-    sb.click('[href*="github.com/seleniumbase/"]')
-    sb.save_screenshot_to_logs()  # ./latest_logs/
+    sb.type('[title="Search"]', "SeleniumBase GitHub page")
+    sb.click("div:not([jsname]) > * > input")
     print(sb.get_page_title())
+    sb.sleep(2)  # Wait for the "AI Overview" result
+    if sb.is_text_visible("Generating"):
+        sb.wait_for_text("AI Overview")
+    sb.save_as_pdf_to_logs()  # Saved to ./latest_logs/
+    sb.save_page_source_to_logs()
+    sb.save_screenshot_to_logs()
 ```
 
 > `python raw_google.py`
 
-<a href="https://github.com/seleniumbase/SeleniumBase/blob/master/examples/raw_google.py"><img src="https://seleniumbase.github.io/cdn/gif/google_search.gif" alt="SeleniumBase Test" title="SeleniumBase Test" width="480" /></a>
+<a href="https://github.com/seleniumbase/SeleniumBase/blob/master/examples/raw_google.py"><img src="https://seleniumbase.github.io/cdn/img/google_sb_result.png" alt="SeleniumBase on Google" title="SeleniumBase on Google" width="480" /></a>
 
 --------
 
-<p align="left">📗 Here's an example of bypassing Cloudflare's challenge page: <a href="https://github.com/seleniumbase/SeleniumBase/blob/master/examples/cdp_mode/raw_gitlab.py">SeleniumBase/examples/cdp_mode/raw_gitlab.py</a></p>
+<p align="left">📗 Here's a script that bypasses Cloudflare's challenge page with UC Mode + CDP Mode: <a href="https://github.com/seleniumbase/SeleniumBase/blob/master/examples/cdp_mode/raw_gitlab.py">SeleniumBase/examples/cdp_mode/raw_gitlab.py</a></p>
 
 ```python
 from seleniumbase import SB
@@ -300,16 +318,35 @@ from seleniumbase import SB
 with SB(uc=True, test=True, locale="en") as sb:
     url = "https://gitlab.com/users/sign_in"
     sb.activate_cdp_mode(url)
-    sb.sleep(1)
+    sb.sleep(2.2)
     sb.uc_gui_click_captcha()
-    sb.sleep(2)
+    # (The rest is for testing and demo purposes)
+    sb.assert_text("Username", '[for="user_login"]', timeout=3)
+    sb.assert_element('label[for="user_login"]')
+    sb.highlight('button:contains("Sign in")')
+    sb.highlight('h1:contains("GitLab")')
+    sb.post_message("SeleniumBase wasn't detected", duration=4)
 ```
 
 <img src="https://seleniumbase.github.io/other/cf_sec.jpg" title="SeleniumBase" width="332"> <img src="https://seleniumbase.github.io/other/gitlab_bypass.png" title="SeleniumBase" width="288">
 
+<p align="left">📙 There's also SeleniumBase's "Pure CDP Mode", which doesn't use WebDriver or Selenium at all: <a href="https://github.com/seleniumbase/SeleniumBase/blob/master/examples/cdp_mode/raw_cdp_gitlab.py">SeleniumBase/examples/cdp_mode/raw_cdp_gitlab.py</a></p>
+
+```python
+from seleniumbase import sb_cdp
+
+url = "https://gitlab.com/users/sign_in"
+sb = sb_cdp.Chrome(url)
+sb.sleep(2.5)
+sb.gui_click_captcha()
+sb.highlight('h1:contains("GitLab")')
+sb.highlight('button:contains("Sign in")')
+sb.driver.stop()
+```
+
 --------
 
-<p align="left">📗 Here's <a href="https://github.com/seleniumbase/SeleniumBase/blob/master/examples/test_get_swag.py">test_get_swag.py</a>, which tests an e-commerce site:</p>
+<p align="left">📗 Here's <a href="https://github.com/seleniumbase/SeleniumBase/blob/master/examples/test_get_swag.py">SeleniumBase/examples/test_get_swag.py</a>, which tests an e-commerce site:</p>
 
 ```python
 from seleniumbase import BaseCase
@@ -341,7 +378,7 @@ class MyTestClass(BaseCase):
 
 --------
 
-<p align="left">📗 Here's <a href="https://github.com/seleniumbase/SeleniumBase/blob/master/examples/test_coffee_cart.py" target="_blank">test_coffee_cart.py</a>, which verifies an e-commerce site:</p>
+<p align="left">📗 Here's <a href="https://github.com/seleniumbase/SeleniumBase/blob/master/examples/test_coffee_cart.py" target="_blank">SeleniumBase/examples/test_coffee_cart.py</a>, which verifies an e-commerce site:</p>
 
 ```zsh
 pytest test_coffee_cart.py --demo
@@ -355,7 +392,7 @@ pytest test_coffee_cart.py --demo
 
 <a id="multiple_examples"></a>
 
-<p align="left">📗 Here's <a href="https://github.com/seleniumbase/SeleniumBase/blob/master/examples/test_demo_site.py" target="_blank">test_demo_site.py</a>, which covers several actions:</p>
+<p align="left">📗 Here's <a href="https://github.com/seleniumbase/SeleniumBase/blob/master/examples/test_demo_site.py" target="_blank">SeleniumBase/examples/test_demo_site.py</a>, which covers several actions:</p>
 
 ```zsh
 pytest test_demo_site.py
@@ -511,7 +548,6 @@ pip install seleniumbase
 
 * (Add ``--upgrade`` OR ``-U`` to upgrade SeleniumBase.)
 * (Add ``--force-reinstall`` to upgrade indirect packages.)
-* (Use ``pip3`` if multiple versions of Python are present.)
 
 🔵 **How to install ``seleniumbase`` from a GitHub clone:**
 
@@ -585,10 +621,10 @@ pip install -e .
 <summary> ▶️ Here's sample output from a chromedriver download. (<b>click to expand</b>)</summary>
 
 ```zsh
-*** chromedriver to download = 131.0.6778.108 (Latest Stable) 
+*** chromedriver to download = 141.0.7390.78 (Latest Stable) 
 
 Downloading chromedriver-mac-arm64.zip from:
-https://storage.googleapis.com/chrome-for-testing-public/131.0.6778.108/mac-arm64/chromedriver-mac-arm64.zip ...
+https://storage.googleapis.com/chrome-for-testing-public/141.0.7390.78/mac-arm64/chromedriver-mac-arm64.zip ...
 Download Complete!
 
 Extracting ['chromedriver'] from chromedriver-mac-arm64.zip ...
@@ -598,8 +634,8 @@ The file [chromedriver] was saved to:
 ~/github/SeleniumBase/seleniumbase/drivers/
 chromedriver
 
-Making [chromedriver 131.0.6778.108] executable ...
-[chromedriver 131.0.6778.108] is now ready for use!
+Making [chromedriver 141.0.7390.78] executable ...
+[chromedriver 141.0.7390.78] is now ready for use!
 ```
 
 </details>
@@ -836,6 +872,10 @@ pytest test_coffee_cart.py --trace
 --edge  # (Shortcut for "--browser=edge".)
 --firefox  # (Shortcut for "--browser=firefox".)
 --safari  # (Shortcut for "--browser=safari".)
+--opera  # (Shortcut for "--browser=opera".)
+--brave  # (Shortcut for "--browser=brave".)
+--comet  # (Shortcut for "--browser=comet".)
+--atlas  # (Shortcut for "--browser=atlas".)
 --settings-file=FILE  # (Override default SeleniumBase settings.)
 --env=ENV  # (Set the test env. Access with "self.env" in tests.)
 --account=STR  # (Set account. Access with "self.account" in tests.)

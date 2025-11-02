@@ -82,6 +82,7 @@ from .type_defs import (
     SubscribeToShardOutputTypeDef,
     TagResourceInputTypeDef,
     UntagResourceInputTypeDef,
+    UpdateMaxRecordSizeInputTypeDef,
     UpdateShardCountInputTypeDef,
     UpdateShardCountOutputTypeDef,
     UpdateStreamModeInputTypeDef,
@@ -482,6 +483,17 @@ class KinesisClient(BaseClient):
 
         [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/kinesis/client/untag_resource.html)
         [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_kinesis/client/#untag_resource)
+        """
+
+    def update_max_record_size(
+        self, **kwargs: Unpack[UpdateMaxRecordSizeInputTypeDef]
+    ) -> EmptyResponseMetadataTypeDef:
+        """
+        This allows you to update the <code>MaxRecordSize</code> of a single record
+        that you can write to, and read from a stream.
+
+        [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/kinesis/client/update_max_record_size.html)
+        [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_kinesis/client/#update_max_record_size)
         """
 
     def update_shard_count(

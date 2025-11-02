@@ -1,303 +1,548 @@
 """Integration with OpenAI's API."""
 
-import copy
-import functools
-from dataclasses import asdict, dataclass, field, replace
-from typing import Callable, Dict, List, Optional, Tuple, Union
+from typing import (
+    TYPE_CHECKING,
+    Any,
+    AsyncIterator,
+    Iterator,
+    Optional,
+    Union,
+    cast,
+)
+from functools import singledispatchmethod
 
-import numpy as np
+from pydantic import BaseModel
 
-from outlines.base import vectorize
-from outlines.caching import cache
+from outlines.inputs import Chat, Image
+from outlines.models.base import AsyncModel, Model, ModelTypeAdapter
+from outlines.models.utils import set_additional_properties_false_json_schema
+from outlines.types import JsonSchema, Regex, CFG
+from outlines.types.utils import is_native_dict
 
-__all__ = ["OpenAI", "openai", "azure_openai"]
+if TYPE_CHECKING:
+    from openai import (
+        OpenAI as OpenAIClient,
+        AsyncOpenAI as AsyncOpenAIClient,
+        AzureOpenAI as AzureOpenAIClient,
+        AsyncAzureOpenAI as AsyncAzureOpenAIClient,
+    )
+
+__all__ = ["AsyncOpenAI", "OpenAI", "from_openai"]
 
 
-@dataclass(frozen=True)
-class OpenAIConfig:
-    """Represents the parameters of the OpenAI API.
+class OpenAITypeAdapter(ModelTypeAdapter):
+    """Type adapter for the `OpenAI` model.
 
-    The information was last fetched on 2023/11/20. We document below the
-    properties that are specific to the OpenAI API. Not all these properties are
-    supported by Outlines.
+    `OpenAITypeAdapter` is responsible for preparing the arguments to OpenAI's
+    `completions.create` methods: the input (prompt and possibly image), as
+    well as the output type (only JSON).
 
-    Parameters
-    ----------
-    model
-        The name of the model. Available models can be found on OpenAI's website.
-    frequency_penalty
-        Number between 2.0 and -2.0. Positive values penalize new tokens based on
-        their existing frequency in the text,
-    logit_bias
-        Modifies the likelihood of specified tokens to appear in the completion.
-        Number between -100 (forbid) and +100 (only allows).
-    n
-        The number of completions to return for each prompt.
-    presence_penalty
-        Similar to frequency penalty.
-    response_format
-        Specifies the format the model must output. `{"type": "json_object"}`
-        enables JSON mode.
-    seed
-        Two completions with the same `seed` value should return the same
-        completion. This is however not guaranteed.
-    stop
-        Up to 4 words where the API will stop the completion.
-    temperature
-        Number between 0 and 2. Higher values make the output more random, while
-        lower values make it more deterministic.
-    top_p
-        Number between 0 and 1. Parameter for nucleus sampling.
-    user
-        A unique identifier for the end-user.
     """
 
-    model: str = ""
-    frequency_penalty: float = 0
-    logit_bias: Dict[int, int] = field(default_factory=dict)
-    max_tokens: Optional[int] = None
-    n: int = 1
-    presence_penalty: float = 0
-    response_format: Optional[Dict[str, str]] = None
-    seed: Optional[int] = None
-    stop: Optional[Union[str, List[str]]] = None
-    temperature: float = 1.0
-    top_p: int = 1
-    user: str = field(default_factory=str)
+    @singledispatchmethod
+    def format_input(self, model_input):
+        """Generate the `messages` argument to pass to the client.
+
+        Parameters
+        ----------
+        model_input
+            The input provided by the user.
+
+        Returns
+        -------
+        dict
+            The formatted input to be passed to the client.
+
+        """
+        raise TypeError(
+            f"The input type {type(model_input)} is not available with "
+            "OpenAI. The only available types are `str`, `list` and `Chat`."
+        )
+
+    @format_input.register(str)
+    def format_str_model_input(self, model_input: str) -> list:
+        """Generate the value of the `messages` argument to pass to the
+        client when the user only passes a prompt.
+
+        """
+        return [
+            self._create_message("user", model_input)
+        ]
+
+    @format_input.register(list)
+    def format_list_model_input(self, model_input: list) -> list:
+        """Generate the value of the `messages` argument to pass to the
+        client when the user passes a prompt and images.
+
+        """
+        return [
+            self._create_message("user", model_input)
+        ]
+
+    @format_input.register(Chat)
+    def format_chat_model_input(self, model_input: Chat) -> list:
+        """Generate the value of the `messages` argument to pass to the
+        client when the user passes a Chat instance.
+
+        """
+        return [
+            self._create_message(message["role"], message["content"])
+            for message in model_input.messages
+        ]
+
+    def _create_message(self, role: str, content: str | list) -> dict:
+        """Create a message."""
+
+        if isinstance(content, str):
+            return {
+                "role": role,
+                "content": content,
+            }
+
+        elif isinstance(content, list):
+            prompt = content[0]
+            images = content[1:]
+
+            if not all(isinstance(image, Image) for image in images):
+                raise ValueError("All assets provided must be of type Image")
+
+            image_parts = [
+                self._create_img_content(image)
+                for image in images
+            ]
+
+            return {
+                "role": role,
+                "content": [
+                    {"type": "text", "text": prompt},
+                    *image_parts,
+                ],
+            }
+
+        else:
+            raise ValueError(
+                f"Invalid content type: {type(content)}. "
+                "The content must be a string or a list containing a string "
+                "and a list of images."
+            )
+
+    def _create_img_content(self, image: Image) -> dict:
+        """Create the content for an image input."""
+        return {
+            "type": "image_url",
+            "image_url": {
+                "url": f"data:{image.image_format};base64,{image.image_str}"  # noqa: E702
+            },
+        }
+
+    def format_output_type(self, output_type: Optional[Any] = None) -> dict:
+        """Generate the `response_format` argument to the client based on the
+        output type specified by the user.
+
+        TODO: `int`, `float` and other Python types could be supported via
+        JSON Schema.
+
+        Parameters
+        ----------
+        output_type
+            The output type provided by the user.
+
+        Returns
+        -------
+        dict
+            The formatted output type to be passed to the client.
+
+        """
+        # Unsupported languages
+        if isinstance(output_type, Regex):
+            raise TypeError(
+                "Neither regex-based structured outputs nor the `pattern` keyword "
+                "in Json Schema are available with OpenAI. Use an open source "
+                "model or dottxt instead."
+            )
+        elif isinstance(output_type, CFG):
+            raise TypeError(
+                "CFG-based structured outputs are not available with OpenAI. "
+                "Use an open source model or dottxt instead."
+            )
+
+        if output_type is None:
+            return {}
+        elif is_native_dict(output_type):
+            return self.format_json_mode_type()
+        elif JsonSchema.is_json_schema(output_type):
+            return self.format_json_output_type(
+                cast(dict, JsonSchema.convert_to(output_type, ["dict"]))
+            )
+        else:
+            type_name = getattr(output_type, "__name__", output_type)
+            raise TypeError(
+                f"The type `{type_name}` is not available with OpenAI. "
+                "Use an open source model or dottxt instead."
+            )
+
+    def format_json_output_type(self, schema: dict) -> dict:
+        """Generate the `response_format` argument to the client when the user
+        specified a `Json` output type.
+
+        """
+        # OpenAI requires `additionalProperties` to be set to False
+        schema = set_additional_properties_false_json_schema(schema)
+
+        return {
+            "response_format": {
+                "type": "json_schema",
+                "json_schema": {
+                    "name": "default",
+                    "strict": True,
+                    "schema": schema,
+                },
+            }
+        }
+
+    def format_json_mode_type(self) -> dict:
+        """Generate the `response_format` argument to the client when the user
+        specified the output type should be a JSON but without specifying the
+        schema (also called "JSON mode").
+
+        """
+        return {"response_format": {"type": "json_object"}}
 
 
-class OpenAI:
-    """An object that represents the OpenAI API."""
+class OpenAI(Model):
+    """Thin wrapper around the `openai.OpenAI` client.
+
+    This wrapper is used to convert the input and output types specified by the
+    users at a higher level to arguments to the `openai.OpenAI` client.
+
+    """
 
     def __init__(
         self,
-        client,
-        config,
-        system_prompt: Optional[str] = None,
+        client: Union["OpenAIClient", "AzureOpenAIClient"],
+        model_name: Optional[str] = None,
     ):
-        """Create an `OpenAI` instance.
-
-        This class supports the standard OpenAI API, the Azure OpeanAI API as
-        well as compatible APIs that rely on the OpenAI client.
-
+        """
         Parameters
         ----------
         client
-            An instance of the API's async client.
-        config
-            An instance of `OpenAIConfig`. Can be useful to specify some
-            parameters that cannot be set by calling this class' methods.
+            The `openai.OpenAI` client.
+        model_name
+            The name of the model to use.
+
         """
-
         self.client = client
-        self.config = config
+        self.model_name = model_name
+        self.type_adapter = OpenAITypeAdapter()
 
-        # We count the total number of prompt and generated tokens as returned
-        # by the OpenAI API, summed over all the requests performed with this
-        # model instance.
-        self.prompt_tokens = 0
-        self.completion_tokens = 0
-
-        self.format_sequence = lambda seq: seq
-
-    def __call__(
+    def generate(
         self,
-        prompt: Union[str, List[str]],
-        max_tokens: Optional[int] = None,
-        stop_at: Optional[Union[List[str], str]] = None,
-        *,
-        system_prompt: Optional[str] = None,
-        temperature: Optional[float] = None,
-        samples: Optional[int] = None,
-    ) -> np.ndarray:
-        """Call the OpenAI API to generate text.
+        model_input: Union[Chat, list, str],
+        output_type: Optional[Union[type[BaseModel], str]] = None,
+        **inference_kwargs: Any,
+    ) -> Union[str, list[str]]:
+        """Generate text using OpenAI.
 
         Parameters
         ----------
-        prompt
-            A string or list of strings that will be used to prompt the model
-        max_tokens
-            The maximum number of tokens to generate
-        stop_at
-            A string or array of strings which, such that the generation stops
-            when they are generated.
-        system_prompt
-            The content of the system message that precedes the user's prompt.
-        temperature
-            The value of the temperature used to sample tokens
-        samples
-            The number of completions to generate for each prompt
-        stop_at
-            Up to 4 words where the API will stop the completion.
+        model_input
+            The prompt based on which the model will generate a response.
+        output_type
+            The desired format of the response generated by the model. The
+            output type must be of a type that can be converted to a JSON
+            schema or an empty dictionary.
+        **inference_kwargs
+            Additional keyword arguments to pass to the client.
+
+        Returns
+        -------
+        Union[str, list[str]]
+            The text generated by the model.
 
         """
-        if max_tokens is None:
-            max_tokens = self.config.max_tokens
-        if stop_at is None:
-            stop_at = self.config.stop
-        if temperature is None:
-            temperature = self.config.temperature
-        if samples is None:
-            samples = self.config.n
+        import openai
 
-        config = replace(
-            self.config,
-            max_tokens=max_tokens,
-            temperature=temperature,
-            n=samples,
-            stop=stop_at,
-        )  # type: ignore
+        messages = self.type_adapter.format_input(model_input)
+        response_format = self.type_adapter.format_output_type(output_type)
 
-        response, prompt_tokens, completion_tokens = generate_chat(
-            prompt, system_prompt, self.client, config
-        )
-        self.prompt_tokens += prompt_tokens
-        self.completion_tokens += completion_tokens
+        if "model" not in inference_kwargs and self.model_name is not None:
+            inference_kwargs["model"] = self.model_name
 
-        return self.format_sequence(response)
+        try:
+            result = self.client.chat.completions.create(
+                messages=messages,
+                **response_format,
+                **inference_kwargs,
+            )
+        except openai.BadRequestError as e:
+            if e.body["message"].startswith("Invalid schema"):
+                raise TypeError(
+                    f"OpenAI does not support your schema: {e.body['message']}. "
+                    "Try a local model or dottxt instead."
+                )
+            else:
+                raise e
 
-    def stream(self, *args, **kwargs):
+        messages = [choice.message for choice in result.choices]
+        for message in messages:
+            if message.refusal is not None:
+                raise ValueError(
+                    f"OpenAI refused to answer the request: {message.refusal}"
+                )
+
+        if len(messages) == 1:
+            return messages[0].content
+        else:
+            return [message.content for message in messages]
+
+    def generate_batch(
+        self,
+        model_input,
+        output_type = None,
+        **inference_kwargs,
+    ):
         raise NotImplementedError(
-            "Streaming is currently not supported for the OpenAI API"
+            "The `openai` library does not support batch inference."
         )
 
-    def new_with_replacements(self, **kwargs):
-        new_instance = copy.copy(self)
-        new_instance.config = replace(new_instance.config, **kwargs)
-        return new_instance
+    def generate_stream(
+        self,
+        model_input: Union[Chat, list, str],
+        output_type: Optional[Union[type[BaseModel], str]] = None,
+        **inference_kwargs,
+    ) -> Iterator[str]:
+        """Stream text using OpenAI.
 
-    def __str__(self):
-        return self.__class__.__name__ + " API"
+        Parameters
+        ----------
+        model_input
+            The prompt based on which the model will generate a response.
+        output_type
+            The desired format of the response generated by the model. The
+            output type must be of a type that can be converted to a JSON
+            schema or an empty dictionary.
+        **inference_kwargs
+            Additional keyword arguments to pass to the client.
 
-    def __repr__(self):
-        return str(self.config)
+        Returns
+        -------
+        Iterator[str]
+            An iterator that yields the text generated by the model.
+
+        """
+        import openai
+
+        messages = self.type_adapter.format_input(model_input)
+        response_format = self.type_adapter.format_output_type(output_type)
+
+        if "model" not in inference_kwargs and self.model_name is not None:
+            inference_kwargs["model"] = self.model_name
+
+        try:
+            stream = self.client.chat.completions.create(
+                stream=True,
+                messages=messages,
+                **response_format,
+                **inference_kwargs
+            )
+        except openai.BadRequestError as e:
+            if e.body["message"].startswith("Invalid schema"):
+                raise TypeError(
+                    f"OpenAI does not support your schema: {e.body['message']}. "
+                    "Try a local model or dottxt instead."
+                )
+            else:
+                raise e
+
+        for chunk in stream:
+            if chunk.choices and chunk.choices[0].delta.content is not None:
+                yield chunk.choices[0].delta.content
 
 
-@functools.partial(vectorize, signature="(),(),(),()->(s),(),()")
-async def generate_chat(
-    prompt: str,
-    system_prompt: Union[str, None],
-    client,
-    config: OpenAIConfig,
-) -> Tuple[np.ndarray, int, int]:
-    """Call OpenAI's Chat Completion API.
+class AsyncOpenAI(AsyncModel):
+    """Thin wrapper around the `openai.AsyncOpenAI` client.
 
-    Parameters
-    ----------
-    prompt
-        The prompt we use to start the generation. Passed to the model
-        with the "user" role.
-    system_prompt
-        The system prompt, passed to the model with the "system" role
-        before the prompt.
-    client
-        The API client
-    config
-        An `OpenAIConfig` instance.
-
-    Returns
-    -------
-    A tuple that contains the model's response(s) and usage statistics.
+    This wrapper is used to convert the input and output types specified by the
+    users at a higher level to arguments to the `openai.AsyncOpenAI` client.
 
     """
 
-    @error_handler
-    @cache()
-    async def call_api(prompt, system_prompt, config):
-        responses = await client.chat.completions.create(
-            messages=system_message + user_message,
-            **asdict(config),  # type: ignore
-        )
-        return responses.model_dump()
+    def __init__(
+        self,
+        client: Union["AsyncOpenAIClient", "AsyncAzureOpenAIClient"],
+        model_name: Optional[str] = None,
+    ):
+        """
+        Parameters
+        ----------
+        client
+            The `openai.AsyncOpenAI` or `openai.AsyncAzureOpenAI` client.
+        model_name
+            The name of the model to use.
 
-    system_message = (
-        [{"role": "system", "content": system_prompt}] if system_prompt else []
-    )
-    user_message = [{"role": "user", "content": prompt}]
+        """
+        self.client = client
+        self.model_name = model_name
+        self.type_adapter = OpenAITypeAdapter()
 
-    responses = await call_api(prompt, system_prompt, config)
+    async def generate(
+        self,
+        model_input: Union[Chat, list, str],
+        output_type: Optional[Union[type[BaseModel], str]] = None,
+        **inference_kwargs: Any,
+    ) -> Union[str, list[str]]:
+        """Generate text using OpenAI.
 
-    results = np.array(
-        [responses["choices"][i]["message"]["content"] for i in range(config.n)]
-    )
-    usage = responses["usage"]
+        Parameters
+        ----------
+        model_input
+            The prompt based on which the model will generate a response.
+        output_type
+            The desired format of the response generated by the model. The
+            output type must be of a type that can be converted to a JSON
+            schema or an empty dictionary.
+        **inference_kwargs
+            Additional keyword arguments to pass to the client.
 
-    return results, usage["prompt_tokens"], usage["completion_tokens"]
+        Returns
+        -------
+        Union[str, list[str]]
+            The text generated by the model.
 
-
-def error_handler(api_call_fn: Callable) -> Callable:
-    """Handle OpenAI API errors and missing API key."""
-
-    def call(*args, **kwargs):
+        """
         import openai
 
+        messages = self.type_adapter.format_input(model_input)
+        response_format = self.type_adapter.format_output_type(output_type)
+
+        if "model" not in inference_kwargs and self.model_name is not None:
+            inference_kwargs["model"] = self.model_name
+
         try:
-            return api_call_fn(*args, **kwargs)
-        except (
-            openai.APITimeoutError,
-            openai.InternalServerError,
-            openai.RateLimitError,
-        ) as e:
-            raise OSError(f"Could not connect to the OpenAI API: {e}")
-        except (
-            openai.AuthenticationError,
-            openai.BadRequestError,
-            openai.ConflictError,
-            openai.PermissionDeniedError,
-            openai.NotFoundError,
-            openai.UnprocessableEntityError,
-        ) as e:
-            raise e
+            result = await self.client.chat.completions.create(
+                messages=messages,
+                **response_format,
+                **inference_kwargs,
+            )
+        except openai.BadRequestError as e:
+            if e.body["message"].startswith("Invalid schema"):
+                raise TypeError(
+                    f"OpenAI does not support your schema: {e.body['message']}. "
+                    "Try a local model or dottxt instead."
+                )
+            else:
+                raise e
 
-    return call
+        messages = [choice.message for choice in result.choices]
+        for message in messages:
+            if message.refusal is not None:
+                raise ValueError(
+                    f"OpenAI refused to answer the request: {message.refusal}"
+                )
 
+        if len(messages) == 1:
+            return messages[0].content
+        else:
+            return [message.content for message in messages]
 
-@functools.singledispatch
-def openai(model_or_client, *args, **kwargs):
-    return OpenAI(model_or_client, *args, **kwargs)
-
-
-@openai.register(str)
-def openai_model(
-    model_name: str,
-    config: Optional[OpenAIConfig] = None,
-    **openai_client_params,
-):
-    try:
-        from openai import AsyncOpenAI
-    except ImportError:
-        raise ImportError(
-            "The `openai` library needs to be installed in order to use Outlines' OpenAI integration."
+    async def generate_batch(
+        self,
+        model_input,
+        output_type = None,
+        **inference_kwargs,
+    ):
+        raise NotImplementedError(
+            "The `openai` library does not support batch inference."
         )
 
-    if config is not None:
-        config = replace(config, model=model_name)  # type: ignore
-    else:
-        config = OpenAIConfig(model=model_name)
+    async def generate_stream( # type: ignore
+        self,
+        model_input: Union[Chat, list, str],
+        output_type: Optional[Union[type[BaseModel], str]] = None,
+        **inference_kwargs,
+    ) -> AsyncIterator[str]:
+        """Stream text using OpenAI.
 
-    client = AsyncOpenAI(**openai_client_params)
+        Parameters
+        ----------
+        model_input
+            The prompt based on which the model will generate a response.
+        output_type
+            The desired format of the response generated by the model. The
+            output type must be of a type that can be converted to a JSON
+            schema or an empty dictionary.
+        **inference_kwargs
+            Additional keyword arguments to pass to the client.
 
-    return OpenAI(client, config)
+        Returns
+        -------
+        Iterator[str]
+            An iterator that yields the text generated by the model.
+
+        """
+        import openai
+
+        messages = self.type_adapter.format_input(model_input)
+        response_format = self.type_adapter.format_output_type(output_type)
+
+        if "model" not in inference_kwargs and self.model_name is not None:
+            inference_kwargs["model"] = self.model_name
+
+        try:
+            stream = await self.client.chat.completions.create(
+                stream=True,
+                messages=messages,
+                **response_format,
+                **inference_kwargs
+            )
+        except openai.BadRequestError as e:
+            if e.body["message"].startswith("Invalid schema"):
+                raise TypeError(
+                    f"OpenAI does not support your schema: {e.body['message']}. "
+                    "Try a local model or dottxt instead."
+                )
+            else:
+                raise e
+
+        async for chunk in stream:
+            if chunk.choices and chunk.choices[0].delta.content is not None:
+                yield chunk.choices[0].delta.content
 
 
-def azure_openai(
-    deployment_name: str,
+def from_openai(
+    client: Union[
+        "OpenAIClient",
+        "AsyncOpenAIClient",
+        "AzureOpenAIClient",
+        "AsyncAzureOpenAIClient",
+    ],
     model_name: Optional[str] = None,
-    config: Optional[OpenAIConfig] = None,
-    **azure_openai_client_params,
-):
-    try:
-        from openai import AsyncAzureOpenAI
-    except ImportError:
-        raise ImportError(
-            "The `openai` library needs to be installed in order to use Outlines' Azure OpenAI integration."
+) -> Union[OpenAI, AsyncOpenAI]:
+    """Create an Outlines `OpenAI` or `AsyncOpenAI` model instance from an
+    `openai.OpenAI` or `openai.AsyncOpenAI` client.
+
+    Parameters
+    ----------
+    client
+        An `openai.OpenAI`, `openai.AsyncOpenAI`, `openai.AzureOpenAI` or
+        `openai.AsyncAzureOpenAI` client instance.
+    model_name
+        The name of the model to use.
+
+    Returns
+    -------
+    OpenAI
+        An Outlines `OpenAI` or `AsyncOpenAI` model instance.
+
+    """
+    import openai
+
+    if isinstance(client, openai.OpenAI):
+        return OpenAI(client, model_name)
+    elif isinstance(client, openai.AsyncOpenAI):
+        return AsyncOpenAI(client, model_name)
+    else:
+        raise ValueError(
+            "Invalid client type. The client must be an instance of "
+            "+ `openai.OpenAI` or `openai.AsyncOpenAI`."
         )
-
-    if config is not None:
-        config = replace(config, model=deployment_name)  # type: ignore
-    if config is None:
-        config = OpenAIConfig(model=deployment_name)
-
-    client = AsyncAzureOpenAI(**azure_openai_client_params)
-
-    return OpenAI(client, config)

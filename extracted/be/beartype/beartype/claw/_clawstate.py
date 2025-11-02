@@ -47,10 +47,10 @@ class BeartypeClawState(object):
         Either:
 
         * If the
-          :func:`beartype.claw._importlib.clawimppath.add_beartype_pathhook`
+          :func:`beartype.claw._importlib.clawimpmain.add_beartype_pathhook`
           function has been previously called at least once under the active
           Python interpreter and the
-          :func:`beartype.claw._importlib.clawimppath.remove_beartype_pathhook`
+          :func:`beartype.claw._importlib.clawimpmain.remove_beartype_pathhook`
           function has not been called more recently, the **beartype import path
           hook singleton** (i.e., factory closure creating and returning a new
           :class:`importlib.machinery.FileFinder` instance itself creating and
@@ -87,6 +87,8 @@ class BeartypeClawState(object):
 
     # ..................{ CLASS VARIABLES                    }..................
     #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    # CAUTION: When adding a new slot, ensure that the copy_deep() method
+    # defined below deeply copies that slot as well.
     # CAUTION: Subclasses declaring uniquely subclass-specific instance
     # variables *MUST* additionally slot those variables. Subclasses violating
     # this constraint will be usable but unslotted, which defeats our purposes.
@@ -154,7 +156,7 @@ class BeartypeClawState(object):
         # print('Renitializing "beartype.claw" state...')
 
         # Avoid circular import dependencies.
-        from beartype.claw._importlib.clawimppath import (
+        from beartype.claw._importlib.clawimpmain import (
             remove_beartype_pathhook)
 
         # Perform the subset of reinitialization that is safe to be called from
@@ -168,6 +170,38 @@ class BeartypeClawState(object):
         # been added (e.g., by a prior call to an import hook) *OR* silently
         # reduce to a noop otherwise.
         remove_beartype_pathhook()
+
+    # ..................{ COPIERS                            }..................
+    #FIXME: Unit test us up, please.
+    #FIXME: Comment out all of this for the moment, please. That includes the
+    #copy_deep() methods implemented below as well. They're not implemented
+    #correctly at the moment, sadly. They need to call themselves recursively.
+    #They don't. Thus, we all sigh. *sigh*
+    # def copy_deep(self) -> 'BeartypeClawState':
+    #     '''
+    #     Deep copy of this beartype import hook state.
+    #     '''
+    #
+    #     # New initially empty beartype import hook state.
+    #     claw_state_copy = BeartypeClawState()
+    #
+    #     #FIXME: Deeply copy all of the remaining stuff, including:
+    #     #* "module_name_to_beartype_conf".
+    #     #* "node_scope_beforelist_global".
+    #
+    #     # Deeply copy *ALL* container-specific instance variables necessitating
+    #     # a deep copy from the current beartype import hook state into this
+    #     # copy.
+    #     claw_state_copy.packages_trie_blacklist = (
+    #         self.packages_trie_blacklist.copy_deep())
+    #     claw_state_copy.packages_trie_whitelist = (
+    #         self.packages_trie_whitelist.copy_deep())
+    #
+    #     # Shallowly copy *ALL* remaining instance variables.
+    #     claw_state_copy.beartype_pathhook = self.beartype_pathhook
+    #
+    #     # Return this deep copy.
+    #     return claw_state_copy
 
     # ..................{ DUNDERS                            }..................
     def __repr__(self) -> str:

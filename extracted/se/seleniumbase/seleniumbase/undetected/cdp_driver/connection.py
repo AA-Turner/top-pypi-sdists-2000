@@ -7,7 +7,6 @@ import json
 import logging
 import sys
 import types
-from asyncio import iscoroutine, iscoroutinefunction
 from typing import (
     Optional,
     Generator,
@@ -33,6 +32,7 @@ GLOBAL_DELAY = 0.005
 MAX_SIZE: int = 2**28
 PING_TIMEOUT: int = 1800  # 30 minutes
 TargetType = Union[cdp.target.TargetInfo, cdp.target.TargetID]
+logging.getLogger("asyncio").setLevel(logging.CRITICAL)
 logger = logging.getLogger("uc.connection")
 
 
@@ -520,8 +520,6 @@ class Connection(metaclass=CantTouchThis):
                     except BaseException:
                         logger.debug("NOT GOOD", exc_info=True)
                         continue
-                finally:
-                    continue
         for ed in enabled_domains:
             # Items still present at this point are unused and need removal.
             self.enabled_domains.remove(ed)
@@ -667,8 +665,8 @@ class Listener:
                     for callback in callbacks:
                         try:
                             if (
-                                iscoroutinefunction(callback)
-                                or iscoroutine(callback)
+                                inspect.iscoroutinefunction(callback)
+                                or inspect.iscoroutine(callback)
                             ):
                                 try:
                                     await callback(event, self.connection)

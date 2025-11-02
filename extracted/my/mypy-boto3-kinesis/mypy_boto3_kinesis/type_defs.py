@@ -134,6 +134,7 @@ __all__ = (
     "TagTypeDef",
     "TimestampTypeDef",
     "UntagResourceInputTypeDef",
+    "UpdateMaxRecordSizeInputTypeDef",
     "UpdateShardCountInputTypeDef",
     "UpdateShardCountOutputTypeDef",
     "UpdateStreamModeInputTypeDef",
@@ -311,7 +312,7 @@ class ListStreamsInputTypeDef(TypedDict):
 
 
 class ListTagsForResourceInputTypeDef(TypedDict):
-    ResourceARN: NotRequired[str]
+    ResourceARN: str
 
 
 class TagTypeDef(TypedDict):
@@ -393,12 +394,17 @@ class StopStreamEncryptionInputTypeDef(TypedDict):
 
 class TagResourceInputTypeDef(TypedDict):
     Tags: Mapping[str, str]
-    ResourceARN: NotRequired[str]
+    ResourceARN: str
 
 
 class UntagResourceInputTypeDef(TypedDict):
     TagKeys: Sequence[str]
-    ResourceARN: NotRequired[str]
+    ResourceARN: str
+
+
+class UpdateMaxRecordSizeInputTypeDef(TypedDict):
+    MaxRecordSizeInKiB: int
+    StreamARN: NotRequired[str]
 
 
 class UpdateShardCountInputTypeDef(TypedDict):
@@ -434,6 +440,7 @@ class CreateStreamInputTypeDef(TypedDict):
     ShardCount: NotRequired[int]
     StreamModeDetails: NotRequired[StreamModeDetailsTypeDef]
     Tags: NotRequired[Mapping[str, str]]
+    MaxRecordSizeInKiB: NotRequired[int]
 
 
 class StreamSummaryTypeDef(TypedDict):
@@ -549,6 +556,7 @@ class StreamDescriptionSummaryTypeDef(TypedDict):
     EncryptionType: NotRequired[EncryptionTypeType]
     KeyId: NotRequired[str]
     ConsumerCount: NotRequired[int]
+    MaxRecordSizeInKiB: NotRequired[int]
 
 
 class GetShardIteratorInputTypeDef(TypedDict):

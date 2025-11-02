@@ -5,6 +5,7 @@ import secrets
 import sys
 import tempfile
 import zipfile
+from contextlib import suppress
 from seleniumbase.config import settings
 from typing import Union, List, Optional
 
@@ -78,10 +79,19 @@ class Config:
         if not browser_args:
             browser_args = []
         if not user_data_dir:
-            self._user_data_dir = temp_profile_dir()
+            self.user_data_dir = temp_profile_dir()
+            self._user_data_dir = self.user_data_dir
             self._custom_data_dir = False
         else:
             self.user_data_dir = user_data_dir
+            profile = os.path.join(self.user_data_dir, "Default")
+            preferences_file = os.path.join(profile, "Preferences")
+            preferences = get_default_preferences()
+            if not os.path.exists(profile):
+                with suppress(Exception):
+                    os.makedirs(profile)
+            with open(preferences_file, "w") as f:
+                f.write(preferences)
         if not browser_executable_path:
             browser_executable_path = find_chrome_executable()
         self._browser_args = browser_args
@@ -120,6 +130,7 @@ class Config:
             "--no-default-browser-check",
             "--homepage=about:blank",
             "--no-pings",
+            "--enable-unsafe-extension-debugging",
             "--wm-window-animations-disabled",
             "--animation-duration-scale=0",
             "--enable-privacy-sandbox-ads-apis",
@@ -141,11 +152,6 @@ class Config:
             "--disable-renderer-backgrounding",
             "--disable-background-networking",
             "--disable-dev-shm-usage",
-            "--disable-features=IsolateOrigins,site-per-process,Translate,"
-            "InsecureDownloadWarnings,DownloadBubble,DownloadBubbleV2,"
-            "OptimizationTargetPrediction,OptimizationGuideModelDownloading,"
-            "SidePanelPinning,UserAgentClientHint,PrivacySandboxSettings4,"
-            "DisableLoadExtensionCommandLineSwitch",
         ]
 
     @property
@@ -193,7 +199,16 @@ class Config:
         # By the time it starts, the port is probably already taken.
         args = self._default_browser_args.copy()
         args += ["--user-data-dir=%s" % self.user_data_dir]
-        args += ["--disable-features=IsolateOrigins,site-per-process"]
+        args += [
+            "--disable-features=IsolateOrigins,site-per-process,Translate,"
+            "InsecureDownloadWarnings,DownloadBubble,DownloadBubbleV2,"
+            "OptimizationTargetPrediction,OptimizationGuideModelDownloading,"
+            "SidePanelPinning,UserAgentClientHint,PrivacySandboxSettings4,"
+            "OptimizationHintsFetching,InterestFeedContentSuggestions,"
+            "DisableLoadExtensionCommandLineSwitch"
+        ]
+        if self.proxy:
+            args += ["--test-type"]
         args += ["--disable-session-crashed-bubble"]
         if self.expert:
             args += [
@@ -270,9 +285,25 @@ def is_root():
         return ctypes.windll.shell32.IsUserAnAdmin() != 0
 
 
+def get_default_preferences():
+    return (
+        """{"credentials_enable_service": false,
+        "password_manager_enabled": false,
+        "password_manager_leak_detection": false}"""
+    )
+
+
 def temp_profile_dir():
     """Generate a temp dir (path)"""
     path = os.path.normpath(tempfile.mkdtemp(prefix="uc_"))
+    profile = os.path.join(path, "Default")
+    preferences_file = os.path.join(profile, "Preferences")
+    preferences = get_default_preferences()
+    if not os.path.exists(profile):
+        with suppress(Exception):
+            os.makedirs(profile)
+    with open(preferences_file, "w") as f:
+        f.write(preferences)
     return path
 
 
@@ -286,10 +317,13 @@ def find_chrome_executable(return_all=False):
         for item in os.environ.get("PATH").split(os.pathsep):
             for subitem in (
                 "google-chrome",
+                "google-chrome-stable",
+                "google-chrome-beta",
+                "google-chrome-dev",
+                "google-chrome-unstable",
+                "chrome",
                 "chromium",
                 "chromium-browser",
-                "chrome",
-                "google-chrome-stable",
             ):
                 candidates.append(os.sep.join((item, subitem)))
         if "darwin" in sys.platform:
@@ -318,7 +352,11 @@ def find_chrome_executable(return_all=False):
                     )
     rv = []
     for candidate in candidates:
-        if os.path.exists(candidate) and os.access(candidate, os.X_OK):
+        if (
+            os.path.exists(candidate)
+            and os.access(candidate, os.R_OK)
+            and os.access(candidate, os.X_OK)
+        ):
             logger.debug("%s is a valid candidate... " % candidate)
             rv.append(candidate)
         else:

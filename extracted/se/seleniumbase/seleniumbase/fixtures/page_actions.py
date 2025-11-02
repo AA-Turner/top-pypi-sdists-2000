@@ -17,11 +17,10 @@ By.XPATH               # "xpath"
 By.TAG_NAME            # "tag name"
 By.PARTIAL_LINK_TEXT   # "partial link text"
 """
-import codecs
-import fasteners
 import os
 import time
 from contextlib import suppress
+from filelock import FileLock
 from selenium.common.exceptions import ElementNotInteractableException
 from selenium.common.exceptions import ElementNotVisibleException
 from selenium.common.exceptions import NoAlertPresentException
@@ -193,6 +192,10 @@ def is_attribute_present(
     @Returns
     Boolean (is attribute present)
     """
+    if __is_cdp_swap_needed(driver):
+        return driver.cdp.is_attribute_present(
+            selector, attribute, value=value
+        )
     _reconnect_if_disconnected(driver)
     try:
         element = driver.find_element(by=by, value=selector)
@@ -1108,6 +1111,14 @@ def wait_for_element_absent(
     timeout - the time to wait for elements in seconds
     original_selector - handle pre-converted ":contains(TEXT)" selector
     """
+    if __is_cdp_swap_needed(driver):
+        if page_utils.is_valid_by(by):
+            original_selector = selector
+        elif page_utils.is_valid_by(selector):
+            original_selector = by
+        selector, by = page_utils.recalculate_selector(original_selector, by)
+        driver.cdp.wait_for_element_absent(selector)
+        return True
     _reconnect_if_disconnected(driver)
     start_ms = time.time() * 1000.0
     stop_ms = start_ms + (timeout * 1000.0)
@@ -1156,6 +1167,14 @@ def wait_for_element_not_visible(
     timeout - the time to wait for the element in seconds
     original_selector - handle pre-converted ":contains(TEXT)" selector
     """
+    if __is_cdp_swap_needed(driver):
+        if page_utils.is_valid_by(by):
+            original_selector = selector
+        elif page_utils.is_valid_by(selector):
+            original_selector = by
+        selector, by = page_utils.recalculate_selector(original_selector, by)
+        driver.cdp.wait_for_element_not_visible(selector)
+        return True
     _reconnect_if_disconnected(driver)
     start_ms = time.time() * 1000.0
     stop_ms = start_ms + (timeout * 1000.0)
@@ -1508,10 +1527,10 @@ def save_page_source(driver, name, folder=None):
         page_source = driver.cdp.get_page_source()
     else:
         page_source = driver.page_source
-    html_file = codecs.open(html_file_path, "w+", "utf-8")
     rendered_source = log_helper.get_html_source_with_base_href(
         driver, page_source
     )
+    html_file = open(html_file_path, mode="w+", encoding="utf-8")
     html_file.write(rendered_source)
     html_file.close()
 
@@ -1632,9 +1651,7 @@ def __switch_to_window(driver, window_handle, uc_lock=True):
         and driver._is_using_uc
         and uc_lock
     ):
-        gui_lock = fasteners.InterProcessLock(
-            constants.MultiBrowser.PYAUTOGUILOCK
-        )
+        gui_lock = FileLock(constants.MultiBrowser.PYAUTOGUILOCK)
         with gui_lock:
             driver.switch_to.window(window_handle)
     else:

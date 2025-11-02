@@ -1,21 +1,98 @@
-from enum import Enum
+"""Output types for structured generation and regex DSL."""
 
-from . import airports, countries, locale
 from outlines.types.dsl import (
+    CFG,
+    Choice,
+    JsonSchema,
     Regex,
-    json_schema,
-    regex,
-    either,
-    optional,
-    exactly,
     at_least,
     at_most,
     between,
+    cfg,
+    either,
+    exactly,
+    json_schema,
     one_or_more,
+    optional,
+    regex,
     zero_or_more,
 )
 
+from . import locale
+
+try:
+    from . import airports
+except ImportError:  # pragma: no cover
+    class AirportImportError:
+        """Dummy module that raises an error when accessed."""
+        def __getattr__(self, name):
+            raise ImportError(
+                "The 'airportsdata' package is required to use airport types. "
+                "Install it with: pip install 'outlines[airports]'"
+            )
+
+    airports = AirportImportError()  # type: ignore
+
+try:
+    from . import countries
+except ImportError:  # pragma: no cover
+    class CountryImportError:
+        """Dummy module that raises an error when accessed."""
+        def __getattr__(self, name):
+            raise ImportError(
+                "The 'iso3166' package is required to use country types. "
+                "Install it with: pip install 'outlines[countries]'"
+            )
+
+    countries = CountryImportError()  # type: ignore
+
+__all__ = [
+    # Submodules
+    "airports",
+    "countries",
+    "locale",
+    # DSL functions and classes
+    "Regex",
+    "CFG",
+    "Choice",
+    "JsonSchema",
+    "regex",
+    "cfg",
+    "json_schema",
+    "optional",
+    "either",
+    "exactly",
+    "at_least",
+    "at_most",
+    "between",
+    "zero_or_more",
+    "one_or_more",
+    # Python types
+    "string",
+    "integer",
+    "boolean",
+    "number",
+    "date",
+    "time",
+    "datetime",
+    # Basic regex types
+    "digit",
+    "char",
+    "newline",
+    "whitespace",
+    "hex_str",
+    "uuid4",
+    "ipv4",
+    # Document-specific types
+    "sentence",
+    "paragraph",
+    "email",
+    "isbn",
+]
+
+
 # Python types
+string = Regex(r'"[^"]*"')
 integer = Regex(r"[+-]?(0|[1-9][0-9]*)")
 boolean = Regex("(True|False)")
 number = Regex(rf"{integer.pattern}(\.[0-9]+)?([eE][+-][0-9]+)?")
@@ -28,6 +105,18 @@ digit = Regex(r"\d")
 char = Regex(r"\w")
 newline = Regex(r"(\r\n|\r|\n)")  # Matched new lines on Linux, Windows & MacOS
 whitespace = Regex(r"\s")
+hex_str = Regex(r"(0x)?[a-fA-F0-9]+")
+uuid4 = Regex(
+    r"[a-fA-F0-9]{8}-"
+    r"[a-fA-F0-9]{4}-"
+    r"4[a-fA-F0-9]{3}-"
+    r"[89abAB][a-fA-F0-9]{3}-"
+    r"[a-fA-F0-9]{12}"
+)
+ipv4 = Regex(
+    r"((25[0-5]|2[0-4][0-9]|1?[0-9]{1,2})\.){3}"
+    r"(25[0-5]|2[0-4][0-9]|1?[0-9]{1,2})"
+)
 
 # Document-specific types
 sentence = Regex(r"[A-Z].*\s*[.!?]")

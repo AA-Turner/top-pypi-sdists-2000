@@ -10,6 +10,14 @@ import pytest
 import expandvars
 
 
+def test_unset_var_substring():
+    assert expandvars.expandvars("${SOME_UNKNOWN_VAR:0:10}") == ""
+
+
+def test_unset_var_length():
+    assert expandvars.expandvars("${#SOME_UNKNOWN_VAR}") == "0"
+
+
 #
 @patch.dict(env, {}, clear=True)
 def test_expandvars_constant():
@@ -184,7 +192,7 @@ def test_escape():
     assert expandvars.expandvars("\\\\$FOO") == "\\foo"
     assert expandvars.expandvars("$FOO\\$BAR") == "foo$BAR"
     assert expandvars.expandvars("\\$FOO$BAR") == "$FOObar"
-    assert expandvars.expandvars("$FOO" "\\" "\\" "\\" "$BAR") == ("foo" "\\" "$BAR")
+    assert expandvars.expandvars("$FOO\\\\\\$BAR") == ("foo\\$BAR")
     assert expandvars.expandvars("$FOO\\$") == "foo$"
     assert expandvars.expandvars("$\\FOO") == "$\\FOO"
     assert expandvars.expandvars("$\\$FOO") == "$$FOO"
@@ -393,4 +401,27 @@ def test_expand_var_symbol(var_symbol):
             var_symbol + "{FOO},$HOME", environ={"FOO": "test"}, var_symbol=var_symbol
         )
         == "test,$HOME"
+    )
+
+
+@patch.dict(env, {"FOO": "bar", "BIZ": "buz"}, clear=True)
+def test_expandvars_require_suffix():
+    importlib.reload(expandvars)
+
+    assert expandvars.expand("${FOO}:$BIZ", surrounded_vars_only=True) == "bar:$BIZ"
+    assert expandvars.expand("$FOO$BIZ", surrounded_vars_only=True) == "$FOO$BIZ"
+    assert expandvars.expand("${FOO}$BIZ", surrounded_vars_only=True) == "bar$BIZ"
+    assert expandvars.expand("$FOO${BIZ}", surrounded_vars_only=True) == "$FOObuz"
+    assert expandvars.expand("$FOO-$BIZ", surrounded_vars_only=True) == "$FOO-$BIZ"
+    assert expandvars.expand("boo$BIZ", surrounded_vars_only=True) == "boo$BIZ"
+    assert expandvars.expand("boo${BIZ}", surrounded_vars_only=True) == "boobuz"
+
+
+@patch.dict(env, {"FOO": "bar", "BIZ": "buz"}, clear=True)
+def test_expandvars_disable_escape():
+    importlib.reload(expandvars)
+
+    assert (
+        expandvars.expand("\\foo\\", surrounded_vars_only=True, escape_char=None)
+        == "\\foo\\"
     )
