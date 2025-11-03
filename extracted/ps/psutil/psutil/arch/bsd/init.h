@@ -5,14 +5,19 @@
  */
 
 #include <Python.h>
+#include <sys/types.h>
 
-void convert_kvm_err(const char *syscall, char *errbuf);
 
-#if defined(PSUTIL_OPENBSD) || defined (PSUTIL_NETBSD)
-    #define PSUTIL_HASNT_KINFO_GETFILE
+#define PSUTIL_KPT2DOUBLE(t) (t##_sec + t##_usec / 1000000.0)
 
-    struct kinfo_file *kinfo_getfile(pid_t pid, int* cnt);
+#if defined(PSUTIL_OPENBSD) || defined(PSUTIL_NETBSD)
+#define PSUTIL_HASNT_KINFO_GETFILE
+struct kinfo_file *kinfo_getfile(pid_t pid, int *cnt);
 #endif
+
+int psutil_kinfo_proc(pid_t pid, void *proc);
+void convert_kvm_err(const char *syscall, char *errbuf);
+int is_zombie(size_t pid);
 
 PyObject *psutil_boot_time(PyObject *self, PyObject *args);
 PyObject *psutil_cpu_count_logical(PyObject *self, PyObject *args);

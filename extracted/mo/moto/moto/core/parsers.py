@@ -65,13 +65,13 @@ class QueryParser(RequestParser):
         return parsed if parsed is not UNDEFINED else {}
 
     def _parse_shape(self, shape, node, prefix=""):
-        handler = getattr(self, "_handle_%s" % shape.type_name, self._default_handle)
+        handler = getattr(self, f"_handle_{shape.type_name}", self._default_handle)
         return handler(shape, node, prefix)
 
     def _gonna_recurse(self, query_params, prefix):
         if prefix == "":
             return False
-        return not any([param_key.startswith(prefix) for param_key in query_params])
+        return not any(param_key.startswith(prefix) for param_key in query_params)
 
     def _handle_structure(self, shape, query_params, prefix=""):
         if self._gonna_recurse(query_params, prefix):
@@ -82,7 +82,7 @@ class QueryParser(RequestParser):
             member_shape = members[member_name]
             member_prefix = self._get_serialized_name(member_shape, member_name)
             if prefix:
-                member_prefix = "%s.%s" % (prefix, member_prefix)
+                member_prefix = f"{prefix}.{member_prefix}"
             value = self._parse_shape(member_shape, query_params, member_prefix)
             parsed_key = self._parsed_key_name(member_name)
             if value is not UNDEFINED:
@@ -171,6 +171,9 @@ class QueryParser(RequestParser):
         return value.get(prefix, default_value)
 
     def _get_serialized_name(self, shape, default_name):
+        serialized_name = shape.serialization.get("locationNameForQueryCompatibility")
+        if serialized_name:
+            return serialized_name
         return shape.serialization.get("name", default_name)
 
     def _parsed_key_name(self, member_name):
@@ -204,11 +207,17 @@ class JSONParser(RequestParser):
         return original_parsed
 
     def _parse_shape(self, shape, node):
-        handler = getattr(self, "_handle_%s" % shape.type_name, self._default_handle)
+        handler = getattr(self, f"_handle_{shape.type_name}", self._default_handle)
         return handler(shape, node)
 
     def _default_handle(self, _, value):
         return value
+
+    def _handle_blob(self, shape, value):
+        value = self._default_handle(shape, value)
+        if value is UNDEFINED:
+            return value
+        return self._blob_parser(value)
 
     def _handle_float(self, _, value):
         return float(value) if value is not UNDEFINED else value
@@ -224,9 +233,9 @@ class JSONParser(RequestParser):
         parsed = self.MAP_TYPE()
         key_shape = shape.key
         value_shape = shape.value
-        for key, value in value.items():
+        for key, item_value in value.items():
             actual_key = self._parse_shape(key_shape, key)
-            actual_value = self._parse_shape(value_shape, value)
+            actual_value = self._parse_shape(value_shape, item_value)
             parsed[actual_key] = actual_value
         return parsed
 
