@@ -20,15 +20,15 @@ class ParseConfiguration(pydantic.BaseModel):
     Parse configuration schema.
     """
 
+    created_at: dt.datetime = pydantic.Field(description="Creation timestamp")
+    creator: typing.Optional[str]
     id: str = pydantic.Field(description="Unique identifier for the parse configuration")
     name: str = pydantic.Field(description="Name of the parse configuration")
-    source_type: str = pydantic.Field(description="Type of the source (e.g., 'project')")
-    source_id: str = pydantic.Field(description="ID of the source")
-    creator: typing.Optional[str]
-    version: str = pydantic.Field(description="Version of the configuration")
     parameters: LlamaParseParameters = pydantic.Field(description="LlamaParseParameters configuration")
-    created_at: dt.datetime = pydantic.Field(description="Creation timestamp")
+    source_id: str = pydantic.Field(description="ID of the source")
+    source_type: str = pydantic.Field(description="Type of the source (e.g., 'project')")
     updated_at: dt.datetime = pydantic.Field(description="Last update timestamp")
+    version: str = pydantic.Field(description="Version of the configuration")
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

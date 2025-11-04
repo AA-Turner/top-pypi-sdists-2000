@@ -25,33 +25,33 @@ class ExtractConfig(pydantic.BaseModel):
     Additional parameters for the extraction agent.
     """
 
-    priority: typing.Optional[ExtractConfigPriority]
-    extraction_target: typing.Optional[ExtractTarget] = pydantic.Field(description="The extraction target specified.")
-    extraction_mode: typing.Optional[ExtractMode] = pydantic.Field(
-        description="The extraction mode specified (FAST, BALANCED, MULTIMODAL, PREMIUM)."
+    chunk_mode: typing.Optional[DocumentChunkMode] = pydantic.Field(
+        description="The mode to use for chunking the document."
     )
-    parse_model: typing.Optional[PublicModelName]
-    extract_model: typing.Optional[ExtractModels]
-    multimodal_fast_mode: typing.Optional[bool] = pydantic.Field(
-        description="DEPRECATED: Whether to use fast mode for multimodal extraction."
-    )
-    system_prompt: typing.Optional[str]
-    use_reasoning: typing.Optional[bool] = pydantic.Field(description="Whether to use reasoning for the extraction.")
     cite_sources: typing.Optional[bool] = pydantic.Field(description="Whether to cite sources for the extraction.")
     confidence_scores: typing.Optional[bool] = pydantic.Field(
         description="Whether to fetch confidence scores for the extraction."
     )
-    chunk_mode: typing.Optional[DocumentChunkMode] = pydantic.Field(
-        description="The mode to use for chunking the document."
+    extract_model: typing.Optional[ExtractModels]
+    extraction_mode: typing.Optional[ExtractMode] = pydantic.Field(
+        description="The extraction mode specified (FAST, BALANCED, MULTIMODAL, PREMIUM)."
     )
+    extraction_target: typing.Optional[ExtractTarget] = pydantic.Field(description="The extraction target specified.")
     high_resolution_mode: typing.Optional[bool] = pydantic.Field(
         description="Whether to use high resolution mode for the extraction."
     )
     invalidate_cache: typing.Optional[bool] = pydantic.Field(
         description="Whether to invalidate the cache for the extraction."
     )
+    multimodal_fast_mode: typing.Optional[bool] = pydantic.Field(
+        description="DEPRECATED: Whether to use fast mode for multimodal extraction."
+    )
     num_pages_context: typing.Optional[int]
     page_range: typing.Optional[str]
+    parse_model: typing.Optional[PublicModelName]
+    priority: typing.Optional[ExtractConfigPriority]
+    system_prompt: typing.Optional[str]
+    use_reasoning: typing.Optional[bool] = pydantic.Field(description="Whether to use reasoning for the extraction.")
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

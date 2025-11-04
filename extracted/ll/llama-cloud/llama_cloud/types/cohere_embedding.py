@@ -15,16 +15,16 @@ except ImportError:
 
 
 class CohereEmbedding(pydantic.BaseModel):
-    model_name: typing.Optional[str] = pydantic.Field(description="The modelId of the Cohere model to use.")
-    embed_batch_size: typing.Optional[int] = pydantic.Field(description="The batch size for embedding calls.")
-    num_workers: typing.Optional[int]
     api_key: typing.Optional[str]
-    truncate: typing.Optional[str] = pydantic.Field(description="Truncation type - START/ END/ NONE")
-    input_type: typing.Optional[str]
+    class_name: typing.Optional[str]
+    embed_batch_size: typing.Optional[int] = pydantic.Field(description="The batch size for embedding calls.")
     embedding_type: typing.Optional[str] = pydantic.Field(
         description="Embedding type. If not provided float embedding_type is used when needed."
     )
-    class_name: typing.Optional[str]
+    input_type: typing.Optional[str]
+    model_name: typing.Optional[str] = pydantic.Field(description="The modelId of the Cohere model to use.")
+    num_workers: typing.Optional[int]
+    truncate: typing.Optional[str] = pydantic.Field(description="Truncation type - START/ END/ NONE")
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

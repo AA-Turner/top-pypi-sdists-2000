@@ -22,20 +22,20 @@ class PlaygroundSession(pydantic.BaseModel):
     A playground session for a user.
     """
 
-    id: str = pydantic.Field(description="Unique identifier")
-    created_at: typing.Optional[dt.datetime]
-    updated_at: typing.Optional[dt.datetime]
-    pipeline_id: str
-    user_id: str
-    llm_params_id: str
-    llm_params: typing.Optional[LlmParameters] = pydantic.Field(description="LLM parameters last used in this session.")
-    retrieval_params_id: str
-    retrieval_params: typing.Optional[PresetRetrievalParams] = pydantic.Field(
-        description="Preset retrieval parameters last used in this session."
-    )
     chat_messages: typing.Optional[typing.List[ChatMessage]] = pydantic.Field(
         description="Chat message history for this session."
     )
+    created_at: typing.Optional[dt.datetime]
+    id: str = pydantic.Field(description="Unique identifier")
+    llm_params: typing.Optional[LlmParameters] = pydantic.Field(description="LLM parameters last used in this session.")
+    llm_params_id: str
+    pipeline_id: str
+    retrieval_params: typing.Optional[PresetRetrievalParams] = pydantic.Field(
+        description="Preset retrieval parameters last used in this session."
+    )
+    retrieval_params_id: str
+    updated_at: typing.Optional[dt.datetime]
+    user_id: str
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

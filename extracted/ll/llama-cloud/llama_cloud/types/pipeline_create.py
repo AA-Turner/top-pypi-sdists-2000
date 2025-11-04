@@ -5,7 +5,6 @@ import typing
 
 from ..core.datetime_utils import serialize_datetime
 from .data_sink_create import DataSinkCreate
-from .eval_execution_params import EvalExecutionParams
 from .llama_parse_parameters import LlamaParseParameters
 from .pipeline_create_embedding_config import PipelineCreateEmbeddingConfig
 from .pipeline_create_transform_config import PipelineCreateTransformConfig
@@ -28,28 +27,25 @@ class PipelineCreate(pydantic.BaseModel):
     Schema for creating a pipeline.
     """
 
-    embedding_config: typing.Optional[PipelineCreateEmbeddingConfig]
-    transform_config: typing.Optional[PipelineCreateTransformConfig] = pydantic.Field(
-        description="Configuration for the transformation."
-    )
-    sparse_model_config: typing.Optional[SparseModelConfig]
-    data_sink_id: typing.Optional[str]
-    embedding_model_config_id: typing.Optional[str]
     data_sink: typing.Optional[DataSinkCreate]
-    preset_retrieval_parameters: typing.Optional[PresetRetrievalParams] = pydantic.Field(
-        description="Preset retrieval parameters for the pipeline."
-    )
-    eval_parameters: typing.Optional[EvalExecutionParams] = pydantic.Field(
-        description="Eval parameters for the pipeline."
-    )
+    data_sink_id: typing.Optional[str]
+    embedding_config: typing.Optional[PipelineCreateEmbeddingConfig]
+    embedding_model_config_id: typing.Optional[str]
     llama_parse_parameters: typing.Optional[LlamaParseParameters]
-    status: typing.Optional[str]
+    managed_pipeline_id: typing.Optional[str]
     metadata_config: typing.Optional[PipelineMetadataConfig]
     name: str
     pipeline_type: typing.Optional[PipelineType] = pydantic.Field(
         description="Type of pipeline. Either PLAYGROUND or MANAGED."
     )
-    managed_pipeline_id: typing.Optional[str]
+    preset_retrieval_parameters: typing.Optional[PresetRetrievalParams] = pydantic.Field(
+        description="Preset retrieval parameters for the pipeline."
+    )
+    sparse_model_config: typing.Optional[SparseModelConfig]
+    status: typing.Optional[str]
+    transform_config: typing.Optional[PipelineCreateTransformConfig] = pydantic.Field(
+        description="Configuration for the transformation."
+    )
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

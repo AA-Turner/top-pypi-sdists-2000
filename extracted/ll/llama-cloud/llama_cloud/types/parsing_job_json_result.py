@@ -15,8 +15,8 @@ except ImportError:
 
 
 class ParsingJobJsonResult(pydantic.BaseModel):
-    pages: typing.Any
     job_metadata: typing.Any
+    pages: typing.Any
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

@@ -16,6 +16,7 @@ except ImportError:
 
 
 class LlmParameters(pydantic.BaseModel):
+    class_name: typing.Optional[str]
     model_name: typing.Optional[SupportedLlmModelNames] = pydantic.Field(
         description="The name of the model to use for LLM completions."
     )
@@ -23,7 +24,6 @@ class LlmParameters(pydantic.BaseModel):
     temperature: typing.Optional[float]
     use_chain_of_thought_reasoning: typing.Optional[bool]
     use_citation: typing.Optional[bool]
-    class_name: typing.Optional[str]
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

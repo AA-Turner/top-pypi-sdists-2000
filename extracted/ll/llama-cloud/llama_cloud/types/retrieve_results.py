@@ -23,24 +23,24 @@ class RetrieveResults(pydantic.BaseModel):
     Schema for the result of an retrieval execution.
     """
 
-    pipeline_id: str = pydantic.Field(description="The ID of the pipeline that the query was retrieved against.")
-    retrieval_nodes: typing.List[TextNodeWithScore] = pydantic.Field(
-        description="The nodes retrieved by the pipeline for the given query."
-    )
+    class_name: typing.Optional[str]
     image_nodes: typing.Optional[typing.List[PageScreenshotNodeWithScore]] = pydantic.Field(
         description="The image nodes retrieved by the pipeline for the given query. Deprecated - will soon be replaced with 'page_screenshot_nodes'."
+    )
+    inferred_search_filters: typing.Optional[MetadataFilters]
+    metadata: typing.Optional[typing.Dict[str, str]] = pydantic.Field(
+        description="Metadata associated with the retrieval execution"
     )
     page_figure_nodes: typing.Optional[typing.List[PageFigureNodeWithScore]] = pydantic.Field(
         description="The page figure nodes retrieved by the pipeline for the given query."
     )
+    pipeline_id: str = pydantic.Field(description="The ID of the pipeline that the query was retrieved against.")
     retrieval_latency: typing.Optional[typing.Dict[str, float]] = pydantic.Field(
         description="The end-to-end latency for retrieval and reranking."
     )
-    metadata: typing.Optional[typing.Dict[str, str]] = pydantic.Field(
-        description="Metadata associated with the retrieval execution"
+    retrieval_nodes: typing.List[TextNodeWithScore] = pydantic.Field(
+        description="The nodes retrieved by the pipeline for the given query."
     )
-    inferred_search_filters: typing.Optional[MetadataFilters]
-    class_name: typing.Optional[str]
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

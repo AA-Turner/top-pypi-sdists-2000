@@ -17,17 +17,17 @@ except ImportError:
 
 
 class ChatMessage(pydantic.BaseModel):
-    id: str
-    index: int = pydantic.Field(description="The index of the message in the chat.")
-    annotations: typing.Optional[typing.List[MessageAnnotation]] = pydantic.Field(
-        description="Retrieval annotations for the message."
-    )
-    role: MessageRole = pydantic.Field(description="The role of the message.")
-    content: typing.Optional[str]
     additional_kwargs: typing.Optional[typing.Dict[str, str]] = pydantic.Field(
         description="Additional arguments passed to the model"
     )
+    annotations: typing.Optional[typing.List[MessageAnnotation]] = pydantic.Field(
+        description="Retrieval annotations for the message."
+    )
     class_name: typing.Optional[str]
+    content: typing.Optional[str]
+    id: str
+    index: int = pydantic.Field(description="The index of the message in the chat.")
+    role: MessageRole = pydantic.Field(description="The role of the message.")
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

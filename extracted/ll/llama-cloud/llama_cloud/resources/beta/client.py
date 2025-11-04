@@ -15,16 +15,24 @@ from ...types.agent_data import AgentData
 from ...types.api_key import ApiKey
 from ...types.api_key_query_response import ApiKeyQueryResponse
 from ...types.api_key_type import ApiKeyType
-from ...types.batch import Batch
-from ...types.batch_paginated_list import BatchPaginatedList
-from ...types.batch_public_output import BatchPublicOutput
+from ...types.batch_file_status import BatchFileStatus
+from ...types.batch_item_list_response import BatchItemListResponse
+from ...types.batch_job_cancel_response import BatchJobCancelResponse
+from ...types.batch_job_response import BatchJobResponse
+from ...types.batch_job_status_response import BatchJobStatusResponse
+from ...types.batch_job_type import BatchJobType
 from ...types.delete_response import DeleteResponse
+from ...types.directory_file_query_response import DirectoryFileQueryResponse
+from ...types.directory_file_response import DirectoryFileResponse
+from ...types.directory_query_response import DirectoryQueryResponse
+from ...types.directory_response import DirectoryResponse
 from ...types.file import File
 from ...types.file_create import FileCreate
 from ...types.file_filter import FileFilter
 from ...types.file_query_response import FileQueryResponse
 from ...types.filter_operation import FilterOperation
 from ...types.http_validation_error import HttpValidationError
+from ...types.item_processing_results_response import ItemProcessingResultsResponse
 from ...types.llama_parse_parameters import LlamaParseParameters
 from ...types.paginated_response_agent_data import PaginatedResponseAgentData
 from ...types.paginated_response_aggregate_group import PaginatedResponseAggregateGroup
@@ -37,6 +45,8 @@ from ...types.parse_configuration_query_response import ParseConfigurationQueryR
 from ...types.presigned_url import PresignedUrl
 from ...types.spreadsheet_job import SpreadsheetJob
 from ...types.spreadsheet_parsing_config import SpreadsheetParsingConfig
+from ...types.spreadsheet_result_type import SpreadsheetResultType
+from .types.batch_job_create_request_job_config import BatchJobCreateRequestJobConfig
 
 try:
     import pydantic
@@ -54,132 +64,52 @@ class BetaClient:
     def __init__(self, *, client_wrapper: SyncClientWrapper):
         self._client_wrapper = client_wrapper
 
-    def list_api_keys(
+    def create_agent_data(
         self,
         *,
-        page_size: typing.Optional[int] = None,
-        page_token: typing.Optional[str] = None,
-        name: typing.Optional[str] = None,
         project_id: typing.Optional[str] = None,
-        key_type: typing.Optional[ApiKeyType] = None,
-    ) -> ApiKeyQueryResponse:
+        organization_id: typing.Optional[str] = None,
+        collection: typing.Optional[str] = OMIT,
+        data: typing.Dict[str, typing.Any],
+        deployment_name: str,
+    ) -> AgentData:
         """
-        List API keys.
-
-        If project_id is provided, validates user has access to that project.
-        If project_id is not provided, scopes results to the current user.
-
-        Args:
-        user: Current user
-        db: Database session
-        page_size: Number of items per page
-        page_token: Token for pagination
-        name: Filter by API key name
-        project_id: Filter by project ID
-        key_type: Filter by key type
-
-        Returns:
-        Paginated response with API keys
+        Create new agent data.
 
         Parameters:
-            - page_size: typing.Optional[int].
-
-            - page_token: typing.Optional[str].
-
-            - name: typing.Optional[str].
-
             - project_id: typing.Optional[str].
 
-            - key_type: typing.Optional[ApiKeyType].
+            - organization_id: typing.Optional[str].
+
+            - collection: typing.Optional[str].
+
+            - data: typing.Dict[str, typing.Any].
+
+            - deployment_name: str.
         ---
-        from llama_cloud import ApiKeyType
         from llama_cloud.client import LlamaCloud
 
         client = LlamaCloud(
             token="YOUR_TOKEN",
         )
-        client.beta.list_api_keys(
-            key_type=ApiKeyType.USER,
+        client.beta.create_agent_data(
+            data={"string": {}},
+            deployment_name="string",
         )
         """
-        _response = self._client_wrapper.httpx_client.request(
-            "GET",
-            urllib.parse.urljoin(f"{self._client_wrapper.get_base_url()}/", "api/v1/beta/api-keys"),
-            params=remove_none_from_dict(
-                {
-                    "page_size": page_size,
-                    "page_token": page_token,
-                    "name": name,
-                    "project_id": project_id,
-                    "key_type": key_type,
-                }
-            ),
-            headers=self._client_wrapper.get_headers(),
-            timeout=60,
-        )
-        if 200 <= _response.status_code < 300:
-            return pydantic.parse_obj_as(ApiKeyQueryResponse, _response.json())  # type: ignore
-        if _response.status_code == 422:
-            raise UnprocessableEntityError(pydantic.parse_obj_as(HttpValidationError, _response.json()))  # type: ignore
-        try:
-            _response_json = _response.json()
-        except JSONDecodeError:
-            raise ApiError(status_code=_response.status_code, body=_response.text)
-        raise ApiError(status_code=_response.status_code, body=_response_json)
-
-    def create_api_key(
-        self,
-        *,
-        name: typing.Optional[str] = OMIT,
-        project_id: typing.Optional[str] = OMIT,
-        key_type: typing.Optional[ApiKeyType] = OMIT,
-    ) -> ApiKey:
-        """
-        Create a new API key.
-
-        If project_id is specified, validates user has admin permissions for that project.
-
-        Args:
-        api_key_create: API key creation data
-        user: Current user
-        db: Database session
-
-        Returns:
-        The created API key with the secret key visible in redacted_api_key field
-
-        Parameters:
-            - name: typing.Optional[str].
-
-            - project_id: typing.Optional[str].
-
-            - key_type: typing.Optional[ApiKeyType].
-        ---
-        from llama_cloud import ApiKeyType
-        from llama_cloud.client import LlamaCloud
-
-        client = LlamaCloud(
-            token="YOUR_TOKEN",
-        )
-        client.beta.create_api_key(
-            key_type=ApiKeyType.USER,
-        )
-        """
-        _request: typing.Dict[str, typing.Any] = {}
-        if name is not OMIT:
-            _request["name"] = name
-        if project_id is not OMIT:
-            _request["project_id"] = project_id
-        if key_type is not OMIT:
-            _request["key_type"] = key_type
+        _request: typing.Dict[str, typing.Any] = {"data": data, "deployment_name": deployment_name}
+        if collection is not OMIT:
+            _request["collection"] = collection
         _response = self._client_wrapper.httpx_client.request(
             "POST",
-            urllib.parse.urljoin(f"{self._client_wrapper.get_base_url()}/", "api/v1/beta/api-keys"),
+            urllib.parse.urljoin(f"{self._client_wrapper.get_base_url()}/", "api/v1/beta/agent-data"),
+            params=remove_none_from_dict({"project_id": project_id, "organization_id": organization_id}),
             json=jsonable_encoder(_request),
             headers=self._client_wrapper.get_headers(),
             timeout=60,
         )
         if 200 <= _response.status_code < 300:
-            return pydantic.parse_obj_as(ApiKey, _response.json())  # type: ignore
+            return pydantic.parse_obj_as(AgentData, _response.json())  # type: ignore
         if _response.status_code == 422:
             raise UnprocessableEntityError(pydantic.parse_obj_as(HttpValidationError, _response.json()))  # type: ignore
         try:
@@ -188,218 +118,88 @@ class BetaClient:
             raise ApiError(status_code=_response.status_code, body=_response.text)
         raise ApiError(status_code=_response.status_code, body=_response_json)
 
-    def get_api_key(self, api_key_id: str) -> ApiKey:
-        """
-        Get an API key by ID.
-
-        Args:
-        api_key_id: The ID of the API key
-        user: Current user
-        db: Database session
-
-        Returns:
-        The API key
-
-        Parameters:
-            - api_key_id: str.
-        ---
-        from llama_cloud.client import LlamaCloud
-
-        client = LlamaCloud(
-            token="YOUR_TOKEN",
-        )
-        client.beta.get_api_key(
-            api_key_id="string",
-        )
-        """
-        _response = self._client_wrapper.httpx_client.request(
-            "GET",
-            urllib.parse.urljoin(f"{self._client_wrapper.get_base_url()}/", f"api/v1/beta/api-keys/{api_key_id}"),
-            headers=self._client_wrapper.get_headers(),
-            timeout=60,
-        )
-        if 200 <= _response.status_code < 300:
-            return pydantic.parse_obj_as(ApiKey, _response.json())  # type: ignore
-        if _response.status_code == 422:
-            raise UnprocessableEntityError(pydantic.parse_obj_as(HttpValidationError, _response.json()))  # type: ignore
-        try:
-            _response_json = _response.json()
-        except JSONDecodeError:
-            raise ApiError(status_code=_response.status_code, body=_response.text)
-        raise ApiError(status_code=_response.status_code, body=_response_json)
-
-    def delete_api_key(self, api_key_id: str) -> None:
-        """
-        Delete an API key.
-
-        If the API key belongs to a project, validates user has admin permissions for that project.
-        If the API key has no project, validates it belongs to the current user.
-
-        Args:
-        api_key_id: The ID of the API key to delete
-        user: Current user
-        db: Database session
-
-        Parameters:
-            - api_key_id: str.
-        ---
-        from llama_cloud.client import LlamaCloud
-
-        client = LlamaCloud(
-            token="YOUR_TOKEN",
-        )
-        client.beta.delete_api_key(
-            api_key_id="string",
-        )
-        """
-        _response = self._client_wrapper.httpx_client.request(
-            "DELETE",
-            urllib.parse.urljoin(f"{self._client_wrapper.get_base_url()}/", f"api/v1/beta/api-keys/{api_key_id}"),
-            headers=self._client_wrapper.get_headers(),
-            timeout=60,
-        )
-        if 200 <= _response.status_code < 300:
-            return
-        if _response.status_code == 422:
-            raise UnprocessableEntityError(pydantic.parse_obj_as(HttpValidationError, _response.json()))  # type: ignore
-        try:
-            _response_json = _response.json()
-        except JSONDecodeError:
-            raise ApiError(status_code=_response.status_code, body=_response.text)
-        raise ApiError(status_code=_response.status_code, body=_response_json)
-
-    def list_batches(
+    def aggregate_agent_data_api_v_1_beta_agent_data_aggregate_post(
         self,
         *,
-        limit: typing.Optional[int] = None,
-        offset: typing.Optional[int] = None,
         project_id: typing.Optional[str] = None,
         organization_id: typing.Optional[str] = None,
-    ) -> BatchPaginatedList:
+        collection: typing.Optional[str] = OMIT,
+        count: typing.Optional[bool] = OMIT,
+        deployment_name: str,
+        filter: typing.Optional[typing.Dict[str, typing.Optional[FilterOperation]]] = OMIT,
+        first: typing.Optional[bool] = OMIT,
+        group_by: typing.Optional[typing.List[str]] = OMIT,
+        offset: typing.Optional[int] = OMIT,
+        order_by: typing.Optional[str] = OMIT,
+        page_size: typing.Optional[int] = OMIT,
+        page_token: typing.Optional[str] = OMIT,
+    ) -> PaginatedResponseAggregateGroup:
         """
+        Aggregate agent data with grouping and optional counting/first item retrieval.
+
         Parameters:
-            - limit: typing.Optional[int].
+            - project_id: typing.Optional[str].
+
+            - organization_id: typing.Optional[str].
+
+            - collection: typing.Optional[str]. The logical agent data collection to aggregate data for
+
+            - count: typing.Optional[bool].
+
+            - deployment_name: str. The agent deployment's name to aggregate data for
+
+            - filter: typing.Optional[typing.Dict[str, typing.Optional[FilterOperation]]].
+
+            - first: typing.Optional[bool].
+
+            - group_by: typing.Optional[typing.List[str]].
 
             - offset: typing.Optional[int].
 
-            - project_id: typing.Optional[str].
+            - order_by: typing.Optional[str].
 
-            - organization_id: typing.Optional[str].
+            - page_size: typing.Optional[int].
+
+            - page_token: typing.Optional[str].
         ---
         from llama_cloud.client import LlamaCloud
 
         client = LlamaCloud(
             token="YOUR_TOKEN",
         )
-        client.beta.list_batches()
-        """
-        _response = self._client_wrapper.httpx_client.request(
-            "GET",
-            urllib.parse.urljoin(f"{self._client_wrapper.get_base_url()}/", "api/v1/beta/batches"),
-            params=remove_none_from_dict(
-                {"limit": limit, "offset": offset, "project_id": project_id, "organization_id": organization_id}
-            ),
-            headers=self._client_wrapper.get_headers(),
-            timeout=60,
-        )
-        if 200 <= _response.status_code < 300:
-            return pydantic.parse_obj_as(BatchPaginatedList, _response.json())  # type: ignore
-        if _response.status_code == 422:
-            raise UnprocessableEntityError(pydantic.parse_obj_as(HttpValidationError, _response.json()))  # type: ignore
-        try:
-            _response_json = _response.json()
-        except JSONDecodeError:
-            raise ApiError(status_code=_response.status_code, body=_response.text)
-        raise ApiError(status_code=_response.status_code, body=_response_json)
-
-    def create_batch(
-        self,
-        *,
-        organization_id: typing.Optional[str] = None,
-        project_id: typing.Optional[str] = None,
-        tool: str,
-        tool_data: typing.Optional[LlamaParseParameters] = OMIT,
-        input_type: str,
-        input_id: str,
-        output_type: typing.Optional[str] = OMIT,
-        output_id: typing.Optional[str] = OMIT,
-        batch_create_project_id: str,
-        external_id: str,
-        completion_window: typing.Optional[int] = OMIT,
-    ) -> Batch:
-        """
-        Parameters:
-            - organization_id: typing.Optional[str].
-
-            - project_id: typing.Optional[str].
-
-            - tool: str. The tool to be used for all requests in the batch.
-
-            - tool_data: typing.Optional[LlamaParseParameters].
-
-            - input_type: str. The type of input file. Currently only 'datasource' is supported.
-
-            - input_id: str. The ID of the input file for the batch.
-
-            - output_type: typing.Optional[str].
-
-            - output_id: typing.Optional[str].
-
-            - batch_create_project_id: str. The ID of the project to which the batch belongs
-
-            - external_id: str. A developer-provided ID for the batch. This ID will be returned in the response.
-
-            - completion_window: typing.Optional[int]. The time frame within which the batch should be processed. Currently only 24h is supported.
-        ---
-        from llama_cloud import (
-            FailPageMode,
-            LlamaParseParameters,
-            LlamaParseParametersPriority,
-            ParsingMode,
-        )
-        from llama_cloud.client import LlamaCloud
-
-        client = LlamaCloud(
-            token="YOUR_TOKEN",
-        )
-        client.beta.create_batch(
-            tool="string",
-            tool_data=LlamaParseParameters(
-                priority=LlamaParseParametersPriority.LOW,
-                parse_mode=ParsingMode.PARSE_PAGE_WITHOUT_LLM,
-                replace_failed_page_mode=FailPageMode.RAW_TEXT,
-            ),
-            input_type="string",
-            input_id="string",
-            batch_create_project_id="string",
-            external_id="string",
+        client.beta.aggregate_agent_data_api_v_1_beta_agent_data_aggregate_post(
+            deployment_name="string",
         )
         """
-        _request: typing.Dict[str, typing.Any] = {
-            "tool": tool,
-            "input_type": input_type,
-            "input_id": input_id,
-            "project_id": batch_create_project_id,
-            "external_id": external_id,
-        }
-        if tool_data is not OMIT:
-            _request["tool_data"] = tool_data
-        if output_type is not OMIT:
-            _request["output_type"] = output_type
-        if output_id is not OMIT:
-            _request["output_id"] = output_id
-        if completion_window is not OMIT:
-            _request["completion_window"] = completion_window
+        _request: typing.Dict[str, typing.Any] = {"deployment_name": deployment_name}
+        if collection is not OMIT:
+            _request["collection"] = collection
+        if count is not OMIT:
+            _request["count"] = count
+        if filter is not OMIT:
+            _request["filter"] = filter
+        if first is not OMIT:
+            _request["first"] = first
+        if group_by is not OMIT:
+            _request["group_by"] = group_by
+        if offset is not OMIT:
+            _request["offset"] = offset
+        if order_by is not OMIT:
+            _request["order_by"] = order_by
+        if page_size is not OMIT:
+            _request["page_size"] = page_size
+        if page_token is not OMIT:
+            _request["page_token"] = page_token
         _response = self._client_wrapper.httpx_client.request(
             "POST",
-            urllib.parse.urljoin(f"{self._client_wrapper.get_base_url()}/", "api/v1/beta/batches"),
-            params=remove_none_from_dict({"organization_id": organization_id, "project_id": project_id}),
+            urllib.parse.urljoin(f"{self._client_wrapper.get_base_url()}/", "api/v1/beta/agent-data/:aggregate"),
+            params=remove_none_from_dict({"project_id": project_id, "organization_id": organization_id}),
             json=jsonable_encoder(_request),
             headers=self._client_wrapper.get_headers(),
             timeout=60,
         )
         if 200 <= _response.status_code < 300:
-            return pydantic.parse_obj_as(Batch, _response.json())  # type: ignore
+            return pydantic.parse_obj_as(PaginatedResponseAggregateGroup, _response.json())  # type: ignore
         if _response.status_code == 422:
             raise UnprocessableEntityError(pydantic.parse_obj_as(HttpValidationError, _response.json()))  # type: ignore
         try:
@@ -408,31 +208,133 @@ class BetaClient:
             raise ApiError(status_code=_response.status_code, body=_response.text)
         raise ApiError(status_code=_response.status_code, body=_response_json)
 
-    def get_batch(self, batch_id: str, *, organization_id: typing.Optional[str] = None) -> BatchPublicOutput:
+    def delete_agent_data_by_query_api_v_1_beta_agent_data_delete_post(
+        self,
+        *,
+        project_id: typing.Optional[str] = None,
+        organization_id: typing.Optional[str] = None,
+        collection: typing.Optional[str] = OMIT,
+        deployment_name: str,
+        filter: typing.Optional[typing.Dict[str, typing.Optional[FilterOperation]]] = OMIT,
+    ) -> DeleteResponse:
         """
+        Bulk delete agent data by query (deployment_name, collection, optional filters).
+
         Parameters:
-            - batch_id: str.
+            - project_id: typing.Optional[str].
 
             - organization_id: typing.Optional[str].
+
+            - collection: typing.Optional[str]. The logical agent data collection to delete from
+
+            - deployment_name: str. The agent deployment's name to delete data for
+
+            - filter: typing.Optional[typing.Dict[str, typing.Optional[FilterOperation]]].
         ---
         from llama_cloud.client import LlamaCloud
 
         client = LlamaCloud(
             token="YOUR_TOKEN",
         )
-        client.beta.get_batch(
-            batch_id="string",
+        client.beta.delete_agent_data_by_query_api_v_1_beta_agent_data_delete_post(
+            deployment_name="string",
         )
         """
+        _request: typing.Dict[str, typing.Any] = {"deployment_name": deployment_name}
+        if collection is not OMIT:
+            _request["collection"] = collection
+        if filter is not OMIT:
+            _request["filter"] = filter
         _response = self._client_wrapper.httpx_client.request(
-            "GET",
-            urllib.parse.urljoin(f"{self._client_wrapper.get_base_url()}/", f"api/v1/beta/batches/{batch_id}"),
-            params=remove_none_from_dict({"organization_id": organization_id}),
+            "POST",
+            urllib.parse.urljoin(f"{self._client_wrapper.get_base_url()}/", "api/v1/beta/agent-data/:delete"),
+            params=remove_none_from_dict({"project_id": project_id, "organization_id": organization_id}),
+            json=jsonable_encoder(_request),
             headers=self._client_wrapper.get_headers(),
             timeout=60,
         )
         if 200 <= _response.status_code < 300:
-            return pydantic.parse_obj_as(BatchPublicOutput, _response.json())  # type: ignore
+            return pydantic.parse_obj_as(DeleteResponse, _response.json())  # type: ignore
+        if _response.status_code == 422:
+            raise UnprocessableEntityError(pydantic.parse_obj_as(HttpValidationError, _response.json()))  # type: ignore
+        try:
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, body=_response.text)
+        raise ApiError(status_code=_response.status_code, body=_response_json)
+
+    def search_agent_data_api_v_1_beta_agent_data_search_post(
+        self,
+        *,
+        project_id: typing.Optional[str] = None,
+        organization_id: typing.Optional[str] = None,
+        collection: typing.Optional[str] = OMIT,
+        deployment_name: str,
+        filter: typing.Optional[typing.Dict[str, typing.Optional[FilterOperation]]] = OMIT,
+        include_total: typing.Optional[bool] = OMIT,
+        offset: typing.Optional[int] = OMIT,
+        order_by: typing.Optional[str] = OMIT,
+        page_size: typing.Optional[int] = OMIT,
+        page_token: typing.Optional[str] = OMIT,
+    ) -> PaginatedResponseAgentData:
+        """
+        Search agent data with filtering, sorting, and pagination.
+
+        Parameters:
+            - project_id: typing.Optional[str].
+
+            - organization_id: typing.Optional[str].
+
+            - collection: typing.Optional[str]. The logical agent data collection to search within
+
+            - deployment_name: str. The agent deployment's name to search within
+
+            - filter: typing.Optional[typing.Dict[str, typing.Optional[FilterOperation]]].
+
+            - include_total: typing.Optional[bool]. Whether to include the total number of items in the response
+
+            - offset: typing.Optional[int].
+
+            - order_by: typing.Optional[str].
+
+            - page_size: typing.Optional[int].
+
+            - page_token: typing.Optional[str].
+        ---
+        from llama_cloud.client import LlamaCloud
+
+        client = LlamaCloud(
+            token="YOUR_TOKEN",
+        )
+        client.beta.search_agent_data_api_v_1_beta_agent_data_search_post(
+            deployment_name="string",
+        )
+        """
+        _request: typing.Dict[str, typing.Any] = {"deployment_name": deployment_name}
+        if collection is not OMIT:
+            _request["collection"] = collection
+        if filter is not OMIT:
+            _request["filter"] = filter
+        if include_total is not OMIT:
+            _request["include_total"] = include_total
+        if offset is not OMIT:
+            _request["offset"] = offset
+        if order_by is not OMIT:
+            _request["order_by"] = order_by
+        if page_size is not OMIT:
+            _request["page_size"] = page_size
+        if page_token is not OMIT:
+            _request["page_token"] = page_token
+        _response = self._client_wrapper.httpx_client.request(
+            "POST",
+            urllib.parse.urljoin(f"{self._client_wrapper.get_base_url()}/", "api/v1/beta/agent-data/:search"),
+            params=remove_none_from_dict({"project_id": project_id, "organization_id": organization_id}),
+            json=jsonable_encoder(_request),
+            headers=self._client_wrapper.get_headers(),
+            timeout=60,
+        )
+        if 200 <= _response.status_code < 300:
+            return pydantic.parse_obj_as(PaginatedResponseAgentData, _response.json())  # type: ignore
         if _response.status_code == 422:
             raise UnprocessableEntityError(pydantic.parse_obj_as(HttpValidationError, _response.json()))  # type: ignore
         try:
@@ -567,326 +469,1083 @@ class BetaClient:
             raise ApiError(status_code=_response.status_code, body=_response.text)
         raise ApiError(status_code=_response.status_code, body=_response_json)
 
-    def create_agent_data(
+    def list_api_keys(
         self,
         *,
-        project_id: typing.Optional[str] = None,
-        organization_id: typing.Optional[str] = None,
-        deployment_name: str,
-        collection: typing.Optional[str] = OMIT,
-        data: typing.Dict[str, typing.Any],
-    ) -> AgentData:
-        """
-        Create new agent data.
-
-        Parameters:
-            - project_id: typing.Optional[str].
-
-            - organization_id: typing.Optional[str].
-
-            - deployment_name: str.
-
-            - collection: typing.Optional[str].
-
-            - data: typing.Dict[str, typing.Any].
-        ---
-        from llama_cloud.client import LlamaCloud
-
-        client = LlamaCloud(
-            token="YOUR_TOKEN",
-        )
-        client.beta.create_agent_data(
-            deployment_name="string",
-            data={"string": {}},
-        )
-        """
-        _request: typing.Dict[str, typing.Any] = {"deployment_name": deployment_name, "data": data}
-        if collection is not OMIT:
-            _request["collection"] = collection
-        _response = self._client_wrapper.httpx_client.request(
-            "POST",
-            urllib.parse.urljoin(f"{self._client_wrapper.get_base_url()}/", "api/v1/beta/agent-data"),
-            params=remove_none_from_dict({"project_id": project_id, "organization_id": organization_id}),
-            json=jsonable_encoder(_request),
-            headers=self._client_wrapper.get_headers(),
-            timeout=60,
-        )
-        if 200 <= _response.status_code < 300:
-            return pydantic.parse_obj_as(AgentData, _response.json())  # type: ignore
-        if _response.status_code == 422:
-            raise UnprocessableEntityError(pydantic.parse_obj_as(HttpValidationError, _response.json()))  # type: ignore
-        try:
-            _response_json = _response.json()
-        except JSONDecodeError:
-            raise ApiError(status_code=_response.status_code, body=_response.text)
-        raise ApiError(status_code=_response.status_code, body=_response_json)
-
-    def search_agent_data_api_v_1_beta_agent_data_search_post(
-        self,
-        *,
-        project_id: typing.Optional[str] = None,
-        organization_id: typing.Optional[str] = None,
-        page_size: typing.Optional[int] = OMIT,
-        page_token: typing.Optional[str] = OMIT,
-        filter: typing.Optional[typing.Dict[str, typing.Optional[FilterOperation]]] = OMIT,
-        order_by: typing.Optional[str] = OMIT,
-        deployment_name: str,
-        collection: typing.Optional[str] = OMIT,
-        include_total: typing.Optional[bool] = OMIT,
-        offset: typing.Optional[int] = OMIT,
-    ) -> PaginatedResponseAgentData:
-        """
-        Search agent data with filtering, sorting, and pagination.
-
-        Parameters:
-            - project_id: typing.Optional[str].
-
-            - organization_id: typing.Optional[str].
-
-            - page_size: typing.Optional[int].
-
-            - page_token: typing.Optional[str].
-
-            - filter: typing.Optional[typing.Dict[str, typing.Optional[FilterOperation]]].
-
-            - order_by: typing.Optional[str].
-
-            - deployment_name: str. The agent deployment's name to search within
-
-            - collection: typing.Optional[str]. The logical agent data collection to search within
-
-            - include_total: typing.Optional[bool]. Whether to include the total number of items in the response
-
-            - offset: typing.Optional[int].
-        ---
-        from llama_cloud.client import LlamaCloud
-
-        client = LlamaCloud(
-            token="YOUR_TOKEN",
-        )
-        client.beta.search_agent_data_api_v_1_beta_agent_data_search_post(
-            deployment_name="string",
-        )
-        """
-        _request: typing.Dict[str, typing.Any] = {"deployment_name": deployment_name}
-        if page_size is not OMIT:
-            _request["page_size"] = page_size
-        if page_token is not OMIT:
-            _request["page_token"] = page_token
-        if filter is not OMIT:
-            _request["filter"] = filter
-        if order_by is not OMIT:
-            _request["order_by"] = order_by
-        if collection is not OMIT:
-            _request["collection"] = collection
-        if include_total is not OMIT:
-            _request["include_total"] = include_total
-        if offset is not OMIT:
-            _request["offset"] = offset
-        _response = self._client_wrapper.httpx_client.request(
-            "POST",
-            urllib.parse.urljoin(f"{self._client_wrapper.get_base_url()}/", "api/v1/beta/agent-data/:search"),
-            params=remove_none_from_dict({"project_id": project_id, "organization_id": organization_id}),
-            json=jsonable_encoder(_request),
-            headers=self._client_wrapper.get_headers(),
-            timeout=60,
-        )
-        if 200 <= _response.status_code < 300:
-            return pydantic.parse_obj_as(PaginatedResponseAgentData, _response.json())  # type: ignore
-        if _response.status_code == 422:
-            raise UnprocessableEntityError(pydantic.parse_obj_as(HttpValidationError, _response.json()))  # type: ignore
-        try:
-            _response_json = _response.json()
-        except JSONDecodeError:
-            raise ApiError(status_code=_response.status_code, body=_response.text)
-        raise ApiError(status_code=_response.status_code, body=_response_json)
-
-    def aggregate_agent_data_api_v_1_beta_agent_data_aggregate_post(
-        self,
-        *,
-        project_id: typing.Optional[str] = None,
-        organization_id: typing.Optional[str] = None,
-        page_size: typing.Optional[int] = OMIT,
-        page_token: typing.Optional[str] = OMIT,
-        filter: typing.Optional[typing.Dict[str, typing.Optional[FilterOperation]]] = OMIT,
-        order_by: typing.Optional[str] = OMIT,
-        deployment_name: str,
-        collection: typing.Optional[str] = OMIT,
-        group_by: typing.Optional[typing.List[str]] = OMIT,
-        count: typing.Optional[bool] = OMIT,
-        first: typing.Optional[bool] = OMIT,
-        offset: typing.Optional[int] = OMIT,
-    ) -> PaginatedResponseAggregateGroup:
-        """
-        Aggregate agent data with grouping and optional counting/first item retrieval.
-
-        Parameters:
-            - project_id: typing.Optional[str].
-
-            - organization_id: typing.Optional[str].
-
-            - page_size: typing.Optional[int].
-
-            - page_token: typing.Optional[str].
-
-            - filter: typing.Optional[typing.Dict[str, typing.Optional[FilterOperation]]].
-
-            - order_by: typing.Optional[str].
-
-            - deployment_name: str. The agent deployment's name to aggregate data for
-
-            - collection: typing.Optional[str]. The logical agent data collection to aggregate data for
-
-            - group_by: typing.Optional[typing.List[str]].
-
-            - count: typing.Optional[bool].
-
-            - first: typing.Optional[bool].
-
-            - offset: typing.Optional[int].
-        ---
-        from llama_cloud.client import LlamaCloud
-
-        client = LlamaCloud(
-            token="YOUR_TOKEN",
-        )
-        client.beta.aggregate_agent_data_api_v_1_beta_agent_data_aggregate_post(
-            deployment_name="string",
-        )
-        """
-        _request: typing.Dict[str, typing.Any] = {"deployment_name": deployment_name}
-        if page_size is not OMIT:
-            _request["page_size"] = page_size
-        if page_token is not OMIT:
-            _request["page_token"] = page_token
-        if filter is not OMIT:
-            _request["filter"] = filter
-        if order_by is not OMIT:
-            _request["order_by"] = order_by
-        if collection is not OMIT:
-            _request["collection"] = collection
-        if group_by is not OMIT:
-            _request["group_by"] = group_by
-        if count is not OMIT:
-            _request["count"] = count
-        if first is not OMIT:
-            _request["first"] = first
-        if offset is not OMIT:
-            _request["offset"] = offset
-        _response = self._client_wrapper.httpx_client.request(
-            "POST",
-            urllib.parse.urljoin(f"{self._client_wrapper.get_base_url()}/", "api/v1/beta/agent-data/:aggregate"),
-            params=remove_none_from_dict({"project_id": project_id, "organization_id": organization_id}),
-            json=jsonable_encoder(_request),
-            headers=self._client_wrapper.get_headers(),
-            timeout=60,
-        )
-        if 200 <= _response.status_code < 300:
-            return pydantic.parse_obj_as(PaginatedResponseAggregateGroup, _response.json())  # type: ignore
-        if _response.status_code == 422:
-            raise UnprocessableEntityError(pydantic.parse_obj_as(HttpValidationError, _response.json()))  # type: ignore
-        try:
-            _response_json = _response.json()
-        except JSONDecodeError:
-            raise ApiError(status_code=_response.status_code, body=_response.text)
-        raise ApiError(status_code=_response.status_code, body=_response_json)
-
-    def delete_agent_data_by_query_api_v_1_beta_agent_data_delete_post(
-        self,
-        *,
-        project_id: typing.Optional[str] = None,
-        organization_id: typing.Optional[str] = None,
-        deployment_name: str,
-        collection: typing.Optional[str] = OMIT,
-        filter: typing.Optional[typing.Dict[str, typing.Optional[FilterOperation]]] = OMIT,
-    ) -> DeleteResponse:
-        """
-        Bulk delete agent data by query (deployment_name, collection, optional filters).
-
-        Parameters:
-            - project_id: typing.Optional[str].
-
-            - organization_id: typing.Optional[str].
-
-            - deployment_name: str. The agent deployment's name to delete data for
-
-            - collection: typing.Optional[str]. The logical agent data collection to delete from
-
-            - filter: typing.Optional[typing.Dict[str, typing.Optional[FilterOperation]]].
-        ---
-        from llama_cloud.client import LlamaCloud
-
-        client = LlamaCloud(
-            token="YOUR_TOKEN",
-        )
-        client.beta.delete_agent_data_by_query_api_v_1_beta_agent_data_delete_post(
-            deployment_name="string",
-        )
-        """
-        _request: typing.Dict[str, typing.Any] = {"deployment_name": deployment_name}
-        if collection is not OMIT:
-            _request["collection"] = collection
-        if filter is not OMIT:
-            _request["filter"] = filter
-        _response = self._client_wrapper.httpx_client.request(
-            "POST",
-            urllib.parse.urljoin(f"{self._client_wrapper.get_base_url()}/", "api/v1/beta/agent-data/:delete"),
-            params=remove_none_from_dict({"project_id": project_id, "organization_id": organization_id}),
-            json=jsonable_encoder(_request),
-            headers=self._client_wrapper.get_headers(),
-            timeout=60,
-        )
-        if 200 <= _response.status_code < 300:
-            return pydantic.parse_obj_as(DeleteResponse, _response.json())  # type: ignore
-        if _response.status_code == 422:
-            raise UnprocessableEntityError(pydantic.parse_obj_as(HttpValidationError, _response.json()))  # type: ignore
-        try:
-            _response_json = _response.json()
-        except JSONDecodeError:
-            raise ApiError(status_code=_response.status_code, body=_response.text)
-        raise ApiError(status_code=_response.status_code, body=_response_json)
-
-    def list_quota_configurations(
-        self,
-        *,
-        source_type: typing_extensions.Literal["organization"],
-        source_id: str,
-        page: typing.Optional[int] = None,
         page_size: typing.Optional[int] = None,
-    ) -> PaginatedResponseQuotaConfiguration:
+        page_token: typing.Optional[str] = None,
+        name: typing.Optional[str] = None,
+        project_id: typing.Optional[str] = None,
+        key_type: typing.Optional[ApiKeyType] = None,
+    ) -> ApiKeyQueryResponse:
         """
-        Retrieve a paginated list of quota configurations with optional filtering.
+        List API keys.
+
+        If project_id is provided, validates user has access to that project.
+        If project_id is not provided, scopes results to the current user.
+
+        Args:
+        user: Current user
+        db: Database session
+        page_size: Number of items per page
+        page_token: Token for pagination
+        name: Filter by API key name
+        project_id: Filter by project ID
+        key_type: Filter by key type
+
+        Returns:
+        Paginated response with API keys
 
         Parameters:
-            - source_type: typing_extensions.Literal["organization"].
-
-            - source_id: str.
-
-            - page: typing.Optional[int].
-
             - page_size: typing.Optional[int].
+
+            - page_token: typing.Optional[str].
+
+            - name: typing.Optional[str].
+
+            - project_id: typing.Optional[str].
+
+            - key_type: typing.Optional[ApiKeyType].
         ---
+        from llama_cloud import ApiKeyType
         from llama_cloud.client import LlamaCloud
 
         client = LlamaCloud(
             token="YOUR_TOKEN",
         )
-        client.beta.list_quota_configurations(
-            source_type="organization",
-            source_id="string",
+        client.beta.list_api_keys(
+            key_type=ApiKeyType.USER,
         )
         """
         _response = self._client_wrapper.httpx_client.request(
             "GET",
-            urllib.parse.urljoin(f"{self._client_wrapper.get_base_url()}/", "api/v1/beta/quota-management"),
+            urllib.parse.urljoin(f"{self._client_wrapper.get_base_url()}/", "api/v1/beta/api-keys"),
             params=remove_none_from_dict(
-                {"source_type": source_type, "source_id": source_id, "page": page, "page_size": page_size}
+                {
+                    "page_size": page_size,
+                    "page_token": page_token,
+                    "name": name,
+                    "project_id": project_id,
+                    "key_type": key_type,
+                }
             ),
             headers=self._client_wrapper.get_headers(),
             timeout=60,
         )
         if 200 <= _response.status_code < 300:
-            return pydantic.parse_obj_as(PaginatedResponseQuotaConfiguration, _response.json())  # type: ignore
+            return pydantic.parse_obj_as(ApiKeyQueryResponse, _response.json())  # type: ignore
+        if _response.status_code == 422:
+            raise UnprocessableEntityError(pydantic.parse_obj_as(HttpValidationError, _response.json()))  # type: ignore
+        try:
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, body=_response.text)
+        raise ApiError(status_code=_response.status_code, body=_response_json)
+
+    def create_api_key(
+        self,
+        *,
+        key_type: typing.Optional[ApiKeyType] = OMIT,
+        name: typing.Optional[str] = OMIT,
+        project_id: typing.Optional[str] = OMIT,
+    ) -> ApiKey:
+        """
+        Create a new API key.
+
+        If project_id is specified, validates user has admin permissions for that project.
+
+        Args:
+        api_key_create: API key creation data
+        user: Current user
+        db: Database session
+
+        Returns:
+        The created API key with the secret key visible in redacted_api_key field
+
+        Parameters:
+            - key_type: typing.Optional[ApiKeyType].
+
+            - name: typing.Optional[str].
+
+            - project_id: typing.Optional[str].
+        ---
+        from llama_cloud import ApiKeyType
+        from llama_cloud.client import LlamaCloud
+
+        client = LlamaCloud(
+            token="YOUR_TOKEN",
+        )
+        client.beta.create_api_key(
+            key_type=ApiKeyType.USER,
+        )
+        """
+        _request: typing.Dict[str, typing.Any] = {}
+        if key_type is not OMIT:
+            _request["key_type"] = key_type
+        if name is not OMIT:
+            _request["name"] = name
+        if project_id is not OMIT:
+            _request["project_id"] = project_id
+        _response = self._client_wrapper.httpx_client.request(
+            "POST",
+            urllib.parse.urljoin(f"{self._client_wrapper.get_base_url()}/", "api/v1/beta/api-keys"),
+            json=jsonable_encoder(_request),
+            headers=self._client_wrapper.get_headers(),
+            timeout=60,
+        )
+        if 200 <= _response.status_code < 300:
+            return pydantic.parse_obj_as(ApiKey, _response.json())  # type: ignore
+        if _response.status_code == 422:
+            raise UnprocessableEntityError(pydantic.parse_obj_as(HttpValidationError, _response.json()))  # type: ignore
+        try:
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, body=_response.text)
+        raise ApiError(status_code=_response.status_code, body=_response_json)
+
+    def get_api_key(self, api_key_id: str) -> ApiKey:
+        """
+        Get an API key by ID.
+
+        Args:
+        api_key_id: The ID of the API key
+        user: Current user
+        db: Database session
+
+        Returns:
+        The API key
+
+        Parameters:
+            - api_key_id: str.
+        ---
+        from llama_cloud.client import LlamaCloud
+
+        client = LlamaCloud(
+            token="YOUR_TOKEN",
+        )
+        client.beta.get_api_key(
+            api_key_id="string",
+        )
+        """
+        _response = self._client_wrapper.httpx_client.request(
+            "GET",
+            urllib.parse.urljoin(f"{self._client_wrapper.get_base_url()}/", f"api/v1/beta/api-keys/{api_key_id}"),
+            headers=self._client_wrapper.get_headers(),
+            timeout=60,
+        )
+        if 200 <= _response.status_code < 300:
+            return pydantic.parse_obj_as(ApiKey, _response.json())  # type: ignore
+        if _response.status_code == 422:
+            raise UnprocessableEntityError(pydantic.parse_obj_as(HttpValidationError, _response.json()))  # type: ignore
+        try:
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, body=_response.text)
+        raise ApiError(status_code=_response.status_code, body=_response_json)
+
+    def delete_api_key(self, api_key_id: str) -> None:
+        """
+        Delete an API key.
+
+        If the API key belongs to a project, validates user has admin permissions for that project.
+        If the API key has no project, validates it belongs to the current user.
+
+        Args:
+        api_key_id: The ID of the API key to delete
+        user: Current user
+        db: Database session
+
+        Parameters:
+            - api_key_id: str.
+        ---
+        from llama_cloud.client import LlamaCloud
+
+        client = LlamaCloud(
+            token="YOUR_TOKEN",
+        )
+        client.beta.delete_api_key(
+            api_key_id="string",
+        )
+        """
+        _response = self._client_wrapper.httpx_client.request(
+            "DELETE",
+            urllib.parse.urljoin(f"{self._client_wrapper.get_base_url()}/", f"api/v1/beta/api-keys/{api_key_id}"),
+            headers=self._client_wrapper.get_headers(),
+            timeout=60,
+        )
+        if 200 <= _response.status_code < 300:
+            return
+        if _response.status_code == 422:
+            raise UnprocessableEntityError(pydantic.parse_obj_as(HttpValidationError, _response.json()))  # type: ignore
+        try:
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, body=_response.text)
+        raise ApiError(status_code=_response.status_code, body=_response_json)
+
+    def create_batch_job(
+        self,
+        *,
+        continue_as_new_threshold: typing.Optional[int] = OMIT,
+        directory_id: typing.Optional[str] = OMIT,
+        item_ids: typing.Optional[typing.List[str]] = OMIT,
+        job_config: BatchJobCreateRequestJobConfig,
+        page_size: typing.Optional[int] = OMIT,
+        project_id: typing.Optional[str] = OMIT,
+    ) -> BatchJobResponse:
+        """
+        Create a new batch processing job for a directory.
+
+        This endpoint creates a batch job that will process all files in the specified directory
+        using a Temporal workflow. The job configuration determines what processing will be performed.
+
+        Args:
+        payload: Job configuration including directory_id, job_config, and workflow settings
+        user: Authenticated user making the request
+        db: Database session
+
+        Returns:
+        BatchJobResponse with job details and workflow ID
+
+        Raises:
+        HTTPException: If directory not found or user lacks permissions
+
+        Example Request Body:
+        `json { "directory_id": "dir_123", "job_config": { "job_name": "PARSE_RAW_FILE", "parameters": { "type": "PARSE", "parsing_instruction": "Extract all tables" } }, "page_size": 100, "continue_as_new_threshold": 1000 } `
+
+        Parameters:
+            - continue_as_new_threshold: typing.Optional[int].
+
+            - directory_id: typing.Optional[str].
+
+            - item_ids: typing.Optional[typing.List[str]].
+
+            - job_config: BatchJobCreateRequestJobConfig. Job configuration for batch processing. Can be BatchParseJobRecordCreate or ClassifyJob.
+
+            - page_size: typing.Optional[int]. Number of files to fetch per batch from the directory (only used in directory mode)
+
+            - project_id: typing.Optional[str].
+        ---
+        from llama_cloud.client import LlamaCloud
+
+        client = LlamaCloud(
+            token="YOUR_TOKEN",
+        )
+        client.beta.create_batch_job()
+        """
+        _request: typing.Dict[str, typing.Any] = {"job_config": job_config}
+        if continue_as_new_threshold is not OMIT:
+            _request["continue_as_new_threshold"] = continue_as_new_threshold
+        if directory_id is not OMIT:
+            _request["directory_id"] = directory_id
+        if item_ids is not OMIT:
+            _request["item_ids"] = item_ids
+        if page_size is not OMIT:
+            _request["page_size"] = page_size
+        if project_id is not OMIT:
+            _request["project_id"] = project_id
+        _response = self._client_wrapper.httpx_client.request(
+            "POST",
+            urllib.parse.urljoin(f"{self._client_wrapper.get_base_url()}/", "api/v1/beta/batch-processing"),
+            json=jsonable_encoder(_request),
+            headers=self._client_wrapper.get_headers(),
+            timeout=60,
+        )
+        if 200 <= _response.status_code < 300:
+            return pydantic.parse_obj_as(BatchJobResponse, _response.json())  # type: ignore
+        if _response.status_code == 422:
+            raise UnprocessableEntityError(pydantic.parse_obj_as(HttpValidationError, _response.json()))  # type: ignore
+        try:
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, body=_response.text)
+        raise ApiError(status_code=_response.status_code, body=_response_json)
+
+    def get_item_processing_results(
+        self, item_id: str, *, job_type: typing.Optional[BatchJobType] = None
+    ) -> ItemProcessingResultsResponse:
+        """
+        Get all processing results for a specific item (lineage query).
+
+        Shows complete processing history including what operations have been performed,
+        with what parameters, and where outputs are stored. Useful for understanding
+        what processing has already been done to avoid redundant work.
+
+        Args:
+        item_id: ID of the item (file) to query
+        job_type: Optional filter to show only specific processing type
+        user: Authenticated user making the request
+        db: Database session
+
+        Returns:
+        ItemProcessingResultsResponse with all processing operations for this item
+
+        Raises:
+        HTTPException: If item not found or user lacks permissions
+
+        Parameters:
+            - item_id: str.
+
+            - job_type: typing.Optional[BatchJobType]. Filter results by job type
+        ---
+        from llama_cloud import BatchJobType
+        from llama_cloud.client import LlamaCloud
+
+        client = LlamaCloud(
+            token="YOUR_TOKEN",
+        )
+        client.beta.get_item_processing_results(
+            item_id="string",
+            job_type=BatchJobType.PARSE,
+        )
+        """
+        _response = self._client_wrapper.httpx_client.request(
+            "GET",
+            urllib.parse.urljoin(
+                f"{self._client_wrapper.get_base_url()}/",
+                f"api/v1/beta/batch-processing/items/{item_id}/processing-results",
+            ),
+            params=remove_none_from_dict({"job_type": job_type}),
+            headers=self._client_wrapper.get_headers(),
+            timeout=60,
+        )
+        if 200 <= _response.status_code < 300:
+            return pydantic.parse_obj_as(ItemProcessingResultsResponse, _response.json())  # type: ignore
+        if _response.status_code == 422:
+            raise UnprocessableEntityError(pydantic.parse_obj_as(HttpValidationError, _response.json()))  # type: ignore
+        try:
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, body=_response.text)
+        raise ApiError(status_code=_response.status_code, body=_response_json)
+
+    def get_batch_job_status(self, job_id: str) -> BatchJobStatusResponse:
+        """
+        Get detailed status of a batch processing job.
+
+        Returns current progress, file counts, and estimated completion time.
+
+        Args:
+        job_id: ID of the batch job
+        user: Authenticated user making the request
+        db: Database session
+
+        Returns:
+        BatchJobStatusResponse with job details and progress information
+
+        Raises:
+        HTTPException: If job not found or user lacks permissions
+
+        Parameters:
+            - job_id: str.
+        ---
+        from llama_cloud.client import LlamaCloud
+
+        client = LlamaCloud(
+            token="YOUR_TOKEN",
+        )
+        client.beta.get_batch_job_status(
+            job_id="string",
+        )
+        """
+        _response = self._client_wrapper.httpx_client.request(
+            "GET",
+            urllib.parse.urljoin(f"{self._client_wrapper.get_base_url()}/", f"api/v1/beta/batch-processing/{job_id}"),
+            headers=self._client_wrapper.get_headers(),
+            timeout=60,
+        )
+        if 200 <= _response.status_code < 300:
+            return pydantic.parse_obj_as(BatchJobStatusResponse, _response.json())  # type: ignore
+        if _response.status_code == 422:
+            raise UnprocessableEntityError(pydantic.parse_obj_as(HttpValidationError, _response.json()))  # type: ignore
+        try:
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, body=_response.text)
+        raise ApiError(status_code=_response.status_code, body=_response_json)
+
+    def cancel_batch_job(self, job_id: str, *, reason: typing.Optional[str] = OMIT) -> BatchJobCancelResponse:
+        """
+        Cancel a running batch processing job.
+
+        Stops spawning new item processing tasks immediately. Items currently being
+        processed will complete. Essential for cost control if a job was started in error.
+
+        Args:
+        job_id: ID of the batch job to cancel
+        payload: Cancellation request with optional reason
+        user: Authenticated user making the request
+        db: Database session
+
+        Returns:
+        BatchJobCancelResponse with final job statistics
+
+        Raises:
+        HTTPException: If job not found, already completed, or user lacks permissions
+
+        Parameters:
+            - job_id: str.
+
+            - reason: typing.Optional[str].
+        ---
+        from llama_cloud.client import LlamaCloud
+
+        client = LlamaCloud(
+            token="YOUR_TOKEN",
+        )
+        client.beta.cancel_batch_job(
+            job_id="string",
+        )
+        """
+        _request: typing.Dict[str, typing.Any] = {}
+        if reason is not OMIT:
+            _request["reason"] = reason
+        _response = self._client_wrapper.httpx_client.request(
+            "POST",
+            urllib.parse.urljoin(
+                f"{self._client_wrapper.get_base_url()}/", f"api/v1/beta/batch-processing/{job_id}/cancel"
+            ),
+            json=jsonable_encoder(_request),
+            headers=self._client_wrapper.get_headers(),
+            timeout=60,
+        )
+        if 200 <= _response.status_code < 300:
+            return pydantic.parse_obj_as(BatchJobCancelResponse, _response.json())  # type: ignore
+        if _response.status_code == 422:
+            raise UnprocessableEntityError(pydantic.parse_obj_as(HttpValidationError, _response.json()))  # type: ignore
+        try:
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, body=_response.text)
+        raise ApiError(status_code=_response.status_code, body=_response_json)
+
+    def list_batch_job_items(
+        self,
+        job_id: str,
+        *,
+        status: typing.Optional[BatchFileStatus] = None,
+        limit: typing.Optional[int] = None,
+        offset: typing.Optional[int] = None,
+    ) -> BatchItemListResponse:
+        """
+        List items in a batch job with optional status filtering.
+
+        Useful for finding failed items, viewing completed items, or debugging issues.
+        Results are paginated for performance.
+
+        Args:
+        job_id: ID of the batch job
+        status_filter: Optional filter by item status
+        limit: Maximum number of items to return (1-1000)
+        offset: Number of items to skip for pagination
+        user: Authenticated user making the request
+        db: Database session
+
+        Returns:
+        BatchItemListResponse with paginated item details
+
+        Raises:
+        HTTPException: If job not found or user lacks permissions
+
+        Parameters:
+            - job_id: str.
+
+            - status: typing.Optional[BatchFileStatus]. Filter items by status
+
+            - limit: typing.Optional[int]. Maximum number of items to return
+
+            - offset: typing.Optional[int]. Number of items to skip
+        ---
+        from llama_cloud import BatchFileStatus
+        from llama_cloud.client import LlamaCloud
+
+        client = LlamaCloud(
+            token="YOUR_TOKEN",
+        )
+        client.beta.list_batch_job_items(
+            job_id="string",
+            status=BatchFileStatus.PENDING,
+        )
+        """
+        _response = self._client_wrapper.httpx_client.request(
+            "GET",
+            urllib.parse.urljoin(
+                f"{self._client_wrapper.get_base_url()}/", f"api/v1/beta/batch-processing/{job_id}/items"
+            ),
+            params=remove_none_from_dict({"status": status, "limit": limit, "offset": offset}),
+            headers=self._client_wrapper.get_headers(),
+            timeout=60,
+        )
+        if 200 <= _response.status_code < 300:
+            return pydantic.parse_obj_as(BatchItemListResponse, _response.json())  # type: ignore
+        if _response.status_code == 422:
+            raise UnprocessableEntityError(pydantic.parse_obj_as(HttpValidationError, _response.json()))  # type: ignore
+        try:
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, body=_response.text)
+        raise ApiError(status_code=_response.status_code, body=_response_json)
+
+    def list_directories(
+        self,
+        *,
+        project_id: typing.Optional[str] = None,
+        organization_id: typing.Optional[str] = None,
+        name: typing.Optional[str] = None,
+        data_source_id: typing.Optional[str] = None,
+        include_deleted: typing.Optional[bool] = None,
+        page_size: typing.Optional[int] = None,
+        page_token: typing.Optional[str] = None,
+    ) -> DirectoryQueryResponse:
+        """
+        Parameters:
+            - project_id: typing.Optional[str].
+
+            - organization_id: typing.Optional[str].
+
+            - name: typing.Optional[str].
+
+            - data_source_id: typing.Optional[str].
+
+            - include_deleted: typing.Optional[bool].
+
+            - page_size: typing.Optional[int].
+
+            - page_token: typing.Optional[str].
+        ---
+        from llama_cloud.client import LlamaCloud
+
+        client = LlamaCloud(
+            token="YOUR_TOKEN",
+        )
+        client.beta.list_directories()
+        """
+        _response = self._client_wrapper.httpx_client.request(
+            "GET",
+            urllib.parse.urljoin(f"{self._client_wrapper.get_base_url()}/", "api/v1/beta/directories"),
+            params=remove_none_from_dict(
+                {
+                    "project_id": project_id,
+                    "organization_id": organization_id,
+                    "name": name,
+                    "data_source_id": data_source_id,
+                    "include_deleted": include_deleted,
+                    "page_size": page_size,
+                    "page_token": page_token,
+                }
+            ),
+            headers=self._client_wrapper.get_headers(),
+            timeout=60,
+        )
+        if 200 <= _response.status_code < 300:
+            return pydantic.parse_obj_as(DirectoryQueryResponse, _response.json())  # type: ignore
+        if _response.status_code == 422:
+            raise UnprocessableEntityError(pydantic.parse_obj_as(HttpValidationError, _response.json()))  # type: ignore
+        try:
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, body=_response.text)
+        raise ApiError(status_code=_response.status_code, body=_response_json)
+
+    def create_directory(
+        self,
+        *,
+        project_id: typing.Optional[str] = None,
+        organization_id: typing.Optional[str] = None,
+        data_source_id: typing.Optional[str] = OMIT,
+        description: typing.Optional[str] = OMIT,
+        name: str,
+    ) -> DirectoryResponse:
+        """
+        Create a new directory within the specified project.
+
+        If data_source_id is provided, validates that the data source exists
+        and belongs to the same project.
+
+        Parameters:
+            - project_id: typing.Optional[str].
+
+            - organization_id: typing.Optional[str].
+
+            - data_source_id: typing.Optional[str].
+
+            - description: typing.Optional[str].
+
+            - name: str. Human-readable name for the directory.
+        ---
+        from llama_cloud.client import LlamaCloud
+
+        client = LlamaCloud(
+            token="YOUR_TOKEN",
+        )
+        client.beta.create_directory(
+            name="string",
+        )
+        """
+        _request: typing.Dict[str, typing.Any] = {"name": name}
+        if data_source_id is not OMIT:
+            _request["data_source_id"] = data_source_id
+        if description is not OMIT:
+            _request["description"] = description
+        _response = self._client_wrapper.httpx_client.request(
+            "POST",
+            urllib.parse.urljoin(f"{self._client_wrapper.get_base_url()}/", "api/v1/beta/directories"),
+            params=remove_none_from_dict({"project_id": project_id, "organization_id": organization_id}),
+            json=jsonable_encoder(_request),
+            headers=self._client_wrapper.get_headers(),
+            timeout=60,
+        )
+        if 200 <= _response.status_code < 300:
+            return pydantic.parse_obj_as(DirectoryResponse, _response.json())  # type: ignore
+        if _response.status_code == 422:
+            raise UnprocessableEntityError(pydantic.parse_obj_as(HttpValidationError, _response.json()))  # type: ignore
+        try:
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, body=_response.text)
+        raise ApiError(status_code=_response.status_code, body=_response_json)
+
+    def get_directory(
+        self,
+        directory_id: str,
+        *,
+        project_id: typing.Optional[str] = None,
+        organization_id: typing.Optional[str] = None,
+    ) -> DirectoryResponse:
+        """
+        Retrieve a directory by its identifier.
+
+        Parameters:
+            - directory_id: str.
+
+            - project_id: typing.Optional[str].
+
+            - organization_id: typing.Optional[str].
+        ---
+        from llama_cloud.client import LlamaCloud
+
+        client = LlamaCloud(
+            token="YOUR_TOKEN",
+        )
+        client.beta.get_directory(
+            directory_id="string",
+        )
+        """
+        _response = self._client_wrapper.httpx_client.request(
+            "GET",
+            urllib.parse.urljoin(f"{self._client_wrapper.get_base_url()}/", f"api/v1/beta/directories/{directory_id}"),
+            params=remove_none_from_dict({"project_id": project_id, "organization_id": organization_id}),
+            headers=self._client_wrapper.get_headers(),
+            timeout=60,
+        )
+        if 200 <= _response.status_code < 300:
+            return pydantic.parse_obj_as(DirectoryResponse, _response.json())  # type: ignore
+        if _response.status_code == 422:
+            raise UnprocessableEntityError(pydantic.parse_obj_as(HttpValidationError, _response.json()))  # type: ignore
+        try:
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, body=_response.text)
+        raise ApiError(status_code=_response.status_code, body=_response_json)
+
+    def delete_directory(
+        self,
+        directory_id: str,
+        *,
+        project_id: typing.Optional[str] = None,
+        organization_id: typing.Optional[str] = None,
+    ) -> None:
+        """
+        Permanently delete a directory.
+
+        Parameters:
+            - directory_id: str.
+
+            - project_id: typing.Optional[str].
+
+            - organization_id: typing.Optional[str].
+        ---
+        from llama_cloud.client import LlamaCloud
+
+        client = LlamaCloud(
+            token="YOUR_TOKEN",
+        )
+        client.beta.delete_directory(
+            directory_id="string",
+        )
+        """
+        _response = self._client_wrapper.httpx_client.request(
+            "DELETE",
+            urllib.parse.urljoin(f"{self._client_wrapper.get_base_url()}/", f"api/v1/beta/directories/{directory_id}"),
+            params=remove_none_from_dict({"project_id": project_id, "organization_id": organization_id}),
+            headers=self._client_wrapper.get_headers(),
+            timeout=60,
+        )
+        if 200 <= _response.status_code < 300:
+            return
+        if _response.status_code == 422:
+            raise UnprocessableEntityError(pydantic.parse_obj_as(HttpValidationError, _response.json()))  # type: ignore
+        try:
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, body=_response.text)
+        raise ApiError(status_code=_response.status_code, body=_response_json)
+
+    def update_directory(
+        self,
+        directory_id: str,
+        *,
+        project_id: typing.Optional[str] = None,
+        organization_id: typing.Optional[str] = None,
+        description: typing.Optional[str] = OMIT,
+        name: typing.Optional[str] = OMIT,
+    ) -> DirectoryResponse:
+        """
+        Update directory metadata.
+
+        Parameters:
+            - directory_id: str.
+
+            - project_id: typing.Optional[str].
+
+            - organization_id: typing.Optional[str].
+
+            - description: typing.Optional[str].
+
+            - name: typing.Optional[str].
+        ---
+        from llama_cloud.client import LlamaCloud
+
+        client = LlamaCloud(
+            token="YOUR_TOKEN",
+        )
+        client.beta.update_directory(
+            directory_id="string",
+        )
+        """
+        _request: typing.Dict[str, typing.Any] = {}
+        if description is not OMIT:
+            _request["description"] = description
+        if name is not OMIT:
+            _request["name"] = name
+        _response = self._client_wrapper.httpx_client.request(
+            "PATCH",
+            urllib.parse.urljoin(f"{self._client_wrapper.get_base_url()}/", f"api/v1/beta/directories/{directory_id}"),
+            params=remove_none_from_dict({"project_id": project_id, "organization_id": organization_id}),
+            json=jsonable_encoder(_request),
+            headers=self._client_wrapper.get_headers(),
+            timeout=60,
+        )
+        if 200 <= _response.status_code < 300:
+            return pydantic.parse_obj_as(DirectoryResponse, _response.json())  # type: ignore
+        if _response.status_code == 422:
+            raise UnprocessableEntityError(pydantic.parse_obj_as(HttpValidationError, _response.json()))  # type: ignore
+        try:
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, body=_response.text)
+        raise ApiError(status_code=_response.status_code, body=_response_json)
+
+    def list_directory_files(
+        self,
+        directory_id: str,
+        *,
+        project_id: typing.Optional[str] = None,
+        organization_id: typing.Optional[str] = None,
+        display_name: typing.Optional[str] = None,
+        display_name_contains: typing.Optional[str] = None,
+        unique_id: typing.Optional[str] = None,
+        file_id: typing.Optional[str] = None,
+        include_deleted: typing.Optional[bool] = None,
+        page_size: typing.Optional[int] = None,
+        page_token: typing.Optional[str] = None,
+    ) -> DirectoryFileQueryResponse:
+        """
+        List all files within the specified directory with optional filtering and pagination.
+
+        Parameters:
+            - directory_id: str.
+
+            - project_id: typing.Optional[str].
+
+            - organization_id: typing.Optional[str].
+
+            - display_name: typing.Optional[str].
+
+            - display_name_contains: typing.Optional[str].
+
+            - unique_id: typing.Optional[str].
+
+            - file_id: typing.Optional[str].
+
+            - include_deleted: typing.Optional[bool].
+
+            - page_size: typing.Optional[int].
+
+            - page_token: typing.Optional[str].
+        ---
+        from llama_cloud.client import LlamaCloud
+
+        client = LlamaCloud(
+            token="YOUR_TOKEN",
+        )
+        client.beta.list_directory_files(
+            directory_id="string",
+        )
+        """
+        _response = self._client_wrapper.httpx_client.request(
+            "GET",
+            urllib.parse.urljoin(
+                f"{self._client_wrapper.get_base_url()}/", f"api/v1/beta/directories/{directory_id}/files"
+            ),
+            params=remove_none_from_dict(
+                {
+                    "project_id": project_id,
+                    "organization_id": organization_id,
+                    "display_name": display_name,
+                    "display_name_contains": display_name_contains,
+                    "unique_id": unique_id,
+                    "file_id": file_id,
+                    "include_deleted": include_deleted,
+                    "page_size": page_size,
+                    "page_token": page_token,
+                }
+            ),
+            headers=self._client_wrapper.get_headers(),
+            timeout=60,
+        )
+        if 200 <= _response.status_code < 300:
+            return pydantic.parse_obj_as(DirectoryFileQueryResponse, _response.json())  # type: ignore
+        if _response.status_code == 422:
+            raise UnprocessableEntityError(pydantic.parse_obj_as(HttpValidationError, _response.json()))  # type: ignore
+        try:
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, body=_response.text)
+        raise ApiError(status_code=_response.status_code, body=_response_json)
+
+    def add_directory_file(
+        self,
+        directory_id: str,
+        *,
+        project_id: typing.Optional[str] = None,
+        organization_id: typing.Optional[str] = None,
+        display_name: typing.Optional[str] = OMIT,
+        file_id: str,
+        unique_id: typing.Optional[str] = OMIT,
+    ) -> DirectoryFileResponse:
+        """
+        Create a new file within the specified directory.
+
+        The directory must exist and belong to the project passed in.
+        The file_id must be provided and exist in the project.
+
+        Parameters:
+            - directory_id: str.
+
+            - project_id: typing.Optional[str].
+
+            - organization_id: typing.Optional[str].
+
+            - display_name: typing.Optional[str].
+
+            - file_id: str. File ID for the storage location (required).
+
+            - unique_id: typing.Optional[str].
+        ---
+        from llama_cloud.client import LlamaCloud
+
+        client = LlamaCloud(
+            token="YOUR_TOKEN",
+        )
+        client.beta.add_directory_file(
+            directory_id="string",
+            file_id="string",
+        )
+        """
+        _request: typing.Dict[str, typing.Any] = {"file_id": file_id}
+        if display_name is not OMIT:
+            _request["display_name"] = display_name
+        if unique_id is not OMIT:
+            _request["unique_id"] = unique_id
+        _response = self._client_wrapper.httpx_client.request(
+            "POST",
+            urllib.parse.urljoin(
+                f"{self._client_wrapper.get_base_url()}/", f"api/v1/beta/directories/{directory_id}/files"
+            ),
+            params=remove_none_from_dict({"project_id": project_id, "organization_id": organization_id}),
+            json=jsonable_encoder(_request),
+            headers=self._client_wrapper.get_headers(),
+            timeout=60,
+        )
+        if 200 <= _response.status_code < 300:
+            return pydantic.parse_obj_as(DirectoryFileResponse, _response.json())  # type: ignore
+        if _response.status_code == 422:
+            raise UnprocessableEntityError(pydantic.parse_obj_as(HttpValidationError, _response.json()))  # type: ignore
+        try:
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, body=_response.text)
+        raise ApiError(status_code=_response.status_code, body=_response_json)
+
+    def get_directory_file(
+        self,
+        directory_id: str,
+        directory_file_id: str,
+        *,
+        project_id: typing.Optional[str] = None,
+        organization_id: typing.Optional[str] = None,
+    ) -> DirectoryFileResponse:
+        """
+        Get a file by its directory_file_id within the specified directory. If you're trying to get a file by its unique_id, use the list endpoint with a filter instead.
+
+        Parameters:
+            - directory_id: str.
+
+            - directory_file_id: str.
+
+            - project_id: typing.Optional[str].
+
+            - organization_id: typing.Optional[str].
+        ---
+        from llama_cloud.client import LlamaCloud
+
+        client = LlamaCloud(
+            token="YOUR_TOKEN",
+        )
+        client.beta.get_directory_file(
+            directory_id="string",
+            directory_file_id="string",
+        )
+        """
+        _response = self._client_wrapper.httpx_client.request(
+            "GET",
+            urllib.parse.urljoin(
+                f"{self._client_wrapper.get_base_url()}/",
+                f"api/v1/beta/directories/{directory_id}/files/{directory_file_id}",
+            ),
+            params=remove_none_from_dict({"project_id": project_id, "organization_id": organization_id}),
+            headers=self._client_wrapper.get_headers(),
+            timeout=60,
+        )
+        if 200 <= _response.status_code < 300:
+            return pydantic.parse_obj_as(DirectoryFileResponse, _response.json())  # type: ignore
+        if _response.status_code == 422:
+            raise UnprocessableEntityError(pydantic.parse_obj_as(HttpValidationError, _response.json()))  # type: ignore
+        try:
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, body=_response.text)
+        raise ApiError(status_code=_response.status_code, body=_response_json)
+
+    def delete_directory_file(
+        self,
+        directory_id: str,
+        directory_file_id: str,
+        *,
+        project_id: typing.Optional[str] = None,
+        organization_id: typing.Optional[str] = None,
+    ) -> None:
+        """
+        Delete a file from the specified directory.
+
+        Note: This endpoint uses directory_file_id (the internal ID). If you're trying to delete a file by its unique_id, use the list endpoint with a filter to find the directory_file_id first.
+
+        Parameters:
+            - directory_id: str.
+
+            - directory_file_id: str.
+
+            - project_id: typing.Optional[str].
+
+            - organization_id: typing.Optional[str].
+        ---
+        from llama_cloud.client import LlamaCloud
+
+        client = LlamaCloud(
+            token="YOUR_TOKEN",
+        )
+        client.beta.delete_directory_file(
+            directory_id="string",
+            directory_file_id="string",
+        )
+        """
+        _response = self._client_wrapper.httpx_client.request(
+            "DELETE",
+            urllib.parse.urljoin(
+                f"{self._client_wrapper.get_base_url()}/",
+                f"api/v1/beta/directories/{directory_id}/files/{directory_file_id}",
+            ),
+            params=remove_none_from_dict({"project_id": project_id, "organization_id": organization_id}),
+            headers=self._client_wrapper.get_headers(),
+            timeout=60,
+        )
+        if 200 <= _response.status_code < 300:
+            return
+        if _response.status_code == 422:
+            raise UnprocessableEntityError(pydantic.parse_obj_as(HttpValidationError, _response.json()))  # type: ignore
+        try:
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, body=_response.text)
+        raise ApiError(status_code=_response.status_code, body=_response_json)
+
+    def update_directory_file(
+        self,
+        directory_id: str,
+        directory_file_id: str,
+        *,
+        project_id: typing.Optional[str] = None,
+        organization_id: typing.Optional[str] = None,
+        display_name: typing.Optional[str] = OMIT,
+        unique_id: typing.Optional[str] = OMIT,
+    ) -> DirectoryFileResponse:
+        """
+        Update file metadata within the specified directory.
+
+        Note: This endpoint uses directory_file_id (the internal ID). If you're trying to update a file by its unique_id, use the list endpoint with a filter to find the directory_file_id first.
+
+        Parameters:
+            - directory_id: str.
+
+            - directory_file_id: str.
+
+            - project_id: typing.Optional[str].
+
+            - organization_id: typing.Optional[str].
+
+            - display_name: typing.Optional[str].
+
+            - unique_id: typing.Optional[str].
+        ---
+        from llama_cloud.client import LlamaCloud
+
+        client = LlamaCloud(
+            token="YOUR_TOKEN",
+        )
+        client.beta.update_directory_file(
+            directory_id="string",
+            directory_file_id="string",
+        )
+        """
+        _request: typing.Dict[str, typing.Any] = {}
+        if display_name is not OMIT:
+            _request["display_name"] = display_name
+        if unique_id is not OMIT:
+            _request["unique_id"] = unique_id
+        _response = self._client_wrapper.httpx_client.request(
+            "PATCH",
+            urllib.parse.urljoin(
+                f"{self._client_wrapper.get_base_url()}/",
+                f"api/v1/beta/directories/{directory_id}/files/{directory_file_id}",
+            ),
+            params=remove_none_from_dict({"project_id": project_id, "organization_id": organization_id}),
+            json=jsonable_encoder(_request),
+            headers=self._client_wrapper.get_headers(),
+            timeout=60,
+        )
+        if 200 <= _response.status_code < 300:
+            return pydantic.parse_obj_as(DirectoryFileResponse, _response.json())  # type: ignore
         if _response.status_code == 422:
             raise UnprocessableEntityError(pydantic.parse_obj_as(HttpValidationError, _response.json()))  # type: ignore
         try:
@@ -1010,10 +1669,10 @@ class BetaClient:
         *,
         project_id: typing.Optional[str] = None,
         organization_id: typing.Optional[str] = None,
-        page_size: typing.Optional[int] = OMIT,
-        page_token: typing.Optional[str] = OMIT,
         filter: typing.Optional[FileFilter] = OMIT,
         order_by: typing.Optional[str] = OMIT,
+        page_size: typing.Optional[int] = OMIT,
+        page_token: typing.Optional[str] = OMIT,
     ) -> FileQueryResponse:
         """
         Query files with flexible filtering and pagination.
@@ -1031,13 +1690,13 @@ class BetaClient:
 
             - organization_id: typing.Optional[str].
 
-            - page_size: typing.Optional[int].
-
-            - page_token: typing.Optional[str].
-
             - filter: typing.Optional[FileFilter].
 
             - order_by: typing.Optional[str].
+
+            - page_size: typing.Optional[int].
+
+            - page_token: typing.Optional[str].
         ---
         from llama_cloud import FileFilter
         from llama_cloud.client import LlamaCloud
@@ -1050,14 +1709,14 @@ class BetaClient:
         )
         """
         _request: typing.Dict[str, typing.Any] = {}
-        if page_size is not OMIT:
-            _request["page_size"] = page_size
-        if page_token is not OMIT:
-            _request["page_token"] = page_token
         if filter is not OMIT:
             _request["filter"] = filter
         if order_by is not OMIT:
             _request["order_by"] = order_by
+        if page_size is not OMIT:
+            _request["page_size"] = page_size
+        if page_token is not OMIT:
+            _request["page_token"] = page_token
         _response = self._client_wrapper.httpx_client.request(
             "POST",
             urllib.parse.urljoin(f"{self._client_wrapper.get_base_url()}/", "api/v1/beta/files/query"),
@@ -1240,12 +1899,12 @@ class BetaClient:
         client.beta.create_parse_configuration(
             request=ParseConfigurationCreate(
                 name="string",
-                version="string",
                 parameters=LlamaParseParameters(
-                    priority=LlamaParseParametersPriority.LOW,
                     parse_mode=ParsingMode.PARSE_PAGE_WITHOUT_LLM,
+                    priority=LlamaParseParametersPriority.LOW,
                     replace_failed_page_mode=FailPageMode.RAW_TEXT,
                 ),
+                version="string",
             ),
         )
         """
@@ -1308,12 +1967,12 @@ class BetaClient:
         client.beta.upsert_parse_configuration(
             request=ParseConfigurationCreate(
                 name="string",
-                version="string",
                 parameters=LlamaParseParameters(
-                    priority=LlamaParseParametersPriority.LOW,
                     parse_mode=ParsingMode.PARSE_PAGE_WITHOUT_LLM,
+                    priority=LlamaParseParametersPriority.LOW,
                     replace_failed_page_mode=FailPageMode.RAW_TEXT,
                 ),
+                version="string",
             ),
         )
         """
@@ -1327,6 +1986,130 @@ class BetaClient:
         )
         if 200 <= _response.status_code < 300:
             return pydantic.parse_obj_as(ParseConfiguration, _response.json())  # type: ignore
+        if _response.status_code == 422:
+            raise UnprocessableEntityError(pydantic.parse_obj_as(HttpValidationError, _response.json()))  # type: ignore
+        try:
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, body=_response.text)
+        raise ApiError(status_code=_response.status_code, body=_response_json)
+
+    def get_latest_parse_configuration(
+        self,
+        *,
+        creator: typing.Optional[str] = None,
+        project_id: typing.Optional[str] = None,
+        organization_id: typing.Optional[str] = None,
+    ) -> typing.Optional[ParseConfiguration]:
+        """
+        Get the latest parse configuration for the current project.
+
+        Args:
+        project: Validated project from dependency
+        user: Current user
+        db: Database session
+        creator: Optional creator filter
+
+        Returns:
+        The latest parse configuration or None if not found
+
+        Parameters:
+            - creator: typing.Optional[str].
+
+            - project_id: typing.Optional[str].
+
+            - organization_id: typing.Optional[str].
+        ---
+        from llama_cloud.client import LlamaCloud
+
+        client = LlamaCloud(
+            token="YOUR_TOKEN",
+        )
+        client.beta.get_latest_parse_configuration()
+        """
+        _response = self._client_wrapper.httpx_client.request(
+            "GET",
+            urllib.parse.urljoin(f"{self._client_wrapper.get_base_url()}/", "api/v1/beta/parse-configurations/latest"),
+            params=remove_none_from_dict(
+                {"creator": creator, "project_id": project_id, "organization_id": organization_id}
+            ),
+            headers=self._client_wrapper.get_headers(),
+            timeout=60,
+        )
+        if 200 <= _response.status_code < 300:
+            return pydantic.parse_obj_as(typing.Optional[ParseConfiguration], _response.json())  # type: ignore
+        if _response.status_code == 422:
+            raise UnprocessableEntityError(pydantic.parse_obj_as(HttpValidationError, _response.json()))  # type: ignore
+        try:
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, body=_response.text)
+        raise ApiError(status_code=_response.status_code, body=_response_json)
+
+    def query_parse_configurations(
+        self,
+        *,
+        project_id: typing.Optional[str] = None,
+        organization_id: typing.Optional[str] = None,
+        filter: typing.Optional[ParseConfigurationFilter] = OMIT,
+        order_by: typing.Optional[str] = OMIT,
+        page_size: typing.Optional[int] = OMIT,
+        page_token: typing.Optional[str] = OMIT,
+    ) -> ParseConfigurationQueryResponse:
+        """
+        Query parse configurations with filtering and pagination.
+
+        Args:
+        query_request: Query request with filters and pagination
+        project: Validated project from dependency
+        user: Current user
+        db: Database session
+
+        Returns:
+        Paginated response with parse configurations
+
+        Parameters:
+            - project_id: typing.Optional[str].
+
+            - organization_id: typing.Optional[str].
+
+            - filter: typing.Optional[ParseConfigurationFilter].
+
+            - order_by: typing.Optional[str].
+
+            - page_size: typing.Optional[int].
+
+            - page_token: typing.Optional[str].
+        ---
+        from llama_cloud import ParseConfigurationFilter
+        from llama_cloud.client import LlamaCloud
+
+        client = LlamaCloud(
+            token="YOUR_TOKEN",
+        )
+        client.beta.query_parse_configurations(
+            filter=ParseConfigurationFilter(),
+        )
+        """
+        _request: typing.Dict[str, typing.Any] = {}
+        if filter is not OMIT:
+            _request["filter"] = filter
+        if order_by is not OMIT:
+            _request["order_by"] = order_by
+        if page_size is not OMIT:
+            _request["page_size"] = page_size
+        if page_token is not OMIT:
+            _request["page_token"] = page_token
+        _response = self._client_wrapper.httpx_client.request(
+            "POST",
+            urllib.parse.urljoin(f"{self._client_wrapper.get_base_url()}/", "api/v1/beta/parse-configurations/query"),
+            params=remove_none_from_dict({"project_id": project_id, "organization_id": organization_id}),
+            json=jsonable_encoder(_request),
+            headers=self._client_wrapper.get_headers(),
+            timeout=60,
+        )
+        if 200 <= _response.status_code < 300:
+            return pydantic.parse_obj_as(ParseConfigurationQueryResponse, _response.json())  # type: ignore
         if _response.status_code == 422:
             raise UnprocessableEntityError(pydantic.parse_obj_as(HttpValidationError, _response.json()))  # type: ignore
         try:
@@ -1429,8 +2212,8 @@ class BetaClient:
         client.beta.update_parse_configuration(
             config_id="string",
             parameters=LlamaParseParameters(
-                priority=LlamaParseParametersPriority.LOW,
                 parse_mode=ParsingMode.PARSE_PAGE_WITHOUT_LLM,
+                priority=LlamaParseParametersPriority.LOW,
                 replace_failed_page_mode=FailPageMode.RAW_TEXT,
             ),
         )
@@ -1505,122 +2288,47 @@ class BetaClient:
             raise ApiError(status_code=_response.status_code, body=_response.text)
         raise ApiError(status_code=_response.status_code, body=_response_json)
 
-    def query_parse_configurations(
+    def list_quota_configurations(
         self,
         *,
-        project_id: typing.Optional[str] = None,
-        organization_id: typing.Optional[str] = None,
-        page_size: typing.Optional[int] = OMIT,
-        page_token: typing.Optional[str] = OMIT,
-        filter: typing.Optional[ParseConfigurationFilter] = OMIT,
-        order_by: typing.Optional[str] = OMIT,
-    ) -> ParseConfigurationQueryResponse:
+        source_type: typing_extensions.Literal["organization"],
+        source_id: str,
+        page: typing.Optional[int] = None,
+        page_size: typing.Optional[int] = None,
+    ) -> PaginatedResponseQuotaConfiguration:
         """
-        Query parse configurations with filtering and pagination.
-
-        Args:
-        query_request: Query request with filters and pagination
-        project: Validated project from dependency
-        user: Current user
-        db: Database session
-
-        Returns:
-        Paginated response with parse configurations
+        Retrieve a paginated list of quota configurations with optional filtering.
 
         Parameters:
-            - project_id: typing.Optional[str].
+            - source_type: typing_extensions.Literal["organization"].
 
-            - organization_id: typing.Optional[str].
+            - source_id: str.
+
+            - page: typing.Optional[int].
 
             - page_size: typing.Optional[int].
-
-            - page_token: typing.Optional[str].
-
-            - filter: typing.Optional[ParseConfigurationFilter].
-
-            - order_by: typing.Optional[str].
-        ---
-        from llama_cloud import ParseConfigurationFilter
-        from llama_cloud.client import LlamaCloud
-
-        client = LlamaCloud(
-            token="YOUR_TOKEN",
-        )
-        client.beta.query_parse_configurations(
-            filter=ParseConfigurationFilter(),
-        )
-        """
-        _request: typing.Dict[str, typing.Any] = {}
-        if page_size is not OMIT:
-            _request["page_size"] = page_size
-        if page_token is not OMIT:
-            _request["page_token"] = page_token
-        if filter is not OMIT:
-            _request["filter"] = filter
-        if order_by is not OMIT:
-            _request["order_by"] = order_by
-        _response = self._client_wrapper.httpx_client.request(
-            "POST",
-            urllib.parse.urljoin(f"{self._client_wrapper.get_base_url()}/", "api/v1/beta/parse-configurations/query"),
-            params=remove_none_from_dict({"project_id": project_id, "organization_id": organization_id}),
-            json=jsonable_encoder(_request),
-            headers=self._client_wrapper.get_headers(),
-            timeout=60,
-        )
-        if 200 <= _response.status_code < 300:
-            return pydantic.parse_obj_as(ParseConfigurationQueryResponse, _response.json())  # type: ignore
-        if _response.status_code == 422:
-            raise UnprocessableEntityError(pydantic.parse_obj_as(HttpValidationError, _response.json()))  # type: ignore
-        try:
-            _response_json = _response.json()
-        except JSONDecodeError:
-            raise ApiError(status_code=_response.status_code, body=_response.text)
-        raise ApiError(status_code=_response.status_code, body=_response_json)
-
-    def get_latest_parse_configuration(
-        self,
-        *,
-        creator: typing.Optional[str] = None,
-        project_id: typing.Optional[str] = None,
-        organization_id: typing.Optional[str] = None,
-    ) -> typing.Optional[ParseConfiguration]:
-        """
-        Get the latest parse configuration for the current project.
-
-        Args:
-        project: Validated project from dependency
-        user: Current user
-        db: Database session
-        creator: Optional creator filter
-
-        Returns:
-        The latest parse configuration or None if not found
-
-        Parameters:
-            - creator: typing.Optional[str].
-
-            - project_id: typing.Optional[str].
-
-            - organization_id: typing.Optional[str].
         ---
         from llama_cloud.client import LlamaCloud
 
         client = LlamaCloud(
             token="YOUR_TOKEN",
         )
-        client.beta.get_latest_parse_configuration()
+        client.beta.list_quota_configurations(
+            source_type="organization",
+            source_id="string",
+        )
         """
         _response = self._client_wrapper.httpx_client.request(
             "GET",
-            urllib.parse.urljoin(f"{self._client_wrapper.get_base_url()}/", "api/v1/beta/parse-configurations/latest"),
+            urllib.parse.urljoin(f"{self._client_wrapper.get_base_url()}/", "api/v1/beta/quota-management"),
             params=remove_none_from_dict(
-                {"creator": creator, "project_id": project_id, "organization_id": organization_id}
+                {"source_type": source_type, "source_id": source_id, "page": page, "page_size": page_size}
             ),
             headers=self._client_wrapper.get_headers(),
             timeout=60,
         )
         if 200 <= _response.status_code < 300:
-            return pydantic.parse_obj_as(typing.Optional[ParseConfiguration], _response.json())  # type: ignore
+            return pydantic.parse_obj_as(PaginatedResponseQuotaConfiguration, _response.json())  # type: ignore
         if _response.status_code == 422:
             raise UnprocessableEntityError(pydantic.parse_obj_as(HttpValidationError, _response.json()))  # type: ignore
         try:
@@ -1690,8 +2398,8 @@ class BetaClient:
         *,
         project_id: typing.Optional[str] = None,
         organization_id: typing.Optional[str] = None,
-        file_id: str,
         config: typing.Optional[SpreadsheetParsingConfig] = OMIT,
+        file_id: str,
     ) -> SpreadsheetJob:
         """
         Create a spreadsheet parsing job.
@@ -1702,9 +2410,9 @@ class BetaClient:
 
             - organization_id: typing.Optional[str].
 
-            - file_id: str. The ID of the file to parse
-
             - config: typing.Optional[SpreadsheetParsingConfig]. Configuration for the parsing job
+
+            - file_id: str. The ID of the file to parse
         ---
         from llama_cloud import SpreadsheetParsingConfig
         from llama_cloud.client import LlamaCloud
@@ -1713,8 +2421,8 @@ class BetaClient:
             token="YOUR_TOKEN",
         )
         client.beta.create_spreadsheet_job(
-            file_id="string",
             config=SpreadsheetParsingConfig(),
+            file_id="string",
         )
         """
         _request: typing.Dict[str, typing.Any] = {"file_id": file_id}
@@ -1793,10 +2501,11 @@ class BetaClient:
             raise ApiError(status_code=_response.status_code, body=_response.text)
         raise ApiError(status_code=_response.status_code, body=_response_json)
 
-    def get_table_download_presigned_url(
+    def get_result_table(
         self,
         spreadsheet_job_id: str,
-        table_id: int,
+        table_id: str,
+        table_type: SpreadsheetResultType,
         *,
         expires_at_seconds: typing.Optional[int] = None,
         project_id: typing.Optional[str] = None,
@@ -1809,7 +2518,9 @@ class BetaClient:
         Parameters:
             - spreadsheet_job_id: str.
 
-            - table_id: int.
+            - table_id: str.
+
+            - table_type: SpreadsheetResultType.
 
             - expires_at_seconds: typing.Optional[int].
 
@@ -1817,21 +2528,23 @@ class BetaClient:
 
             - organization_id: typing.Optional[str].
         ---
+        from llama_cloud import SpreadsheetResultType
         from llama_cloud.client import LlamaCloud
 
         client = LlamaCloud(
             token="YOUR_TOKEN",
         )
-        client.beta.get_table_download_presigned_url(
+        client.beta.get_result_table(
             spreadsheet_job_id="string",
-            table_id=1,
+            table_id="string",
+            table_type=SpreadsheetResultType.TABLE,
         )
         """
         _response = self._client_wrapper.httpx_client.request(
             "GET",
             urllib.parse.urljoin(
                 f"{self._client_wrapper.get_base_url()}/",
-                f"api/v1/beta/spreadsheet/jobs/{spreadsheet_job_id}/tables/{table_id}/result",
+                f"api/v1/beta/spreadsheet/jobs/{spreadsheet_job_id}/tables/{table_id}/result/{table_type}",
             ),
             params=remove_none_from_dict(
                 {"expires_at_seconds": expires_at_seconds, "project_id": project_id, "organization_id": organization_id}
@@ -1854,132 +2567,52 @@ class AsyncBetaClient:
     def __init__(self, *, client_wrapper: AsyncClientWrapper):
         self._client_wrapper = client_wrapper
 
-    async def list_api_keys(
+    async def create_agent_data(
         self,
         *,
-        page_size: typing.Optional[int] = None,
-        page_token: typing.Optional[str] = None,
-        name: typing.Optional[str] = None,
         project_id: typing.Optional[str] = None,
-        key_type: typing.Optional[ApiKeyType] = None,
-    ) -> ApiKeyQueryResponse:
+        organization_id: typing.Optional[str] = None,
+        collection: typing.Optional[str] = OMIT,
+        data: typing.Dict[str, typing.Any],
+        deployment_name: str,
+    ) -> AgentData:
         """
-        List API keys.
-
-        If project_id is provided, validates user has access to that project.
-        If project_id is not provided, scopes results to the current user.
-
-        Args:
-        user: Current user
-        db: Database session
-        page_size: Number of items per page
-        page_token: Token for pagination
-        name: Filter by API key name
-        project_id: Filter by project ID
-        key_type: Filter by key type
-
-        Returns:
-        Paginated response with API keys
+        Create new agent data.
 
         Parameters:
-            - page_size: typing.Optional[int].
-
-            - page_token: typing.Optional[str].
-
-            - name: typing.Optional[str].
-
             - project_id: typing.Optional[str].
 
-            - key_type: typing.Optional[ApiKeyType].
+            - organization_id: typing.Optional[str].
+
+            - collection: typing.Optional[str].
+
+            - data: typing.Dict[str, typing.Any].
+
+            - deployment_name: str.
         ---
-        from llama_cloud import ApiKeyType
         from llama_cloud.client import AsyncLlamaCloud
 
         client = AsyncLlamaCloud(
             token="YOUR_TOKEN",
         )
-        await client.beta.list_api_keys(
-            key_type=ApiKeyType.USER,
+        await client.beta.create_agent_data(
+            data={"string": {}},
+            deployment_name="string",
         )
         """
-        _response = await self._client_wrapper.httpx_client.request(
-            "GET",
-            urllib.parse.urljoin(f"{self._client_wrapper.get_base_url()}/", "api/v1/beta/api-keys"),
-            params=remove_none_from_dict(
-                {
-                    "page_size": page_size,
-                    "page_token": page_token,
-                    "name": name,
-                    "project_id": project_id,
-                    "key_type": key_type,
-                }
-            ),
-            headers=self._client_wrapper.get_headers(),
-            timeout=60,
-        )
-        if 200 <= _response.status_code < 300:
-            return pydantic.parse_obj_as(ApiKeyQueryResponse, _response.json())  # type: ignore
-        if _response.status_code == 422:
-            raise UnprocessableEntityError(pydantic.parse_obj_as(HttpValidationError, _response.json()))  # type: ignore
-        try:
-            _response_json = _response.json()
-        except JSONDecodeError:
-            raise ApiError(status_code=_response.status_code, body=_response.text)
-        raise ApiError(status_code=_response.status_code, body=_response_json)
-
-    async def create_api_key(
-        self,
-        *,
-        name: typing.Optional[str] = OMIT,
-        project_id: typing.Optional[str] = OMIT,
-        key_type: typing.Optional[ApiKeyType] = OMIT,
-    ) -> ApiKey:
-        """
-        Create a new API key.
-
-        If project_id is specified, validates user has admin permissions for that project.
-
-        Args:
-        api_key_create: API key creation data
-        user: Current user
-        db: Database session
-
-        Returns:
-        The created API key with the secret key visible in redacted_api_key field
-
-        Parameters:
-            - name: typing.Optional[str].
-
-            - project_id: typing.Optional[str].
-
-            - key_type: typing.Optional[ApiKeyType].
-        ---
-        from llama_cloud import ApiKeyType
-        from llama_cloud.client import AsyncLlamaCloud
-
-        client = AsyncLlamaCloud(
-            token="YOUR_TOKEN",
-        )
-        await client.beta.create_api_key(
-            key_type=ApiKeyType.USER,
-        )
-        """
-        _request: typing.Dict[str, typing.Any] = {}
-        if name is not OMIT:
-            _request["name"] = name
-        if project_id is not OMIT:
-            _request["project_id"] = project_id
-        if key_type is not OMIT:
-            _request["key_type"] = key_type
+        _request: typing.Dict[str, typing.Any] = {"data": data, "deployment_name": deployment_name}
+        if collection is not OMIT:
+            _request["collection"] = collection
         _response = await self._client_wrapper.httpx_client.request(
             "POST",
-            urllib.parse.urljoin(f"{self._client_wrapper.get_base_url()}/", "api/v1/beta/api-keys"),
+            urllib.parse.urljoin(f"{self._client_wrapper.get_base_url()}/", "api/v1/beta/agent-data"),
+            params=remove_none_from_dict({"project_id": project_id, "organization_id": organization_id}),
             json=jsonable_encoder(_request),
             headers=self._client_wrapper.get_headers(),
             timeout=60,
         )
         if 200 <= _response.status_code < 300:
-            return pydantic.parse_obj_as(ApiKey, _response.json())  # type: ignore
+            return pydantic.parse_obj_as(AgentData, _response.json())  # type: ignore
         if _response.status_code == 422:
             raise UnprocessableEntityError(pydantic.parse_obj_as(HttpValidationError, _response.json()))  # type: ignore
         try:
@@ -1988,218 +2621,88 @@ class AsyncBetaClient:
             raise ApiError(status_code=_response.status_code, body=_response.text)
         raise ApiError(status_code=_response.status_code, body=_response_json)
 
-    async def get_api_key(self, api_key_id: str) -> ApiKey:
-        """
-        Get an API key by ID.
-
-        Args:
-        api_key_id: The ID of the API key
-        user: Current user
-        db: Database session
-
-        Returns:
-        The API key
-
-        Parameters:
-            - api_key_id: str.
-        ---
-        from llama_cloud.client import AsyncLlamaCloud
-
-        client = AsyncLlamaCloud(
-            token="YOUR_TOKEN",
-        )
-        await client.beta.get_api_key(
-            api_key_id="string",
-        )
-        """
-        _response = await self._client_wrapper.httpx_client.request(
-            "GET",
-            urllib.parse.urljoin(f"{self._client_wrapper.get_base_url()}/", f"api/v1/beta/api-keys/{api_key_id}"),
-            headers=self._client_wrapper.get_headers(),
-            timeout=60,
-        )
-        if 200 <= _response.status_code < 300:
-            return pydantic.parse_obj_as(ApiKey, _response.json())  # type: ignore
-        if _response.status_code == 422:
-            raise UnprocessableEntityError(pydantic.parse_obj_as(HttpValidationError, _response.json()))  # type: ignore
-        try:
-            _response_json = _response.json()
-        except JSONDecodeError:
-            raise ApiError(status_code=_response.status_code, body=_response.text)
-        raise ApiError(status_code=_response.status_code, body=_response_json)
-
-    async def delete_api_key(self, api_key_id: str) -> None:
-        """
-        Delete an API key.
-
-        If the API key belongs to a project, validates user has admin permissions for that project.
-        If the API key has no project, validates it belongs to the current user.
-
-        Args:
-        api_key_id: The ID of the API key to delete
-        user: Current user
-        db: Database session
-
-        Parameters:
-            - api_key_id: str.
-        ---
-        from llama_cloud.client import AsyncLlamaCloud
-
-        client = AsyncLlamaCloud(
-            token="YOUR_TOKEN",
-        )
-        await client.beta.delete_api_key(
-            api_key_id="string",
-        )
-        """
-        _response = await self._client_wrapper.httpx_client.request(
-            "DELETE",
-            urllib.parse.urljoin(f"{self._client_wrapper.get_base_url()}/", f"api/v1/beta/api-keys/{api_key_id}"),
-            headers=self._client_wrapper.get_headers(),
-            timeout=60,
-        )
-        if 200 <= _response.status_code < 300:
-            return
-        if _response.status_code == 422:
-            raise UnprocessableEntityError(pydantic.parse_obj_as(HttpValidationError, _response.json()))  # type: ignore
-        try:
-            _response_json = _response.json()
-        except JSONDecodeError:
-            raise ApiError(status_code=_response.status_code, body=_response.text)
-        raise ApiError(status_code=_response.status_code, body=_response_json)
-
-    async def list_batches(
+    async def aggregate_agent_data_api_v_1_beta_agent_data_aggregate_post(
         self,
         *,
-        limit: typing.Optional[int] = None,
-        offset: typing.Optional[int] = None,
         project_id: typing.Optional[str] = None,
         organization_id: typing.Optional[str] = None,
-    ) -> BatchPaginatedList:
+        collection: typing.Optional[str] = OMIT,
+        count: typing.Optional[bool] = OMIT,
+        deployment_name: str,
+        filter: typing.Optional[typing.Dict[str, typing.Optional[FilterOperation]]] = OMIT,
+        first: typing.Optional[bool] = OMIT,
+        group_by: typing.Optional[typing.List[str]] = OMIT,
+        offset: typing.Optional[int] = OMIT,
+        order_by: typing.Optional[str] = OMIT,
+        page_size: typing.Optional[int] = OMIT,
+        page_token: typing.Optional[str] = OMIT,
+    ) -> PaginatedResponseAggregateGroup:
         """
+        Aggregate agent data with grouping and optional counting/first item retrieval.
+
         Parameters:
-            - limit: typing.Optional[int].
+            - project_id: typing.Optional[str].
+
+            - organization_id: typing.Optional[str].
+
+            - collection: typing.Optional[str]. The logical agent data collection to aggregate data for
+
+            - count: typing.Optional[bool].
+
+            - deployment_name: str. The agent deployment's name to aggregate data for
+
+            - filter: typing.Optional[typing.Dict[str, typing.Optional[FilterOperation]]].
+
+            - first: typing.Optional[bool].
+
+            - group_by: typing.Optional[typing.List[str]].
 
             - offset: typing.Optional[int].
 
-            - project_id: typing.Optional[str].
+            - order_by: typing.Optional[str].
 
-            - organization_id: typing.Optional[str].
+            - page_size: typing.Optional[int].
+
+            - page_token: typing.Optional[str].
         ---
         from llama_cloud.client import AsyncLlamaCloud
 
         client = AsyncLlamaCloud(
             token="YOUR_TOKEN",
         )
-        await client.beta.list_batches()
-        """
-        _response = await self._client_wrapper.httpx_client.request(
-            "GET",
-            urllib.parse.urljoin(f"{self._client_wrapper.get_base_url()}/", "api/v1/beta/batches"),
-            params=remove_none_from_dict(
-                {"limit": limit, "offset": offset, "project_id": project_id, "organization_id": organization_id}
-            ),
-            headers=self._client_wrapper.get_headers(),
-            timeout=60,
-        )
-        if 200 <= _response.status_code < 300:
-            return pydantic.parse_obj_as(BatchPaginatedList, _response.json())  # type: ignore
-        if _response.status_code == 422:
-            raise UnprocessableEntityError(pydantic.parse_obj_as(HttpValidationError, _response.json()))  # type: ignore
-        try:
-            _response_json = _response.json()
-        except JSONDecodeError:
-            raise ApiError(status_code=_response.status_code, body=_response.text)
-        raise ApiError(status_code=_response.status_code, body=_response_json)
-
-    async def create_batch(
-        self,
-        *,
-        organization_id: typing.Optional[str] = None,
-        project_id: typing.Optional[str] = None,
-        tool: str,
-        tool_data: typing.Optional[LlamaParseParameters] = OMIT,
-        input_type: str,
-        input_id: str,
-        output_type: typing.Optional[str] = OMIT,
-        output_id: typing.Optional[str] = OMIT,
-        batch_create_project_id: str,
-        external_id: str,
-        completion_window: typing.Optional[int] = OMIT,
-    ) -> Batch:
-        """
-        Parameters:
-            - organization_id: typing.Optional[str].
-
-            - project_id: typing.Optional[str].
-
-            - tool: str. The tool to be used for all requests in the batch.
-
-            - tool_data: typing.Optional[LlamaParseParameters].
-
-            - input_type: str. The type of input file. Currently only 'datasource' is supported.
-
-            - input_id: str. The ID of the input file for the batch.
-
-            - output_type: typing.Optional[str].
-
-            - output_id: typing.Optional[str].
-
-            - batch_create_project_id: str. The ID of the project to which the batch belongs
-
-            - external_id: str. A developer-provided ID for the batch. This ID will be returned in the response.
-
-            - completion_window: typing.Optional[int]. The time frame within which the batch should be processed. Currently only 24h is supported.
-        ---
-        from llama_cloud import (
-            FailPageMode,
-            LlamaParseParameters,
-            LlamaParseParametersPriority,
-            ParsingMode,
-        )
-        from llama_cloud.client import AsyncLlamaCloud
-
-        client = AsyncLlamaCloud(
-            token="YOUR_TOKEN",
-        )
-        await client.beta.create_batch(
-            tool="string",
-            tool_data=LlamaParseParameters(
-                priority=LlamaParseParametersPriority.LOW,
-                parse_mode=ParsingMode.PARSE_PAGE_WITHOUT_LLM,
-                replace_failed_page_mode=FailPageMode.RAW_TEXT,
-            ),
-            input_type="string",
-            input_id="string",
-            batch_create_project_id="string",
-            external_id="string",
+        await client.beta.aggregate_agent_data_api_v_1_beta_agent_data_aggregate_post(
+            deployment_name="string",
         )
         """
-        _request: typing.Dict[str, typing.Any] = {
-            "tool": tool,
-            "input_type": input_type,
-            "input_id": input_id,
-            "project_id": batch_create_project_id,
-            "external_id": external_id,
-        }
-        if tool_data is not OMIT:
-            _request["tool_data"] = tool_data
-        if output_type is not OMIT:
-            _request["output_type"] = output_type
-        if output_id is not OMIT:
-            _request["output_id"] = output_id
-        if completion_window is not OMIT:
-            _request["completion_window"] = completion_window
+        _request: typing.Dict[str, typing.Any] = {"deployment_name": deployment_name}
+        if collection is not OMIT:
+            _request["collection"] = collection
+        if count is not OMIT:
+            _request["count"] = count
+        if filter is not OMIT:
+            _request["filter"] = filter
+        if first is not OMIT:
+            _request["first"] = first
+        if group_by is not OMIT:
+            _request["group_by"] = group_by
+        if offset is not OMIT:
+            _request["offset"] = offset
+        if order_by is not OMIT:
+            _request["order_by"] = order_by
+        if page_size is not OMIT:
+            _request["page_size"] = page_size
+        if page_token is not OMIT:
+            _request["page_token"] = page_token
         _response = await self._client_wrapper.httpx_client.request(
             "POST",
-            urllib.parse.urljoin(f"{self._client_wrapper.get_base_url()}/", "api/v1/beta/batches"),
-            params=remove_none_from_dict({"organization_id": organization_id, "project_id": project_id}),
+            urllib.parse.urljoin(f"{self._client_wrapper.get_base_url()}/", "api/v1/beta/agent-data/:aggregate"),
+            params=remove_none_from_dict({"project_id": project_id, "organization_id": organization_id}),
             json=jsonable_encoder(_request),
             headers=self._client_wrapper.get_headers(),
             timeout=60,
         )
         if 200 <= _response.status_code < 300:
-            return pydantic.parse_obj_as(Batch, _response.json())  # type: ignore
+            return pydantic.parse_obj_as(PaginatedResponseAggregateGroup, _response.json())  # type: ignore
         if _response.status_code == 422:
             raise UnprocessableEntityError(pydantic.parse_obj_as(HttpValidationError, _response.json()))  # type: ignore
         try:
@@ -2208,31 +2711,133 @@ class AsyncBetaClient:
             raise ApiError(status_code=_response.status_code, body=_response.text)
         raise ApiError(status_code=_response.status_code, body=_response_json)
 
-    async def get_batch(self, batch_id: str, *, organization_id: typing.Optional[str] = None) -> BatchPublicOutput:
+    async def delete_agent_data_by_query_api_v_1_beta_agent_data_delete_post(
+        self,
+        *,
+        project_id: typing.Optional[str] = None,
+        organization_id: typing.Optional[str] = None,
+        collection: typing.Optional[str] = OMIT,
+        deployment_name: str,
+        filter: typing.Optional[typing.Dict[str, typing.Optional[FilterOperation]]] = OMIT,
+    ) -> DeleteResponse:
         """
+        Bulk delete agent data by query (deployment_name, collection, optional filters).
+
         Parameters:
-            - batch_id: str.
+            - project_id: typing.Optional[str].
 
             - organization_id: typing.Optional[str].
+
+            - collection: typing.Optional[str]. The logical agent data collection to delete from
+
+            - deployment_name: str. The agent deployment's name to delete data for
+
+            - filter: typing.Optional[typing.Dict[str, typing.Optional[FilterOperation]]].
         ---
         from llama_cloud.client import AsyncLlamaCloud
 
         client = AsyncLlamaCloud(
             token="YOUR_TOKEN",
         )
-        await client.beta.get_batch(
-            batch_id="string",
+        await client.beta.delete_agent_data_by_query_api_v_1_beta_agent_data_delete_post(
+            deployment_name="string",
         )
         """
+        _request: typing.Dict[str, typing.Any] = {"deployment_name": deployment_name}
+        if collection is not OMIT:
+            _request["collection"] = collection
+        if filter is not OMIT:
+            _request["filter"] = filter
         _response = await self._client_wrapper.httpx_client.request(
-            "GET",
-            urllib.parse.urljoin(f"{self._client_wrapper.get_base_url()}/", f"api/v1/beta/batches/{batch_id}"),
-            params=remove_none_from_dict({"organization_id": organization_id}),
+            "POST",
+            urllib.parse.urljoin(f"{self._client_wrapper.get_base_url()}/", "api/v1/beta/agent-data/:delete"),
+            params=remove_none_from_dict({"project_id": project_id, "organization_id": organization_id}),
+            json=jsonable_encoder(_request),
             headers=self._client_wrapper.get_headers(),
             timeout=60,
         )
         if 200 <= _response.status_code < 300:
-            return pydantic.parse_obj_as(BatchPublicOutput, _response.json())  # type: ignore
+            return pydantic.parse_obj_as(DeleteResponse, _response.json())  # type: ignore
+        if _response.status_code == 422:
+            raise UnprocessableEntityError(pydantic.parse_obj_as(HttpValidationError, _response.json()))  # type: ignore
+        try:
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, body=_response.text)
+        raise ApiError(status_code=_response.status_code, body=_response_json)
+
+    async def search_agent_data_api_v_1_beta_agent_data_search_post(
+        self,
+        *,
+        project_id: typing.Optional[str] = None,
+        organization_id: typing.Optional[str] = None,
+        collection: typing.Optional[str] = OMIT,
+        deployment_name: str,
+        filter: typing.Optional[typing.Dict[str, typing.Optional[FilterOperation]]] = OMIT,
+        include_total: typing.Optional[bool] = OMIT,
+        offset: typing.Optional[int] = OMIT,
+        order_by: typing.Optional[str] = OMIT,
+        page_size: typing.Optional[int] = OMIT,
+        page_token: typing.Optional[str] = OMIT,
+    ) -> PaginatedResponseAgentData:
+        """
+        Search agent data with filtering, sorting, and pagination.
+
+        Parameters:
+            - project_id: typing.Optional[str].
+
+            - organization_id: typing.Optional[str].
+
+            - collection: typing.Optional[str]. The logical agent data collection to search within
+
+            - deployment_name: str. The agent deployment's name to search within
+
+            - filter: typing.Optional[typing.Dict[str, typing.Optional[FilterOperation]]].
+
+            - include_total: typing.Optional[bool]. Whether to include the total number of items in the response
+
+            - offset: typing.Optional[int].
+
+            - order_by: typing.Optional[str].
+
+            - page_size: typing.Optional[int].
+
+            - page_token: typing.Optional[str].
+        ---
+        from llama_cloud.client import AsyncLlamaCloud
+
+        client = AsyncLlamaCloud(
+            token="YOUR_TOKEN",
+        )
+        await client.beta.search_agent_data_api_v_1_beta_agent_data_search_post(
+            deployment_name="string",
+        )
+        """
+        _request: typing.Dict[str, typing.Any] = {"deployment_name": deployment_name}
+        if collection is not OMIT:
+            _request["collection"] = collection
+        if filter is not OMIT:
+            _request["filter"] = filter
+        if include_total is not OMIT:
+            _request["include_total"] = include_total
+        if offset is not OMIT:
+            _request["offset"] = offset
+        if order_by is not OMIT:
+            _request["order_by"] = order_by
+        if page_size is not OMIT:
+            _request["page_size"] = page_size
+        if page_token is not OMIT:
+            _request["page_token"] = page_token
+        _response = await self._client_wrapper.httpx_client.request(
+            "POST",
+            urllib.parse.urljoin(f"{self._client_wrapper.get_base_url()}/", "api/v1/beta/agent-data/:search"),
+            params=remove_none_from_dict({"project_id": project_id, "organization_id": organization_id}),
+            json=jsonable_encoder(_request),
+            headers=self._client_wrapper.get_headers(),
+            timeout=60,
+        )
+        if 200 <= _response.status_code < 300:
+            return pydantic.parse_obj_as(PaginatedResponseAgentData, _response.json())  # type: ignore
         if _response.status_code == 422:
             raise UnprocessableEntityError(pydantic.parse_obj_as(HttpValidationError, _response.json()))  # type: ignore
         try:
@@ -2367,326 +2972,1083 @@ class AsyncBetaClient:
             raise ApiError(status_code=_response.status_code, body=_response.text)
         raise ApiError(status_code=_response.status_code, body=_response_json)
 
-    async def create_agent_data(
+    async def list_api_keys(
         self,
         *,
-        project_id: typing.Optional[str] = None,
-        organization_id: typing.Optional[str] = None,
-        deployment_name: str,
-        collection: typing.Optional[str] = OMIT,
-        data: typing.Dict[str, typing.Any],
-    ) -> AgentData:
-        """
-        Create new agent data.
-
-        Parameters:
-            - project_id: typing.Optional[str].
-
-            - organization_id: typing.Optional[str].
-
-            - deployment_name: str.
-
-            - collection: typing.Optional[str].
-
-            - data: typing.Dict[str, typing.Any].
-        ---
-        from llama_cloud.client import AsyncLlamaCloud
-
-        client = AsyncLlamaCloud(
-            token="YOUR_TOKEN",
-        )
-        await client.beta.create_agent_data(
-            deployment_name="string",
-            data={"string": {}},
-        )
-        """
-        _request: typing.Dict[str, typing.Any] = {"deployment_name": deployment_name, "data": data}
-        if collection is not OMIT:
-            _request["collection"] = collection
-        _response = await self._client_wrapper.httpx_client.request(
-            "POST",
-            urllib.parse.urljoin(f"{self._client_wrapper.get_base_url()}/", "api/v1/beta/agent-data"),
-            params=remove_none_from_dict({"project_id": project_id, "organization_id": organization_id}),
-            json=jsonable_encoder(_request),
-            headers=self._client_wrapper.get_headers(),
-            timeout=60,
-        )
-        if 200 <= _response.status_code < 300:
-            return pydantic.parse_obj_as(AgentData, _response.json())  # type: ignore
-        if _response.status_code == 422:
-            raise UnprocessableEntityError(pydantic.parse_obj_as(HttpValidationError, _response.json()))  # type: ignore
-        try:
-            _response_json = _response.json()
-        except JSONDecodeError:
-            raise ApiError(status_code=_response.status_code, body=_response.text)
-        raise ApiError(status_code=_response.status_code, body=_response_json)
-
-    async def search_agent_data_api_v_1_beta_agent_data_search_post(
-        self,
-        *,
-        project_id: typing.Optional[str] = None,
-        organization_id: typing.Optional[str] = None,
-        page_size: typing.Optional[int] = OMIT,
-        page_token: typing.Optional[str] = OMIT,
-        filter: typing.Optional[typing.Dict[str, typing.Optional[FilterOperation]]] = OMIT,
-        order_by: typing.Optional[str] = OMIT,
-        deployment_name: str,
-        collection: typing.Optional[str] = OMIT,
-        include_total: typing.Optional[bool] = OMIT,
-        offset: typing.Optional[int] = OMIT,
-    ) -> PaginatedResponseAgentData:
-        """
-        Search agent data with filtering, sorting, and pagination.
-
-        Parameters:
-            - project_id: typing.Optional[str].
-
-            - organization_id: typing.Optional[str].
-
-            - page_size: typing.Optional[int].
-
-            - page_token: typing.Optional[str].
-
-            - filter: typing.Optional[typing.Dict[str, typing.Optional[FilterOperation]]].
-
-            - order_by: typing.Optional[str].
-
-            - deployment_name: str. The agent deployment's name to search within
-
-            - collection: typing.Optional[str]. The logical agent data collection to search within
-
-            - include_total: typing.Optional[bool]. Whether to include the total number of items in the response
-
-            - offset: typing.Optional[int].
-        ---
-        from llama_cloud.client import AsyncLlamaCloud
-
-        client = AsyncLlamaCloud(
-            token="YOUR_TOKEN",
-        )
-        await client.beta.search_agent_data_api_v_1_beta_agent_data_search_post(
-            deployment_name="string",
-        )
-        """
-        _request: typing.Dict[str, typing.Any] = {"deployment_name": deployment_name}
-        if page_size is not OMIT:
-            _request["page_size"] = page_size
-        if page_token is not OMIT:
-            _request["page_token"] = page_token
-        if filter is not OMIT:
-            _request["filter"] = filter
-        if order_by is not OMIT:
-            _request["order_by"] = order_by
-        if collection is not OMIT:
-            _request["collection"] = collection
-        if include_total is not OMIT:
-            _request["include_total"] = include_total
-        if offset is not OMIT:
-            _request["offset"] = offset
-        _response = await self._client_wrapper.httpx_client.request(
-            "POST",
-            urllib.parse.urljoin(f"{self._client_wrapper.get_base_url()}/", "api/v1/beta/agent-data/:search"),
-            params=remove_none_from_dict({"project_id": project_id, "organization_id": organization_id}),
-            json=jsonable_encoder(_request),
-            headers=self._client_wrapper.get_headers(),
-            timeout=60,
-        )
-        if 200 <= _response.status_code < 300:
-            return pydantic.parse_obj_as(PaginatedResponseAgentData, _response.json())  # type: ignore
-        if _response.status_code == 422:
-            raise UnprocessableEntityError(pydantic.parse_obj_as(HttpValidationError, _response.json()))  # type: ignore
-        try:
-            _response_json = _response.json()
-        except JSONDecodeError:
-            raise ApiError(status_code=_response.status_code, body=_response.text)
-        raise ApiError(status_code=_response.status_code, body=_response_json)
-
-    async def aggregate_agent_data_api_v_1_beta_agent_data_aggregate_post(
-        self,
-        *,
-        project_id: typing.Optional[str] = None,
-        organization_id: typing.Optional[str] = None,
-        page_size: typing.Optional[int] = OMIT,
-        page_token: typing.Optional[str] = OMIT,
-        filter: typing.Optional[typing.Dict[str, typing.Optional[FilterOperation]]] = OMIT,
-        order_by: typing.Optional[str] = OMIT,
-        deployment_name: str,
-        collection: typing.Optional[str] = OMIT,
-        group_by: typing.Optional[typing.List[str]] = OMIT,
-        count: typing.Optional[bool] = OMIT,
-        first: typing.Optional[bool] = OMIT,
-        offset: typing.Optional[int] = OMIT,
-    ) -> PaginatedResponseAggregateGroup:
-        """
-        Aggregate agent data with grouping and optional counting/first item retrieval.
-
-        Parameters:
-            - project_id: typing.Optional[str].
-
-            - organization_id: typing.Optional[str].
-
-            - page_size: typing.Optional[int].
-
-            - page_token: typing.Optional[str].
-
-            - filter: typing.Optional[typing.Dict[str, typing.Optional[FilterOperation]]].
-
-            - order_by: typing.Optional[str].
-
-            - deployment_name: str. The agent deployment's name to aggregate data for
-
-            - collection: typing.Optional[str]. The logical agent data collection to aggregate data for
-
-            - group_by: typing.Optional[typing.List[str]].
-
-            - count: typing.Optional[bool].
-
-            - first: typing.Optional[bool].
-
-            - offset: typing.Optional[int].
-        ---
-        from llama_cloud.client import AsyncLlamaCloud
-
-        client = AsyncLlamaCloud(
-            token="YOUR_TOKEN",
-        )
-        await client.beta.aggregate_agent_data_api_v_1_beta_agent_data_aggregate_post(
-            deployment_name="string",
-        )
-        """
-        _request: typing.Dict[str, typing.Any] = {"deployment_name": deployment_name}
-        if page_size is not OMIT:
-            _request["page_size"] = page_size
-        if page_token is not OMIT:
-            _request["page_token"] = page_token
-        if filter is not OMIT:
-            _request["filter"] = filter
-        if order_by is not OMIT:
-            _request["order_by"] = order_by
-        if collection is not OMIT:
-            _request["collection"] = collection
-        if group_by is not OMIT:
-            _request["group_by"] = group_by
-        if count is not OMIT:
-            _request["count"] = count
-        if first is not OMIT:
-            _request["first"] = first
-        if offset is not OMIT:
-            _request["offset"] = offset
-        _response = await self._client_wrapper.httpx_client.request(
-            "POST",
-            urllib.parse.urljoin(f"{self._client_wrapper.get_base_url()}/", "api/v1/beta/agent-data/:aggregate"),
-            params=remove_none_from_dict({"project_id": project_id, "organization_id": organization_id}),
-            json=jsonable_encoder(_request),
-            headers=self._client_wrapper.get_headers(),
-            timeout=60,
-        )
-        if 200 <= _response.status_code < 300:
-            return pydantic.parse_obj_as(PaginatedResponseAggregateGroup, _response.json())  # type: ignore
-        if _response.status_code == 422:
-            raise UnprocessableEntityError(pydantic.parse_obj_as(HttpValidationError, _response.json()))  # type: ignore
-        try:
-            _response_json = _response.json()
-        except JSONDecodeError:
-            raise ApiError(status_code=_response.status_code, body=_response.text)
-        raise ApiError(status_code=_response.status_code, body=_response_json)
-
-    async def delete_agent_data_by_query_api_v_1_beta_agent_data_delete_post(
-        self,
-        *,
-        project_id: typing.Optional[str] = None,
-        organization_id: typing.Optional[str] = None,
-        deployment_name: str,
-        collection: typing.Optional[str] = OMIT,
-        filter: typing.Optional[typing.Dict[str, typing.Optional[FilterOperation]]] = OMIT,
-    ) -> DeleteResponse:
-        """
-        Bulk delete agent data by query (deployment_name, collection, optional filters).
-
-        Parameters:
-            - project_id: typing.Optional[str].
-
-            - organization_id: typing.Optional[str].
-
-            - deployment_name: str. The agent deployment's name to delete data for
-
-            - collection: typing.Optional[str]. The logical agent data collection to delete from
-
-            - filter: typing.Optional[typing.Dict[str, typing.Optional[FilterOperation]]].
-        ---
-        from llama_cloud.client import AsyncLlamaCloud
-
-        client = AsyncLlamaCloud(
-            token="YOUR_TOKEN",
-        )
-        await client.beta.delete_agent_data_by_query_api_v_1_beta_agent_data_delete_post(
-            deployment_name="string",
-        )
-        """
-        _request: typing.Dict[str, typing.Any] = {"deployment_name": deployment_name}
-        if collection is not OMIT:
-            _request["collection"] = collection
-        if filter is not OMIT:
-            _request["filter"] = filter
-        _response = await self._client_wrapper.httpx_client.request(
-            "POST",
-            urllib.parse.urljoin(f"{self._client_wrapper.get_base_url()}/", "api/v1/beta/agent-data/:delete"),
-            params=remove_none_from_dict({"project_id": project_id, "organization_id": organization_id}),
-            json=jsonable_encoder(_request),
-            headers=self._client_wrapper.get_headers(),
-            timeout=60,
-        )
-        if 200 <= _response.status_code < 300:
-            return pydantic.parse_obj_as(DeleteResponse, _response.json())  # type: ignore
-        if _response.status_code == 422:
-            raise UnprocessableEntityError(pydantic.parse_obj_as(HttpValidationError, _response.json()))  # type: ignore
-        try:
-            _response_json = _response.json()
-        except JSONDecodeError:
-            raise ApiError(status_code=_response.status_code, body=_response.text)
-        raise ApiError(status_code=_response.status_code, body=_response_json)
-
-    async def list_quota_configurations(
-        self,
-        *,
-        source_type: typing_extensions.Literal["organization"],
-        source_id: str,
-        page: typing.Optional[int] = None,
         page_size: typing.Optional[int] = None,
-    ) -> PaginatedResponseQuotaConfiguration:
+        page_token: typing.Optional[str] = None,
+        name: typing.Optional[str] = None,
+        project_id: typing.Optional[str] = None,
+        key_type: typing.Optional[ApiKeyType] = None,
+    ) -> ApiKeyQueryResponse:
         """
-        Retrieve a paginated list of quota configurations with optional filtering.
+        List API keys.
+
+        If project_id is provided, validates user has access to that project.
+        If project_id is not provided, scopes results to the current user.
+
+        Args:
+        user: Current user
+        db: Database session
+        page_size: Number of items per page
+        page_token: Token for pagination
+        name: Filter by API key name
+        project_id: Filter by project ID
+        key_type: Filter by key type
+
+        Returns:
+        Paginated response with API keys
 
         Parameters:
-            - source_type: typing_extensions.Literal["organization"].
-
-            - source_id: str.
-
-            - page: typing.Optional[int].
-
             - page_size: typing.Optional[int].
+
+            - page_token: typing.Optional[str].
+
+            - name: typing.Optional[str].
+
+            - project_id: typing.Optional[str].
+
+            - key_type: typing.Optional[ApiKeyType].
         ---
+        from llama_cloud import ApiKeyType
         from llama_cloud.client import AsyncLlamaCloud
 
         client = AsyncLlamaCloud(
             token="YOUR_TOKEN",
         )
-        await client.beta.list_quota_configurations(
-            source_type="organization",
-            source_id="string",
+        await client.beta.list_api_keys(
+            key_type=ApiKeyType.USER,
         )
         """
         _response = await self._client_wrapper.httpx_client.request(
             "GET",
-            urllib.parse.urljoin(f"{self._client_wrapper.get_base_url()}/", "api/v1/beta/quota-management"),
+            urllib.parse.urljoin(f"{self._client_wrapper.get_base_url()}/", "api/v1/beta/api-keys"),
             params=remove_none_from_dict(
-                {"source_type": source_type, "source_id": source_id, "page": page, "page_size": page_size}
+                {
+                    "page_size": page_size,
+                    "page_token": page_token,
+                    "name": name,
+                    "project_id": project_id,
+                    "key_type": key_type,
+                }
             ),
             headers=self._client_wrapper.get_headers(),
             timeout=60,
         )
         if 200 <= _response.status_code < 300:
-            return pydantic.parse_obj_as(PaginatedResponseQuotaConfiguration, _response.json())  # type: ignore
+            return pydantic.parse_obj_as(ApiKeyQueryResponse, _response.json())  # type: ignore
+        if _response.status_code == 422:
+            raise UnprocessableEntityError(pydantic.parse_obj_as(HttpValidationError, _response.json()))  # type: ignore
+        try:
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, body=_response.text)
+        raise ApiError(status_code=_response.status_code, body=_response_json)
+
+    async def create_api_key(
+        self,
+        *,
+        key_type: typing.Optional[ApiKeyType] = OMIT,
+        name: typing.Optional[str] = OMIT,
+        project_id: typing.Optional[str] = OMIT,
+    ) -> ApiKey:
+        """
+        Create a new API key.
+
+        If project_id is specified, validates user has admin permissions for that project.
+
+        Args:
+        api_key_create: API key creation data
+        user: Current user
+        db: Database session
+
+        Returns:
+        The created API key with the secret key visible in redacted_api_key field
+
+        Parameters:
+            - key_type: typing.Optional[ApiKeyType].
+
+            - name: typing.Optional[str].
+
+            - project_id: typing.Optional[str].
+        ---
+        from llama_cloud import ApiKeyType
+        from llama_cloud.client import AsyncLlamaCloud
+
+        client = AsyncLlamaCloud(
+            token="YOUR_TOKEN",
+        )
+        await client.beta.create_api_key(
+            key_type=ApiKeyType.USER,
+        )
+        """
+        _request: typing.Dict[str, typing.Any] = {}
+        if key_type is not OMIT:
+            _request["key_type"] = key_type
+        if name is not OMIT:
+            _request["name"] = name
+        if project_id is not OMIT:
+            _request["project_id"] = project_id
+        _response = await self._client_wrapper.httpx_client.request(
+            "POST",
+            urllib.parse.urljoin(f"{self._client_wrapper.get_base_url()}/", "api/v1/beta/api-keys"),
+            json=jsonable_encoder(_request),
+            headers=self._client_wrapper.get_headers(),
+            timeout=60,
+        )
+        if 200 <= _response.status_code < 300:
+            return pydantic.parse_obj_as(ApiKey, _response.json())  # type: ignore
+        if _response.status_code == 422:
+            raise UnprocessableEntityError(pydantic.parse_obj_as(HttpValidationError, _response.json()))  # type: ignore
+        try:
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, body=_response.text)
+        raise ApiError(status_code=_response.status_code, body=_response_json)
+
+    async def get_api_key(self, api_key_id: str) -> ApiKey:
+        """
+        Get an API key by ID.
+
+        Args:
+        api_key_id: The ID of the API key
+        user: Current user
+        db: Database session
+
+        Returns:
+        The API key
+
+        Parameters:
+            - api_key_id: str.
+        ---
+        from llama_cloud.client import AsyncLlamaCloud
+
+        client = AsyncLlamaCloud(
+            token="YOUR_TOKEN",
+        )
+        await client.beta.get_api_key(
+            api_key_id="string",
+        )
+        """
+        _response = await self._client_wrapper.httpx_client.request(
+            "GET",
+            urllib.parse.urljoin(f"{self._client_wrapper.get_base_url()}/", f"api/v1/beta/api-keys/{api_key_id}"),
+            headers=self._client_wrapper.get_headers(),
+            timeout=60,
+        )
+        if 200 <= _response.status_code < 300:
+            return pydantic.parse_obj_as(ApiKey, _response.json())  # type: ignore
+        if _response.status_code == 422:
+            raise UnprocessableEntityError(pydantic.parse_obj_as(HttpValidationError, _response.json()))  # type: ignore
+        try:
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, body=_response.text)
+        raise ApiError(status_code=_response.status_code, body=_response_json)
+
+    async def delete_api_key(self, api_key_id: str) -> None:
+        """
+        Delete an API key.
+
+        If the API key belongs to a project, validates user has admin permissions for that project.
+        If the API key has no project, validates it belongs to the current user.
+
+        Args:
+        api_key_id: The ID of the API key to delete
+        user: Current user
+        db: Database session
+
+        Parameters:
+            - api_key_id: str.
+        ---
+        from llama_cloud.client import AsyncLlamaCloud
+
+        client = AsyncLlamaCloud(
+            token="YOUR_TOKEN",
+        )
+        await client.beta.delete_api_key(
+            api_key_id="string",
+        )
+        """
+        _response = await self._client_wrapper.httpx_client.request(
+            "DELETE",
+            urllib.parse.urljoin(f"{self._client_wrapper.get_base_url()}/", f"api/v1/beta/api-keys/{api_key_id}"),
+            headers=self._client_wrapper.get_headers(),
+            timeout=60,
+        )
+        if 200 <= _response.status_code < 300:
+            return
+        if _response.status_code == 422:
+            raise UnprocessableEntityError(pydantic.parse_obj_as(HttpValidationError, _response.json()))  # type: ignore
+        try:
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, body=_response.text)
+        raise ApiError(status_code=_response.status_code, body=_response_json)
+
+    async def create_batch_job(
+        self,
+        *,
+        continue_as_new_threshold: typing.Optional[int] = OMIT,
+        directory_id: typing.Optional[str] = OMIT,
+        item_ids: typing.Optional[typing.List[str]] = OMIT,
+        job_config: BatchJobCreateRequestJobConfig,
+        page_size: typing.Optional[int] = OMIT,
+        project_id: typing.Optional[str] = OMIT,
+    ) -> BatchJobResponse:
+        """
+        Create a new batch processing job for a directory.
+
+        This endpoint creates a batch job that will process all files in the specified directory
+        using a Temporal workflow. The job configuration determines what processing will be performed.
+
+        Args:
+        payload: Job configuration including directory_id, job_config, and workflow settings
+        user: Authenticated user making the request
+        db: Database session
+
+        Returns:
+        BatchJobResponse with job details and workflow ID
+
+        Raises:
+        HTTPException: If directory not found or user lacks permissions
+
+        Example Request Body:
+        `json { "directory_id": "dir_123", "job_config": { "job_name": "PARSE_RAW_FILE", "parameters": { "type": "PARSE", "parsing_instruction": "Extract all tables" } }, "page_size": 100, "continue_as_new_threshold": 1000 } `
+
+        Parameters:
+            - continue_as_new_threshold: typing.Optional[int].
+
+            - directory_id: typing.Optional[str].
+
+            - item_ids: typing.Optional[typing.List[str]].
+
+            - job_config: BatchJobCreateRequestJobConfig. Job configuration for batch processing. Can be BatchParseJobRecordCreate or ClassifyJob.
+
+            - page_size: typing.Optional[int]. Number of files to fetch per batch from the directory (only used in directory mode)
+
+            - project_id: typing.Optional[str].
+        ---
+        from llama_cloud.client import AsyncLlamaCloud
+
+        client = AsyncLlamaCloud(
+            token="YOUR_TOKEN",
+        )
+        await client.beta.create_batch_job()
+        """
+        _request: typing.Dict[str, typing.Any] = {"job_config": job_config}
+        if continue_as_new_threshold is not OMIT:
+            _request["continue_as_new_threshold"] = continue_as_new_threshold
+        if directory_id is not OMIT:
+            _request["directory_id"] = directory_id
+        if item_ids is not OMIT:
+            _request["item_ids"] = item_ids
+        if page_size is not OMIT:
+            _request["page_size"] = page_size
+        if project_id is not OMIT:
+            _request["project_id"] = project_id
+        _response = await self._client_wrapper.httpx_client.request(
+            "POST",
+            urllib.parse.urljoin(f"{self._client_wrapper.get_base_url()}/", "api/v1/beta/batch-processing"),
+            json=jsonable_encoder(_request),
+            headers=self._client_wrapper.get_headers(),
+            timeout=60,
+        )
+        if 200 <= _response.status_code < 300:
+            return pydantic.parse_obj_as(BatchJobResponse, _response.json())  # type: ignore
+        if _response.status_code == 422:
+            raise UnprocessableEntityError(pydantic.parse_obj_as(HttpValidationError, _response.json()))  # type: ignore
+        try:
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, body=_response.text)
+        raise ApiError(status_code=_response.status_code, body=_response_json)
+
+    async def get_item_processing_results(
+        self, item_id: str, *, job_type: typing.Optional[BatchJobType] = None
+    ) -> ItemProcessingResultsResponse:
+        """
+        Get all processing results for a specific item (lineage query).
+
+        Shows complete processing history including what operations have been performed,
+        with what parameters, and where outputs are stored. Useful for understanding
+        what processing has already been done to avoid redundant work.
+
+        Args:
+        item_id: ID of the item (file) to query
+        job_type: Optional filter to show only specific processing type
+        user: Authenticated user making the request
+        db: Database session
+
+        Returns:
+        ItemProcessingResultsResponse with all processing operations for this item
+
+        Raises:
+        HTTPException: If item not found or user lacks permissions
+
+        Parameters:
+            - item_id: str.
+
+            - job_type: typing.Optional[BatchJobType]. Filter results by job type
+        ---
+        from llama_cloud import BatchJobType
+        from llama_cloud.client import AsyncLlamaCloud
+
+        client = AsyncLlamaCloud(
+            token="YOUR_TOKEN",
+        )
+        await client.beta.get_item_processing_results(
+            item_id="string",
+            job_type=BatchJobType.PARSE,
+        )
+        """
+        _response = await self._client_wrapper.httpx_client.request(
+            "GET",
+            urllib.parse.urljoin(
+                f"{self._client_wrapper.get_base_url()}/",
+                f"api/v1/beta/batch-processing/items/{item_id}/processing-results",
+            ),
+            params=remove_none_from_dict({"job_type": job_type}),
+            headers=self._client_wrapper.get_headers(),
+            timeout=60,
+        )
+        if 200 <= _response.status_code < 300:
+            return pydantic.parse_obj_as(ItemProcessingResultsResponse, _response.json())  # type: ignore
+        if _response.status_code == 422:
+            raise UnprocessableEntityError(pydantic.parse_obj_as(HttpValidationError, _response.json()))  # type: ignore
+        try:
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, body=_response.text)
+        raise ApiError(status_code=_response.status_code, body=_response_json)
+
+    async def get_batch_job_status(self, job_id: str) -> BatchJobStatusResponse:
+        """
+        Get detailed status of a batch processing job.
+
+        Returns current progress, file counts, and estimated completion time.
+
+        Args:
+        job_id: ID of the batch job
+        user: Authenticated user making the request
+        db: Database session
+
+        Returns:
+        BatchJobStatusResponse with job details and progress information
+
+        Raises:
+        HTTPException: If job not found or user lacks permissions
+
+        Parameters:
+            - job_id: str.
+        ---
+        from llama_cloud.client import AsyncLlamaCloud
+
+        client = AsyncLlamaCloud(
+            token="YOUR_TOKEN",
+        )
+        await client.beta.get_batch_job_status(
+            job_id="string",
+        )
+        """
+        _response = await self._client_wrapper.httpx_client.request(
+            "GET",
+            urllib.parse.urljoin(f"{self._client_wrapper.get_base_url()}/", f"api/v1/beta/batch-processing/{job_id}"),
+            headers=self._client_wrapper.get_headers(),
+            timeout=60,
+        )
+        if 200 <= _response.status_code < 300:
+            return pydantic.parse_obj_as(BatchJobStatusResponse, _response.json())  # type: ignore
+        if _response.status_code == 422:
+            raise UnprocessableEntityError(pydantic.parse_obj_as(HttpValidationError, _response.json()))  # type: ignore
+        try:
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, body=_response.text)
+        raise ApiError(status_code=_response.status_code, body=_response_json)
+
+    async def cancel_batch_job(self, job_id: str, *, reason: typing.Optional[str] = OMIT) -> BatchJobCancelResponse:
+        """
+        Cancel a running batch processing job.
+
+        Stops spawning new item processing tasks immediately. Items currently being
+        processed will complete. Essential for cost control if a job was started in error.
+
+        Args:
+        job_id: ID of the batch job to cancel
+        payload: Cancellation request with optional reason
+        user: Authenticated user making the request
+        db: Database session
+
+        Returns:
+        BatchJobCancelResponse with final job statistics
+
+        Raises:
+        HTTPException: If job not found, already completed, or user lacks permissions
+
+        Parameters:
+            - job_id: str.
+
+            - reason: typing.Optional[str].
+        ---
+        from llama_cloud.client import AsyncLlamaCloud
+
+        client = AsyncLlamaCloud(
+            token="YOUR_TOKEN",
+        )
+        await client.beta.cancel_batch_job(
+            job_id="string",
+        )
+        """
+        _request: typing.Dict[str, typing.Any] = {}
+        if reason is not OMIT:
+            _request["reason"] = reason
+        _response = await self._client_wrapper.httpx_client.request(
+            "POST",
+            urllib.parse.urljoin(
+                f"{self._client_wrapper.get_base_url()}/", f"api/v1/beta/batch-processing/{job_id}/cancel"
+            ),
+            json=jsonable_encoder(_request),
+            headers=self._client_wrapper.get_headers(),
+            timeout=60,
+        )
+        if 200 <= _response.status_code < 300:
+            return pydantic.parse_obj_as(BatchJobCancelResponse, _response.json())  # type: ignore
+        if _response.status_code == 422:
+            raise UnprocessableEntityError(pydantic.parse_obj_as(HttpValidationError, _response.json()))  # type: ignore
+        try:
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, body=_response.text)
+        raise ApiError(status_code=_response.status_code, body=_response_json)
+
+    async def list_batch_job_items(
+        self,
+        job_id: str,
+        *,
+        status: typing.Optional[BatchFileStatus] = None,
+        limit: typing.Optional[int] = None,
+        offset: typing.Optional[int] = None,
+    ) -> BatchItemListResponse:
+        """
+        List items in a batch job with optional status filtering.
+
+        Useful for finding failed items, viewing completed items, or debugging issues.
+        Results are paginated for performance.
+
+        Args:
+        job_id: ID of the batch job
+        status_filter: Optional filter by item status
+        limit: Maximum number of items to return (1-1000)
+        offset: Number of items to skip for pagination
+        user: Authenticated user making the request
+        db: Database session
+
+        Returns:
+        BatchItemListResponse with paginated item details
+
+        Raises:
+        HTTPException: If job not found or user lacks permissions
+
+        Parameters:
+            - job_id: str.
+
+            - status: typing.Optional[BatchFileStatus]. Filter items by status
+
+            - limit: typing.Optional[int]. Maximum number of items to return
+
+            - offset: typing.Optional[int]. Number of items to skip
+        ---
+        from llama_cloud import BatchFileStatus
+        from llama_cloud.client import AsyncLlamaCloud
+
+        client = AsyncLlamaCloud(
+            token="YOUR_TOKEN",
+        )
+        await client.beta.list_batch_job_items(
+            job_id="string",
+            status=BatchFileStatus.PENDING,
+        )
+        """
+        _response = await self._client_wrapper.httpx_client.request(
+            "GET",
+            urllib.parse.urljoin(
+                f"{self._client_wrapper.get_base_url()}/", f"api/v1/beta/batch-processing/{job_id}/items"
+            ),
+            params=remove_none_from_dict({"status": status, "limit": limit, "offset": offset}),
+            headers=self._client_wrapper.get_headers(),
+            timeout=60,
+        )
+        if 200 <= _response.status_code < 300:
+            return pydantic.parse_obj_as(BatchItemListResponse, _response.json())  # type: ignore
+        if _response.status_code == 422:
+            raise UnprocessableEntityError(pydantic.parse_obj_as(HttpValidationError, _response.json()))  # type: ignore
+        try:
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, body=_response.text)
+        raise ApiError(status_code=_response.status_code, body=_response_json)
+
+    async def list_directories(
+        self,
+        *,
+        project_id: typing.Optional[str] = None,
+        organization_id: typing.Optional[str] = None,
+        name: typing.Optional[str] = None,
+        data_source_id: typing.Optional[str] = None,
+        include_deleted: typing.Optional[bool] = None,
+        page_size: typing.Optional[int] = None,
+        page_token: typing.Optional[str] = None,
+    ) -> DirectoryQueryResponse:
+        """
+        Parameters:
+            - project_id: typing.Optional[str].
+
+            - organization_id: typing.Optional[str].
+
+            - name: typing.Optional[str].
+
+            - data_source_id: typing.Optional[str].
+
+            - include_deleted: typing.Optional[bool].
+
+            - page_size: typing.Optional[int].
+
+            - page_token: typing.Optional[str].
+        ---
+        from llama_cloud.client import AsyncLlamaCloud
+
+        client = AsyncLlamaCloud(
+            token="YOUR_TOKEN",
+        )
+        await client.beta.list_directories()
+        """
+        _response = await self._client_wrapper.httpx_client.request(
+            "GET",
+            urllib.parse.urljoin(f"{self._client_wrapper.get_base_url()}/", "api/v1/beta/directories"),
+            params=remove_none_from_dict(
+                {
+                    "project_id": project_id,
+                    "organization_id": organization_id,
+                    "name": name,
+                    "data_source_id": data_source_id,
+                    "include_deleted": include_deleted,
+                    "page_size": page_size,
+                    "page_token": page_token,
+                }
+            ),
+            headers=self._client_wrapper.get_headers(),
+            timeout=60,
+        )
+        if 200 <= _response.status_code < 300:
+            return pydantic.parse_obj_as(DirectoryQueryResponse, _response.json())  # type: ignore
+        if _response.status_code == 422:
+            raise UnprocessableEntityError(pydantic.parse_obj_as(HttpValidationError, _response.json()))  # type: ignore
+        try:
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, body=_response.text)
+        raise ApiError(status_code=_response.status_code, body=_response_json)
+
+    async def create_directory(
+        self,
+        *,
+        project_id: typing.Optional[str] = None,
+        organization_id: typing.Optional[str] = None,
+        data_source_id: typing.Optional[str] = OMIT,
+        description: typing.Optional[str] = OMIT,
+        name: str,
+    ) -> DirectoryResponse:
+        """
+        Create a new directory within the specified project.
+
+        If data_source_id is provided, validates that the data source exists
+        and belongs to the same project.
+
+        Parameters:
+            - project_id: typing.Optional[str].
+
+            - organization_id: typing.Optional[str].
+
+            - data_source_id: typing.Optional[str].
+
+            - description: typing.Optional[str].
+
+            - name: str. Human-readable name for the directory.
+        ---
+        from llama_cloud.client import AsyncLlamaCloud
+
+        client = AsyncLlamaCloud(
+            token="YOUR_TOKEN",
+        )
+        await client.beta.create_directory(
+            name="string",
+        )
+        """
+        _request: typing.Dict[str, typing.Any] = {"name": name}
+        if data_source_id is not OMIT:
+            _request["data_source_id"] = data_source_id
+        if description is not OMIT:
+            _request["description"] = description
+        _response = await self._client_wrapper.httpx_client.request(
+            "POST",
+            urllib.parse.urljoin(f"{self._client_wrapper.get_base_url()}/", "api/v1/beta/directories"),
+            params=remove_none_from_dict({"project_id": project_id, "organization_id": organization_id}),
+            json=jsonable_encoder(_request),
+            headers=self._client_wrapper.get_headers(),
+            timeout=60,
+        )
+        if 200 <= _response.status_code < 300:
+            return pydantic.parse_obj_as(DirectoryResponse, _response.json())  # type: ignore
+        if _response.status_code == 422:
+            raise UnprocessableEntityError(pydantic.parse_obj_as(HttpValidationError, _response.json()))  # type: ignore
+        try:
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, body=_response.text)
+        raise ApiError(status_code=_response.status_code, body=_response_json)
+
+    async def get_directory(
+        self,
+        directory_id: str,
+        *,
+        project_id: typing.Optional[str] = None,
+        organization_id: typing.Optional[str] = None,
+    ) -> DirectoryResponse:
+        """
+        Retrieve a directory by its identifier.
+
+        Parameters:
+            - directory_id: str.
+
+            - project_id: typing.Optional[str].
+
+            - organization_id: typing.Optional[str].
+        ---
+        from llama_cloud.client import AsyncLlamaCloud
+
+        client = AsyncLlamaCloud(
+            token="YOUR_TOKEN",
+        )
+        await client.beta.get_directory(
+            directory_id="string",
+        )
+        """
+        _response = await self._client_wrapper.httpx_client.request(
+            "GET",
+            urllib.parse.urljoin(f"{self._client_wrapper.get_base_url()}/", f"api/v1/beta/directories/{directory_id}"),
+            params=remove_none_from_dict({"project_id": project_id, "organization_id": organization_id}),
+            headers=self._client_wrapper.get_headers(),
+            timeout=60,
+        )
+        if 200 <= _response.status_code < 300:
+            return pydantic.parse_obj_as(DirectoryResponse, _response.json())  # type: ignore
+        if _response.status_code == 422:
+            raise UnprocessableEntityError(pydantic.parse_obj_as(HttpValidationError, _response.json()))  # type: ignore
+        try:
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, body=_response.text)
+        raise ApiError(status_code=_response.status_code, body=_response_json)
+
+    async def delete_directory(
+        self,
+        directory_id: str,
+        *,
+        project_id: typing.Optional[str] = None,
+        organization_id: typing.Optional[str] = None,
+    ) -> None:
+        """
+        Permanently delete a directory.
+
+        Parameters:
+            - directory_id: str.
+
+            - project_id: typing.Optional[str].
+
+            - organization_id: typing.Optional[str].
+        ---
+        from llama_cloud.client import AsyncLlamaCloud
+
+        client = AsyncLlamaCloud(
+            token="YOUR_TOKEN",
+        )
+        await client.beta.delete_directory(
+            directory_id="string",
+        )
+        """
+        _response = await self._client_wrapper.httpx_client.request(
+            "DELETE",
+            urllib.parse.urljoin(f"{self._client_wrapper.get_base_url()}/", f"api/v1/beta/directories/{directory_id}"),
+            params=remove_none_from_dict({"project_id": project_id, "organization_id": organization_id}),
+            headers=self._client_wrapper.get_headers(),
+            timeout=60,
+        )
+        if 200 <= _response.status_code < 300:
+            return
+        if _response.status_code == 422:
+            raise UnprocessableEntityError(pydantic.parse_obj_as(HttpValidationError, _response.json()))  # type: ignore
+        try:
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, body=_response.text)
+        raise ApiError(status_code=_response.status_code, body=_response_json)
+
+    async def update_directory(
+        self,
+        directory_id: str,
+        *,
+        project_id: typing.Optional[str] = None,
+        organization_id: typing.Optional[str] = None,
+        description: typing.Optional[str] = OMIT,
+        name: typing.Optional[str] = OMIT,
+    ) -> DirectoryResponse:
+        """
+        Update directory metadata.
+
+        Parameters:
+            - directory_id: str.
+
+            - project_id: typing.Optional[str].
+
+            - organization_id: typing.Optional[str].
+
+            - description: typing.Optional[str].
+
+            - name: typing.Optional[str].
+        ---
+        from llama_cloud.client import AsyncLlamaCloud
+
+        client = AsyncLlamaCloud(
+            token="YOUR_TOKEN",
+        )
+        await client.beta.update_directory(
+            directory_id="string",
+        )
+        """
+        _request: typing.Dict[str, typing.Any] = {}
+        if description is not OMIT:
+            _request["description"] = description
+        if name is not OMIT:
+            _request["name"] = name
+        _response = await self._client_wrapper.httpx_client.request(
+            "PATCH",
+            urllib.parse.urljoin(f"{self._client_wrapper.get_base_url()}/", f"api/v1/beta/directories/{directory_id}"),
+            params=remove_none_from_dict({"project_id": project_id, "organization_id": organization_id}),
+            json=jsonable_encoder(_request),
+            headers=self._client_wrapper.get_headers(),
+            timeout=60,
+        )
+        if 200 <= _response.status_code < 300:
+            return pydantic.parse_obj_as(DirectoryResponse, _response.json())  # type: ignore
+        if _response.status_code == 422:
+            raise UnprocessableEntityError(pydantic.parse_obj_as(HttpValidationError, _response.json()))  # type: ignore
+        try:
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, body=_response.text)
+        raise ApiError(status_code=_response.status_code, body=_response_json)
+
+    async def list_directory_files(
+        self,
+        directory_id: str,
+        *,
+        project_id: typing.Optional[str] = None,
+        organization_id: typing.Optional[str] = None,
+        display_name: typing.Optional[str] = None,
+        display_name_contains: typing.Optional[str] = None,
+        unique_id: typing.Optional[str] = None,
+        file_id: typing.Optional[str] = None,
+        include_deleted: typing.Optional[bool] = None,
+        page_size: typing.Optional[int] = None,
+        page_token: typing.Optional[str] = None,
+    ) -> DirectoryFileQueryResponse:
+        """
+        List all files within the specified directory with optional filtering and pagination.
+
+        Parameters:
+            - directory_id: str.
+
+            - project_id: typing.Optional[str].
+
+            - organization_id: typing.Optional[str].
+
+            - display_name: typing.Optional[str].
+
+            - display_name_contains: typing.Optional[str].
+
+            - unique_id: typing.Optional[str].
+
+            - file_id: typing.Optional[str].
+
+            - include_deleted: typing.Optional[bool].
+
+            - page_size: typing.Optional[int].
+
+            - page_token: typing.Optional[str].
+        ---
+        from llama_cloud.client import AsyncLlamaCloud
+
+        client = AsyncLlamaCloud(
+            token="YOUR_TOKEN",
+        )
+        await client.beta.list_directory_files(
+            directory_id="string",
+        )
+        """
+        _response = await self._client_wrapper.httpx_client.request(
+            "GET",
+            urllib.parse.urljoin(
+                f"{self._client_wrapper.get_base_url()}/", f"api/v1/beta/directories/{directory_id}/files"
+            ),
+            params=remove_none_from_dict(
+                {
+                    "project_id": project_id,
+                    "organization_id": organization_id,
+                    "display_name": display_name,
+                    "display_name_contains": display_name_contains,
+                    "unique_id": unique_id,
+                    "file_id": file_id,
+                    "include_deleted": include_deleted,
+                    "page_size": page_size,
+                    "page_token": page_token,
+                }
+            ),
+            headers=self._client_wrapper.get_headers(),
+            timeout=60,
+        )
+        if 200 <= _response.status_code < 300:
+            return pydantic.parse_obj_as(DirectoryFileQueryResponse, _response.json())  # type: ignore
+        if _response.status_code == 422:
+            raise UnprocessableEntityError(pydantic.parse_obj_as(HttpValidationError, _response.json()))  # type: ignore
+        try:
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, body=_response.text)
+        raise ApiError(status_code=_response.status_code, body=_response_json)
+
+    async def add_directory_file(
+        self,
+        directory_id: str,
+        *,
+        project_id: typing.Optional[str] = None,
+        organization_id: typing.Optional[str] = None,
+        display_name: typing.Optional[str] = OMIT,
+        file_id: str,
+        unique_id: typing.Optional[str] = OMIT,
+    ) -> DirectoryFileResponse:
+        """
+        Create a new file within the specified directory.
+
+        The directory must exist and belong to the project passed in.
+        The file_id must be provided and exist in the project.
+
+        Parameters:
+            - directory_id: str.
+
+            - project_id: typing.Optional[str].
+
+            - organization_id: typing.Optional[str].
+
+            - display_name: typing.Optional[str].
+
+            - file_id: str. File ID for the storage location (required).
+
+            - unique_id: typing.Optional[str].
+        ---
+        from llama_cloud.client import AsyncLlamaCloud
+
+        client = AsyncLlamaCloud(
+            token="YOUR_TOKEN",
+        )
+        await client.beta.add_directory_file(
+            directory_id="string",
+            file_id="string",
+        )
+        """
+        _request: typing.Dict[str, typing.Any] = {"file_id": file_id}
+        if display_name is not OMIT:
+            _request["display_name"] = display_name
+        if unique_id is not OMIT:
+            _request["unique_id"] = unique_id
+        _response = await self._client_wrapper.httpx_client.request(
+            "POST",
+            urllib.parse.urljoin(
+                f"{self._client_wrapper.get_base_url()}/", f"api/v1/beta/directories/{directory_id}/files"
+            ),
+            params=remove_none_from_dict({"project_id": project_id, "organization_id": organization_id}),
+            json=jsonable_encoder(_request),
+            headers=self._client_wrapper.get_headers(),
+            timeout=60,
+        )
+        if 200 <= _response.status_code < 300:
+            return pydantic.parse_obj_as(DirectoryFileResponse, _response.json())  # type: ignore
+        if _response.status_code == 422:
+            raise UnprocessableEntityError(pydantic.parse_obj_as(HttpValidationError, _response.json()))  # type: ignore
+        try:
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, body=_response.text)
+        raise ApiError(status_code=_response.status_code, body=_response_json)
+
+    async def get_directory_file(
+        self,
+        directory_id: str,
+        directory_file_id: str,
+        *,
+        project_id: typing.Optional[str] = None,
+        organization_id: typing.Optional[str] = None,
+    ) -> DirectoryFileResponse:
+        """
+        Get a file by its directory_file_id within the specified directory. If you're trying to get a file by its unique_id, use the list endpoint with a filter instead.
+
+        Parameters:
+            - directory_id: str.
+
+            - directory_file_id: str.
+
+            - project_id: typing.Optional[str].
+
+            - organization_id: typing.Optional[str].
+        ---
+        from llama_cloud.client import AsyncLlamaCloud
+
+        client = AsyncLlamaCloud(
+            token="YOUR_TOKEN",
+        )
+        await client.beta.get_directory_file(
+            directory_id="string",
+            directory_file_id="string",
+        )
+        """
+        _response = await self._client_wrapper.httpx_client.request(
+            "GET",
+            urllib.parse.urljoin(
+                f"{self._client_wrapper.get_base_url()}/",
+                f"api/v1/beta/directories/{directory_id}/files/{directory_file_id}",
+            ),
+            params=remove_none_from_dict({"project_id": project_id, "organization_id": organization_id}),
+            headers=self._client_wrapper.get_headers(),
+            timeout=60,
+        )
+        if 200 <= _response.status_code < 300:
+            return pydantic.parse_obj_as(DirectoryFileResponse, _response.json())  # type: ignore
+        if _response.status_code == 422:
+            raise UnprocessableEntityError(pydantic.parse_obj_as(HttpValidationError, _response.json()))  # type: ignore
+        try:
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, body=_response.text)
+        raise ApiError(status_code=_response.status_code, body=_response_json)
+
+    async def delete_directory_file(
+        self,
+        directory_id: str,
+        directory_file_id: str,
+        *,
+        project_id: typing.Optional[str] = None,
+        organization_id: typing.Optional[str] = None,
+    ) -> None:
+        """
+        Delete a file from the specified directory.
+
+        Note: This endpoint uses directory_file_id (the internal ID). If you're trying to delete a file by its unique_id, use the list endpoint with a filter to find the directory_file_id first.
+
+        Parameters:
+            - directory_id: str.
+
+            - directory_file_id: str.
+
+            - project_id: typing.Optional[str].
+
+            - organization_id: typing.Optional[str].
+        ---
+        from llama_cloud.client import AsyncLlamaCloud
+
+        client = AsyncLlamaCloud(
+            token="YOUR_TOKEN",
+        )
+        await client.beta.delete_directory_file(
+            directory_id="string",
+            directory_file_id="string",
+        )
+        """
+        _response = await self._client_wrapper.httpx_client.request(
+            "DELETE",
+            urllib.parse.urljoin(
+                f"{self._client_wrapper.get_base_url()}/",
+                f"api/v1/beta/directories/{directory_id}/files/{directory_file_id}",
+            ),
+            params=remove_none_from_dict({"project_id": project_id, "organization_id": organization_id}),
+            headers=self._client_wrapper.get_headers(),
+            timeout=60,
+        )
+        if 200 <= _response.status_code < 300:
+            return
+        if _response.status_code == 422:
+            raise UnprocessableEntityError(pydantic.parse_obj_as(HttpValidationError, _response.json()))  # type: ignore
+        try:
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, body=_response.text)
+        raise ApiError(status_code=_response.status_code, body=_response_json)
+
+    async def update_directory_file(
+        self,
+        directory_id: str,
+        directory_file_id: str,
+        *,
+        project_id: typing.Optional[str] = None,
+        organization_id: typing.Optional[str] = None,
+        display_name: typing.Optional[str] = OMIT,
+        unique_id: typing.Optional[str] = OMIT,
+    ) -> DirectoryFileResponse:
+        """
+        Update file metadata within the specified directory.
+
+        Note: This endpoint uses directory_file_id (the internal ID). If you're trying to update a file by its unique_id, use the list endpoint with a filter to find the directory_file_id first.
+
+        Parameters:
+            - directory_id: str.
+
+            - directory_file_id: str.
+
+            - project_id: typing.Optional[str].
+
+            - organization_id: typing.Optional[str].
+
+            - display_name: typing.Optional[str].
+
+            - unique_id: typing.Optional[str].
+        ---
+        from llama_cloud.client import AsyncLlamaCloud
+
+        client = AsyncLlamaCloud(
+            token="YOUR_TOKEN",
+        )
+        await client.beta.update_directory_file(
+            directory_id="string",
+            directory_file_id="string",
+        )
+        """
+        _request: typing.Dict[str, typing.Any] = {}
+        if display_name is not OMIT:
+            _request["display_name"] = display_name
+        if unique_id is not OMIT:
+            _request["unique_id"] = unique_id
+        _response = await self._client_wrapper.httpx_client.request(
+            "PATCH",
+            urllib.parse.urljoin(
+                f"{self._client_wrapper.get_base_url()}/",
+                f"api/v1/beta/directories/{directory_id}/files/{directory_file_id}",
+            ),
+            params=remove_none_from_dict({"project_id": project_id, "organization_id": organization_id}),
+            json=jsonable_encoder(_request),
+            headers=self._client_wrapper.get_headers(),
+            timeout=60,
+        )
+        if 200 <= _response.status_code < 300:
+            return pydantic.parse_obj_as(DirectoryFileResponse, _response.json())  # type: ignore
         if _response.status_code == 422:
             raise UnprocessableEntityError(pydantic.parse_obj_as(HttpValidationError, _response.json()))  # type: ignore
         try:
@@ -2810,10 +4172,10 @@ class AsyncBetaClient:
         *,
         project_id: typing.Optional[str] = None,
         organization_id: typing.Optional[str] = None,
-        page_size: typing.Optional[int] = OMIT,
-        page_token: typing.Optional[str] = OMIT,
         filter: typing.Optional[FileFilter] = OMIT,
         order_by: typing.Optional[str] = OMIT,
+        page_size: typing.Optional[int] = OMIT,
+        page_token: typing.Optional[str] = OMIT,
     ) -> FileQueryResponse:
         """
         Query files with flexible filtering and pagination.
@@ -2831,13 +4193,13 @@ class AsyncBetaClient:
 
             - organization_id: typing.Optional[str].
 
-            - page_size: typing.Optional[int].
-
-            - page_token: typing.Optional[str].
-
             - filter: typing.Optional[FileFilter].
 
             - order_by: typing.Optional[str].
+
+            - page_size: typing.Optional[int].
+
+            - page_token: typing.Optional[str].
         ---
         from llama_cloud import FileFilter
         from llama_cloud.client import AsyncLlamaCloud
@@ -2850,14 +4212,14 @@ class AsyncBetaClient:
         )
         """
         _request: typing.Dict[str, typing.Any] = {}
-        if page_size is not OMIT:
-            _request["page_size"] = page_size
-        if page_token is not OMIT:
-            _request["page_token"] = page_token
         if filter is not OMIT:
             _request["filter"] = filter
         if order_by is not OMIT:
             _request["order_by"] = order_by
+        if page_size is not OMIT:
+            _request["page_size"] = page_size
+        if page_token is not OMIT:
+            _request["page_token"] = page_token
         _response = await self._client_wrapper.httpx_client.request(
             "POST",
             urllib.parse.urljoin(f"{self._client_wrapper.get_base_url()}/", "api/v1/beta/files/query"),
@@ -3040,12 +4402,12 @@ class AsyncBetaClient:
         await client.beta.create_parse_configuration(
             request=ParseConfigurationCreate(
                 name="string",
-                version="string",
                 parameters=LlamaParseParameters(
-                    priority=LlamaParseParametersPriority.LOW,
                     parse_mode=ParsingMode.PARSE_PAGE_WITHOUT_LLM,
+                    priority=LlamaParseParametersPriority.LOW,
                     replace_failed_page_mode=FailPageMode.RAW_TEXT,
                 ),
+                version="string",
             ),
         )
         """
@@ -3108,12 +4470,12 @@ class AsyncBetaClient:
         await client.beta.upsert_parse_configuration(
             request=ParseConfigurationCreate(
                 name="string",
-                version="string",
                 parameters=LlamaParseParameters(
-                    priority=LlamaParseParametersPriority.LOW,
                     parse_mode=ParsingMode.PARSE_PAGE_WITHOUT_LLM,
+                    priority=LlamaParseParametersPriority.LOW,
                     replace_failed_page_mode=FailPageMode.RAW_TEXT,
                 ),
+                version="string",
             ),
         )
         """
@@ -3127,6 +4489,130 @@ class AsyncBetaClient:
         )
         if 200 <= _response.status_code < 300:
             return pydantic.parse_obj_as(ParseConfiguration, _response.json())  # type: ignore
+        if _response.status_code == 422:
+            raise UnprocessableEntityError(pydantic.parse_obj_as(HttpValidationError, _response.json()))  # type: ignore
+        try:
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, body=_response.text)
+        raise ApiError(status_code=_response.status_code, body=_response_json)
+
+    async def get_latest_parse_configuration(
+        self,
+        *,
+        creator: typing.Optional[str] = None,
+        project_id: typing.Optional[str] = None,
+        organization_id: typing.Optional[str] = None,
+    ) -> typing.Optional[ParseConfiguration]:
+        """
+        Get the latest parse configuration for the current project.
+
+        Args:
+        project: Validated project from dependency
+        user: Current user
+        db: Database session
+        creator: Optional creator filter
+
+        Returns:
+        The latest parse configuration or None if not found
+
+        Parameters:
+            - creator: typing.Optional[str].
+
+            - project_id: typing.Optional[str].
+
+            - organization_id: typing.Optional[str].
+        ---
+        from llama_cloud.client import AsyncLlamaCloud
+
+        client = AsyncLlamaCloud(
+            token="YOUR_TOKEN",
+        )
+        await client.beta.get_latest_parse_configuration()
+        """
+        _response = await self._client_wrapper.httpx_client.request(
+            "GET",
+            urllib.parse.urljoin(f"{self._client_wrapper.get_base_url()}/", "api/v1/beta/parse-configurations/latest"),
+            params=remove_none_from_dict(
+                {"creator": creator, "project_id": project_id, "organization_id": organization_id}
+            ),
+            headers=self._client_wrapper.get_headers(),
+            timeout=60,
+        )
+        if 200 <= _response.status_code < 300:
+            return pydantic.parse_obj_as(typing.Optional[ParseConfiguration], _response.json())  # type: ignore
+        if _response.status_code == 422:
+            raise UnprocessableEntityError(pydantic.parse_obj_as(HttpValidationError, _response.json()))  # type: ignore
+        try:
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, body=_response.text)
+        raise ApiError(status_code=_response.status_code, body=_response_json)
+
+    async def query_parse_configurations(
+        self,
+        *,
+        project_id: typing.Optional[str] = None,
+        organization_id: typing.Optional[str] = None,
+        filter: typing.Optional[ParseConfigurationFilter] = OMIT,
+        order_by: typing.Optional[str] = OMIT,
+        page_size: typing.Optional[int] = OMIT,
+        page_token: typing.Optional[str] = OMIT,
+    ) -> ParseConfigurationQueryResponse:
+        """
+        Query parse configurations with filtering and pagination.
+
+        Args:
+        query_request: Query request with filters and pagination
+        project: Validated project from dependency
+        user: Current user
+        db: Database session
+
+        Returns:
+        Paginated response with parse configurations
+
+        Parameters:
+            - project_id: typing.Optional[str].
+
+            - organization_id: typing.Optional[str].
+
+            - filter: typing.Optional[ParseConfigurationFilter].
+
+            - order_by: typing.Optional[str].
+
+            - page_size: typing.Optional[int].
+
+            - page_token: typing.Optional[str].
+        ---
+        from llama_cloud import ParseConfigurationFilter
+        from llama_cloud.client import AsyncLlamaCloud
+
+        client = AsyncLlamaCloud(
+            token="YOUR_TOKEN",
+        )
+        await client.beta.query_parse_configurations(
+            filter=ParseConfigurationFilter(),
+        )
+        """
+        _request: typing.Dict[str, typing.Any] = {}
+        if filter is not OMIT:
+            _request["filter"] = filter
+        if order_by is not OMIT:
+            _request["order_by"] = order_by
+        if page_size is not OMIT:
+            _request["page_size"] = page_size
+        if page_token is not OMIT:
+            _request["page_token"] = page_token
+        _response = await self._client_wrapper.httpx_client.request(
+            "POST",
+            urllib.parse.urljoin(f"{self._client_wrapper.get_base_url()}/", "api/v1/beta/parse-configurations/query"),
+            params=remove_none_from_dict({"project_id": project_id, "organization_id": organization_id}),
+            json=jsonable_encoder(_request),
+            headers=self._client_wrapper.get_headers(),
+            timeout=60,
+        )
+        if 200 <= _response.status_code < 300:
+            return pydantic.parse_obj_as(ParseConfigurationQueryResponse, _response.json())  # type: ignore
         if _response.status_code == 422:
             raise UnprocessableEntityError(pydantic.parse_obj_as(HttpValidationError, _response.json()))  # type: ignore
         try:
@@ -3229,8 +4715,8 @@ class AsyncBetaClient:
         await client.beta.update_parse_configuration(
             config_id="string",
             parameters=LlamaParseParameters(
-                priority=LlamaParseParametersPriority.LOW,
                 parse_mode=ParsingMode.PARSE_PAGE_WITHOUT_LLM,
+                priority=LlamaParseParametersPriority.LOW,
                 replace_failed_page_mode=FailPageMode.RAW_TEXT,
             ),
         )
@@ -3305,122 +4791,47 @@ class AsyncBetaClient:
             raise ApiError(status_code=_response.status_code, body=_response.text)
         raise ApiError(status_code=_response.status_code, body=_response_json)
 
-    async def query_parse_configurations(
+    async def list_quota_configurations(
         self,
         *,
-        project_id: typing.Optional[str] = None,
-        organization_id: typing.Optional[str] = None,
-        page_size: typing.Optional[int] = OMIT,
-        page_token: typing.Optional[str] = OMIT,
-        filter: typing.Optional[ParseConfigurationFilter] = OMIT,
-        order_by: typing.Optional[str] = OMIT,
-    ) -> ParseConfigurationQueryResponse:
+        source_type: typing_extensions.Literal["organization"],
+        source_id: str,
+        page: typing.Optional[int] = None,
+        page_size: typing.Optional[int] = None,
+    ) -> PaginatedResponseQuotaConfiguration:
         """
-        Query parse configurations with filtering and pagination.
-
-        Args:
-        query_request: Query request with filters and pagination
-        project: Validated project from dependency
-        user: Current user
-        db: Database session
-
-        Returns:
-        Paginated response with parse configurations
+        Retrieve a paginated list of quota configurations with optional filtering.
 
         Parameters:
-            - project_id: typing.Optional[str].
+            - source_type: typing_extensions.Literal["organization"].
 
-            - organization_id: typing.Optional[str].
+            - source_id: str.
+
+            - page: typing.Optional[int].
 
             - page_size: typing.Optional[int].
-
-            - page_token: typing.Optional[str].
-
-            - filter: typing.Optional[ParseConfigurationFilter].
-
-            - order_by: typing.Optional[str].
-        ---
-        from llama_cloud import ParseConfigurationFilter
-        from llama_cloud.client import AsyncLlamaCloud
-
-        client = AsyncLlamaCloud(
-            token="YOUR_TOKEN",
-        )
-        await client.beta.query_parse_configurations(
-            filter=ParseConfigurationFilter(),
-        )
-        """
-        _request: typing.Dict[str, typing.Any] = {}
-        if page_size is not OMIT:
-            _request["page_size"] = page_size
-        if page_token is not OMIT:
-            _request["page_token"] = page_token
-        if filter is not OMIT:
-            _request["filter"] = filter
-        if order_by is not OMIT:
-            _request["order_by"] = order_by
-        _response = await self._client_wrapper.httpx_client.request(
-            "POST",
-            urllib.parse.urljoin(f"{self._client_wrapper.get_base_url()}/", "api/v1/beta/parse-configurations/query"),
-            params=remove_none_from_dict({"project_id": project_id, "organization_id": organization_id}),
-            json=jsonable_encoder(_request),
-            headers=self._client_wrapper.get_headers(),
-            timeout=60,
-        )
-        if 200 <= _response.status_code < 300:
-            return pydantic.parse_obj_as(ParseConfigurationQueryResponse, _response.json())  # type: ignore
-        if _response.status_code == 422:
-            raise UnprocessableEntityError(pydantic.parse_obj_as(HttpValidationError, _response.json()))  # type: ignore
-        try:
-            _response_json = _response.json()
-        except JSONDecodeError:
-            raise ApiError(status_code=_response.status_code, body=_response.text)
-        raise ApiError(status_code=_response.status_code, body=_response_json)
-
-    async def get_latest_parse_configuration(
-        self,
-        *,
-        creator: typing.Optional[str] = None,
-        project_id: typing.Optional[str] = None,
-        organization_id: typing.Optional[str] = None,
-    ) -> typing.Optional[ParseConfiguration]:
-        """
-        Get the latest parse configuration for the current project.
-
-        Args:
-        project: Validated project from dependency
-        user: Current user
-        db: Database session
-        creator: Optional creator filter
-
-        Returns:
-        The latest parse configuration or None if not found
-
-        Parameters:
-            - creator: typing.Optional[str].
-
-            - project_id: typing.Optional[str].
-
-            - organization_id: typing.Optional[str].
         ---
         from llama_cloud.client import AsyncLlamaCloud
 
         client = AsyncLlamaCloud(
             token="YOUR_TOKEN",
         )
-        await client.beta.get_latest_parse_configuration()
+        await client.beta.list_quota_configurations(
+            source_type="organization",
+            source_id="string",
+        )
         """
         _response = await self._client_wrapper.httpx_client.request(
             "GET",
-            urllib.parse.urljoin(f"{self._client_wrapper.get_base_url()}/", "api/v1/beta/parse-configurations/latest"),
+            urllib.parse.urljoin(f"{self._client_wrapper.get_base_url()}/", "api/v1/beta/quota-management"),
             params=remove_none_from_dict(
-                {"creator": creator, "project_id": project_id, "organization_id": organization_id}
+                {"source_type": source_type, "source_id": source_id, "page": page, "page_size": page_size}
             ),
             headers=self._client_wrapper.get_headers(),
             timeout=60,
         )
         if 200 <= _response.status_code < 300:
-            return pydantic.parse_obj_as(typing.Optional[ParseConfiguration], _response.json())  # type: ignore
+            return pydantic.parse_obj_as(PaginatedResponseQuotaConfiguration, _response.json())  # type: ignore
         if _response.status_code == 422:
             raise UnprocessableEntityError(pydantic.parse_obj_as(HttpValidationError, _response.json()))  # type: ignore
         try:
@@ -3490,8 +4901,8 @@ class AsyncBetaClient:
         *,
         project_id: typing.Optional[str] = None,
         organization_id: typing.Optional[str] = None,
-        file_id: str,
         config: typing.Optional[SpreadsheetParsingConfig] = OMIT,
+        file_id: str,
     ) -> SpreadsheetJob:
         """
         Create a spreadsheet parsing job.
@@ -3502,9 +4913,9 @@ class AsyncBetaClient:
 
             - organization_id: typing.Optional[str].
 
-            - file_id: str. The ID of the file to parse
-
             - config: typing.Optional[SpreadsheetParsingConfig]. Configuration for the parsing job
+
+            - file_id: str. The ID of the file to parse
         ---
         from llama_cloud import SpreadsheetParsingConfig
         from llama_cloud.client import AsyncLlamaCloud
@@ -3513,8 +4924,8 @@ class AsyncBetaClient:
             token="YOUR_TOKEN",
         )
         await client.beta.create_spreadsheet_job(
-            file_id="string",
             config=SpreadsheetParsingConfig(),
+            file_id="string",
         )
         """
         _request: typing.Dict[str, typing.Any] = {"file_id": file_id}
@@ -3593,10 +5004,11 @@ class AsyncBetaClient:
             raise ApiError(status_code=_response.status_code, body=_response.text)
         raise ApiError(status_code=_response.status_code, body=_response_json)
 
-    async def get_table_download_presigned_url(
+    async def get_result_table(
         self,
         spreadsheet_job_id: str,
-        table_id: int,
+        table_id: str,
+        table_type: SpreadsheetResultType,
         *,
         expires_at_seconds: typing.Optional[int] = None,
         project_id: typing.Optional[str] = None,
@@ -3609,7 +5021,9 @@ class AsyncBetaClient:
         Parameters:
             - spreadsheet_job_id: str.
 
-            - table_id: int.
+            - table_id: str.
+
+            - table_type: SpreadsheetResultType.
 
             - expires_at_seconds: typing.Optional[int].
 
@@ -3617,21 +5031,23 @@ class AsyncBetaClient:
 
             - organization_id: typing.Optional[str].
         ---
+        from llama_cloud import SpreadsheetResultType
         from llama_cloud.client import AsyncLlamaCloud
 
         client = AsyncLlamaCloud(
             token="YOUR_TOKEN",
         )
-        await client.beta.get_table_download_presigned_url(
+        await client.beta.get_result_table(
             spreadsheet_job_id="string",
-            table_id=1,
+            table_id="string",
+            table_type=SpreadsheetResultType.TABLE,
         )
         """
         _response = await self._client_wrapper.httpx_client.request(
             "GET",
             urllib.parse.urljoin(
                 f"{self._client_wrapper.get_base_url()}/",
-                f"api/v1/beta/spreadsheet/jobs/{spreadsheet_job_id}/tables/{table_id}/result",
+                f"api/v1/beta/spreadsheet/jobs/{spreadsheet_job_id}/tables/{table_id}/result/{table_type}",
             ),
             params=remove_none_from_dict(
                 {"expires_at_seconds": expires_at_seconds, "project_id": project_id, "organization_id": organization_id}

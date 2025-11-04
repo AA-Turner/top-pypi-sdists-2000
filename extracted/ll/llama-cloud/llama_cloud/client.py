@@ -10,7 +10,6 @@ from .resources.admin.client import AdminClient, AsyncAdminClient
 from .resources.agent_deployments.client import AgentDeploymentsClient, AsyncAgentDeploymentsClient
 from .resources.alpha.client import AlphaClient, AsyncAlphaClient
 from .resources.beta.client import AsyncBetaClient, BetaClient
-from .resources.chat_apps.client import AsyncChatAppsClient, ChatAppsClient
 from .resources.classifier.client import AsyncClassifierClient, ClassifierClient
 from .resources.data_sinks.client import AsyncDataSinksClient, DataSinksClient
 from .resources.data_sources.client import AsyncDataSourcesClient, DataSourcesClient
@@ -19,11 +18,17 @@ from .resources.evals.client import AsyncEvalsClient, EvalsClient
 from .resources.files.client import AsyncFilesClient, FilesClient
 from .resources.jobs.client import AsyncJobsClient, JobsClient
 from .resources.llama_extract.client import AsyncLlamaExtractClient, LlamaExtractClient
+from .resources.organization_users.client import AsyncOrganizationUsersClient, OrganizationUsersClient
 from .resources.organizations.client import AsyncOrganizationsClient, OrganizationsClient
+from .resources.page_figures.client import AsyncPageFiguresClient, PageFiguresClient
+from .resources.page_screenshots.client import AsyncPageScreenshotsClient, PageScreenshotsClient
 from .resources.parsing.client import AsyncParsingClient, ParsingClient
+from .resources.pipeline_data_sources.client import AsyncPipelineDataSourcesClient, PipelineDataSourcesClient
+from .resources.pipeline_files.client import AsyncPipelineFilesClient, PipelineFilesClient
 from .resources.pipelines.client import AsyncPipelinesClient, PipelinesClient
 from .resources.projects.client import AsyncProjectsClient, ProjectsClient
 from .resources.retrievers.client import AsyncRetrieversClient, RetrieversClient
+from .resources.testing.client import AsyncTestingClient, TestingClient
 from .resources.users.client import AsyncUsersClient, UsersClient
 
 
@@ -42,24 +47,29 @@ class LlamaCloud:
             token=token,
             httpx_client=httpx.Client(timeout=timeout) if httpx_client is None else httpx_client,
         )
-        self.agent_deployments = AgentDeploymentsClient(client_wrapper=self._client_wrapper)
+        self.admin = AdminClient(client_wrapper=self._client_wrapper)
+        self.beta = BetaClient(client_wrapper=self._client_wrapper)
+        self.classifier = ClassifierClient(client_wrapper=self._client_wrapper)
         self.data_sinks = DataSinksClient(client_wrapper=self._client_wrapper)
         self.data_sources = DataSourcesClient(client_wrapper=self._client_wrapper)
         self.embedding_model_configs = EmbeddingModelConfigsClient(client_wrapper=self._client_wrapper)
-        self.organizations = OrganizationsClient(client_wrapper=self._client_wrapper)
-        self.projects = ProjectsClient(client_wrapper=self._client_wrapper)
-        self.files = FilesClient(client_wrapper=self._client_wrapper)
-        self.pipelines = PipelinesClient(client_wrapper=self._client_wrapper)
-        self.retrievers = RetrieversClient(client_wrapper=self._client_wrapper)
-        self.jobs = JobsClient(client_wrapper=self._client_wrapper)
         self.evals = EvalsClient(client_wrapper=self._client_wrapper)
-        self.parsing = ParsingClient(client_wrapper=self._client_wrapper)
-        self.chat_apps = ChatAppsClient(client_wrapper=self._client_wrapper)
-        self.classifier = ClassifierClient(client_wrapper=self._client_wrapper)
-        self.admin = AdminClient(client_wrapper=self._client_wrapper)
-        self.users = UsersClient(client_wrapper=self._client_wrapper)
         self.llama_extract = LlamaExtractClient(client_wrapper=self._client_wrapper)
-        self.beta = BetaClient(client_wrapper=self._client_wrapper)
+        self.files = FilesClient(client_wrapper=self._client_wrapper)
+        self.page_figures = PageFiguresClient(client_wrapper=self._client_wrapper)
+        self.page_screenshots = PageScreenshotsClient(client_wrapper=self._client_wrapper)
+        self.jobs = JobsClient(client_wrapper=self._client_wrapper)
+        self.organizations = OrganizationsClient(client_wrapper=self._client_wrapper)
+        self.organization_users = OrganizationUsersClient(client_wrapper=self._client_wrapper)
+        self.parsing = ParsingClient(client_wrapper=self._client_wrapper)
+        self.pipelines = PipelinesClient(client_wrapper=self._client_wrapper)
+        self.pipeline_data_sources = PipelineDataSourcesClient(client_wrapper=self._client_wrapper)
+        self.pipeline_files = PipelineFilesClient(client_wrapper=self._client_wrapper)
+        self.projects = ProjectsClient(client_wrapper=self._client_wrapper)
+        self.agent_deployments = AgentDeploymentsClient(client_wrapper=self._client_wrapper)
+        self.retrievers = RetrieversClient(client_wrapper=self._client_wrapper)
+        self.testing = TestingClient(client_wrapper=self._client_wrapper)
+        self.users = UsersClient(client_wrapper=self._client_wrapper)
         self.alpha = AlphaClient(client_wrapper=self._client_wrapper)
 
 
@@ -78,24 +88,29 @@ class AsyncLlamaCloud:
             token=token,
             httpx_client=httpx.AsyncClient(timeout=timeout) if httpx_client is None else httpx_client,
         )
-        self.agent_deployments = AsyncAgentDeploymentsClient(client_wrapper=self._client_wrapper)
+        self.admin = AsyncAdminClient(client_wrapper=self._client_wrapper)
+        self.beta = AsyncBetaClient(client_wrapper=self._client_wrapper)
+        self.classifier = AsyncClassifierClient(client_wrapper=self._client_wrapper)
         self.data_sinks = AsyncDataSinksClient(client_wrapper=self._client_wrapper)
         self.data_sources = AsyncDataSourcesClient(client_wrapper=self._client_wrapper)
         self.embedding_model_configs = AsyncEmbeddingModelConfigsClient(client_wrapper=self._client_wrapper)
-        self.organizations = AsyncOrganizationsClient(client_wrapper=self._client_wrapper)
-        self.projects = AsyncProjectsClient(client_wrapper=self._client_wrapper)
-        self.files = AsyncFilesClient(client_wrapper=self._client_wrapper)
-        self.pipelines = AsyncPipelinesClient(client_wrapper=self._client_wrapper)
-        self.retrievers = AsyncRetrieversClient(client_wrapper=self._client_wrapper)
-        self.jobs = AsyncJobsClient(client_wrapper=self._client_wrapper)
         self.evals = AsyncEvalsClient(client_wrapper=self._client_wrapper)
-        self.parsing = AsyncParsingClient(client_wrapper=self._client_wrapper)
-        self.chat_apps = AsyncChatAppsClient(client_wrapper=self._client_wrapper)
-        self.classifier = AsyncClassifierClient(client_wrapper=self._client_wrapper)
-        self.admin = AsyncAdminClient(client_wrapper=self._client_wrapper)
-        self.users = AsyncUsersClient(client_wrapper=self._client_wrapper)
         self.llama_extract = AsyncLlamaExtractClient(client_wrapper=self._client_wrapper)
-        self.beta = AsyncBetaClient(client_wrapper=self._client_wrapper)
+        self.files = AsyncFilesClient(client_wrapper=self._client_wrapper)
+        self.page_figures = AsyncPageFiguresClient(client_wrapper=self._client_wrapper)
+        self.page_screenshots = AsyncPageScreenshotsClient(client_wrapper=self._client_wrapper)
+        self.jobs = AsyncJobsClient(client_wrapper=self._client_wrapper)
+        self.organizations = AsyncOrganizationsClient(client_wrapper=self._client_wrapper)
+        self.organization_users = AsyncOrganizationUsersClient(client_wrapper=self._client_wrapper)
+        self.parsing = AsyncParsingClient(client_wrapper=self._client_wrapper)
+        self.pipelines = AsyncPipelinesClient(client_wrapper=self._client_wrapper)
+        self.pipeline_data_sources = AsyncPipelineDataSourcesClient(client_wrapper=self._client_wrapper)
+        self.pipeline_files = AsyncPipelineFilesClient(client_wrapper=self._client_wrapper)
+        self.projects = AsyncProjectsClient(client_wrapper=self._client_wrapper)
+        self.agent_deployments = AsyncAgentDeploymentsClient(client_wrapper=self._client_wrapper)
+        self.retrievers = AsyncRetrieversClient(client_wrapper=self._client_wrapper)
+        self.testing = AsyncTestingClient(client_wrapper=self._client_wrapper)
+        self.users = AsyncUsersClient(client_wrapper=self._client_wrapper)
         self.alpha = AsyncAlphaClient(client_wrapper=self._client_wrapper)
 
 

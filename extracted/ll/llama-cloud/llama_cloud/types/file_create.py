@@ -17,15 +17,15 @@ except ImportError:
 
 
 class FileCreate(pydantic.BaseModel):
-    name: str = pydantic.Field(
-        description="Name that will be used for created file. If possible, always include the file extension in the name."
-    )
+    data_source_id: typing.Optional[str]
     external_file_id: typing.Optional[str]
     file_size: typing.Optional[int]
     last_modified_at: typing.Optional[dt.datetime]
-    resource_info: typing.Optional[typing.Dict[str, typing.Optional[FileCreateResourceInfoValue]]]
+    name: str = pydantic.Field(
+        description="Name that will be used for created file. If possible, always include the file extension in the name."
+    )
     permission_info: typing.Optional[typing.Dict[str, typing.Optional[FileCreatePermissionInfoValue]]]
-    data_source_id: typing.Optional[str]
+    resource_info: typing.Optional[typing.Dict[str, typing.Optional[FileCreateResourceInfoValue]]]
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

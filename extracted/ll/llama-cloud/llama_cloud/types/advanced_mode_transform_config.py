@@ -17,11 +17,11 @@ except ImportError:
 
 
 class AdvancedModeTransformConfig(pydantic.BaseModel):
-    segmentation_config: typing.Optional[AdvancedModeTransformConfigSegmentationConfig] = pydantic.Field(
-        description="Configuration for the segmentation."
-    )
     chunking_config: typing.Optional[AdvancedModeTransformConfigChunkingConfig] = pydantic.Field(
         description="Configuration for the chunking."
+    )
+    segmentation_config: typing.Optional[AdvancedModeTransformConfigSegmentationConfig] = pydantic.Field(
+        description="Configuration for the segmentation."
     )
 
     def json(self, **kwargs: typing.Any) -> str:

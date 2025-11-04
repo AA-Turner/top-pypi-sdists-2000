@@ -5,7 +5,6 @@ from . import (
     agent_deployments,
     alpha,
     beta,
-    chat_apps,
     classifier,
     data_sinks,
     data_sources,
@@ -14,13 +13,20 @@ from . import (
     files,
     jobs,
     llama_extract,
+    organization_users,
     organizations,
+    page_figures,
+    page_screenshots,
     parsing,
+    pipeline_data_sources,
+    pipeline_files,
     pipelines,
     projects,
     retrievers,
+    testing,
     users,
 )
+from .beta import BatchJobCreateRequestJobConfig
 from .data_sinks import DataSinkUpdateComponent
 from .data_sources import DataSourceUpdateComponent, DataSourceUpdateCustomMetadataValue
 from .embedding_model_configs import (
@@ -49,8 +55,10 @@ from .llama_extract import (
     ExtractStatelessRequestDataSchema,
     ExtractStatelessRequestDataSchemaZeroValue,
 )
+from .pipeline_files import PipelineFileUpdateCustomMetadataValue
 from .pipelines import (
-    PipelineFileUpdateCustomMetadataValue,
+    ListPipelineDocumentsApiV1PipelinesPipelineIdDocumentsGetRequestStatusRefreshPolicy,
+    PaginatedListPipelineDocumentsApiV1PipelinesPipelineIdDocumentsPaginatedGetRequestStatusRefreshPolicy,
     PipelineUpdateEmbeddingConfig,
     PipelineUpdateEmbeddingConfig_AzureEmbedding,
     PipelineUpdateEmbeddingConfig_BedrockEmbedding,
@@ -64,6 +72,7 @@ from .pipelines import (
 )
 
 __all__ = [
+    "BatchJobCreateRequestJobConfig",
     "DataSinkUpdateComponent",
     "DataSourceUpdateComponent",
     "DataSourceUpdateCustomMetadataValue",
@@ -89,6 +98,8 @@ __all__ = [
     "ExtractStatelessRequestDataSchema",
     "ExtractStatelessRequestDataSchemaZeroValue",
     "FileCreateFromUrlResourceInfoValue",
+    "ListPipelineDocumentsApiV1PipelinesPipelineIdDocumentsGetRequestStatusRefreshPolicy",
+    "PaginatedListPipelineDocumentsApiV1PipelinesPipelineIdDocumentsPaginatedGetRequestStatusRefreshPolicy",
     "PipelineFileUpdateCustomMetadataValue",
     "PipelineUpdateEmbeddingConfig",
     "PipelineUpdateEmbeddingConfig_AzureEmbedding",
@@ -104,7 +115,6 @@ __all__ = [
     "agent_deployments",
     "alpha",
     "beta",
-    "chat_apps",
     "classifier",
     "data_sinks",
     "data_sources",
@@ -113,10 +123,16 @@ __all__ = [
     "files",
     "jobs",
     "llama_extract",
+    "organization_users",
     "organizations",
+    "page_figures",
+    "page_screenshots",
     "parsing",
+    "pipeline_data_sources",
+    "pipeline_files",
     "pipelines",
     "projects",
     "retrievers",
+    "testing",
     "users",
 ]

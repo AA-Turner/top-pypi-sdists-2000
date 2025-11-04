@@ -511,6 +511,7 @@ class AssertionInfoClass(_Aspect):
         source: Union[None, "AssertionSourceClass"]=None,
         lastUpdated: Union[None, "AuditStampClass"]=None,
         description: Union[None, str]=None,
+        note: Union[None, "AssertionNoteClass"]=None,
     ):
         super().__init__()
         
@@ -531,6 +532,7 @@ class AssertionInfoClass(_Aspect):
         self.source = source
         self.lastUpdated = lastUpdated
         self.description = description
+        self.note = note
     
     def _restore_defaults(self) -> None:
         self.customProperties = dict()
@@ -546,6 +548,7 @@ class AssertionInfoClass(_Aspect):
         self.source = self.RECORD_SCHEMA.fields_dict["source"].default
         self.lastUpdated = self.RECORD_SCHEMA.fields_dict["lastUpdated"].default
         self.description = self.RECORD_SCHEMA.fields_dict["description"].default
+        self.note = self.RECORD_SCHEMA.fields_dict["note"].default
     
     
     @property
@@ -570,7 +573,7 @@ class AssertionInfoClass(_Aspect):
     
     @property
     def type(self) -> Union[str, "AssertionTypeClass"]:
-        """Type of assertion. Assertion types can evolve to span Datasets, Flows (Pipelines), Models, Features etc."""
+        """Type of assertion."""
         return self._inner_dict.get('type')  # type: ignore
     
     @type.setter
@@ -680,6 +683,55 @@ class AssertionInfoClass(_Aspect):
     @description.setter
     def description(self, value: Union[None, str]) -> None:
         self._inner_dict['description'] = value
+    
+    
+    @property
+    def note(self) -> Union[None, "AssertionNoteClass"]:
+        """An optional note to give technical owners more context about the assertion, and how to troubleshoot it.
+    The UI will render this in markdown format."""
+        return self._inner_dict.get('note')  # type: ignore
+    
+    @note.setter
+    def note(self, value: Union[None, "AssertionNoteClass"]) -> None:
+        self._inner_dict['note'] = value
+    
+    
+class AssertionNoteClass(DictWrapper):
+    # No docs available.
+    
+    RECORD_SCHEMA = get_schema_type("com.linkedin.pegasus2avro.assertion.AssertionNote")
+    def __init__(self,
+        content: str,
+        lastModified: "AuditStampClass",
+    ):
+        super().__init__()
+        
+        self.content = content
+        self.lastModified = lastModified
+    
+    def _restore_defaults(self) -> None:
+        self.content = str()
+        self.lastModified = AuditStampClass._construct_with_defaults()
+    
+    
+    @property
+    def content(self) -> str:
+        """The note to give technical owners more context about the assertion, and how to troubleshoot it."""
+        return self._inner_dict.get('content')  # type: ignore
+    
+    @content.setter
+    def content(self, value: str) -> None:
+        self._inner_dict['content'] = value
+    
+    
+    @property
+    def lastModified(self) -> "AuditStampClass":
+        """The time at which the note was last modified."""
+        return self._inner_dict.get('lastModified')  # type: ignore
+    
+    @lastModified.setter
+    def lastModified(self, value: "AuditStampClass") -> None:
+        self._inner_dict['lastModified'] = value
     
     
 class AssertionResultClass(DictWrapper):
@@ -1337,7 +1389,7 @@ class AssertionStdParametersClass(DictWrapper):
     
     
 class AssertionTypeClass(object):
-    # No docs available.
+    """Type of assertion. Assertion types can evolve to span Datasets, Flows (Pipelines), Models, Features etc."""
     
     DATASET = "DATASET"
     """A single-dataset assertion.
@@ -12623,6 +12675,9 @@ class NotificationSinkTypeClass(object):
     EMAIL = "EMAIL"
     """Email target type."""
     
+    TEAMS = "TEAMS"
+    """Microsoft Teams target type."""
+    
     
     
 class EmailNotificationSettingsClass(DictWrapper):
@@ -13086,6 +13141,185 @@ class StructuredExecutionReportClass(DictWrapper):
     @contentType.setter
     def contentType(self, value: str) -> None:
         self._inner_dict['contentType'] = value
+    
+    
+class BucketStorageLocationClass(DictWrapper):
+    """Information where a file is stored"""
+    
+    RECORD_SCHEMA = get_schema_type("com.linkedin.pegasus2avro.file.BucketStorageLocation")
+    def __init__(self,
+        storageBucket: str,
+        storageKey: str,
+    ):
+        super().__init__()
+        
+        self.storageBucket = storageBucket
+        self.storageKey = storageKey
+    
+    def _restore_defaults(self) -> None:
+        self.storageBucket = str()
+        self.storageKey = str()
+    
+    
+    @property
+    def storageBucket(self) -> str:
+        """The storage bucket this file is stored in"""
+        return self._inner_dict.get('storageBucket')  # type: ignore
+    
+    @storageBucket.setter
+    def storageBucket(self, value: str) -> None:
+        self._inner_dict['storageBucket'] = value
+    
+    
+    @property
+    def storageKey(self) -> str:
+        """The key for where this file is stored inside of the given bucket"""
+        return self._inner_dict.get('storageKey')  # type: ignore
+    
+    @storageKey.setter
+    def storageKey(self, value: str) -> None:
+        self._inner_dict['storageKey'] = value
+    
+    
+class DataHubFileInfoClass(_Aspect):
+    """Information about a DataHub file - a file stored in S3 for use within DataHub platform features like documentation, home pages, and announcements."""
+
+
+    ASPECT_NAME = 'dataHubFileInfo'
+    ASPECT_INFO = {}
+    RECORD_SCHEMA = get_schema_type("com.linkedin.pegasus2avro.file.DataHubFileInfo")
+
+    def __init__(self,
+        bucketStorageLocation: "BucketStorageLocationClass",
+        originalFileName: str,
+        mimeType: str,
+        sizeInBytes: int,
+        scenario: Union[str, "FileUploadScenarioClass"],
+        created: "AuditStampClass",
+        referencedByAsset: Union[None, str]=None,
+        schemaField: Union[None, str]=None,
+        contentHash: Union[None, str]=None,
+    ):
+        super().__init__()
+        
+        self.bucketStorageLocation = bucketStorageLocation
+        self.originalFileName = originalFileName
+        self.mimeType = mimeType
+        self.sizeInBytes = sizeInBytes
+        self.scenario = scenario
+        self.referencedByAsset = referencedByAsset
+        self.schemaField = schemaField
+        self.created = created
+        self.contentHash = contentHash
+    
+    def _restore_defaults(self) -> None:
+        self.bucketStorageLocation = BucketStorageLocationClass._construct_with_defaults()
+        self.originalFileName = str()
+        self.mimeType = str()
+        self.sizeInBytes = int()
+        self.scenario = FileUploadScenarioClass.ASSET_DOCUMENTATION
+        self.referencedByAsset = self.RECORD_SCHEMA.fields_dict["referencedByAsset"].default
+        self.schemaField = self.RECORD_SCHEMA.fields_dict["schemaField"].default
+        self.created = AuditStampClass._construct_with_defaults()
+        self.contentHash = self.RECORD_SCHEMA.fields_dict["contentHash"].default
+    
+    
+    @property
+    def bucketStorageLocation(self) -> "BucketStorageLocationClass":
+        """Info about where a file is stored"""
+        return self._inner_dict.get('bucketStorageLocation')  # type: ignore
+    
+    @bucketStorageLocation.setter
+    def bucketStorageLocation(self, value: "BucketStorageLocationClass") -> None:
+        self._inner_dict['bucketStorageLocation'] = value
+    
+    
+    @property
+    def originalFileName(self) -> str:
+        """The original filename as uploaded by the user"""
+        return self._inner_dict.get('originalFileName')  # type: ignore
+    
+    @originalFileName.setter
+    def originalFileName(self, value: str) -> None:
+        self._inner_dict['originalFileName'] = value
+    
+    
+    @property
+    def mimeType(self) -> str:
+        """MIME type of the file (e.g., image/png, application/pdf)"""
+        return self._inner_dict.get('mimeType')  # type: ignore
+    
+    @mimeType.setter
+    def mimeType(self, value: str) -> None:
+        self._inner_dict['mimeType'] = value
+    
+    
+    @property
+    def sizeInBytes(self) -> int:
+        """Size of the file in bytes"""
+        return self._inner_dict.get('sizeInBytes')  # type: ignore
+    
+    @sizeInBytes.setter
+    def sizeInBytes(self, value: int) -> None:
+        self._inner_dict['sizeInBytes'] = value
+    
+    
+    @property
+    def scenario(self) -> Union[str, "FileUploadScenarioClass"]:
+        """The scenario/context in which this file was uploaded"""
+        return self._inner_dict.get('scenario')  # type: ignore
+    
+    @scenario.setter
+    def scenario(self, value: Union[str, "FileUploadScenarioClass"]) -> None:
+        self._inner_dict['scenario'] = value
+    
+    
+    @property
+    def referencedByAsset(self) -> Union[None, str]:
+        """Optional URN of the entity this file is associated with (e.g., the dataset whose docs contain this file)"""
+        return self._inner_dict.get('referencedByAsset')  # type: ignore
+    
+    @referencedByAsset.setter
+    def referencedByAsset(self, value: Union[None, str]) -> None:
+        self._inner_dict['referencedByAsset'] = value
+    
+    
+    @property
+    def schemaField(self) -> Union[None, str]:
+        """The dataset schema field urn this file is referenced by"""
+        return self._inner_dict.get('schemaField')  # type: ignore
+    
+    @schemaField.setter
+    def schemaField(self, value: Union[None, str]) -> None:
+        self._inner_dict['schemaField'] = value
+    
+    
+    @property
+    def created(self) -> "AuditStampClass":
+        """Timestamp when this file was created and by whom"""
+        return self._inner_dict.get('created')  # type: ignore
+    
+    @created.setter
+    def created(self, value: "AuditStampClass") -> None:
+        self._inner_dict['created'] = value
+    
+    
+    @property
+    def contentHash(self) -> Union[None, str]:
+        """SHA-256 hash of file contents"""
+        return self._inner_dict.get('contentHash')  # type: ignore
+    
+    @contentHash.setter
+    def contentHash(self, value: Union[None, str]) -> None:
+        self._inner_dict['contentHash'] = value
+    
+    
+class FileUploadScenarioClass(object):
+    # No docs available.
+    
+    ASSET_DOCUMENTATION = "ASSET_DOCUMENTATION"
+    """File uploaded for entity documentation"""
+    
     
     
 class DynamicFormAssignmentClass(_Aspect):
@@ -15705,6 +15939,35 @@ class DataHubConnectionKeyClass(_Aspect):
     @property
     def id(self) -> str:
         """A unique identifier for the connection."""
+        return self._inner_dict.get('id')  # type: ignore
+    
+    @id.setter
+    def id(self, value: str) -> None:
+        self._inner_dict['id'] = value
+    
+    
+class DataHubFileKeyClass(_Aspect):
+    """Key for a DataHubFile"""
+
+
+    ASPECT_NAME = 'dataHubFileKey'
+    ASPECT_INFO = {'keyForEntity': 'dataHubFile', 'entityCategory': 'core', 'entityAspects': ['dataHubFileInfo']}
+    RECORD_SCHEMA = get_schema_type("com.linkedin.pegasus2avro.metadata.key.DataHubFileKey")
+
+    def __init__(self,
+        id: str,
+    ):
+        super().__init__()
+        
+        self.id = id
+    
+    def _restore_defaults(self) -> None:
+        self.id = str()
+    
+    
+    @property
+    def id(self) -> str:
+        """Unique id for the file."""
         return self._inner_dict.get('id')  # type: ignore
     
     @id.setter
@@ -20227,6 +20490,12 @@ class DataHubPageModuleTypeClass(object):
     
     RELATED_TERMS = "RELATED_TERMS"
     """Module displaying the related terms of a given glossary term"""
+    
+    PLATFORMS = "PLATFORMS"
+    """Module displaying the platforms in an instance"""
+    
+    UNKNOWN = "UNKNOWN"
+    """Unknown module type - this can occur with corrupted data or rolling back to versions without new modules"""
     
     
     
@@ -27531,6 +27800,7 @@ __SCHEMA_TYPES = {
     'com.linkedin.pegasus2avro.assertion.AssertionActionType': AssertionActionTypeClass,
     'com.linkedin.pegasus2avro.assertion.AssertionActions': AssertionActionsClass,
     'com.linkedin.pegasus2avro.assertion.AssertionInfo': AssertionInfoClass,
+    'com.linkedin.pegasus2avro.assertion.AssertionNote': AssertionNoteClass,
     'com.linkedin.pegasus2avro.assertion.AssertionResult': AssertionResultClass,
     'com.linkedin.pegasus2avro.assertion.AssertionResultError': AssertionResultErrorClass,
     'com.linkedin.pegasus2avro.assertion.AssertionResultErrorType': AssertionResultErrorTypeClass,
@@ -27748,6 +28018,9 @@ __SCHEMA_TYPES = {
     'com.linkedin.pegasus2avro.execution.ExecutionRequestSignal': ExecutionRequestSignalClass,
     'com.linkedin.pegasus2avro.execution.ExecutionRequestSource': ExecutionRequestSourceClass,
     'com.linkedin.pegasus2avro.execution.StructuredExecutionReport': StructuredExecutionReportClass,
+    'com.linkedin.pegasus2avro.file.BucketStorageLocation': BucketStorageLocationClass,
+    'com.linkedin.pegasus2avro.file.DataHubFileInfo': DataHubFileInfoClass,
+    'com.linkedin.pegasus2avro.file.FileUploadScenario': FileUploadScenarioClass,
     'com.linkedin.pegasus2avro.form.DynamicFormAssignment': DynamicFormAssignmentClass,
     'com.linkedin.pegasus2avro.form.FormActorAssignment': FormActorAssignmentClass,
     'com.linkedin.pegasus2avro.form.FormInfo': FormInfoClass,
@@ -27797,6 +28070,7 @@ __SCHEMA_TYPES = {
     'com.linkedin.pegasus2avro.metadata.key.DataHubAccessTokenKey': DataHubAccessTokenKeyClass,
     'com.linkedin.pegasus2avro.metadata.key.DataHubActionKey': DataHubActionKeyClass,
     'com.linkedin.pegasus2avro.metadata.key.DataHubConnectionKey': DataHubConnectionKeyClass,
+    'com.linkedin.pegasus2avro.metadata.key.DataHubFileKey': DataHubFileKeyClass,
     'com.linkedin.pegasus2avro.metadata.key.DataHubIngestionSourceKey': DataHubIngestionSourceKeyClass,
     'com.linkedin.pegasus2avro.metadata.key.DataHubOpenAPISchemaKey': DataHubOpenAPISchemaKeyClass,
     'com.linkedin.pegasus2avro.metadata.key.DataHubPageModuleKey': DataHubPageModuleKeyClass,
@@ -28053,6 +28327,7 @@ __SCHEMA_TYPES = {
     'AssertionActionType': AssertionActionTypeClass,
     'AssertionActions': AssertionActionsClass,
     'AssertionInfo': AssertionInfoClass,
+    'AssertionNote': AssertionNoteClass,
     'AssertionResult': AssertionResultClass,
     'AssertionResultError': AssertionResultErrorClass,
     'AssertionResultErrorType': AssertionResultErrorTypeClass,
@@ -28270,6 +28545,9 @@ __SCHEMA_TYPES = {
     'ExecutionRequestSignal': ExecutionRequestSignalClass,
     'ExecutionRequestSource': ExecutionRequestSourceClass,
     'StructuredExecutionReport': StructuredExecutionReportClass,
+    'BucketStorageLocation': BucketStorageLocationClass,
+    'DataHubFileInfo': DataHubFileInfoClass,
+    'FileUploadScenario': FileUploadScenarioClass,
     'DynamicFormAssignment': DynamicFormAssignmentClass,
     'FormActorAssignment': FormActorAssignmentClass,
     'FormInfo': FormInfoClass,
@@ -28319,6 +28597,7 @@ __SCHEMA_TYPES = {
     'DataHubAccessTokenKey': DataHubAccessTokenKeyClass,
     'DataHubActionKey': DataHubActionKeyClass,
     'DataHubConnectionKey': DataHubConnectionKeyClass,
+    'DataHubFileKey': DataHubFileKeyClass,
     'DataHubIngestionSourceKey': DataHubIngestionSourceKeyClass,
     'DataHubOpenAPISchemaKey': DataHubOpenAPISchemaKeyClass,
     'DataHubPageModuleKey': DataHubPageModuleKeyClass,
@@ -28582,6 +28861,7 @@ ASPECT_CLASSES: List[Type[_Aspect]] = [
     DashboardInfoClass,
     EditableSchemaMetadataClass,
     SchemaMetadataClass,
+    DataHubFileInfoClass,
     AssertionActionsClass,
     AssertionRunEventClass,
     AssertionInfoClass,
@@ -28663,6 +28943,7 @@ ASPECT_CLASSES: List[Type[_Aspect]] = [
     DataHubAccessTokenKeyClass,
     DataHubActionKeyClass,
     MLPrimaryKeyKeyClass,
+    DataHubFileKeyClass,
     TestKeyClass,
     GlossaryTermKeyClass,
     InviteTokenKeyClass,
@@ -28816,6 +29097,7 @@ class AspectBag(TypedDict, total=False):
     dashboardInfo: DashboardInfoClass
     editableSchemaMetadata: EditableSchemaMetadataClass
     schemaMetadata: SchemaMetadataClass
+    dataHubFileInfo: DataHubFileInfoClass
     assertionActions: AssertionActionsClass
     assertionRunEvent: AssertionRunEventClass
     assertionInfo: AssertionInfoClass
@@ -28897,6 +29179,7 @@ class AspectBag(TypedDict, total=False):
     dataHubAccessTokenKey: DataHubAccessTokenKeyClass
     dataHubActionKey: DataHubActionKeyClass
     mlPrimaryKeyKey: MLPrimaryKeyKeyClass
+    dataHubFileKey: DataHubFileKeyClass
     testKey: TestKeyClass
     glossaryTermKey: GlossaryTermKeyClass
     inviteTokenKey: InviteTokenKeyClass
@@ -29066,6 +29349,7 @@ KEY_ASPECTS: Dict[str, Type[_Aspect]] = {
     'dataHubAccessToken': DataHubAccessTokenKeyClass,
     'dataHubAction': DataHubActionKeyClass,
     'mlPrimaryKey': MLPrimaryKeyKeyClass,
+    'dataHubFile': DataHubFileKeyClass,
     'test': TestKeyClass,
     'glossaryTerm': GlossaryTermKeyClass,
     'inviteToken': InviteTokenKeyClass,
@@ -29132,6 +29416,7 @@ ENTITY_TYPE_NAMES: List[str] = [
     'dataHubAccessToken',
     'dataHubAction',
     'mlPrimaryKey',
+    'dataHubFile',
     'test',
     'glossaryTerm',
     'inviteToken',
@@ -29195,6 +29480,7 @@ EntityTypeName = Literal[
     'dataHubAccessToken',
     'dataHubAction',
     'mlPrimaryKey',
+    'dataHubFile',
     'test',
     'glossaryTerm',
     'inviteToken',

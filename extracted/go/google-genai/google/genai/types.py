@@ -214,6 +214,28 @@ class ApiSpec(_common.CaseInSensitiveEnum):
   """Elastic search API spec."""
 
 
+class PhishBlockThreshold(_common.CaseInSensitiveEnum):
+  """Sites with confidence level chosen & above this value will be blocked from the search results.
+
+  This enum is not supported in Gemini API.
+  """
+
+  PHISH_BLOCK_THRESHOLD_UNSPECIFIED = 'PHISH_BLOCK_THRESHOLD_UNSPECIFIED'
+  """Defaults to unspecified."""
+  BLOCK_LOW_AND_ABOVE = 'BLOCK_LOW_AND_ABOVE'
+  """Blocks Low and above confidence URL that is risky."""
+  BLOCK_MEDIUM_AND_ABOVE = 'BLOCK_MEDIUM_AND_ABOVE'
+  """Blocks Medium and above confidence URL that is risky."""
+  BLOCK_HIGH_AND_ABOVE = 'BLOCK_HIGH_AND_ABOVE'
+  """Blocks High and above confidence URL that is risky."""
+  BLOCK_HIGHER_AND_ABOVE = 'BLOCK_HIGHER_AND_ABOVE'
+  """Blocks Higher and above confidence URL that is risky."""
+  BLOCK_VERY_HIGH_AND_ABOVE = 'BLOCK_VERY_HIGH_AND_ABOVE'
+  """Blocks Very high and above confidence URL that is risky."""
+  BLOCK_ONLY_EXTREMELY_HIGH = 'BLOCK_ONLY_EXTREMELY_HIGH'
+  """Blocks Extremely high confidence URL that is risky."""
+
+
 class HarmCategory(_common.CaseInSensitiveEnum):
   """Harm category."""
 
@@ -3554,6 +3576,10 @@ class EnterpriseWebSearch(_common.BaseModel):
       default=None,
       description="""Optional. List of domains to be excluded from the search results. The default limit is 2000 domains.""",
   )
+  blocking_confidence: Optional[PhishBlockThreshold] = Field(
+      default=None,
+      description="""Optional. Sites with confidence level chosen & above this value will be blocked from the search results.""",
+  )
 
 
 class EnterpriseWebSearchDict(TypedDict, total=False):
@@ -3564,6 +3590,9 @@ class EnterpriseWebSearchDict(TypedDict, total=False):
 
   exclude_domains: Optional[list[str]]
   """Optional. List of domains to be excluded from the search results. The default limit is 2000 domains."""
+
+  blocking_confidence: Optional[PhishBlockThreshold]
+  """Optional. Sites with confidence level chosen & above this value will be blocked from the search results."""
 
 
 EnterpriseWebSearchOrDict = Union[EnterpriseWebSearch, EnterpriseWebSearchDict]
@@ -3615,6 +3644,10 @@ class GoogleSearch(_common.BaseModel):
       default=None,
       description="""Optional. List of domains to be excluded from the search results. The default limit is 2000 domains. Example: ["amazon.com", "facebook.com"]. This field is not supported in Gemini API.""",
   )
+  blocking_confidence: Optional[PhishBlockThreshold] = Field(
+      default=None,
+      description="""Optional. Sites with confidence level chosen & above this value will be blocked from the search results. This field is not supported in Gemini API.""",
+  )
   time_range_filter: Optional[Interval] = Field(
       default=None,
       description="""Optional. Filter search results to a specific time range. If customers set a start time, they must set an end time (and vice versa). This field is not supported in Vertex AI.""",
@@ -3629,6 +3662,9 @@ class GoogleSearchDict(TypedDict, total=False):
 
   exclude_domains: Optional[list[str]]
   """Optional. List of domains to be excluded from the search results. The default limit is 2000 domains. Example: ["amazon.com", "facebook.com"]. This field is not supported in Gemini API."""
+
+  blocking_confidence: Optional[PhishBlockThreshold]
+  """Optional. Sites with confidence level chosen & above this value will be blocked from the search results. This field is not supported in Gemini API."""
 
   time_range_filter: Optional[IntervalDict]
   """Optional. Filter search results to a specific time range. If customers set a start time, they must set an end time (and vice versa). This field is not supported in Vertex AI."""
@@ -5993,10 +6029,18 @@ class GenerateContentResponse(_common.BaseModel):
       description="""First candidate from the parsed response if response_schema is provided. Not available for streaming.""",
   )
 
-  def _get_text(self, warn_property: str = 'text') -> Optional[str]:
+  def _get_text(self, warn_property: Optional[str] = None) -> Optional[str]:
     """Returns the concatenation of all text parts in the response.
 
-    This is an internal method that allows customizing the warning message.
+    This is an internal method that allows customizing or disabling the warning
+    message.
+
+    Args:
+      warn_property: The property name that is being accessed. This is used to
+        customize the warning message. If None, no warning will be logged.
+
+    Returns:
+      The concatenation of all text parts in the response.
     """
     if (
         not self.candidates
@@ -6004,7 +6048,7 @@ class GenerateContentResponse(_common.BaseModel):
         or not self.candidates[0].content.parts
     ):
       return None
-    if len(self.candidates) > 1:
+    if len(self.candidates) > 1 and warn_property:
       logger.warning(
           f'there are {len(self.candidates)} candidates, returning'
           f' {warn_property} result from the first candidate. Access'
@@ -6025,7 +6069,7 @@ class GenerateContentResponse(_common.BaseModel):
           continue
         any_text_part_text = True
         text += part.text
-    if non_text_parts:
+    if non_text_parts and warn_property:
       logger.warning(
           'Warning: there are non-text parts in the response:'
           f' {non_text_parts}, returning concatenated {warn_property} result'
@@ -6054,7 +6098,10 @@ class GenerateContentResponse(_common.BaseModel):
 
   @property
   def text(self) -> Optional[str]:
-    """Returns the concatenation of all text parts in the response."""
+    """Returns the concatenation of all text parts in the response.
+
+    If there are multiple candidates, returns the text from only the first one.
+    """
     return self._get_text(warn_property='text')
 
   @property
@@ -6145,7 +6192,7 @@ class GenerateContentResponse(_common.BaseModel):
     ):
       # Pydantic schema.
       try:
-        result_text = result._get_text(warn_property='parsed')
+        result_text = result._get_text()
         if result_text is not None:
           result.parsed = response_schema.model_validate_json(result_text)
       # may not be a valid json per stream response
@@ -6154,11 +6201,10 @@ class GenerateContentResponse(_common.BaseModel):
       except json.decoder.JSONDecodeError:
         pass
     elif (
-        isinstance(response_schema, EnumMeta)
-        and result._get_text(warn_property='parsed') is not None
+        isinstance(response_schema, EnumMeta) and result._get_text() is not None
     ):
       # Enum with "application/json" returns response in double quotes.
-      result_text = result._get_text(warn_property='parsed')
+      result_text = result._get_text()
       if result_text is None:
         raise ValueError('Response is empty.')
       enum_value = result_text.replace('"', '')
@@ -6179,7 +6225,7 @@ class GenerateContentResponse(_common.BaseModel):
         placeholder: response_schema  # type: ignore[valid-type]
 
       try:
-        result_text = result._get_text(warn_property='parsed')
+        result_text = result._get_text()
         if result_text is not None:
           parsed = {'placeholder': json.loads(result_text)}
           placeholder = Placeholder.model_validate(parsed)
@@ -6196,7 +6242,7 @@ class GenerateContentResponse(_common.BaseModel):
       # want the result converted to. So just return json.
       # JSON schema.
       try:
-        result_text = result._get_text(warn_property='parsed')
+        result_text = result._get_text()
         if result_text is not None:
           result.parsed = json.loads(result_text)
       # may not be a valid json per stream response
@@ -6208,7 +6254,7 @@ class GenerateContentResponse(_common.BaseModel):
       for union_type in union_types:
         if issubclass(union_type, pydantic.BaseModel):
           try:
-            result_text = result._get_text(warn_property='parsed')
+            result_text = result._get_text()
             if result_text is not None:
 
               class Placeholder(pydantic.BaseModel):  # type: ignore[no-redef]
@@ -6223,7 +6269,7 @@ class GenerateContentResponse(_common.BaseModel):
             pass
         else:
           try:
-            result_text = result._get_text(warn_property='parsed')
+            result_text = result._get_text()
             if result_text is not None:
               result.parsed = json.loads(result_text)
           # may not be a valid json per stream response

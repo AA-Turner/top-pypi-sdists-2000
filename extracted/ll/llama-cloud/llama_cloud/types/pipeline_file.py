@@ -24,25 +24,25 @@ class PipelineFile(pydantic.BaseModel):
     Schema for a file that is associated with a pipeline.
     """
 
-    id: str = pydantic.Field(description="Unique identifier")
+    config_hash: typing.Optional[typing.Dict[str, typing.Optional[PipelineFileConfigHashValue]]]
     created_at: typing.Optional[dt.datetime]
-    updated_at: typing.Optional[dt.datetime]
-    name: typing.Optional[str]
-    external_file_id: typing.Optional[str]
-    file_size: typing.Optional[int]
-    file_type: typing.Optional[str]
-    project_id: typing.Optional[str]
-    last_modified_at: typing.Optional[dt.datetime]
-    file_id: typing.Optional[str]
-    pipeline_id: str = pydantic.Field(description="The ID of the pipeline that the file is associated with")
-    resource_info: typing.Optional[typing.Dict[str, typing.Optional[PipelineFileResourceInfoValue]]]
-    permission_info: typing.Optional[typing.Dict[str, typing.Optional[PipelineFilePermissionInfoValue]]]
     custom_metadata: typing.Optional[typing.Dict[str, typing.Optional[PipelineFileCustomMetadataValue]]]
     data_source_id: typing.Optional[str]
-    config_hash: typing.Optional[typing.Dict[str, typing.Optional[PipelineFileConfigHashValue]]]
+    external_file_id: typing.Optional[str]
+    file_id: typing.Optional[str]
+    file_size: typing.Optional[int]
+    file_type: typing.Optional[str]
+    id: str = pydantic.Field(description="Unique identifier")
     indexed_page_count: typing.Optional[int]
+    last_modified_at: typing.Optional[dt.datetime]
+    name: typing.Optional[str]
+    permission_info: typing.Optional[typing.Dict[str, typing.Optional[PipelineFilePermissionInfoValue]]]
+    pipeline_id: str = pydantic.Field(description="The ID of the pipeline that the file is associated with")
+    project_id: typing.Optional[str]
+    resource_info: typing.Optional[typing.Dict[str, typing.Optional[PipelineFileResourceInfoValue]]]
     status: typing.Optional[PipelineFileStatus]
     status_updated_at: typing.Optional[dt.datetime]
+    updated_at: typing.Optional[dt.datetime]
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

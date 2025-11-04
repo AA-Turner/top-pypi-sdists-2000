@@ -19,12 +19,12 @@ class FileFilter(pydantic.BaseModel):
     Filter parameters for file queries.
     """
 
-    project_id: typing.Optional[str]
-    file_ids: typing.Optional[typing.List[str]]
-    file_name: typing.Optional[str]
     data_source_id: typing.Optional[str]
     external_file_id: typing.Optional[str]
+    file_ids: typing.Optional[typing.List[str]]
+    file_name: typing.Optional[str]
     only_manually_uploaded: typing.Optional[bool]
+    project_id: typing.Optional[str]
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

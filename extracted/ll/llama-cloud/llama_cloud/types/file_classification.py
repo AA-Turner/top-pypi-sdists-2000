@@ -20,12 +20,12 @@ class FileClassification(pydantic.BaseModel):
     A file classification.
     """
 
-    id: str = pydantic.Field(description="Unique identifier")
-    created_at: typing.Optional[dt.datetime]
-    updated_at: typing.Optional[dt.datetime]
     classify_job_id: str = pydantic.Field(description="The ID of the classify job")
+    created_at: typing.Optional[dt.datetime]
     file_id: str = pydantic.Field(description="The ID of the classified file")
+    id: str = pydantic.Field(description="Unique identifier")
     result: typing.Optional[ClassificationResult]
+    updated_at: typing.Optional[dt.datetime]
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

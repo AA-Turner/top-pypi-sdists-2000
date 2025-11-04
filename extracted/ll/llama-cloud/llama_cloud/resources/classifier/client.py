@@ -89,9 +89,9 @@ class ClassifierClient:
         *,
         project_id: typing.Optional[str] = None,
         organization_id: typing.Optional[str] = None,
-        rules: typing.List[ClassifierRule],
         file_ids: typing.List[str],
         parsing_configuration: typing.Optional[ClassifyParsingConfiguration] = OMIT,
+        rules: typing.List[ClassifierRule],
     ) -> ClassifyJob:
         """
         Create a classify job.
@@ -102,11 +102,11 @@ class ClassifierClient:
 
             - organization_id: typing.Optional[str].
 
-            - rules: typing.List[ClassifierRule]. The rules to classify the files
-
             - file_ids: typing.List[str]. The IDs of the files to classify
 
             - parsing_configuration: typing.Optional[ClassifyParsingConfiguration]. The configuration for the parsing job
+
+            - rules: typing.List[ClassifierRule]. The rules to classify the files
         ---
         from llama_cloud import ClassifyParsingConfiguration, ParserLanguages
         from llama_cloud.client import LlamaCloud
@@ -115,14 +115,14 @@ class ClassifierClient:
             token="YOUR_TOKEN",
         )
         client.classifier.create_classify_job(
-            rules=[],
             file_ids=[],
             parsing_configuration=ClassifyParsingConfiguration(
                 lang=ParserLanguages.AF,
             ),
+            rules=[],
         )
         """
-        _request: typing.Dict[str, typing.Any] = {"rules": rules, "file_ids": file_ids}
+        _request: typing.Dict[str, typing.Any] = {"file_ids": file_ids, "rules": rules}
         if parsing_configuration is not OMIT:
             _request["parsing_configuration"] = parsing_configuration
         _response = self._client_wrapper.httpx_client.request(
@@ -297,9 +297,9 @@ class AsyncClassifierClient:
         *,
         project_id: typing.Optional[str] = None,
         organization_id: typing.Optional[str] = None,
-        rules: typing.List[ClassifierRule],
         file_ids: typing.List[str],
         parsing_configuration: typing.Optional[ClassifyParsingConfiguration] = OMIT,
+        rules: typing.List[ClassifierRule],
     ) -> ClassifyJob:
         """
         Create a classify job.
@@ -310,11 +310,11 @@ class AsyncClassifierClient:
 
             - organization_id: typing.Optional[str].
 
-            - rules: typing.List[ClassifierRule]. The rules to classify the files
-
             - file_ids: typing.List[str]. The IDs of the files to classify
 
             - parsing_configuration: typing.Optional[ClassifyParsingConfiguration]. The configuration for the parsing job
+
+            - rules: typing.List[ClassifierRule]. The rules to classify the files
         ---
         from llama_cloud import ClassifyParsingConfiguration, ParserLanguages
         from llama_cloud.client import AsyncLlamaCloud
@@ -323,14 +323,14 @@ class AsyncClassifierClient:
             token="YOUR_TOKEN",
         )
         await client.classifier.create_classify_job(
-            rules=[],
             file_ids=[],
             parsing_configuration=ClassifyParsingConfiguration(
                 lang=ParserLanguages.AF,
             ),
+            rules=[],
         )
         """
-        _request: typing.Dict[str, typing.Any] = {"rules": rules, "file_ids": file_ids}
+        _request: typing.Dict[str, typing.Any] = {"file_ids": file_ids, "rules": rules}
         if parsing_configuration is not OMIT:
             _request["parsing_configuration"] = parsing_configuration
         _response = await self._client_wrapper.httpx_client.request(

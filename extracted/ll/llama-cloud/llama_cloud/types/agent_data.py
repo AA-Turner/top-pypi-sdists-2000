@@ -19,11 +19,12 @@ class AgentData(pydantic.BaseModel):
     API Result for a single agent data item
     """
 
-    id: typing.Optional[str]
-    deployment_name: str
     collection: typing.Optional[str]
-    data: typing.Dict[str, typing.Any]
     created_at: typing.Optional[dt.datetime]
+    data: typing.Dict[str, typing.Any]
+    deployment_name: str
+    id: typing.Optional[str]
+    project_id: typing.Optional[str]
     updated_at: typing.Optional[dt.datetime]
 
     def json(self, **kwargs: typing.Any) -> str:

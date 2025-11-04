@@ -17,8 +17,8 @@ except ImportError:
 
 class FileStoreInfoResponse(pydantic.BaseModel):
     available_buckets: typing.Optional[typing.Dict[str, str]]
-    unavailable_buckets: typing.Optional[typing.Dict[str, str]]
     status: FileStoreInfoResponseStatus
+    unavailable_buckets: typing.Optional[typing.Dict[str, str]]
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

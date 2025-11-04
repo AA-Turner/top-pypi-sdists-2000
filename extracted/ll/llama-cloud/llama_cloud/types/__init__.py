@@ -29,17 +29,22 @@ from .base_plan import BasePlan
 from .base_plan_metronome_plan_type import BasePlanMetronomePlanType
 from .base_plan_name import BasePlanName
 from .base_plan_plan_frequency import BasePlanPlanFrequency
-from .batch import Batch
-from .batch_item import BatchItem
-from .batch_paginated_list import BatchPaginatedList
-from .batch_public_output import BatchPublicOutput
+from .batch_file_status import BatchFileStatus
+from .batch_item_detail import BatchItemDetail
+from .batch_item_list_response import BatchItemListResponse
+from .batch_job_cancel_response import BatchJobCancelResponse
+from .batch_job_response import BatchJobResponse
+from .batch_job_status import BatchJobStatus
+from .batch_job_status_response import BatchJobStatusResponse
+from .batch_job_type import BatchJobType
+from .batch_parse_job_config import BatchParseJobConfig
+from .batch_parse_job_config_priority import BatchParseJobConfigPriority
+from .batch_parse_job_record_create import BatchParseJobRecordCreate
 from .bedrock_embedding import BedrockEmbedding
 from .bedrock_embedding_config import BedrockEmbeddingConfig
 from .billing_period import BillingPeriod
 from .box_auth_mechanism import BoxAuthMechanism
 from .character_chunking_config import CharacterChunkingConfig
-from .chat_app import ChatApp
-from .chat_app_response import ChatAppResponse
 from .chat_data import ChatData
 from .chat_message import ChatMessage
 from .classification_result import ClassificationResult
@@ -88,9 +93,14 @@ from .data_source_create_custom_metadata_value import DataSourceCreateCustomMeta
 from .data_source_custom_metadata_value import DataSourceCustomMetadataValue
 from .data_source_reader_version_metadata import DataSourceReaderVersionMetadata
 from .data_source_reader_version_metadata_reader_version import DataSourceReaderVersionMetadataReaderVersion
+from .data_source_sync_request import DataSourceSyncRequest
 from .data_source_update_dispatcher_config import DataSourceUpdateDispatcherConfig
 from .delete_params import DeleteParams
 from .delete_response import DeleteResponse
+from .directory_file_query_response import DirectoryFileQueryResponse
+from .directory_file_response import DirectoryFileResponse
+from .directory_query_response import DirectoryQueryResponse
+from .directory_response import DirectoryResponse
 from .document_chunk_mode import DocumentChunkMode
 from .document_ingestion_job_params import DocumentIngestionJobParams
 from .element_segmentation_config import ElementSegmentationConfig
@@ -116,7 +126,6 @@ from .embedding_model_config_update_embedding_config import (
     EmbeddingModelConfigUpdateEmbeddingConfig_OpenaiEmbedding,
     EmbeddingModelConfigUpdateEmbeddingConfig_VertexaiEmbedding,
 )
-from .eval_execution_params import EvalExecutionParams
 from .extract_agent import ExtractAgent
 from .extract_agent_data_schema_value import ExtractAgentDataSchemaValue
 from .extract_config import ExtractConfig
@@ -141,7 +150,7 @@ from .extract_schema_validate_response import ExtractSchemaValidateResponse
 from .extract_schema_validate_response_data_schema_value import ExtractSchemaValidateResponseDataSchemaValue
 from .extract_state import ExtractState
 from .extract_target import ExtractTarget
-from .extracted_table import ExtractedTable
+from .extracted_table_summary import ExtractedTableSummary
 from .fail_page_mode import FailPageMode
 from .failure_handling_config import FailureHandlingConfig
 from .file import File
@@ -153,7 +162,6 @@ from .file_create_resource_info_value import FileCreateResourceInfoValue
 from .file_data import FileData
 from .file_filter import FileFilter
 from .file_id_presigned_url import FileIdPresignedUrl
-from .file_parse_public import FileParsePublic
 from .file_permission_info_value import FilePermissionInfoValue
 from .file_query_response import FileQueryResponse
 from .file_resource_info_value import FileResourceInfoValue
@@ -177,6 +185,7 @@ from .hugging_face_inference_api_embedding_config import HuggingFaceInferenceApi
 from .hugging_face_inference_api_embedding_token import HuggingFaceInferenceApiEmbeddingToken
 from .ingestion_error_response import IngestionErrorResponse
 from .input_message import InputMessage
+from .item_processing_results_response import ItemProcessingResultsResponse
 from .job_name_mapping import JobNameMapping
 from .job_names import JobNames
 from .job_record import JobRecord
@@ -188,7 +197,6 @@ from .job_record_parameters import (
     JobRecordParameters_LlamaParseTransform,
     JobRecordParameters_LoadFiles,
     JobRecordParameters_Parse,
-    JobRecordParameters_PipelineFileUpdateDispatcher,
     JobRecordParameters_PipelineFileUpdater,
     JobRecordParameters_PipelineManagedIngestion,
 )
@@ -276,7 +284,6 @@ from .pipeline_data_source_component import PipelineDataSourceComponent
 from .pipeline_data_source_create import PipelineDataSourceCreate
 from .pipeline_data_source_custom_metadata_value import PipelineDataSourceCustomMetadataValue
 from .pipeline_data_source_status import PipelineDataSourceStatus
-from .pipeline_deployment import PipelineDeployment
 from .pipeline_embedding_config import (
     PipelineEmbeddingConfig,
     PipelineEmbeddingConfig_AzureEmbedding,
@@ -296,7 +303,6 @@ from .pipeline_file_custom_metadata_value import PipelineFileCustomMetadataValue
 from .pipeline_file_permission_info_value import PipelineFilePermissionInfoValue
 from .pipeline_file_resource_info_value import PipelineFileResourceInfoValue
 from .pipeline_file_status import PipelineFileStatus
-from .pipeline_file_update_dispatcher_config import PipelineFileUpdateDispatcherConfig
 from .pipeline_file_updater_config import PipelineFileUpdaterConfig
 from .pipeline_managed_ingestion_job_params import PipelineManagedIngestionJobParams
 from .pipeline_metadata_config import PipelineMetadataConfig
@@ -310,12 +316,14 @@ from .pipeline_type import PipelineType
 from .plan_limits import PlanLimits
 from .playground_session import PlaygroundSession
 from .pooling import Pooling
-from .preset_composite_retrieval_params import PresetCompositeRetrievalParams
 from .preset_retrieval_params import PresetRetrievalParams
 from .preset_retrieval_params_search_filters_inference_schema_value import (
     PresetRetrievalParamsSearchFiltersInferenceSchemaValue,
 )
 from .presigned_url import PresignedUrl
+from .processing_result import ProcessingResult
+from .processing_result_job_config import ProcessingResultJobConfig
+from .processing_result_metadata import ProcessingResultMetadata
 from .project import Project
 from .project_create import ProjectCreate
 from .public_model_name import PublicModelName
@@ -343,6 +351,7 @@ from .sparse_model_config import SparseModelConfig
 from .sparse_model_type import SparseModelType
 from .spreadsheet_job import SpreadsheetJob
 from .spreadsheet_parsing_config import SpreadsheetParsingConfig
+from .spreadsheet_result_type import SpreadsheetResultType
 from .status_enum import StatusEnum
 from .supported_llm_model import SupportedLlmModel
 from .supported_llm_model_names import SupportedLlmModelNames
@@ -358,7 +367,6 @@ from .usage_response_active_alerts_item import UsageResponseActiveAlertsItem
 from .user_job_record import UserJobRecord
 from .user_organization import UserOrganization
 from .user_organization_create import UserOrganizationCreate
-from .user_organization_delete import UserOrganizationDelete
 from .user_organization_role import UserOrganizationRole
 from .user_summary import UserSummary
 from .validation_error import ValidationError
@@ -368,6 +376,7 @@ from .vertex_embedding_mode import VertexEmbeddingMode
 from .vertex_text_embedding import VertexTextEmbedding
 from .webhook_configuration import WebhookConfiguration
 from .webhook_configuration_webhook_events_item import WebhookConfigurationWebhookEventsItem
+from .worksheet_metadata import WorksheetMetadata
 
 __all__ = [
     "AdvancedModeTransformConfig",
@@ -395,17 +404,22 @@ __all__ = [
     "BasePlanMetronomePlanType",
     "BasePlanName",
     "BasePlanPlanFrequency",
-    "Batch",
-    "BatchItem",
-    "BatchPaginatedList",
-    "BatchPublicOutput",
+    "BatchFileStatus",
+    "BatchItemDetail",
+    "BatchItemListResponse",
+    "BatchJobCancelResponse",
+    "BatchJobResponse",
+    "BatchJobStatus",
+    "BatchJobStatusResponse",
+    "BatchJobType",
+    "BatchParseJobConfig",
+    "BatchParseJobConfigPriority",
+    "BatchParseJobRecordCreate",
     "BedrockEmbedding",
     "BedrockEmbeddingConfig",
     "BillingPeriod",
     "BoxAuthMechanism",
     "CharacterChunkingConfig",
-    "ChatApp",
-    "ChatAppResponse",
     "ChatData",
     "ChatMessage",
     "ClassificationResult",
@@ -454,9 +468,14 @@ __all__ = [
     "DataSourceCustomMetadataValue",
     "DataSourceReaderVersionMetadata",
     "DataSourceReaderVersionMetadataReaderVersion",
+    "DataSourceSyncRequest",
     "DataSourceUpdateDispatcherConfig",
     "DeleteParams",
     "DeleteResponse",
+    "DirectoryFileQueryResponse",
+    "DirectoryFileResponse",
+    "DirectoryQueryResponse",
+    "DirectoryResponse",
     "DocumentChunkMode",
     "DocumentIngestionJobParams",
     "ElementSegmentationConfig",
@@ -478,7 +497,6 @@ __all__ = [
     "EmbeddingModelConfigUpdateEmbeddingConfig_HuggingfaceApiEmbedding",
     "EmbeddingModelConfigUpdateEmbeddingConfig_OpenaiEmbedding",
     "EmbeddingModelConfigUpdateEmbeddingConfig_VertexaiEmbedding",
-    "EvalExecutionParams",
     "ExtractAgent",
     "ExtractAgentDataSchemaValue",
     "ExtractConfig",
@@ -503,7 +521,7 @@ __all__ = [
     "ExtractSchemaValidateResponseDataSchemaValue",
     "ExtractState",
     "ExtractTarget",
-    "ExtractedTable",
+    "ExtractedTableSummary",
     "FailPageMode",
     "FailureHandlingConfig",
     "File",
@@ -515,7 +533,6 @@ __all__ = [
     "FileData",
     "FileFilter",
     "FileIdPresignedUrl",
-    "FileParsePublic",
     "FilePermissionInfoValue",
     "FileQueryResponse",
     "FileResourceInfoValue",
@@ -539,6 +556,7 @@ __all__ = [
     "HuggingFaceInferenceApiEmbeddingToken",
     "IngestionErrorResponse",
     "InputMessage",
+    "ItemProcessingResultsResponse",
     "JobNameMapping",
     "JobNames",
     "JobRecord",
@@ -549,7 +567,6 @@ __all__ = [
     "JobRecordParameters_LlamaParseTransform",
     "JobRecordParameters_LoadFiles",
     "JobRecordParameters_Parse",
-    "JobRecordParameters_PipelineFileUpdateDispatcher",
     "JobRecordParameters_PipelineFileUpdater",
     "JobRecordParameters_PipelineManagedIngestion",
     "JobRecordWithUsageMetrics",
@@ -634,7 +651,6 @@ __all__ = [
     "PipelineDataSourceCreate",
     "PipelineDataSourceCustomMetadataValue",
     "PipelineDataSourceStatus",
-    "PipelineDeployment",
     "PipelineEmbeddingConfig",
     "PipelineEmbeddingConfig_AzureEmbedding",
     "PipelineEmbeddingConfig_BedrockEmbedding",
@@ -652,7 +668,6 @@ __all__ = [
     "PipelineFilePermissionInfoValue",
     "PipelineFileResourceInfoValue",
     "PipelineFileStatus",
-    "PipelineFileUpdateDispatcherConfig",
     "PipelineFileUpdaterConfig",
     "PipelineManagedIngestionJobParams",
     "PipelineMetadataConfig",
@@ -664,10 +679,12 @@ __all__ = [
     "PlanLimits",
     "PlaygroundSession",
     "Pooling",
-    "PresetCompositeRetrievalParams",
     "PresetRetrievalParams",
     "PresetRetrievalParamsSearchFiltersInferenceSchemaValue",
     "PresignedUrl",
+    "ProcessingResult",
+    "ProcessingResultJobConfig",
+    "ProcessingResultMetadata",
     "Project",
     "ProjectCreate",
     "PublicModelName",
@@ -695,6 +712,7 @@ __all__ = [
     "SparseModelType",
     "SpreadsheetJob",
     "SpreadsheetParsingConfig",
+    "SpreadsheetResultType",
     "StatusEnum",
     "SupportedLlmModel",
     "SupportedLlmModelNames",
@@ -710,7 +728,6 @@ __all__ = [
     "UserJobRecord",
     "UserOrganization",
     "UserOrganizationCreate",
-    "UserOrganizationDelete",
     "UserOrganizationRole",
     "UserSummary",
     "ValidationError",
@@ -720,4 +737,5 @@ __all__ = [
     "VertexTextEmbedding",
     "WebhookConfiguration",
     "WebhookConfigurationWebhookEventsItem",
+    "WorksheetMetadata",
 ]

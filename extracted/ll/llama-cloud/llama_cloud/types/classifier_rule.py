@@ -22,11 +22,11 @@ class ClassifierRule(pydantic.BaseModel):
     All rules are content-based and use natural language descriptions.
     """
 
-    type: str = pydantic.Field(
-        description="The document type to assign when this rule matches (e.g., 'invoice', 'receipt', 'contract')"
-    )
     description: str = pydantic.Field(
         description="Natural language description of what to classify. Be specific about the content characteristics that identify this document type."
+    )
+    type: str = pydantic.Field(
+        description="The document type to assign when this rule matches (e.g., 'invoice', 'receipt', 'contract')"
     )
 
     def json(self, **kwargs: typing.Any) -> str:

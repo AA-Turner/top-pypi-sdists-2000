@@ -24,26 +24,26 @@ class PresetRetrievalParams(pydantic.BaseModel):
     Schema for the search params for an retrieval execution that can be preset for a pipeline.
     """
 
-    dense_similarity_top_k: typing.Optional[int]
-    dense_similarity_cutoff: typing.Optional[float]
-    sparse_similarity_top_k: typing.Optional[int]
-    enable_reranking: typing.Optional[bool]
-    rerank_top_n: typing.Optional[int]
     alpha: typing.Optional[float]
+    class_name: typing.Optional[str]
+    dense_similarity_cutoff: typing.Optional[float]
+    dense_similarity_top_k: typing.Optional[int]
+    enable_reranking: typing.Optional[bool]
+    files_top_k: typing.Optional[int]
+    rerank_top_n: typing.Optional[int]
+    retrieval_mode: typing.Optional[RetrievalMode] = pydantic.Field(description="The retrieval mode for the query.")
+    retrieve_image_nodes: typing.Optional[bool] = pydantic.Field(description="Whether to retrieve image nodes.")
+    retrieve_page_figure_nodes: typing.Optional[bool] = pydantic.Field(
+        description="Whether to retrieve page figure nodes."
+    )
+    retrieve_page_screenshot_nodes: typing.Optional[bool] = pydantic.Field(
+        description="Whether to retrieve page screenshot nodes."
+    )
     search_filters: typing.Optional[MetadataFilters]
     search_filters_inference_schema: typing.Optional[
         typing.Dict[str, typing.Optional[PresetRetrievalParamsSearchFiltersInferenceSchemaValue]]
     ]
-    files_top_k: typing.Optional[int]
-    retrieval_mode: typing.Optional[RetrievalMode] = pydantic.Field(description="The retrieval mode for the query.")
-    retrieve_image_nodes: typing.Optional[bool] = pydantic.Field(description="Whether to retrieve image nodes.")
-    retrieve_page_screenshot_nodes: typing.Optional[bool] = pydantic.Field(
-        description="Whether to retrieve page screenshot nodes."
-    )
-    retrieve_page_figure_nodes: typing.Optional[bool] = pydantic.Field(
-        description="Whether to retrieve page figure nodes."
-    )
-    class_name: typing.Optional[str]
+    sparse_similarity_top_k: typing.Optional[int]
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

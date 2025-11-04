@@ -23,15 +23,15 @@ class DataSource(pydantic.BaseModel):
     Schema for a data source.
     """
 
-    id: str = pydantic.Field(description="Unique identifier")
-    created_at: typing.Optional[dt.datetime]
-    updated_at: typing.Optional[dt.datetime]
-    name: str = pydantic.Field(description="The name of the data source.")
-    source_type: ConfigurableDataSourceNames
-    custom_metadata: typing.Optional[typing.Dict[str, typing.Optional[DataSourceCustomMetadataValue]]]
     component: DataSourceComponent = pydantic.Field(description="Component that implements the data source")
-    version_metadata: typing.Optional[DataSourceReaderVersionMetadata]
+    created_at: typing.Optional[dt.datetime]
+    custom_metadata: typing.Optional[typing.Dict[str, typing.Optional[DataSourceCustomMetadataValue]]]
+    id: str = pydantic.Field(description="Unique identifier")
+    name: str = pydantic.Field(description="The name of the data source.")
     project_id: str
+    source_type: ConfigurableDataSourceNames
+    updated_at: typing.Optional[dt.datetime]
+    version_metadata: typing.Optional[DataSourceReaderVersionMetadata]
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

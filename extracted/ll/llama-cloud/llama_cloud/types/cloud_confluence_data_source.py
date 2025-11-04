@@ -16,19 +16,12 @@ except ImportError:
 
 
 class CloudConfluenceDataSource(pydantic.BaseModel):
-    supports_access_control: typing.Optional[bool]
-    server_url: str = pydantic.Field(description="The server URL of the Confluence instance.")
+    api_token: typing.Optional[str]
     authentication_mechanism: str = pydantic.Field(
         description="Type of Authentication for connecting to Confluence APIs."
     )
-    user_name: typing.Optional[str]
-    api_token: typing.Optional[str]
-    space_key: typing.Optional[str]
-    page_ids: typing.Optional[str]
+    class_name: typing.Optional[str]
     cql: typing.Optional[str]
-    label: typing.Optional[str]
-    index_restricted_pages: typing.Optional[bool] = pydantic.Field(description="Whether to index restricted pages.")
-    keep_markdown_format: typing.Optional[bool] = pydantic.Field(description="Whether to keep the markdown format.")
     failure_handling: typing.Optional[FailureHandlingConfig] = pydantic.Field(
         description=(
             "Configuration for handling failures during processing. Key-value object controlling failure handling behaviors.\n"
@@ -43,7 +36,14 @@ class CloudConfluenceDataSource(pydantic.BaseModel):
             "- skip_list_failures: Skip failed batches/lists and continue processing\n"
         )
     )
-    class_name: typing.Optional[str]
+    index_restricted_pages: typing.Optional[bool] = pydantic.Field(description="Whether to index restricted pages.")
+    keep_markdown_format: typing.Optional[bool] = pydantic.Field(description="Whether to keep the markdown format.")
+    label: typing.Optional[str]
+    page_ids: typing.Optional[str]
+    server_url: str = pydantic.Field(description="The server URL of the Confluence instance.")
+    space_key: typing.Optional[str]
+    supports_access_control: typing.Optional[bool]
+    user_name: typing.Optional[str]
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

@@ -20,14 +20,14 @@ class ApiKey(pydantic.BaseModel):
     Schema for an API Key.
     """
 
-    id: str = pydantic.Field(description="Unique identifier")
     created_at: typing.Optional[dt.datetime]
-    updated_at: typing.Optional[dt.datetime]
+    id: str = pydantic.Field(description="Unique identifier")
+    key_type: typing.Optional[ApiKeyType]
     name: typing.Optional[str]
     project_id: typing.Optional[str]
-    key_type: typing.Optional[ApiKeyType]
-    user_id: str
     redacted_api_key: str
+    updated_at: typing.Optional[dt.datetime]
+    user_id: str
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

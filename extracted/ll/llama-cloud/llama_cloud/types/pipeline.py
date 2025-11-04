@@ -6,7 +6,6 @@ import typing
 from ..core.datetime_utils import serialize_datetime
 from .data_sink import DataSink
 from .embedding_model_config import EmbeddingModelConfig
-from .eval_execution_params import EvalExecutionParams
 from .llama_parse_parameters import LlamaParseParameters
 from .pipeline_configuration_hashes import PipelineConfigurationHashes
 from .pipeline_embedding_config import PipelineEmbeddingConfig
@@ -31,33 +30,30 @@ class Pipeline(pydantic.BaseModel):
     Schema for a pipeline.
     """
 
-    id: str = pydantic.Field(description="Unique identifier")
+    config_hash: typing.Optional[PipelineConfigurationHashes]
     created_at: typing.Optional[dt.datetime]
-    updated_at: typing.Optional[dt.datetime]
-    name: str
-    project_id: str
-    embedding_model_config_id: typing.Optional[str]
+    data_sink: typing.Optional[DataSink]
+    embedding_config: PipelineEmbeddingConfig
     embedding_model_config: typing.Optional[EmbeddingModelConfig]
+    embedding_model_config_id: typing.Optional[str]
+    id: str = pydantic.Field(description="Unique identifier")
+    llama_parse_parameters: typing.Optional[LlamaParseParameters]
+    managed_pipeline_id: typing.Optional[str]
+    metadata_config: typing.Optional[PipelineMetadataConfig]
+    name: str
     pipeline_type: typing.Optional[PipelineType] = pydantic.Field(
         description="Type of pipeline. Either PLAYGROUND or MANAGED."
-    )
-    managed_pipeline_id: typing.Optional[str]
-    embedding_config: PipelineEmbeddingConfig
-    sparse_model_config: typing.Optional[SparseModelConfig]
-    config_hash: typing.Optional[PipelineConfigurationHashes]
-    transform_config: typing.Optional[PipelineTransformConfig] = pydantic.Field(
-        description="Configuration for the transformation."
     )
     preset_retrieval_parameters: typing.Optional[PresetRetrievalParams] = pydantic.Field(
         description="Preset retrieval parameters for the pipeline."
     )
-    eval_parameters: typing.Optional[EvalExecutionParams] = pydantic.Field(
-        description="Eval parameters for the pipeline."
-    )
-    llama_parse_parameters: typing.Optional[LlamaParseParameters]
-    data_sink: typing.Optional[DataSink]
+    project_id: str
+    sparse_model_config: typing.Optional[SparseModelConfig]
     status: typing.Optional[PipelineStatus]
-    metadata_config: typing.Optional[PipelineMetadataConfig]
+    transform_config: typing.Optional[PipelineTransformConfig] = pydantic.Field(
+        description="Configuration for the transformation."
+    )
+    updated_at: typing.Optional[dt.datetime]
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

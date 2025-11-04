@@ -15,10 +15,10 @@ except ImportError:
 
 
 class SentenceChunkingConfig(pydantic.BaseModel):
-    chunk_size: typing.Optional[int]
     chunk_overlap: typing.Optional[int]
-    separator: typing.Optional[str]
+    chunk_size: typing.Optional[int]
     paragraph_separator: typing.Optional[str]
+    separator: typing.Optional[str]
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

@@ -17,9 +17,9 @@ except ImportError:
 
 
 class ChatData(pydantic.BaseModel):
-    retrieval_parameters: typing.Optional[PresetRetrievalParams]
-    llm_parameters: typing.Optional[LlmParameters]
     class_name: typing.Optional[str]
+    llm_parameters: typing.Optional[LlmParameters]
+    retrieval_parameters: typing.Optional[PresetRetrievalParams]
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

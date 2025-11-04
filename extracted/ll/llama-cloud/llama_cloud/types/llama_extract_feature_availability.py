@@ -17,8 +17,8 @@ except ImportError:
 
 
 class LlamaExtractFeatureAvailability(pydantic.BaseModel):
-    schema_generation: SchemaGenerationAvailability
     available_modes: typing.List[LlamaExtractModeAvailability]
+    schema_generation: SchemaGenerationAvailability
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

@@ -13,7 +13,6 @@ class JobNameMapping(str, enum.Enum):
 
     MANAGED_INGESTION = "MANAGED_INGESTION"
     DATA_SOURCE = "DATA_SOURCE"
-    FILES_UPDATE = "FILES_UPDATE"
     FILE_UPDATER = "FILE_UPDATER"
     PARSE = "PARSE"
     TRANSFORM = "TRANSFORM"
@@ -24,7 +23,6 @@ class JobNameMapping(str, enum.Enum):
         self,
         managed_ingestion: typing.Callable[[], T_Result],
         data_source: typing.Callable[[], T_Result],
-        files_update: typing.Callable[[], T_Result],
         file_updater: typing.Callable[[], T_Result],
         parse: typing.Callable[[], T_Result],
         transform: typing.Callable[[], T_Result],
@@ -35,8 +33,6 @@ class JobNameMapping(str, enum.Enum):
             return managed_ingestion()
         if self is JobNameMapping.DATA_SOURCE:
             return data_source()
-        if self is JobNameMapping.FILES_UPDATE:
-            return files_update()
         if self is JobNameMapping.FILE_UPDATER:
             return file_updater()
         if self is JobNameMapping.PARSE:

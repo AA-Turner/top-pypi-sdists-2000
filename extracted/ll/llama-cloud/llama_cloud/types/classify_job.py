@@ -22,16 +22,19 @@ class ClassifyJob(pydantic.BaseModel):
     A classify job.
     """
 
-    id: str = pydantic.Field(description="Unique identifier")
     created_at: typing.Optional[dt.datetime]
-    updated_at: typing.Optional[dt.datetime]
-    rules: typing.List[ClassifierRule] = pydantic.Field(description="The rules to classify the files")
-    user_id: str = pydantic.Field(description="The ID of the user")
-    project_id: str = pydantic.Field(description="The ID of the project")
-    status: StatusEnum = pydantic.Field(description="The status of the classify job")
+    effective_at: typing.Optional[dt.datetime]
+    error_message: typing.Optional[str]
+    id: str = pydantic.Field(description="Unique identifier")
+    job_record_id: typing.Optional[str]
     parsing_configuration: typing.Optional[ClassifyParsingConfiguration] = pydantic.Field(
         description="The configuration for the parsing job"
     )
+    project_id: str = pydantic.Field(description="The ID of the project")
+    rules: typing.List[ClassifierRule] = pydantic.Field(description="The rules to classify the files")
+    status: StatusEnum = pydantic.Field(description="The status of the classify job")
+    updated_at: typing.Optional[dt.datetime]
+    user_id: str = pydantic.Field(description="The ID of the user")
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

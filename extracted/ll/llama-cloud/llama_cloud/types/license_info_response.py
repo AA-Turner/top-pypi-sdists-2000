@@ -15,10 +15,10 @@ except ImportError:
 
 
 class LicenseInfoResponse(pydantic.BaseModel):
-    status: str = pydantic.Field(description="License validation status")
     expires_at: dt.datetime = pydantic.Field(description="License expiration date")
-    scopes: typing.Optional[typing.List[str]]
     message: typing.Optional[str]
+    scopes: typing.Optional[typing.List[str]]
+    status: str = pydantic.Field(description="License validation status")
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

@@ -15,14 +15,14 @@ except ImportError:
 
 
 class AgentDeploymentSummary(pydantic.BaseModel):
-    id: str = pydantic.Field(description="Deployment ID. Prefixed with dpl-")
-    project_id: str = pydantic.Field(description="Project ID")
-    deployment_name: str = pydantic.Field(description="Identifier of the deployed app")
-    thumbnail_url: typing.Optional[str]
+    api_key_id: typing.Optional[str]
     base_url: str = pydantic.Field(description="Base URL of the deployed app")
     created_at: dt.datetime = pydantic.Field(description="Timestamp when the app deployment was created")
+    deployment_name: str = pydantic.Field(description="Identifier of the deployed app")
+    id: str = pydantic.Field(description="Deployment ID. Prefixed with dpl-")
+    project_id: str = pydantic.Field(description="Project ID")
+    thumbnail_url: typing.Optional[str]
     updated_at: dt.datetime = pydantic.Field(description="Timestamp when the app deployment was last updated")
-    api_key_id: typing.Optional[str]
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

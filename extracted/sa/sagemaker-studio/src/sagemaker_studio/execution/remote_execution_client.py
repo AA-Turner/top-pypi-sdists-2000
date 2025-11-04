@@ -653,7 +653,8 @@ class RemoteExecutionClient(ExecutionClient):
                 ],
                 "HyperParameters": request.input_config.get("notebook_config", {}).get(
                     "input_parameters", {}
-                ),
+                )
+                or {},
                 "StoppingCondition": {
                     "MaxRuntimeInSeconds": request.get("termination_condition", {}).get(
                         "max_runtime_in_seconds", 86400

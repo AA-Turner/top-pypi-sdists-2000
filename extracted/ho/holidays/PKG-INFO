@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: holidays
-Version: 0.83
+Version: 0.84
 Summary: Open World Holidays Framework
 Author: Vacanza Team
 Maintainer: Arkadii Yakovets, Panpakorn Siripanich, Serhii Murza
@@ -17,7 +17,6 @@ Classifier: Intended Audience :: Financial and Insurance Industry
 Classifier: Intended Audience :: Information Technology
 Classifier: Operating System :: OS Independent
 Classifier: Programming Language :: Python :: 3 :: Only
-Classifier: Programming Language :: Python :: 3.9
 Classifier: Programming Language :: Python :: 3.10
 Classifier: Programming Language :: Python :: 3.11
 Classifier: Programming Language :: Python :: 3.12
@@ -29,7 +28,7 @@ Classifier: Topic :: Office/Business :: Financial :: Accounting
 Classifier: Topic :: Office/Business :: Financial :: Investment
 Classifier: Topic :: Office/Business :: Scheduling
 Classifier: Topic :: Software Development :: Libraries :: Python Modules
-Requires-Python: >=3.9
+Requires-Python: >=3.10
 Description-Content-Type: text/markdown
 License-File: CONTRIBUTORS
 License-File: LICENSE
@@ -1645,7 +1644,7 @@ any) in brackets, available languages and additional holiday categories. All cou
 <td>Spain</td>
 <td>ES</td>
 <td>Autonomous communities: AN (Andalucía), AR (Aragón), AS (Asturias), CB (Cantabria), CE (Ceuta), CL (Castilla y León), CM (Castilla-La Mancha), CN (Canarias), CT (Cataluña, Catalunya), EX (Extremadura), GA (Galicia), IB (Islas Baleares, Illes Balears), MC (Murcia), MD (Madrid), ML (Melilla), NC (Navarra), PV (País Vasco), RI (La Rioja), VC (Valenciana)</td>
-<td>ca, en_US, <strong>es</strong>, uk</td>
+<td>ca, en_US, <strong>es</strong>, th, uk</td>
 <td></td>
 </tr>
 <tr>

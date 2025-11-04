@@ -16,11 +16,11 @@ except ImportError:
 
 
 class PaginatedResponseQuotaConfiguration(pydantic.BaseModel):
-    total: int
-    page: int
-    size: int
-    pages: int
     items: typing.List[QuotaConfiguration]
+    page: int
+    pages: int
+    size: int
+    total: int
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

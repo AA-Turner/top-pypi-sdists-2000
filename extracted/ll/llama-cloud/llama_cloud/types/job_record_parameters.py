@@ -12,7 +12,6 @@ from .l_lama_parse_transform_config import LLamaParseTransformConfig
 from .legacy_parse_job_config import LegacyParseJobConfig
 from .load_files_job_config import LoadFilesJobConfig
 from .parse_job_config import ParseJobConfig
-from .pipeline_file_update_dispatcher_config import PipelineFileUpdateDispatcherConfig
 from .pipeline_file_updater_config import PipelineFileUpdaterConfig
 from .pipeline_managed_ingestion_job_params import PipelineManagedIngestionJobParams
 
@@ -71,15 +70,6 @@ class JobRecordParameters_Parse(ParseJobConfig):
         allow_population_by_field_name = True
 
 
-class JobRecordParameters_PipelineFileUpdateDispatcher(PipelineFileUpdateDispatcherConfig):
-    type: typing_extensions.Literal["pipeline_file_update_dispatcher"]
-
-    class Config:
-        frozen = True
-        smart_union = True
-        allow_population_by_field_name = True
-
-
 class JobRecordParameters_PipelineFileUpdater(PipelineFileUpdaterConfig):
     type: typing_extensions.Literal["pipeline_file_updater"]
 
@@ -105,7 +95,6 @@ JobRecordParameters = typing.Union[
     JobRecordParameters_LlamaParseTransform,
     JobRecordParameters_LoadFiles,
     JobRecordParameters_Parse,
-    JobRecordParameters_PipelineFileUpdateDispatcher,
     JobRecordParameters_PipelineFileUpdater,
     JobRecordParameters_PipelineManagedIngestion,
 ]

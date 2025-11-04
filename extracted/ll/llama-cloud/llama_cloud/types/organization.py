@@ -20,15 +20,15 @@ class Organization(pydantic.BaseModel):
     Schema for an organization.
     """
 
-    id: str = pydantic.Field(description="Unique identifier")
     created_at: typing.Optional[dt.datetime]
-    updated_at: typing.Optional[dt.datetime]
+    feature_flags: typing.Optional[typing.Dict[str, typing.Any]]
+    id: str = pydantic.Field(description="Unique identifier")
     name: str = pydantic.Field(description="A name for the organization.")
-    stripe_customer_id: typing.Optional[str]
     parse_plan_level: typing.Optional[ParsePlanLevel] = pydantic.Field(
         description="Whether the organization is a Parse Premium customer."
     )
-    feature_flags: typing.Optional[typing.Dict[str, typing.Any]]
+    stripe_customer_id: typing.Optional[str]
+    updated_at: typing.Optional[dt.datetime]
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

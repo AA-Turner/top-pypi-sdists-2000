@@ -15,9 +15,6 @@ from ...types.organization_create import OrganizationCreate
 from ...types.project import Project
 from ...types.role import Role
 from ...types.usage_and_plan import UsageAndPlan
-from ...types.user_organization import UserOrganization
-from ...types.user_organization_create import UserOrganizationCreate
-from ...types.user_organization_delete import UserOrganizationDelete
 from ...types.user_organization_role import UserOrganizationRole
 
 try:
@@ -164,39 +161,6 @@ class OrganizationsClient:
             raise ApiError(status_code=_response.status_code, body=_response.text)
         raise ApiError(status_code=_response.status_code, body=_response_json)
 
-    def set_default_organization(self, *, organization_id: str) -> Organization:
-        """
-        Set the default organization for the user.
-
-        Parameters:
-            - organization_id: str. The organization's ID.
-        ---
-        from llama_cloud.client import LlamaCloud
-
-        client = LlamaCloud(
-            token="YOUR_TOKEN",
-        )
-        client.organizations.set_default_organization(
-            organization_id="string",
-        )
-        """
-        _response = self._client_wrapper.httpx_client.request(
-            "PUT",
-            urllib.parse.urljoin(f"{self._client_wrapper.get_base_url()}/", "api/v1/organizations/default"),
-            json=jsonable_encoder({"organization_id": organization_id}),
-            headers=self._client_wrapper.get_headers(),
-            timeout=60,
-        )
-        if 200 <= _response.status_code < 300:
-            return pydantic.parse_obj_as(Organization, _response.json())  # type: ignore
-        if _response.status_code == 422:
-            raise UnprocessableEntityError(pydantic.parse_obj_as(HttpValidationError, _response.json()))  # type: ignore
-        try:
-            _response_json = _response.json()
-        except JSONDecodeError:
-            raise ApiError(status_code=_response.status_code, body=_response.text)
-        raise ApiError(status_code=_response.status_code, body=_response_json)
-
     def get_organization(self, organization_id: str) -> Organization:
         """
         Get an organization by ID.
@@ -230,7 +194,7 @@ class OrganizationsClient:
         raise ApiError(status_code=_response.status_code, body=_response_json)
 
     def update_organization(
-        self, organization_id: str, *, name: str, feature_flags: typing.Optional[typing.Dict[str, typing.Any]] = OMIT
+        self, organization_id: str, *, feature_flags: typing.Optional[typing.Dict[str, typing.Any]] = OMIT, name: str
     ) -> Organization:
         """
         Update an existing organization.
@@ -238,9 +202,9 @@ class OrganizationsClient:
         Parameters:
             - organization_id: str.
 
-            - name: str. A name for the organization.
-
             - feature_flags: typing.Optional[typing.Dict[str, typing.Any]].
+
+            - name: str. A name for the organization.
         ---
         from llama_cloud.client import LlamaCloud
 
@@ -304,6 +268,40 @@ class OrganizationsClient:
             raise ApiError(status_code=_response.status_code, body=_response.text)
         raise ApiError(status_code=_response.status_code, body=_response_json)
 
+    def list_roles(self, organization_id: str) -> typing.List[Role]:
+        """
+        List all roles in an organization.
+
+        Parameters:
+            - organization_id: str.
+        ---
+        from llama_cloud.client import LlamaCloud
+
+        client = LlamaCloud(
+            token="YOUR_TOKEN",
+        )
+        client.organizations.list_roles(
+            organization_id="string",
+        )
+        """
+        _response = self._client_wrapper.httpx_client.request(
+            "GET",
+            urllib.parse.urljoin(
+                f"{self._client_wrapper.get_base_url()}/", f"api/v1/organizations/{organization_id}/roles"
+            ),
+            headers=self._client_wrapper.get_headers(),
+            timeout=60,
+        )
+        if 200 <= _response.status_code < 300:
+            return pydantic.parse_obj_as(typing.List[Role], _response.json())  # type: ignore
+        if _response.status_code == 422:
+            raise UnprocessableEntityError(pydantic.parse_obj_as(HttpValidationError, _response.json()))  # type: ignore
+        try:
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, body=_response.text)
+        raise ApiError(status_code=_response.status_code, body=_response_json)
+
     def get_organization_usage(
         self, organization_id: str, *, get_current_invoice_total: typing.Optional[bool] = None
     ) -> UsageAndPlan:
@@ -335,197 +333,6 @@ class OrganizationsClient:
         )
         if 200 <= _response.status_code < 300:
             return pydantic.parse_obj_as(UsageAndPlan, _response.json())  # type: ignore
-        if _response.status_code == 422:
-            raise UnprocessableEntityError(pydantic.parse_obj_as(HttpValidationError, _response.json()))  # type: ignore
-        try:
-            _response_json = _response.json()
-        except JSONDecodeError:
-            raise ApiError(status_code=_response.status_code, body=_response.text)
-        raise ApiError(status_code=_response.status_code, body=_response_json)
-
-    def list_organization_users(self, organization_id: str) -> typing.List[UserOrganization]:
-        """
-        Get all users in an organization.
-
-        Parameters:
-            - organization_id: str.
-        ---
-        from llama_cloud.client import LlamaCloud
-
-        client = LlamaCloud(
-            token="YOUR_TOKEN",
-        )
-        client.organizations.list_organization_users(
-            organization_id="string",
-        )
-        """
-        _response = self._client_wrapper.httpx_client.request(
-            "GET",
-            urllib.parse.urljoin(
-                f"{self._client_wrapper.get_base_url()}/", f"api/v1/organizations/{organization_id}/users"
-            ),
-            headers=self._client_wrapper.get_headers(),
-            timeout=60,
-        )
-        if 200 <= _response.status_code < 300:
-            return pydantic.parse_obj_as(typing.List[UserOrganization], _response.json())  # type: ignore
-        if _response.status_code == 422:
-            raise UnprocessableEntityError(pydantic.parse_obj_as(HttpValidationError, _response.json()))  # type: ignore
-        try:
-            _response_json = _response.json()
-        except JSONDecodeError:
-            raise ApiError(status_code=_response.status_code, body=_response.text)
-        raise ApiError(status_code=_response.status_code, body=_response_json)
-
-    def add_users_to_organization(
-        self, organization_id: str, *, request: typing.List[UserOrganizationCreate]
-    ) -> typing.List[UserOrganization]:
-        """
-        Add a user to an organization.
-
-        Parameters:
-            - organization_id: str.
-
-            - request: typing.List[UserOrganizationCreate].
-        ---
-        from llama_cloud.client import LlamaCloud
-
-        client = LlamaCloud(
-            token="YOUR_TOKEN",
-        )
-        client.organizations.add_users_to_organization(
-            organization_id="string",
-            request=[],
-        )
-        """
-        _response = self._client_wrapper.httpx_client.request(
-            "PUT",
-            urllib.parse.urljoin(
-                f"{self._client_wrapper.get_base_url()}/", f"api/v1/organizations/{organization_id}/users"
-            ),
-            json=jsonable_encoder(request),
-            headers=self._client_wrapper.get_headers(),
-            timeout=60,
-        )
-        if 200 <= _response.status_code < 300:
-            return pydantic.parse_obj_as(typing.List[UserOrganization], _response.json())  # type: ignore
-        if _response.status_code == 422:
-            raise UnprocessableEntityError(pydantic.parse_obj_as(HttpValidationError, _response.json()))  # type: ignore
-        try:
-            _response_json = _response.json()
-        except JSONDecodeError:
-            raise ApiError(status_code=_response.status_code, body=_response.text)
-        raise ApiError(status_code=_response.status_code, body=_response_json)
-
-    def remove_users_from_organization(
-        self, organization_id: str, member_user_id: str, *, request: typing.Optional[typing.List[str]] = None
-    ) -> None:
-        """
-        Remove users from an organization.
-
-        Parameters:
-            - organization_id: str.
-
-            - member_user_id: str.
-
-            - request: typing.Optional[typing.List[str]].
-        ---
-        from llama_cloud.client import LlamaCloud
-
-        client = LlamaCloud(
-            token="YOUR_TOKEN",
-        )
-        client.organizations.remove_users_from_organization(
-            organization_id="string",
-            member_user_id="string",
-        )
-        """
-        _response = self._client_wrapper.httpx_client.request(
-            "DELETE",
-            urllib.parse.urljoin(
-                f"{self._client_wrapper.get_base_url()}/",
-                f"api/v1/organizations/{organization_id}/users/{member_user_id}",
-            ),
-            json=jsonable_encoder(request),
-            headers=self._client_wrapper.get_headers(),
-            timeout=60,
-        )
-        if 200 <= _response.status_code < 300:
-            return
-        if _response.status_code == 422:
-            raise UnprocessableEntityError(pydantic.parse_obj_as(HttpValidationError, _response.json()))  # type: ignore
-        try:
-            _response_json = _response.json()
-        except JSONDecodeError:
-            raise ApiError(status_code=_response.status_code, body=_response.text)
-        raise ApiError(status_code=_response.status_code, body=_response_json)
-
-    def batch_remove_users_from_organization(
-        self, organization_id: str, *, request: typing.List[UserOrganizationDelete]
-    ) -> None:
-        """
-        Remove a batch of users from an organization.
-
-        Parameters:
-            - organization_id: str.
-
-            - request: typing.List[UserOrganizationDelete].
-        ---
-        from llama_cloud.client import LlamaCloud
-
-        client = LlamaCloud(
-            token="YOUR_TOKEN",
-        )
-        client.organizations.batch_remove_users_from_organization(
-            organization_id="string",
-            request=[],
-        )
-        """
-        _response = self._client_wrapper.httpx_client.request(
-            "PUT",
-            urllib.parse.urljoin(
-                f"{self._client_wrapper.get_base_url()}/", f"api/v1/organizations/{organization_id}/users/remove"
-            ),
-            json=jsonable_encoder(request),
-            headers=self._client_wrapper.get_headers(),
-            timeout=60,
-        )
-        if 200 <= _response.status_code < 300:
-            return
-        if _response.status_code == 422:
-            raise UnprocessableEntityError(pydantic.parse_obj_as(HttpValidationError, _response.json()))  # type: ignore
-        try:
-            _response_json = _response.json()
-        except JSONDecodeError:
-            raise ApiError(status_code=_response.status_code, body=_response.text)
-        raise ApiError(status_code=_response.status_code, body=_response_json)
-
-    def list_roles(self, organization_id: str) -> typing.List[Role]:
-        """
-        List all roles in an organization.
-
-        Parameters:
-            - organization_id: str.
-        ---
-        from llama_cloud.client import LlamaCloud
-
-        client = LlamaCloud(
-            token="YOUR_TOKEN",
-        )
-        client.organizations.list_roles(
-            organization_id="string",
-        )
-        """
-        _response = self._client_wrapper.httpx_client.request(
-            "GET",
-            urllib.parse.urljoin(
-                f"{self._client_wrapper.get_base_url()}/", f"api/v1/organizations/{organization_id}/roles"
-            ),
-            headers=self._client_wrapper.get_headers(),
-            timeout=60,
-        )
-        if 200 <= _response.status_code < 300:
-            return pydantic.parse_obj_as(typing.List[Role], _response.json())  # type: ignore
         if _response.status_code == 422:
             raise UnprocessableEntityError(pydantic.parse_obj_as(HttpValidationError, _response.json()))  # type: ignore
         try:
@@ -574,7 +381,7 @@ class OrganizationsClient:
         raise ApiError(status_code=_response.status_code, body=_response_json)
 
     def assign_role_to_user_in_organization(
-        self, organization_id: str, *, user_id: str, user_organization_role_create_organization_id: str, role_id: str
+        self, organization_id: str, *, user_organization_role_create_organization_id: str, role_id: str, user_id: str
     ) -> UserOrganizationRole:
         """
         Assign a role to a user in an organization.
@@ -582,11 +389,11 @@ class OrganizationsClient:
         Parameters:
             - organization_id: str.
 
-            - user_id: str. The user's ID.
-
             - user_organization_role_create_organization_id: str. The organization's ID.
 
             - role_id: str. The role's ID.
+
+            - user_id: str. The user's ID.
         ---
         from llama_cloud.client import LlamaCloud
 
@@ -595,9 +402,9 @@ class OrganizationsClient:
         )
         client.organizations.assign_role_to_user_in_organization(
             organization_id="string",
-            user_id="string",
             user_organization_role_create_organization_id="string",
             role_id="string",
+            user_id="string",
         )
         """
         _response = self._client_wrapper.httpx_client.request(
@@ -607,9 +414,9 @@ class OrganizationsClient:
             ),
             json=jsonable_encoder(
                 {
-                    "user_id": user_id,
                     "organization_id": user_organization_role_create_organization_id,
                     "role_id": role_id,
+                    "user_id": user_id,
                 }
             ),
             headers=self._client_wrapper.get_headers(),
@@ -879,39 +686,6 @@ class AsyncOrganizationsClient:
             raise ApiError(status_code=_response.status_code, body=_response.text)
         raise ApiError(status_code=_response.status_code, body=_response_json)
 
-    async def set_default_organization(self, *, organization_id: str) -> Organization:
-        """
-        Set the default organization for the user.
-
-        Parameters:
-            - organization_id: str. The organization's ID.
-        ---
-        from llama_cloud.client import AsyncLlamaCloud
-
-        client = AsyncLlamaCloud(
-            token="YOUR_TOKEN",
-        )
-        await client.organizations.set_default_organization(
-            organization_id="string",
-        )
-        """
-        _response = await self._client_wrapper.httpx_client.request(
-            "PUT",
-            urllib.parse.urljoin(f"{self._client_wrapper.get_base_url()}/", "api/v1/organizations/default"),
-            json=jsonable_encoder({"organization_id": organization_id}),
-            headers=self._client_wrapper.get_headers(),
-            timeout=60,
-        )
-        if 200 <= _response.status_code < 300:
-            return pydantic.parse_obj_as(Organization, _response.json())  # type: ignore
-        if _response.status_code == 422:
-            raise UnprocessableEntityError(pydantic.parse_obj_as(HttpValidationError, _response.json()))  # type: ignore
-        try:
-            _response_json = _response.json()
-        except JSONDecodeError:
-            raise ApiError(status_code=_response.status_code, body=_response.text)
-        raise ApiError(status_code=_response.status_code, body=_response_json)
-
     async def get_organization(self, organization_id: str) -> Organization:
         """
         Get an organization by ID.
@@ -945,7 +719,7 @@ class AsyncOrganizationsClient:
         raise ApiError(status_code=_response.status_code, body=_response_json)
 
     async def update_organization(
-        self, organization_id: str, *, name: str, feature_flags: typing.Optional[typing.Dict[str, typing.Any]] = OMIT
+        self, organization_id: str, *, feature_flags: typing.Optional[typing.Dict[str, typing.Any]] = OMIT, name: str
     ) -> Organization:
         """
         Update an existing organization.
@@ -953,9 +727,9 @@ class AsyncOrganizationsClient:
         Parameters:
             - organization_id: str.
 
-            - name: str. A name for the organization.
-
             - feature_flags: typing.Optional[typing.Dict[str, typing.Any]].
+
+            - name: str. A name for the organization.
         ---
         from llama_cloud.client import AsyncLlamaCloud
 
@@ -1019,6 +793,40 @@ class AsyncOrganizationsClient:
             raise ApiError(status_code=_response.status_code, body=_response.text)
         raise ApiError(status_code=_response.status_code, body=_response_json)
 
+    async def list_roles(self, organization_id: str) -> typing.List[Role]:
+        """
+        List all roles in an organization.
+
+        Parameters:
+            - organization_id: str.
+        ---
+        from llama_cloud.client import AsyncLlamaCloud
+
+        client = AsyncLlamaCloud(
+            token="YOUR_TOKEN",
+        )
+        await client.organizations.list_roles(
+            organization_id="string",
+        )
+        """
+        _response = await self._client_wrapper.httpx_client.request(
+            "GET",
+            urllib.parse.urljoin(
+                f"{self._client_wrapper.get_base_url()}/", f"api/v1/organizations/{organization_id}/roles"
+            ),
+            headers=self._client_wrapper.get_headers(),
+            timeout=60,
+        )
+        if 200 <= _response.status_code < 300:
+            return pydantic.parse_obj_as(typing.List[Role], _response.json())  # type: ignore
+        if _response.status_code == 422:
+            raise UnprocessableEntityError(pydantic.parse_obj_as(HttpValidationError, _response.json()))  # type: ignore
+        try:
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, body=_response.text)
+        raise ApiError(status_code=_response.status_code, body=_response_json)
+
     async def get_organization_usage(
         self, organization_id: str, *, get_current_invoice_total: typing.Optional[bool] = None
     ) -> UsageAndPlan:
@@ -1050,197 +858,6 @@ class AsyncOrganizationsClient:
         )
         if 200 <= _response.status_code < 300:
             return pydantic.parse_obj_as(UsageAndPlan, _response.json())  # type: ignore
-        if _response.status_code == 422:
-            raise UnprocessableEntityError(pydantic.parse_obj_as(HttpValidationError, _response.json()))  # type: ignore
-        try:
-            _response_json = _response.json()
-        except JSONDecodeError:
-            raise ApiError(status_code=_response.status_code, body=_response.text)
-        raise ApiError(status_code=_response.status_code, body=_response_json)
-
-    async def list_organization_users(self, organization_id: str) -> typing.List[UserOrganization]:
-        """
-        Get all users in an organization.
-
-        Parameters:
-            - organization_id: str.
-        ---
-        from llama_cloud.client import AsyncLlamaCloud
-
-        client = AsyncLlamaCloud(
-            token="YOUR_TOKEN",
-        )
-        await client.organizations.list_organization_users(
-            organization_id="string",
-        )
-        """
-        _response = await self._client_wrapper.httpx_client.request(
-            "GET",
-            urllib.parse.urljoin(
-                f"{self._client_wrapper.get_base_url()}/", f"api/v1/organizations/{organization_id}/users"
-            ),
-            headers=self._client_wrapper.get_headers(),
-            timeout=60,
-        )
-        if 200 <= _response.status_code < 300:
-            return pydantic.parse_obj_as(typing.List[UserOrganization], _response.json())  # type: ignore
-        if _response.status_code == 422:
-            raise UnprocessableEntityError(pydantic.parse_obj_as(HttpValidationError, _response.json()))  # type: ignore
-        try:
-            _response_json = _response.json()
-        except JSONDecodeError:
-            raise ApiError(status_code=_response.status_code, body=_response.text)
-        raise ApiError(status_code=_response.status_code, body=_response_json)
-
-    async def add_users_to_organization(
-        self, organization_id: str, *, request: typing.List[UserOrganizationCreate]
-    ) -> typing.List[UserOrganization]:
-        """
-        Add a user to an organization.
-
-        Parameters:
-            - organization_id: str.
-
-            - request: typing.List[UserOrganizationCreate].
-        ---
-        from llama_cloud.client import AsyncLlamaCloud
-
-        client = AsyncLlamaCloud(
-            token="YOUR_TOKEN",
-        )
-        await client.organizations.add_users_to_organization(
-            organization_id="string",
-            request=[],
-        )
-        """
-        _response = await self._client_wrapper.httpx_client.request(
-            "PUT",
-            urllib.parse.urljoin(
-                f"{self._client_wrapper.get_base_url()}/", f"api/v1/organizations/{organization_id}/users"
-            ),
-            json=jsonable_encoder(request),
-            headers=self._client_wrapper.get_headers(),
-            timeout=60,
-        )
-        if 200 <= _response.status_code < 300:
-            return pydantic.parse_obj_as(typing.List[UserOrganization], _response.json())  # type: ignore
-        if _response.status_code == 422:
-            raise UnprocessableEntityError(pydantic.parse_obj_as(HttpValidationError, _response.json()))  # type: ignore
-        try:
-            _response_json = _response.json()
-        except JSONDecodeError:
-            raise ApiError(status_code=_response.status_code, body=_response.text)
-        raise ApiError(status_code=_response.status_code, body=_response_json)
-
-    async def remove_users_from_organization(
-        self, organization_id: str, member_user_id: str, *, request: typing.Optional[typing.List[str]] = None
-    ) -> None:
-        """
-        Remove users from an organization.
-
-        Parameters:
-            - organization_id: str.
-
-            - member_user_id: str.
-
-            - request: typing.Optional[typing.List[str]].
-        ---
-        from llama_cloud.client import AsyncLlamaCloud
-
-        client = AsyncLlamaCloud(
-            token="YOUR_TOKEN",
-        )
-        await client.organizations.remove_users_from_organization(
-            organization_id="string",
-            member_user_id="string",
-        )
-        """
-        _response = await self._client_wrapper.httpx_client.request(
-            "DELETE",
-            urllib.parse.urljoin(
-                f"{self._client_wrapper.get_base_url()}/",
-                f"api/v1/organizations/{organization_id}/users/{member_user_id}",
-            ),
-            json=jsonable_encoder(request),
-            headers=self._client_wrapper.get_headers(),
-            timeout=60,
-        )
-        if 200 <= _response.status_code < 300:
-            return
-        if _response.status_code == 422:
-            raise UnprocessableEntityError(pydantic.parse_obj_as(HttpValidationError, _response.json()))  # type: ignore
-        try:
-            _response_json = _response.json()
-        except JSONDecodeError:
-            raise ApiError(status_code=_response.status_code, body=_response.text)
-        raise ApiError(status_code=_response.status_code, body=_response_json)
-
-    async def batch_remove_users_from_organization(
-        self, organization_id: str, *, request: typing.List[UserOrganizationDelete]
-    ) -> None:
-        """
-        Remove a batch of users from an organization.
-
-        Parameters:
-            - organization_id: str.
-
-            - request: typing.List[UserOrganizationDelete].
-        ---
-        from llama_cloud.client import AsyncLlamaCloud
-
-        client = AsyncLlamaCloud(
-            token="YOUR_TOKEN",
-        )
-        await client.organizations.batch_remove_users_from_organization(
-            organization_id="string",
-            request=[],
-        )
-        """
-        _response = await self._client_wrapper.httpx_client.request(
-            "PUT",
-            urllib.parse.urljoin(
-                f"{self._client_wrapper.get_base_url()}/", f"api/v1/organizations/{organization_id}/users/remove"
-            ),
-            json=jsonable_encoder(request),
-            headers=self._client_wrapper.get_headers(),
-            timeout=60,
-        )
-        if 200 <= _response.status_code < 300:
-            return
-        if _response.status_code == 422:
-            raise UnprocessableEntityError(pydantic.parse_obj_as(HttpValidationError, _response.json()))  # type: ignore
-        try:
-            _response_json = _response.json()
-        except JSONDecodeError:
-            raise ApiError(status_code=_response.status_code, body=_response.text)
-        raise ApiError(status_code=_response.status_code, body=_response_json)
-
-    async def list_roles(self, organization_id: str) -> typing.List[Role]:
-        """
-        List all roles in an organization.
-
-        Parameters:
-            - organization_id: str.
-        ---
-        from llama_cloud.client import AsyncLlamaCloud
-
-        client = AsyncLlamaCloud(
-            token="YOUR_TOKEN",
-        )
-        await client.organizations.list_roles(
-            organization_id="string",
-        )
-        """
-        _response = await self._client_wrapper.httpx_client.request(
-            "GET",
-            urllib.parse.urljoin(
-                f"{self._client_wrapper.get_base_url()}/", f"api/v1/organizations/{organization_id}/roles"
-            ),
-            headers=self._client_wrapper.get_headers(),
-            timeout=60,
-        )
-        if 200 <= _response.status_code < 300:
-            return pydantic.parse_obj_as(typing.List[Role], _response.json())  # type: ignore
         if _response.status_code == 422:
             raise UnprocessableEntityError(pydantic.parse_obj_as(HttpValidationError, _response.json()))  # type: ignore
         try:
@@ -1289,7 +906,7 @@ class AsyncOrganizationsClient:
         raise ApiError(status_code=_response.status_code, body=_response_json)
 
     async def assign_role_to_user_in_organization(
-        self, organization_id: str, *, user_id: str, user_organization_role_create_organization_id: str, role_id: str
+        self, organization_id: str, *, user_organization_role_create_organization_id: str, role_id: str, user_id: str
     ) -> UserOrganizationRole:
         """
         Assign a role to a user in an organization.
@@ -1297,11 +914,11 @@ class AsyncOrganizationsClient:
         Parameters:
             - organization_id: str.
 
-            - user_id: str. The user's ID.
-
             - user_organization_role_create_organization_id: str. The organization's ID.
 
             - role_id: str. The role's ID.
+
+            - user_id: str. The user's ID.
         ---
         from llama_cloud.client import AsyncLlamaCloud
 
@@ -1310,9 +927,9 @@ class AsyncOrganizationsClient:
         )
         await client.organizations.assign_role_to_user_in_organization(
             organization_id="string",
-            user_id="string",
             user_organization_role_create_organization_id="string",
             role_id="string",
+            user_id="string",
         )
         """
         _response = await self._client_wrapper.httpx_client.request(
@@ -1322,9 +939,9 @@ class AsyncOrganizationsClient:
             ),
             json=jsonable_encoder(
                 {
-                    "user_id": user_id,
                     "organization_id": user_organization_role_create_organization_id,
                     "role_id": role_id,
+                    "user_id": user_id,
                 }
             ),
             headers=self._client_wrapper.get_headers(),

@@ -1,8 +1,9 @@
-Metadata-Version: 2.3
+Metadata-Version: 2.4
 Name: launchdarkly-eventsource
-Version: 1.3.0
+Version: 1.4.0
 Summary: LaunchDarkly SSE Client
 License: Apache-2.0
+License-File: LICENSE
 Author: LaunchDarkly
 Author-email: dev@launchdarkly.com
 Requires-Python: >=3.9
@@ -15,6 +16,7 @@ Classifier: Programming Language :: Python :: 3.10
 Classifier: Programming Language :: Python :: 3.11
 Classifier: Programming Language :: Python :: 3.12
 Classifier: Programming Language :: Python :: 3.13
+Classifier: Programming Language :: Python :: 3.14
 Classifier: Topic :: Software Development
 Classifier: Topic :: Software Development :: Libraries
 Requires-Dist: urllib3 (>=1.26.0,<3)

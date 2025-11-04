@@ -17,11 +17,11 @@ except ImportError:
 
 
 class ManagedIngestionStatusResponse(pydantic.BaseModel):
-    job_id: typing.Optional[str]
     deployment_date: typing.Optional[dt.datetime]
-    status: ManagedIngestionStatus = pydantic.Field(description="Status of the ingestion.")
-    error: typing.Optional[typing.List[IngestionErrorResponse]]
     effective_at: typing.Optional[dt.datetime]
+    error: typing.Optional[typing.List[IngestionErrorResponse]]
+    job_id: typing.Optional[str]
+    status: ManagedIngestionStatus = pydantic.Field(description="Status of the ingestion.")
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

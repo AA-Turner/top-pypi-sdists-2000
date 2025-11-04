@@ -20,12 +20,12 @@ class ParseConfigurationCreate(pydantic.BaseModel):
     Schema for creating a new parse configuration (API boundary).
     """
 
-    name: str = pydantic.Field(description="Name of the parse configuration")
-    source_type: typing.Optional[str]
-    source_id: typing.Optional[str]
     creator: typing.Optional[str]
-    version: str = pydantic.Field(description="Version of the configuration")
+    name: str = pydantic.Field(description="Name of the parse configuration")
     parameters: LlamaParseParameters = pydantic.Field(description="LlamaParseParameters configuration")
+    source_id: typing.Optional[str]
+    source_type: typing.Optional[str]
+    version: str = pydantic.Field(description="Version of the configuration")
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

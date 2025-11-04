@@ -17,20 +17,20 @@ except ImportError:
 
 
 class HuggingFaceInferenceApiEmbedding(pydantic.BaseModel):
-    model_name: typing.Optional[str]
+    class_name: typing.Optional[str]
+    cookies: typing.Optional[typing.Dict[str, typing.Optional[str]]]
     embed_batch_size: typing.Optional[int] = pydantic.Field(description="The batch size for embedding calls.")
+    headers: typing.Optional[typing.Dict[str, typing.Optional[str]]]
+    model_name: typing.Optional[str]
     num_workers: typing.Optional[int]
     pooling: typing.Optional[Pooling]
     query_instruction: typing.Optional[str]
+    task: typing.Optional[str]
     text_instruction: typing.Optional[str]
+    timeout: typing.Optional[float]
     token: typing.Optional[HuggingFaceInferenceApiEmbeddingToken] = pydantic.Field(
         description="Hugging Face token. Will default to the locally saved token. Pass token=False if you don’t want to send your token to the server."
     )
-    timeout: typing.Optional[float]
-    headers: typing.Optional[typing.Dict[str, typing.Optional[str]]]
-    cookies: typing.Optional[typing.Dict[str, typing.Optional[str]]]
-    task: typing.Optional[str]
-    class_name: typing.Optional[str]
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

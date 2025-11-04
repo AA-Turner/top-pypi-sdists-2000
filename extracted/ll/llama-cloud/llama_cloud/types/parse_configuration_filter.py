@@ -19,12 +19,12 @@ class ParseConfigurationFilter(pydantic.BaseModel):
     Filter parameters for parse configuration queries.
     """
 
-    name: typing.Optional[str]
-    source_type: typing.Optional[str]
-    source_id: typing.Optional[str]
     creator: typing.Optional[str]
-    version: typing.Optional[str]
+    name: typing.Optional[str]
     parse_config_ids: typing.Optional[typing.List[str]]
+    source_id: typing.Optional[str]
+    source_type: typing.Optional[str]
+    version: typing.Optional[str]
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

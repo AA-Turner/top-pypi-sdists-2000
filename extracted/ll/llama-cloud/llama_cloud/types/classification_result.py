@@ -19,10 +19,10 @@ class ClassificationResult(pydantic.BaseModel):
     Result of classifying a single file.
     """
 
+    confidence: float = pydantic.Field(description="Confidence score of the classification (0.0-1.0)")
     reasoning: str = pydantic.Field(
         description="Step-by-step explanation of why this classification was chosen and the confidence score assigned"
     )
-    confidence: float = pydantic.Field(description="Confidence score of the classification (0.0-1.0)")
     type: typing.Optional[str]
 
     def json(self, **kwargs: typing.Any) -> str:

@@ -23,15 +23,15 @@ class ExtractAgent(pydantic.BaseModel):
     Schema and configuration for creating an extraction agent.
     """
 
-    id: str = pydantic.Field(description="The id of the extraction agent.")
-    name: str = pydantic.Field(description="The name of the extraction agent.")
-    project_id: str = pydantic.Field(description="The ID of the project that the extraction agent belongs to.")
+    config: ExtractConfig = pydantic.Field(description="The configuration parameters for the extraction agent.")
+    created_at: typing.Optional[dt.datetime]
+    custom_configuration: typing.Optional[typing_extensions.Literal["default"]]
     data_schema: typing.Dict[str, typing.Optional[ExtractAgentDataSchemaValue]] = pydantic.Field(
         description="The schema of the data."
     )
-    config: ExtractConfig = pydantic.Field(description="The configuration parameters for the extraction agent.")
-    custom_configuration: typing.Optional[typing_extensions.Literal["default"]]
-    created_at: typing.Optional[dt.datetime]
+    id: str = pydantic.Field(description="The id of the extraction agent.")
+    name: str = pydantic.Field(description="The name of the extraction agent.")
+    project_id: str = pydantic.Field(description="The ID of the project that the extraction agent belongs to.")
     updated_at: typing.Optional[dt.datetime]
 
     def json(self, **kwargs: typing.Any) -> str:

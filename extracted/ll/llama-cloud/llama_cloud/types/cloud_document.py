@@ -19,12 +19,13 @@ class CloudDocument(pydantic.BaseModel):
     Cloud document stored in S3.
     """
 
-    text: str
-    metadata: typing.Dict[str, typing.Any]
     excluded_embed_metadata_keys: typing.Optional[typing.List[str]]
     excluded_llm_metadata_keys: typing.Optional[typing.List[str]]
-    page_positions: typing.Optional[typing.List[int]]
     id: str
+    metadata: typing.Dict[str, typing.Any]
+    page_positions: typing.Optional[typing.List[int]]
+    status_metadata: typing.Optional[typing.Dict[str, typing.Any]]
+    text: str
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

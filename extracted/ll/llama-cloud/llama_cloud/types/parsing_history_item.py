@@ -15,15 +15,15 @@ except ImportError:
 
 
 class ParsingHistoryItem(pydantic.BaseModel):
-    user_id: str
     day: str
-    job_id: str
-    file_name: str
-    original_file_name: str
     expired: typing.Optional[bool]
-    pages: typing.Optional[float]
+    file_name: str
     images: typing.Optional[float]
+    job_id: str
+    original_file_name: str
+    pages: typing.Optional[float]
     time: typing.Optional[float]
+    user_id: str
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

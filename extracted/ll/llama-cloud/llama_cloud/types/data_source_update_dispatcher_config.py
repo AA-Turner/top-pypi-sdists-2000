@@ -20,9 +20,10 @@ class DataSourceUpdateDispatcherConfig(pydantic.BaseModel):
     Schema for the parameters of a data source dispatcher job.
     """
 
-    should_delete: typing.Optional[bool]
     custom_metadata: typing.Optional[typing.Dict[str, typing.Any]]
     delete_info: typing.Optional[DeleteParams]
+    pipeline_file_ids: typing.Optional[typing.List[str]]
+    should_delete: typing.Optional[bool]
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

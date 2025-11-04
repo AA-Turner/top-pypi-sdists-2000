@@ -4,9 +4,10 @@ import datetime as dt
 import typing
 
 from ..core.datetime_utils import serialize_datetime
-from .extracted_table import ExtractedTable
+from .extracted_table_summary import ExtractedTableSummary
 from .spreadsheet_parsing_config import SpreadsheetParsingConfig
 from .status_enum import StatusEnum
+from .worksheet_metadata import WorksheetMetadata
 
 try:
     import pydantic
@@ -22,19 +23,22 @@ class SpreadsheetJob(pydantic.BaseModel):
     A spreadsheet parsing job
     """
 
-    id: str = pydantic.Field(description="The ID of the job")
-    user_id: str = pydantic.Field(description="The ID of the user")
-    project_id: str = pydantic.Field(description="The ID of the project")
-    file_id: str = pydantic.Field(description="The ID of the file to parse")
     config: SpreadsheetParsingConfig = pydantic.Field(description="Configuration for the parsing job")
-    status: StatusEnum = pydantic.Field(description="The status of the parsing job")
     created_at: str = pydantic.Field(description="When the job was created")
-    updated_at: str = pydantic.Field(description="When the job was last updated")
+    errors: typing.Optional[typing.List[str]] = pydantic.Field(description="Any errors encountered")
+    file_id: str = pydantic.Field(description="The ID of the file to parse")
+    id: str = pydantic.Field(description="The ID of the job")
+    project_id: str = pydantic.Field(description="The ID of the project")
+    status: StatusEnum = pydantic.Field(description="The status of the parsing job")
     success: typing.Optional[bool]
-    tables: typing.Optional[typing.List[ExtractedTable]] = pydantic.Field(
+    tables: typing.Optional[typing.List[ExtractedTableSummary]] = pydantic.Field(
         description="All extracted tables (populated when job is complete)"
     )
-    errors: typing.Optional[typing.List[str]] = pydantic.Field(description="Any errors encountered")
+    updated_at: str = pydantic.Field(description="When the job was last updated")
+    user_id: str = pydantic.Field(description="The ID of the user")
+    worksheet_metadata: typing.Optional[typing.List[WorksheetMetadata]] = pydantic.Field(
+        description="Metadata for each processed worksheet (populated when job is complete)"
+    )
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

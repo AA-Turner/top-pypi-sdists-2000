@@ -22,6 +22,8 @@ class PublicModelName(str, enum.Enum):
     ANTHROPIC_SONNET_35_V_2 = "anthropic-sonnet-3.5-v2"
     ANTHROPIC_SONNET_37 = "anthropic-sonnet-3.7"
     ANTHROPIC_SONNET_40 = "anthropic-sonnet-4.0"
+    ANTHROPIC_SONNET_45 = "anthropic-sonnet-4.5"
+    ANTHROPIC_HAIKU_45 = "anthropic-haiku-4.5"
     GEMINI_25_FLASH = "gemini-2.5-flash"
     GEMINI_25_PRO = "gemini-2.5-pro"
     GEMINI_20_FLASH = "gemini-2.0-flash"
@@ -47,6 +49,8 @@ class PublicModelName(str, enum.Enum):
         anthropic_sonnet_35_v_2: typing.Callable[[], T_Result],
         anthropic_sonnet_37: typing.Callable[[], T_Result],
         anthropic_sonnet_40: typing.Callable[[], T_Result],
+        anthropic_sonnet_45: typing.Callable[[], T_Result],
+        anthropic_haiku_45: typing.Callable[[], T_Result],
         gemini_25_flash: typing.Callable[[], T_Result],
         gemini_25_pro: typing.Callable[[], T_Result],
         gemini_20_flash: typing.Callable[[], T_Result],
@@ -85,6 +89,10 @@ class PublicModelName(str, enum.Enum):
             return anthropic_sonnet_37()
         if self is PublicModelName.ANTHROPIC_SONNET_40:
             return anthropic_sonnet_40()
+        if self is PublicModelName.ANTHROPIC_SONNET_45:
+            return anthropic_sonnet_45()
+        if self is PublicModelName.ANTHROPIC_HAIKU_45:
+            return anthropic_haiku_45()
         if self is PublicModelName.GEMINI_25_FLASH:
             return gemini_25_flash()
         if self is PublicModelName.GEMINI_25_PRO:

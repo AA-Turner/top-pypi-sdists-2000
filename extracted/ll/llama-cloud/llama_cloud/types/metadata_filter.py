@@ -27,8 +27,8 @@ class MetadataFilter(pydantic.BaseModel):
     """
 
     key: str
-    value: typing.Optional[MetadataFilterValue]
     operator: typing.Optional[FilterOperator]
+    value: typing.Optional[MetadataFilterValue]
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

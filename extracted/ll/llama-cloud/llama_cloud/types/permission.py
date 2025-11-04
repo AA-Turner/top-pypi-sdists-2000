@@ -19,12 +19,12 @@ class Permission(pydantic.BaseModel):
     Schema for a permission.
     """
 
-    id: str = pydantic.Field(description="Unique identifier")
-    created_at: typing.Optional[dt.datetime]
-    updated_at: typing.Optional[dt.datetime]
-    name: str = pydantic.Field(description="A name for the permission.")
-    description: typing.Optional[str]
     access: bool = pydantic.Field(description="Whether the permission is granted or not.")
+    created_at: typing.Optional[dt.datetime]
+    description: typing.Optional[str]
+    id: str = pydantic.Field(description="Unique identifier")
+    name: str = pydantic.Field(description="A name for the permission.")
+    updated_at: typing.Optional[dt.datetime]
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

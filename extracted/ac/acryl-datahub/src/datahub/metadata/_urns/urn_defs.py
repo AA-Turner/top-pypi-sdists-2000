@@ -1886,6 +1886,62 @@ class MlPrimaryKeyUrn(_SpecificUrn):
         return self._entity_ids[1]
 
 if TYPE_CHECKING:
+    from datahub.metadata.schema_classes import DataHubFileKeyClass
+
+class DataHubFileUrn(_SpecificUrn):
+    ENTITY_TYPE: ClassVar[Literal["dataHubFile"]] = "dataHubFile"
+    _URN_PARTS: ClassVar[int] = 1
+
+    def __init__(self, id: Union["DataHubFileUrn", str], *, _allow_coercion: bool = True) -> None:
+        if _allow_coercion:
+            # Field coercion logic (if any is required).
+            if isinstance(id, str):
+                if id.startswith('urn:li:'):
+                    try:
+                        id = DataHubFileUrn.from_string(id)
+                    except InvalidUrnError:
+                        raise InvalidUrnError(f'Expecting a DataHubFileUrn but got {id}')
+                else:
+                    id = UrnEncoder.encode_string(id)
+
+        # Validation logic.
+        if not id:
+            raise InvalidUrnError("DataHubFileUrn id cannot be empty")
+        if isinstance(id, DataHubFileUrn):
+            id = id.id
+        elif isinstance(id, Urn):
+            raise InvalidUrnError(f'Expecting a DataHubFileUrn but got {id}')
+        if UrnEncoder.contains_reserved_char(id):
+            raise InvalidUrnError(f'DataHubFileUrn id contains reserved characters')
+
+        super().__init__(self.ENTITY_TYPE, [id])
+
+    @classmethod
+    def _parse_ids(cls, entity_ids: List[str]) -> "DataHubFileUrn":
+        if len(entity_ids) != cls._URN_PARTS:
+            raise InvalidUrnError(f"DataHubFileUrn should have {cls._URN_PARTS} parts, got {len(entity_ids)}: {entity_ids}")
+        return cls(id=entity_ids[0], _allow_coercion=False)
+
+    @classmethod
+    def underlying_key_aspect_type(cls) -> Type["DataHubFileKeyClass"]:
+        from datahub.metadata.schema_classes import DataHubFileKeyClass
+
+        return DataHubFileKeyClass
+
+    def to_key_aspect(self) -> "DataHubFileKeyClass":
+        from datahub.metadata.schema_classes import DataHubFileKeyClass
+
+        return DataHubFileKeyClass(id=self.id)
+
+    @classmethod
+    def from_key_aspect(cls, key_aspect: "DataHubFileKeyClass") -> "DataHubFileUrn":
+        return cls(id=key_aspect.id)
+
+    @property
+    def id(self) -> str:
+        return self._entity_ids[0]
+
+if TYPE_CHECKING:
     from datahub.metadata.schema_classes import TestKeyClass
 
 class TestUrn(_SpecificUrn):

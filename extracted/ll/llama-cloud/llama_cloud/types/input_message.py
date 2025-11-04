@@ -20,11 +20,11 @@ class InputMessage(pydantic.BaseModel):
     This is distinct from a ChatMessage because this schema is enforced by the AI Chat library used in the frontend
     """
 
-    id: typing.Optional[str] = pydantic.Field(description="ID of the message, if any. a UUID.")
-    role: MessageRole
+    class_name: typing.Optional[str]
     content: str
     data: typing.Optional[typing.Dict[str, typing.Any]]
-    class_name: typing.Optional[str]
+    id: typing.Optional[str] = pydantic.Field(description="ID of the message, if any. a UUID.")
+    role: MessageRole
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

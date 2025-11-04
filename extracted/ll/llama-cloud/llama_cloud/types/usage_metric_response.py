@@ -15,10 +15,10 @@ except ImportError:
 
 
 class UsageMetricResponse(pydantic.BaseModel):
-    feature_usage: typing.Dict[str, typing.Any]
     day: str
-    source: str
+    feature_usage: typing.Dict[str, typing.Any]
     job_id: str
+    source: str
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

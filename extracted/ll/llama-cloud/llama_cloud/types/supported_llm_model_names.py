@@ -18,6 +18,7 @@ class SupportedLlmModelNames(str, enum.Enum):
     AZURE_OPENAI_GPT_4_1_MINI = "AZURE_OPENAI_GPT_4_1_MINI"
     AZURE_OPENAI_GPT_4_1_NANO = "AZURE_OPENAI_GPT_4_1_NANO"
     CLAUDE_3_5_SONNET = "CLAUDE_3_5_SONNET"
+    CLAUDE_4_5_SONNET = "CLAUDE_4_5_SONNET"
     BEDROCK_CLAUDE_3_5_SONNET_V_1 = "BEDROCK_CLAUDE_3_5_SONNET_V1"
     BEDROCK_CLAUDE_3_5_SONNET_V_2 = "BEDROCK_CLAUDE_3_5_SONNET_V2"
     VERTEX_AI_CLAUDE_3_5_SONNET_V_2 = "VERTEX_AI_CLAUDE_3_5_SONNET_V2"
@@ -35,6 +36,7 @@ class SupportedLlmModelNames(str, enum.Enum):
         azure_openai_gpt_4_1_mini: typing.Callable[[], T_Result],
         azure_openai_gpt_4_1_nano: typing.Callable[[], T_Result],
         claude_3_5_sonnet: typing.Callable[[], T_Result],
+        claude_4_5_sonnet: typing.Callable[[], T_Result],
         bedrock_claude_3_5_sonnet_v_1: typing.Callable[[], T_Result],
         bedrock_claude_3_5_sonnet_v_2: typing.Callable[[], T_Result],
         vertex_ai_claude_3_5_sonnet_v_2: typing.Callable[[], T_Result],
@@ -61,6 +63,8 @@ class SupportedLlmModelNames(str, enum.Enum):
             return azure_openai_gpt_4_1_nano()
         if self is SupportedLlmModelNames.CLAUDE_3_5_SONNET:
             return claude_3_5_sonnet()
+        if self is SupportedLlmModelNames.CLAUDE_4_5_SONNET:
+            return claude_4_5_sonnet()
         if self is SupportedLlmModelNames.BEDROCK_CLAUDE_3_5_SONNET_V_1:
             return bedrock_claude_3_5_sonnet_v_1()
         if self is SupportedLlmModelNames.BEDROCK_CLAUDE_3_5_SONNET_V_2:

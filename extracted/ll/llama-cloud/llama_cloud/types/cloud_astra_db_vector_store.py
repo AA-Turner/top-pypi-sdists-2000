@@ -29,13 +29,13 @@ class CloudAstraDbVectorStore(pydantic.BaseModel):
     keyspace (optional[str]): The keyspace to use. If not provided, 'default_keyspace'
     """
 
-    supports_nested_metadata_filters: typing.Optional[bool]
-    token: str = pydantic.Field(description="The Astra DB Application Token to use")
     api_endpoint: str = pydantic.Field(description="The Astra DB JSON API endpoint for your database")
+    class_name: typing.Optional[str]
     collection_name: str = pydantic.Field(description="Collection name to use. If not existing, it will be created")
     embedding_dimension: int = pydantic.Field(description="Length of the embedding vectors in use")
     keyspace: typing.Optional[str]
-    class_name: typing.Optional[str]
+    supports_nested_metadata_filters: typing.Optional[bool]
+    token: str = pydantic.Field(description="The Astra DB Application Token to use")
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

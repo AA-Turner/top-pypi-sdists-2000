@@ -17,12 +17,15 @@ except ImportError:
 
 class QuotaRateLimitConfigurationValue(pydantic.BaseModel):
     """
-    Quota-specific wrapper for default rate limit configuration.
+    Quota-specific wrapper for rate limit configuration.
+
+    For simple limits (like files per index), use numerator as the limit value
+    and leave denominator as None.
     """
 
-    numerator: int = pydantic.Field(description="The rate numerator")
     denominator: typing.Optional[int]
     denominator_units: typing.Optional[QuotaRateLimitConfigurationValueDenominatorUnits]
+    numerator: int = pydantic.Field(description="The rate numerator")
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

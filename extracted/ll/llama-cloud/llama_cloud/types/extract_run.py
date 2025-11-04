@@ -25,21 +25,22 @@ class ExtractRun(pydantic.BaseModel):
     Schema for an extraction run.
     """
 
-    id: str = pydantic.Field(description="The id of the extraction run")
+    config: ExtractConfig = pydantic.Field(description="The config used for extraction")
     created_at: typing.Optional[dt.datetime]
-    updated_at: typing.Optional[dt.datetime]
-    extraction_agent_id: str = pydantic.Field(description="The id of the extraction agent")
+    data: typing.Optional[ExtractRunData] = pydantic.Field(description="The data extracted from the file")
     data_schema: typing.Dict[str, typing.Optional[ExtractRunDataSchemaValue]] = pydantic.Field(
         description="The schema used for extraction"
     )
-    config: ExtractConfig = pydantic.Field(description="The config used for extraction")
-    file: File = pydantic.Field(description="The file that the extract was extracted from")
-    status: ExtractState = pydantic.Field(description="The status of the extraction run")
     error: typing.Optional[str]
-    job_id: typing.Optional[str]
-    data: typing.Optional[ExtractRunData] = pydantic.Field(description="The data extracted from the file")
+    extraction_agent_id: str = pydantic.Field(description="The id of the extraction agent")
     extraction_metadata: typing.Optional[typing.Dict[str, typing.Optional[ExtractRunExtractionMetadataValue]]]
+    file: File = pydantic.Field(description="The file that the extract was extracted from")
     from_ui: bool = pydantic.Field(description="Whether this extraction run was triggered from the UI")
+    id: str = pydantic.Field(description="The id of the extraction run")
+    job_id: typing.Optional[str]
+    project_id: str = pydantic.Field(description="The id of the project that the extraction run belongs to")
+    status: ExtractState = pydantic.Field(description="The status of the extraction run")
+    updated_at: typing.Optional[dt.datetime]
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

@@ -996,6 +996,7 @@ def exclude_unstorable_headers(response: Response, is_cache_shared: bool) -> Res
 def refresh_response_headers(
     stored_response: Response,
     revalidation_response: Response,
+    is_cache_shared: bool,
 ) -> Response:
     """
     Updates a stored response's headers with fresh metadata from a 304 response.
@@ -1108,7 +1109,7 @@ def refresh_response_headers(
             stored_response,
             headers=Headers(new_headers),
         ),
-        is_cache_shared=True,  # Assume shared cache for maximum safety
+        is_cache_shared,
     )
 
 
@@ -1337,7 +1338,7 @@ class IdleClient(State):
             "A cache MUST NOT generate a stale response unless it is disconnected or
             doing so is explicitly permitted by the client or origin server."
             """
-            freshness_lifetime = get_freshness_lifetime(pair.response, is_cache_shared=True)
+            freshness_lifetime = get_freshness_lifetime(pair.response, self.options.shared)
             age = get_age(pair.response)
 
             # Check freshness: response_is_fresh = (freshness_lifetime > current_age)
@@ -2245,7 +2246,7 @@ class NeedRevalidation(State):
                 updating_entries=[
                     replace(
                         pair,
-                        response=refresh_response_headers(pair.response, revalidation_response),
+                        response=refresh_response_headers(pair.response, revalidation_response, self.options.shared),
                     )
                     for pair in identified_for_revalidation
                 ],

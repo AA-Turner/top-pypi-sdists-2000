@@ -38,46 +38,12 @@ class ParsingClient:
     def __init__(self, *, client_wrapper: SyncClientWrapper):
         self._client_wrapper = client_wrapper
 
-    def get_job_image_result(self, job_id: str, name: str) -> None:
+    def get_parsing_history_result(self) -> typing.List[ParsingHistoryItem]:
         """
-        Get a job by id
+        Get parsing history for user
 
-        Parameters:
-            - job_id: str.
-
-            - name: str.
-        ---
-        from llama_cloud.client import LlamaCloud
-
-        client = LlamaCloud(
-            token="YOUR_TOKEN",
-        )
-        client.parsing.get_job_image_result(
-            job_id="string",
-            name="string",
-        )
-        """
-        _response = self._client_wrapper.httpx_client.request(
-            "GET",
-            urllib.parse.urljoin(
-                f"{self._client_wrapper.get_base_url()}/", f"api/v1/parsing/job/{job_id}/result/image/{name}"
-            ),
-            headers=self._client_wrapper.get_headers(),
-            timeout=60,
-        )
-        if 200 <= _response.status_code < 300:
-            return
-        if _response.status_code == 422:
-            raise UnprocessableEntityError(pydantic.parse_obj_as(HttpValidationError, _response.json()))  # type: ignore
-        try:
-            _response_json = _response.json()
-        except JSONDecodeError:
-            raise ApiError(status_code=_response.status_code, body=_response.text)
-        raise ApiError(status_code=_response.status_code, body=_response_json)
-
-    def get_supported_file_extensions(self) -> typing.List[LlamaParseSupportedFileExtensions]:
-        """
-        Get a list of supported file extensions
+        This endpoint is deprecated.
+        Use /api/v1/jobs/?job_name=parsing&project_id=YOUR_PROJECT_ID instead.
 
         ---
         from llama_cloud.client import LlamaCloud
@@ -85,560 +51,16 @@ class ParsingClient:
         client = LlamaCloud(
             token="YOUR_TOKEN",
         )
-        client.parsing.get_supported_file_extensions()
+        client.parsing.get_parsing_history_result()
         """
         _response = self._client_wrapper.httpx_client.request(
             "GET",
-            urllib.parse.urljoin(f"{self._client_wrapper.get_base_url()}/", "api/v1/parsing/supported_file_extensions"),
+            urllib.parse.urljoin(f"{self._client_wrapper.get_base_url()}/", "api/v1/parsing/history"),
             headers=self._client_wrapper.get_headers(),
             timeout=60,
         )
         if 200 <= _response.status_code < 300:
-            return pydantic.parse_obj_as(typing.List[LlamaParseSupportedFileExtensions], _response.json())  # type: ignore
-        try:
-            _response_json = _response.json()
-        except JSONDecodeError:
-            raise ApiError(status_code=_response.status_code, body=_response.text)
-        raise ApiError(status_code=_response.status_code, body=_response_json)
-
-    def screenshot(
-        self,
-        *,
-        organization_id: typing.Optional[str] = None,
-        project_id: typing.Optional[str] = None,
-        file: typing.Optional[str] = OMIT,
-        do_not_cache: bool,
-        http_proxy: str,
-        input_s_3_path: str,
-        input_s_3_region: str,
-        input_url: str,
-        invalidate_cache: bool,
-        max_pages: typing.Optional[int] = OMIT,
-        output_s_3_path_prefix: str,
-        output_s_3_region: str,
-        target_pages: str,
-        webhook_url: str,
-        webhook_configurations: str,
-        job_timeout_in_seconds: float,
-        job_timeout_extra_time_per_page_in_seconds: float,
-    ) -> ParsingJob:
-        """
-        Parameters:
-            - organization_id: typing.Optional[str].
-
-            - project_id: typing.Optional[str].
-
-            - file: typing.Optional[str].
-
-            - do_not_cache: bool.
-
-            - http_proxy: str.
-
-            - input_s_3_path: str.
-
-            - input_s_3_region: str.
-
-            - input_url: str.
-
-            - invalidate_cache: bool.
-
-            - max_pages: typing.Optional[int].
-
-            - output_s_3_path_prefix: str.
-
-            - output_s_3_region: str.
-
-            - target_pages: str.
-
-            - webhook_url: str.
-
-            - webhook_configurations: str.
-
-            - job_timeout_in_seconds: float.
-
-            - job_timeout_extra_time_per_page_in_seconds: float.
-        """
-        _request: typing.Dict[str, typing.Any] = {
-            "do_not_cache": do_not_cache,
-            "http_proxy": http_proxy,
-            "input_s3_path": input_s_3_path,
-            "input_s3_region": input_s_3_region,
-            "input_url": input_url,
-            "invalidate_cache": invalidate_cache,
-            "output_s3_path_prefix": output_s_3_path_prefix,
-            "output_s3_region": output_s_3_region,
-            "target_pages": target_pages,
-            "webhook_url": webhook_url,
-            "webhook_configurations": webhook_configurations,
-            "job_timeout_in_seconds": job_timeout_in_seconds,
-            "job_timeout_extra_time_per_page_in_seconds": job_timeout_extra_time_per_page_in_seconds,
-        }
-        if file is not OMIT:
-            _request["file"] = file
-        if max_pages is not OMIT:
-            _request["max_pages"] = max_pages
-        _response = self._client_wrapper.httpx_client.request(
-            "POST",
-            urllib.parse.urljoin(f"{self._client_wrapper.get_base_url()}/", "api/v1/parsing/screenshot"),
-            params=remove_none_from_dict({"organization_id": organization_id, "project_id": project_id}),
-            json=jsonable_encoder(_request),
-            headers=self._client_wrapper.get_headers(),
-            timeout=60,
-        )
-        if 200 <= _response.status_code < 300:
-            return pydantic.parse_obj_as(ParsingJob, _response.json())  # type: ignore
-        if _response.status_code == 422:
-            raise UnprocessableEntityError(pydantic.parse_obj_as(HttpValidationError, _response.json()))  # type: ignore
-        try:
-            _response_json = _response.json()
-        except JSONDecodeError:
-            raise ApiError(status_code=_response.status_code, body=_response.text)
-        raise ApiError(status_code=_response.status_code, body=_response_json)
-
-    def upload_file(
-        self,
-        *,
-        organization_id: typing.Optional[str] = None,
-        project_id: typing.Optional[str] = None,
-        file: typing.Optional[str] = OMIT,
-        adaptive_long_table: bool,
-        annotate_links: bool,
-        auto_mode: bool,
-        auto_mode_trigger_on_image_in_page: bool,
-        auto_mode_trigger_on_table_in_page: bool,
-        auto_mode_trigger_on_text_in_page: str,
-        auto_mode_trigger_on_regexp_in_page: str,
-        auto_mode_configuration_json: str,
-        azure_openai_api_version: str,
-        azure_openai_deployment_name: str,
-        azure_openai_endpoint: str,
-        azure_openai_key: str,
-        bbox_bottom: float,
-        bbox_left: float,
-        bbox_right: float,
-        bbox_top: float,
-        compact_markdown_table: bool,
-        disable_ocr: bool,
-        disable_reconstruction: bool,
-        disable_image_extraction: bool,
-        do_not_cache: bool,
-        do_not_unroll_columns: bool,
-        extract_charts: bool,
-        guess_xlsx_sheet_name: bool,
-        high_res_ocr: bool,
-        html_make_all_elements_visible: bool,
-        layout_aware: bool,
-        specialized_chart_parsing_agentic: bool,
-        specialized_chart_parsing_plus: bool,
-        specialized_chart_parsing_efficient: bool,
-        specialized_image_parsing: bool,
-        precise_bounding_box: bool,
-        html_remove_fixed_elements: bool,
-        html_remove_navigation_elements: bool,
-        http_proxy: str,
-        input_s_3_path: str,
-        input_s_3_region: str,
-        input_url: str,
-        invalidate_cache: bool,
-        language: typing.List[ParserLanguages],
-        extract_layout: bool,
-        max_pages: typing.Optional[int] = OMIT,
-        merge_tables_across_pages_in_markdown: bool,
-        outlined_table_extraction: bool,
-        output_pdf_of_document: bool,
-        output_s_3_path_prefix: str,
-        output_s_3_region: str,
-        page_prefix: str,
-        page_separator: str,
-        page_suffix: str,
-        preserve_layout_alignment_across_pages: bool,
-        preserve_very_small_text: bool,
-        skip_diagonal_text: bool,
-        spreadsheet_extract_sub_tables: bool,
-        spreadsheet_force_formula_computation: bool,
-        inline_images_in_markdown: bool,
-        structured_output: bool,
-        structured_output_json_schema: str,
-        structured_output_json_schema_name: str,
-        take_screenshot: bool,
-        target_pages: str,
-        vendor_multimodal_api_key: str,
-        vendor_multimodal_model_name: str,
-        model: str,
-        webhook_url: str,
-        webhook_configurations: str,
-        preset: str,
-        parse_mode: typing.Optional[ParsingMode] = OMIT,
-        page_error_tolerance: float,
-        replace_failed_page_mode: typing.Optional[FailPageMode] = OMIT,
-        replace_failed_page_with_error_message_prefix: str,
-        replace_failed_page_with_error_message_suffix: str,
-        system_prompt: str,
-        system_prompt_append: str,
-        user_prompt: str,
-        job_timeout_in_seconds: float,
-        job_timeout_extra_time_per_page_in_seconds: float,
-        strict_mode_image_extraction: bool,
-        strict_mode_image_ocr: bool,
-        strict_mode_reconstruction: bool,
-        strict_mode_buggy_font: bool,
-        save_images: bool,
-        ignore_document_elements_for_layout_detection: bool,
-        output_tables_as_html: bool,
-        markdown_table_multiline_header_separator: str,
-        use_vendor_multimodal_model: bool,
-        bounding_box: str,
-        gpt_4_o_mode: bool,
-        gpt_4_o_api_key: str,
-        complemental_formatting_instruction: str,
-        content_guideline_instruction: str,
-        premium_mode: bool,
-        is_formatting_instruction: bool,
-        continuous_mode: bool,
-        parsing_instruction: str,
-        fast_mode: bool,
-        formatting_instruction: str,
-        hide_headers: bool,
-        hide_footers: bool,
-        page_header_prefix: str,
-        page_header_suffix: str,
-        page_footer_prefix: str,
-        page_footer_suffix: str,
-    ) -> ParsingJob:
-        """
-        Parameters:
-            - organization_id: typing.Optional[str].
-
-            - project_id: typing.Optional[str].
-
-            - file: typing.Optional[str].
-
-            - adaptive_long_table: bool.
-
-            - annotate_links: bool.
-
-            - auto_mode: bool.
-
-            - auto_mode_trigger_on_image_in_page: bool.
-
-            - auto_mode_trigger_on_table_in_page: bool.
-
-            - auto_mode_trigger_on_text_in_page: str.
-
-            - auto_mode_trigger_on_regexp_in_page: str.
-
-            - auto_mode_configuration_json: str.
-
-            - azure_openai_api_version: str.
-
-            - azure_openai_deployment_name: str.
-
-            - azure_openai_endpoint: str.
-
-            - azure_openai_key: str.
-
-            - bbox_bottom: float.
-
-            - bbox_left: float.
-
-            - bbox_right: float.
-
-            - bbox_top: float.
-
-            - compact_markdown_table: bool.
-
-            - disable_ocr: bool.
-
-            - disable_reconstruction: bool.
-
-            - disable_image_extraction: bool.
-
-            - do_not_cache: bool.
-
-            - do_not_unroll_columns: bool.
-
-            - extract_charts: bool.
-
-            - guess_xlsx_sheet_name: bool.
-
-            - high_res_ocr: bool.
-
-            - html_make_all_elements_visible: bool.
-
-            - layout_aware: bool.
-
-            - specialized_chart_parsing_agentic: bool.
-
-            - specialized_chart_parsing_plus: bool.
-
-            - specialized_chart_parsing_efficient: bool.
-
-            - specialized_image_parsing: bool.
-
-            - precise_bounding_box: bool.
-
-            - html_remove_fixed_elements: bool.
-
-            - html_remove_navigation_elements: bool.
-
-            - http_proxy: str.
-
-            - input_s_3_path: str.
-
-            - input_s_3_region: str.
-
-            - input_url: str.
-
-            - invalidate_cache: bool.
-
-            - language: typing.List[ParserLanguages].
-
-            - extract_layout: bool.
-
-            - max_pages: typing.Optional[int].
-
-            - merge_tables_across_pages_in_markdown: bool.
-
-            - outlined_table_extraction: bool.
-
-            - output_pdf_of_document: bool.
-
-            - output_s_3_path_prefix: str.
-
-            - output_s_3_region: str.
-
-            - page_prefix: str.
-
-            - page_separator: str.
-
-            - page_suffix: str.
-
-            - preserve_layout_alignment_across_pages: bool.
-
-            - preserve_very_small_text: bool.
-
-            - skip_diagonal_text: bool.
-
-            - spreadsheet_extract_sub_tables: bool.
-
-            - spreadsheet_force_formula_computation: bool.
-
-            - inline_images_in_markdown: bool.
-
-            - structured_output: bool.
-
-            - structured_output_json_schema: str.
-
-            - structured_output_json_schema_name: str.
-
-            - take_screenshot: bool.
-
-            - target_pages: str.
-
-            - vendor_multimodal_api_key: str.
-
-            - vendor_multimodal_model_name: str.
-
-            - model: str.
-
-            - webhook_url: str.
-
-            - webhook_configurations: str.
-
-            - preset: str.
-
-            - parse_mode: typing.Optional[ParsingMode].
-
-            - page_error_tolerance: float.
-
-            - replace_failed_page_mode: typing.Optional[FailPageMode].
-
-            - replace_failed_page_with_error_message_prefix: str.
-
-            - replace_failed_page_with_error_message_suffix: str.
-
-            - system_prompt: str.
-
-            - system_prompt_append: str.
-
-            - user_prompt: str.
-
-            - job_timeout_in_seconds: float.
-
-            - job_timeout_extra_time_per_page_in_seconds: float.
-
-            - strict_mode_image_extraction: bool.
-
-            - strict_mode_image_ocr: bool.
-
-            - strict_mode_reconstruction: bool.
-
-            - strict_mode_buggy_font: bool.
-
-            - save_images: bool.
-
-            - ignore_document_elements_for_layout_detection: bool.
-
-            - output_tables_as_html: bool.
-
-            - markdown_table_multiline_header_separator: str.
-
-            - use_vendor_multimodal_model: bool.
-
-            - bounding_box: str.
-
-            - gpt_4_o_mode: bool.
-
-            - gpt_4_o_api_key: str.
-
-            - complemental_formatting_instruction: str.
-
-            - content_guideline_instruction: str.
-
-            - premium_mode: bool.
-
-            - is_formatting_instruction: bool.
-
-            - continuous_mode: bool.
-
-            - parsing_instruction: str.
-
-            - fast_mode: bool.
-
-            - formatting_instruction: str.
-
-            - hide_headers: bool.
-
-            - hide_footers: bool.
-
-            - page_header_prefix: str.
-
-            - page_header_suffix: str.
-
-            - page_footer_prefix: str.
-
-            - page_footer_suffix: str.
-        """
-        _request: typing.Dict[str, typing.Any] = {
-            "adaptive_long_table": adaptive_long_table,
-            "annotate_links": annotate_links,
-            "auto_mode": auto_mode,
-            "auto_mode_trigger_on_image_in_page": auto_mode_trigger_on_image_in_page,
-            "auto_mode_trigger_on_table_in_page": auto_mode_trigger_on_table_in_page,
-            "auto_mode_trigger_on_text_in_page": auto_mode_trigger_on_text_in_page,
-            "auto_mode_trigger_on_regexp_in_page": auto_mode_trigger_on_regexp_in_page,
-            "auto_mode_configuration_json": auto_mode_configuration_json,
-            "azure_openai_api_version": azure_openai_api_version,
-            "azure_openai_deployment_name": azure_openai_deployment_name,
-            "azure_openai_endpoint": azure_openai_endpoint,
-            "azure_openai_key": azure_openai_key,
-            "bbox_bottom": bbox_bottom,
-            "bbox_left": bbox_left,
-            "bbox_right": bbox_right,
-            "bbox_top": bbox_top,
-            "compact_markdown_table": compact_markdown_table,
-            "disable_ocr": disable_ocr,
-            "disable_reconstruction": disable_reconstruction,
-            "disable_image_extraction": disable_image_extraction,
-            "do_not_cache": do_not_cache,
-            "do_not_unroll_columns": do_not_unroll_columns,
-            "extract_charts": extract_charts,
-            "guess_xlsx_sheet_name": guess_xlsx_sheet_name,
-            "high_res_ocr": high_res_ocr,
-            "html_make_all_elements_visible": html_make_all_elements_visible,
-            "layout_aware": layout_aware,
-            "specialized_chart_parsing_agentic": specialized_chart_parsing_agentic,
-            "specialized_chart_parsing_plus": specialized_chart_parsing_plus,
-            "specialized_chart_parsing_efficient": specialized_chart_parsing_efficient,
-            "specialized_image_parsing": specialized_image_parsing,
-            "precise_bounding_box": precise_bounding_box,
-            "html_remove_fixed_elements": html_remove_fixed_elements,
-            "html_remove_navigation_elements": html_remove_navigation_elements,
-            "http_proxy": http_proxy,
-            "input_s3_path": input_s_3_path,
-            "input_s3_region": input_s_3_region,
-            "input_url": input_url,
-            "invalidate_cache": invalidate_cache,
-            "language": language,
-            "extract_layout": extract_layout,
-            "merge_tables_across_pages_in_markdown": merge_tables_across_pages_in_markdown,
-            "outlined_table_extraction": outlined_table_extraction,
-            "output_pdf_of_document": output_pdf_of_document,
-            "output_s3_path_prefix": output_s_3_path_prefix,
-            "output_s3_region": output_s_3_region,
-            "page_prefix": page_prefix,
-            "page_separator": page_separator,
-            "page_suffix": page_suffix,
-            "preserve_layout_alignment_across_pages": preserve_layout_alignment_across_pages,
-            "preserve_very_small_text": preserve_very_small_text,
-            "skip_diagonal_text": skip_diagonal_text,
-            "spreadsheet_extract_sub_tables": spreadsheet_extract_sub_tables,
-            "spreadsheet_force_formula_computation": spreadsheet_force_formula_computation,
-            "inline_images_in_markdown": inline_images_in_markdown,
-            "structured_output": structured_output,
-            "structured_output_json_schema": structured_output_json_schema,
-            "structured_output_json_schema_name": structured_output_json_schema_name,
-            "take_screenshot": take_screenshot,
-            "target_pages": target_pages,
-            "vendor_multimodal_api_key": vendor_multimodal_api_key,
-            "vendor_multimodal_model_name": vendor_multimodal_model_name,
-            "model": model,
-            "webhook_url": webhook_url,
-            "webhook_configurations": webhook_configurations,
-            "preset": preset,
-            "page_error_tolerance": page_error_tolerance,
-            "replace_failed_page_with_error_message_prefix": replace_failed_page_with_error_message_prefix,
-            "replace_failed_page_with_error_message_suffix": replace_failed_page_with_error_message_suffix,
-            "system_prompt": system_prompt,
-            "system_prompt_append": system_prompt_append,
-            "user_prompt": user_prompt,
-            "job_timeout_in_seconds": job_timeout_in_seconds,
-            "job_timeout_extra_time_per_page_in_seconds": job_timeout_extra_time_per_page_in_seconds,
-            "strict_mode_image_extraction": strict_mode_image_extraction,
-            "strict_mode_image_ocr": strict_mode_image_ocr,
-            "strict_mode_reconstruction": strict_mode_reconstruction,
-            "strict_mode_buggy_font": strict_mode_buggy_font,
-            "save_images": save_images,
-            "ignore_document_elements_for_layout_detection": ignore_document_elements_for_layout_detection,
-            "output_tables_as_HTML": output_tables_as_html,
-            "markdown_table_multiline_header_separator": markdown_table_multiline_header_separator,
-            "use_vendor_multimodal_model": use_vendor_multimodal_model,
-            "bounding_box": bounding_box,
-            "gpt4o_mode": gpt_4_o_mode,
-            "gpt4o_api_key": gpt_4_o_api_key,
-            "complemental_formatting_instruction": complemental_formatting_instruction,
-            "content_guideline_instruction": content_guideline_instruction,
-            "premium_mode": premium_mode,
-            "is_formatting_instruction": is_formatting_instruction,
-            "continuous_mode": continuous_mode,
-            "parsing_instruction": parsing_instruction,
-            "fast_mode": fast_mode,
-            "formatting_instruction": formatting_instruction,
-            "hide_headers": hide_headers,
-            "hide_footers": hide_footers,
-            "page_header_prefix": page_header_prefix,
-            "page_header_suffix": page_header_suffix,
-            "page_footer_prefix": page_footer_prefix,
-            "page_footer_suffix": page_footer_suffix,
-        }
-        if file is not OMIT:
-            _request["file"] = file
-        if max_pages is not OMIT:
-            _request["max_pages"] = max_pages
-        if parse_mode is not OMIT:
-            _request["parse_mode"] = parse_mode
-        if replace_failed_page_mode is not OMIT:
-            _request["replace_failed_page_mode"] = replace_failed_page_mode
-        _response = self._client_wrapper.httpx_client.request(
-            "POST",
-            urllib.parse.urljoin(f"{self._client_wrapper.get_base_url()}/", "api/v1/parsing/upload"),
-            params=remove_none_from_dict({"organization_id": organization_id, "project_id": project_id}),
-            json=jsonable_encoder(_request),
-            headers=self._client_wrapper.get_headers(),
-            timeout=60,
-        )
-        if 200 <= _response.status_code < 300:
-            return pydantic.parse_obj_as(ParsingJob, _response.json())  # type: ignore
+            return pydantic.parse_obj_as(typing.List[ParsingHistoryItem], _response.json())  # type: ignore
         if _response.status_code == 422:
             raise UnprocessableEntityError(pydantic.parse_obj_as(HttpValidationError, _response.json()))  # type: ignore
         try:
@@ -679,38 +101,6 @@ class ParsingClient:
             raise ApiError(status_code=_response.status_code, body=_response.text)
         raise ApiError(status_code=_response.status_code, body=_response_json)
 
-    def get_job_parameters(self, job_id: str) -> typing.Any:
-        """
-        Get a job by id
-
-        Parameters:
-            - job_id: str.
-        ---
-        from llama_cloud.client import LlamaCloud
-
-        client = LlamaCloud(
-            token="YOUR_TOKEN",
-        )
-        client.parsing.get_job_parameters(
-            job_id="string",
-        )
-        """
-        _response = self._client_wrapper.httpx_client.request(
-            "GET",
-            urllib.parse.urljoin(f"{self._client_wrapper.get_base_url()}/", f"api/v1/parsing/job/{job_id}/parameters"),
-            headers=self._client_wrapper.get_headers(),
-            timeout=60,
-        )
-        if 200 <= _response.status_code < 300:
-            return pydantic.parse_obj_as(typing.Any, _response.json())  # type: ignore
-        if _response.status_code == 422:
-            raise UnprocessableEntityError(pydantic.parse_obj_as(HttpValidationError, _response.json()))  # type: ignore
-        try:
-            _response_json = _response.json()
-        except JSONDecodeError:
-            raise ApiError(status_code=_response.status_code, body=_response.text)
-        raise ApiError(status_code=_response.status_code, body=_response_json)
-
     def get_parsing_job_details(self, job_id: str) -> typing.Any:
         """
         Get a job by id
@@ -743,7 +133,113 @@ class ParsingClient:
             raise ApiError(status_code=_response.status_code, body=_response.text)
         raise ApiError(status_code=_response.status_code, body=_response_json)
 
-    def get_job_text_result(self, job_id: str, *, organization_id: typing.Optional[str] = None) -> ParsingJobTextResult:
+    def get_job_parameters(self, job_id: str) -> typing.Any:
+        """
+        Get a job by id
+
+        Parameters:
+            - job_id: str.
+        ---
+        from llama_cloud.client import LlamaCloud
+
+        client = LlamaCloud(
+            token="YOUR_TOKEN",
+        )
+        client.parsing.get_job_parameters(
+            job_id="string",
+        )
+        """
+        _response = self._client_wrapper.httpx_client.request(
+            "GET",
+            urllib.parse.urljoin(f"{self._client_wrapper.get_base_url()}/", f"api/v1/parsing/job/{job_id}/parameters"),
+            headers=self._client_wrapper.get_headers(),
+            timeout=60,
+        )
+        if 200 <= _response.status_code < 300:
+            return pydantic.parse_obj_as(typing.Any, _response.json())  # type: ignore
+        if _response.status_code == 422:
+            raise UnprocessableEntityError(pydantic.parse_obj_as(HttpValidationError, _response.json()))  # type: ignore
+        try:
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, body=_response.text)
+        raise ApiError(status_code=_response.status_code, body=_response_json)
+
+    def generate_presigned_url(self, job_id: str, filename: str) -> PresignedUrl:
+        """
+        Generate a presigned URL for a job
+
+        Parameters:
+            - job_id: str.
+
+            - filename: str.
+        ---
+        from llama_cloud.client import LlamaCloud
+
+        client = LlamaCloud(
+            token="YOUR_TOKEN",
+        )
+        client.parsing.generate_presigned_url(
+            job_id="string",
+            filename="string",
+        )
+        """
+        _response = self._client_wrapper.httpx_client.request(
+            "GET",
+            urllib.parse.urljoin(
+                f"{self._client_wrapper.get_base_url()}/", f"api/v1/parsing/job/{job_id}/read/{filename}"
+            ),
+            headers=self._client_wrapper.get_headers(),
+            timeout=60,
+        )
+        if 200 <= _response.status_code < 300:
+            return pydantic.parse_obj_as(PresignedUrl, _response.json())  # type: ignore
+        if _response.status_code == 422:
+            raise UnprocessableEntityError(pydantic.parse_obj_as(HttpValidationError, _response.json()))  # type: ignore
+        try:
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, body=_response.text)
+        raise ApiError(status_code=_response.status_code, body=_response_json)
+
+    def get_job_image_result(self, job_id: str, name: str) -> None:
+        """
+        Get a job by id
+
+        Parameters:
+            - job_id: str.
+
+            - name: str.
+        ---
+        from llama_cloud.client import LlamaCloud
+
+        client = LlamaCloud(
+            token="YOUR_TOKEN",
+        )
+        client.parsing.get_job_image_result(
+            job_id="string",
+            name="string",
+        )
+        """
+        _response = self._client_wrapper.httpx_client.request(
+            "GET",
+            urllib.parse.urljoin(
+                f"{self._client_wrapper.get_base_url()}/", f"api/v1/parsing/job/{job_id}/result/image/{name}"
+            ),
+            headers=self._client_wrapper.get_headers(),
+            timeout=60,
+        )
+        if 200 <= _response.status_code < 300:
+            return
+        if _response.status_code == 422:
+            raise UnprocessableEntityError(pydantic.parse_obj_as(HttpValidationError, _response.json()))  # type: ignore
+        try:
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, body=_response.text)
+        raise ApiError(status_code=_response.status_code, body=_response_json)
+
+    def get_job_json_result(self, job_id: str, *, organization_id: typing.Optional[str] = None) -> ParsingJobJsonResult:
         """
         Get a job by id
 
@@ -760,19 +256,227 @@ class ParsingClient:
         client = LlamaCloud(
             token="YOUR_TOKEN",
         )
-        client.parsing.get_job_text_result(
+        client.parsing.get_job_json_result(
             job_id="string",
         )
         """
         _response = self._client_wrapper.httpx_client.request(
             "GET",
-            urllib.parse.urljoin(f"{self._client_wrapper.get_base_url()}/", f"api/v1/parsing/job/{job_id}/result/text"),
+            urllib.parse.urljoin(f"{self._client_wrapper.get_base_url()}/", f"api/v1/parsing/job/{job_id}/result/json"),
             params=remove_none_from_dict({"organization_id": organization_id}),
             headers=self._client_wrapper.get_headers(),
             timeout=60,
         )
         if 200 <= _response.status_code < 300:
-            return pydantic.parse_obj_as(ParsingJobTextResult, _response.json())  # type: ignore
+            return pydantic.parse_obj_as(ParsingJobJsonResult, _response.json())  # type: ignore
+        if _response.status_code == 422:
+            raise UnprocessableEntityError(pydantic.parse_obj_as(HttpValidationError, _response.json()))  # type: ignore
+        try:
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, body=_response.text)
+        raise ApiError(status_code=_response.status_code, body=_response_json)
+
+    def get_job_result(self, job_id: str, *, organization_id: typing.Optional[str] = None) -> ParsingJobMarkdownResult:
+        """
+        Get a job by id
+
+        Note: The 'credits_used' and 'job_credits_usage' fields in the response metadata are deprecated
+        and will be removed in a future release.
+
+        Parameters:
+            - job_id: str.
+
+            - organization_id: typing.Optional[str].
+        ---
+        from llama_cloud.client import LlamaCloud
+
+        client = LlamaCloud(
+            token="YOUR_TOKEN",
+        )
+        client.parsing.get_job_result(
+            job_id="string",
+        )
+        """
+        _response = self._client_wrapper.httpx_client.request(
+            "GET",
+            urllib.parse.urljoin(
+                f"{self._client_wrapper.get_base_url()}/", f"api/v1/parsing/job/{job_id}/result/markdown"
+            ),
+            params=remove_none_from_dict({"organization_id": organization_id}),
+            headers=self._client_wrapper.get_headers(),
+            timeout=60,
+        )
+        if 200 <= _response.status_code < 300:
+            return pydantic.parse_obj_as(ParsingJobMarkdownResult, _response.json())  # type: ignore
+        if _response.status_code == 422:
+            raise UnprocessableEntityError(pydantic.parse_obj_as(HttpValidationError, _response.json()))  # type: ignore
+        try:
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, body=_response.text)
+        raise ApiError(status_code=_response.status_code, body=_response_json)
+
+    def get_job_raw_text_result(self, job_id: str) -> typing.Any:
+        """
+        Get a job by id
+
+        Parameters:
+            - job_id: str.
+        ---
+        from llama_cloud.client import LlamaCloud
+
+        client = LlamaCloud(
+            token="YOUR_TOKEN",
+        )
+        client.parsing.get_job_raw_text_result(
+            job_id="string",
+        )
+        """
+        _response = self._client_wrapper.httpx_client.request(
+            "GET",
+            urllib.parse.urljoin(f"{self._client_wrapper.get_base_url()}/", f"api/v1/parsing/job/{job_id}/result/pdf"),
+            headers=self._client_wrapper.get_headers(),
+            timeout=60,
+        )
+        if 200 <= _response.status_code < 300:
+            return pydantic.parse_obj_as(typing.Any, _response.json())  # type: ignore
+        if _response.status_code == 422:
+            raise UnprocessableEntityError(pydantic.parse_obj_as(HttpValidationError, _response.json()))  # type: ignore
+        try:
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, body=_response.text)
+        raise ApiError(status_code=_response.status_code, body=_response_json)
+
+    def get_job_json_raw_result(self, job_id: str) -> typing.Any:
+        """
+        Get a job by id
+
+        Parameters:
+            - job_id: str.
+        ---
+        from llama_cloud.client import LlamaCloud
+
+        client = LlamaCloud(
+            token="YOUR_TOKEN",
+        )
+        client.parsing.get_job_json_raw_result(
+            job_id="string",
+        )
+        """
+        _response = self._client_wrapper.httpx_client.request(
+            "GET",
+            urllib.parse.urljoin(
+                f"{self._client_wrapper.get_base_url()}/", f"api/v1/parsing/job/{job_id}/result/raw/json"
+            ),
+            headers=self._client_wrapper.get_headers(),
+            timeout=60,
+        )
+        if 200 <= _response.status_code < 300:
+            return pydantic.parse_obj_as(typing.Any, _response.json())  # type: ignore
+        if _response.status_code == 422:
+            raise UnprocessableEntityError(pydantic.parse_obj_as(HttpValidationError, _response.json()))  # type: ignore
+        try:
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, body=_response.text)
+        raise ApiError(status_code=_response.status_code, body=_response_json)
+
+    def get_job_raw_md_result(self, job_id: str) -> typing.Any:
+        """
+        Get a job by id
+
+        Parameters:
+            - job_id: str.
+        ---
+        from llama_cloud.client import LlamaCloud
+
+        client = LlamaCloud(
+            token="YOUR_TOKEN",
+        )
+        client.parsing.get_job_raw_md_result(
+            job_id="string",
+        )
+        """
+        _response = self._client_wrapper.httpx_client.request(
+            "GET",
+            urllib.parse.urljoin(
+                f"{self._client_wrapper.get_base_url()}/", f"api/v1/parsing/job/{job_id}/result/raw/markdown"
+            ),
+            headers=self._client_wrapper.get_headers(),
+            timeout=60,
+        )
+        if 200 <= _response.status_code < 300:
+            return pydantic.parse_obj_as(typing.Any, _response.json())  # type: ignore
+        if _response.status_code == 422:
+            raise UnprocessableEntityError(pydantic.parse_obj_as(HttpValidationError, _response.json()))  # type: ignore
+        try:
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, body=_response.text)
+        raise ApiError(status_code=_response.status_code, body=_response_json)
+
+    def get_job_raw_text_result_raw_pdf(self, job_id: str) -> typing.Any:
+        """
+        Get a job by id
+
+        Parameters:
+            - job_id: str.
+        ---
+        from llama_cloud.client import LlamaCloud
+
+        client = LlamaCloud(
+            token="YOUR_TOKEN",
+        )
+        client.parsing.get_job_raw_text_result_raw_pdf(
+            job_id="string",
+        )
+        """
+        _response = self._client_wrapper.httpx_client.request(
+            "GET",
+            urllib.parse.urljoin(
+                f"{self._client_wrapper.get_base_url()}/", f"api/v1/parsing/job/{job_id}/result/raw/pdf"
+            ),
+            headers=self._client_wrapper.get_headers(),
+            timeout=60,
+        )
+        if 200 <= _response.status_code < 300:
+            return pydantic.parse_obj_as(typing.Any, _response.json())  # type: ignore
+        if _response.status_code == 422:
+            raise UnprocessableEntityError(pydantic.parse_obj_as(HttpValidationError, _response.json()))  # type: ignore
+        try:
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, body=_response.text)
+        raise ApiError(status_code=_response.status_code, body=_response_json)
+
+    def get_job_raw_structured_result(self, job_id: str) -> typing.Any:
+        """
+        Get a job by id
+
+        Parameters:
+            - job_id: str.
+        ---
+        from llama_cloud.client import LlamaCloud
+
+        client = LlamaCloud(
+            token="YOUR_TOKEN",
+        )
+        client.parsing.get_job_raw_structured_result(
+            job_id="string",
+        )
+        """
+        _response = self._client_wrapper.httpx_client.request(
+            "GET",
+            urllib.parse.urljoin(
+                f"{self._client_wrapper.get_base_url()}/", f"api/v1/parsing/job/{job_id}/result/raw/structured"
+            ),
+            headers=self._client_wrapper.get_headers(),
+            timeout=60,
+        )
+        if 200 <= _response.status_code < 300:
+            return pydantic.parse_obj_as(typing.Any, _response.json())  # type: ignore
         if _response.status_code == 422:
             raise UnprocessableEntityError(pydantic.parse_obj_as(HttpValidationError, _response.json()))  # type: ignore
         try:
@@ -815,7 +519,7 @@ class ParsingClient:
             raise ApiError(status_code=_response.status_code, body=_response.text)
         raise ApiError(status_code=_response.status_code, body=_response_json)
 
-    def get_job_raw_text_result(self, job_id: str) -> typing.Any:
+    def get_job_raw_xlsx_result_raw(self, job_id: str) -> typing.Any:
         """
         Get a job by id
 
@@ -827,46 +531,14 @@ class ParsingClient:
         client = LlamaCloud(
             token="YOUR_TOKEN",
         )
-        client.parsing.get_job_raw_text_result(
-            job_id="string",
-        )
-        """
-        _response = self._client_wrapper.httpx_client.request(
-            "GET",
-            urllib.parse.urljoin(f"{self._client_wrapper.get_base_url()}/", f"api/v1/parsing/job/{job_id}/result/pdf"),
-            headers=self._client_wrapper.get_headers(),
-            timeout=60,
-        )
-        if 200 <= _response.status_code < 300:
-            return pydantic.parse_obj_as(typing.Any, _response.json())  # type: ignore
-        if _response.status_code == 422:
-            raise UnprocessableEntityError(pydantic.parse_obj_as(HttpValidationError, _response.json()))  # type: ignore
-        try:
-            _response_json = _response.json()
-        except JSONDecodeError:
-            raise ApiError(status_code=_response.status_code, body=_response.text)
-        raise ApiError(status_code=_response.status_code, body=_response_json)
-
-    def get_job_raw_text_result_raw_pdf(self, job_id: str) -> typing.Any:
-        """
-        Get a job by id
-
-        Parameters:
-            - job_id: str.
-        ---
-        from llama_cloud.client import LlamaCloud
-
-        client = LlamaCloud(
-            token="YOUR_TOKEN",
-        )
-        client.parsing.get_job_raw_text_result_raw_pdf(
+        client.parsing.get_job_raw_xlsx_result_raw(
             job_id="string",
         )
         """
         _response = self._client_wrapper.httpx_client.request(
             "GET",
             urllib.parse.urljoin(
-                f"{self._client_wrapper.get_base_url()}/", f"api/v1/parsing/job/{job_id}/result/raw/pdf"
+                f"{self._client_wrapper.get_base_url()}/", f"api/v1/parsing/job/{job_id}/result/raw/xlsx"
             ),
             headers=self._client_wrapper.get_headers(),
             timeout=60,
@@ -923,32 +595,36 @@ class ParsingClient:
             raise ApiError(status_code=_response.status_code, body=_response.text)
         raise ApiError(status_code=_response.status_code, body=_response_json)
 
-    def get_job_raw_structured_result(self, job_id: str) -> typing.Any:
+    def get_job_text_result(self, job_id: str, *, organization_id: typing.Optional[str] = None) -> ParsingJobTextResult:
         """
         Get a job by id
 
+        Note: The 'credits_used' and 'job_credits_usage' fields in the response metadata are deprecated
+        and will be removed in a future release.
+
         Parameters:
             - job_id: str.
+
+            - organization_id: typing.Optional[str].
         ---
         from llama_cloud.client import LlamaCloud
 
         client = LlamaCloud(
             token="YOUR_TOKEN",
         )
-        client.parsing.get_job_raw_structured_result(
+        client.parsing.get_job_text_result(
             job_id="string",
         )
         """
         _response = self._client_wrapper.httpx_client.request(
             "GET",
-            urllib.parse.urljoin(
-                f"{self._client_wrapper.get_base_url()}/", f"api/v1/parsing/job/{job_id}/result/raw/structured"
-            ),
+            urllib.parse.urljoin(f"{self._client_wrapper.get_base_url()}/", f"api/v1/parsing/job/{job_id}/result/text"),
+            params=remove_none_from_dict({"organization_id": organization_id}),
             headers=self._client_wrapper.get_headers(),
             timeout=60,
         )
         if 200 <= _response.status_code < 300:
-            return pydantic.parse_obj_as(typing.Any, _response.json())  # type: ignore
+            return pydantic.parse_obj_as(ParsingJobTextResult, _response.json())  # type: ignore
         if _response.status_code == 422:
             raise UnprocessableEntityError(pydantic.parse_obj_as(HttpValidationError, _response.json()))  # type: ignore
         try:
@@ -989,342 +665,26 @@ class ParsingClient:
             raise ApiError(status_code=_response.status_code, body=_response.text)
         raise ApiError(status_code=_response.status_code, body=_response_json)
 
-    def get_job_raw_xlsx_result_raw(self, job_id: str) -> typing.Any:
-        """
-        Get a job by id
-
-        Parameters:
-            - job_id: str.
-        ---
-        from llama_cloud.client import LlamaCloud
-
-        client = LlamaCloud(
-            token="YOUR_TOKEN",
-        )
-        client.parsing.get_job_raw_xlsx_result_raw(
-            job_id="string",
-        )
-        """
-        _response = self._client_wrapper.httpx_client.request(
-            "GET",
-            urllib.parse.urljoin(
-                f"{self._client_wrapper.get_base_url()}/", f"api/v1/parsing/job/{job_id}/result/raw/xlsx"
-            ),
-            headers=self._client_wrapper.get_headers(),
-            timeout=60,
-        )
-        if 200 <= _response.status_code < 300:
-            return pydantic.parse_obj_as(typing.Any, _response.json())  # type: ignore
-        if _response.status_code == 422:
-            raise UnprocessableEntityError(pydantic.parse_obj_as(HttpValidationError, _response.json()))  # type: ignore
-        try:
-            _response_json = _response.json()
-        except JSONDecodeError:
-            raise ApiError(status_code=_response.status_code, body=_response.text)
-        raise ApiError(status_code=_response.status_code, body=_response_json)
-
-    def get_job_result(self, job_id: str, *, organization_id: typing.Optional[str] = None) -> ParsingJobMarkdownResult:
-        """
-        Get a job by id
-
-        Note: The 'credits_used' and 'job_credits_usage' fields in the response metadata are deprecated
-        and will be removed in a future release.
-
-        Parameters:
-            - job_id: str.
-
-            - organization_id: typing.Optional[str].
-        ---
-        from llama_cloud.client import LlamaCloud
-
-        client = LlamaCloud(
-            token="YOUR_TOKEN",
-        )
-        client.parsing.get_job_result(
-            job_id="string",
-        )
-        """
-        _response = self._client_wrapper.httpx_client.request(
-            "GET",
-            urllib.parse.urljoin(
-                f"{self._client_wrapper.get_base_url()}/", f"api/v1/parsing/job/{job_id}/result/markdown"
-            ),
-            params=remove_none_from_dict({"organization_id": organization_id}),
-            headers=self._client_wrapper.get_headers(),
-            timeout=60,
-        )
-        if 200 <= _response.status_code < 300:
-            return pydantic.parse_obj_as(ParsingJobMarkdownResult, _response.json())  # type: ignore
-        if _response.status_code == 422:
-            raise UnprocessableEntityError(pydantic.parse_obj_as(HttpValidationError, _response.json()))  # type: ignore
-        try:
-            _response_json = _response.json()
-        except JSONDecodeError:
-            raise ApiError(status_code=_response.status_code, body=_response.text)
-        raise ApiError(status_code=_response.status_code, body=_response_json)
-
-    def get_job_raw_md_result(self, job_id: str) -> typing.Any:
-        """
-        Get a job by id
-
-        Parameters:
-            - job_id: str.
-        ---
-        from llama_cloud.client import LlamaCloud
-
-        client = LlamaCloud(
-            token="YOUR_TOKEN",
-        )
-        client.parsing.get_job_raw_md_result(
-            job_id="string",
-        )
-        """
-        _response = self._client_wrapper.httpx_client.request(
-            "GET",
-            urllib.parse.urljoin(
-                f"{self._client_wrapper.get_base_url()}/", f"api/v1/parsing/job/{job_id}/result/raw/markdown"
-            ),
-            headers=self._client_wrapper.get_headers(),
-            timeout=60,
-        )
-        if 200 <= _response.status_code < 300:
-            return pydantic.parse_obj_as(typing.Any, _response.json())  # type: ignore
-        if _response.status_code == 422:
-            raise UnprocessableEntityError(pydantic.parse_obj_as(HttpValidationError, _response.json()))  # type: ignore
-        try:
-            _response_json = _response.json()
-        except JSONDecodeError:
-            raise ApiError(status_code=_response.status_code, body=_response.text)
-        raise ApiError(status_code=_response.status_code, body=_response_json)
-
-    def get_job_json_result(self, job_id: str, *, organization_id: typing.Optional[str] = None) -> ParsingJobJsonResult:
-        """
-        Get a job by id
-
-        Note: The 'credits_used' and 'job_credits_usage' fields in the response metadata are deprecated
-        and will be removed in a future release.
-
-        Parameters:
-            - job_id: str.
-
-            - organization_id: typing.Optional[str].
-        ---
-        from llama_cloud.client import LlamaCloud
-
-        client = LlamaCloud(
-            token="YOUR_TOKEN",
-        )
-        client.parsing.get_job_json_result(
-            job_id="string",
-        )
-        """
-        _response = self._client_wrapper.httpx_client.request(
-            "GET",
-            urllib.parse.urljoin(f"{self._client_wrapper.get_base_url()}/", f"api/v1/parsing/job/{job_id}/result/json"),
-            params=remove_none_from_dict({"organization_id": organization_id}),
-            headers=self._client_wrapper.get_headers(),
-            timeout=60,
-        )
-        if 200 <= _response.status_code < 300:
-            return pydantic.parse_obj_as(ParsingJobJsonResult, _response.json())  # type: ignore
-        if _response.status_code == 422:
-            raise UnprocessableEntityError(pydantic.parse_obj_as(HttpValidationError, _response.json()))  # type: ignore
-        try:
-            _response_json = _response.json()
-        except JSONDecodeError:
-            raise ApiError(status_code=_response.status_code, body=_response.text)
-        raise ApiError(status_code=_response.status_code, body=_response_json)
-
-    def get_job_json_raw_result(self, job_id: str) -> typing.Any:
-        """
-        Get a job by id
-
-        Parameters:
-            - job_id: str.
-        ---
-        from llama_cloud.client import LlamaCloud
-
-        client = LlamaCloud(
-            token="YOUR_TOKEN",
-        )
-        client.parsing.get_job_json_raw_result(
-            job_id="string",
-        )
-        """
-        _response = self._client_wrapper.httpx_client.request(
-            "GET",
-            urllib.parse.urljoin(
-                f"{self._client_wrapper.get_base_url()}/", f"api/v1/parsing/job/{job_id}/result/raw/json"
-            ),
-            headers=self._client_wrapper.get_headers(),
-            timeout=60,
-        )
-        if 200 <= _response.status_code < 300:
-            return pydantic.parse_obj_as(typing.Any, _response.json())  # type: ignore
-        if _response.status_code == 422:
-            raise UnprocessableEntityError(pydantic.parse_obj_as(HttpValidationError, _response.json()))  # type: ignore
-        try:
-            _response_json = _response.json()
-        except JSONDecodeError:
-            raise ApiError(status_code=_response.status_code, body=_response.text)
-        raise ApiError(status_code=_response.status_code, body=_response_json)
-
-    def get_parsing_history_result(self) -> typing.List[ParsingHistoryItem]:
-        """
-        Get parsing history for user
-
-        This endpoint is deprecated.
-        Use /api/v1/jobs/?job_name=parsing&project_id=YOUR_PROJECT_ID instead.
-
-        ---
-        from llama_cloud.client import LlamaCloud
-
-        client = LlamaCloud(
-            token="YOUR_TOKEN",
-        )
-        client.parsing.get_parsing_history_result()
-        """
-        _response = self._client_wrapper.httpx_client.request(
-            "GET",
-            urllib.parse.urljoin(f"{self._client_wrapper.get_base_url()}/", "api/v1/parsing/history"),
-            headers=self._client_wrapper.get_headers(),
-            timeout=60,
-        )
-        if 200 <= _response.status_code < 300:
-            return pydantic.parse_obj_as(typing.List[ParsingHistoryItem], _response.json())  # type: ignore
-        if _response.status_code == 422:
-            raise UnprocessableEntityError(pydantic.parse_obj_as(HttpValidationError, _response.json()))  # type: ignore
-        try:
-            _response_json = _response.json()
-        except JSONDecodeError:
-            raise ApiError(status_code=_response.status_code, body=_response.text)
-        raise ApiError(status_code=_response.status_code, body=_response_json)
-
-    def generate_presigned_url(self, job_id: str, filename: str) -> PresignedUrl:
-        """
-        Generate a presigned URL for a job
-
-        Parameters:
-            - job_id: str.
-
-            - filename: str.
-        ---
-        from llama_cloud.client import LlamaCloud
-
-        client = LlamaCloud(
-            token="YOUR_TOKEN",
-        )
-        client.parsing.generate_presigned_url(
-            job_id="string",
-            filename="string",
-        )
-        """
-        _response = self._client_wrapper.httpx_client.request(
-            "GET",
-            urllib.parse.urljoin(
-                f"{self._client_wrapper.get_base_url()}/", f"api/v1/parsing/job/{job_id}/read/{filename}"
-            ),
-            headers=self._client_wrapper.get_headers(),
-            timeout=60,
-        )
-        if 200 <= _response.status_code < 300:
-            return pydantic.parse_obj_as(PresignedUrl, _response.json())  # type: ignore
-        if _response.status_code == 422:
-            raise UnprocessableEntityError(pydantic.parse_obj_as(HttpValidationError, _response.json()))  # type: ignore
-        try:
-            _response_json = _response.json()
-        except JSONDecodeError:
-            raise ApiError(status_code=_response.status_code, body=_response.text)
-        raise ApiError(status_code=_response.status_code, body=_response_json)
-
-
-class AsyncParsingClient:
-    def __init__(self, *, client_wrapper: AsyncClientWrapper):
-        self._client_wrapper = client_wrapper
-
-    async def get_job_image_result(self, job_id: str, name: str) -> None:
-        """
-        Get a job by id
-
-        Parameters:
-            - job_id: str.
-
-            - name: str.
-        ---
-        from llama_cloud.client import AsyncLlamaCloud
-
-        client = AsyncLlamaCloud(
-            token="YOUR_TOKEN",
-        )
-        await client.parsing.get_job_image_result(
-            job_id="string",
-            name="string",
-        )
-        """
-        _response = await self._client_wrapper.httpx_client.request(
-            "GET",
-            urllib.parse.urljoin(
-                f"{self._client_wrapper.get_base_url()}/", f"api/v1/parsing/job/{job_id}/result/image/{name}"
-            ),
-            headers=self._client_wrapper.get_headers(),
-            timeout=60,
-        )
-        if 200 <= _response.status_code < 300:
-            return
-        if _response.status_code == 422:
-            raise UnprocessableEntityError(pydantic.parse_obj_as(HttpValidationError, _response.json()))  # type: ignore
-        try:
-            _response_json = _response.json()
-        except JSONDecodeError:
-            raise ApiError(status_code=_response.status_code, body=_response.text)
-        raise ApiError(status_code=_response.status_code, body=_response_json)
-
-    async def get_supported_file_extensions(self) -> typing.List[LlamaParseSupportedFileExtensions]:
-        """
-        Get a list of supported file extensions
-
-        ---
-        from llama_cloud.client import AsyncLlamaCloud
-
-        client = AsyncLlamaCloud(
-            token="YOUR_TOKEN",
-        )
-        await client.parsing.get_supported_file_extensions()
-        """
-        _response = await self._client_wrapper.httpx_client.request(
-            "GET",
-            urllib.parse.urljoin(f"{self._client_wrapper.get_base_url()}/", "api/v1/parsing/supported_file_extensions"),
-            headers=self._client_wrapper.get_headers(),
-            timeout=60,
-        )
-        if 200 <= _response.status_code < 300:
-            return pydantic.parse_obj_as(typing.List[LlamaParseSupportedFileExtensions], _response.json())  # type: ignore
-        try:
-            _response_json = _response.json()
-        except JSONDecodeError:
-            raise ApiError(status_code=_response.status_code, body=_response.text)
-        raise ApiError(status_code=_response.status_code, body=_response_json)
-
-    async def screenshot(
+    def screenshot(
         self,
         *,
         organization_id: typing.Optional[str] = None,
         project_id: typing.Optional[str] = None,
-        file: typing.Optional[str] = OMIT,
         do_not_cache: bool,
+        file: typing.Optional[str] = OMIT,
         http_proxy: str,
         input_s_3_path: str,
         input_s_3_region: str,
         input_url: str,
         invalidate_cache: bool,
+        job_timeout_extra_time_per_page_in_seconds: float,
+        job_timeout_in_seconds: float,
         max_pages: typing.Optional[int] = OMIT,
         output_s_3_path_prefix: str,
         output_s_3_region: str,
         target_pages: str,
-        webhook_url: str,
         webhook_configurations: str,
-        job_timeout_in_seconds: float,
-        job_timeout_extra_time_per_page_in_seconds: float,
+        webhook_url: str,
     ) -> ParsingJob:
         """
         Parameters:
@@ -1332,9 +692,9 @@ class AsyncParsingClient:
 
             - project_id: typing.Optional[str].
 
-            - file: typing.Optional[str].
-
             - do_not_cache: bool.
+
+            - file: typing.Optional[str].
 
             - http_proxy: str.
 
@@ -1346,6 +706,10 @@ class AsyncParsingClient:
 
             - invalidate_cache: bool.
 
+            - job_timeout_extra_time_per_page_in_seconds: float.
+
+            - job_timeout_in_seconds: float.
+
             - max_pages: typing.Optional[int].
 
             - output_s_3_path_prefix: str.
@@ -1354,13 +718,9 @@ class AsyncParsingClient:
 
             - target_pages: str.
 
-            - webhook_url: str.
-
             - webhook_configurations: str.
 
-            - job_timeout_in_seconds: float.
-
-            - job_timeout_extra_time_per_page_in_seconds: float.
+            - webhook_url: str.
         """
         _request: typing.Dict[str, typing.Any] = {
             "do_not_cache": do_not_cache,
@@ -1369,19 +729,19 @@ class AsyncParsingClient:
             "input_s3_region": input_s_3_region,
             "input_url": input_url,
             "invalidate_cache": invalidate_cache,
+            "job_timeout_extra_time_per_page_in_seconds": job_timeout_extra_time_per_page_in_seconds,
+            "job_timeout_in_seconds": job_timeout_in_seconds,
             "output_s3_path_prefix": output_s_3_path_prefix,
             "output_s3_region": output_s_3_region,
             "target_pages": target_pages,
-            "webhook_url": webhook_url,
             "webhook_configurations": webhook_configurations,
-            "job_timeout_in_seconds": job_timeout_in_seconds,
-            "job_timeout_extra_time_per_page_in_seconds": job_timeout_extra_time_per_page_in_seconds,
+            "webhook_url": webhook_url,
         }
         if file is not OMIT:
             _request["file"] = file
         if max_pages is not OMIT:
             _request["max_pages"] = max_pages
-        _response = await self._client_wrapper.httpx_client.request(
+        _response = self._client_wrapper.httpx_client.request(
             "POST",
             urllib.parse.urljoin(f"{self._client_wrapper.get_base_url()}/", "api/v1/parsing/screenshot"),
             params=remove_none_from_dict({"organization_id": organization_id, "project_id": project_id}),
@@ -1399,20 +759,46 @@ class AsyncParsingClient:
             raise ApiError(status_code=_response.status_code, body=_response.text)
         raise ApiError(status_code=_response.status_code, body=_response_json)
 
-    async def upload_file(
+    def get_supported_file_extensions(self) -> typing.List[LlamaParseSupportedFileExtensions]:
+        """
+        Get a list of supported file extensions
+
+        ---
+        from llama_cloud.client import LlamaCloud
+
+        client = LlamaCloud(
+            token="YOUR_TOKEN",
+        )
+        client.parsing.get_supported_file_extensions()
+        """
+        _response = self._client_wrapper.httpx_client.request(
+            "GET",
+            urllib.parse.urljoin(f"{self._client_wrapper.get_base_url()}/", "api/v1/parsing/supported_file_extensions"),
+            headers=self._client_wrapper.get_headers(),
+            timeout=60,
+        )
+        if 200 <= _response.status_code < 300:
+            return pydantic.parse_obj_as(typing.List[LlamaParseSupportedFileExtensions], _response.json())  # type: ignore
+        try:
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, body=_response.text)
+        raise ApiError(status_code=_response.status_code, body=_response_json)
+
+    def upload_file(
         self,
         *,
         organization_id: typing.Optional[str] = None,
         project_id: typing.Optional[str] = None,
-        file: typing.Optional[str] = OMIT,
         adaptive_long_table: bool,
+        aggressive_table_extraction: bool,
         annotate_links: bool,
         auto_mode: bool,
+        auto_mode_configuration_json: str,
         auto_mode_trigger_on_image_in_page: bool,
+        auto_mode_trigger_on_regexp_in_page: str,
         auto_mode_trigger_on_table_in_page: bool,
         auto_mode_trigger_on_text_in_page: str,
-        auto_mode_trigger_on_regexp_in_page: str,
-        auto_mode_configuration_json: str,
         azure_openai_api_version: str,
         azure_openai_deployment_name: str,
         azure_openai_endpoint: str,
@@ -1421,93 +807,97 @@ class AsyncParsingClient:
         bbox_left: float,
         bbox_right: float,
         bbox_top: float,
+        bounding_box: str,
         compact_markdown_table: bool,
+        complemental_formatting_instruction: str,
+        content_guideline_instruction: str,
+        continuous_mode: bool,
+        disable_image_extraction: bool,
         disable_ocr: bool,
         disable_reconstruction: bool,
-        disable_image_extraction: bool,
         do_not_cache: bool,
         do_not_unroll_columns: bool,
         extract_charts: bool,
+        extract_layout: bool,
+        fast_mode: bool,
+        file: typing.Optional[str] = OMIT,
+        formatting_instruction: str,
+        gpt_4_o_api_key: str,
+        gpt_4_o_mode: bool,
         guess_xlsx_sheet_name: bool,
+        hide_footers: bool,
+        hide_headers: bool,
         high_res_ocr: bool,
         html_make_all_elements_visible: bool,
-        layout_aware: bool,
-        specialized_chart_parsing_agentic: bool,
-        specialized_chart_parsing_plus: bool,
-        specialized_chart_parsing_efficient: bool,
-        specialized_image_parsing: bool,
-        precise_bounding_box: bool,
         html_remove_fixed_elements: bool,
         html_remove_navigation_elements: bool,
         http_proxy: str,
+        ignore_document_elements_for_layout_detection: bool,
+        inline_images_in_markdown: bool,
         input_s_3_path: str,
         input_s_3_region: str,
         input_url: str,
         invalidate_cache: bool,
+        is_formatting_instruction: bool,
+        job_timeout_extra_time_per_page_in_seconds: float,
+        job_timeout_in_seconds: float,
+        keep_page_separator_when_merging_tables: bool,
         language: typing.List[ParserLanguages],
-        extract_layout: bool,
+        layout_aware: bool,
+        markdown_table_multiline_header_separator: str,
         max_pages: typing.Optional[int] = OMIT,
         merge_tables_across_pages_in_markdown: bool,
+        model: str,
         outlined_table_extraction: bool,
         output_pdf_of_document: bool,
         output_s_3_path_prefix: str,
         output_s_3_region: str,
+        output_tables_as_html: bool,
+        page_error_tolerance: float,
+        page_footer_prefix: str,
+        page_footer_suffix: str,
+        page_header_prefix: str,
+        page_header_suffix: str,
         page_prefix: str,
         page_separator: str,
         page_suffix: str,
+        parse_mode: typing.Optional[ParsingMode] = OMIT,
+        parsing_instruction: str,
+        precise_bounding_box: bool,
+        premium_mode: bool,
+        presentation_out_of_bounds_content: bool,
         preserve_layout_alignment_across_pages: bool,
         preserve_very_small_text: bool,
-        skip_diagonal_text: bool,
-        spreadsheet_extract_sub_tables: bool,
-        spreadsheet_force_formula_computation: bool,
-        inline_images_in_markdown: bool,
-        structured_output: bool,
-        structured_output_json_schema: str,
-        structured_output_json_schema_name: str,
-        take_screenshot: bool,
-        target_pages: str,
-        vendor_multimodal_api_key: str,
-        vendor_multimodal_model_name: str,
-        model: str,
-        webhook_url: str,
-        webhook_configurations: str,
         preset: str,
-        parse_mode: typing.Optional[ParsingMode] = OMIT,
-        page_error_tolerance: float,
+        remove_hidden_text: bool,
         replace_failed_page_mode: typing.Optional[FailPageMode] = OMIT,
         replace_failed_page_with_error_message_prefix: str,
         replace_failed_page_with_error_message_suffix: str,
-        system_prompt: str,
-        system_prompt_append: str,
-        user_prompt: str,
-        job_timeout_in_seconds: float,
-        job_timeout_extra_time_per_page_in_seconds: float,
+        save_images: bool,
+        skip_diagonal_text: bool,
+        specialized_chart_parsing_agentic: bool,
+        specialized_chart_parsing_efficient: bool,
+        specialized_chart_parsing_plus: bool,
+        specialized_image_parsing: bool,
+        spreadsheet_extract_sub_tables: bool,
+        spreadsheet_force_formula_computation: bool,
+        strict_mode_buggy_font: bool,
         strict_mode_image_extraction: bool,
         strict_mode_image_ocr: bool,
         strict_mode_reconstruction: bool,
-        strict_mode_buggy_font: bool,
-        save_images: bool,
-        ignore_document_elements_for_layout_detection: bool,
-        output_tables_as_html: bool,
-        markdown_table_multiline_header_separator: str,
+        structured_output: bool,
+        structured_output_json_schema: str,
+        structured_output_json_schema_name: str,
+        system_prompt: str,
+        system_prompt_append: str,
+        take_screenshot: bool,
+        target_pages: str,
         use_vendor_multimodal_model: bool,
-        bounding_box: str,
-        gpt_4_o_mode: bool,
-        gpt_4_o_api_key: str,
-        complemental_formatting_instruction: str,
-        content_guideline_instruction: str,
-        premium_mode: bool,
-        is_formatting_instruction: bool,
-        continuous_mode: bool,
-        parsing_instruction: str,
-        fast_mode: bool,
-        formatting_instruction: str,
-        hide_headers: bool,
-        hide_footers: bool,
-        page_header_prefix: str,
-        page_header_suffix: str,
-        page_footer_prefix: str,
-        page_footer_suffix: str,
+        user_prompt: str,
+        vendor_multimodal_api_key: str,
+        vendor_multimodal_model_name: str,
+        webhook_configurations: str,
+        webhook_url: str,
     ) -> ParsingJob:
         """
         Parameters:
@@ -1515,23 +905,23 @@ class AsyncParsingClient:
 
             - project_id: typing.Optional[str].
 
-            - file: typing.Optional[str].
-
             - adaptive_long_table: bool.
+
+            - aggressive_table_extraction: bool.
 
             - annotate_links: bool.
 
             - auto_mode: bool.
 
+            - auto_mode_configuration_json: str.
+
             - auto_mode_trigger_on_image_in_page: bool.
+
+            - auto_mode_trigger_on_regexp_in_page: str.
 
             - auto_mode_trigger_on_table_in_page: bool.
 
             - auto_mode_trigger_on_text_in_page: str.
-
-            - auto_mode_trigger_on_regexp_in_page: str.
-
-            - auto_mode_configuration_json: str.
 
             - azure_openai_api_version: str.
 
@@ -1549,13 +939,21 @@ class AsyncParsingClient:
 
             - bbox_top: float.
 
+            - bounding_box: str.
+
             - compact_markdown_table: bool.
+
+            - complemental_formatting_instruction: str.
+
+            - content_guideline_instruction: str.
+
+            - continuous_mode: bool.
+
+            - disable_image_extraction: bool.
 
             - disable_ocr: bool.
 
             - disable_reconstruction: bool.
-
-            - disable_image_extraction: bool.
 
             - do_not_cache: bool.
 
@@ -1563,29 +961,37 @@ class AsyncParsingClient:
 
             - extract_charts: bool.
 
+            - extract_layout: bool.
+
+            - fast_mode: bool.
+
+            - file: typing.Optional[str].
+
+            - formatting_instruction: str.
+
+            - gpt_4_o_api_key: str.
+
+            - gpt_4_o_mode: bool.
+
             - guess_xlsx_sheet_name: bool.
+
+            - hide_footers: bool.
+
+            - hide_headers: bool.
 
             - high_res_ocr: bool.
 
             - html_make_all_elements_visible: bool.
-
-            - layout_aware: bool.
-
-            - specialized_chart_parsing_agentic: bool.
-
-            - specialized_chart_parsing_plus: bool.
-
-            - specialized_chart_parsing_efficient: bool.
-
-            - specialized_image_parsing: bool.
-
-            - precise_bounding_box: bool.
 
             - html_remove_fixed_elements: bool.
 
             - html_remove_navigation_elements: bool.
 
             - http_proxy: str.
+
+            - ignore_document_elements_for_layout_detection: bool.
+
+            - inline_images_in_markdown: bool.
 
             - input_s_3_path: str.
 
@@ -1595,13 +1001,25 @@ class AsyncParsingClient:
 
             - invalidate_cache: bool.
 
+            - is_formatting_instruction: bool.
+
+            - job_timeout_extra_time_per_page_in_seconds: float.
+
+            - job_timeout_in_seconds: float.
+
+            - keep_page_separator_when_merging_tables: bool.
+
             - language: typing.List[ParserLanguages].
 
-            - extract_layout: bool.
+            - layout_aware: bool.
+
+            - markdown_table_multiline_header_separator: str.
 
             - max_pages: typing.Optional[int].
 
             - merge_tables_across_pages_in_markdown: bool.
+
+            - model: str.
 
             - outlined_table_extraction: bool.
 
@@ -1611,49 +1029,41 @@ class AsyncParsingClient:
 
             - output_s_3_region: str.
 
+            - output_tables_as_html: bool.
+
+            - page_error_tolerance: float.
+
+            - page_footer_prefix: str.
+
+            - page_footer_suffix: str.
+
+            - page_header_prefix: str.
+
+            - page_header_suffix: str.
+
             - page_prefix: str.
 
             - page_separator: str.
 
             - page_suffix: str.
 
+            - parse_mode: typing.Optional[ParsingMode].
+
+            - parsing_instruction: str.
+
+            - precise_bounding_box: bool.
+
+            - premium_mode: bool.
+
+            - presentation_out_of_bounds_content: bool.
+
             - preserve_layout_alignment_across_pages: bool.
 
             - preserve_very_small_text: bool.
 
-            - skip_diagonal_text: bool.
-
-            - spreadsheet_extract_sub_tables: bool.
-
-            - spreadsheet_force_formula_computation: bool.
-
-            - inline_images_in_markdown: bool.
-
-            - structured_output: bool.
-
-            - structured_output_json_schema: str.
-
-            - structured_output_json_schema_name: str.
-
-            - take_screenshot: bool.
-
-            - target_pages: str.
-
-            - vendor_multimodal_api_key: str.
-
-            - vendor_multimodal_model_name: str.
-
-            - model: str.
-
-            - webhook_url: str.
-
-            - webhook_configurations: str.
-
             - preset: str.
 
-            - parse_mode: typing.Optional[ParsingMode].
-
-            - page_error_tolerance: float.
+            - remove_hidden_text: bool.
 
             - replace_failed_page_mode: typing.Optional[FailPageMode].
 
@@ -1661,15 +1071,23 @@ class AsyncParsingClient:
 
             - replace_failed_page_with_error_message_suffix: str.
 
-            - system_prompt: str.
+            - save_images: bool.
 
-            - system_prompt_append: str.
+            - skip_diagonal_text: bool.
 
-            - user_prompt: str.
+            - specialized_chart_parsing_agentic: bool.
 
-            - job_timeout_in_seconds: float.
+            - specialized_chart_parsing_efficient: bool.
 
-            - job_timeout_extra_time_per_page_in_seconds: float.
+            - specialized_chart_parsing_plus: bool.
+
+            - specialized_image_parsing: bool.
+
+            - spreadsheet_extract_sub_tables: bool.
+
+            - spreadsheet_force_formula_computation: bool.
+
+            - strict_mode_buggy_font: bool.
 
             - strict_mode_image_extraction: bool.
 
@@ -1677,61 +1095,42 @@ class AsyncParsingClient:
 
             - strict_mode_reconstruction: bool.
 
-            - strict_mode_buggy_font: bool.
+            - structured_output: bool.
 
-            - save_images: bool.
+            - structured_output_json_schema: str.
 
-            - ignore_document_elements_for_layout_detection: bool.
+            - structured_output_json_schema_name: str.
 
-            - output_tables_as_html: bool.
+            - system_prompt: str.
 
-            - markdown_table_multiline_header_separator: str.
+            - system_prompt_append: str.
+
+            - take_screenshot: bool.
+
+            - target_pages: str.
 
             - use_vendor_multimodal_model: bool.
 
-            - bounding_box: str.
+            - user_prompt: str.
 
-            - gpt_4_o_mode: bool.
+            - vendor_multimodal_api_key: str.
 
-            - gpt_4_o_api_key: str.
+            - vendor_multimodal_model_name: str.
 
-            - complemental_formatting_instruction: str.
+            - webhook_configurations: str.
 
-            - content_guideline_instruction: str.
-
-            - premium_mode: bool.
-
-            - is_formatting_instruction: bool.
-
-            - continuous_mode: bool.
-
-            - parsing_instruction: str.
-
-            - fast_mode: bool.
-
-            - formatting_instruction: str.
-
-            - hide_headers: bool.
-
-            - hide_footers: bool.
-
-            - page_header_prefix: str.
-
-            - page_header_suffix: str.
-
-            - page_footer_prefix: str.
-
-            - page_footer_suffix: str.
+            - webhook_url: str.
         """
         _request: typing.Dict[str, typing.Any] = {
             "adaptive_long_table": adaptive_long_table,
+            "aggressive_table_extraction": aggressive_table_extraction,
             "annotate_links": annotate_links,
             "auto_mode": auto_mode,
+            "auto_mode_configuration_json": auto_mode_configuration_json,
             "auto_mode_trigger_on_image_in_page": auto_mode_trigger_on_image_in_page,
+            "auto_mode_trigger_on_regexp_in_page": auto_mode_trigger_on_regexp_in_page,
             "auto_mode_trigger_on_table_in_page": auto_mode_trigger_on_table_in_page,
             "auto_mode_trigger_on_text_in_page": auto_mode_trigger_on_text_in_page,
-            "auto_mode_trigger_on_regexp_in_page": auto_mode_trigger_on_regexp_in_page,
-            "auto_mode_configuration_json": auto_mode_configuration_json,
             "azure_openai_api_version": azure_openai_api_version,
             "azure_openai_deployment_name": azure_openai_deployment_name,
             "azure_openai_endpoint": azure_openai_endpoint,
@@ -1740,90 +1139,93 @@ class AsyncParsingClient:
             "bbox_left": bbox_left,
             "bbox_right": bbox_right,
             "bbox_top": bbox_top,
+            "bounding_box": bounding_box,
             "compact_markdown_table": compact_markdown_table,
+            "complemental_formatting_instruction": complemental_formatting_instruction,
+            "content_guideline_instruction": content_guideline_instruction,
+            "continuous_mode": continuous_mode,
+            "disable_image_extraction": disable_image_extraction,
             "disable_ocr": disable_ocr,
             "disable_reconstruction": disable_reconstruction,
-            "disable_image_extraction": disable_image_extraction,
             "do_not_cache": do_not_cache,
             "do_not_unroll_columns": do_not_unroll_columns,
             "extract_charts": extract_charts,
+            "extract_layout": extract_layout,
+            "fast_mode": fast_mode,
+            "formatting_instruction": formatting_instruction,
+            "gpt4o_api_key": gpt_4_o_api_key,
+            "gpt4o_mode": gpt_4_o_mode,
             "guess_xlsx_sheet_name": guess_xlsx_sheet_name,
+            "hide_footers": hide_footers,
+            "hide_headers": hide_headers,
             "high_res_ocr": high_res_ocr,
             "html_make_all_elements_visible": html_make_all_elements_visible,
-            "layout_aware": layout_aware,
-            "specialized_chart_parsing_agentic": specialized_chart_parsing_agentic,
-            "specialized_chart_parsing_plus": specialized_chart_parsing_plus,
-            "specialized_chart_parsing_efficient": specialized_chart_parsing_efficient,
-            "specialized_image_parsing": specialized_image_parsing,
-            "precise_bounding_box": precise_bounding_box,
             "html_remove_fixed_elements": html_remove_fixed_elements,
             "html_remove_navigation_elements": html_remove_navigation_elements,
             "http_proxy": http_proxy,
+            "ignore_document_elements_for_layout_detection": ignore_document_elements_for_layout_detection,
+            "inline_images_in_markdown": inline_images_in_markdown,
             "input_s3_path": input_s_3_path,
             "input_s3_region": input_s_3_region,
             "input_url": input_url,
             "invalidate_cache": invalidate_cache,
+            "is_formatting_instruction": is_formatting_instruction,
+            "job_timeout_extra_time_per_page_in_seconds": job_timeout_extra_time_per_page_in_seconds,
+            "job_timeout_in_seconds": job_timeout_in_seconds,
+            "keep_page_separator_when_merging_tables": keep_page_separator_when_merging_tables,
             "language": language,
-            "extract_layout": extract_layout,
+            "layout_aware": layout_aware,
+            "markdown_table_multiline_header_separator": markdown_table_multiline_header_separator,
             "merge_tables_across_pages_in_markdown": merge_tables_across_pages_in_markdown,
+            "model": model,
             "outlined_table_extraction": outlined_table_extraction,
             "output_pdf_of_document": output_pdf_of_document,
             "output_s3_path_prefix": output_s_3_path_prefix,
             "output_s3_region": output_s_3_region,
+            "output_tables_as_HTML": output_tables_as_html,
+            "page_error_tolerance": page_error_tolerance,
+            "page_footer_prefix": page_footer_prefix,
+            "page_footer_suffix": page_footer_suffix,
+            "page_header_prefix": page_header_prefix,
+            "page_header_suffix": page_header_suffix,
             "page_prefix": page_prefix,
             "page_separator": page_separator,
             "page_suffix": page_suffix,
+            "parsing_instruction": parsing_instruction,
+            "precise_bounding_box": precise_bounding_box,
+            "premium_mode": premium_mode,
+            "presentation_out_of_bounds_content": presentation_out_of_bounds_content,
             "preserve_layout_alignment_across_pages": preserve_layout_alignment_across_pages,
             "preserve_very_small_text": preserve_very_small_text,
-            "skip_diagonal_text": skip_diagonal_text,
-            "spreadsheet_extract_sub_tables": spreadsheet_extract_sub_tables,
-            "spreadsheet_force_formula_computation": spreadsheet_force_formula_computation,
-            "inline_images_in_markdown": inline_images_in_markdown,
-            "structured_output": structured_output,
-            "structured_output_json_schema": structured_output_json_schema,
-            "structured_output_json_schema_name": structured_output_json_schema_name,
-            "take_screenshot": take_screenshot,
-            "target_pages": target_pages,
-            "vendor_multimodal_api_key": vendor_multimodal_api_key,
-            "vendor_multimodal_model_name": vendor_multimodal_model_name,
-            "model": model,
-            "webhook_url": webhook_url,
-            "webhook_configurations": webhook_configurations,
             "preset": preset,
-            "page_error_tolerance": page_error_tolerance,
+            "remove_hidden_text": remove_hidden_text,
             "replace_failed_page_with_error_message_prefix": replace_failed_page_with_error_message_prefix,
             "replace_failed_page_with_error_message_suffix": replace_failed_page_with_error_message_suffix,
-            "system_prompt": system_prompt,
-            "system_prompt_append": system_prompt_append,
-            "user_prompt": user_prompt,
-            "job_timeout_in_seconds": job_timeout_in_seconds,
-            "job_timeout_extra_time_per_page_in_seconds": job_timeout_extra_time_per_page_in_seconds,
+            "save_images": save_images,
+            "skip_diagonal_text": skip_diagonal_text,
+            "specialized_chart_parsing_agentic": specialized_chart_parsing_agentic,
+            "specialized_chart_parsing_efficient": specialized_chart_parsing_efficient,
+            "specialized_chart_parsing_plus": specialized_chart_parsing_plus,
+            "specialized_image_parsing": specialized_image_parsing,
+            "spreadsheet_extract_sub_tables": spreadsheet_extract_sub_tables,
+            "spreadsheet_force_formula_computation": spreadsheet_force_formula_computation,
+            "strict_mode_buggy_font": strict_mode_buggy_font,
             "strict_mode_image_extraction": strict_mode_image_extraction,
             "strict_mode_image_ocr": strict_mode_image_ocr,
             "strict_mode_reconstruction": strict_mode_reconstruction,
-            "strict_mode_buggy_font": strict_mode_buggy_font,
-            "save_images": save_images,
-            "ignore_document_elements_for_layout_detection": ignore_document_elements_for_layout_detection,
-            "output_tables_as_HTML": output_tables_as_html,
-            "markdown_table_multiline_header_separator": markdown_table_multiline_header_separator,
+            "structured_output": structured_output,
+            "structured_output_json_schema": structured_output_json_schema,
+            "structured_output_json_schema_name": structured_output_json_schema_name,
+            "system_prompt": system_prompt,
+            "system_prompt_append": system_prompt_append,
+            "take_screenshot": take_screenshot,
+            "target_pages": target_pages,
             "use_vendor_multimodal_model": use_vendor_multimodal_model,
-            "bounding_box": bounding_box,
-            "gpt4o_mode": gpt_4_o_mode,
-            "gpt4o_api_key": gpt_4_o_api_key,
-            "complemental_formatting_instruction": complemental_formatting_instruction,
-            "content_guideline_instruction": content_guideline_instruction,
-            "premium_mode": premium_mode,
-            "is_formatting_instruction": is_formatting_instruction,
-            "continuous_mode": continuous_mode,
-            "parsing_instruction": parsing_instruction,
-            "fast_mode": fast_mode,
-            "formatting_instruction": formatting_instruction,
-            "hide_headers": hide_headers,
-            "hide_footers": hide_footers,
-            "page_header_prefix": page_header_prefix,
-            "page_header_suffix": page_header_suffix,
-            "page_footer_prefix": page_footer_prefix,
-            "page_footer_suffix": page_footer_suffix,
+            "user_prompt": user_prompt,
+            "vendor_multimodal_api_key": vendor_multimodal_api_key,
+            "vendor_multimodal_model_name": vendor_multimodal_model_name,
+            "webhook_configurations": webhook_configurations,
+            "webhook_url": webhook_url,
         }
         if file is not OMIT:
             _request["file"] = file
@@ -1833,7 +1235,7 @@ class AsyncParsingClient:
             _request["parse_mode"] = parse_mode
         if replace_failed_page_mode is not OMIT:
             _request["replace_failed_page_mode"] = replace_failed_page_mode
-        _response = await self._client_wrapper.httpx_client.request(
+        _response = self._client_wrapper.httpx_client.request(
             "POST",
             urllib.parse.urljoin(f"{self._client_wrapper.get_base_url()}/", "api/v1/parsing/upload"),
             params=remove_none_from_dict({"organization_id": organization_id, "project_id": project_id}),
@@ -1843,6 +1245,42 @@ class AsyncParsingClient:
         )
         if 200 <= _response.status_code < 300:
             return pydantic.parse_obj_as(ParsingJob, _response.json())  # type: ignore
+        if _response.status_code == 422:
+            raise UnprocessableEntityError(pydantic.parse_obj_as(HttpValidationError, _response.json()))  # type: ignore
+        try:
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, body=_response.text)
+        raise ApiError(status_code=_response.status_code, body=_response_json)
+
+
+class AsyncParsingClient:
+    def __init__(self, *, client_wrapper: AsyncClientWrapper):
+        self._client_wrapper = client_wrapper
+
+    async def get_parsing_history_result(self) -> typing.List[ParsingHistoryItem]:
+        """
+        Get parsing history for user
+
+        This endpoint is deprecated.
+        Use /api/v1/jobs/?job_name=parsing&project_id=YOUR_PROJECT_ID instead.
+
+        ---
+        from llama_cloud.client import AsyncLlamaCloud
+
+        client = AsyncLlamaCloud(
+            token="YOUR_TOKEN",
+        )
+        await client.parsing.get_parsing_history_result()
+        """
+        _response = await self._client_wrapper.httpx_client.request(
+            "GET",
+            urllib.parse.urljoin(f"{self._client_wrapper.get_base_url()}/", "api/v1/parsing/history"),
+            headers=self._client_wrapper.get_headers(),
+            timeout=60,
+        )
+        if 200 <= _response.status_code < 300:
+            return pydantic.parse_obj_as(typing.List[ParsingHistoryItem], _response.json())  # type: ignore
         if _response.status_code == 422:
             raise UnprocessableEntityError(pydantic.parse_obj_as(HttpValidationError, _response.json()))  # type: ignore
         try:
@@ -1883,38 +1321,6 @@ class AsyncParsingClient:
             raise ApiError(status_code=_response.status_code, body=_response.text)
         raise ApiError(status_code=_response.status_code, body=_response_json)
 
-    async def get_job_parameters(self, job_id: str) -> typing.Any:
-        """
-        Get a job by id
-
-        Parameters:
-            - job_id: str.
-        ---
-        from llama_cloud.client import AsyncLlamaCloud
-
-        client = AsyncLlamaCloud(
-            token="YOUR_TOKEN",
-        )
-        await client.parsing.get_job_parameters(
-            job_id="string",
-        )
-        """
-        _response = await self._client_wrapper.httpx_client.request(
-            "GET",
-            urllib.parse.urljoin(f"{self._client_wrapper.get_base_url()}/", f"api/v1/parsing/job/{job_id}/parameters"),
-            headers=self._client_wrapper.get_headers(),
-            timeout=60,
-        )
-        if 200 <= _response.status_code < 300:
-            return pydantic.parse_obj_as(typing.Any, _response.json())  # type: ignore
-        if _response.status_code == 422:
-            raise UnprocessableEntityError(pydantic.parse_obj_as(HttpValidationError, _response.json()))  # type: ignore
-        try:
-            _response_json = _response.json()
-        except JSONDecodeError:
-            raise ApiError(status_code=_response.status_code, body=_response.text)
-        raise ApiError(status_code=_response.status_code, body=_response_json)
-
     async def get_parsing_job_details(self, job_id: str) -> typing.Any:
         """
         Get a job by id
@@ -1947,9 +1353,115 @@ class AsyncParsingClient:
             raise ApiError(status_code=_response.status_code, body=_response.text)
         raise ApiError(status_code=_response.status_code, body=_response_json)
 
-    async def get_job_text_result(
+    async def get_job_parameters(self, job_id: str) -> typing.Any:
+        """
+        Get a job by id
+
+        Parameters:
+            - job_id: str.
+        ---
+        from llama_cloud.client import AsyncLlamaCloud
+
+        client = AsyncLlamaCloud(
+            token="YOUR_TOKEN",
+        )
+        await client.parsing.get_job_parameters(
+            job_id="string",
+        )
+        """
+        _response = await self._client_wrapper.httpx_client.request(
+            "GET",
+            urllib.parse.urljoin(f"{self._client_wrapper.get_base_url()}/", f"api/v1/parsing/job/{job_id}/parameters"),
+            headers=self._client_wrapper.get_headers(),
+            timeout=60,
+        )
+        if 200 <= _response.status_code < 300:
+            return pydantic.parse_obj_as(typing.Any, _response.json())  # type: ignore
+        if _response.status_code == 422:
+            raise UnprocessableEntityError(pydantic.parse_obj_as(HttpValidationError, _response.json()))  # type: ignore
+        try:
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, body=_response.text)
+        raise ApiError(status_code=_response.status_code, body=_response_json)
+
+    async def generate_presigned_url(self, job_id: str, filename: str) -> PresignedUrl:
+        """
+        Generate a presigned URL for a job
+
+        Parameters:
+            - job_id: str.
+
+            - filename: str.
+        ---
+        from llama_cloud.client import AsyncLlamaCloud
+
+        client = AsyncLlamaCloud(
+            token="YOUR_TOKEN",
+        )
+        await client.parsing.generate_presigned_url(
+            job_id="string",
+            filename="string",
+        )
+        """
+        _response = await self._client_wrapper.httpx_client.request(
+            "GET",
+            urllib.parse.urljoin(
+                f"{self._client_wrapper.get_base_url()}/", f"api/v1/parsing/job/{job_id}/read/{filename}"
+            ),
+            headers=self._client_wrapper.get_headers(),
+            timeout=60,
+        )
+        if 200 <= _response.status_code < 300:
+            return pydantic.parse_obj_as(PresignedUrl, _response.json())  # type: ignore
+        if _response.status_code == 422:
+            raise UnprocessableEntityError(pydantic.parse_obj_as(HttpValidationError, _response.json()))  # type: ignore
+        try:
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, body=_response.text)
+        raise ApiError(status_code=_response.status_code, body=_response_json)
+
+    async def get_job_image_result(self, job_id: str, name: str) -> None:
+        """
+        Get a job by id
+
+        Parameters:
+            - job_id: str.
+
+            - name: str.
+        ---
+        from llama_cloud.client import AsyncLlamaCloud
+
+        client = AsyncLlamaCloud(
+            token="YOUR_TOKEN",
+        )
+        await client.parsing.get_job_image_result(
+            job_id="string",
+            name="string",
+        )
+        """
+        _response = await self._client_wrapper.httpx_client.request(
+            "GET",
+            urllib.parse.urljoin(
+                f"{self._client_wrapper.get_base_url()}/", f"api/v1/parsing/job/{job_id}/result/image/{name}"
+            ),
+            headers=self._client_wrapper.get_headers(),
+            timeout=60,
+        )
+        if 200 <= _response.status_code < 300:
+            return
+        if _response.status_code == 422:
+            raise UnprocessableEntityError(pydantic.parse_obj_as(HttpValidationError, _response.json()))  # type: ignore
+        try:
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, body=_response.text)
+        raise ApiError(status_code=_response.status_code, body=_response_json)
+
+    async def get_job_json_result(
         self, job_id: str, *, organization_id: typing.Optional[str] = None
-    ) -> ParsingJobTextResult:
+    ) -> ParsingJobJsonResult:
         """
         Get a job by id
 
@@ -1966,19 +1478,229 @@ class AsyncParsingClient:
         client = AsyncLlamaCloud(
             token="YOUR_TOKEN",
         )
-        await client.parsing.get_job_text_result(
+        await client.parsing.get_job_json_result(
             job_id="string",
         )
         """
         _response = await self._client_wrapper.httpx_client.request(
             "GET",
-            urllib.parse.urljoin(f"{self._client_wrapper.get_base_url()}/", f"api/v1/parsing/job/{job_id}/result/text"),
+            urllib.parse.urljoin(f"{self._client_wrapper.get_base_url()}/", f"api/v1/parsing/job/{job_id}/result/json"),
             params=remove_none_from_dict({"organization_id": organization_id}),
             headers=self._client_wrapper.get_headers(),
             timeout=60,
         )
         if 200 <= _response.status_code < 300:
-            return pydantic.parse_obj_as(ParsingJobTextResult, _response.json())  # type: ignore
+            return pydantic.parse_obj_as(ParsingJobJsonResult, _response.json())  # type: ignore
+        if _response.status_code == 422:
+            raise UnprocessableEntityError(pydantic.parse_obj_as(HttpValidationError, _response.json()))  # type: ignore
+        try:
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, body=_response.text)
+        raise ApiError(status_code=_response.status_code, body=_response_json)
+
+    async def get_job_result(
+        self, job_id: str, *, organization_id: typing.Optional[str] = None
+    ) -> ParsingJobMarkdownResult:
+        """
+        Get a job by id
+
+        Note: The 'credits_used' and 'job_credits_usage' fields in the response metadata are deprecated
+        and will be removed in a future release.
+
+        Parameters:
+            - job_id: str.
+
+            - organization_id: typing.Optional[str].
+        ---
+        from llama_cloud.client import AsyncLlamaCloud
+
+        client = AsyncLlamaCloud(
+            token="YOUR_TOKEN",
+        )
+        await client.parsing.get_job_result(
+            job_id="string",
+        )
+        """
+        _response = await self._client_wrapper.httpx_client.request(
+            "GET",
+            urllib.parse.urljoin(
+                f"{self._client_wrapper.get_base_url()}/", f"api/v1/parsing/job/{job_id}/result/markdown"
+            ),
+            params=remove_none_from_dict({"organization_id": organization_id}),
+            headers=self._client_wrapper.get_headers(),
+            timeout=60,
+        )
+        if 200 <= _response.status_code < 300:
+            return pydantic.parse_obj_as(ParsingJobMarkdownResult, _response.json())  # type: ignore
+        if _response.status_code == 422:
+            raise UnprocessableEntityError(pydantic.parse_obj_as(HttpValidationError, _response.json()))  # type: ignore
+        try:
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, body=_response.text)
+        raise ApiError(status_code=_response.status_code, body=_response_json)
+
+    async def get_job_raw_text_result(self, job_id: str) -> typing.Any:
+        """
+        Get a job by id
+
+        Parameters:
+            - job_id: str.
+        ---
+        from llama_cloud.client import AsyncLlamaCloud
+
+        client = AsyncLlamaCloud(
+            token="YOUR_TOKEN",
+        )
+        await client.parsing.get_job_raw_text_result(
+            job_id="string",
+        )
+        """
+        _response = await self._client_wrapper.httpx_client.request(
+            "GET",
+            urllib.parse.urljoin(f"{self._client_wrapper.get_base_url()}/", f"api/v1/parsing/job/{job_id}/result/pdf"),
+            headers=self._client_wrapper.get_headers(),
+            timeout=60,
+        )
+        if 200 <= _response.status_code < 300:
+            return pydantic.parse_obj_as(typing.Any, _response.json())  # type: ignore
+        if _response.status_code == 422:
+            raise UnprocessableEntityError(pydantic.parse_obj_as(HttpValidationError, _response.json()))  # type: ignore
+        try:
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, body=_response.text)
+        raise ApiError(status_code=_response.status_code, body=_response_json)
+
+    async def get_job_json_raw_result(self, job_id: str) -> typing.Any:
+        """
+        Get a job by id
+
+        Parameters:
+            - job_id: str.
+        ---
+        from llama_cloud.client import AsyncLlamaCloud
+
+        client = AsyncLlamaCloud(
+            token="YOUR_TOKEN",
+        )
+        await client.parsing.get_job_json_raw_result(
+            job_id="string",
+        )
+        """
+        _response = await self._client_wrapper.httpx_client.request(
+            "GET",
+            urllib.parse.urljoin(
+                f"{self._client_wrapper.get_base_url()}/", f"api/v1/parsing/job/{job_id}/result/raw/json"
+            ),
+            headers=self._client_wrapper.get_headers(),
+            timeout=60,
+        )
+        if 200 <= _response.status_code < 300:
+            return pydantic.parse_obj_as(typing.Any, _response.json())  # type: ignore
+        if _response.status_code == 422:
+            raise UnprocessableEntityError(pydantic.parse_obj_as(HttpValidationError, _response.json()))  # type: ignore
+        try:
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, body=_response.text)
+        raise ApiError(status_code=_response.status_code, body=_response_json)
+
+    async def get_job_raw_md_result(self, job_id: str) -> typing.Any:
+        """
+        Get a job by id
+
+        Parameters:
+            - job_id: str.
+        ---
+        from llama_cloud.client import AsyncLlamaCloud
+
+        client = AsyncLlamaCloud(
+            token="YOUR_TOKEN",
+        )
+        await client.parsing.get_job_raw_md_result(
+            job_id="string",
+        )
+        """
+        _response = await self._client_wrapper.httpx_client.request(
+            "GET",
+            urllib.parse.urljoin(
+                f"{self._client_wrapper.get_base_url()}/", f"api/v1/parsing/job/{job_id}/result/raw/markdown"
+            ),
+            headers=self._client_wrapper.get_headers(),
+            timeout=60,
+        )
+        if 200 <= _response.status_code < 300:
+            return pydantic.parse_obj_as(typing.Any, _response.json())  # type: ignore
+        if _response.status_code == 422:
+            raise UnprocessableEntityError(pydantic.parse_obj_as(HttpValidationError, _response.json()))  # type: ignore
+        try:
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, body=_response.text)
+        raise ApiError(status_code=_response.status_code, body=_response_json)
+
+    async def get_job_raw_text_result_raw_pdf(self, job_id: str) -> typing.Any:
+        """
+        Get a job by id
+
+        Parameters:
+            - job_id: str.
+        ---
+        from llama_cloud.client import AsyncLlamaCloud
+
+        client = AsyncLlamaCloud(
+            token="YOUR_TOKEN",
+        )
+        await client.parsing.get_job_raw_text_result_raw_pdf(
+            job_id="string",
+        )
+        """
+        _response = await self._client_wrapper.httpx_client.request(
+            "GET",
+            urllib.parse.urljoin(
+                f"{self._client_wrapper.get_base_url()}/", f"api/v1/parsing/job/{job_id}/result/raw/pdf"
+            ),
+            headers=self._client_wrapper.get_headers(),
+            timeout=60,
+        )
+        if 200 <= _response.status_code < 300:
+            return pydantic.parse_obj_as(typing.Any, _response.json())  # type: ignore
+        if _response.status_code == 422:
+            raise UnprocessableEntityError(pydantic.parse_obj_as(HttpValidationError, _response.json()))  # type: ignore
+        try:
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, body=_response.text)
+        raise ApiError(status_code=_response.status_code, body=_response_json)
+
+    async def get_job_raw_structured_result(self, job_id: str) -> typing.Any:
+        """
+        Get a job by id
+
+        Parameters:
+            - job_id: str.
+        ---
+        from llama_cloud.client import AsyncLlamaCloud
+
+        client = AsyncLlamaCloud(
+            token="YOUR_TOKEN",
+        )
+        await client.parsing.get_job_raw_structured_result(
+            job_id="string",
+        )
+        """
+        _response = await self._client_wrapper.httpx_client.request(
+            "GET",
+            urllib.parse.urljoin(
+                f"{self._client_wrapper.get_base_url()}/", f"api/v1/parsing/job/{job_id}/result/raw/structured"
+            ),
+            headers=self._client_wrapper.get_headers(),
+            timeout=60,
+        )
+        if 200 <= _response.status_code < 300:
+            return pydantic.parse_obj_as(typing.Any, _response.json())  # type: ignore
         if _response.status_code == 422:
             raise UnprocessableEntityError(pydantic.parse_obj_as(HttpValidationError, _response.json()))  # type: ignore
         try:
@@ -2021,7 +1743,7 @@ class AsyncParsingClient:
             raise ApiError(status_code=_response.status_code, body=_response.text)
         raise ApiError(status_code=_response.status_code, body=_response_json)
 
-    async def get_job_raw_text_result(self, job_id: str) -> typing.Any:
+    async def get_job_raw_xlsx_result_raw(self, job_id: str) -> typing.Any:
         """
         Get a job by id
 
@@ -2033,46 +1755,14 @@ class AsyncParsingClient:
         client = AsyncLlamaCloud(
             token="YOUR_TOKEN",
         )
-        await client.parsing.get_job_raw_text_result(
-            job_id="string",
-        )
-        """
-        _response = await self._client_wrapper.httpx_client.request(
-            "GET",
-            urllib.parse.urljoin(f"{self._client_wrapper.get_base_url()}/", f"api/v1/parsing/job/{job_id}/result/pdf"),
-            headers=self._client_wrapper.get_headers(),
-            timeout=60,
-        )
-        if 200 <= _response.status_code < 300:
-            return pydantic.parse_obj_as(typing.Any, _response.json())  # type: ignore
-        if _response.status_code == 422:
-            raise UnprocessableEntityError(pydantic.parse_obj_as(HttpValidationError, _response.json()))  # type: ignore
-        try:
-            _response_json = _response.json()
-        except JSONDecodeError:
-            raise ApiError(status_code=_response.status_code, body=_response.text)
-        raise ApiError(status_code=_response.status_code, body=_response_json)
-
-    async def get_job_raw_text_result_raw_pdf(self, job_id: str) -> typing.Any:
-        """
-        Get a job by id
-
-        Parameters:
-            - job_id: str.
-        ---
-        from llama_cloud.client import AsyncLlamaCloud
-
-        client = AsyncLlamaCloud(
-            token="YOUR_TOKEN",
-        )
-        await client.parsing.get_job_raw_text_result_raw_pdf(
+        await client.parsing.get_job_raw_xlsx_result_raw(
             job_id="string",
         )
         """
         _response = await self._client_wrapper.httpx_client.request(
             "GET",
             urllib.parse.urljoin(
-                f"{self._client_wrapper.get_base_url()}/", f"api/v1/parsing/job/{job_id}/result/raw/pdf"
+                f"{self._client_wrapper.get_base_url()}/", f"api/v1/parsing/job/{job_id}/result/raw/xlsx"
             ),
             headers=self._client_wrapper.get_headers(),
             timeout=60,
@@ -2129,32 +1819,38 @@ class AsyncParsingClient:
             raise ApiError(status_code=_response.status_code, body=_response.text)
         raise ApiError(status_code=_response.status_code, body=_response_json)
 
-    async def get_job_raw_structured_result(self, job_id: str) -> typing.Any:
+    async def get_job_text_result(
+        self, job_id: str, *, organization_id: typing.Optional[str] = None
+    ) -> ParsingJobTextResult:
         """
         Get a job by id
 
+        Note: The 'credits_used' and 'job_credits_usage' fields in the response metadata are deprecated
+        and will be removed in a future release.
+
         Parameters:
             - job_id: str.
+
+            - organization_id: typing.Optional[str].
         ---
         from llama_cloud.client import AsyncLlamaCloud
 
         client = AsyncLlamaCloud(
             token="YOUR_TOKEN",
         )
-        await client.parsing.get_job_raw_structured_result(
+        await client.parsing.get_job_text_result(
             job_id="string",
         )
         """
         _response = await self._client_wrapper.httpx_client.request(
             "GET",
-            urllib.parse.urljoin(
-                f"{self._client_wrapper.get_base_url()}/", f"api/v1/parsing/job/{job_id}/result/raw/structured"
-            ),
+            urllib.parse.urljoin(f"{self._client_wrapper.get_base_url()}/", f"api/v1/parsing/job/{job_id}/result/text"),
+            params=remove_none_from_dict({"organization_id": organization_id}),
             headers=self._client_wrapper.get_headers(),
             timeout=60,
         )
         if 200 <= _response.status_code < 300:
-            return pydantic.parse_obj_as(typing.Any, _response.json())  # type: ignore
+            return pydantic.parse_obj_as(ParsingJobTextResult, _response.json())  # type: ignore
         if _response.status_code == 422:
             raise UnprocessableEntityError(pydantic.parse_obj_as(HttpValidationError, _response.json()))  # type: ignore
         try:
@@ -2195,74 +1891,92 @@ class AsyncParsingClient:
             raise ApiError(status_code=_response.status_code, body=_response.text)
         raise ApiError(status_code=_response.status_code, body=_response_json)
 
-    async def get_job_raw_xlsx_result_raw(self, job_id: str) -> typing.Any:
+    async def screenshot(
+        self,
+        *,
+        organization_id: typing.Optional[str] = None,
+        project_id: typing.Optional[str] = None,
+        do_not_cache: bool,
+        file: typing.Optional[str] = OMIT,
+        http_proxy: str,
+        input_s_3_path: str,
+        input_s_3_region: str,
+        input_url: str,
+        invalidate_cache: bool,
+        job_timeout_extra_time_per_page_in_seconds: float,
+        job_timeout_in_seconds: float,
+        max_pages: typing.Optional[int] = OMIT,
+        output_s_3_path_prefix: str,
+        output_s_3_region: str,
+        target_pages: str,
+        webhook_configurations: str,
+        webhook_url: str,
+    ) -> ParsingJob:
         """
-        Get a job by id
-
         Parameters:
-            - job_id: str.
-        ---
-        from llama_cloud.client import AsyncLlamaCloud
-
-        client = AsyncLlamaCloud(
-            token="YOUR_TOKEN",
-        )
-        await client.parsing.get_job_raw_xlsx_result_raw(
-            job_id="string",
-        )
-        """
-        _response = await self._client_wrapper.httpx_client.request(
-            "GET",
-            urllib.parse.urljoin(
-                f"{self._client_wrapper.get_base_url()}/", f"api/v1/parsing/job/{job_id}/result/raw/xlsx"
-            ),
-            headers=self._client_wrapper.get_headers(),
-            timeout=60,
-        )
-        if 200 <= _response.status_code < 300:
-            return pydantic.parse_obj_as(typing.Any, _response.json())  # type: ignore
-        if _response.status_code == 422:
-            raise UnprocessableEntityError(pydantic.parse_obj_as(HttpValidationError, _response.json()))  # type: ignore
-        try:
-            _response_json = _response.json()
-        except JSONDecodeError:
-            raise ApiError(status_code=_response.status_code, body=_response.text)
-        raise ApiError(status_code=_response.status_code, body=_response_json)
-
-    async def get_job_result(
-        self, job_id: str, *, organization_id: typing.Optional[str] = None
-    ) -> ParsingJobMarkdownResult:
-        """
-        Get a job by id
-
-        Note: The 'credits_used' and 'job_credits_usage' fields in the response metadata are deprecated
-        and will be removed in a future release.
-
-        Parameters:
-            - job_id: str.
-
             - organization_id: typing.Optional[str].
-        ---
-        from llama_cloud.client import AsyncLlamaCloud
 
-        client = AsyncLlamaCloud(
-            token="YOUR_TOKEN",
-        )
-        await client.parsing.get_job_result(
-            job_id="string",
-        )
+            - project_id: typing.Optional[str].
+
+            - do_not_cache: bool.
+
+            - file: typing.Optional[str].
+
+            - http_proxy: str.
+
+            - input_s_3_path: str.
+
+            - input_s_3_region: str.
+
+            - input_url: str.
+
+            - invalidate_cache: bool.
+
+            - job_timeout_extra_time_per_page_in_seconds: float.
+
+            - job_timeout_in_seconds: float.
+
+            - max_pages: typing.Optional[int].
+
+            - output_s_3_path_prefix: str.
+
+            - output_s_3_region: str.
+
+            - target_pages: str.
+
+            - webhook_configurations: str.
+
+            - webhook_url: str.
         """
+        _request: typing.Dict[str, typing.Any] = {
+            "do_not_cache": do_not_cache,
+            "http_proxy": http_proxy,
+            "input_s3_path": input_s_3_path,
+            "input_s3_region": input_s_3_region,
+            "input_url": input_url,
+            "invalidate_cache": invalidate_cache,
+            "job_timeout_extra_time_per_page_in_seconds": job_timeout_extra_time_per_page_in_seconds,
+            "job_timeout_in_seconds": job_timeout_in_seconds,
+            "output_s3_path_prefix": output_s_3_path_prefix,
+            "output_s3_region": output_s_3_region,
+            "target_pages": target_pages,
+            "webhook_configurations": webhook_configurations,
+            "webhook_url": webhook_url,
+        }
+        if file is not OMIT:
+            _request["file"] = file
+        if max_pages is not OMIT:
+            _request["max_pages"] = max_pages
         _response = await self._client_wrapper.httpx_client.request(
-            "GET",
-            urllib.parse.urljoin(
-                f"{self._client_wrapper.get_base_url()}/", f"api/v1/parsing/job/{job_id}/result/markdown"
-            ),
-            params=remove_none_from_dict({"organization_id": organization_id}),
+            "POST",
+            urllib.parse.urljoin(f"{self._client_wrapper.get_base_url()}/", "api/v1/parsing/screenshot"),
+            params=remove_none_from_dict({"organization_id": organization_id, "project_id": project_id}),
+            json=jsonable_encoder(_request),
             headers=self._client_wrapper.get_headers(),
             timeout=60,
         )
         if 200 <= _response.status_code < 300:
-            return pydantic.parse_obj_as(ParsingJobMarkdownResult, _response.json())  # type: ignore
+            return pydantic.parse_obj_as(ParsingJob, _response.json())  # type: ignore
         if _response.status_code == 422:
             raise UnprocessableEntityError(pydantic.parse_obj_as(HttpValidationError, _response.json()))  # type: ignore
         try:
@@ -2271,174 +1985,492 @@ class AsyncParsingClient:
             raise ApiError(status_code=_response.status_code, body=_response.text)
         raise ApiError(status_code=_response.status_code, body=_response_json)
 
-    async def get_job_raw_md_result(self, job_id: str) -> typing.Any:
+    async def get_supported_file_extensions(self) -> typing.List[LlamaParseSupportedFileExtensions]:
         """
-        Get a job by id
+        Get a list of supported file extensions
 
-        Parameters:
-            - job_id: str.
         ---
         from llama_cloud.client import AsyncLlamaCloud
 
         client = AsyncLlamaCloud(
             token="YOUR_TOKEN",
         )
-        await client.parsing.get_job_raw_md_result(
-            job_id="string",
-        )
+        await client.parsing.get_supported_file_extensions()
         """
         _response = await self._client_wrapper.httpx_client.request(
             "GET",
-            urllib.parse.urljoin(
-                f"{self._client_wrapper.get_base_url()}/", f"api/v1/parsing/job/{job_id}/result/raw/markdown"
-            ),
+            urllib.parse.urljoin(f"{self._client_wrapper.get_base_url()}/", "api/v1/parsing/supported_file_extensions"),
             headers=self._client_wrapper.get_headers(),
             timeout=60,
         )
         if 200 <= _response.status_code < 300:
-            return pydantic.parse_obj_as(typing.Any, _response.json())  # type: ignore
-        if _response.status_code == 422:
-            raise UnprocessableEntityError(pydantic.parse_obj_as(HttpValidationError, _response.json()))  # type: ignore
+            return pydantic.parse_obj_as(typing.List[LlamaParseSupportedFileExtensions], _response.json())  # type: ignore
         try:
             _response_json = _response.json()
         except JSONDecodeError:
             raise ApiError(status_code=_response.status_code, body=_response.text)
         raise ApiError(status_code=_response.status_code, body=_response_json)
 
-    async def get_job_json_result(
-        self, job_id: str, *, organization_id: typing.Optional[str] = None
-    ) -> ParsingJobJsonResult:
+    async def upload_file(
+        self,
+        *,
+        organization_id: typing.Optional[str] = None,
+        project_id: typing.Optional[str] = None,
+        adaptive_long_table: bool,
+        aggressive_table_extraction: bool,
+        annotate_links: bool,
+        auto_mode: bool,
+        auto_mode_configuration_json: str,
+        auto_mode_trigger_on_image_in_page: bool,
+        auto_mode_trigger_on_regexp_in_page: str,
+        auto_mode_trigger_on_table_in_page: bool,
+        auto_mode_trigger_on_text_in_page: str,
+        azure_openai_api_version: str,
+        azure_openai_deployment_name: str,
+        azure_openai_endpoint: str,
+        azure_openai_key: str,
+        bbox_bottom: float,
+        bbox_left: float,
+        bbox_right: float,
+        bbox_top: float,
+        bounding_box: str,
+        compact_markdown_table: bool,
+        complemental_formatting_instruction: str,
+        content_guideline_instruction: str,
+        continuous_mode: bool,
+        disable_image_extraction: bool,
+        disable_ocr: bool,
+        disable_reconstruction: bool,
+        do_not_cache: bool,
+        do_not_unroll_columns: bool,
+        extract_charts: bool,
+        extract_layout: bool,
+        fast_mode: bool,
+        file: typing.Optional[str] = OMIT,
+        formatting_instruction: str,
+        gpt_4_o_api_key: str,
+        gpt_4_o_mode: bool,
+        guess_xlsx_sheet_name: bool,
+        hide_footers: bool,
+        hide_headers: bool,
+        high_res_ocr: bool,
+        html_make_all_elements_visible: bool,
+        html_remove_fixed_elements: bool,
+        html_remove_navigation_elements: bool,
+        http_proxy: str,
+        ignore_document_elements_for_layout_detection: bool,
+        inline_images_in_markdown: bool,
+        input_s_3_path: str,
+        input_s_3_region: str,
+        input_url: str,
+        invalidate_cache: bool,
+        is_formatting_instruction: bool,
+        job_timeout_extra_time_per_page_in_seconds: float,
+        job_timeout_in_seconds: float,
+        keep_page_separator_when_merging_tables: bool,
+        language: typing.List[ParserLanguages],
+        layout_aware: bool,
+        markdown_table_multiline_header_separator: str,
+        max_pages: typing.Optional[int] = OMIT,
+        merge_tables_across_pages_in_markdown: bool,
+        model: str,
+        outlined_table_extraction: bool,
+        output_pdf_of_document: bool,
+        output_s_3_path_prefix: str,
+        output_s_3_region: str,
+        output_tables_as_html: bool,
+        page_error_tolerance: float,
+        page_footer_prefix: str,
+        page_footer_suffix: str,
+        page_header_prefix: str,
+        page_header_suffix: str,
+        page_prefix: str,
+        page_separator: str,
+        page_suffix: str,
+        parse_mode: typing.Optional[ParsingMode] = OMIT,
+        parsing_instruction: str,
+        precise_bounding_box: bool,
+        premium_mode: bool,
+        presentation_out_of_bounds_content: bool,
+        preserve_layout_alignment_across_pages: bool,
+        preserve_very_small_text: bool,
+        preset: str,
+        remove_hidden_text: bool,
+        replace_failed_page_mode: typing.Optional[FailPageMode] = OMIT,
+        replace_failed_page_with_error_message_prefix: str,
+        replace_failed_page_with_error_message_suffix: str,
+        save_images: bool,
+        skip_diagonal_text: bool,
+        specialized_chart_parsing_agentic: bool,
+        specialized_chart_parsing_efficient: bool,
+        specialized_chart_parsing_plus: bool,
+        specialized_image_parsing: bool,
+        spreadsheet_extract_sub_tables: bool,
+        spreadsheet_force_formula_computation: bool,
+        strict_mode_buggy_font: bool,
+        strict_mode_image_extraction: bool,
+        strict_mode_image_ocr: bool,
+        strict_mode_reconstruction: bool,
+        structured_output: bool,
+        structured_output_json_schema: str,
+        structured_output_json_schema_name: str,
+        system_prompt: str,
+        system_prompt_append: str,
+        take_screenshot: bool,
+        target_pages: str,
+        use_vendor_multimodal_model: bool,
+        user_prompt: str,
+        vendor_multimodal_api_key: str,
+        vendor_multimodal_model_name: str,
+        webhook_configurations: str,
+        webhook_url: str,
+    ) -> ParsingJob:
         """
-        Get a job by id
-
-        Note: The 'credits_used' and 'job_credits_usage' fields in the response metadata are deprecated
-        and will be removed in a future release.
-
         Parameters:
-            - job_id: str.
-
             - organization_id: typing.Optional[str].
-        ---
-        from llama_cloud.client import AsyncLlamaCloud
 
-        client = AsyncLlamaCloud(
-            token="YOUR_TOKEN",
-        )
-        await client.parsing.get_job_json_result(
-            job_id="string",
-        )
+            - project_id: typing.Optional[str].
+
+            - adaptive_long_table: bool.
+
+            - aggressive_table_extraction: bool.
+
+            - annotate_links: bool.
+
+            - auto_mode: bool.
+
+            - auto_mode_configuration_json: str.
+
+            - auto_mode_trigger_on_image_in_page: bool.
+
+            - auto_mode_trigger_on_regexp_in_page: str.
+
+            - auto_mode_trigger_on_table_in_page: bool.
+
+            - auto_mode_trigger_on_text_in_page: str.
+
+            - azure_openai_api_version: str.
+
+            - azure_openai_deployment_name: str.
+
+            - azure_openai_endpoint: str.
+
+            - azure_openai_key: str.
+
+            - bbox_bottom: float.
+
+            - bbox_left: float.
+
+            - bbox_right: float.
+
+            - bbox_top: float.
+
+            - bounding_box: str.
+
+            - compact_markdown_table: bool.
+
+            - complemental_formatting_instruction: str.
+
+            - content_guideline_instruction: str.
+
+            - continuous_mode: bool.
+
+            - disable_image_extraction: bool.
+
+            - disable_ocr: bool.
+
+            - disable_reconstruction: bool.
+
+            - do_not_cache: bool.
+
+            - do_not_unroll_columns: bool.
+
+            - extract_charts: bool.
+
+            - extract_layout: bool.
+
+            - fast_mode: bool.
+
+            - file: typing.Optional[str].
+
+            - formatting_instruction: str.
+
+            - gpt_4_o_api_key: str.
+
+            - gpt_4_o_mode: bool.
+
+            - guess_xlsx_sheet_name: bool.
+
+            - hide_footers: bool.
+
+            - hide_headers: bool.
+
+            - high_res_ocr: bool.
+
+            - html_make_all_elements_visible: bool.
+
+            - html_remove_fixed_elements: bool.
+
+            - html_remove_navigation_elements: bool.
+
+            - http_proxy: str.
+
+            - ignore_document_elements_for_layout_detection: bool.
+
+            - inline_images_in_markdown: bool.
+
+            - input_s_3_path: str.
+
+            - input_s_3_region: str.
+
+            - input_url: str.
+
+            - invalidate_cache: bool.
+
+            - is_formatting_instruction: bool.
+
+            - job_timeout_extra_time_per_page_in_seconds: float.
+
+            - job_timeout_in_seconds: float.
+
+            - keep_page_separator_when_merging_tables: bool.
+
+            - language: typing.List[ParserLanguages].
+
+            - layout_aware: bool.
+
+            - markdown_table_multiline_header_separator: str.
+
+            - max_pages: typing.Optional[int].
+
+            - merge_tables_across_pages_in_markdown: bool.
+
+            - model: str.
+
+            - outlined_table_extraction: bool.
+
+            - output_pdf_of_document: bool.
+
+            - output_s_3_path_prefix: str.
+
+            - output_s_3_region: str.
+
+            - output_tables_as_html: bool.
+
+            - page_error_tolerance: float.
+
+            - page_footer_prefix: str.
+
+            - page_footer_suffix: str.
+
+            - page_header_prefix: str.
+
+            - page_header_suffix: str.
+
+            - page_prefix: str.
+
+            - page_separator: str.
+
+            - page_suffix: str.
+
+            - parse_mode: typing.Optional[ParsingMode].
+
+            - parsing_instruction: str.
+
+            - precise_bounding_box: bool.
+
+            - premium_mode: bool.
+
+            - presentation_out_of_bounds_content: bool.
+
+            - preserve_layout_alignment_across_pages: bool.
+
+            - preserve_very_small_text: bool.
+
+            - preset: str.
+
+            - remove_hidden_text: bool.
+
+            - replace_failed_page_mode: typing.Optional[FailPageMode].
+
+            - replace_failed_page_with_error_message_prefix: str.
+
+            - replace_failed_page_with_error_message_suffix: str.
+
+            - save_images: bool.
+
+            - skip_diagonal_text: bool.
+
+            - specialized_chart_parsing_agentic: bool.
+
+            - specialized_chart_parsing_efficient: bool.
+
+            - specialized_chart_parsing_plus: bool.
+
+            - specialized_image_parsing: bool.
+
+            - spreadsheet_extract_sub_tables: bool.
+
+            - spreadsheet_force_formula_computation: bool.
+
+            - strict_mode_buggy_font: bool.
+
+            - strict_mode_image_extraction: bool.
+
+            - strict_mode_image_ocr: bool.
+
+            - strict_mode_reconstruction: bool.
+
+            - structured_output: bool.
+
+            - structured_output_json_schema: str.
+
+            - structured_output_json_schema_name: str.
+
+            - system_prompt: str.
+
+            - system_prompt_append: str.
+
+            - take_screenshot: bool.
+
+            - target_pages: str.
+
+            - use_vendor_multimodal_model: bool.
+
+            - user_prompt: str.
+
+            - vendor_multimodal_api_key: str.
+
+            - vendor_multimodal_model_name: str.
+
+            - webhook_configurations: str.
+
+            - webhook_url: str.
         """
+        _request: typing.Dict[str, typing.Any] = {
+            "adaptive_long_table": adaptive_long_table,
+            "aggressive_table_extraction": aggressive_table_extraction,
+            "annotate_links": annotate_links,
+            "auto_mode": auto_mode,
+            "auto_mode_configuration_json": auto_mode_configuration_json,
+            "auto_mode_trigger_on_image_in_page": auto_mode_trigger_on_image_in_page,
+            "auto_mode_trigger_on_regexp_in_page": auto_mode_trigger_on_regexp_in_page,
+            "auto_mode_trigger_on_table_in_page": auto_mode_trigger_on_table_in_page,
+            "auto_mode_trigger_on_text_in_page": auto_mode_trigger_on_text_in_page,
+            "azure_openai_api_version": azure_openai_api_version,
+            "azure_openai_deployment_name": azure_openai_deployment_name,
+            "azure_openai_endpoint": azure_openai_endpoint,
+            "azure_openai_key": azure_openai_key,
+            "bbox_bottom": bbox_bottom,
+            "bbox_left": bbox_left,
+            "bbox_right": bbox_right,
+            "bbox_top": bbox_top,
+            "bounding_box": bounding_box,
+            "compact_markdown_table": compact_markdown_table,
+            "complemental_formatting_instruction": complemental_formatting_instruction,
+            "content_guideline_instruction": content_guideline_instruction,
+            "continuous_mode": continuous_mode,
+            "disable_image_extraction": disable_image_extraction,
+            "disable_ocr": disable_ocr,
+            "disable_reconstruction": disable_reconstruction,
+            "do_not_cache": do_not_cache,
+            "do_not_unroll_columns": do_not_unroll_columns,
+            "extract_charts": extract_charts,
+            "extract_layout": extract_layout,
+            "fast_mode": fast_mode,
+            "formatting_instruction": formatting_instruction,
+            "gpt4o_api_key": gpt_4_o_api_key,
+            "gpt4o_mode": gpt_4_o_mode,
+            "guess_xlsx_sheet_name": guess_xlsx_sheet_name,
+            "hide_footers": hide_footers,
+            "hide_headers": hide_headers,
+            "high_res_ocr": high_res_ocr,
+            "html_make_all_elements_visible": html_make_all_elements_visible,
+            "html_remove_fixed_elements": html_remove_fixed_elements,
+            "html_remove_navigation_elements": html_remove_navigation_elements,
+            "http_proxy": http_proxy,
+            "ignore_document_elements_for_layout_detection": ignore_document_elements_for_layout_detection,
+            "inline_images_in_markdown": inline_images_in_markdown,
+            "input_s3_path": input_s_3_path,
+            "input_s3_region": input_s_3_region,
+            "input_url": input_url,
+            "invalidate_cache": invalidate_cache,
+            "is_formatting_instruction": is_formatting_instruction,
+            "job_timeout_extra_time_per_page_in_seconds": job_timeout_extra_time_per_page_in_seconds,
+            "job_timeout_in_seconds": job_timeout_in_seconds,
+            "keep_page_separator_when_merging_tables": keep_page_separator_when_merging_tables,
+            "language": language,
+            "layout_aware": layout_aware,
+            "markdown_table_multiline_header_separator": markdown_table_multiline_header_separator,
+            "merge_tables_across_pages_in_markdown": merge_tables_across_pages_in_markdown,
+            "model": model,
+            "outlined_table_extraction": outlined_table_extraction,
+            "output_pdf_of_document": output_pdf_of_document,
+            "output_s3_path_prefix": output_s_3_path_prefix,
+            "output_s3_region": output_s_3_region,
+            "output_tables_as_HTML": output_tables_as_html,
+            "page_error_tolerance": page_error_tolerance,
+            "page_footer_prefix": page_footer_prefix,
+            "page_footer_suffix": page_footer_suffix,
+            "page_header_prefix": page_header_prefix,
+            "page_header_suffix": page_header_suffix,
+            "page_prefix": page_prefix,
+            "page_separator": page_separator,
+            "page_suffix": page_suffix,
+            "parsing_instruction": parsing_instruction,
+            "precise_bounding_box": precise_bounding_box,
+            "premium_mode": premium_mode,
+            "presentation_out_of_bounds_content": presentation_out_of_bounds_content,
+            "preserve_layout_alignment_across_pages": preserve_layout_alignment_across_pages,
+            "preserve_very_small_text": preserve_very_small_text,
+            "preset": preset,
+            "remove_hidden_text": remove_hidden_text,
+            "replace_failed_page_with_error_message_prefix": replace_failed_page_with_error_message_prefix,
+            "replace_failed_page_with_error_message_suffix": replace_failed_page_with_error_message_suffix,
+            "save_images": save_images,
+            "skip_diagonal_text": skip_diagonal_text,
+            "specialized_chart_parsing_agentic": specialized_chart_parsing_agentic,
+            "specialized_chart_parsing_efficient": specialized_chart_parsing_efficient,
+            "specialized_chart_parsing_plus": specialized_chart_parsing_plus,
+            "specialized_image_parsing": specialized_image_parsing,
+            "spreadsheet_extract_sub_tables": spreadsheet_extract_sub_tables,
+            "spreadsheet_force_formula_computation": spreadsheet_force_formula_computation,
+            "strict_mode_buggy_font": strict_mode_buggy_font,
+            "strict_mode_image_extraction": strict_mode_image_extraction,
+            "strict_mode_image_ocr": strict_mode_image_ocr,
+            "strict_mode_reconstruction": strict_mode_reconstruction,
+            "structured_output": structured_output,
+            "structured_output_json_schema": structured_output_json_schema,
+            "structured_output_json_schema_name": structured_output_json_schema_name,
+            "system_prompt": system_prompt,
+            "system_prompt_append": system_prompt_append,
+            "take_screenshot": take_screenshot,
+            "target_pages": target_pages,
+            "use_vendor_multimodal_model": use_vendor_multimodal_model,
+            "user_prompt": user_prompt,
+            "vendor_multimodal_api_key": vendor_multimodal_api_key,
+            "vendor_multimodal_model_name": vendor_multimodal_model_name,
+            "webhook_configurations": webhook_configurations,
+            "webhook_url": webhook_url,
+        }
+        if file is not OMIT:
+            _request["file"] = file
+        if max_pages is not OMIT:
+            _request["max_pages"] = max_pages
+        if parse_mode is not OMIT:
+            _request["parse_mode"] = parse_mode
+        if replace_failed_page_mode is not OMIT:
+            _request["replace_failed_page_mode"] = replace_failed_page_mode
         _response = await self._client_wrapper.httpx_client.request(
-            "GET",
-            urllib.parse.urljoin(f"{self._client_wrapper.get_base_url()}/", f"api/v1/parsing/job/{job_id}/result/json"),
-            params=remove_none_from_dict({"organization_id": organization_id}),
+            "POST",
+            urllib.parse.urljoin(f"{self._client_wrapper.get_base_url()}/", "api/v1/parsing/upload"),
+            params=remove_none_from_dict({"organization_id": organization_id, "project_id": project_id}),
+            json=jsonable_encoder(_request),
             headers=self._client_wrapper.get_headers(),
             timeout=60,
         )
         if 200 <= _response.status_code < 300:
-            return pydantic.parse_obj_as(ParsingJobJsonResult, _response.json())  # type: ignore
-        if _response.status_code == 422:
-            raise UnprocessableEntityError(pydantic.parse_obj_as(HttpValidationError, _response.json()))  # type: ignore
-        try:
-            _response_json = _response.json()
-        except JSONDecodeError:
-            raise ApiError(status_code=_response.status_code, body=_response.text)
-        raise ApiError(status_code=_response.status_code, body=_response_json)
-
-    async def get_job_json_raw_result(self, job_id: str) -> typing.Any:
-        """
-        Get a job by id
-
-        Parameters:
-            - job_id: str.
-        ---
-        from llama_cloud.client import AsyncLlamaCloud
-
-        client = AsyncLlamaCloud(
-            token="YOUR_TOKEN",
-        )
-        await client.parsing.get_job_json_raw_result(
-            job_id="string",
-        )
-        """
-        _response = await self._client_wrapper.httpx_client.request(
-            "GET",
-            urllib.parse.urljoin(
-                f"{self._client_wrapper.get_base_url()}/", f"api/v1/parsing/job/{job_id}/result/raw/json"
-            ),
-            headers=self._client_wrapper.get_headers(),
-            timeout=60,
-        )
-        if 200 <= _response.status_code < 300:
-            return pydantic.parse_obj_as(typing.Any, _response.json())  # type: ignore
-        if _response.status_code == 422:
-            raise UnprocessableEntityError(pydantic.parse_obj_as(HttpValidationError, _response.json()))  # type: ignore
-        try:
-            _response_json = _response.json()
-        except JSONDecodeError:
-            raise ApiError(status_code=_response.status_code, body=_response.text)
-        raise ApiError(status_code=_response.status_code, body=_response_json)
-
-    async def get_parsing_history_result(self) -> typing.List[ParsingHistoryItem]:
-        """
-        Get parsing history for user
-
-        This endpoint is deprecated.
-        Use /api/v1/jobs/?job_name=parsing&project_id=YOUR_PROJECT_ID instead.
-
-        ---
-        from llama_cloud.client import AsyncLlamaCloud
-
-        client = AsyncLlamaCloud(
-            token="YOUR_TOKEN",
-        )
-        await client.parsing.get_parsing_history_result()
-        """
-        _response = await self._client_wrapper.httpx_client.request(
-            "GET",
-            urllib.parse.urljoin(f"{self._client_wrapper.get_base_url()}/", "api/v1/parsing/history"),
-            headers=self._client_wrapper.get_headers(),
-            timeout=60,
-        )
-        if 200 <= _response.status_code < 300:
-            return pydantic.parse_obj_as(typing.List[ParsingHistoryItem], _response.json())  # type: ignore
-        if _response.status_code == 422:
-            raise UnprocessableEntityError(pydantic.parse_obj_as(HttpValidationError, _response.json()))  # type: ignore
-        try:
-            _response_json = _response.json()
-        except JSONDecodeError:
-            raise ApiError(status_code=_response.status_code, body=_response.text)
-        raise ApiError(status_code=_response.status_code, body=_response_json)
-
-    async def generate_presigned_url(self, job_id: str, filename: str) -> PresignedUrl:
-        """
-        Generate a presigned URL for a job
-
-        Parameters:
-            - job_id: str.
-
-            - filename: str.
-        ---
-        from llama_cloud.client import AsyncLlamaCloud
-
-        client = AsyncLlamaCloud(
-            token="YOUR_TOKEN",
-        )
-        await client.parsing.generate_presigned_url(
-            job_id="string",
-            filename="string",
-        )
-        """
-        _response = await self._client_wrapper.httpx_client.request(
-            "GET",
-            urllib.parse.urljoin(
-                f"{self._client_wrapper.get_base_url()}/", f"api/v1/parsing/job/{job_id}/read/{filename}"
-            ),
-            headers=self._client_wrapper.get_headers(),
-            timeout=60,
-        )
-        if 200 <= _response.status_code < 300:
-            return pydantic.parse_obj_as(PresignedUrl, _response.json())  # type: ignore
+            return pydantic.parse_obj_as(ParsingJob, _response.json())  # type: ignore
         if _response.status_code == 422:
             raise UnprocessableEntityError(pydantic.parse_obj_as(HttpValidationError, _response.json()))  # type: ignore
         try:

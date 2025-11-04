@@ -16,9 +16,16 @@ except ImportError:
 
 class SpreadsheetParsingConfig(pydantic.BaseModel):
     """
-    Configuration for spreadsheet parsing
+    Configuration for spreadsheet parsing and table extraction
     """
 
+    extraction_range: typing.Optional[str]
+    generate_additional_metadata: typing.Optional[bool] = pydantic.Field(
+        description="Whether to generate additional metadata (title, description) for each extracted table."
+    )
+    include_hidden_cells: typing.Optional[bool] = pydantic.Field(
+        description="Whether to include hidden cells when extracting tables from the spreadsheet."
+    )
     sheet_names: typing.Optional[typing.List[str]]
 
     def json(self, **kwargs: typing.Any) -> str:

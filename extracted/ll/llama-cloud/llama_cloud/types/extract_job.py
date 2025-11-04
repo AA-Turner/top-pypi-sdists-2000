@@ -18,11 +18,11 @@ except ImportError:
 
 
 class ExtractJob(pydantic.BaseModel):
-    id: str = pydantic.Field(description="The id of the extraction job")
-    extraction_agent: ExtractAgent = pydantic.Field(description="The agent that the job was run on.")
-    status: StatusEnum = pydantic.Field(description="The status of the extraction job")
     error: typing.Optional[str]
+    extraction_agent: ExtractAgent = pydantic.Field(description="The agent that the job was run on.")
     file: File = pydantic.Field(description="The file that the extract was extracted from")
+    id: str = pydantic.Field(description="The id of the extraction job")
+    status: StatusEnum = pydantic.Field(description="The status of the extraction job")
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

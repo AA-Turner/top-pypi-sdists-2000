@@ -23,10 +23,10 @@ class SparseModelConfig(pydantic.BaseModel):
     sparse retrieval in managed data sinks.
     """
 
-    model_type: typing.Optional[SparseModelType] = pydantic.Field(
-        description="The sparse model type to use. 'auto' selects based on deployment mode (BYOC uses term frequency, Cloud uses Splade), 'splade' uses HuggingFace Splade model, 'bm25' uses Qdrant's FastEmbed BM25 model."
-    )
     class_name: typing.Optional[str]
+    model_type: typing.Optional[SparseModelType] = pydantic.Field(
+        description="The sparse model type to use. 'bm25' uses Qdrant's FastEmbed BM25 model (default for new pipelines), 'splade' uses HuggingFace Splade model, 'auto' selects based on deployment mode (BYOC uses term frequency, Cloud uses Splade)."
+    )
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}

@@ -24,22 +24,22 @@ class PipelineDataSource(pydantic.BaseModel):
     Schema for a data source in a pipeline.
     """
 
-    id: str = pydantic.Field(description="Unique identifier")
-    created_at: typing.Optional[dt.datetime]
-    updated_at: typing.Optional[dt.datetime]
-    name: str = pydantic.Field(description="The name of the data source.")
-    source_type: ConfigurableDataSourceNames
-    custom_metadata: typing.Optional[typing.Dict[str, typing.Optional[PipelineDataSourceCustomMetadataValue]]]
     component: PipelineDataSourceComponent = pydantic.Field(description="Component that implements the data source")
-    version_metadata: typing.Optional[DataSourceReaderVersionMetadata]
-    project_id: str
+    created_at: typing.Optional[dt.datetime]
+    custom_metadata: typing.Optional[typing.Dict[str, typing.Optional[PipelineDataSourceCustomMetadataValue]]]
     data_source_id: str = pydantic.Field(description="The ID of the data source.")
-    pipeline_id: str = pydantic.Field(description="The ID of the pipeline.")
+    id: str = pydantic.Field(description="Unique identifier")
     last_synced_at: dt.datetime = pydantic.Field(description="The last time the data source was automatically synced.")
-    sync_interval: typing.Optional[float]
-    sync_schedule_set_by: typing.Optional[str]
+    name: str = pydantic.Field(description="The name of the data source.")
+    pipeline_id: str = pydantic.Field(description="The ID of the pipeline.")
+    project_id: str
+    source_type: ConfigurableDataSourceNames
     status: typing.Optional[PipelineDataSourceStatus]
     status_updated_at: typing.Optional[dt.datetime]
+    sync_interval: typing.Optional[float]
+    sync_schedule_set_by: typing.Optional[str]
+    updated_at: typing.Optional[dt.datetime]
+    version_metadata: typing.Optional[DataSourceReaderVersionMetadata]
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}
