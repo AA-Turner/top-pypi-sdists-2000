@@ -61,6 +61,7 @@ import constructs as _constructs_77d1e7e8
 from .. import (
     CfnResource as _CfnResource_9df397a6,
     CfnTag as _CfnTag_f6864754,
+    IEnvironmentAware as _IEnvironmentAware_a408b00d,
     IInspectable as _IInspectable_c2943556,
     IResolvable as _IResolvable_da3f097b,
     ITaggable as _ITaggable_36806126,
@@ -1366,7 +1367,11 @@ class ChannelReference:
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_mediapackage.IAssetRef")
-class IAssetRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IAssetRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Asset.
 
     :stability: experimental
@@ -1384,6 +1389,7 @@ class IAssetRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IAssetRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Asset.
 
@@ -1406,7 +1412,11 @@ typing.cast(typing.Any, IAssetRef).__jsii_proxy_class__ = lambda : _IAssetRefPro
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_mediapackage.IChannelRef")
-class IChannelRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IChannelRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Channel.
 
     :stability: experimental
@@ -1424,6 +1434,7 @@ class IChannelRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IChannelRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Channel.
 
@@ -1446,7 +1457,11 @@ typing.cast(typing.Any, IChannelRef).__jsii_proxy_class__ = lambda : _IChannelRe
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_mediapackage.IOriginEndpointRef")
-class IOriginEndpointRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IOriginEndpointRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a OriginEndpoint.
 
     :stability: experimental
@@ -1464,6 +1479,7 @@ class IOriginEndpointRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Prot
 
 class _IOriginEndpointRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a OriginEndpoint.
 
@@ -1488,6 +1504,7 @@ typing.cast(typing.Any, IOriginEndpointRef).__jsii_proxy_class__ = lambda : _IOr
 @jsii.interface(jsii_type="aws-cdk-lib.aws_mediapackage.IPackagingConfigurationRef")
 class IPackagingConfigurationRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a PackagingConfiguration.
@@ -1507,6 +1524,7 @@ class IPackagingConfigurationRef(
 
 class _IPackagingConfigurationRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a PackagingConfiguration.
 
@@ -1529,7 +1547,11 @@ typing.cast(typing.Any, IPackagingConfigurationRef).__jsii_proxy_class__ = lambd
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_mediapackage.IPackagingGroupRef")
-class IPackagingGroupRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IPackagingGroupRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a PackagingGroup.
 
     :stability: experimental
@@ -1547,6 +1569,7 @@ class IPackagingGroupRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Prot
 
 class _IPackagingGroupRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a PackagingGroup.
 

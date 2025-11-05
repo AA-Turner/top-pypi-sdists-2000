@@ -1312,6 +1312,7 @@ from .. import (
     CfnResource as _CfnResource_9df397a6,
     CfnTag as _CfnTag_f6864754,
     Duration as _Duration_4839e8c3,
+    IEnvironmentAware as _IEnvironmentAware_a408b00d,
     IInspectable as _IInspectable_c2943556,
     IResolvable as _IResolvable_da3f097b,
     IResource as _IResource_c80c4260,
@@ -6072,6 +6073,7 @@ typing.cast(typing.Any, ICustomAttribute).__jsii_proxy_class__ = lambda : _ICust
 @jsii.interface(jsii_type="aws-cdk-lib.aws_cognito.IIdentityPoolPrincipalTagRef")
 class IIdentityPoolPrincipalTagRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a IdentityPoolPrincipalTag.
@@ -6091,6 +6093,7 @@ class IIdentityPoolPrincipalTagRef(
 
 class _IIdentityPoolPrincipalTagRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a IdentityPoolPrincipalTag.
 
@@ -6113,7 +6116,11 @@ typing.cast(typing.Any, IIdentityPoolPrincipalTagRef).__jsii_proxy_class__ = lam
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_cognito.IIdentityPoolRef")
-class IIdentityPoolRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IIdentityPoolRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a IdentityPool.
 
     :stability: experimental
@@ -6131,6 +6138,7 @@ class IIdentityPoolRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protoc
 
 class _IIdentityPoolRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a IdentityPool.
 
@@ -6155,6 +6163,7 @@ typing.cast(typing.Any, IIdentityPoolRef).__jsii_proxy_class__ = lambda : _IIden
 @jsii.interface(jsii_type="aws-cdk-lib.aws_cognito.IIdentityPoolRoleAttachmentRef")
 class IIdentityPoolRoleAttachmentRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a IdentityPoolRoleAttachment.
@@ -6176,6 +6185,7 @@ class IIdentityPoolRoleAttachmentRef(
 
 class _IIdentityPoolRoleAttachmentRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a IdentityPoolRoleAttachment.
 
@@ -6202,6 +6212,7 @@ typing.cast(typing.Any, IIdentityPoolRoleAttachmentRef).__jsii_proxy_class__ = l
 @jsii.interface(jsii_type="aws-cdk-lib.aws_cognito.ILogDeliveryConfigurationRef")
 class ILogDeliveryConfigurationRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a LogDeliveryConfiguration.
@@ -6221,6 +6232,7 @@ class ILogDeliveryConfigurationRef(
 
 class _ILogDeliveryConfigurationRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a LogDeliveryConfiguration.
 
@@ -6245,6 +6257,7 @@ typing.cast(typing.Any, ILogDeliveryConfigurationRef).__jsii_proxy_class__ = lam
 @jsii.interface(jsii_type="aws-cdk-lib.aws_cognito.IManagedLoginBrandingRef")
 class IManagedLoginBrandingRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a ManagedLoginBranding.
@@ -6264,6 +6277,7 @@ class IManagedLoginBrandingRef(
 
 class _IManagedLoginBrandingRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a ManagedLoginBranding.
 
@@ -6744,7 +6758,11 @@ typing.cast(typing.Any, IUserPoolClient).__jsii_proxy_class__ = lambda : _IUserP
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_cognito.IUserPoolClientRef")
-class IUserPoolClientRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IUserPoolClientRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a UserPoolClient.
 
     :stability: experimental
@@ -6762,6 +6780,7 @@ class IUserPoolClientRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Prot
 
 class _IUserPoolClientRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a UserPoolClient.
 
@@ -6824,7 +6843,11 @@ typing.cast(typing.Any, IUserPoolDomain).__jsii_proxy_class__ = lambda : _IUserP
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_cognito.IUserPoolDomainRef")
-class IUserPoolDomainRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IUserPoolDomainRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a UserPoolDomain.
 
     :stability: experimental
@@ -6842,6 +6865,7 @@ class IUserPoolDomainRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Prot
 
 class _IUserPoolDomainRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a UserPoolDomain.
 
@@ -6898,7 +6922,11 @@ typing.cast(typing.Any, IUserPoolGroup).__jsii_proxy_class__ = lambda : _IUserPo
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_cognito.IUserPoolGroupRef")
-class IUserPoolGroupRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IUserPoolGroupRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a UserPoolGroup.
 
     :stability: experimental
@@ -6916,6 +6944,7 @@ class IUserPoolGroupRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Proto
 
 class _IUserPoolGroupRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a UserPoolGroup.
 
@@ -6974,6 +7003,7 @@ typing.cast(typing.Any, IUserPoolIdentityProvider).__jsii_proxy_class__ = lambda
 @jsii.interface(jsii_type="aws-cdk-lib.aws_cognito.IUserPoolIdentityProviderRef")
 class IUserPoolIdentityProviderRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a UserPoolIdentityProvider.
@@ -6993,6 +7023,7 @@ class IUserPoolIdentityProviderRef(
 
 class _IUserPoolIdentityProviderRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a UserPoolIdentityProvider.
 
@@ -7015,7 +7046,11 @@ typing.cast(typing.Any, IUserPoolIdentityProviderRef).__jsii_proxy_class__ = lam
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_cognito.IUserPoolRef")
-class IUserPoolRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IUserPoolRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a UserPool.
 
     :stability: experimental
@@ -7033,6 +7068,7 @@ class IUserPoolRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IUserPoolRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a UserPool.
 
@@ -7091,6 +7127,7 @@ typing.cast(typing.Any, IUserPoolResourceServer).__jsii_proxy_class__ = lambda :
 @jsii.interface(jsii_type="aws-cdk-lib.aws_cognito.IUserPoolResourceServerRef")
 class IUserPoolResourceServerRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a UserPoolResourceServer.
@@ -7110,6 +7147,7 @@ class IUserPoolResourceServerRef(
 
 class _IUserPoolResourceServerRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a UserPoolResourceServer.
 
@@ -7136,6 +7174,7 @@ typing.cast(typing.Any, IUserPoolResourceServerRef).__jsii_proxy_class__ = lambd
 )
 class IUserPoolRiskConfigurationAttachmentRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a UserPoolRiskConfigurationAttachment.
@@ -7157,6 +7196,7 @@ class IUserPoolRiskConfigurationAttachmentRef(
 
 class _IUserPoolRiskConfigurationAttachmentRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a UserPoolRiskConfigurationAttachment.
 
@@ -7185,6 +7225,7 @@ typing.cast(typing.Any, IUserPoolRiskConfigurationAttachmentRef).__jsii_proxy_cl
 )
 class IUserPoolUICustomizationAttachmentRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a UserPoolUICustomizationAttachment.
@@ -7206,6 +7247,7 @@ class IUserPoolUICustomizationAttachmentRef(
 
 class _IUserPoolUICustomizationAttachmentRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a UserPoolUICustomizationAttachment.
 
@@ -7230,7 +7272,11 @@ typing.cast(typing.Any, IUserPoolUICustomizationAttachmentRef).__jsii_proxy_clas
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_cognito.IUserPoolUserRef")
-class IUserPoolUserRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IUserPoolUserRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a UserPoolUser.
 
     :stability: experimental
@@ -7248,6 +7294,7 @@ class IUserPoolUserRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protoc
 
 class _IUserPoolUserRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a UserPoolUser.
 
@@ -7272,6 +7319,7 @@ typing.cast(typing.Any, IUserPoolUserRef).__jsii_proxy_class__ = lambda : _IUser
 @jsii.interface(jsii_type="aws-cdk-lib.aws_cognito.IUserPoolUserToGroupAttachmentRef")
 class IUserPoolUserToGroupAttachmentRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a UserPoolUserToGroupAttachment.
@@ -7293,6 +7341,7 @@ class IUserPoolUserToGroupAttachmentRef(
 
 class _IUserPoolUserToGroupAttachmentRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a UserPoolUserToGroupAttachment.
 

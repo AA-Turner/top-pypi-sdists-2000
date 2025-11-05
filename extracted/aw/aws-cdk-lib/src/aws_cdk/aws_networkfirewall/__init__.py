@@ -61,6 +61,7 @@ import constructs as _constructs_77d1e7e8
 from .. import (
     CfnResource as _CfnResource_9df397a6,
     CfnTag as _CfnTag_f6864754,
+    IEnvironmentAware as _IEnvironmentAware_a408b00d,
     IInspectable as _IInspectable_c2943556,
     IResolvable as _IResolvable_da3f097b,
     ITaggable as _ITaggable_36806126,
@@ -1311,7 +1312,11 @@ class FirewallReference:
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_networkfirewall.IFirewallPolicyRef")
-class IFirewallPolicyRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IFirewallPolicyRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a FirewallPolicy.
 
     :stability: experimental
@@ -1329,6 +1334,7 @@ class IFirewallPolicyRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Prot
 
 class _IFirewallPolicyRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a FirewallPolicy.
 
@@ -1351,7 +1357,11 @@ typing.cast(typing.Any, IFirewallPolicyRef).__jsii_proxy_class__ = lambda : _IFi
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_networkfirewall.IFirewallRef")
-class IFirewallRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IFirewallRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Firewall.
 
     :stability: experimental
@@ -1369,6 +1379,7 @@ class IFirewallRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IFirewallRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Firewall.
 
@@ -1393,6 +1404,7 @@ typing.cast(typing.Any, IFirewallRef).__jsii_proxy_class__ = lambda : _IFirewall
 @jsii.interface(jsii_type="aws-cdk-lib.aws_networkfirewall.ILoggingConfigurationRef")
 class ILoggingConfigurationRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a LoggingConfiguration.
@@ -1412,6 +1424,7 @@ class ILoggingConfigurationRef(
 
 class _ILoggingConfigurationRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a LoggingConfiguration.
 
@@ -1434,7 +1447,11 @@ typing.cast(typing.Any, ILoggingConfigurationRef).__jsii_proxy_class__ = lambda 
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_networkfirewall.IRuleGroupRef")
-class IRuleGroupRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IRuleGroupRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a RuleGroup.
 
     :stability: experimental
@@ -1452,6 +1469,7 @@ class IRuleGroupRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol)
 
 class _IRuleGroupRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a RuleGroup.
 
@@ -1478,6 +1496,7 @@ typing.cast(typing.Any, IRuleGroupRef).__jsii_proxy_class__ = lambda : _IRuleGro
 )
 class ITLSInspectionConfigurationRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a TLSInspectionConfiguration.
@@ -1497,6 +1516,7 @@ class ITLSInspectionConfigurationRef(
 
 class _ITLSInspectionConfigurationRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a TLSInspectionConfiguration.
 
@@ -1521,6 +1541,7 @@ typing.cast(typing.Any, ITLSInspectionConfigurationRef).__jsii_proxy_class__ = l
 @jsii.interface(jsii_type="aws-cdk-lib.aws_networkfirewall.IVpcEndpointAssociationRef")
 class IVpcEndpointAssociationRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a VpcEndpointAssociation.
@@ -1540,6 +1561,7 @@ class IVpcEndpointAssociationRef(
 
 class _IVpcEndpointAssociationRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a VpcEndpointAssociation.
 

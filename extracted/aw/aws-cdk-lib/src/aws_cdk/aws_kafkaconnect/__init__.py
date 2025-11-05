@@ -61,6 +61,7 @@ import constructs as _constructs_77d1e7e8
 from .. import (
     CfnResource as _CfnResource_9df397a6,
     CfnTag as _CfnTag_f6864754,
+    IEnvironmentAware as _IEnvironmentAware_a408b00d,
     IInspectable as _IInspectable_c2943556,
     IResolvable as _IResolvable_da3f097b,
     ITaggableV2 as _ITaggableV2_4e6798f8,
@@ -760,7 +761,11 @@ class CustomPluginReference:
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_kafkaconnect.IConnectorRef")
-class IConnectorRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IConnectorRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Connector.
 
     :stability: experimental
@@ -778,6 +783,7 @@ class IConnectorRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol)
 
 class _IConnectorRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Connector.
 
@@ -800,7 +806,11 @@ typing.cast(typing.Any, IConnectorRef).__jsii_proxy_class__ = lambda : _IConnect
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_kafkaconnect.ICustomPluginRef")
-class ICustomPluginRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class ICustomPluginRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a CustomPlugin.
 
     :stability: experimental
@@ -818,6 +828,7 @@ class ICustomPluginRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protoc
 
 class _ICustomPluginRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a CustomPlugin.
 
@@ -842,6 +853,7 @@ typing.cast(typing.Any, ICustomPluginRef).__jsii_proxy_class__ = lambda : _ICust
 @jsii.interface(jsii_type="aws-cdk-lib.aws_kafkaconnect.IWorkerConfigurationRef")
 class IWorkerConfigurationRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a WorkerConfiguration.
@@ -861,6 +873,7 @@ class IWorkerConfigurationRef(
 
 class _IWorkerConfigurationRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a WorkerConfiguration.
 

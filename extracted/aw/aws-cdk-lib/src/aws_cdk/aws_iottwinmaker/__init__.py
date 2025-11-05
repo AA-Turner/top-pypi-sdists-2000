@@ -60,6 +60,7 @@ from .._jsii import *
 import constructs as _constructs_77d1e7e8
 from .. import (
     CfnResource as _CfnResource_9df397a6,
+    IEnvironmentAware as _IEnvironmentAware_a408b00d,
     IInspectable as _IInspectable_c2943556,
     IResolvable as _IResolvable_da3f097b,
     ITaggable as _ITaggable_36806126,
@@ -1198,7 +1199,11 @@ class EntityReference:
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_iottwinmaker.IComponentTypeRef")
-class IComponentTypeRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IComponentTypeRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a ComponentType.
 
     :stability: experimental
@@ -1216,6 +1221,7 @@ class IComponentTypeRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Proto
 
 class _IComponentTypeRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a ComponentType.
 
@@ -1238,7 +1244,11 @@ typing.cast(typing.Any, IComponentTypeRef).__jsii_proxy_class__ = lambda : _ICom
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_iottwinmaker.IEntityRef")
-class IEntityRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IEntityRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Entity.
 
     :stability: experimental
@@ -1256,6 +1266,7 @@ class IEntityRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IEntityRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Entity.
 
@@ -1278,7 +1289,11 @@ typing.cast(typing.Any, IEntityRef).__jsii_proxy_class__ = lambda : _IEntityRefP
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_iottwinmaker.ISceneRef")
-class ISceneRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class ISceneRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Scene.
 
     :stability: experimental
@@ -1296,6 +1311,7 @@ class ISceneRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _ISceneRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Scene.
 
@@ -1318,7 +1334,11 @@ typing.cast(typing.Any, ISceneRef).__jsii_proxy_class__ = lambda : _ISceneRefPro
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_iottwinmaker.ISyncJobRef")
-class ISyncJobRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class ISyncJobRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a SyncJob.
 
     :stability: experimental
@@ -1336,6 +1356,7 @@ class ISyncJobRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _ISyncJobRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a SyncJob.
 
@@ -1358,7 +1379,11 @@ typing.cast(typing.Any, ISyncJobRef).__jsii_proxy_class__ = lambda : _ISyncJobRe
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_iottwinmaker.IWorkspaceRef")
-class IWorkspaceRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IWorkspaceRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Workspace.
 
     :stability: experimental
@@ -1376,6 +1401,7 @@ class IWorkspaceRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol)
 
 class _IWorkspaceRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Workspace.
 

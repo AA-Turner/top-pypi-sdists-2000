@@ -349,18 +349,14 @@ Balancers:
 ```python
 # vpc: ec2.Vpc
 # asg: autoscaling.AutoScalingGroup
-# sg1: ec2.ISecurityGroup
-# sg2: ec2.ISecurityGroup
 
 
 # Create the load balancer in a VPC. 'internetFacing' is 'false'
 # by default, which creates an internal load balancer.
 lb = elbv2.NetworkLoadBalancer(self, "LB",
     vpc=vpc,
-    internet_facing=True,
-    security_groups=[sg1]
+    internet_facing=True
 )
-lb.add_security_group(sg2)
 
 # Add a listener on a particular port.
 listener = lb.add_listener("Listener",
@@ -372,6 +368,42 @@ listener.add_targets("AppFleet",
     port=443,
     targets=[asg]
 )
+```
+
+### Security Groups for Network Load Balancer
+
+By default, Network Load Balancers (NLB) have a security group associated with them.
+This is controlled by the feature flag `@aws-cdk/aws-elasticloadbalancingv2:networkLoadBalancerWithSecurityGroupByDefault`.
+When this flag is enabled (the default for new projects), a security group will be automatically created and attached to the NLB unless you explicitly provide your own security groups via the `securityGroups` property.
+
+If you wish to create an NLB without any security groups, you can set the `disableSecurityGroups` property to `true`. When this property is set, no security group will be associated with the NLB, regardless of the feature flag.
+
+```python
+# vpc: ec2.IVpc
+
+
+nlb = elbv2.NetworkLoadBalancer(self, "LB",
+    vpc=vpc,
+    # To disable security groups for this NLB
+    disable_security_groups=True
+)
+```
+
+If you want to use your own security groups, provide them via the `securityGroups` property:
+
+```python
+# vpc: ec2.IVpc
+# sg1: ec2.ISecurityGroup
+# sg2: ec2.ISecurityGroup
+
+
+nlb = elbv2.NetworkLoadBalancer(self, "LB",
+    vpc=vpc,
+    # Provide your own security groups
+    security_groups=[sg1]
+)
+# Add another security group to the NLB
+nlb.add_security_group(sg2)
 ```
 
 ### Enforce security group inbound rules on PrivateLink traffic for a Network Load Balancer
@@ -1237,6 +1269,7 @@ from .. import (
     CfnResource as _CfnResource_9df397a6,
     CfnTag as _CfnTag_f6864754,
     Duration as _Duration_4839e8c3,
+    IEnvironmentAware as _IEnvironmentAware_a408b00d,
     IInspectable as _IInspectable_c2943556,
     IResolvable as _IResolvable_da3f097b,
     IResource as _IResource_c80c4260,
@@ -1362,18 +1395,14 @@ class AddNetworkTargetsProps:
 
             # vpc: ec2.Vpc
             # asg: autoscaling.AutoScalingGroup
-            # sg1: ec2.ISecurityGroup
-            # sg2: ec2.ISecurityGroup
             
             
             # Create the load balancer in a VPC. 'internetFacing' is 'false'
             # by default, which creates an internal load balancer.
             lb = elbv2.NetworkLoadBalancer(self, "LB",
                 vpc=vpc,
-                internet_facing=True,
-                security_groups=[sg1]
+                internet_facing=True
             )
-            lb.add_security_group(sg2)
             
             # Add a listener on a particular port.
             listener = lb.add_listener("Listener",
@@ -3424,18 +3453,14 @@ class BaseNetworkListenerProps:
 
             # vpc: ec2.Vpc
             # asg: autoscaling.AutoScalingGroup
-            # sg1: ec2.ISecurityGroup
-            # sg2: ec2.ISecurityGroup
             
             
             # Create the load balancer in a VPC. 'internetFacing' is 'false'
             # by default, which creates an internal load balancer.
             lb = elbv2.NetworkLoadBalancer(self, "LB",
                 vpc=vpc,
-                internet_facing=True,
-                security_groups=[sg1]
+                internet_facing=True
             )
-            lb.add_security_group(sg2)
             
             # Add a listener on a particular port.
             listener = lb.add_listener("Listener",
@@ -9088,6 +9113,7 @@ typing.cast(typing.Any, IListenerCertificate).__jsii_proxy_class__ = lambda : _I
 )
 class IListenerCertificateRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a ListenerCertificate.
@@ -9107,6 +9133,7 @@ class IListenerCertificateRef(
 
 class _IListenerCertificateRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a ListenerCertificate.
 
@@ -9129,7 +9156,11 @@ typing.cast(typing.Any, IListenerCertificateRef).__jsii_proxy_class__ = lambda :
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_elasticloadbalancingv2.IListenerRef")
-class IListenerRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IListenerRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Listener.
 
     :stability: experimental
@@ -9147,6 +9178,7 @@ class IListenerRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IListenerRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Listener.
 
@@ -9169,7 +9201,11 @@ typing.cast(typing.Any, IListenerRef).__jsii_proxy_class__ = lambda : _IListener
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_elasticloadbalancingv2.IListenerRuleRef")
-class IListenerRuleRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IListenerRuleRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a ListenerRule.
 
     :stability: experimental
@@ -9187,6 +9223,7 @@ class IListenerRuleRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protoc
 
 class _IListenerRuleRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a ListenerRule.
 
@@ -9209,7 +9246,11 @@ typing.cast(typing.Any, IListenerRuleRef).__jsii_proxy_class__ = lambda : _IList
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_elasticloadbalancingv2.ILoadBalancerRef")
-class ILoadBalancerRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class ILoadBalancerRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a LoadBalancer.
 
     :stability: experimental
@@ -9227,6 +9268,7 @@ class ILoadBalancerRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protoc
 
 class _ILoadBalancerRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a LoadBalancer.
 
@@ -10629,7 +10671,11 @@ typing.cast(typing.Any, ITargetGroup).__jsii_proxy_class__ = lambda : _ITargetGr
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_elasticloadbalancingv2.ITargetGroupRef")
-class ITargetGroupRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class ITargetGroupRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a TargetGroup.
 
     :stability: experimental
@@ -10647,6 +10693,7 @@ class ITargetGroupRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protoco
 
 class _ITargetGroupRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a TargetGroup.
 
@@ -10721,7 +10768,11 @@ typing.cast(typing.Any, ITrustStore).__jsii_proxy_class__ = lambda : _ITrustStor
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_elasticloadbalancingv2.ITrustStoreRef")
-class ITrustStoreRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class ITrustStoreRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a TrustStore.
 
     :stability: experimental
@@ -10739,6 +10790,7 @@ class ITrustStoreRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol
 
 class _ITrustStoreRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a TrustStore.
 
@@ -10765,6 +10817,7 @@ typing.cast(typing.Any, ITrustStoreRef).__jsii_proxy_class__ = lambda : _ITrustS
 )
 class ITrustStoreRevocationRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a TrustStoreRevocation.
@@ -10784,6 +10837,7 @@ class ITrustStoreRevocationRef(
 
 class _ITrustStoreRevocationRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a TrustStoreRevocation.
 
@@ -12357,6 +12411,7 @@ class NetworkLoadBalancer(
         id: builtins.str,
         *,
         client_routing_policy: typing.Optional[ClientRoutingPolicy] = None,
+        disable_security_groups: typing.Optional[builtins.bool] = None,
         enable_prefix_for_ipv6_source_nat: typing.Optional[builtins.bool] = None,
         enforce_security_group_inbound_rules_on_private_link_traffic: typing.Optional[builtins.bool] = None,
         ip_address_type: typing.Optional[IpAddressType] = None,
@@ -12376,6 +12431,7 @@ class NetworkLoadBalancer(
         :param scope: -
         :param id: -
         :param client_routing_policy: The AZ affinity routing policy. Default: - AZ affinity is disabled.
+        :param disable_security_groups: Create a Network Load Balancer without security groups. When true, creates an NLB that cannot have security groups attached. This is useful when you need to create a traditional NLB without security group associations. This property only takes effect when the feature flag ``@aws-cdk/aws-elasticloadbalancingv2:networkLoadBalancerWithSecurityGroupByDefault`` is enabled. Default: false
         :param enable_prefix_for_ipv6_source_nat: Indicates whether to use an IPv6 prefix from each subnet for source NAT. The IP address type must be IpAddressType.DUALSTACK. Default: undefined - NLB default behavior is false
         :param enforce_security_group_inbound_rules_on_private_link_traffic: Indicates whether to evaluate inbound security group rules for traffic sent to a Network Load Balancer through AWS PrivateLink. Default: true
         :param ip_address_type: The type of IP addresses to use. If you want to add a UDP or TCP_UDP listener to the load balancer, you must choose IPv4. Default: IpAddressType.IPV4
@@ -12397,6 +12453,7 @@ class NetworkLoadBalancer(
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
         props = NetworkLoadBalancerProps(
             client_routing_policy=client_routing_policy,
+            disable_security_groups=disable_security_groups,
             enable_prefix_for_ipv6_source_nat=enable_prefix_for_ipv6_source_nat,
             enforce_security_group_inbound_rules_on_private_link_traffic=enforce_security_group_inbound_rules_on_private_link_traffic,
             ip_address_type=ip_address_type,
@@ -13255,6 +13312,7 @@ class NetworkLoadBalancerLookupOptions(BaseLoadBalancerLookupOptions):
         "minimum_capacity_unit": "minimumCapacityUnit",
         "vpc_subnets": "vpcSubnets",
         "client_routing_policy": "clientRoutingPolicy",
+        "disable_security_groups": "disableSecurityGroups",
         "enable_prefix_for_ipv6_source_nat": "enablePrefixForIpv6SourceNat",
         "enforce_security_group_inbound_rules_on_private_link_traffic": "enforceSecurityGroupInboundRulesOnPrivateLinkTraffic",
         "ip_address_type": "ipAddressType",
@@ -13276,6 +13334,7 @@ class NetworkLoadBalancerProps(BaseLoadBalancerProps):
         minimum_capacity_unit: typing.Optional[jsii.Number] = None,
         vpc_subnets: typing.Optional[typing.Union[_SubnetSelection_e57d76df, typing.Dict[builtins.str, typing.Any]]] = None,
         client_routing_policy: typing.Optional[ClientRoutingPolicy] = None,
+        disable_security_groups: typing.Optional[builtins.bool] = None,
         enable_prefix_for_ipv6_source_nat: typing.Optional[builtins.bool] = None,
         enforce_security_group_inbound_rules_on_private_link_traffic: typing.Optional[builtins.bool] = None,
         ip_address_type: typing.Optional[IpAddressType] = None,
@@ -13294,6 +13353,7 @@ class NetworkLoadBalancerProps(BaseLoadBalancerProps):
         :param minimum_capacity_unit: The minimum capacity (LCU) for a load balancer. Default: undefined - ELB default is 0 LCU
         :param vpc_subnets: Which subnets place the load balancer in. Default: - the Vpc default strategy.
         :param client_routing_policy: The AZ affinity routing policy. Default: - AZ affinity is disabled.
+        :param disable_security_groups: Create a Network Load Balancer without security groups. When true, creates an NLB that cannot have security groups attached. This is useful when you need to create a traditional NLB without security group associations. This property only takes effect when the feature flag ``@aws-cdk/aws-elasticloadbalancingv2:networkLoadBalancerWithSecurityGroupByDefault`` is enabled. Default: false
         :param enable_prefix_for_ipv6_source_nat: Indicates whether to use an IPv6 prefix from each subnet for source NAT. The IP address type must be IpAddressType.DUALSTACK. Default: undefined - NLB default behavior is false
         :param enforce_security_group_inbound_rules_on_private_link_traffic: Indicates whether to evaluate inbound security group rules for traffic sent to a Network Load Balancer through AWS PrivateLink. Default: true
         :param ip_address_type: The type of IP addresses to use. If you want to add a UDP or TCP_UDP listener to the load balancer, you must choose IPv4. Default: IpAddressType.IPV4
@@ -13332,6 +13392,7 @@ class NetworkLoadBalancerProps(BaseLoadBalancerProps):
             check_type(argname="argument minimum_capacity_unit", value=minimum_capacity_unit, expected_type=type_hints["minimum_capacity_unit"])
             check_type(argname="argument vpc_subnets", value=vpc_subnets, expected_type=type_hints["vpc_subnets"])
             check_type(argname="argument client_routing_policy", value=client_routing_policy, expected_type=type_hints["client_routing_policy"])
+            check_type(argname="argument disable_security_groups", value=disable_security_groups, expected_type=type_hints["disable_security_groups"])
             check_type(argname="argument enable_prefix_for_ipv6_source_nat", value=enable_prefix_for_ipv6_source_nat, expected_type=type_hints["enable_prefix_for_ipv6_source_nat"])
             check_type(argname="argument enforce_security_group_inbound_rules_on_private_link_traffic", value=enforce_security_group_inbound_rules_on_private_link_traffic, expected_type=type_hints["enforce_security_group_inbound_rules_on_private_link_traffic"])
             check_type(argname="argument ip_address_type", value=ip_address_type, expected_type=type_hints["ip_address_type"])
@@ -13357,6 +13418,8 @@ class NetworkLoadBalancerProps(BaseLoadBalancerProps):
             self._values["vpc_subnets"] = vpc_subnets
         if client_routing_policy is not None:
             self._values["client_routing_policy"] = client_routing_policy
+        if disable_security_groups is not None:
+            self._values["disable_security_groups"] = disable_security_groups
         if enable_prefix_for_ipv6_source_nat is not None:
             self._values["enable_prefix_for_ipv6_source_nat"] = enable_prefix_for_ipv6_source_nat
         if enforce_security_group_inbound_rules_on_private_link_traffic is not None:
@@ -13457,6 +13520,21 @@ class NetworkLoadBalancerProps(BaseLoadBalancerProps):
         '''
         result = self._values.get("client_routing_policy")
         return typing.cast(typing.Optional[ClientRoutingPolicy], result)
+
+    @builtins.property
+    def disable_security_groups(self) -> typing.Optional[builtins.bool]:
+        '''Create a Network Load Balancer without security groups.
+
+        When true, creates an NLB that cannot have security groups attached.
+        This is useful when you need to create a traditional NLB without security group associations.
+
+        This property only takes effect when the feature flag
+        ``@aws-cdk/aws-elasticloadbalancingv2:networkLoadBalancerWithSecurityGroupByDefault`` is enabled.
+
+        :default: false
+        '''
+        result = self._values.get("disable_security_groups")
+        return typing.cast(typing.Optional[builtins.bool], result)
 
     @builtins.property
     def enable_prefix_for_ipv6_source_nat(self) -> typing.Optional[builtins.bool]:
@@ -25089,18 +25167,26 @@ class NetworkListener(
 
     Example::
 
-        from aws_cdk.aws_apigatewayv2_integrations import HttpNlbIntegration
+        # vpc: ec2.Vpc
+        # asg: autoscaling.AutoScalingGroup
         
         
-        vpc = ec2.Vpc(self, "VPC")
-        lb = elbv2.NetworkLoadBalancer(self, "lb", vpc=vpc)
-        listener = lb.add_listener("listener", port=80)
-        listener.add_targets("target",
-            port=80
+        # Create the load balancer in a VPC. 'internetFacing' is 'false'
+        # by default, which creates an internal load balancer.
+        lb = elbv2.NetworkLoadBalancer(self, "LB",
+            vpc=vpc,
+            internet_facing=True
         )
         
-        http_endpoint = apigwv2.HttpApi(self, "HttpProxyPrivateApi",
-            default_integration=HttpNlbIntegration("DefaultIntegration", listener)
+        # Add a listener on a particular port.
+        listener = lb.add_listener("Listener",
+            port=443
+        )
+        
+        # Add targets on a particular port.
+        listener.add_targets("AppFleet",
+            port=443,
+            targets=[asg]
         )
     '''
 
@@ -29280,6 +29366,7 @@ def _typecheckingstub__e1c7a4c1332bdc807d1e25aa5d69eea6e1f3bf6a88ddd30dac9a64c93
     id: builtins.str,
     *,
     client_routing_policy: typing.Optional[ClientRoutingPolicy] = None,
+    disable_security_groups: typing.Optional[builtins.bool] = None,
     enable_prefix_for_ipv6_source_nat: typing.Optional[builtins.bool] = None,
     enforce_security_group_inbound_rules_on_private_link_traffic: typing.Optional[builtins.bool] = None,
     ip_address_type: typing.Optional[IpAddressType] = None,
@@ -29391,6 +29478,7 @@ def _typecheckingstub__195ab659ca9cd1c401d6d2d1a1f5cb0aaf7dd80f06dbc724020ac0cc3
     minimum_capacity_unit: typing.Optional[jsii.Number] = None,
     vpc_subnets: typing.Optional[typing.Union[_SubnetSelection_e57d76df, typing.Dict[builtins.str, typing.Any]]] = None,
     client_routing_policy: typing.Optional[ClientRoutingPolicy] = None,
+    disable_security_groups: typing.Optional[builtins.bool] = None,
     enable_prefix_for_ipv6_source_nat: typing.Optional[builtins.bool] = None,
     enforce_security_group_inbound_rules_on_private_link_traffic: typing.Optional[builtins.bool] = None,
     ip_address_type: typing.Optional[IpAddressType] = None,

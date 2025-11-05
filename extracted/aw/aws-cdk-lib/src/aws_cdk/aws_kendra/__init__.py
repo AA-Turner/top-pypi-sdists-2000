@@ -61,6 +61,7 @@ import constructs as _constructs_77d1e7e8
 from .. import (
     CfnResource as _CfnResource_9df397a6,
     CfnTag as _CfnTag_f6864754,
+    IEnvironmentAware as _IEnvironmentAware_a408b00d,
     IInspectable as _IInspectable_c2943556,
     IResolvable as _IResolvable_da3f097b,
     ITaggable as _ITaggable_36806126,
@@ -1338,7 +1339,11 @@ class FaqReference:
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_kendra.IDataSourceRef")
-class IDataSourceRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IDataSourceRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a DataSource.
 
     :stability: experimental
@@ -1356,6 +1361,7 @@ class IDataSourceRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol
 
 class _IDataSourceRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a DataSource.
 
@@ -1378,7 +1384,11 @@ typing.cast(typing.Any, IDataSourceRef).__jsii_proxy_class__ = lambda : _IDataSo
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_kendra.IFaqRef")
-class IFaqRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IFaqRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Faq.
 
     :stability: experimental
@@ -1396,6 +1406,7 @@ class IFaqRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IFaqRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Faq.
 
@@ -1418,7 +1429,11 @@ typing.cast(typing.Any, IFaqRef).__jsii_proxy_class__ = lambda : _IFaqRefProxy
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_kendra.IIndexRef")
-class IIndexRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IIndexRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Index.
 
     :stability: experimental
@@ -1436,6 +1451,7 @@ class IIndexRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IIndexRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Index.
 

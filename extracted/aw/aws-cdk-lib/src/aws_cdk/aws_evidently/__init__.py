@@ -61,6 +61,7 @@ import constructs as _constructs_77d1e7e8
 from .. import (
     CfnResource as _CfnResource_9df397a6,
     CfnTag as _CfnTag_f6864754,
+    IEnvironmentAware as _IEnvironmentAware_a408b00d,
     IInspectable as _IInspectable_c2943556,
     IResolvable as _IResolvable_da3f097b,
     ITaggable as _ITaggable_36806126,
@@ -1222,7 +1223,11 @@ class FeatureReference:
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_evidently.IExperimentRef")
-class IExperimentRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IExperimentRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Experiment.
 
     :stability: experimental
@@ -1240,6 +1245,7 @@ class IExperimentRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol
 
 class _IExperimentRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Experiment.
 
@@ -1262,7 +1268,11 @@ typing.cast(typing.Any, IExperimentRef).__jsii_proxy_class__ = lambda : _IExperi
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_evidently.IFeatureRef")
-class IFeatureRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IFeatureRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Feature.
 
     :stability: experimental
@@ -1280,6 +1290,7 @@ class IFeatureRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IFeatureRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Feature.
 
@@ -1302,7 +1313,11 @@ typing.cast(typing.Any, IFeatureRef).__jsii_proxy_class__ = lambda : _IFeatureRe
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_evidently.ILaunchRef")
-class ILaunchRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class ILaunchRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Launch.
 
     :stability: experimental
@@ -1320,6 +1335,7 @@ class ILaunchRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _ILaunchRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Launch.
 
@@ -1342,7 +1358,11 @@ typing.cast(typing.Any, ILaunchRef).__jsii_proxy_class__ = lambda : _ILaunchRefP
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_evidently.IProjectRef")
-class IProjectRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IProjectRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Project.
 
     :stability: experimental
@@ -1360,6 +1380,7 @@ class IProjectRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IProjectRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Project.
 
@@ -1382,7 +1403,11 @@ typing.cast(typing.Any, IProjectRef).__jsii_proxy_class__ = lambda : _IProjectRe
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_evidently.ISegmentRef")
-class ISegmentRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class ISegmentRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Segment.
 
     :stability: experimental
@@ -1400,6 +1425,7 @@ class ISegmentRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _ISegmentRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Segment.
 

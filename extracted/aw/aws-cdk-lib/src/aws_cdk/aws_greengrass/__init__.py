@@ -60,6 +60,7 @@ from .._jsii import *
 import constructs as _constructs_77d1e7e8
 from .. import (
     CfnResource as _CfnResource_9df397a6,
+    IEnvironmentAware as _IEnvironmentAware_a408b00d,
     IInspectable as _IInspectable_c2943556,
     IResolvable as _IResolvable_da3f097b,
     ITaggable as _ITaggable_36806126,
@@ -2534,6 +2535,7 @@ class GroupVersionReference:
 @jsii.interface(jsii_type="aws-cdk-lib.aws_greengrass.IConnectorDefinitionRef")
 class IConnectorDefinitionRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a ConnectorDefinition.
@@ -2553,6 +2555,7 @@ class IConnectorDefinitionRef(
 
 class _IConnectorDefinitionRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a ConnectorDefinition.
 
@@ -2577,6 +2580,7 @@ typing.cast(typing.Any, IConnectorDefinitionRef).__jsii_proxy_class__ = lambda :
 @jsii.interface(jsii_type="aws-cdk-lib.aws_greengrass.IConnectorDefinitionVersionRef")
 class IConnectorDefinitionVersionRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a ConnectorDefinitionVersion.
@@ -2596,6 +2600,7 @@ class IConnectorDefinitionVersionRef(
 
 class _IConnectorDefinitionVersionRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a ConnectorDefinitionVersion.
 
@@ -2618,7 +2623,11 @@ typing.cast(typing.Any, IConnectorDefinitionVersionRef).__jsii_proxy_class__ = l
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_greengrass.ICoreDefinitionRef")
-class ICoreDefinitionRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class ICoreDefinitionRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a CoreDefinition.
 
     :stability: experimental
@@ -2636,6 +2645,7 @@ class ICoreDefinitionRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Prot
 
 class _ICoreDefinitionRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a CoreDefinition.
 
@@ -2660,6 +2670,7 @@ typing.cast(typing.Any, ICoreDefinitionRef).__jsii_proxy_class__ = lambda : _ICo
 @jsii.interface(jsii_type="aws-cdk-lib.aws_greengrass.ICoreDefinitionVersionRef")
 class ICoreDefinitionVersionRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a CoreDefinitionVersion.
@@ -2679,6 +2690,7 @@ class ICoreDefinitionVersionRef(
 
 class _ICoreDefinitionVersionRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a CoreDefinitionVersion.
 
@@ -2701,7 +2713,11 @@ typing.cast(typing.Any, ICoreDefinitionVersionRef).__jsii_proxy_class__ = lambda
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_greengrass.IDeviceDefinitionRef")
-class IDeviceDefinitionRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IDeviceDefinitionRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a DeviceDefinition.
 
     :stability: experimental
@@ -2719,6 +2735,7 @@ class IDeviceDefinitionRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Pr
 
 class _IDeviceDefinitionRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a DeviceDefinition.
 
@@ -2743,6 +2760,7 @@ typing.cast(typing.Any, IDeviceDefinitionRef).__jsii_proxy_class__ = lambda : _I
 @jsii.interface(jsii_type="aws-cdk-lib.aws_greengrass.IDeviceDefinitionVersionRef")
 class IDeviceDefinitionVersionRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a DeviceDefinitionVersion.
@@ -2762,6 +2780,7 @@ class IDeviceDefinitionVersionRef(
 
 class _IDeviceDefinitionVersionRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a DeviceDefinitionVersion.
 
@@ -2786,6 +2805,7 @@ typing.cast(typing.Any, IDeviceDefinitionVersionRef).__jsii_proxy_class__ = lamb
 @jsii.interface(jsii_type="aws-cdk-lib.aws_greengrass.IFunctionDefinitionRef")
 class IFunctionDefinitionRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a FunctionDefinition.
@@ -2805,6 +2825,7 @@ class IFunctionDefinitionRef(
 
 class _IFunctionDefinitionRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a FunctionDefinition.
 
@@ -2829,6 +2850,7 @@ typing.cast(typing.Any, IFunctionDefinitionRef).__jsii_proxy_class__ = lambda : 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_greengrass.IFunctionDefinitionVersionRef")
 class IFunctionDefinitionVersionRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a FunctionDefinitionVersion.
@@ -2848,6 +2870,7 @@ class IFunctionDefinitionVersionRef(
 
 class _IFunctionDefinitionVersionRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a FunctionDefinitionVersion.
 
@@ -2870,7 +2893,11 @@ typing.cast(typing.Any, IFunctionDefinitionVersionRef).__jsii_proxy_class__ = la
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_greengrass.IGroupRef")
-class IGroupRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IGroupRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Group.
 
     :stability: experimental
@@ -2888,6 +2915,7 @@ class IGroupRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IGroupRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Group.
 
@@ -2910,7 +2938,11 @@ typing.cast(typing.Any, IGroupRef).__jsii_proxy_class__ = lambda : _IGroupRefPro
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_greengrass.IGroupVersionRef")
-class IGroupVersionRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IGroupVersionRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a GroupVersion.
 
     :stability: experimental
@@ -2928,6 +2960,7 @@ class IGroupVersionRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protoc
 
 class _IGroupVersionRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a GroupVersion.
 
@@ -2950,7 +2983,11 @@ typing.cast(typing.Any, IGroupVersionRef).__jsii_proxy_class__ = lambda : _IGrou
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_greengrass.ILoggerDefinitionRef")
-class ILoggerDefinitionRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class ILoggerDefinitionRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a LoggerDefinition.
 
     :stability: experimental
@@ -2968,6 +3005,7 @@ class ILoggerDefinitionRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Pr
 
 class _ILoggerDefinitionRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a LoggerDefinition.
 
@@ -2992,6 +3030,7 @@ typing.cast(typing.Any, ILoggerDefinitionRef).__jsii_proxy_class__ = lambda : _I
 @jsii.interface(jsii_type="aws-cdk-lib.aws_greengrass.ILoggerDefinitionVersionRef")
 class ILoggerDefinitionVersionRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a LoggerDefinitionVersion.
@@ -3011,6 +3050,7 @@ class ILoggerDefinitionVersionRef(
 
 class _ILoggerDefinitionVersionRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a LoggerDefinitionVersion.
 
@@ -3035,6 +3075,7 @@ typing.cast(typing.Any, ILoggerDefinitionVersionRef).__jsii_proxy_class__ = lamb
 @jsii.interface(jsii_type="aws-cdk-lib.aws_greengrass.IResourceDefinitionRef")
 class IResourceDefinitionRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a ResourceDefinition.
@@ -3054,6 +3095,7 @@ class IResourceDefinitionRef(
 
 class _IResourceDefinitionRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a ResourceDefinition.
 
@@ -3078,6 +3120,7 @@ typing.cast(typing.Any, IResourceDefinitionRef).__jsii_proxy_class__ = lambda : 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_greengrass.IResourceDefinitionVersionRef")
 class IResourceDefinitionVersionRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a ResourceDefinitionVersion.
@@ -3097,6 +3140,7 @@ class IResourceDefinitionVersionRef(
 
 class _IResourceDefinitionVersionRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a ResourceDefinitionVersion.
 
@@ -3121,6 +3165,7 @@ typing.cast(typing.Any, IResourceDefinitionVersionRef).__jsii_proxy_class__ = la
 @jsii.interface(jsii_type="aws-cdk-lib.aws_greengrass.ISubscriptionDefinitionRef")
 class ISubscriptionDefinitionRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a SubscriptionDefinition.
@@ -3140,6 +3185,7 @@ class ISubscriptionDefinitionRef(
 
 class _ISubscriptionDefinitionRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a SubscriptionDefinition.
 
@@ -3166,6 +3212,7 @@ typing.cast(typing.Any, ISubscriptionDefinitionRef).__jsii_proxy_class__ = lambd
 )
 class ISubscriptionDefinitionVersionRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a SubscriptionDefinitionVersion.
@@ -3187,6 +3234,7 @@ class ISubscriptionDefinitionVersionRef(
 
 class _ISubscriptionDefinitionVersionRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a SubscriptionDefinitionVersion.
 

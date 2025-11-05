@@ -33,6 +33,7 @@ from vertexai._genai import _observability_data_converter
 from vertexai._genai import evals
 from vertexai._genai import types as vertexai_genai_types
 from google.genai import client
+from google.genai import errors as genai_errors
 from google.genai import types as genai_types
 import pandas as pd
 import pytest
@@ -2314,7 +2315,7 @@ class TestFlattenEvalDataConverter:
                 "response": ["Hi"],
                 "intermediate_events": [
                     [
-                        vertexai_genai_types.Event(
+                        vertexai_genai_types.evals.Event(
                             event_id="event1",
                             content=genai_types.Content(
                                 parts=[genai_types.Part(text="intermediate event")]
@@ -2577,14 +2578,14 @@ class TestObservabilityDataConverter:
         )
 
         assert len(eval_case.conversation_history) == 2
-        assert eval_case.conversation_history[0] == vertexai_genai_types.Message(
+        assert eval_case.conversation_history[0] == vertexai_genai_types.evals.Message(
             content=genai_types.Content(
                 parts=[genai_types.Part(text="Hello")], role="user"
             ),
             turn_id="0",
             author="user",
         )
-        assert eval_case.conversation_history[1] == vertexai_genai_types.Message(
+        assert eval_case.conversation_history[1] == vertexai_genai_types.evals.Message(
             content=genai_types.Content(
                 parts=[genai_types.Part(text="Hi")], role="system"
             ),
@@ -2786,7 +2787,7 @@ class TestEvent:
     """Unit tests for the Event class."""
 
     def test_event_creation(self):
-        event = vertexai_genai_types.Event(
+        event = vertexai_genai_types.evals.Event(
             event_id="event1",
             content=genai_types.Content(
                 parts=[genai_types.Part(text="intermediate event")]
@@ -2820,7 +2821,7 @@ class TestEvalCase:
             tool_declarations=[tool],
         )
         intermediate_events = [
-            vertexai_genai_types.Event(
+            vertexai_genai_types.evals.Event(
                 event_id="event1",
                 content=genai_types.Content(
                     parts=[genai_types.Part(text="intermediate event")]
@@ -2846,7 +2847,7 @@ class TestSessionInput:
     """Unit tests for the SessionInput class."""
 
     def test_session_input_creation(self):
-        session_input = vertexai_genai_types.SessionInput(
+        session_input = vertexai_genai_types.evals.SessionInput(
             user_id="user1",
             state={"key": "value"},
         )
@@ -3692,7 +3693,7 @@ class TestPredefinedMetricHandler:
             tool_declarations=[tool],
         )
         intermediate_events = [
-            vertexai_genai_types.Event(
+            vertexai_genai_types.evals.Event(
                 event_id="event1",
                 content=genai_types.Content(
                     parts=[genai_types.Part(text="intermediate event")]
@@ -3722,7 +3723,7 @@ class TestPredefinedMetricHandler:
 
     def test_eval_case_to_agent_data_events_only(self):
         intermediate_events = [
-            vertexai_genai_types.Event(
+            vertexai_genai_types.evals.Event(
                 event_id="event1",
                 content=genai_types.Content(
                     parts=[genai_types.Part(text="intermediate event")]
@@ -3751,7 +3752,7 @@ class TestPredefinedMetricHandler:
 
     def test_eval_case_to_agent_data_empty_event_content(self):
         intermediate_events = [
-            vertexai_genai_types.Event(
+            vertexai_genai_types.evals.Event(
                 event_id="event1",
                 content=None,
             )
@@ -3933,12 +3934,12 @@ class TestLLMMetricHandlerPayload:
                 )
             ],
             conversation_history=[
-                vertexai_genai_types.Message(
+                vertexai_genai_types.evals.Message(
                     content=genai_types.Content(
                         parts=[genai_types.Part(text="Turn 1 user")], role="user"
                     )
                 ),
-                vertexai_genai_types.Message(
+                vertexai_genai_types.evals.Message(
                     content=genai_types.Content(
                         parts=[genai_types.Part(text="Turn 1 model")], role="model"
                     )
@@ -4860,6 +4861,110 @@ class TestEvalsRunEvaluation:
 
         assert result.metadata is not None
         assert result.metadata.creation_timestamp == mock_now
+
+    @mock.patch(
+        "vertexai._genai._evals_metric_handlers._evals_constant.SUPPORTED_PREDEFINED_METRICS",
+        frozenset(["summarization_quality"]),
+    )
+    @mock.patch("time.sleep", return_value=None)
+    @mock.patch("vertexai._genai.evals.Evals._evaluate_instances")
+    def test_predefined_metric_retry_on_resource_exhausted(
+        self,
+        mock_private_evaluate_instances,
+        mock_sleep,
+        mock_api_client_fixture,
+    ):
+        dataset_df = pd.DataFrame(
+            [{"prompt": "Test prompt", "response": "Test response"}]
+        )
+        input_dataset = vertexai_genai_types.EvaluationDataset(
+            eval_dataset_df=dataset_df
+        )
+        metric = vertexai_genai_types.Metric(name="summarization_quality")
+        metric_result = vertexai_genai_types.MetricResult(
+            score=0.9,
+            explanation="Mocked predefined explanation",
+            rubric_verdicts=[],
+            error=None,
+        )
+        error_response_json = {
+            "error": {
+                "code": 429,
+                "message": ("Judge model resource exhausted. Please try again later."),
+                "status": "RESOURCE_EXHAUSTED",
+            }
+        }
+        mock_private_evaluate_instances.side_effect = [
+            genai_errors.ClientError(code=429, response_json=error_response_json),
+            genai_errors.ClientError(code=429, response_json=error_response_json),
+            vertexai_genai_types.EvaluateInstancesResponse(
+                metric_results=[metric_result]
+            ),
+        ]
+
+        result = _evals_common._execute_evaluation(
+            api_client=mock_api_client_fixture,
+            dataset=input_dataset,
+            metrics=[metric],
+        )
+
+        assert mock_private_evaluate_instances.call_count == 3
+        assert mock_sleep.call_count == 2
+        assert len(result.summary_metrics) == 1
+        summary_metric = result.summary_metrics[0]
+        assert summary_metric.metric_name == "summarization_quality"
+        assert summary_metric.mean_score == 0.9
+
+    @mock.patch(
+        "vertexai._genai._evals_metric_handlers._evals_constant.SUPPORTED_PREDEFINED_METRICS",
+        frozenset(["summarization_quality"]),
+    )
+    @mock.patch("time.sleep", return_value=None)
+    @mock.patch("vertexai._genai.evals.Evals._evaluate_instances")
+    def test_predefined_metric_retry_fail_on_resource_exhausted(
+        self,
+        mock_private_evaluate_instances,
+        mock_sleep,
+        mock_api_client_fixture,
+    ):
+        dataset_df = pd.DataFrame(
+            [{"prompt": "Test prompt", "response": "Test response"}]
+        )
+        input_dataset = vertexai_genai_types.EvaluationDataset(
+            eval_dataset_df=dataset_df
+        )
+        error_response_json = {
+            "error": {
+                "code": 429,
+                "message": ("Judge model resource exhausted. Please try again later."),
+                "status": "RESOURCE_EXHAUSTED",
+            }
+        }
+        metric = vertexai_genai_types.Metric(name="summarization_quality")
+        mock_private_evaluate_instances.side_effect = [
+            genai_errors.ClientError(code=429, response_json=error_response_json),
+            genai_errors.ClientError(code=429, response_json=error_response_json),
+            genai_errors.ClientError(code=429, response_json=error_response_json),
+        ]
+
+        result = _evals_common._execute_evaluation(
+            api_client=mock_api_client_fixture,
+            dataset=input_dataset,
+            metrics=[metric],
+        )
+
+        assert mock_private_evaluate_instances.call_count == 3
+        assert mock_sleep.call_count == 2
+        assert len(result.summary_metrics) == 1
+        summary_metric = result.summary_metrics[0]
+        assert summary_metric.metric_name == "summarization_quality"
+        assert summary_metric.mean_score is None
+        assert summary_metric.num_cases_error == 1
+        assert (
+            "Judge model resource exhausted after 3 retries"
+        ) in result.eval_case_results[0].response_candidate_results[0].metric_results[
+            "summarization_quality"
+        ].error_message
 
 
 class TestEvaluationDataset:

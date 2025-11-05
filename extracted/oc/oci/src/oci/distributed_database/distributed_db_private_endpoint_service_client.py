@@ -162,7 +162,7 @@ class DistributedDbPrivateEndpointServiceClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/distributeddatabase/change_distributed_database_private_endpoint_compartment.py.html>`__ to see an example of how to use change_distributed_database_private_endpoint_compartment API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/distributeddatabase/change_distributed_database_private_endpoint_compartment.py.html>`__ to see an example of how to use change_distributed_database_private_endpoint_compartment API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['distributedDatabasePrivateEndpointId']
@@ -272,7 +272,7 @@ class DistributedDbPrivateEndpointServiceClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/distributeddatabase/create_distributed_database_private_endpoint.py.html>`__ to see an example of how to use create_distributed_database_private_endpoint API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/distributeddatabase/create_distributed_database_private_endpoint.py.html>`__ to see an example of how to use create_distributed_database_private_endpoint API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -377,7 +377,7 @@ class DistributedDbPrivateEndpointServiceClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/distributeddatabase/delete_distributed_database_private_endpoint.py.html>`__ to see an example of how to use delete_distributed_database_private_endpoint API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/distributeddatabase/delete_distributed_database_private_endpoint.py.html>`__ to see an example of how to use delete_distributed_database_private_endpoint API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['distributedDatabasePrivateEndpointId']
@@ -485,7 +485,7 @@ class DistributedDbPrivateEndpointServiceClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/distributeddatabase/get_distributed_database_private_endpoint.py.html>`__ to see an example of how to use get_distributed_database_private_endpoint API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/distributeddatabase/get_distributed_database_private_endpoint.py.html>`__ to see an example of how to use get_distributed_database_private_endpoint API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['distributedDatabasePrivateEndpointId']
@@ -609,7 +609,7 @@ class DistributedDbPrivateEndpointServiceClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/distributeddatabase/list_distributed_database_private_endpoints.py.html>`__ to see an example of how to use list_distributed_database_private_endpoints API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/distributeddatabase/list_distributed_database_private_endpoints.py.html>`__ to see an example of how to use list_distributed_database_private_endpoints API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['compartmentId']
@@ -749,7 +749,7 @@ class DistributedDbPrivateEndpointServiceClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/distributeddatabase/reinstate_proxy_instance.py.html>`__ to see an example of how to use reinstate_proxy_instance API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/distributeddatabase/reinstate_proxy_instance.py.html>`__ to see an example of how to use reinstate_proxy_instance API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['distributedDatabasePrivateEndpointId']
@@ -867,7 +867,7 @@ class DistributedDbPrivateEndpointServiceClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/distributeddatabase/update_distributed_database_private_endpoint.py.html>`__ to see an example of how to use update_distributed_database_private_endpoint API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/distributeddatabase/update_distributed_database_private_endpoint.py.html>`__ to see an example of how to use update_distributed_database_private_endpoint API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['distributedDatabasePrivateEndpointId']

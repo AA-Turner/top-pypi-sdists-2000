@@ -61,6 +61,7 @@ import constructs as _constructs_77d1e7e8
 from .. import (
     CfnResource as _CfnResource_9df397a6,
     CfnTag as _CfnTag_f6864754,
+    IEnvironmentAware as _IEnvironmentAware_a408b00d,
     IInspectable as _IInspectable_c2943556,
     IResolvable as _IResolvable_da3f097b,
     ITaggable as _ITaggable_36806126,
@@ -1090,7 +1091,11 @@ class CollectionReference:
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_opensearchserverless.IAccessPolicyRef")
-class IAccessPolicyRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IAccessPolicyRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a AccessPolicy.
 
     :stability: experimental
@@ -1108,6 +1113,7 @@ class IAccessPolicyRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protoc
 
 class _IAccessPolicyRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a AccessPolicy.
 
@@ -1130,7 +1136,11 @@ typing.cast(typing.Any, IAccessPolicyRef).__jsii_proxy_class__ = lambda : _IAcce
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_opensearchserverless.ICollectionRef")
-class ICollectionRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class ICollectionRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Collection.
 
     :stability: experimental
@@ -1148,6 +1158,7 @@ class ICollectionRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol
 
 class _ICollectionRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Collection.
 
@@ -1170,7 +1181,11 @@ typing.cast(typing.Any, ICollectionRef).__jsii_proxy_class__ = lambda : _ICollec
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_opensearchserverless.IIndexRef")
-class IIndexRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IIndexRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Index.
 
     :stability: experimental
@@ -1188,6 +1203,7 @@ class IIndexRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IIndexRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Index.
 
@@ -1210,7 +1226,11 @@ typing.cast(typing.Any, IIndexRef).__jsii_proxy_class__ = lambda : _IIndexRefPro
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_opensearchserverless.ILifecyclePolicyRef")
-class ILifecyclePolicyRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class ILifecyclePolicyRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a LifecyclePolicy.
 
     :stability: experimental
@@ -1228,6 +1248,7 @@ class ILifecyclePolicyRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Pro
 
 class _ILifecyclePolicyRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a LifecyclePolicy.
 
@@ -1250,7 +1271,11 @@ typing.cast(typing.Any, ILifecyclePolicyRef).__jsii_proxy_class__ = lambda : _IL
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_opensearchserverless.ISecurityConfigRef")
-class ISecurityConfigRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class ISecurityConfigRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a SecurityConfig.
 
     :stability: experimental
@@ -1268,6 +1293,7 @@ class ISecurityConfigRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Prot
 
 class _ISecurityConfigRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a SecurityConfig.
 
@@ -1290,7 +1316,11 @@ typing.cast(typing.Any, ISecurityConfigRef).__jsii_proxy_class__ = lambda : _ISe
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_opensearchserverless.ISecurityPolicyRef")
-class ISecurityPolicyRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class ISecurityPolicyRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a SecurityPolicy.
 
     :stability: experimental
@@ -1308,6 +1338,7 @@ class ISecurityPolicyRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Prot
 
 class _ISecurityPolicyRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a SecurityPolicy.
 
@@ -1330,7 +1361,11 @@ typing.cast(typing.Any, ISecurityPolicyRef).__jsii_proxy_class__ = lambda : _ISe
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_opensearchserverless.IVpcEndpointRef")
-class IVpcEndpointRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IVpcEndpointRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a VpcEndpoint.
 
     :stability: experimental
@@ -1348,6 +1383,7 @@ class IVpcEndpointRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protoco
 
 class _IVpcEndpointRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a VpcEndpoint.
 

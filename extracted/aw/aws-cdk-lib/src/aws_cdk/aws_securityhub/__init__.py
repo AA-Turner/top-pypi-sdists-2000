@@ -60,6 +60,7 @@ from .._jsii import *
 import constructs as _constructs_77d1e7e8
 from .. import (
     CfnResource as _CfnResource_9df397a6,
+    IEnvironmentAware as _IEnvironmentAware_a408b00d,
     IInspectable as _IInspectable_c2943556,
     IResolvable as _IResolvable_da3f097b,
     ITaggable as _ITaggable_36806126,
@@ -2668,7 +2669,11 @@ class HubV2Reference:
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_securityhub.IAggregatorV2Ref")
-class IAggregatorV2Ref(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IAggregatorV2Ref(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a AggregatorV2.
 
     :stability: experimental
@@ -2686,6 +2691,7 @@ class IAggregatorV2Ref(_constructs_77d1e7e8.IConstruct, typing_extensions.Protoc
 
 class _IAggregatorV2RefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a AggregatorV2.
 
@@ -2708,7 +2714,11 @@ typing.cast(typing.Any, IAggregatorV2Ref).__jsii_proxy_class__ = lambda : _IAggr
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_securityhub.IAutomationRuleRef")
-class IAutomationRuleRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IAutomationRuleRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a AutomationRule.
 
     :stability: experimental
@@ -2726,6 +2736,7 @@ class IAutomationRuleRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Prot
 
 class _IAutomationRuleRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a AutomationRule.
 
@@ -2748,7 +2759,11 @@ typing.cast(typing.Any, IAutomationRuleRef).__jsii_proxy_class__ = lambda : _IAu
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_securityhub.IAutomationRuleV2Ref")
-class IAutomationRuleV2Ref(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IAutomationRuleV2Ref(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a AutomationRuleV2.
 
     :stability: experimental
@@ -2766,6 +2781,7 @@ class IAutomationRuleV2Ref(_constructs_77d1e7e8.IConstruct, typing_extensions.Pr
 
 class _IAutomationRuleV2RefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a AutomationRuleV2.
 
@@ -2790,6 +2806,7 @@ typing.cast(typing.Any, IAutomationRuleV2Ref).__jsii_proxy_class__ = lambda : _I
 @jsii.interface(jsii_type="aws-cdk-lib.aws_securityhub.IConfigurationPolicyRef")
 class IConfigurationPolicyRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a ConfigurationPolicy.
@@ -2809,6 +2826,7 @@ class IConfigurationPolicyRef(
 
 class _IConfigurationPolicyRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a ConfigurationPolicy.
 
@@ -2831,7 +2849,11 @@ typing.cast(typing.Any, IConfigurationPolicyRef).__jsii_proxy_class__ = lambda :
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_securityhub.IDelegatedAdminRef")
-class IDelegatedAdminRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IDelegatedAdminRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a DelegatedAdmin.
 
     :stability: experimental
@@ -2849,6 +2871,7 @@ class IDelegatedAdminRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Prot
 
 class _IDelegatedAdminRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a DelegatedAdmin.
 
@@ -2873,6 +2896,7 @@ typing.cast(typing.Any, IDelegatedAdminRef).__jsii_proxy_class__ = lambda : _IDe
 @jsii.interface(jsii_type="aws-cdk-lib.aws_securityhub.IFindingAggregatorRef")
 class IFindingAggregatorRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a FindingAggregator.
@@ -2892,6 +2916,7 @@ class IFindingAggregatorRef(
 
 class _IFindingAggregatorRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a FindingAggregator.
 
@@ -2914,7 +2939,11 @@ typing.cast(typing.Any, IFindingAggregatorRef).__jsii_proxy_class__ = lambda : _
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_securityhub.IHubRef")
-class IHubRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IHubRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Hub.
 
     :stability: experimental
@@ -2932,6 +2961,7 @@ class IHubRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IHubRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Hub.
 
@@ -2954,7 +2984,11 @@ typing.cast(typing.Any, IHubRef).__jsii_proxy_class__ = lambda : _IHubRefProxy
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_securityhub.IHubV2Ref")
-class IHubV2Ref(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IHubV2Ref(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a HubV2.
 
     :stability: experimental
@@ -2972,6 +3006,7 @@ class IHubV2Ref(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IHubV2RefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a HubV2.
 
@@ -2994,7 +3029,11 @@ typing.cast(typing.Any, IHubV2Ref).__jsii_proxy_class__ = lambda : _IHubV2RefPro
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_securityhub.IInsightRef")
-class IInsightRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IInsightRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Insight.
 
     :stability: experimental
@@ -3012,6 +3051,7 @@ class IInsightRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IInsightRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Insight.
 
@@ -3036,6 +3076,7 @@ typing.cast(typing.Any, IInsightRef).__jsii_proxy_class__ = lambda : _IInsightRe
 @jsii.interface(jsii_type="aws-cdk-lib.aws_securityhub.IOrganizationConfigurationRef")
 class IOrganizationConfigurationRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a OrganizationConfiguration.
@@ -3055,6 +3096,7 @@ class IOrganizationConfigurationRef(
 
 class _IOrganizationConfigurationRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a OrganizationConfiguration.
 
@@ -3079,6 +3121,7 @@ typing.cast(typing.Any, IOrganizationConfigurationRef).__jsii_proxy_class__ = la
 @jsii.interface(jsii_type="aws-cdk-lib.aws_securityhub.IPolicyAssociationRef")
 class IPolicyAssociationRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a PolicyAssociation.
@@ -3098,6 +3141,7 @@ class IPolicyAssociationRef(
 
 class _IPolicyAssociationRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a PolicyAssociation.
 
@@ -3122,6 +3166,7 @@ typing.cast(typing.Any, IPolicyAssociationRef).__jsii_proxy_class__ = lambda : _
 @jsii.interface(jsii_type="aws-cdk-lib.aws_securityhub.IProductSubscriptionRef")
 class IProductSubscriptionRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a ProductSubscription.
@@ -3141,6 +3186,7 @@ class IProductSubscriptionRef(
 
 class _IProductSubscriptionRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a ProductSubscription.
 
@@ -3163,7 +3209,11 @@ typing.cast(typing.Any, IProductSubscriptionRef).__jsii_proxy_class__ = lambda :
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_securityhub.ISecurityControlRef")
-class ISecurityControlRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class ISecurityControlRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a SecurityControl.
 
     :stability: experimental
@@ -3181,6 +3231,7 @@ class ISecurityControlRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Pro
 
 class _ISecurityControlRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a SecurityControl.
 
@@ -3203,7 +3254,11 @@ typing.cast(typing.Any, ISecurityControlRef).__jsii_proxy_class__ = lambda : _IS
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_securityhub.IStandardRef")
-class IStandardRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IStandardRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Standard.
 
     :stability: experimental
@@ -3221,6 +3276,7 @@ class IStandardRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IStandardRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Standard.
 

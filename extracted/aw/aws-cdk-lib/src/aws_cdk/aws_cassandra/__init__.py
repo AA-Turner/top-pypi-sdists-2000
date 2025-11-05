@@ -61,6 +61,7 @@ import constructs as _constructs_77d1e7e8
 from .. import (
     CfnResource as _CfnResource_9df397a6,
     CfnTag as _CfnTag_f6864754,
+    IEnvironmentAware as _IEnvironmentAware_a408b00d,
     IInspectable as _IInspectable_c2943556,
     IResolvable as _IResolvable_da3f097b,
     ITaggable as _ITaggable_36806126,
@@ -729,7 +730,11 @@ class CfnTypeProps:
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_cassandra.IKeyspaceRef")
-class IKeyspaceRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IKeyspaceRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Keyspace.
 
     :stability: experimental
@@ -747,6 +752,7 @@ class IKeyspaceRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IKeyspaceRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Keyspace.
 
@@ -769,7 +775,11 @@ typing.cast(typing.Any, IKeyspaceRef).__jsii_proxy_class__ = lambda : _IKeyspace
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_cassandra.ITableRef")
-class ITableRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class ITableRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Table.
 
     :stability: experimental
@@ -787,6 +797,7 @@ class ITableRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _ITableRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Table.
 
@@ -809,7 +820,11 @@ typing.cast(typing.Any, ITableRef).__jsii_proxy_class__ = lambda : _ITableRefPro
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_cassandra.ITypeRef")
-class ITypeRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class ITypeRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Type.
 
     :stability: experimental
@@ -827,6 +842,7 @@ class ITypeRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _ITypeRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Type.
 

@@ -60,6 +60,7 @@ from .._jsii import *
 import constructs as _constructs_77d1e7e8
 from .. import (
     CfnResource as _CfnResource_9df397a6,
+    IEnvironmentAware as _IEnvironmentAware_a408b00d,
     IInspectable as _IInspectable_c2943556,
     IResolvable as _IResolvable_da3f097b,
     ITaggable as _ITaggable_36806126,
@@ -1054,7 +1055,11 @@ class FormReference:
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_amplifyuibuilder.IComponentRef")
-class IComponentRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IComponentRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Component.
 
     :stability: experimental
@@ -1072,6 +1077,7 @@ class IComponentRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol)
 
 class _IComponentRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Component.
 
@@ -1094,7 +1100,11 @@ typing.cast(typing.Any, IComponentRef).__jsii_proxy_class__ = lambda : _ICompone
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_amplifyuibuilder.IFormRef")
-class IFormRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IFormRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Form.
 
     :stability: experimental
@@ -1112,6 +1122,7 @@ class IFormRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IFormRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Form.
 
@@ -1134,7 +1145,11 @@ typing.cast(typing.Any, IFormRef).__jsii_proxy_class__ = lambda : _IFormRefProxy
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_amplifyuibuilder.IThemeRef")
-class IThemeRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IThemeRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Theme.
 
     :stability: experimental
@@ -1152,6 +1167,7 @@ class IThemeRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IThemeRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Theme.
 

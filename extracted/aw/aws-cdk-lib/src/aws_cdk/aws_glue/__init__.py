@@ -66,6 +66,7 @@ import constructs as _constructs_77d1e7e8
 from .. import (
     CfnResource as _CfnResource_9df397a6,
     CfnTag as _CfnTag_f6864754,
+    IEnvironmentAware as _IEnvironmentAware_a408b00d,
     IInspectable as _IInspectable_c2943556,
     IResolvable as _IResolvable_da3f097b,
     ITaggable as _ITaggable_36806126,
@@ -4291,7 +4292,11 @@ class DevEndpointReference:
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_glue.IClassifierRef")
-class IClassifierRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IClassifierRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Classifier.
 
     :stability: experimental
@@ -4309,6 +4314,7 @@ class IClassifierRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol
 
 class _IClassifierRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Classifier.
 
@@ -4331,7 +4337,11 @@ typing.cast(typing.Any, IClassifierRef).__jsii_proxy_class__ = lambda : _IClassi
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_glue.IConnectionRef")
-class IConnectionRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IConnectionRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Connection.
 
     :stability: experimental
@@ -4349,6 +4359,7 @@ class IConnectionRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol
 
 class _IConnectionRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Connection.
 
@@ -4371,7 +4382,11 @@ typing.cast(typing.Any, IConnectionRef).__jsii_proxy_class__ = lambda : _IConnec
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_glue.ICrawlerRef")
-class ICrawlerRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class ICrawlerRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Crawler.
 
     :stability: experimental
@@ -4389,6 +4404,7 @@ class ICrawlerRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _ICrawlerRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Crawler.
 
@@ -4411,7 +4427,11 @@ typing.cast(typing.Any, ICrawlerRef).__jsii_proxy_class__ = lambda : _ICrawlerRe
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_glue.ICustomEntityTypeRef")
-class ICustomEntityTypeRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class ICustomEntityTypeRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a CustomEntityType.
 
     :stability: experimental
@@ -4429,6 +4449,7 @@ class ICustomEntityTypeRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Pr
 
 class _ICustomEntityTypeRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a CustomEntityType.
 
@@ -4453,6 +4474,7 @@ typing.cast(typing.Any, ICustomEntityTypeRef).__jsii_proxy_class__ = lambda : _I
 @jsii.interface(jsii_type="aws-cdk-lib.aws_glue.IDataCatalogEncryptionSettingsRef")
 class IDataCatalogEncryptionSettingsRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a DataCatalogEncryptionSettings.
@@ -4474,6 +4496,7 @@ class IDataCatalogEncryptionSettingsRef(
 
 class _IDataCatalogEncryptionSettingsRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a DataCatalogEncryptionSettings.
 
@@ -4500,6 +4523,7 @@ typing.cast(typing.Any, IDataCatalogEncryptionSettingsRef).__jsii_proxy_class__ 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_glue.IDataQualityRulesetRef")
 class IDataQualityRulesetRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a DataQualityRuleset.
@@ -4519,6 +4543,7 @@ class IDataQualityRulesetRef(
 
 class _IDataQualityRulesetRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a DataQualityRuleset.
 
@@ -4541,7 +4566,11 @@ typing.cast(typing.Any, IDataQualityRulesetRef).__jsii_proxy_class__ = lambda : 
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_glue.IDatabaseRef")
-class IDatabaseRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IDatabaseRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Database.
 
     :stability: experimental
@@ -4559,6 +4588,7 @@ class IDatabaseRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IDatabaseRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Database.
 
@@ -4581,7 +4611,11 @@ typing.cast(typing.Any, IDatabaseRef).__jsii_proxy_class__ = lambda : _IDatabase
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_glue.IDevEndpointRef")
-class IDevEndpointRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IDevEndpointRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a DevEndpoint.
 
     :stability: experimental
@@ -4599,6 +4633,7 @@ class IDevEndpointRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protoco
 
 class _IDevEndpointRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a DevEndpoint.
 
@@ -4621,7 +4656,11 @@ typing.cast(typing.Any, IDevEndpointRef).__jsii_proxy_class__ = lambda : _IDevEn
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_glue.IJobRef")
-class IJobRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IJobRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Job.
 
     :stability: experimental
@@ -4639,6 +4678,7 @@ class IJobRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IJobRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Job.
 
@@ -4661,7 +4701,11 @@ typing.cast(typing.Any, IJobRef).__jsii_proxy_class__ = lambda : _IJobRefProxy
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_glue.IMLTransformRef")
-class IMLTransformRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IMLTransformRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a MLTransform.
 
     :stability: experimental
@@ -4679,6 +4723,7 @@ class IMLTransformRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protoco
 
 class _IMLTransformRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a MLTransform.
 
@@ -4701,7 +4746,11 @@ typing.cast(typing.Any, IMLTransformRef).__jsii_proxy_class__ = lambda : _IMLTra
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_glue.IPartitionRef")
-class IPartitionRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IPartitionRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Partition.
 
     :stability: experimental
@@ -4719,6 +4768,7 @@ class IPartitionRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol)
 
 class _IPartitionRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Partition.
 
@@ -4741,7 +4791,11 @@ typing.cast(typing.Any, IPartitionRef).__jsii_proxy_class__ = lambda : _IPartiti
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_glue.IRegistryRef")
-class IRegistryRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IRegistryRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Registry.
 
     :stability: experimental
@@ -4759,6 +4813,7 @@ class IRegistryRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IRegistryRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Registry.
 
@@ -4781,7 +4836,11 @@ typing.cast(typing.Any, IRegistryRef).__jsii_proxy_class__ = lambda : _IRegistry
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_glue.ISchemaRef")
-class ISchemaRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class ISchemaRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Schema.
 
     :stability: experimental
@@ -4799,6 +4858,7 @@ class ISchemaRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _ISchemaRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Schema.
 
@@ -4823,6 +4883,7 @@ typing.cast(typing.Any, ISchemaRef).__jsii_proxy_class__ = lambda : _ISchemaRefP
 @jsii.interface(jsii_type="aws-cdk-lib.aws_glue.ISchemaVersionMetadataRef")
 class ISchemaVersionMetadataRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a SchemaVersionMetadata.
@@ -4842,6 +4903,7 @@ class ISchemaVersionMetadataRef(
 
 class _ISchemaVersionMetadataRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a SchemaVersionMetadata.
 
@@ -4864,7 +4926,11 @@ typing.cast(typing.Any, ISchemaVersionMetadataRef).__jsii_proxy_class__ = lambda
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_glue.ISchemaVersionRef")
-class ISchemaVersionRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class ISchemaVersionRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a SchemaVersion.
 
     :stability: experimental
@@ -4882,6 +4948,7 @@ class ISchemaVersionRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Proto
 
 class _ISchemaVersionRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a SchemaVersion.
 
@@ -4906,6 +4973,7 @@ typing.cast(typing.Any, ISchemaVersionRef).__jsii_proxy_class__ = lambda : _ISch
 @jsii.interface(jsii_type="aws-cdk-lib.aws_glue.ISecurityConfigurationRef")
 class ISecurityConfigurationRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a SecurityConfiguration.
@@ -4925,6 +4993,7 @@ class ISecurityConfigurationRef(
 
 class _ISecurityConfigurationRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a SecurityConfiguration.
 
@@ -4947,7 +5016,11 @@ typing.cast(typing.Any, ISecurityConfigurationRef).__jsii_proxy_class__ = lambda
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_glue.ITableOptimizerRef")
-class ITableOptimizerRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class ITableOptimizerRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a TableOptimizer.
 
     :stability: experimental
@@ -4965,6 +5038,7 @@ class ITableOptimizerRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Prot
 
 class _ITableOptimizerRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a TableOptimizer.
 
@@ -4987,7 +5061,11 @@ typing.cast(typing.Any, ITableOptimizerRef).__jsii_proxy_class__ = lambda : _ITa
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_glue.ITableRef")
-class ITableRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class ITableRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Table.
 
     :stability: experimental
@@ -5005,6 +5083,7 @@ class ITableRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _ITableRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Table.
 
@@ -5027,7 +5106,11 @@ typing.cast(typing.Any, ITableRef).__jsii_proxy_class__ = lambda : _ITableRefPro
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_glue.ITriggerRef")
-class ITriggerRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class ITriggerRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Trigger.
 
     :stability: experimental
@@ -5045,6 +5128,7 @@ class ITriggerRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _ITriggerRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Trigger.
 
@@ -5067,7 +5151,11 @@ typing.cast(typing.Any, ITriggerRef).__jsii_proxy_class__ = lambda : _ITriggerRe
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_glue.IUsageProfileRef")
-class IUsageProfileRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IUsageProfileRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a UsageProfile.
 
     :stability: experimental
@@ -5085,6 +5173,7 @@ class IUsageProfileRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protoc
 
 class _IUsageProfileRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a UsageProfile.
 
@@ -5107,7 +5196,11 @@ typing.cast(typing.Any, IUsageProfileRef).__jsii_proxy_class__ = lambda : _IUsag
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_glue.IWorkflowRef")
-class IWorkflowRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IWorkflowRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Workflow.
 
     :stability: experimental
@@ -5125,6 +5218,7 @@ class IWorkflowRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IWorkflowRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Workflow.
 

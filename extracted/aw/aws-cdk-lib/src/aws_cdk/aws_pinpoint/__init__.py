@@ -60,6 +60,7 @@ from .._jsii import *
 import constructs as _constructs_77d1e7e8
 from .. import (
     CfnResource as _CfnResource_9df397a6,
+    IEnvironmentAware as _IEnvironmentAware_a408b00d,
     IInspectable as _IInspectable_c2943556,
     IResolvable as _IResolvable_da3f097b,
     ITaggable as _ITaggable_36806126,
@@ -4371,7 +4372,11 @@ class GCMChannelReference:
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_pinpoint.IADMChannelRef")
-class IADMChannelRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IADMChannelRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a ADMChannel.
 
     :stability: experimental
@@ -4389,6 +4394,7 @@ class IADMChannelRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol
 
 class _IADMChannelRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a ADMChannel.
 
@@ -4411,7 +4417,11 @@ typing.cast(typing.Any, IADMChannelRef).__jsii_proxy_class__ = lambda : _IADMCha
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_pinpoint.IAPNSChannelRef")
-class IAPNSChannelRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IAPNSChannelRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a APNSChannel.
 
     :stability: experimental
@@ -4429,6 +4439,7 @@ class IAPNSChannelRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protoco
 
 class _IAPNSChannelRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a APNSChannel.
 
@@ -4453,6 +4464,7 @@ typing.cast(typing.Any, IAPNSChannelRef).__jsii_proxy_class__ = lambda : _IAPNSC
 @jsii.interface(jsii_type="aws-cdk-lib.aws_pinpoint.IAPNSSandboxChannelRef")
 class IAPNSSandboxChannelRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a APNSSandboxChannel.
@@ -4472,6 +4484,7 @@ class IAPNSSandboxChannelRef(
 
 class _IAPNSSandboxChannelRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a APNSSandboxChannel.
 
@@ -4494,7 +4507,11 @@ typing.cast(typing.Any, IAPNSSandboxChannelRef).__jsii_proxy_class__ = lambda : 
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_pinpoint.IAPNSVoipChannelRef")
-class IAPNSVoipChannelRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IAPNSVoipChannelRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a APNSVoipChannel.
 
     :stability: experimental
@@ -4512,6 +4529,7 @@ class IAPNSVoipChannelRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Pro
 
 class _IAPNSVoipChannelRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a APNSVoipChannel.
 
@@ -4536,6 +4554,7 @@ typing.cast(typing.Any, IAPNSVoipChannelRef).__jsii_proxy_class__ = lambda : _IA
 @jsii.interface(jsii_type="aws-cdk-lib.aws_pinpoint.IAPNSVoipSandboxChannelRef")
 class IAPNSVoipSandboxChannelRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a APNSVoipSandboxChannel.
@@ -4555,6 +4574,7 @@ class IAPNSVoipSandboxChannelRef(
 
 class _IAPNSVoipSandboxChannelRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a APNSVoipSandboxChannel.
 
@@ -4577,7 +4597,11 @@ typing.cast(typing.Any, IAPNSVoipSandboxChannelRef).__jsii_proxy_class__ = lambd
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_pinpoint.IAppRef")
-class IAppRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IAppRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a App.
 
     :stability: experimental
@@ -4595,6 +4619,7 @@ class IAppRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IAppRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a App.
 
@@ -4619,6 +4644,7 @@ typing.cast(typing.Any, IAppRef).__jsii_proxy_class__ = lambda : _IAppRefProxy
 @jsii.interface(jsii_type="aws-cdk-lib.aws_pinpoint.IApplicationSettingsRef")
 class IApplicationSettingsRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a ApplicationSettings.
@@ -4638,6 +4664,7 @@ class IApplicationSettingsRef(
 
 class _IApplicationSettingsRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a ApplicationSettings.
 
@@ -4660,7 +4687,11 @@ typing.cast(typing.Any, IApplicationSettingsRef).__jsii_proxy_class__ = lambda :
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_pinpoint.IBaiduChannelRef")
-class IBaiduChannelRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IBaiduChannelRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a BaiduChannel.
 
     :stability: experimental
@@ -4678,6 +4709,7 @@ class IBaiduChannelRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protoc
 
 class _IBaiduChannelRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a BaiduChannel.
 
@@ -4700,7 +4732,11 @@ typing.cast(typing.Any, IBaiduChannelRef).__jsii_proxy_class__ = lambda : _IBaid
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_pinpoint.ICampaignRef")
-class ICampaignRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class ICampaignRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Campaign.
 
     :stability: experimental
@@ -4718,6 +4754,7 @@ class ICampaignRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _ICampaignRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Campaign.
 
@@ -4740,7 +4777,11 @@ typing.cast(typing.Any, ICampaignRef).__jsii_proxy_class__ = lambda : _ICampaign
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_pinpoint.IEmailChannelRef")
-class IEmailChannelRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IEmailChannelRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a EmailChannel.
 
     :stability: experimental
@@ -4758,6 +4799,7 @@ class IEmailChannelRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protoc
 
 class _IEmailChannelRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a EmailChannel.
 
@@ -4780,7 +4822,11 @@ typing.cast(typing.Any, IEmailChannelRef).__jsii_proxy_class__ = lambda : _IEmai
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_pinpoint.IEmailTemplateRef")
-class IEmailTemplateRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IEmailTemplateRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a EmailTemplate.
 
     :stability: experimental
@@ -4798,6 +4844,7 @@ class IEmailTemplateRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Proto
 
 class _IEmailTemplateRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a EmailTemplate.
 
@@ -4820,7 +4867,11 @@ typing.cast(typing.Any, IEmailTemplateRef).__jsii_proxy_class__ = lambda : _IEma
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_pinpoint.IEventStreamRef")
-class IEventStreamRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IEventStreamRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a EventStream.
 
     :stability: experimental
@@ -4838,6 +4889,7 @@ class IEventStreamRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protoco
 
 class _IEventStreamRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a EventStream.
 
@@ -4860,7 +4912,11 @@ typing.cast(typing.Any, IEventStreamRef).__jsii_proxy_class__ = lambda : _IEvent
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_pinpoint.IGCMChannelRef")
-class IGCMChannelRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IGCMChannelRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a GCMChannel.
 
     :stability: experimental
@@ -4878,6 +4934,7 @@ class IGCMChannelRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol
 
 class _IGCMChannelRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a GCMChannel.
 
@@ -4900,7 +4957,11 @@ typing.cast(typing.Any, IGCMChannelRef).__jsii_proxy_class__ = lambda : _IGCMCha
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_pinpoint.IInAppTemplateRef")
-class IInAppTemplateRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IInAppTemplateRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a InAppTemplate.
 
     :stability: experimental
@@ -4918,6 +4979,7 @@ class IInAppTemplateRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Proto
 
 class _IInAppTemplateRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a InAppTemplate.
 
@@ -4940,7 +5002,11 @@ typing.cast(typing.Any, IInAppTemplateRef).__jsii_proxy_class__ = lambda : _IInA
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_pinpoint.IPushTemplateRef")
-class IPushTemplateRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IPushTemplateRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a PushTemplate.
 
     :stability: experimental
@@ -4958,6 +5024,7 @@ class IPushTemplateRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protoc
 
 class _IPushTemplateRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a PushTemplate.
 
@@ -4980,7 +5047,11 @@ typing.cast(typing.Any, IPushTemplateRef).__jsii_proxy_class__ = lambda : _IPush
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_pinpoint.ISMSChannelRef")
-class ISMSChannelRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class ISMSChannelRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a SMSChannel.
 
     :stability: experimental
@@ -4998,6 +5069,7 @@ class ISMSChannelRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol
 
 class _ISMSChannelRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a SMSChannel.
 
@@ -5020,7 +5092,11 @@ typing.cast(typing.Any, ISMSChannelRef).__jsii_proxy_class__ = lambda : _ISMSCha
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_pinpoint.ISegmentRef")
-class ISegmentRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class ISegmentRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Segment.
 
     :stability: experimental
@@ -5038,6 +5114,7 @@ class ISegmentRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _ISegmentRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Segment.
 
@@ -5060,7 +5137,11 @@ typing.cast(typing.Any, ISegmentRef).__jsii_proxy_class__ = lambda : _ISegmentRe
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_pinpoint.ISmsTemplateRef")
-class ISmsTemplateRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class ISmsTemplateRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a SmsTemplate.
 
     :stability: experimental
@@ -5078,6 +5159,7 @@ class ISmsTemplateRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protoco
 
 class _ISmsTemplateRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a SmsTemplate.
 
@@ -5100,7 +5182,11 @@ typing.cast(typing.Any, ISmsTemplateRef).__jsii_proxy_class__ = lambda : _ISmsTe
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_pinpoint.IVoiceChannelRef")
-class IVoiceChannelRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IVoiceChannelRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a VoiceChannel.
 
     :stability: experimental
@@ -5118,6 +5204,7 @@ class IVoiceChannelRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protoc
 
 class _IVoiceChannelRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a VoiceChannel.
 

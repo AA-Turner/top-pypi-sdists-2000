@@ -61,6 +61,7 @@ import constructs as _constructs_77d1e7e8
 from .. import (
     CfnResource as _CfnResource_9df397a6,
     CfnTag as _CfnTag_f6864754,
+    IEnvironmentAware as _IEnvironmentAware_a408b00d,
     IInspectable as _IInspectable_c2943556,
     IResolvable as _IResolvable_da3f097b,
     ITaggable as _ITaggable_36806126,
@@ -493,7 +494,11 @@ class CfnNodeProps:
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_managedblockchain.IAccessorRef")
-class IAccessorRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IAccessorRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Accessor.
 
     :stability: experimental
@@ -511,6 +516,7 @@ class IAccessorRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IAccessorRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Accessor.
 
@@ -533,7 +539,11 @@ typing.cast(typing.Any, IAccessorRef).__jsii_proxy_class__ = lambda : _IAccessor
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_managedblockchain.IMemberRef")
-class IMemberRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IMemberRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Member.
 
     :stability: experimental
@@ -551,6 +561,7 @@ class IMemberRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IMemberRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Member.
 
@@ -573,7 +584,11 @@ typing.cast(typing.Any, IMemberRef).__jsii_proxy_class__ = lambda : _IMemberRefP
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_managedblockchain.INodeRef")
-class INodeRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class INodeRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Node.
 
     :stability: experimental
@@ -591,6 +606,7 @@ class INodeRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _INodeRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Node.
 

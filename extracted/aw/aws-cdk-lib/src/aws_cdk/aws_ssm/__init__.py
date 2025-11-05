@@ -253,6 +253,7 @@ import constructs as _constructs_77d1e7e8
 from .. import (
     CfnResource as _CfnResource_9df397a6,
     CfnTag as _CfnTag_f6864754,
+    IEnvironmentAware as _IEnvironmentAware_a408b00d,
     IInspectable as _IInspectable_c2943556,
     IResolvable as _IResolvable_da3f097b,
     IResource as _IResource_c80c4260,
@@ -2717,7 +2718,11 @@ class DocumentReference:
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_ssm.IAssociationRef")
-class IAssociationRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IAssociationRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Association.
 
     :stability: experimental
@@ -2735,6 +2740,7 @@ class IAssociationRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protoco
 
 class _IAssociationRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Association.
 
@@ -2757,7 +2763,11 @@ typing.cast(typing.Any, IAssociationRef).__jsii_proxy_class__ = lambda : _IAssoc
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_ssm.IDocumentRef")
-class IDocumentRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IDocumentRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Document.
 
     :stability: experimental
@@ -2775,6 +2785,7 @@ class IDocumentRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IDocumentRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Document.
 
@@ -2799,6 +2810,7 @@ typing.cast(typing.Any, IDocumentRef).__jsii_proxy_class__ = lambda : _IDocument
 @jsii.interface(jsii_type="aws-cdk-lib.aws_ssm.IMaintenanceWindowRef")
 class IMaintenanceWindowRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a MaintenanceWindow.
@@ -2818,6 +2830,7 @@ class IMaintenanceWindowRef(
 
 class _IMaintenanceWindowRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a MaintenanceWindow.
 
@@ -2842,6 +2855,7 @@ typing.cast(typing.Any, IMaintenanceWindowRef).__jsii_proxy_class__ = lambda : _
 @jsii.interface(jsii_type="aws-cdk-lib.aws_ssm.IMaintenanceWindowTargetRef")
 class IMaintenanceWindowTargetRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a MaintenanceWindowTarget.
@@ -2861,6 +2875,7 @@ class IMaintenanceWindowTargetRef(
 
 class _IMaintenanceWindowTargetRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a MaintenanceWindowTarget.
 
@@ -2885,6 +2900,7 @@ typing.cast(typing.Any, IMaintenanceWindowTargetRef).__jsii_proxy_class__ = lamb
 @jsii.interface(jsii_type="aws-cdk-lib.aws_ssm.IMaintenanceWindowTaskRef")
 class IMaintenanceWindowTaskRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a MaintenanceWindowTask.
@@ -2904,6 +2920,7 @@ class IMaintenanceWindowTaskRef(
 
 class _IMaintenanceWindowTaskRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a MaintenanceWindowTask.
 
@@ -3034,7 +3051,11 @@ typing.cast(typing.Any, IParameter).__jsii_proxy_class__ = lambda : _IParameterP
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_ssm.IParameterRef")
-class IParameterRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IParameterRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Parameter.
 
     :stability: experimental
@@ -3052,6 +3073,7 @@ class IParameterRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol)
 
 class _IParameterRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Parameter.
 
@@ -3074,7 +3096,11 @@ typing.cast(typing.Any, IParameterRef).__jsii_proxy_class__ = lambda : _IParamet
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_ssm.IPatchBaselineRef")
-class IPatchBaselineRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IPatchBaselineRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a PatchBaseline.
 
     :stability: experimental
@@ -3092,6 +3118,7 @@ class IPatchBaselineRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Proto
 
 class _IPatchBaselineRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a PatchBaseline.
 
@@ -3114,7 +3141,11 @@ typing.cast(typing.Any, IPatchBaselineRef).__jsii_proxy_class__ = lambda : _IPat
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_ssm.IResourceDataSyncRef")
-class IResourceDataSyncRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IResourceDataSyncRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a ResourceDataSync.
 
     :stability: experimental
@@ -3132,6 +3163,7 @@ class IResourceDataSyncRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Pr
 
 class _IResourceDataSyncRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a ResourceDataSync.
 
@@ -3154,7 +3186,11 @@ typing.cast(typing.Any, IResourceDataSyncRef).__jsii_proxy_class__ = lambda : _I
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_ssm.IResourcePolicyRef")
-class IResourcePolicyRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IResourcePolicyRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a ResourcePolicy.
 
     :stability: experimental
@@ -3172,6 +3208,7 @@ class IResourcePolicyRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Prot
 
 class _IResourcePolicyRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a ResourcePolicy.
 

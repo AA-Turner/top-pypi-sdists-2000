@@ -61,6 +61,7 @@ import constructs as _constructs_77d1e7e8
 from .. import (
     CfnResource as _CfnResource_9df397a6,
     CfnTag as _CfnTag_f6864754,
+    IEnvironmentAware as _IEnvironmentAware_a408b00d,
     IInspectable as _IInspectable_c2943556,
     IResolvable as _IResolvable_da3f097b,
     ITaggable as _ITaggable_36806126,
@@ -724,7 +725,11 @@ class CfnResourcePolicyProps:
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_organizations.IAccountRef")
-class IAccountRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IAccountRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Account.
 
     :stability: experimental
@@ -742,6 +747,7 @@ class IAccountRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IAccountRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Account.
 
@@ -764,7 +770,11 @@ typing.cast(typing.Any, IAccountRef).__jsii_proxy_class__ = lambda : _IAccountRe
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_organizations.IOrganizationRef")
-class IOrganizationRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IOrganizationRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Organization.
 
     :stability: experimental
@@ -782,6 +792,7 @@ class IOrganizationRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protoc
 
 class _IOrganizationRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Organization.
 
@@ -806,6 +817,7 @@ typing.cast(typing.Any, IOrganizationRef).__jsii_proxy_class__ = lambda : _IOrga
 @jsii.interface(jsii_type="aws-cdk-lib.aws_organizations.IOrganizationalUnitRef")
 class IOrganizationalUnitRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a OrganizationalUnit.
@@ -825,6 +837,7 @@ class IOrganizationalUnitRef(
 
 class _IOrganizationalUnitRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a OrganizationalUnit.
 
@@ -847,7 +860,11 @@ typing.cast(typing.Any, IOrganizationalUnitRef).__jsii_proxy_class__ = lambda : 
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_organizations.IPolicyRef")
-class IPolicyRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IPolicyRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Policy.
 
     :stability: experimental
@@ -865,6 +882,7 @@ class IPolicyRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IPolicyRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Policy.
 
@@ -887,7 +905,11 @@ typing.cast(typing.Any, IPolicyRef).__jsii_proxy_class__ = lambda : _IPolicyRefP
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_organizations.IResourcePolicyRef")
-class IResourcePolicyRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IResourcePolicyRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a ResourcePolicy.
 
     :stability: experimental
@@ -905,6 +927,7 @@ class IResourcePolicyRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Prot
 
 class _IResourcePolicyRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a ResourcePolicy.
 

@@ -1,6 +1,5 @@
 // SPDX-License-Identifier: (Apache-2.0 OR MIT)
 
-use crate::exc::*;
 use crate::ffi::*;
 use crate::opt::*;
 use crate::serialize::serializer::*;
@@ -10,6 +9,23 @@ use serde::ser::{Serialize, SerializeMap, Serializer};
 
 use smallvec::SmallVec;
 use std::ptr::NonNull;
+
+#[inline]
+fn has_slots(ob_type: *mut pyo3::ffi::PyTypeObject, state: *mut State) -> bool {
+    unsafe {
+        let tp_dict = (*ob_type).tp_dict;
+        pyo3::ffi::PyDict_Contains(tp_dict, (*state).slots_str) == 1
+    }
+}
+
+#[inline]
+pub fn is_dataclass(ob_type: *mut pyo3::ffi::PyTypeObject, state: *mut State) -> bool {
+    unsafe {
+        let tp_dict = (*ob_type).tp_dict;
+        !tp_dict.is_null()
+            && pyo3::ffi::PyDict_Contains(tp_dict, (*state).dataclass_fields_str) == 1
+    }
+}
 
 pub struct Dataclass {
     ptr: *mut pyo3::ffi::PyObject,
@@ -43,10 +59,7 @@ impl Dataclass {
 fn is_pseudo_field(field: *mut pyo3::ffi::PyObject, state: *mut State) -> bool {
     let field_type = unsafe { pyo3::ffi::PyObject_GetAttr(field, (*state).field_type_str) };
     unsafe { pyo3::ffi::Py_DECREF(field_type) };
-    !py_is!(
-        field_type.cast::<pyo3::ffi::PyTypeObject>(),
-        (*state).dataclass_field_type
-    )
+    field_type.cast::<pyo3::ffi::PyTypeObject>() != unsafe { (*state).dataclass_field_type }
 }
 
 impl Serialize for Dataclass {
@@ -64,7 +77,7 @@ impl Serialize for Dataclass {
 
         let dict = {
             let ob_type = ob_type!(self.ptr);
-            if pydict_contains!(ob_type, (*self.state).slots_str) {
+            if has_slots(ob_type, self.state) {
                 std::ptr::null_mut()
             } else {
                 let dict = unsafe { pyo3::ffi::PyObject_GetAttr(self.ptr, (*self.state).dict_str) };
@@ -76,11 +89,7 @@ impl Serialize for Dataclass {
         let mut items: SmallVec<[(&str, *mut pyo3::ffi::PyObject); 8]> =
             SmallVec::with_capacity(len);
         for (attr, field) in PyDictIter::from_pyobject(fields) {
-            let data = unicode_to_str(attr.as_ptr());
-            if unlikely!(data.is_none()) {
-                return Err(serde::ser::Error::custom(INVALID_STR));
-            }
-            let key_as_str = data.unwrap();
+            let key_as_str = unicode_to_str(attr.as_ptr()).map_err(serde::ser::Error::custom)?;
             if key_as_str.as_bytes()[0] == b'_' {
                 continue;
             }

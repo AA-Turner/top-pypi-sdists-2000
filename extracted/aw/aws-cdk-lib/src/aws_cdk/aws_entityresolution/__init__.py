@@ -71,6 +71,7 @@ import constructs as _constructs_77d1e7e8
 from .. import (
     CfnResource as _CfnResource_9df397a6,
     CfnTag as _CfnTag_f6864754,
+    IEnvironmentAware as _IEnvironmentAware_a408b00d,
     IInspectable as _IInspectable_c2943556,
     IResolvable as _IResolvable_da3f097b,
     ITaggableV2 as _ITaggableV2_4e6798f8,
@@ -1019,6 +1020,7 @@ class CfnSchemaMappingProps:
 @jsii.interface(jsii_type="aws-cdk-lib.aws_entityresolution.IIdMappingWorkflowRef")
 class IIdMappingWorkflowRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a IdMappingWorkflow.
@@ -1038,6 +1040,7 @@ class IIdMappingWorkflowRef(
 
 class _IIdMappingWorkflowRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a IdMappingWorkflow.
 
@@ -1060,7 +1063,11 @@ typing.cast(typing.Any, IIdMappingWorkflowRef).__jsii_proxy_class__ = lambda : _
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_entityresolution.IIdNamespaceRef")
-class IIdNamespaceRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IIdNamespaceRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a IdNamespace.
 
     :stability: experimental
@@ -1078,6 +1085,7 @@ class IIdNamespaceRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protoco
 
 class _IIdNamespaceRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a IdNamespace.
 
@@ -1100,7 +1108,11 @@ typing.cast(typing.Any, IIdNamespaceRef).__jsii_proxy_class__ = lambda : _IIdNam
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_entityresolution.IMatchingWorkflowRef")
-class IMatchingWorkflowRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IMatchingWorkflowRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a MatchingWorkflow.
 
     :stability: experimental
@@ -1118,6 +1130,7 @@ class IMatchingWorkflowRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Pr
 
 class _IMatchingWorkflowRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a MatchingWorkflow.
 
@@ -1140,7 +1153,11 @@ typing.cast(typing.Any, IMatchingWorkflowRef).__jsii_proxy_class__ = lambda : _I
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_entityresolution.IPolicyStatementRef")
-class IPolicyStatementRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IPolicyStatementRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a PolicyStatement.
 
     :stability: experimental
@@ -1158,6 +1175,7 @@ class IPolicyStatementRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Pro
 
 class _IPolicyStatementRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a PolicyStatement.
 
@@ -1180,7 +1198,11 @@ typing.cast(typing.Any, IPolicyStatementRef).__jsii_proxy_class__ = lambda : _IP
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_entityresolution.ISchemaMappingRef")
-class ISchemaMappingRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class ISchemaMappingRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a SchemaMapping.
 
     :stability: experimental
@@ -1198,6 +1220,7 @@ class ISchemaMappingRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Proto
 
 class _ISchemaMappingRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a SchemaMapping.
 

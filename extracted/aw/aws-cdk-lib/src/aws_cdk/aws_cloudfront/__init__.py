@@ -1652,6 +1652,7 @@ from .. import (
     CfnResource as _CfnResource_9df397a6,
     CfnTag as _CfnTag_f6864754,
     Duration as _Duration_4839e8c3,
+    IEnvironmentAware as _IEnvironmentAware_a408b00d,
     IInspectable as _IInspectable_c2943556,
     IResolvable as _IResolvable_da3f097b,
     IResource as _IResource_c80c4260,
@@ -7852,7 +7853,11 @@ class HttpVersion(enum.Enum):
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_cloudfront.IAnycastIpListRef")
-class IAnycastIpListRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IAnycastIpListRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a AnycastIpList.
 
     :stability: experimental
@@ -7870,6 +7875,7 @@ class IAnycastIpListRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Proto
 
 class _IAnycastIpListRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a AnycastIpList.
 
@@ -7892,7 +7898,11 @@ typing.cast(typing.Any, IAnycastIpListRef).__jsii_proxy_class__ = lambda : _IAny
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_cloudfront.ICachePolicyRef")
-class ICachePolicyRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class ICachePolicyRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a CachePolicy.
 
     :stability: experimental
@@ -7910,6 +7920,7 @@ class ICachePolicyRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protoco
 
 class _ICachePolicyRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a CachePolicy.
 
@@ -7936,6 +7947,7 @@ typing.cast(typing.Any, ICachePolicyRef).__jsii_proxy_class__ = lambda : _ICache
 )
 class ICloudFrontOriginAccessIdentityRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a CloudFrontOriginAccessIdentity.
@@ -7957,6 +7969,7 @@ class ICloudFrontOriginAccessIdentityRef(
 
 class _ICloudFrontOriginAccessIdentityRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a CloudFrontOriginAccessIdentity.
 
@@ -7981,7 +7994,11 @@ typing.cast(typing.Any, ICloudFrontOriginAccessIdentityRef).__jsii_proxy_class__
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_cloudfront.IConnectionGroupRef")
-class IConnectionGroupRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IConnectionGroupRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a ConnectionGroup.
 
     :stability: experimental
@@ -7999,6 +8016,7 @@ class IConnectionGroupRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Pro
 
 class _IConnectionGroupRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a ConnectionGroup.
 
@@ -8023,6 +8041,7 @@ typing.cast(typing.Any, IConnectionGroupRef).__jsii_proxy_class__ = lambda : _IC
 @jsii.interface(jsii_type="aws-cdk-lib.aws_cloudfront.IContinuousDeploymentPolicyRef")
 class IContinuousDeploymentPolicyRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a ContinuousDeploymentPolicy.
@@ -8042,6 +8061,7 @@ class IContinuousDeploymentPolicyRef(
 
 class _IContinuousDeploymentPolicyRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a ContinuousDeploymentPolicy.
 
@@ -8064,7 +8084,11 @@ typing.cast(typing.Any, IContinuousDeploymentPolicyRef).__jsii_proxy_class__ = l
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_cloudfront.IDistributionRef")
-class IDistributionRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IDistributionRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Distribution.
 
     :stability: experimental
@@ -8082,6 +8106,7 @@ class IDistributionRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protoc
 
 class _IDistributionRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Distribution.
 
@@ -8106,6 +8131,7 @@ typing.cast(typing.Any, IDistributionRef).__jsii_proxy_class__ = lambda : _IDist
 @jsii.interface(jsii_type="aws-cdk-lib.aws_cloudfront.IDistributionTenantRef")
 class IDistributionTenantRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a DistributionTenant.
@@ -8125,6 +8151,7 @@ class IDistributionTenantRef(
 
 class _IDistributionTenantRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a DistributionTenant.
 
@@ -8147,7 +8174,11 @@ typing.cast(typing.Any, IDistributionTenantRef).__jsii_proxy_class__ = lambda : 
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_cloudfront.IFunctionRef")
-class IFunctionRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IFunctionRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Function.
 
     :stability: experimental
@@ -8165,6 +8196,7 @@ class IFunctionRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IFunctionRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Function.
 
@@ -8187,7 +8219,11 @@ typing.cast(typing.Any, IFunctionRef).__jsii_proxy_class__ = lambda : _IFunction
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_cloudfront.IKeyGroupRef")
-class IKeyGroupRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IKeyGroupRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a KeyGroup.
 
     :stability: experimental
@@ -8205,6 +8241,7 @@ class IKeyGroupRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IKeyGroupRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a KeyGroup.
 
@@ -8227,7 +8264,11 @@ typing.cast(typing.Any, IKeyGroupRef).__jsii_proxy_class__ = lambda : _IKeyGroup
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_cloudfront.IKeyValueStoreRef")
-class IKeyValueStoreRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IKeyValueStoreRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a KeyValueStore.
 
     :stability: experimental
@@ -8245,6 +8286,7 @@ class IKeyValueStoreRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Proto
 
 class _IKeyValueStoreRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a KeyValueStore.
 
@@ -8269,6 +8311,7 @@ typing.cast(typing.Any, IKeyValueStoreRef).__jsii_proxy_class__ = lambda : _IKey
 @jsii.interface(jsii_type="aws-cdk-lib.aws_cloudfront.IMonitoringSubscriptionRef")
 class IMonitoringSubscriptionRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a MonitoringSubscription.
@@ -8288,6 +8331,7 @@ class IMonitoringSubscriptionRef(
 
 class _IMonitoringSubscriptionRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a MonitoringSubscription.
 
@@ -8405,6 +8449,7 @@ typing.cast(typing.Any, IOriginAccessControl).__jsii_proxy_class__ = lambda : _I
 @jsii.interface(jsii_type="aws-cdk-lib.aws_cloudfront.IOriginAccessControlRef")
 class IOriginAccessControlRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a OriginAccessControl.
@@ -8424,6 +8469,7 @@ class IOriginAccessControlRef(
 
 class _IOriginAccessControlRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a OriginAccessControl.
 
@@ -8505,6 +8551,7 @@ typing.cast(typing.Any, IOriginAccessIdentity).__jsii_proxy_class__ = lambda : _
 @jsii.interface(jsii_type="aws-cdk-lib.aws_cloudfront.IOriginRequestPolicyRef")
 class IOriginRequestPolicyRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a OriginRequestPolicy.
@@ -8524,6 +8571,7 @@ class IOriginRequestPolicyRef(
 
 class _IOriginRequestPolicyRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a OriginRequestPolicy.
 
@@ -8546,7 +8594,11 @@ typing.cast(typing.Any, IOriginRequestPolicyRef).__jsii_proxy_class__ = lambda :
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_cloudfront.IPublicKeyRef")
-class IPublicKeyRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IPublicKeyRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a PublicKey.
 
     :stability: experimental
@@ -8564,6 +8616,7 @@ class IPublicKeyRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol)
 
 class _IPublicKeyRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a PublicKey.
 
@@ -8588,6 +8641,7 @@ typing.cast(typing.Any, IPublicKeyRef).__jsii_proxy_class__ = lambda : _IPublicK
 @jsii.interface(jsii_type="aws-cdk-lib.aws_cloudfront.IRealtimeLogConfigRef")
 class IRealtimeLogConfigRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a RealtimeLogConfig.
@@ -8607,6 +8661,7 @@ class IRealtimeLogConfigRef(
 
 class _IRealtimeLogConfigRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a RealtimeLogConfig.
 
@@ -8631,6 +8686,7 @@ typing.cast(typing.Any, IRealtimeLogConfigRef).__jsii_proxy_class__ = lambda : _
 @jsii.interface(jsii_type="aws-cdk-lib.aws_cloudfront.IResponseHeadersPolicyRef")
 class IResponseHeadersPolicyRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a ResponseHeadersPolicy.
@@ -8650,6 +8706,7 @@ class IResponseHeadersPolicyRef(
 
 class _IResponseHeadersPolicyRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a ResponseHeadersPolicy.
 
@@ -8674,6 +8731,7 @@ typing.cast(typing.Any, IResponseHeadersPolicyRef).__jsii_proxy_class__ = lambda
 @jsii.interface(jsii_type="aws-cdk-lib.aws_cloudfront.IStreamingDistributionRef")
 class IStreamingDistributionRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a StreamingDistribution.
@@ -8693,6 +8751,7 @@ class IStreamingDistributionRef(
 
 class _IStreamingDistributionRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a StreamingDistribution.
 
@@ -8715,7 +8774,11 @@ typing.cast(typing.Any, IStreamingDistributionRef).__jsii_proxy_class__ = lambda
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_cloudfront.IVpcOriginRef")
-class IVpcOriginRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IVpcOriginRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a VpcOrigin.
 
     :stability: experimental
@@ -8733,6 +8796,7 @@ class IVpcOriginRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol)
 
 class _IVpcOriginRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a VpcOrigin.
 

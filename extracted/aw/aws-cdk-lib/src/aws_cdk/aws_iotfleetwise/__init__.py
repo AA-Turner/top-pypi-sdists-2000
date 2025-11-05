@@ -61,6 +61,7 @@ import constructs as _constructs_77d1e7e8
 from .. import (
     CfnResource as _CfnResource_9df397a6,
     CfnTag as _CfnTag_f6864754,
+    IEnvironmentAware as _IEnvironmentAware_a408b00d,
     IInspectable as _IInspectable_c2943556,
     IResolvable as _IResolvable_da3f097b,
     ITaggable as _ITaggable_36806126,
@@ -1783,7 +1784,11 @@ class FleetReference:
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_iotfleetwise.ICampaignRef")
-class ICampaignRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class ICampaignRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Campaign.
 
     :stability: experimental
@@ -1801,6 +1806,7 @@ class ICampaignRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _ICampaignRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Campaign.
 
@@ -1823,7 +1829,11 @@ typing.cast(typing.Any, ICampaignRef).__jsii_proxy_class__ = lambda : _ICampaign
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_iotfleetwise.IDecoderManifestRef")
-class IDecoderManifestRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IDecoderManifestRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a DecoderManifest.
 
     :stability: experimental
@@ -1841,6 +1851,7 @@ class IDecoderManifestRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Pro
 
 class _IDecoderManifestRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a DecoderManifest.
 
@@ -1863,7 +1874,11 @@ typing.cast(typing.Any, IDecoderManifestRef).__jsii_proxy_class__ = lambda : _ID
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_iotfleetwise.IFleetRef")
-class IFleetRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IFleetRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Fleet.
 
     :stability: experimental
@@ -1881,6 +1896,7 @@ class IFleetRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IFleetRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Fleet.
 
@@ -1903,7 +1919,11 @@ typing.cast(typing.Any, IFleetRef).__jsii_proxy_class__ = lambda : _IFleetRefPro
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_iotfleetwise.IModelManifestRef")
-class IModelManifestRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IModelManifestRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a ModelManifest.
 
     :stability: experimental
@@ -1921,6 +1941,7 @@ class IModelManifestRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Proto
 
 class _IModelManifestRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a ModelManifest.
 
@@ -1943,7 +1964,11 @@ typing.cast(typing.Any, IModelManifestRef).__jsii_proxy_class__ = lambda : _IMod
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_iotfleetwise.ISignalCatalogRef")
-class ISignalCatalogRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class ISignalCatalogRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a SignalCatalog.
 
     :stability: experimental
@@ -1961,6 +1986,7 @@ class ISignalCatalogRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Proto
 
 class _ISignalCatalogRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a SignalCatalog.
 
@@ -1983,7 +2009,11 @@ typing.cast(typing.Any, ISignalCatalogRef).__jsii_proxy_class__ = lambda : _ISig
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_iotfleetwise.IStateTemplateRef")
-class IStateTemplateRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IStateTemplateRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a StateTemplate.
 
     :stability: experimental
@@ -2001,6 +2031,7 @@ class IStateTemplateRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Proto
 
 class _IStateTemplateRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a StateTemplate.
 
@@ -2023,7 +2054,11 @@ typing.cast(typing.Any, IStateTemplateRef).__jsii_proxy_class__ = lambda : _ISta
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_iotfleetwise.IVehicleRef")
-class IVehicleRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IVehicleRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Vehicle.
 
     :stability: experimental
@@ -2041,6 +2076,7 @@ class IVehicleRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IVehicleRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Vehicle.
 

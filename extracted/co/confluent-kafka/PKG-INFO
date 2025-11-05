@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: confluent-kafka
-Version: 2.12.0
+Version: 2.12.1
 Summary: Confluent's Python client for Apache Kafka
 Author-email: "Confluent Inc." <support@confluent.io>
 Project-URL: Homepage, https://github.com/confluentinc/confluent-kafka-python
@@ -10,10 +10,9 @@ Classifier: License :: OSI Approved :: Apache Software License
 Classifier: Programming Language :: Python
 Classifier: Programming Language :: Python :: 3
 Classifier: Topic :: Software Development :: Libraries :: Python Modules
-Requires-Python: >=3.7
+Requires-Python: >=3.8
 Description-Content-Type: text/markdown
 License-File: LICENSE
-Requires-Dist: tomli; python_version < "3.13"
 Provides-Extra: schemaregistry
 Requires-Dist: attrs>=21.2.0; extra == "schemaregistry"
 Requires-Dist: cachetools>=5.5.0; extra == "schemaregistry"
@@ -74,7 +73,7 @@ Requires-Dist: authlib>=1.0.0; extra == "protobuf"
 Provides-Extra: dev
 Requires-Dist: sphinx; extra == "dev"
 Requires-Dist: sphinx-rtd-theme; extra == "dev"
-Requires-Dist: tomli; python_version < "3.13" and extra == "dev"
+Requires-Dist: tomli; python_version < "3.11" and extra == "dev"
 Requires-Dist: pandoc; extra == "dev"
 Requires-Dist: confluent-kafka; extra == "dev"
 Requires-Dist: fastapi; extra == "dev"
@@ -146,7 +145,7 @@ Requires-Dist: protobuf; extra == "dev"
 Provides-Extra: docs
 Requires-Dist: sphinx; extra == "docs"
 Requires-Dist: sphinx-rtd-theme; extra == "docs"
-Requires-Dist: tomli; python_version < "3.13" and extra == "docs"
+Requires-Dist: tomli; python_version < "3.11" and extra == "docs"
 Requires-Dist: pandoc; extra == "docs"
 Requires-Dist: attrs>=21.2.0; extra == "docs"
 Requires-Dist: cachetools>=5.5.0; extra == "docs"
@@ -253,7 +252,7 @@ Requires-Dist: opentelemetry-distro; extra == "all"
 Requires-Dist: opentelemetry-exporter-otlp; extra == "all"
 Requires-Dist: sphinx; extra == "all"
 Requires-Dist: sphinx-rtd-theme; extra == "all"
-Requires-Dist: tomli; python_version < "3.13" and extra == "all"
+Requires-Dist: tomli; python_version < "3.11" and extra == "all"
 Requires-Dist: pandoc; extra == "all"
 Requires-Dist: confluent-kafka; extra == "all"
 Requires-Dist: fastapi; extra == "all"
@@ -432,7 +431,7 @@ p = Producer({'bootstrap.servers': 'mybroker1,mybroker2'})
 
 def delivery_report(err, msg):
     """ Called once for each message produced to indicate delivery result.
-        Triggered by poll() or flush(). """
+        Triggered by poll() or flush()."""
     if err is not None:
         print('Message delivery failed: {}'.format(err))
     else:

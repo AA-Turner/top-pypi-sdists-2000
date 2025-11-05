@@ -16,12 +16,15 @@ r'''
   * [VPC Link](#vpc-link)
   * [Private Integration](#private-integration)
   * [Generating ARN for Execute API](#generating-arn-for-execute-api)
-  * [Access Logging](#access-logging)
 * [WebSocket API](#websocket-api)
 
   * [Manage Connections Permission](#manage-connections-permission)
   * [Managing access to WebSocket APIs](#managing-access-to-websocket-apis)
   * [Usage Plan and API Keys](#usage-plan-and-api-keys)
+* [Common Config](#common-config)
+
+  * [Route Settings](#route-settings)
+  * [Access Logging](#access-logging)
 
 ## Introduction
 
@@ -385,66 +388,6 @@ arn = api.arn_for_execute_api("GET", "/myApiPath", "dev")
 * The 'ANY' method can be used for matching any HTTP methods not explicitly defined.
 * The function gracefully handles undefined parameters by using wildcards, making it flexible for various API configurations.
 
-## Access Logging
-
-You can turn on logging to write logs to CloudWatch Logs.
-Read more at [Configure logging for HTTP APIs in API Gateway](https://docs.aws.amazon.com/apigateway/latest/developerguide/http-api-logging.html)
-
-```python
-import aws_cdk.aws_logs as logs
-
-# api: apigwv2.HttpApi
-# log_group: logs.LogGroup
-
-
-stage = apigwv2.HttpStage(self, "Stage",
-    http_api=api,
-    access_log_settings={
-        "destination": apigwv2.LogGroupLogDestination(log_group)
-    }
-)
-```
-
-The following code will generate the access log in the [CLF format](https://en.wikipedia.org/wiki/Common_Log_Format).
-
-```python
-import aws_cdk.aws_apigateway as apigw
-import aws_cdk.aws_logs as logs
-
-# api: apigwv2.HttpApi
-# log_group: logs.LogGroup
-
-
-stage = apigwv2.HttpStage(self, "Stage",
-    http_api=api,
-    access_log_settings={
-        "destination": apigwv2.LogGroupLogDestination(log_group),
-        "format": apigw.AccessLogFormat.clf()
-    }
-)
-```
-
-You can also configure your own access log format by using the `AccessLogFormat.custom()` API.
-`AccessLogField` provides commonly used fields. The following code configures access log to contain.
-
-```python
-import aws_cdk.aws_apigateway as apigw
-import aws_cdk.aws_logs as logs
-
-# api: apigwv2.HttpApi
-# log_group: logs.LogGroup
-
-
-stage = apigwv2.HttpStage(self, "Stage",
-    http_api=api,
-    access_log_settings={
-        "destination": apigwv2.LogGroupLogDestination(log_group),
-        "format": apigw.AccessLogFormat.custom(f"""{apigw.AccessLogField.contextRequestId()} {apigw.AccessLogField.contextErrorMessage()} {apigw.AccessLogField.contextErrorMessageString()}
-                  {apigw.AccessLogField.contextAuthorizerError()} {apigw.AccessLogField.contextAuthorizerIntegrationStatus()}""")
-    }
-)
-```
-
 ## WebSocket API
 
 A WebSocket API in API Gateway is a collection of WebSocket routes that are integrated with backend HTTP endpoints,
@@ -590,28 +533,6 @@ To require an API Key when accessing the Websocket API:
 ```python
 web_socket_api = apigwv2.WebSocketApi(self, "mywsapi",
     api_key_selection_expression=apigwv2.WebSocketApiKeySelectionExpression.HEADER_X_API_KEY
-)
-```
-
-## Common Config
-
-Common config for both HTTP API and WebSocket API
-
-### Route Settings
-
-Represents a collection of route settings.
-
-```python
-# api: apigwv2.HttpApi
-
-
-apigwv2.HttpStage(self, "Stage",
-    http_api=api,
-    throttle=apigwv2.ThrottleSettings(
-        rate_limit=1000,
-        burst_limit=1000
-    ),
-    detailed_metrics_enabled=True
 )
 ```
 
@@ -763,6 +684,97 @@ key = apigwv2.RateLimitedApiKey(self, "rate-limited-api-key",
     )
 )
 ```
+
+## Common Config
+
+Common config for both HTTP API and WebSocket API
+
+### Route Settings
+
+Represents a collection of route settings.
+
+```python
+# api: apigwv2.HttpApi
+
+
+apigwv2.HttpStage(self, "Stage",
+    http_api=api,
+    throttle=apigwv2.ThrottleSettings(
+        rate_limit=1000,
+        burst_limit=1000
+    ),
+    detailed_metrics_enabled=True
+)
+```
+
+### Access Logging
+
+You can turn on logging to write logs to CloudWatch Logs.
+Read more at Configure logging for [HTTP APIs](https://docs.aws.amazon.com/apigateway/latest/developerguide/http-api-logging.html) or [WebSocket APIs](https://docs.aws.amazon.com/apigateway/latest/developerguide/websocket-api-logging.html)
+
+```python
+import aws_cdk.aws_logs as logs
+
+# http_api: apigwv2.HttpApi
+# web_socket_api: apigwv2.WebSocketApi
+# log_group: logs.LogGroup
+
+
+apigwv2.HttpStage(self, "HttpStage",
+    http_api=http_api,
+    access_log_settings={
+        "destination": apigwv2.LogGroupLogDestination(log_group)
+    }
+)
+
+apigwv2.WebSocketStage(self, "WebSocketStage",
+    web_socket_api=web_socket_api,
+    stage_name="dev",
+    access_log_settings={
+        "destination": apigwv2.LogGroupLogDestination(log_group)
+    }
+)
+```
+
+The following code will generate the access log in the [CLF format](https://en.wikipedia.org/wiki/Common_Log_Format).
+
+```python
+import aws_cdk.aws_apigateway as apigw
+import aws_cdk.aws_logs as logs
+
+# api: apigwv2.HttpApi
+# log_group: logs.LogGroup
+
+
+stage = apigwv2.HttpStage(self, "Stage",
+    http_api=api,
+    access_log_settings={
+        "destination": apigwv2.LogGroupLogDestination(log_group),
+        "format": apigw.AccessLogFormat.clf()
+    }
+)
+```
+
+You can also configure your own access log format by using the `AccessLogFormat.custom()` API.
+`AccessLogField` provides commonly used fields. The following code configures access log to contain.
+
+```python
+import aws_cdk.aws_apigateway as apigw
+import aws_cdk.aws_logs as logs
+
+# api: apigwv2.HttpApi
+# log_group: logs.LogGroup
+
+
+stage = apigwv2.HttpStage(self, "Stage",
+    http_api=api,
+    access_log_settings={
+        "destination": apigwv2.LogGroupLogDestination(log_group),
+        "format": apigw.AccessLogFormat.custom(f"""{apigw.AccessLogField.contextRequestId()} {apigw.AccessLogField.contextErrorMessage()} {apigw.AccessLogField.contextErrorMessageString()}
+                  {apigw.AccessLogField.contextAuthorizerError()} {apigw.AccessLogField.contextAuthorizerIntegrationStatus()}""")
+    }
+)
+```
 '''
 from pkgutil import extend_path
 __path__ = extend_path(__path__, __name__)
@@ -800,6 +812,7 @@ import constructs as _constructs_77d1e7e8
 from .. import (
     CfnResource as _CfnResource_9df397a6,
     Duration as _Duration_4839e8c3,
+    IEnvironmentAware as _IEnvironmentAware_a408b00d,
     IInspectable as _IInspectable_c2943556,
     IResolvable as _IResolvable_da3f097b,
     IResource as _IResource_c80c4260,
@@ -7084,6 +7097,7 @@ typing.cast(typing.Any, IApi).__jsii_proxy_class__ = lambda : _IApiProxy
 )
 class IApiGatewayManagedOverridesRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a ApiGatewayManagedOverrides.
@@ -7103,6 +7117,7 @@ class IApiGatewayManagedOverridesRef(
 
 class _IApiGatewayManagedOverridesRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a ApiGatewayManagedOverrides.
 
@@ -7217,7 +7232,11 @@ typing.cast(typing.Any, IApiMapping).__jsii_proxy_class__ = lambda : _IApiMappin
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_apigatewayv2.IApiMappingRef")
-class IApiMappingRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IApiMappingRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a ApiMapping.
 
     :stability: experimental
@@ -7235,6 +7254,7 @@ class IApiMappingRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol
 
 class _IApiMappingRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a ApiMapping.
 
@@ -7257,7 +7277,11 @@ typing.cast(typing.Any, IApiMappingRef).__jsii_proxy_class__ = lambda : _IApiMap
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_apigatewayv2.IApiRef")
-class IApiRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IApiRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Api.
 
     :stability: experimental
@@ -7275,6 +7299,7 @@ class IApiRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IApiRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Api.
 
@@ -7331,7 +7356,11 @@ typing.cast(typing.Any, IAuthorizer).__jsii_proxy_class__ = lambda : _IAuthorize
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_apigatewayv2.IAuthorizerRef")
-class IAuthorizerRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IAuthorizerRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Authorizer.
 
     :stability: experimental
@@ -7349,6 +7378,7 @@ class IAuthorizerRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol
 
 class _IAuthorizerRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Authorizer.
 
@@ -7371,7 +7401,11 @@ typing.cast(typing.Any, IAuthorizerRef).__jsii_proxy_class__ = lambda : _IAuthor
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_apigatewayv2.IDeploymentRef")
-class IDeploymentRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IDeploymentRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Deployment.
 
     :stability: experimental
@@ -7389,6 +7423,7 @@ class IDeploymentRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol
 
 class _IDeploymentRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Deployment.
 
@@ -7487,7 +7522,11 @@ typing.cast(typing.Any, IDomainName).__jsii_proxy_class__ = lambda : _IDomainNam
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_apigatewayv2.IDomainNameRef")
-class IDomainNameRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IDomainNameRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a DomainName.
 
     :stability: experimental
@@ -7505,6 +7544,7 @@ class IDomainNameRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol
 
 class _IDomainNameRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a DomainName.
 
@@ -8338,7 +8378,11 @@ typing.cast(typing.Any, IIntegration).__jsii_proxy_class__ = lambda : _IIntegrat
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_apigatewayv2.IIntegrationRef")
-class IIntegrationRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IIntegrationRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Integration.
 
     :stability: experimental
@@ -8356,6 +8400,7 @@ class IIntegrationRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protoco
 
 class _IIntegrationRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Integration.
 
@@ -8380,6 +8425,7 @@ typing.cast(typing.Any, IIntegrationRef).__jsii_proxy_class__ = lambda : _IInteg
 @jsii.interface(jsii_type="aws-cdk-lib.aws_apigatewayv2.IIntegrationResponseRef")
 class IIntegrationResponseRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a IntegrationResponse.
@@ -8399,6 +8445,7 @@ class IIntegrationResponseRef(
 
 class _IIntegrationResponseRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a IntegrationResponse.
 
@@ -8447,7 +8494,11 @@ typing.cast(typing.Any, IMappingValue).__jsii_proxy_class__ = lambda : _IMapping
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_apigatewayv2.IModelRef")
-class IModelRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IModelRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Model.
 
     :stability: experimental
@@ -8465,6 +8516,7 @@ class IModelRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IModelRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Model.
 
@@ -8521,7 +8573,11 @@ typing.cast(typing.Any, IRoute).__jsii_proxy_class__ = lambda : _IRouteProxy
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_apigatewayv2.IRouteRef")
-class IRouteRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IRouteRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Route.
 
     :stability: experimental
@@ -8539,6 +8595,7 @@ class IRouteRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IRouteRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Route.
 
@@ -8561,7 +8618,11 @@ typing.cast(typing.Any, IRouteRef).__jsii_proxy_class__ = lambda : _IRouteRefPro
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_apigatewayv2.IRouteResponseRef")
-class IRouteResponseRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IRouteResponseRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a RouteResponse.
 
     :stability: experimental
@@ -8579,6 +8640,7 @@ class IRouteResponseRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Proto
 
 class _IRouteResponseRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a RouteResponse.
 
@@ -8601,7 +8663,11 @@ typing.cast(typing.Any, IRouteResponseRef).__jsii_proxy_class__ = lambda : _IRou
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_apigatewayv2.IRoutingRuleRef")
-class IRoutingRuleRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IRoutingRuleRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a RoutingRule.
 
     :stability: experimental
@@ -8619,6 +8685,7 @@ class IRoutingRuleRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protoco
 
 class _IRoutingRuleRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a RoutingRule.
 
@@ -8807,7 +8874,11 @@ typing.cast(typing.Any, IStage).__jsii_proxy_class__ = lambda : _IStageProxy
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_apigatewayv2.IStageRef")
-class IStageRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IStageRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Stage.
 
     :stability: experimental
@@ -8825,6 +8896,7 @@ class IStageRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IStageRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Stage.
 
@@ -8960,7 +9032,11 @@ typing.cast(typing.Any, IVpcLink).__jsii_proxy_class__ = lambda : _IVpcLinkProxy
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_apigatewayv2.IVpcLinkRef")
-class IVpcLinkRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IVpcLinkRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a VpcLink.
 
     :stability: experimental
@@ -8978,6 +9054,7 @@ class IVpcLinkRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IVpcLinkRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a VpcLink.
 
@@ -13924,6 +14001,14 @@ class WebSocketStage(
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
         return typing.cast(None, jsii.invoke(self, "addStageVariable", [name, value]))
 
+    @jsii.member(jsii_name="defaultAccessLogFormat")
+    def default_access_log_format(self) -> _AccessLogFormat_07733b91:
+        '''CLF Log format for WebSocket API Stage.
+
+        :see: https://docs.aws.amazon.com/apigateway/latest/developerguide/websocket-api-logging.html
+        '''
+        return typing.cast(_AccessLogFormat_07733b91, jsii.invoke(self, "defaultAccessLogFormat", []))
+
     @jsii.member(jsii_name="grantManagementApiAccess")
     def grant_management_api_access(
         self,
@@ -14143,19 +14228,26 @@ class WebSocketStageProps(StageOptions):
 
         Example::
 
-            from aws_cdk.aws_apigatewayv2_integrations import WebSocketLambdaIntegration
+            import aws_cdk.aws_logs as logs
             
-            # message_handler: lambda.Function
+            # http_api: apigwv2.HttpApi
+            # web_socket_api: apigwv2.WebSocketApi
+            # log_group: logs.LogGroup
             
             
-            web_socket_api = apigwv2.WebSocketApi(self, "mywsapi")
-            apigwv2.WebSocketStage(self, "mystage",
+            apigwv2.HttpStage(self, "HttpStage",
+                http_api=http_api,
+                access_log_settings={
+                    "destination": apigwv2.LogGroupLogDestination(log_group)
+                }
+            )
+            
+            apigwv2.WebSocketStage(self, "WebSocketStage",
                 web_socket_api=web_socket_api,
                 stage_name="dev",
-                auto_deploy=True
-            )
-            web_socket_api.add_route("sendMessage",
-                integration=WebSocketLambdaIntegration("SendMessageIntegration", message_handler)
+                access_log_settings={
+                    "destination": apigwv2.LogGroupLogDestination(log_group)
+                }
             )
         '''
         if isinstance(domain_mapping, dict):
@@ -21926,6 +22018,7 @@ class HttpStageProps(HttpStageOptions):
 
         Example::
 
+            import aws_cdk.aws_apigateway as apigw
             import aws_cdk.aws_logs as logs
             
             # api: apigwv2.HttpApi
@@ -21935,7 +22028,8 @@ class HttpStageProps(HttpStageOptions):
             stage = apigwv2.HttpStage(self, "Stage",
                 http_api=api,
                 access_log_settings={
-                    "destination": apigwv2.LogGroupLogDestination(log_group)
+                    "destination": apigwv2.LogGroupLogDestination(log_group),
+                    "format": apigw.AccessLogFormat.clf()
                 }
             )
         '''
@@ -23010,6 +23104,7 @@ class HttpStage(
 
     Example::
 
+        import aws_cdk.aws_apigateway as apigw
         import aws_cdk.aws_logs as logs
         
         # api: apigwv2.HttpApi
@@ -23019,7 +23114,8 @@ class HttpStage(
         stage = apigwv2.HttpStage(self, "Stage",
             http_api=api,
             access_log_settings={
-                "destination": apigwv2.LogGroupLogDestination(log_group)
+                "destination": apigwv2.LogGroupLogDestination(log_group),
+                "format": apigw.AccessLogFormat.clf()
             }
         )
     '''
@@ -23107,6 +23203,14 @@ class HttpStage(
             check_type(argname="argument name", value=name, expected_type=type_hints["name"])
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
         return typing.cast(None, jsii.invoke(self, "addStageVariable", [name, value]))
+
+    @jsii.member(jsii_name="defaultAccessLogFormat")
+    def default_access_log_format(self) -> _AccessLogFormat_07733b91:
+        '''CLF Log format for HTTP API Stage.
+
+        :see: https://docs.aws.amazon.com/apigateway/latest/developerguide/http-api-logging.html
+        '''
+        return typing.cast(_AccessLogFormat_07733b91, jsii.invoke(self, "defaultAccessLogFormat", []))
 
     @jsii.member(jsii_name="metric")
     def metric(

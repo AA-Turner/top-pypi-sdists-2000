@@ -156,7 +156,7 @@ class GatewayClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/apigateway/add_gateway_lock.py.html>`__ to see an example of how to use add_gateway_lock API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/apigateway/add_gateway_lock.py.html>`__ to see an example of how to use add_gateway_lock API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['gatewayId']
@@ -276,7 +276,7 @@ class GatewayClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/apigateway/change_gateway_compartment.py.html>`__ to see an example of how to use change_gateway_compartment API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/apigateway/change_gateway_compartment.py.html>`__ to see an example of how to use change_gateway_compartment API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['gatewayId']
@@ -392,7 +392,7 @@ class GatewayClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/apigateway/create_gateway.py.html>`__ to see an example of how to use create_gateway API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/apigateway/create_gateway.py.html>`__ to see an example of how to use create_gateway API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -493,7 +493,7 @@ class GatewayClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/apigateway/delete_gateway.py.html>`__ to see an example of how to use delete_gateway API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/apigateway/delete_gateway.py.html>`__ to see an example of how to use delete_gateway API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['gatewayId']
@@ -597,7 +597,7 @@ class GatewayClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/apigateway/get_gateway.py.html>`__ to see an example of how to use get_gateway API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/apigateway/get_gateway.py.html>`__ to see an example of how to use get_gateway API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['gatewayId']
@@ -729,7 +729,7 @@ class GatewayClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/apigateway/list_gateways.py.html>`__ to see an example of how to use list_gateways API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/apigateway/list_gateways.py.html>`__ to see an example of how to use list_gateways API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['compartmentId']
@@ -866,7 +866,7 @@ class GatewayClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/apigateway/remove_gateway_lock.py.html>`__ to see an example of how to use remove_gateway_lock API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/apigateway/remove_gateway_lock.py.html>`__ to see an example of how to use remove_gateway_lock API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['gatewayId']
@@ -979,7 +979,7 @@ class GatewayClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/apigateway/update_gateway.py.html>`__ to see an example of how to use update_gateway API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/apigateway/update_gateway.py.html>`__ to see an example of how to use update_gateway API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['gatewayId']

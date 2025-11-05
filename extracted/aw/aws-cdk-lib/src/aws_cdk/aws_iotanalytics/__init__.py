@@ -61,6 +61,7 @@ import constructs as _constructs_77d1e7e8
 from .. import (
     CfnResource as _CfnResource_9df397a6,
     CfnTag as _CfnTag_f6864754,
+    IEnvironmentAware as _IEnvironmentAware_a408b00d,
     IInspectable as _IInspectable_c2943556,
     IResolvable as _IResolvable_da3f097b,
     ITaggable as _ITaggable_36806126,
@@ -1007,7 +1008,11 @@ class DatastoreReference:
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_iotanalytics.IChannelRef")
-class IChannelRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IChannelRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Channel.
 
     :stability: experimental
@@ -1025,6 +1030,7 @@ class IChannelRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IChannelRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Channel.
 
@@ -1047,7 +1053,11 @@ typing.cast(typing.Any, IChannelRef).__jsii_proxy_class__ = lambda : _IChannelRe
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_iotanalytics.IDatasetRef")
-class IDatasetRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IDatasetRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Dataset.
 
     :stability: experimental
@@ -1065,6 +1075,7 @@ class IDatasetRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IDatasetRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Dataset.
 
@@ -1087,7 +1098,11 @@ typing.cast(typing.Any, IDatasetRef).__jsii_proxy_class__ = lambda : _IDatasetRe
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_iotanalytics.IDatastoreRef")
-class IDatastoreRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IDatastoreRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Datastore.
 
     :stability: experimental
@@ -1105,6 +1120,7 @@ class IDatastoreRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol)
 
 class _IDatastoreRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Datastore.
 
@@ -1127,7 +1143,11 @@ typing.cast(typing.Any, IDatastoreRef).__jsii_proxy_class__ = lambda : _IDatasto
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_iotanalytics.IPipelineRef")
-class IPipelineRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IPipelineRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Pipeline.
 
     :stability: experimental
@@ -1145,6 +1165,7 @@ class IPipelineRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IPipelineRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Pipeline.
 

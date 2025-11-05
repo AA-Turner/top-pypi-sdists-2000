@@ -71,6 +71,7 @@ import constructs as _constructs_77d1e7e8
 from .. import (
     CfnResource as _CfnResource_9df397a6,
     CfnTag as _CfnTag_f6864754,
+    IEnvironmentAware as _IEnvironmentAware_a408b00d,
     IInspectable as _IInspectable_c2943556,
     IResolvable as _IResolvable_da3f097b,
     ITaggableV2 as _ITaggableV2_4e6798f8,
@@ -632,7 +633,11 @@ class DRTAccessReference:
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_shield.IDRTAccessRef")
-class IDRTAccessRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IDRTAccessRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a DRTAccess.
 
     :stability: experimental
@@ -650,6 +655,7 @@ class IDRTAccessRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol)
 
 class _IDRTAccessRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a DRTAccess.
 
@@ -674,6 +680,7 @@ typing.cast(typing.Any, IDRTAccessRef).__jsii_proxy_class__ = lambda : _IDRTAcce
 @jsii.interface(jsii_type="aws-cdk-lib.aws_shield.IProactiveEngagementRef")
 class IProactiveEngagementRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a ProactiveEngagement.
@@ -693,6 +700,7 @@ class IProactiveEngagementRef(
 
 class _IProactiveEngagementRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a ProactiveEngagement.
 
@@ -715,7 +723,11 @@ typing.cast(typing.Any, IProactiveEngagementRef).__jsii_proxy_class__ = lambda :
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_shield.IProtectionGroupRef")
-class IProtectionGroupRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IProtectionGroupRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a ProtectionGroup.
 
     :stability: experimental
@@ -733,6 +745,7 @@ class IProtectionGroupRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Pro
 
 class _IProtectionGroupRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a ProtectionGroup.
 
@@ -755,7 +768,11 @@ typing.cast(typing.Any, IProtectionGroupRef).__jsii_proxy_class__ = lambda : _IP
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_shield.IProtectionRef")
-class IProtectionRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IProtectionRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Protection.
 
     :stability: experimental
@@ -773,6 +790,7 @@ class IProtectionRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol
 
 class _IProtectionRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Protection.
 

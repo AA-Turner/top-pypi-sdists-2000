@@ -71,6 +71,7 @@ import constructs as _constructs_77d1e7e8
 from .. import (
     CfnResource as _CfnResource_9df397a6,
     CfnTag as _CfnTag_f6864754,
+    IEnvironmentAware as _IEnvironmentAware_a408b00d,
     IInspectable as _IInspectable_c2943556,
     IResolvable as _IResolvable_da3f097b,
     ITaggableV2 as _ITaggableV2_4e6798f8,
@@ -1830,7 +1831,11 @@ class DataProtectionSettingsReference:
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_workspacesweb.IBrowserSettingsRef")
-class IBrowserSettingsRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IBrowserSettingsRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a BrowserSettings.
 
     :stability: experimental
@@ -1848,6 +1853,7 @@ class IBrowserSettingsRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Pro
 
 class _IBrowserSettingsRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a BrowserSettings.
 
@@ -1872,6 +1878,7 @@ typing.cast(typing.Any, IBrowserSettingsRef).__jsii_proxy_class__ = lambda : _IB
 @jsii.interface(jsii_type="aws-cdk-lib.aws_workspacesweb.IDataProtectionSettingsRef")
 class IDataProtectionSettingsRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a DataProtectionSettings.
@@ -1891,6 +1898,7 @@ class IDataProtectionSettingsRef(
 
 class _IDataProtectionSettingsRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a DataProtectionSettings.
 
@@ -1913,7 +1921,11 @@ typing.cast(typing.Any, IDataProtectionSettingsRef).__jsii_proxy_class__ = lambd
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_workspacesweb.IIdentityProviderRef")
-class IIdentityProviderRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IIdentityProviderRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a IdentityProvider.
 
     :stability: experimental
@@ -1931,6 +1943,7 @@ class IIdentityProviderRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Pr
 
 class _IIdentityProviderRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a IdentityProvider.
 
@@ -1953,7 +1966,11 @@ typing.cast(typing.Any, IIdentityProviderRef).__jsii_proxy_class__ = lambda : _I
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_workspacesweb.IIpAccessSettingsRef")
-class IIpAccessSettingsRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IIpAccessSettingsRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a IpAccessSettings.
 
     :stability: experimental
@@ -1971,6 +1988,7 @@ class IIpAccessSettingsRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Pr
 
 class _IIpAccessSettingsRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a IpAccessSettings.
 
@@ -1993,7 +2011,11 @@ typing.cast(typing.Any, IIpAccessSettingsRef).__jsii_proxy_class__ = lambda : _I
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_workspacesweb.INetworkSettingsRef")
-class INetworkSettingsRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class INetworkSettingsRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a NetworkSettings.
 
     :stability: experimental
@@ -2011,6 +2033,7 @@ class INetworkSettingsRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Pro
 
 class _INetworkSettingsRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a NetworkSettings.
 
@@ -2033,7 +2056,11 @@ typing.cast(typing.Any, INetworkSettingsRef).__jsii_proxy_class__ = lambda : _IN
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_workspacesweb.IPortalRef")
-class IPortalRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IPortalRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Portal.
 
     :stability: experimental
@@ -2051,6 +2078,7 @@ class IPortalRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IPortalRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Portal.
 
@@ -2073,7 +2101,11 @@ typing.cast(typing.Any, IPortalRef).__jsii_proxy_class__ = lambda : _IPortalRefP
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_workspacesweb.ISessionLoggerRef")
-class ISessionLoggerRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class ISessionLoggerRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a SessionLogger.
 
     :stability: experimental
@@ -2091,6 +2123,7 @@ class ISessionLoggerRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Proto
 
 class _ISessionLoggerRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a SessionLogger.
 
@@ -2113,7 +2146,11 @@ typing.cast(typing.Any, ISessionLoggerRef).__jsii_proxy_class__ = lambda : _ISes
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_workspacesweb.ITrustStoreRef")
-class ITrustStoreRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class ITrustStoreRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a TrustStore.
 
     :stability: experimental
@@ -2131,6 +2168,7 @@ class ITrustStoreRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol
 
 class _ITrustStoreRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a TrustStore.
 
@@ -2157,6 +2195,7 @@ typing.cast(typing.Any, ITrustStoreRef).__jsii_proxy_class__ = lambda : _ITrustS
 )
 class IUserAccessLoggingSettingsRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a UserAccessLoggingSettings.
@@ -2176,6 +2215,7 @@ class IUserAccessLoggingSettingsRef(
 
 class _IUserAccessLoggingSettingsRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a UserAccessLoggingSettings.
 
@@ -2198,7 +2238,11 @@ typing.cast(typing.Any, IUserAccessLoggingSettingsRef).__jsii_proxy_class__ = la
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_workspacesweb.IUserSettingsRef")
-class IUserSettingsRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IUserSettingsRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a UserSettings.
 
     :stability: experimental
@@ -2216,6 +2260,7 @@ class IUserSettingsRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protoc
 
 class _IUserSettingsRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a UserSettings.
 

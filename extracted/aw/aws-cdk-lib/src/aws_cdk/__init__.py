@@ -8712,6 +8712,11 @@ class CfnResource(
         return typing.cast(builtins.str, jsii.get(self, "cfnResourceType"))
 
     @builtins.property
+    @jsii.member(jsii_name="env")
+    def env(self) -> "ResourceEnvironment":
+        return typing.cast("ResourceEnvironment", jsii.get(self, "env"))
+
+    @builtins.property
     @jsii.member(jsii_name="updatedProperites")
     def _updated_properites(self) -> typing.Mapping[builtins.str, typing.Any]:
         '''(deprecated) Deprecated.
@@ -16764,44 +16769,48 @@ class _ICfnResourceOptionsProxy:
 typing.cast(typing.Any, ICfnResourceOptions).__jsii_proxy_class__ = lambda : _ICfnResourceOptionsProxy
 
 
-@jsii.interface(jsii_type="aws-cdk-lib.ICustomResourceRef")
-class ICustomResourceRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
-    '''(experimental) Indicates that this resource can be referenced as a CustomResource.
-
-    :stability: experimental
-    '''
+@jsii.interface(jsii_type="aws-cdk-lib.IEnvironmentAware")
+class IEnvironmentAware(typing_extensions.Protocol):
+    '''Used to indicate that a particular construct has an resource environment.'''
 
     @builtins.property
-    @jsii.member(jsii_name="customResourceRef")
-    def custom_resource_ref(self) -> CustomResourceReference:
-        '''(experimental) A reference to a CustomResource resource.
+    @jsii.member(jsii_name="env")
+    def env(self) -> "ResourceEnvironment":
+        '''The environment this resource belongs to.
 
-        :stability: experimental
+        For resources that are created and managed in a Stack (those created by
+        creating new class instances like ``new Role()``, ``new Bucket()``, etc.), this
+        is always the same as the environment of the stack they belong to.
+
+        For referenced resources (those obtained from referencing methods like
+        ``Role.fromRoleArn()``, ``Bucket.fromBucketName()``, etc.), they might be
+        different than the stack they were imported into.
         '''
         ...
 
 
-class _ICustomResourceRefProxy(
-    jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
-):
-    '''(experimental) Indicates that this resource can be referenced as a CustomResource.
+class _IEnvironmentAwareProxy:
+    '''Used to indicate that a particular construct has an resource environment.'''
 
-    :stability: experimental
-    '''
-
-    __jsii_type__: typing.ClassVar[str] = "aws-cdk-lib.ICustomResourceRef"
+    __jsii_type__: typing.ClassVar[str] = "aws-cdk-lib.IEnvironmentAware"
 
     @builtins.property
-    @jsii.member(jsii_name="customResourceRef")
-    def custom_resource_ref(self) -> CustomResourceReference:
-        '''(experimental) A reference to a CustomResource resource.
+    @jsii.member(jsii_name="env")
+    def env(self) -> "ResourceEnvironment":
+        '''The environment this resource belongs to.
 
-        :stability: experimental
+        For resources that are created and managed in a Stack (those created by
+        creating new class instances like ``new Role()``, ``new Bucket()``, etc.), this
+        is always the same as the environment of the stack they belong to.
+
+        For referenced resources (those obtained from referencing methods like
+        ``Role.fromRoleArn()``, ``Bucket.fromBucketName()``, etc.), they might be
+        different than the stack they were imported into.
         '''
-        return typing.cast(CustomResourceReference, jsii.get(self, "customResourceRef"))
+        return typing.cast("ResourceEnvironment", jsii.get(self, "env"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
-typing.cast(typing.Any, ICustomResourceRef).__jsii_proxy_class__ = lambda : _ICustomResourceRefProxy
+typing.cast(typing.Any, IEnvironmentAware).__jsii_proxy_class__ = lambda : _IEnvironmentAwareProxy
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.IFragmentConcatenator")
@@ -16847,7 +16856,11 @@ typing.cast(typing.Any, IFragmentConcatenator).__jsii_proxy_class__ = lambda : _
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.IGuardHookRef")
-class IGuardHookRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IGuardHookRef(
+    _constructs_77d1e7e8.IConstruct,
+    IEnvironmentAware,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a GuardHook.
 
     :stability: experimental
@@ -16865,6 +16878,7 @@ class IGuardHookRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol)
 
 class _IGuardHookRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(IEnvironmentAware), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a GuardHook.
 
@@ -16889,6 +16903,7 @@ typing.cast(typing.Any, IGuardHookRef).__jsii_proxy_class__ = lambda : _IGuardHo
 @jsii.interface(jsii_type="aws-cdk-lib.IHookDefaultVersionRef")
 class IHookDefaultVersionRef(
     _constructs_77d1e7e8.IConstruct,
+    IEnvironmentAware,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a HookDefaultVersion.
@@ -16908,6 +16923,7 @@ class IHookDefaultVersionRef(
 
 class _IHookDefaultVersionRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(IEnvironmentAware), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a HookDefaultVersion.
 
@@ -16930,7 +16946,11 @@ typing.cast(typing.Any, IHookDefaultVersionRef).__jsii_proxy_class__ = lambda : 
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.IHookTypeConfigRef")
-class IHookTypeConfigRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IHookTypeConfigRef(
+    _constructs_77d1e7e8.IConstruct,
+    IEnvironmentAware,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a HookTypeConfig.
 
     :stability: experimental
@@ -16948,6 +16968,7 @@ class IHookTypeConfigRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Prot
 
 class _IHookTypeConfigRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(IEnvironmentAware), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a HookTypeConfig.
 
@@ -16970,7 +16991,11 @@ typing.cast(typing.Any, IHookTypeConfigRef).__jsii_proxy_class__ = lambda : _IHo
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.IHookVersionRef")
-class IHookVersionRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IHookVersionRef(
+    _constructs_77d1e7e8.IConstruct,
+    IEnvironmentAware,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a HookVersion.
 
     :stability: experimental
@@ -16988,6 +17013,7 @@ class IHookVersionRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protoco
 
 class _IHookVersionRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(IEnvironmentAware), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a HookVersion.
 
@@ -17043,7 +17069,11 @@ typing.cast(typing.Any, IInspectable).__jsii_proxy_class__ = lambda : _IInspecta
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.ILambdaHookRef")
-class ILambdaHookRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class ILambdaHookRef(
+    _constructs_77d1e7e8.IConstruct,
+    IEnvironmentAware,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a LambdaHook.
 
     :stability: experimental
@@ -17061,6 +17091,7 @@ class ILambdaHookRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol
 
 class _ILambdaHookRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(IEnvironmentAware), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a LambdaHook.
 
@@ -17242,7 +17273,11 @@ typing.cast(typing.Any, ILocalBundling).__jsii_proxy_class__ = lambda : _ILocalB
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.IMacroRef")
-class IMacroRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IMacroRef(
+    _constructs_77d1e7e8.IConstruct,
+    IEnvironmentAware,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Macro.
 
     :stability: experimental
@@ -17260,6 +17295,7 @@ class IMacroRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IMacroRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(IEnvironmentAware), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Macro.
 
@@ -17284,6 +17320,7 @@ typing.cast(typing.Any, IMacroRef).__jsii_proxy_class__ = lambda : _IMacroRefPro
 @jsii.interface(jsii_type="aws-cdk-lib.IModuleDefaultVersionRef")
 class IModuleDefaultVersionRef(
     _constructs_77d1e7e8.IConstruct,
+    IEnvironmentAware,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a ModuleDefaultVersion.
@@ -17303,6 +17340,7 @@ class IModuleDefaultVersionRef(
 
 class _IModuleDefaultVersionRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(IEnvironmentAware), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a ModuleDefaultVersion.
 
@@ -17325,7 +17363,11 @@ typing.cast(typing.Any, IModuleDefaultVersionRef).__jsii_proxy_class__ = lambda 
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.IModuleVersionRef")
-class IModuleVersionRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IModuleVersionRef(
+    _constructs_77d1e7e8.IConstruct,
+    IEnvironmentAware,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a ModuleVersion.
 
     :stability: experimental
@@ -17343,6 +17385,7 @@ class IModuleVersionRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Proto
 
 class _IModuleVersionRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(IEnvironmentAware), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a ModuleVersion.
 
@@ -17674,6 +17717,7 @@ typing.cast(typing.Any, IPropertyInjector).__jsii_proxy_class__ = lambda : _IPro
 @jsii.interface(jsii_type="aws-cdk-lib.IPublicTypeVersionRef")
 class IPublicTypeVersionRef(
     _constructs_77d1e7e8.IConstruct,
+    IEnvironmentAware,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a PublicTypeVersion.
@@ -17693,6 +17737,7 @@ class IPublicTypeVersionRef(
 
 class _IPublicTypeVersionRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(IEnvironmentAware), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a PublicTypeVersion.
 
@@ -17715,7 +17760,11 @@ typing.cast(typing.Any, IPublicTypeVersionRef).__jsii_proxy_class__ = lambda : _
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.IPublisherRef")
-class IPublisherRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IPublisherRef(
+    _constructs_77d1e7e8.IConstruct,
+    IEnvironmentAware,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Publisher.
 
     :stability: experimental
@@ -17733,6 +17782,7 @@ class IPublisherRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol)
 
 class _IPublisherRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(IEnvironmentAware), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Publisher.
 
@@ -17950,22 +18000,12 @@ typing.cast(typing.Any, IResolveContext).__jsii_proxy_class__ = lambda : _IResol
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.IResource")
-class IResource(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
-    '''Interface for the Resource construct.'''
-
-    @builtins.property
-    @jsii.member(jsii_name="env")
-    def env(self) -> "ResourceEnvironment":
-        '''The environment this resource belongs to.
-
-        For resources that are created and managed by the CDK
-        (generally, those created by creating new class instances like Role, Bucket, etc.),
-        this is always the same as the environment of the stack they belong to;
-        however, for imported resources
-        (those obtained from static methods like fromRoleArn, fromBucketName, etc.),
-        that might be different than the stack they were imported into.
-        '''
-        ...
+class IResource(
+    _constructs_77d1e7e8.IConstruct,
+    IEnvironmentAware,
+    typing_extensions.Protocol,
+):
+    '''Interface for L2 Resource constructs.'''
 
     @builtins.property
     @jsii.member(jsii_name="stack")
@@ -17992,24 +18032,11 @@ class IResource(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IResourceProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(IEnvironmentAware), # type: ignore[misc]
 ):
-    '''Interface for the Resource construct.'''
+    '''Interface for L2 Resource constructs.'''
 
     __jsii_type__: typing.ClassVar[str] = "aws-cdk-lib.IResource"
-
-    @builtins.property
-    @jsii.member(jsii_name="env")
-    def env(self) -> "ResourceEnvironment":
-        '''The environment this resource belongs to.
-
-        For resources that are created and managed by the CDK
-        (generally, those created by creating new class instances like Role, Bucket, etc.),
-        this is always the same as the environment of the stack they belong to;
-        however, for imported resources
-        (those obtained from static methods like fromRoleArn, fromBucketName, etc.),
-        that might be different than the stack they were imported into.
-        '''
-        return typing.cast("ResourceEnvironment", jsii.get(self, "env"))
 
     @builtins.property
     @jsii.member(jsii_name="stack")
@@ -18043,6 +18070,7 @@ typing.cast(typing.Any, IResource).__jsii_proxy_class__ = lambda : _IResourcePro
 @jsii.interface(jsii_type="aws-cdk-lib.IResourceDefaultVersionRef")
 class IResourceDefaultVersionRef(
     _constructs_77d1e7e8.IConstruct,
+    IEnvironmentAware,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a ResourceDefaultVersion.
@@ -18062,6 +18090,7 @@ class IResourceDefaultVersionRef(
 
 class _IResourceDefaultVersionRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(IEnvironmentAware), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a ResourceDefaultVersion.
 
@@ -18084,7 +18113,11 @@ typing.cast(typing.Any, IResourceDefaultVersionRef).__jsii_proxy_class__ = lambd
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.IResourceVersionRef")
-class IResourceVersionRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IResourceVersionRef(
+    _constructs_77d1e7e8.IConstruct,
+    IEnvironmentAware,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a ResourceVersion.
 
     :stability: experimental
@@ -18102,6 +18135,7 @@ class IResourceVersionRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Pro
 
 class _IResourceVersionRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(IEnvironmentAware), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a ResourceVersion.
 
@@ -18220,7 +18254,11 @@ typing.cast(typing.Any, IStableStringProducer).__jsii_proxy_class__ = lambda : _
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.IStackRef")
-class IStackRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IStackRef(
+    _constructs_77d1e7e8.IConstruct,
+    IEnvironmentAware,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Stack.
 
     :stability: experimental
@@ -18238,6 +18276,7 @@ class IStackRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IStackRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(IEnvironmentAware), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Stack.
 
@@ -18260,7 +18299,11 @@ typing.cast(typing.Any, IStackRef).__jsii_proxy_class__ = lambda : _IStackRefPro
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.IStackSetRef")
-class IStackSetRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IStackSetRef(
+    _constructs_77d1e7e8.IConstruct,
+    IEnvironmentAware,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a StackSet.
 
     :stability: experimental
@@ -18278,6 +18321,7 @@ class IStackSetRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IStackSetRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(IEnvironmentAware), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a StackSet.
 
@@ -19022,7 +19066,11 @@ typing.cast(typing.Any, ITokenResolver).__jsii_proxy_class__ = lambda : _ITokenR
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.ITypeActivationRef")
-class ITypeActivationRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class ITypeActivationRef(
+    _constructs_77d1e7e8.IConstruct,
+    IEnvironmentAware,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a TypeActivation.
 
     :stability: experimental
@@ -19040,6 +19088,7 @@ class ITypeActivationRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Prot
 
 class _ITypeActivationRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(IEnvironmentAware), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a TypeActivation.
 
@@ -19064,6 +19113,7 @@ typing.cast(typing.Any, ITypeActivationRef).__jsii_proxy_class__ = lambda : _ITy
 @jsii.interface(jsii_type="aws-cdk-lib.IWaitConditionHandleRef")
 class IWaitConditionHandleRef(
     _constructs_77d1e7e8.IConstruct,
+    IEnvironmentAware,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a WaitConditionHandle.
@@ -19083,6 +19133,7 @@ class IWaitConditionHandleRef(
 
 class _IWaitConditionHandleRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(IEnvironmentAware), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a WaitConditionHandle.
 
@@ -19105,7 +19156,11 @@ typing.cast(typing.Any, IWaitConditionHandleRef).__jsii_proxy_class__ = lambda :
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.IWaitConditionRef")
-class IWaitConditionRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IWaitConditionRef(
+    _constructs_77d1e7e8.IConstruct,
+    IEnvironmentAware,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a WaitCondition.
 
     :stability: experimental
@@ -19123,6 +19178,7 @@ class IWaitConditionRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Proto
 
 class _IWaitConditionRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(IEnvironmentAware), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a WaitCondition.
 
@@ -21668,24 +21724,43 @@ class RemovalPolicy(enum.Enum):
        cfn_bucket = bucket.node.find_child("Resource")
        cfn_bucket.apply_removal_policy(RemovalPolicy.DESTROY)
 
-    :exampleMetadata: infused
+    :exampleMetadata: fixture=default infused
 
     Example::
 
-        # my_role: iam.Role
+        bucket = s3.Bucket(self, "memoryBucket",
+            bucket_name="test-memory",
+            removal_policy=cdk.RemovalPolicy.DESTROY,
+            auto_delete_objects=True
+        )
         
-        cr.AwsCustomResource(self, "Customized",
-            role=my_role,  # must be assumable by the `lambda.amazonaws.com` service principal
-            timeout=Duration.minutes(10),  # defaults to 2 minutes
-            memory_size=1025,  # defaults to 512 if installLatestAwsSdk is true
-            log_group=logs.LogGroup(self, "AwsCustomResourceLogs",
-                retention=logs.RetentionDays.ONE_DAY
+        topic = sns.Topic(self, "topic")
+        
+        # Create a custom semantic memory strategy
+        self_managed_strategy = agentcore.MemoryStrategy.using_self_managed(
+            name="selfManagedStrategy",
+            description="self managed memory strategy",
+            historical_context_window_size=5,
+            invocation_configuration=agentcore.InvocationConfiguration(
+                topic=topic,
+                s3_location=s3.Location(
+                    bucket_name=bucket.bucket_name,
+                    object_key="memory/"
+                )
             ),
-            function_name="my-custom-name",  # defaults to a CloudFormation generated name
-            removal_policy=RemovalPolicy.RETAIN,  # defaults to `RemovalPolicy.DESTROY`
-            policy=cr.AwsCustomResourcePolicy.from_sdk_calls(
-                resources=cr.AwsCustomResourcePolicy.ANY_RESOURCE
+            trigger_conditions=agentcore.TriggerConditions(
+                message_based_trigger=1,
+                time_based_trigger=cdk.Duration.seconds(10),
+                token_based_trigger=100
             )
+        )
+        
+        # Create memory with custom strategy
+        memory = agentcore.Memory(self, "MyMemory",
+            memory_name="my-custom-memory",
+            description="Memory with custom strategy",
+            expiration_duration=cdk.Duration.days(90),
+            memory_strategies=[self_managed_strategy]
         )
     '''
 
@@ -22205,7 +22280,7 @@ class Resource(
     metaclass=jsii.JSIIAbstractClass,
     jsii_type="aws-cdk-lib.Resource",
 ):
-    '''A construct which represents an AWS resource.
+    '''An L2 construct which represents an AWS resource.
 
     :exampleMetadata: infused
 
@@ -22371,12 +22446,13 @@ class Resource(
     def env(self) -> "ResourceEnvironment":
         '''The environment this resource belongs to.
 
-        For resources that are created and managed by the CDK
-        (generally, those created by creating new class instances like Role, Bucket, etc.),
-        this is always the same as the environment of the stack they belong to;
-        however, for imported resources
-        (those obtained from static methods like fromRoleArn, fromBucketName, etc.),
-        that might be different than the stack they were imported into.
+        For resources that are created and managed in a Stack (those created by
+        creating new class instances like ``new Role()``, ``new Bucket()``, etc.), this
+        is always the same as the environment of the stack they belong to.
+
+        For referenced resources (those obtained from referencing methods like
+        ``Role.fromRoleArn()``, ``Bucket.fromBucketName()``, etc.), they might be
+        different than the stack they were imported into.
         '''
         return typing.cast("ResourceEnvironment", jsii.get(self, "env"))
 
@@ -22466,10 +22542,10 @@ class ResourceEnvironment:
     def __init__(self, *, account: builtins.str, region: builtins.str) -> None:
         '''Represents the environment a given resource lives in.
 
-        Used as the return value for the ``IResource.env`` property.
+        Used as the return value for the ``IEnvironmentAware.env`` property.
 
-        :param account: The AWS account ID that this resource belongs to. Since this can be a Token (for example, when the account is CloudFormation's AWS::AccountId intrinsic), make sure to use Token.compareStrings() instead of just comparing the values for equality.
-        :param region: The AWS region that this resource belongs to. Since this can be a Token (for example, when the region is CloudFormation's AWS::Region intrinsic), make sure to use Token.compareStrings() instead of just comparing the values for equality.
+        :param account: The AWS Account ID that this resource belongs to. Since this can be a Token (for example, when the account is CloudFormation's ``AWS::AccountId`` intrinsic), make sure to use ``Token.compareStrings()`` instead of comparing the values with direct string equality.
+        :param region: The AWS Region that this resource belongs to. Since this can be a Token (for example, when the region is CloudFormation's ``AWS::Region`` intrinsic), make sure to use ``Token.compareStrings()`` instead of comparing the values with direct string equality.
 
         :exampleMetadata: fixture=_generated
 
@@ -22495,12 +22571,12 @@ class ResourceEnvironment:
 
     @builtins.property
     def account(self) -> builtins.str:
-        '''The AWS account ID that this resource belongs to.
+        '''The AWS Account ID that this resource belongs to.
 
-        Since this can be a Token
-        (for example, when the account is CloudFormation's AWS::AccountId intrinsic),
-        make sure to use Token.compareStrings()
-        instead of just comparing the values for equality.
+        Since this can be a Token (for example, when the account is
+        CloudFormation's ``AWS::AccountId`` intrinsic), make sure to use
+        ``Token.compareStrings()`` instead of comparing the values with direct
+        string equality.
         '''
         result = self._values.get("account")
         assert result is not None, "Required property 'account' is missing"
@@ -22508,12 +22584,11 @@ class ResourceEnvironment:
 
     @builtins.property
     def region(self) -> builtins.str:
-        '''The AWS region that this resource belongs to.
+        '''The AWS Region that this resource belongs to.
 
-        Since this can be a Token
-        (for example, when the region is CloudFormation's AWS::Region intrinsic),
-        make sure to use Token.compareStrings()
-        instead of just comparing the values for equality.
+        Since this can be a Token (for example, when the region is CloudFormation's
+        ``AWS::Region`` intrinsic), make sure to use ``Token.compareStrings()`` instead
+        of comparing the values with direct string equality.
         '''
         result = self._values.get("region")
         assert result is not None, "Required property 'region' is missing"
@@ -31322,139 +31397,6 @@ class CfnCodeDeployBlueGreenHook(
         jsii.set(self, "trafficRoutingConfig", value) # pyright: ignore[reportArgumentType]
 
 
-@jsii.implements(IInspectable, ICustomResourceRef)
-class CfnCustomResource(
-    CfnResource,
-    metaclass=jsii.JSIIMeta,
-    jsii_type="aws-cdk-lib.CfnCustomResource",
-):
-    '''The ``AWS::CloudFormation::CustomResource`` resource creates a custom resource.
-
-    Custom resources provide a way for you to write custom provisioning logic into your CloudFormation templates and have CloudFormation run it anytime you create, update (if you changed the custom resource), or delete a stack.
-
-    For more information, see `Create custom provisioning logic with custom resources <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/template-custom-resources.html>`_ in the *AWS CloudFormation User Guide* .
-    .. epigraph::
-
-       If you use AWS PrivateLink , custom resources in the VPC must have access to CloudFormation -specific Amazon S3 buckets. Custom resources must send responses to a presigned Amazon S3 URL. If they can't send responses to Amazon S3 , CloudFormation won't receive a response and the stack operation fails. For more information, see `Access CloudFormation using an interface endpoint ( AWS PrivateLink ) <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/vpc-interface-endpoints.html>`_ in the *AWS CloudFormation User Guide* .
-
-    :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudformation-customresource.html
-    :cloudformationResource: AWS::CloudFormation::CustomResource
-    :exampleMetadata: fixture=_generated
-
-    Example::
-
-        # The code below shows an example of how to instantiate this type.
-        # The values are placeholders you should change.
-        import aws_cdk as cdk
-        
-        cfn_custom_resource = cdk.CfnCustomResource(self, "MyCfnCustomResource",
-            service_token="serviceToken",
-        
-            # the properties below are optional
-            service_timeout=123
-        )
-    '''
-
-    def __init__(
-        self,
-        scope: _constructs_77d1e7e8.Construct,
-        id: builtins.str,
-        *,
-        service_token: builtins.str,
-        service_timeout: typing.Optional[jsii.Number] = None,
-    ) -> None:
-        '''
-        :param scope: Scope in which this resource is defined.
-        :param id: Construct identifier for this resource (unique in its scope).
-        :param service_token: The service token, such as an Amazon SNS topic ARN or Lambda function ARN. The service token must be from the same Region as the stack. Updates aren't supported.
-        :param service_timeout: The maximum time, in seconds, that can elapse before a custom resource operation times out. The value must be an integer from 1 to 3600. The default value is 3600 seconds (1 hour).
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__16a2a0525f82ea7b4a1beeb12b88b2db09686739df818b756288418b59219b7c)
-            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
-            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
-        props = CfnCustomResourceProps(
-            service_token=service_token, service_timeout=service_timeout
-        )
-
-        jsii.create(self.__class__, self, [scope, id, props])
-
-    @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: TreeInspector) -> None:
-        '''Examines the CloudFormation resource and discloses attributes.
-
-        :param inspector: tree inspector to collect and process attributes.
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__c62719bced90b78066c472e5d8f314af507e96e7741d77a6a87a12994ae8e21b)
-            check_type(argname="argument inspector", value=inspector, expected_type=type_hints["inspector"])
-        return typing.cast(None, jsii.invoke(self, "inspect", [inspector]))
-
-    @jsii.member(jsii_name="renderProperties")
-    def _render_properties(
-        self,
-        props: typing.Mapping[builtins.str, typing.Any],
-    ) -> typing.Mapping[builtins.str, typing.Any]:
-        '''
-        :param props: -
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__1780156bb1c157cc6d1e5e833d4392539800c9072d24a1d621c2792657265322)
-            check_type(argname="argument props", value=props, expected_type=type_hints["props"])
-        return typing.cast(typing.Mapping[builtins.str, typing.Any], jsii.invoke(self, "renderProperties", [props]))
-
-    @jsii.python.classproperty
-    @jsii.member(jsii_name="CFN_RESOURCE_TYPE_NAME")
-    def CFN_RESOURCE_TYPE_NAME(cls) -> builtins.str:
-        '''The CloudFormation resource type name for this resource class.'''
-        return typing.cast(builtins.str, jsii.sget(cls, "CFN_RESOURCE_TYPE_NAME"))
-
-    @builtins.property
-    @jsii.member(jsii_name="attrId")
-    def attr_id(self) -> builtins.str:
-        '''
-        :cloudformationAttribute: Id
-        '''
-        return typing.cast(builtins.str, jsii.get(self, "attrId"))
-
-    @builtins.property
-    @jsii.member(jsii_name="cfnProperties")
-    def _cfn_properties(self) -> typing.Mapping[builtins.str, typing.Any]:
-        return typing.cast(typing.Mapping[builtins.str, typing.Any], jsii.get(self, "cfnProperties"))
-
-    @builtins.property
-    @jsii.member(jsii_name="customResourceRef")
-    def custom_resource_ref(self) -> CustomResourceReference:
-        '''A reference to a CustomResource resource.'''
-        return typing.cast(CustomResourceReference, jsii.get(self, "customResourceRef"))
-
-    @builtins.property
-    @jsii.member(jsii_name="serviceToken")
-    def service_token(self) -> builtins.str:
-        '''The service token, such as an Amazon SNS topic ARN or Lambda function ARN.'''
-        return typing.cast(builtins.str, jsii.get(self, "serviceToken"))
-
-    @service_token.setter
-    def service_token(self, value: builtins.str) -> None:
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__3be70abbbdb8420844283a98dccbfef7ea4227506b14273ee3a1591ad5361837)
-            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
-        jsii.set(self, "serviceToken", value) # pyright: ignore[reportArgumentType]
-
-    @builtins.property
-    @jsii.member(jsii_name="serviceTimeout")
-    def service_timeout(self) -> typing.Optional[jsii.Number]:
-        '''The maximum time, in seconds, that can elapse before a custom resource operation times out.'''
-        return typing.cast(typing.Optional[jsii.Number], jsii.get(self, "serviceTimeout"))
-
-    @service_timeout.setter
-    def service_timeout(self, value: typing.Optional[jsii.Number]) -> None:
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__ef8d85097c83e56b7252e81e816994d1a6952dd056336dfe16d4feffa1e1e091)
-            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
-        jsii.set(self, "serviceTimeout", value) # pyright: ignore[reportArgumentType]
-
-
 class CfnDynamicReference(
     Intrinsic,
     metaclass=jsii.JSIIMeta,
@@ -38299,6 +38241,51 @@ class _ICfnRuleConditionExpressionProxy(
 typing.cast(typing.Any, ICfnRuleConditionExpression).__jsii_proxy_class__ = lambda : _ICfnRuleConditionExpressionProxy
 
 
+@jsii.interface(jsii_type="aws-cdk-lib.ICustomResourceRef")
+class ICustomResourceRef(
+    _constructs_77d1e7e8.IConstruct,
+    IEnvironmentAware,
+    typing_extensions.Protocol,
+):
+    '''(experimental) Indicates that this resource can be referenced as a CustomResource.
+
+    :stability: experimental
+    '''
+
+    @builtins.property
+    @jsii.member(jsii_name="customResourceRef")
+    def custom_resource_ref(self) -> CustomResourceReference:
+        '''(experimental) A reference to a CustomResource resource.
+
+        :stability: experimental
+        '''
+        ...
+
+
+class _ICustomResourceRefProxy(
+    jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(IEnvironmentAware), # type: ignore[misc]
+):
+    '''(experimental) Indicates that this resource can be referenced as a CustomResource.
+
+    :stability: experimental
+    '''
+
+    __jsii_type__: typing.ClassVar[str] = "aws-cdk-lib.ICustomResourceRef"
+
+    @builtins.property
+    @jsii.member(jsii_name="customResourceRef")
+    def custom_resource_ref(self) -> CustomResourceReference:
+        '''(experimental) A reference to a CustomResource resource.
+
+        :stability: experimental
+        '''
+        return typing.cast(CustomResourceReference, jsii.get(self, "customResourceRef"))
+
+# Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
+typing.cast(typing.Any, ICustomResourceRef).__jsii_proxy_class__ = lambda : _ICustomResourceRefProxy
+
+
 @jsii.interface(jsii_type="aws-cdk-lib.IReusableStackSynthesizer")
 class IReusableStackSynthesizer(IStackSynthesizer, typing_extensions.Protocol):
     '''Interface for Stack Synthesizers that can be used for more than one stack.
@@ -38925,6 +38912,139 @@ class CfnCondition(
             type_hints = typing.get_type_hints(_typecheckingstub__520eaac3c160a5dbd339868eadb4b6e1430b0196bd533ef619b6b3352bca706c)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
         jsii.set(self, "expression", value) # pyright: ignore[reportArgumentType]
+
+
+@jsii.implements(IInspectable, ICustomResourceRef)
+class CfnCustomResource(
+    CfnResource,
+    metaclass=jsii.JSIIMeta,
+    jsii_type="aws-cdk-lib.CfnCustomResource",
+):
+    '''The ``AWS::CloudFormation::CustomResource`` resource creates a custom resource.
+
+    Custom resources provide a way for you to write custom provisioning logic into your CloudFormation templates and have CloudFormation run it anytime you create, update (if you changed the custom resource), or delete a stack.
+
+    For more information, see `Create custom provisioning logic with custom resources <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/template-custom-resources.html>`_ in the *AWS CloudFormation User Guide* .
+    .. epigraph::
+
+       If you use AWS PrivateLink , custom resources in the VPC must have access to CloudFormation -specific Amazon S3 buckets. Custom resources must send responses to a presigned Amazon S3 URL. If they can't send responses to Amazon S3 , CloudFormation won't receive a response and the stack operation fails. For more information, see `Access CloudFormation using an interface endpoint ( AWS PrivateLink ) <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/vpc-interface-endpoints.html>`_ in the *AWS CloudFormation User Guide* .
+
+    :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudformation-customresource.html
+    :cloudformationResource: AWS::CloudFormation::CustomResource
+    :exampleMetadata: fixture=_generated
+
+    Example::
+
+        # The code below shows an example of how to instantiate this type.
+        # The values are placeholders you should change.
+        import aws_cdk as cdk
+        
+        cfn_custom_resource = cdk.CfnCustomResource(self, "MyCfnCustomResource",
+            service_token="serviceToken",
+        
+            # the properties below are optional
+            service_timeout=123
+        )
+    '''
+
+    def __init__(
+        self,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        *,
+        service_token: builtins.str,
+        service_timeout: typing.Optional[jsii.Number] = None,
+    ) -> None:
+        '''
+        :param scope: Scope in which this resource is defined.
+        :param id: Construct identifier for this resource (unique in its scope).
+        :param service_token: The service token, such as an Amazon SNS topic ARN or Lambda function ARN. The service token must be from the same Region as the stack. Updates aren't supported.
+        :param service_timeout: The maximum time, in seconds, that can elapse before a custom resource operation times out. The value must be an integer from 1 to 3600. The default value is 3600 seconds (1 hour).
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__16a2a0525f82ea7b4a1beeb12b88b2db09686739df818b756288418b59219b7c)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+        props = CfnCustomResourceProps(
+            service_token=service_token, service_timeout=service_timeout
+        )
+
+        jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="inspect")
+    def inspect(self, inspector: TreeInspector) -> None:
+        '''Examines the CloudFormation resource and discloses attributes.
+
+        :param inspector: tree inspector to collect and process attributes.
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__c62719bced90b78066c472e5d8f314af507e96e7741d77a6a87a12994ae8e21b)
+            check_type(argname="argument inspector", value=inspector, expected_type=type_hints["inspector"])
+        return typing.cast(None, jsii.invoke(self, "inspect", [inspector]))
+
+    @jsii.member(jsii_name="renderProperties")
+    def _render_properties(
+        self,
+        props: typing.Mapping[builtins.str, typing.Any],
+    ) -> typing.Mapping[builtins.str, typing.Any]:
+        '''
+        :param props: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__1780156bb1c157cc6d1e5e833d4392539800c9072d24a1d621c2792657265322)
+            check_type(argname="argument props", value=props, expected_type=type_hints["props"])
+        return typing.cast(typing.Mapping[builtins.str, typing.Any], jsii.invoke(self, "renderProperties", [props]))
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="CFN_RESOURCE_TYPE_NAME")
+    def CFN_RESOURCE_TYPE_NAME(cls) -> builtins.str:
+        '''The CloudFormation resource type name for this resource class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "CFN_RESOURCE_TYPE_NAME"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrId")
+    def attr_id(self) -> builtins.str:
+        '''
+        :cloudformationAttribute: Id
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrId"))
+
+    @builtins.property
+    @jsii.member(jsii_name="cfnProperties")
+    def _cfn_properties(self) -> typing.Mapping[builtins.str, typing.Any]:
+        return typing.cast(typing.Mapping[builtins.str, typing.Any], jsii.get(self, "cfnProperties"))
+
+    @builtins.property
+    @jsii.member(jsii_name="customResourceRef")
+    def custom_resource_ref(self) -> CustomResourceReference:
+        '''A reference to a CustomResource resource.'''
+        return typing.cast(CustomResourceReference, jsii.get(self, "customResourceRef"))
+
+    @builtins.property
+    @jsii.member(jsii_name="serviceToken")
+    def service_token(self) -> builtins.str:
+        '''The service token, such as an Amazon SNS topic ARN or Lambda function ARN.'''
+        return typing.cast(builtins.str, jsii.get(self, "serviceToken"))
+
+    @service_token.setter
+    def service_token(self, value: builtins.str) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__3be70abbbdb8420844283a98dccbfef7ea4227506b14273ee3a1591ad5361837)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "serviceToken", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="serviceTimeout")
+    def service_timeout(self) -> typing.Optional[jsii.Number]:
+        '''The maximum time, in seconds, that can elapse before a custom resource operation times out.'''
+        return typing.cast(typing.Optional[jsii.Number], jsii.get(self, "serviceTimeout"))
+
+    @service_timeout.setter
+    def service_timeout(self, value: typing.Optional[jsii.Number]) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__ef8d85097c83e56b7252e81e816994d1a6952dd056336dfe16d4feffa1e1e091)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "serviceTimeout", value) # pyright: ignore[reportArgumentType]
 
 
 @jsii.implements(IReusableStackSynthesizer, IBoundStackSynthesizer)
@@ -39877,6 +39997,7 @@ __all__ = [
     "ICfnResourceOptions",
     "ICfnRuleConditionExpression",
     "ICustomResourceRef",
+    "IEnvironmentAware",
     "IFragmentConcatenator",
     "IGuardHookRef",
     "IHookDefaultVersionRef",
@@ -44030,40 +44151,6 @@ def _typecheckingstub__c78641539d02a4305c5aded1d4cfdeae4440529ff8644bacc5d0fbf08
     """Type checking stubs"""
     pass
 
-def _typecheckingstub__16a2a0525f82ea7b4a1beeb12b88b2db09686739df818b756288418b59219b7c(
-    scope: _constructs_77d1e7e8.Construct,
-    id: builtins.str,
-    *,
-    service_token: builtins.str,
-    service_timeout: typing.Optional[jsii.Number] = None,
-) -> None:
-    """Type checking stubs"""
-    pass
-
-def _typecheckingstub__c62719bced90b78066c472e5d8f314af507e96e7741d77a6a87a12994ae8e21b(
-    inspector: TreeInspector,
-) -> None:
-    """Type checking stubs"""
-    pass
-
-def _typecheckingstub__1780156bb1c157cc6d1e5e833d4392539800c9072d24a1d621c2792657265322(
-    props: typing.Mapping[builtins.str, typing.Any],
-) -> None:
-    """Type checking stubs"""
-    pass
-
-def _typecheckingstub__3be70abbbdb8420844283a98dccbfef7ea4227506b14273ee3a1591ad5361837(
-    value: builtins.str,
-) -> None:
-    """Type checking stubs"""
-    pass
-
-def _typecheckingstub__ef8d85097c83e56b7252e81e816994d1a6952dd056336dfe16d4feffa1e1e091(
-    value: typing.Optional[jsii.Number],
-) -> None:
-    """Type checking stubs"""
-    pass
-
 def _typecheckingstub__f4382454e1b2012ad94b6695331fb17ad1e5c1efffcba7978396a05ac7349259(
     service: CfnDynamicReferenceService,
     key: builtins.str,
@@ -45507,6 +45594,40 @@ def _typecheckingstub__520eaac3c160a5dbd339868eadb4b6e1430b0196bd533ef619b6b3352
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__16a2a0525f82ea7b4a1beeb12b88b2db09686739df818b756288418b59219b7c(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    *,
+    service_token: builtins.str,
+    service_timeout: typing.Optional[jsii.Number] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__c62719bced90b78066c472e5d8f314af507e96e7741d77a6a87a12994ae8e21b(
+    inspector: TreeInspector,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__1780156bb1c157cc6d1e5e833d4392539800c9072d24a1d621c2792657265322(
+    props: typing.Mapping[builtins.str, typing.Any],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__3be70abbbdb8420844283a98dccbfef7ea4227506b14273ee3a1591ad5361837(
+    value: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__ef8d85097c83e56b7252e81e816994d1a6952dd056336dfe16d4feffa1e1e091(
+    value: typing.Optional[jsii.Number],
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__6daefc49ad8b7f708e6b6b382f712d8283f10baf958b38d9cd47452979bbaa4a(
     stack: Stack,
 ) -> None:
@@ -45556,5 +45677,5 @@ def _typecheckingstub__47e469f0015340593bcbbe8474c853bc170a6dfd3bcb31e6795042408
     """Type checking stubs"""
     pass
 
-for cls in [IAnyProducer, IAspect, IAsset, IBoundStackSynthesizer, ICfnConditionExpression, ICfnResourceOptions, ICfnRuleConditionExpression, ICustomResourceRef, IFragmentConcatenator, IGuardHookRef, IHookDefaultVersionRef, IHookTypeConfigRef, IHookVersionRef, IInspectable, ILambdaHookRef, IListProducer, ILocalBundling, IMacroRef, IModuleDefaultVersionRef, IModuleVersionRef, INumberProducer, IPolicyValidationContextBeta1, IPolicyValidationPluginBeta1, IPostProcessor, IPropertyInjector, IPublicTypeVersionRef, IPublisherRef, IResolvable, IResolveContext, IResource, IResourceDefaultVersionRef, IResourceVersionRef, IReusableStackSynthesizer, IStableAnyProducer, IStableListProducer, IStableNumberProducer, IStableStringProducer, IStackRef, IStackSetRef, IStackSynthesizer, IStringProducer, ISynthesisSession, ITaggable, ITaggableV2, ITemplateOptions, ITokenMapper, ITokenResolver, ITypeActivationRef, IWaitConditionHandleRef, IWaitConditionRef]:
+for cls in [IAnyProducer, IAspect, IAsset, IBoundStackSynthesizer, ICfnConditionExpression, ICfnResourceOptions, ICfnRuleConditionExpression, ICustomResourceRef, IEnvironmentAware, IFragmentConcatenator, IGuardHookRef, IHookDefaultVersionRef, IHookTypeConfigRef, IHookVersionRef, IInspectable, ILambdaHookRef, IListProducer, ILocalBundling, IMacroRef, IModuleDefaultVersionRef, IModuleVersionRef, INumberProducer, IPolicyValidationContextBeta1, IPolicyValidationPluginBeta1, IPostProcessor, IPropertyInjector, IPublicTypeVersionRef, IPublisherRef, IResolvable, IResolveContext, IResource, IResourceDefaultVersionRef, IResourceVersionRef, IReusableStackSynthesizer, IStableAnyProducer, IStableListProducer, IStableNumberProducer, IStableStringProducer, IStackRef, IStackSetRef, IStackSynthesizer, IStringProducer, ISynthesisSession, ITaggable, ITaggableV2, ITemplateOptions, ITokenMapper, ITokenResolver, ITypeActivationRef, IWaitConditionHandleRef, IWaitConditionRef]:
     typing.cast(typing.Any, cls).__protocol_attrs__ = typing.cast(typing.Any, cls).__protocol_attrs__ - set(['__jsii_proxy_class__', '__jsii_type__'])

@@ -61,6 +61,7 @@ import constructs as _constructs_77d1e7e8
 from .. import (
     CfnResource as _CfnResource_9df397a6,
     CfnTag as _CfnTag_f6864754,
+    IEnvironmentAware as _IEnvironmentAware_a408b00d,
     IInspectable as _IInspectable_c2943556,
     IResolvable as _IResolvable_da3f097b,
     ITaggable as _ITaggable_36806126,
@@ -385,7 +386,11 @@ class GraphReference:
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_detective.IGraphRef")
-class IGraphRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IGraphRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Graph.
 
     :stability: experimental
@@ -403,6 +408,7 @@ class IGraphRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IGraphRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Graph.
 
@@ -425,7 +431,11 @@ typing.cast(typing.Any, IGraphRef).__jsii_proxy_class__ = lambda : _IGraphRefPro
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_detective.IMemberInvitationRef")
-class IMemberInvitationRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IMemberInvitationRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a MemberInvitation.
 
     :stability: experimental
@@ -443,6 +453,7 @@ class IMemberInvitationRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Pr
 
 class _IMemberInvitationRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a MemberInvitation.
 
@@ -467,6 +478,7 @@ typing.cast(typing.Any, IMemberInvitationRef).__jsii_proxy_class__ = lambda : _I
 @jsii.interface(jsii_type="aws-cdk-lib.aws_detective.IOrganizationAdminRef")
 class IOrganizationAdminRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a OrganizationAdmin.
@@ -486,6 +498,7 @@ class IOrganizationAdminRef(
 
 class _IOrganizationAdminRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a OrganizationAdmin.
 

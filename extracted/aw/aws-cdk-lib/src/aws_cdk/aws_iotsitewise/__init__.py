@@ -61,6 +61,7 @@ import constructs as _constructs_77d1e7e8
 from .. import (
     CfnResource as _CfnResource_9df397a6,
     CfnTag as _CfnTag_f6864754,
+    IEnvironmentAware as _IEnvironmentAware_a408b00d,
     IInspectable as _IInspectable_c2943556,
     IResolvable as _IResolvable_da3f097b,
     ITaggable as _ITaggable_36806126,
@@ -2123,7 +2124,11 @@ class GatewayReference:
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_iotsitewise.IAccessPolicyRef")
-class IAccessPolicyRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IAccessPolicyRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a AccessPolicy.
 
     :stability: experimental
@@ -2141,6 +2146,7 @@ class IAccessPolicyRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protoc
 
 class _IAccessPolicyRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a AccessPolicy.
 
@@ -2163,7 +2169,11 @@ typing.cast(typing.Any, IAccessPolicyRef).__jsii_proxy_class__ = lambda : _IAcce
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_iotsitewise.IAssetModelRef")
-class IAssetModelRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IAssetModelRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a AssetModel.
 
     :stability: experimental
@@ -2181,6 +2191,7 @@ class IAssetModelRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol
 
 class _IAssetModelRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a AssetModel.
 
@@ -2203,7 +2214,11 @@ typing.cast(typing.Any, IAssetModelRef).__jsii_proxy_class__ = lambda : _IAssetM
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_iotsitewise.IAssetRef")
-class IAssetRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IAssetRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Asset.
 
     :stability: experimental
@@ -2221,6 +2236,7 @@ class IAssetRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IAssetRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Asset.
 
@@ -2243,7 +2259,11 @@ typing.cast(typing.Any, IAssetRef).__jsii_proxy_class__ = lambda : _IAssetRefPro
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_iotsitewise.IComputationModelRef")
-class IComputationModelRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IComputationModelRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a ComputationModel.
 
     :stability: experimental
@@ -2261,6 +2281,7 @@ class IComputationModelRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Pr
 
 class _IComputationModelRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a ComputationModel.
 
@@ -2283,7 +2304,11 @@ typing.cast(typing.Any, IComputationModelRef).__jsii_proxy_class__ = lambda : _I
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_iotsitewise.IDashboardRef")
-class IDashboardRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IDashboardRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Dashboard.
 
     :stability: experimental
@@ -2301,6 +2326,7 @@ class IDashboardRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol)
 
 class _IDashboardRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Dashboard.
 
@@ -2323,7 +2349,11 @@ typing.cast(typing.Any, IDashboardRef).__jsii_proxy_class__ = lambda : _IDashboa
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_iotsitewise.IDatasetRef")
-class IDatasetRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IDatasetRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Dataset.
 
     :stability: experimental
@@ -2341,6 +2371,7 @@ class IDatasetRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IDatasetRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Dataset.
 
@@ -2363,7 +2394,11 @@ typing.cast(typing.Any, IDatasetRef).__jsii_proxy_class__ = lambda : _IDatasetRe
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_iotsitewise.IGatewayRef")
-class IGatewayRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IGatewayRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Gateway.
 
     :stability: experimental
@@ -2381,6 +2416,7 @@ class IGatewayRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IGatewayRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Gateway.
 
@@ -2403,7 +2439,11 @@ typing.cast(typing.Any, IGatewayRef).__jsii_proxy_class__ = lambda : _IGatewayRe
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_iotsitewise.IPortalRef")
-class IPortalRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IPortalRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Portal.
 
     :stability: experimental
@@ -2421,6 +2461,7 @@ class IPortalRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IPortalRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Portal.
 
@@ -2443,7 +2484,11 @@ typing.cast(typing.Any, IPortalRef).__jsii_proxy_class__ = lambda : _IPortalRefP
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_iotsitewise.IProjectRef")
-class IProjectRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IProjectRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Project.
 
     :stability: experimental
@@ -2461,6 +2506,7 @@ class IProjectRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IProjectRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Project.
 

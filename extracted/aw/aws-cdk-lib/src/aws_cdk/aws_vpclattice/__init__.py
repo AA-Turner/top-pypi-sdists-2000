@@ -61,6 +61,7 @@ import constructs as _constructs_77d1e7e8
 from .. import (
     CfnResource as _CfnResource_9df397a6,
     CfnTag as _CfnTag_f6864754,
+    IEnvironmentAware as _IEnvironmentAware_a408b00d,
     IInspectable as _IInspectable_c2943556,
     IResolvable as _IResolvable_da3f097b,
     ITaggable as _ITaggable_36806126,
@@ -1949,6 +1950,7 @@ class CfnTargetGroupProps:
 @jsii.interface(jsii_type="aws-cdk-lib.aws_vpclattice.IAccessLogSubscriptionRef")
 class IAccessLogSubscriptionRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a AccessLogSubscription.
@@ -1968,6 +1970,7 @@ class IAccessLogSubscriptionRef(
 
 class _IAccessLogSubscriptionRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a AccessLogSubscription.
 
@@ -1990,7 +1993,11 @@ typing.cast(typing.Any, IAccessLogSubscriptionRef).__jsii_proxy_class__ = lambda
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_vpclattice.IAuthPolicyRef")
-class IAuthPolicyRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IAuthPolicyRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a AuthPolicy.
 
     :stability: experimental
@@ -2008,6 +2015,7 @@ class IAuthPolicyRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol
 
 class _IAuthPolicyRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a AuthPolicy.
 
@@ -2030,7 +2038,11 @@ typing.cast(typing.Any, IAuthPolicyRef).__jsii_proxy_class__ = lambda : _IAuthPo
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_vpclattice.IListenerRef")
-class IListenerRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IListenerRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Listener.
 
     :stability: experimental
@@ -2048,6 +2060,7 @@ class IListenerRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IListenerRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Listener.
 
@@ -2072,6 +2085,7 @@ typing.cast(typing.Any, IListenerRef).__jsii_proxy_class__ = lambda : _IListener
 @jsii.interface(jsii_type="aws-cdk-lib.aws_vpclattice.IResourceConfigurationRef")
 class IResourceConfigurationRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a ResourceConfiguration.
@@ -2091,6 +2105,7 @@ class IResourceConfigurationRef(
 
 class _IResourceConfigurationRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a ResourceConfiguration.
 
@@ -2113,7 +2128,11 @@ typing.cast(typing.Any, IResourceConfigurationRef).__jsii_proxy_class__ = lambda
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_vpclattice.IResourceGatewayRef")
-class IResourceGatewayRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IResourceGatewayRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a ResourceGateway.
 
     :stability: experimental
@@ -2131,6 +2150,7 @@ class IResourceGatewayRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Pro
 
 class _IResourceGatewayRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a ResourceGateway.
 
@@ -2153,7 +2173,11 @@ typing.cast(typing.Any, IResourceGatewayRef).__jsii_proxy_class__ = lambda : _IR
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_vpclattice.IResourcePolicyRef")
-class IResourcePolicyRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IResourcePolicyRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a ResourcePolicy.
 
     :stability: experimental
@@ -2171,6 +2195,7 @@ class IResourcePolicyRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Prot
 
 class _IResourcePolicyRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a ResourcePolicy.
 
@@ -2193,7 +2218,11 @@ typing.cast(typing.Any, IResourcePolicyRef).__jsii_proxy_class__ = lambda : _IRe
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_vpclattice.IRuleRef")
-class IRuleRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IRuleRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Rule.
 
     :stability: experimental
@@ -2211,6 +2240,7 @@ class IRuleRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IRuleRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Rule.
 
@@ -2233,7 +2263,11 @@ typing.cast(typing.Any, IRuleRef).__jsii_proxy_class__ = lambda : _IRuleRefProxy
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_vpclattice.IServiceNetworkRef")
-class IServiceNetworkRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IServiceNetworkRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a ServiceNetwork.
 
     :stability: experimental
@@ -2251,6 +2285,7 @@ class IServiceNetworkRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Prot
 
 class _IServiceNetworkRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a ServiceNetwork.
 
@@ -2277,6 +2312,7 @@ typing.cast(typing.Any, IServiceNetworkRef).__jsii_proxy_class__ = lambda : _ISe
 )
 class IServiceNetworkResourceAssociationRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a ServiceNetworkResourceAssociation.
@@ -2298,6 +2334,7 @@ class IServiceNetworkResourceAssociationRef(
 
 class _IServiceNetworkResourceAssociationRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a ServiceNetworkResourceAssociation.
 
@@ -2326,6 +2363,7 @@ typing.cast(typing.Any, IServiceNetworkResourceAssociationRef).__jsii_proxy_clas
 )
 class IServiceNetworkServiceAssociationRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a ServiceNetworkServiceAssociation.
@@ -2347,6 +2385,7 @@ class IServiceNetworkServiceAssociationRef(
 
 class _IServiceNetworkServiceAssociationRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a ServiceNetworkServiceAssociation.
 
@@ -2375,6 +2414,7 @@ typing.cast(typing.Any, IServiceNetworkServiceAssociationRef).__jsii_proxy_class
 )
 class IServiceNetworkVpcAssociationRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a ServiceNetworkVpcAssociation.
@@ -2396,6 +2436,7 @@ class IServiceNetworkVpcAssociationRef(
 
 class _IServiceNetworkVpcAssociationRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a ServiceNetworkVpcAssociation.
 
@@ -2420,7 +2461,11 @@ typing.cast(typing.Any, IServiceNetworkVpcAssociationRef).__jsii_proxy_class__ =
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_vpclattice.IServiceRef")
-class IServiceRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IServiceRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Service.
 
     :stability: experimental
@@ -2438,6 +2483,7 @@ class IServiceRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IServiceRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Service.
 
@@ -2460,7 +2506,11 @@ typing.cast(typing.Any, IServiceRef).__jsii_proxy_class__ = lambda : _IServiceRe
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_vpclattice.ITargetGroupRef")
-class ITargetGroupRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class ITargetGroupRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a TargetGroup.
 
     :stability: experimental
@@ -2478,6 +2528,7 @@ class ITargetGroupRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protoco
 
 class _ITargetGroupRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a TargetGroup.
 

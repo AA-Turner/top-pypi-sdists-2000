@@ -61,6 +61,7 @@ import constructs as _constructs_77d1e7e8
 from .. import (
     CfnResource as _CfnResource_9df397a6,
     CfnTag as _CfnTag_f6864754,
+    IEnvironmentAware as _IEnvironmentAware_a408b00d,
     IInspectable as _IInspectable_c2943556,
     IResolvable as _IResolvable_da3f097b,
     ITaggable as _ITaggable_36806126,
@@ -1273,7 +1274,11 @@ class EventTypeReference:
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_frauddetector.IDetectorRef")
-class IDetectorRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IDetectorRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Detector.
 
     :stability: experimental
@@ -1291,6 +1296,7 @@ class IDetectorRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IDetectorRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Detector.
 
@@ -1313,7 +1319,11 @@ typing.cast(typing.Any, IDetectorRef).__jsii_proxy_class__ = lambda : _IDetector
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_frauddetector.IEntityTypeRef")
-class IEntityTypeRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IEntityTypeRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a EntityType.
 
     :stability: experimental
@@ -1331,6 +1341,7 @@ class IEntityTypeRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol
 
 class _IEntityTypeRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a EntityType.
 
@@ -1353,7 +1364,11 @@ typing.cast(typing.Any, IEntityTypeRef).__jsii_proxy_class__ = lambda : _IEntity
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_frauddetector.IEventTypeRef")
-class IEventTypeRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IEventTypeRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a EventType.
 
     :stability: experimental
@@ -1371,6 +1386,7 @@ class IEventTypeRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol)
 
 class _IEventTypeRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a EventType.
 
@@ -1393,7 +1409,11 @@ typing.cast(typing.Any, IEventTypeRef).__jsii_proxy_class__ = lambda : _IEventTy
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_frauddetector.ILabelRef")
-class ILabelRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class ILabelRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Label.
 
     :stability: experimental
@@ -1411,6 +1431,7 @@ class ILabelRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _ILabelRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Label.
 
@@ -1433,7 +1454,11 @@ typing.cast(typing.Any, ILabelRef).__jsii_proxy_class__ = lambda : _ILabelRefPro
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_frauddetector.IListRef")
-class IListRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IListRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a List.
 
     :stability: experimental
@@ -1451,6 +1476,7 @@ class IListRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IListRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a List.
 
@@ -1473,7 +1499,11 @@ typing.cast(typing.Any, IListRef).__jsii_proxy_class__ = lambda : _IListRefProxy
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_frauddetector.IOutcomeRef")
-class IOutcomeRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IOutcomeRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Outcome.
 
     :stability: experimental
@@ -1491,6 +1521,7 @@ class IOutcomeRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IOutcomeRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Outcome.
 
@@ -1513,7 +1544,11 @@ typing.cast(typing.Any, IOutcomeRef).__jsii_proxy_class__ = lambda : _IOutcomeRe
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_frauddetector.IVariableRef")
-class IVariableRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IVariableRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Variable.
 
     :stability: experimental
@@ -1531,6 +1566,7 @@ class IVariableRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IVariableRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Variable.
 

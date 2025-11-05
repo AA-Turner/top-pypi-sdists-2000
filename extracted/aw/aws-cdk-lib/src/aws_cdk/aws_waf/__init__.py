@@ -60,6 +60,7 @@ from .._jsii import *
 import constructs as _constructs_77d1e7e8
 from .. import (
     CfnResource as _CfnResource_9df397a6,
+    IEnvironmentAware as _IEnvironmentAware_a408b00d,
     IInspectable as _IInspectable_c2943556,
     IResolvable as _IResolvable_da3f097b,
     TreeInspector as _TreeInspector_488e0dd5,
@@ -775,7 +776,11 @@ class CfnXssMatchSetProps:
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_waf.IByteMatchSetRef")
-class IByteMatchSetRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IByteMatchSetRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a ByteMatchSet.
 
     :stability: experimental
@@ -793,6 +798,7 @@ class IByteMatchSetRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protoc
 
 class _IByteMatchSetRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a ByteMatchSet.
 
@@ -815,7 +821,11 @@ typing.cast(typing.Any, IByteMatchSetRef).__jsii_proxy_class__ = lambda : _IByte
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_waf.IIPSetRef")
-class IIPSetRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IIPSetRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a IPSet.
 
     :stability: experimental
@@ -833,6 +843,7 @@ class IIPSetRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IIPSetRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a IPSet.
 
@@ -904,7 +915,11 @@ class IPSetReference:
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_waf.IRuleRef")
-class IRuleRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IRuleRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Rule.
 
     :stability: experimental
@@ -922,6 +937,7 @@ class IRuleRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IRuleRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Rule.
 
@@ -946,6 +962,7 @@ typing.cast(typing.Any, IRuleRef).__jsii_proxy_class__ = lambda : _IRuleRefProxy
 @jsii.interface(jsii_type="aws-cdk-lib.aws_waf.ISizeConstraintSetRef")
 class ISizeConstraintSetRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a SizeConstraintSet.
@@ -965,6 +982,7 @@ class ISizeConstraintSetRef(
 
 class _ISizeConstraintSetRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a SizeConstraintSet.
 
@@ -989,6 +1007,7 @@ typing.cast(typing.Any, ISizeConstraintSetRef).__jsii_proxy_class__ = lambda : _
 @jsii.interface(jsii_type="aws-cdk-lib.aws_waf.ISqlInjectionMatchSetRef")
 class ISqlInjectionMatchSetRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a SqlInjectionMatchSet.
@@ -1008,6 +1027,7 @@ class ISqlInjectionMatchSetRef(
 
 class _ISqlInjectionMatchSetRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a SqlInjectionMatchSet.
 
@@ -1030,7 +1050,11 @@ typing.cast(typing.Any, ISqlInjectionMatchSetRef).__jsii_proxy_class__ = lambda 
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_waf.IWebACLRef")
-class IWebACLRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IWebACLRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a WebACL.
 
     :stability: experimental
@@ -1048,6 +1072,7 @@ class IWebACLRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IWebACLRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a WebACL.
 
@@ -1070,7 +1095,11 @@ typing.cast(typing.Any, IWebACLRef).__jsii_proxy_class__ = lambda : _IWebACLRefP
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_waf.IXssMatchSetRef")
-class IXssMatchSetRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IXssMatchSetRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a XssMatchSet.
 
     :stability: experimental
@@ -1088,6 +1117,7 @@ class IXssMatchSetRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protoco
 
 class _IXssMatchSetRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a XssMatchSet.
 

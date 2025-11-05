@@ -71,6 +71,7 @@ import constructs as _constructs_77d1e7e8
 from .. import (
     CfnResource as _CfnResource_9df397a6,
     CfnTag as _CfnTag_f6864754,
+    IEnvironmentAware as _IEnvironmentAware_a408b00d,
     IInspectable as _IInspectable_c2943556,
     IResolvable as _IResolvable_da3f097b,
     ITaggableV2 as _ITaggableV2_4e6798f8,
@@ -1756,7 +1757,11 @@ class FleetReference:
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_deadline.IFarmRef")
-class IFarmRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IFarmRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Farm.
 
     :stability: experimental
@@ -1774,6 +1779,7 @@ class IFarmRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IFarmRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Farm.
 
@@ -1796,7 +1802,11 @@ typing.cast(typing.Any, IFarmRef).__jsii_proxy_class__ = lambda : _IFarmRefProxy
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_deadline.IFleetRef")
-class IFleetRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IFleetRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Fleet.
 
     :stability: experimental
@@ -1814,6 +1824,7 @@ class IFleetRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IFleetRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Fleet.
 
@@ -1836,7 +1847,11 @@ typing.cast(typing.Any, IFleetRef).__jsii_proxy_class__ = lambda : _IFleetRefPro
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_deadline.ILicenseEndpointRef")
-class ILicenseEndpointRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class ILicenseEndpointRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a LicenseEndpoint.
 
     :stability: experimental
@@ -1854,6 +1869,7 @@ class ILicenseEndpointRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Pro
 
 class _ILicenseEndpointRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a LicenseEndpoint.
 
@@ -1876,7 +1892,11 @@ typing.cast(typing.Any, ILicenseEndpointRef).__jsii_proxy_class__ = lambda : _IL
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_deadline.ILimitRef")
-class ILimitRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class ILimitRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Limit.
 
     :stability: experimental
@@ -1894,6 +1914,7 @@ class ILimitRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _ILimitRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Limit.
 
@@ -1916,7 +1937,11 @@ typing.cast(typing.Any, ILimitRef).__jsii_proxy_class__ = lambda : _ILimitRefPro
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_deadline.IMeteredProductRef")
-class IMeteredProductRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IMeteredProductRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a MeteredProduct.
 
     :stability: experimental
@@ -1934,6 +1959,7 @@ class IMeteredProductRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Prot
 
 class _IMeteredProductRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a MeteredProduct.
 
@@ -1956,7 +1982,11 @@ typing.cast(typing.Any, IMeteredProductRef).__jsii_proxy_class__ = lambda : _IMe
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_deadline.IMonitorRef")
-class IMonitorRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IMonitorRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Monitor.
 
     :stability: experimental
@@ -1974,6 +2004,7 @@ class IMonitorRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IMonitorRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Monitor.
 
@@ -1996,7 +2027,11 @@ typing.cast(typing.Any, IMonitorRef).__jsii_proxy_class__ = lambda : _IMonitorRe
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_deadline.IQueueEnvironmentRef")
-class IQueueEnvironmentRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IQueueEnvironmentRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a QueueEnvironment.
 
     :stability: experimental
@@ -2014,6 +2049,7 @@ class IQueueEnvironmentRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Pr
 
 class _IQueueEnvironmentRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a QueueEnvironment.
 
@@ -2038,6 +2074,7 @@ typing.cast(typing.Any, IQueueEnvironmentRef).__jsii_proxy_class__ = lambda : _I
 @jsii.interface(jsii_type="aws-cdk-lib.aws_deadline.IQueueFleetAssociationRef")
 class IQueueFleetAssociationRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a QueueFleetAssociation.
@@ -2057,6 +2094,7 @@ class IQueueFleetAssociationRef(
 
 class _IQueueFleetAssociationRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a QueueFleetAssociation.
 
@@ -2081,6 +2119,7 @@ typing.cast(typing.Any, IQueueFleetAssociationRef).__jsii_proxy_class__ = lambda
 @jsii.interface(jsii_type="aws-cdk-lib.aws_deadline.IQueueLimitAssociationRef")
 class IQueueLimitAssociationRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a QueueLimitAssociation.
@@ -2100,6 +2139,7 @@ class IQueueLimitAssociationRef(
 
 class _IQueueLimitAssociationRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a QueueLimitAssociation.
 
@@ -2122,7 +2162,11 @@ typing.cast(typing.Any, IQueueLimitAssociationRef).__jsii_proxy_class__ = lambda
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_deadline.IQueueRef")
-class IQueueRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IQueueRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Queue.
 
     :stability: experimental
@@ -2140,6 +2184,7 @@ class IQueueRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IQueueRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Queue.
 
@@ -2162,7 +2207,11 @@ typing.cast(typing.Any, IQueueRef).__jsii_proxy_class__ = lambda : _IQueueRefPro
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_deadline.IStorageProfileRef")
-class IStorageProfileRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IStorageProfileRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a StorageProfile.
 
     :stability: experimental
@@ -2180,6 +2229,7 @@ class IStorageProfileRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Prot
 
 class _IStorageProfileRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a StorageProfile.
 

@@ -600,6 +600,7 @@ from .. import (
     CfnResource as _CfnResource_9df397a6,
     CfnTag as _CfnTag_f6864754,
     Duration as _Duration_4839e8c3,
+    IEnvironmentAware as _IEnvironmentAware_a408b00d,
     IInspectable as _IInspectable_c2943556,
     IResolvable as _IResolvable_da3f097b,
     IResource as _IResource_c80c4260,
@@ -5298,7 +5299,11 @@ class GrokProperty:
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_logs.IAccountPolicyRef")
-class IAccountPolicyRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IAccountPolicyRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a AccountPolicy.
 
     :stability: experimental
@@ -5316,6 +5321,7 @@ class IAccountPolicyRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Proto
 
 class _IAccountPolicyRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a AccountPolicy.
 
@@ -5340,6 +5346,7 @@ typing.cast(typing.Any, IAccountPolicyRef).__jsii_proxy_class__ = lambda : _IAcc
 @jsii.interface(jsii_type="aws-cdk-lib.aws_logs.IDeliveryDestinationRef")
 class IDeliveryDestinationRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a DeliveryDestination.
@@ -5359,6 +5366,7 @@ class IDeliveryDestinationRef(
 
 class _IDeliveryDestinationRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a DeliveryDestination.
 
@@ -5381,7 +5389,11 @@ typing.cast(typing.Any, IDeliveryDestinationRef).__jsii_proxy_class__ = lambda :
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_logs.IDeliveryRef")
-class IDeliveryRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IDeliveryRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Delivery.
 
     :stability: experimental
@@ -5399,6 +5411,7 @@ class IDeliveryRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IDeliveryRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Delivery.
 
@@ -5421,7 +5434,11 @@ typing.cast(typing.Any, IDeliveryRef).__jsii_proxy_class__ = lambda : _IDelivery
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_logs.IDeliverySourceRef")
-class IDeliverySourceRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IDeliverySourceRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a DeliverySource.
 
     :stability: experimental
@@ -5439,6 +5456,7 @@ class IDeliverySourceRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Prot
 
 class _IDeliverySourceRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a DeliverySource.
 
@@ -5461,7 +5479,11 @@ typing.cast(typing.Any, IDeliverySourceRef).__jsii_proxy_class__ = lambda : _IDe
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_logs.IDestinationRef")
-class IDestinationRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IDestinationRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Destination.
 
     :stability: experimental
@@ -5479,6 +5501,7 @@ class IDestinationRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protoco
 
 class _IDestinationRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Destination.
 
@@ -5525,7 +5548,11 @@ typing.cast(typing.Any, IFilterPattern).__jsii_proxy_class__ = lambda : _IFilter
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_logs.IIntegrationRef")
-class IIntegrationRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IIntegrationRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Integration.
 
     :stability: experimental
@@ -5543,6 +5570,7 @@ class IIntegrationRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protoco
 
 class _IIntegrationRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Integration.
 
@@ -5567,6 +5595,7 @@ typing.cast(typing.Any, IIntegrationRef).__jsii_proxy_class__ = lambda : _IInteg
 @jsii.interface(jsii_type="aws-cdk-lib.aws_logs.ILogAnomalyDetectorRef")
 class ILogAnomalyDetectorRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a LogAnomalyDetector.
@@ -5586,6 +5615,7 @@ class ILogAnomalyDetectorRef(
 
 class _ILogAnomalyDetectorRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a LogAnomalyDetector.
 
@@ -6250,7 +6280,11 @@ typing.cast(typing.Any, ILogGroup).__jsii_proxy_class__ = lambda : _ILogGroupPro
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_logs.ILogGroupRef")
-class ILogGroupRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class ILogGroupRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a LogGroup.
 
     :stability: experimental
@@ -6268,6 +6302,7 @@ class ILogGroupRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _ILogGroupRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a LogGroup.
 
@@ -6320,7 +6355,11 @@ typing.cast(typing.Any, ILogStream).__jsii_proxy_class__ = lambda : _ILogStreamP
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_logs.ILogStreamRef")
-class ILogStreamRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class ILogStreamRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a LogStream.
 
     :stability: experimental
@@ -6338,6 +6377,7 @@ class ILogStreamRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol)
 
 class _ILogStreamRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a LogStream.
 
@@ -6418,7 +6458,11 @@ typing.cast(typing.Any, ILogSubscriptionDestination).__jsii_proxy_class__ = lamb
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_logs.IMetricFilterRef")
-class IMetricFilterRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IMetricFilterRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a MetricFilter.
 
     :stability: experimental
@@ -6436,6 +6480,7 @@ class IMetricFilterRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protoc
 
 class _IMetricFilterRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a MetricFilter.
 
@@ -6483,7 +6528,11 @@ typing.cast(typing.Any, IProcessor).__jsii_proxy_class__ = lambda : _IProcessorP
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_logs.IQueryDefinitionRef")
-class IQueryDefinitionRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IQueryDefinitionRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a QueryDefinition.
 
     :stability: experimental
@@ -6501,6 +6550,7 @@ class IQueryDefinitionRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Pro
 
 class _IQueryDefinitionRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a QueryDefinition.
 
@@ -6523,7 +6573,11 @@ typing.cast(typing.Any, IQueryDefinitionRef).__jsii_proxy_class__ = lambda : _IQ
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_logs.IResourcePolicyRef")
-class IResourcePolicyRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IResourcePolicyRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a ResourcePolicy.
 
     :stability: experimental
@@ -6541,6 +6595,7 @@ class IResourcePolicyRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Prot
 
 class _IResourcePolicyRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a ResourcePolicy.
 
@@ -6565,6 +6620,7 @@ typing.cast(typing.Any, IResourcePolicyRef).__jsii_proxy_class__ = lambda : _IRe
 @jsii.interface(jsii_type="aws-cdk-lib.aws_logs.ISubscriptionFilterRef")
 class ISubscriptionFilterRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a SubscriptionFilter.
@@ -6584,6 +6640,7 @@ class ISubscriptionFilterRef(
 
 class _ISubscriptionFilterRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a SubscriptionFilter.
 
@@ -6606,7 +6663,11 @@ typing.cast(typing.Any, ISubscriptionFilterRef).__jsii_proxy_class__ = lambda : 
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_logs.ITransformerRef")
-class ITransformerRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class ITransformerRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Transformer.
 
     :stability: experimental
@@ -6624,6 +6685,7 @@ class ITransformerRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protoco
 
 class _ITransformerRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Transformer.
 

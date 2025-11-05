@@ -2323,6 +2323,7 @@ from .. import (
     CfnResource as _CfnResource_9df397a6,
     CfnTag as _CfnTag_f6864754,
     Duration as _Duration_4839e8c3,
+    IEnvironmentAware as _IEnvironmentAware_a408b00d,
     IInspectable as _IInspectable_c2943556,
     IResolvable as _IResolvable_da3f097b,
     IResource as _IResource_c80c4260,
@@ -21477,7 +21478,11 @@ typing.cast(typing.Any, IAlternateTarget).__jsii_proxy_class__ = lambda : _IAlte
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_ecs.ICapacityProviderRef")
-class ICapacityProviderRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class ICapacityProviderRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a CapacityProvider.
 
     :stability: experimental
@@ -21495,6 +21500,7 @@ class ICapacityProviderRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Pr
 
 class _ICapacityProviderRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a CapacityProvider.
 
@@ -21649,6 +21655,7 @@ typing.cast(typing.Any, ICluster).__jsii_proxy_class__ = lambda : _IClusterProxy
 )
 class IClusterCapacityProviderAssociationsRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a ClusterCapacityProviderAssociations.
@@ -21670,6 +21677,7 @@ class IClusterCapacityProviderAssociationsRef(
 
 class _IClusterCapacityProviderAssociationsRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a ClusterCapacityProviderAssociations.
 
@@ -21694,7 +21702,11 @@ typing.cast(typing.Any, IClusterCapacityProviderAssociationsRef).__jsii_proxy_cl
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_ecs.IClusterRef")
-class IClusterRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IClusterRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Cluster.
 
     :stability: experimental
@@ -21712,6 +21724,7 @@ class IClusterRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IClusterRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Cluster.
 
@@ -21799,7 +21812,11 @@ typing.cast(typing.Any, IEcsLoadBalancerTarget).__jsii_proxy_class__ = lambda : 
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_ecs.IPrimaryTaskSetRef")
-class IPrimaryTaskSetRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IPrimaryTaskSetRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a PrimaryTaskSet.
 
     :stability: experimental
@@ -21817,6 +21834,7 @@ class IPrimaryTaskSetRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Prot
 
 class _IPrimaryTaskSetRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a PrimaryTaskSet.
 
@@ -21891,7 +21909,11 @@ typing.cast(typing.Any, IService).__jsii_proxy_class__ = lambda : _IServiceProxy
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_ecs.IServiceRef")
-class IServiceRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IServiceRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Service.
 
     :stability: experimental
@@ -21909,6 +21931,7 @@ class IServiceRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IServiceRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Service.
 
@@ -22108,7 +22131,11 @@ typing.cast(typing.Any, ITaskDefinitionExtension).__jsii_proxy_class__ = lambda 
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_ecs.ITaskDefinitionRef")
-class ITaskDefinitionRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class ITaskDefinitionRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a TaskDefinition.
 
     :stability: experimental
@@ -22126,6 +22153,7 @@ class ITaskDefinitionRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Prot
 
 class _ITaskDefinitionRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a TaskDefinition.
 
@@ -22148,7 +22176,11 @@ typing.cast(typing.Any, ITaskDefinitionRef).__jsii_proxy_class__ = lambda : _ITa
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_ecs.ITaskSetRef")
-class ITaskSetRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class ITaskSetRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a TaskSet.
 
     :stability: experimental
@@ -22166,6 +22198,7 @@ class ITaskSetRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _ITaskSetRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a TaskSet.
 

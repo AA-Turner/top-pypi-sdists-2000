@@ -70,6 +70,7 @@ from .._jsii import *
 import constructs as _constructs_77d1e7e8
 from .. import (
     CfnResource as _CfnResource_9df397a6,
+    IEnvironmentAware as _IEnvironmentAware_a408b00d,
     IInspectable as _IInspectable_c2943556,
     IResolvable as _IResolvable_da3f097b,
     ITaggableV2 as _ITaggableV2_4e6798f8,
@@ -956,7 +957,11 @@ class DirectoryRegistrationReference:
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_pcaconnectorad.IConnectorRef")
-class IConnectorRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IConnectorRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Connector.
 
     :stability: experimental
@@ -974,6 +979,7 @@ class IConnectorRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol)
 
 class _IConnectorRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Connector.
 
@@ -998,6 +1004,7 @@ typing.cast(typing.Any, IConnectorRef).__jsii_proxy_class__ = lambda : _IConnect
 @jsii.interface(jsii_type="aws-cdk-lib.aws_pcaconnectorad.IDirectoryRegistrationRef")
 class IDirectoryRegistrationRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a DirectoryRegistration.
@@ -1017,6 +1024,7 @@ class IDirectoryRegistrationRef(
 
 class _IDirectoryRegistrationRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a DirectoryRegistration.
 
@@ -1041,6 +1049,7 @@ typing.cast(typing.Any, IDirectoryRegistrationRef).__jsii_proxy_class__ = lambda
 @jsii.interface(jsii_type="aws-cdk-lib.aws_pcaconnectorad.IServicePrincipalNameRef")
 class IServicePrincipalNameRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a ServicePrincipalName.
@@ -1060,6 +1069,7 @@ class IServicePrincipalNameRef(
 
 class _IServicePrincipalNameRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a ServicePrincipalName.
 
@@ -1086,6 +1096,7 @@ typing.cast(typing.Any, IServicePrincipalNameRef).__jsii_proxy_class__ = lambda 
 )
 class ITemplateGroupAccessControlEntryRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a TemplateGroupAccessControlEntry.
@@ -1107,6 +1118,7 @@ class ITemplateGroupAccessControlEntryRef(
 
 class _ITemplateGroupAccessControlEntryRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a TemplateGroupAccessControlEntry.
 
@@ -1131,7 +1143,11 @@ typing.cast(typing.Any, ITemplateGroupAccessControlEntryRef).__jsii_proxy_class_
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_pcaconnectorad.ITemplateRef")
-class ITemplateRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class ITemplateRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Template.
 
     :stability: experimental
@@ -1149,6 +1165,7 @@ class ITemplateRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _ITemplateRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Template.
 

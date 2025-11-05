@@ -24,9 +24,9 @@ pub fn deserialize(
     let obj_type_ptr = ob_type!(ptr);
     let contents: &[u8];
 
-    if py_is!(obj_type_ptr, &mut pyo3::ffi::PyBytes_Type) {
+    if obj_type_ptr == &raw mut pyo3::ffi::PyBytes_Type {
         contents = unsafe { pybytes_as_bytes(ptr) };
-    } else if py_is!(obj_type_ptr, &mut pyo3::ffi::PyMemoryView_Type) {
+    } else if obj_type_ptr == &raw mut pyo3::ffi::PyMemoryView_Type {
         if let Some(buffer) = unsafe { pymemoryview_as_bytes(ptr) } {
             contents = buffer;
         } else {
@@ -34,7 +34,7 @@ pub fn deserialize(
                 "Input type memoryview must be a C contiguous buffer",
             )));
         }
-    } else if py_is!(obj_type_ptr, &mut pyo3::ffi::PyByteArray_Type) {
+    } else if obj_type_ptr == &raw mut pyo3::ffi::PyByteArray_Type {
         contents = unsafe { pybytearray_as_bytes(ptr) };
     } else {
         return Err(DeserializeError::new(Cow::Borrowed(
@@ -67,7 +67,7 @@ impl std::fmt::Display for Error {
             Error::ExtHookFailed => f.write_str("ext_hook failed"),
             Error::ExtHookMissing => f.write_str("ext_hook missing"),
             Error::Internal => f.write_str("internal error"),
-            Error::InvalidStr => f.write_str(INVALID_STR),
+            Error::InvalidStr => f.write_str("invalid UTF-8 string"),
             Error::InvalidType(ref marker) => {
                 write!(f, "invalid type {marker:?}")
             }

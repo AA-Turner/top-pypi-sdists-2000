@@ -685,6 +685,7 @@ import constructs as _constructs_77d1e7e8
 from .. import (
     CfnResource as _CfnResource_9df397a6,
     Duration as _Duration_4839e8c3,
+    IEnvironmentAware as _IEnvironmentAware_a408b00d,
     IInspectable as _IInspectable_c2943556,
     IResolvable as _IResolvable_da3f097b,
     IResource as _IResource_c80c4260,
@@ -4068,7 +4069,11 @@ typing.cast(typing.Any, IAliasRecordTarget).__jsii_proxy_class__ = lambda : _IAl
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_route53.ICidrCollectionRef")
-class ICidrCollectionRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class ICidrCollectionRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a CidrCollection.
 
     :stability: experimental
@@ -4086,6 +4091,7 @@ class ICidrCollectionRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Prot
 
 class _ICidrCollectionRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a CidrCollection.
 
@@ -4108,7 +4114,11 @@ typing.cast(typing.Any, ICidrCollectionRef).__jsii_proxy_class__ = lambda : _ICi
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_route53.IDNSSECRef")
-class IDNSSECRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IDNSSECRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a DNSSEC.
 
     :stability: experimental
@@ -4126,6 +4136,7 @@ class IDNSSECRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IDNSSECRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a DNSSEC.
 
@@ -4182,7 +4193,11 @@ typing.cast(typing.Any, IHealthCheck).__jsii_proxy_class__ = lambda : _IHealthCh
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_route53.IHealthCheckRef")
-class IHealthCheckRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IHealthCheckRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a HealthCheck.
 
     :stability: experimental
@@ -4200,6 +4215,7 @@ class IHealthCheckRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protoco
 
 class _IHealthCheckRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a HealthCheck.
 
@@ -4327,7 +4343,11 @@ typing.cast(typing.Any, IHostedZone).__jsii_proxy_class__ = lambda : _IHostedZon
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_route53.IHostedZoneRef")
-class IHostedZoneRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IHostedZoneRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a HostedZone.
 
     :stability: experimental
@@ -4345,6 +4365,7 @@ class IHostedZoneRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol
 
 class _IHostedZoneRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a HostedZone.
 
@@ -4437,7 +4458,11 @@ typing.cast(typing.Any, IKeySigningKey).__jsii_proxy_class__ = lambda : _IKeySig
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_route53.IKeySigningKeyRef")
-class IKeySigningKeyRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IKeySigningKeyRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a KeySigningKey.
 
     :stability: experimental
@@ -4455,6 +4480,7 @@ class IKeySigningKeyRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Proto
 
 class _IKeySigningKeyRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a KeySigningKey.
 
@@ -4543,7 +4569,11 @@ typing.cast(typing.Any, IRecordSet).__jsii_proxy_class__ = lambda : _IRecordSetP
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_route53.IRecordSetGroupRef")
-class IRecordSetGroupRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IRecordSetGroupRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a RecordSetGroup.
 
     :stability: experimental
@@ -4561,6 +4591,7 @@ class IRecordSetGroupRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Prot
 
 class _IRecordSetGroupRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a RecordSetGroup.
 
@@ -4583,7 +4614,11 @@ typing.cast(typing.Any, IRecordSetGroupRef).__jsii_proxy_class__ = lambda : _IRe
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_route53.IRecordSetRef")
-class IRecordSetRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IRecordSetRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a RecordSet.
 
     :stability: experimental
@@ -4601,6 +4636,7 @@ class IRecordSetRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol)
 
 class _IRecordSetRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a RecordSet.
 

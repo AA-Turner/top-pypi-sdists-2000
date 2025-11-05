@@ -238,6 +238,7 @@ import constructs as _constructs_77d1e7e8
 from .. import (
     CfnResource as _CfnResource_9df397a6,
     CfnTag as _CfnTag_f6864754,
+    IEnvironmentAware as _IEnvironmentAware_a408b00d,
     IInspectable as _IInspectable_c2943556,
     IResolvable as _IResolvable_da3f097b,
     ITaggable as _ITaggable_36806126,
@@ -1673,7 +1674,11 @@ class EventDataStoreReference:
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_cloudtrail.IChannelRef")
-class IChannelRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IChannelRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Channel.
 
     :stability: experimental
@@ -1691,6 +1696,7 @@ class IChannelRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IChannelRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Channel.
 
@@ -1713,7 +1719,11 @@ typing.cast(typing.Any, IChannelRef).__jsii_proxy_class__ = lambda : _IChannelRe
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_cloudtrail.IDashboardRef")
-class IDashboardRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IDashboardRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Dashboard.
 
     :stability: experimental
@@ -1731,6 +1741,7 @@ class IDashboardRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol)
 
 class _IDashboardRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Dashboard.
 
@@ -1753,7 +1764,11 @@ typing.cast(typing.Any, IDashboardRef).__jsii_proxy_class__ = lambda : _IDashboa
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_cloudtrail.IEventDataStoreRef")
-class IEventDataStoreRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IEventDataStoreRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a EventDataStore.
 
     :stability: experimental
@@ -1771,6 +1786,7 @@ class IEventDataStoreRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Prot
 
 class _IEventDataStoreRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a EventDataStore.
 
@@ -1793,7 +1809,11 @@ typing.cast(typing.Any, IEventDataStoreRef).__jsii_proxy_class__ = lambda : _IEv
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_cloudtrail.IResourcePolicyRef")
-class IResourcePolicyRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IResourcePolicyRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a ResourcePolicy.
 
     :stability: experimental
@@ -1811,6 +1831,7 @@ class IResourcePolicyRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Prot
 
 class _IResourcePolicyRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a ResourcePolicy.
 
@@ -1833,7 +1854,11 @@ typing.cast(typing.Any, IResourcePolicyRef).__jsii_proxy_class__ = lambda : _IRe
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_cloudtrail.ITrailRef")
-class ITrailRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class ITrailRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Trail.
 
     :stability: experimental
@@ -1851,6 +1876,7 @@ class ITrailRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _ITrailRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Trail.
 

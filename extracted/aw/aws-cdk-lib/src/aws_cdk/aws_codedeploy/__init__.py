@@ -797,6 +797,7 @@ from .. import (
     CfnResource as _CfnResource_9df397a6,
     CfnTag as _CfnTag_f6864754,
     Duration as _Duration_4839e8c3,
+    IEnvironmentAware as _IEnvironmentAware_a408b00d,
     IInspectable as _IInspectable_c2943556,
     IResolvable as _IResolvable_da3f097b,
     IResource as _IResource_c80c4260,
@@ -2987,7 +2988,11 @@ class EcsDeploymentGroupProps:
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_codedeploy.IApplicationRef")
-class IApplicationRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IApplicationRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Application.
 
     :stability: experimental
@@ -3005,6 +3010,7 @@ class IApplicationRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protoco
 
 class _IApplicationRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Application.
 
@@ -3077,7 +3083,11 @@ typing.cast(typing.Any, IBaseDeploymentConfig).__jsii_proxy_class__ = lambda : _
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_codedeploy.IDeploymentConfigRef")
-class IDeploymentConfigRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IDeploymentConfigRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a DeploymentConfig.
 
     :stability: experimental
@@ -3095,6 +3105,7 @@ class IDeploymentConfigRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Pr
 
 class _IDeploymentConfigRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a DeploymentConfig.
 
@@ -3117,7 +3128,11 @@ typing.cast(typing.Any, IDeploymentConfigRef).__jsii_proxy_class__ = lambda : _I
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_codedeploy.IDeploymentGroupRef")
-class IDeploymentGroupRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IDeploymentGroupRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a DeploymentGroup.
 
     :stability: experimental
@@ -3135,6 +3150,7 @@ class IDeploymentGroupRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Pro
 
 class _IDeploymentGroupRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a DeploymentGroup.
 

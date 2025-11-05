@@ -71,6 +71,7 @@ import constructs as _constructs_77d1e7e8
 from .. import (
     CfnResource as _CfnResource_9df397a6,
     CfnTag as _CfnTag_f6864754,
+    IEnvironmentAware as _IEnvironmentAware_a408b00d,
     IInspectable as _IInspectable_c2943556,
     IResolvable as _IResolvable_da3f097b,
     ITaggableV2 as _ITaggableV2_4e6798f8,
@@ -733,7 +734,11 @@ class DataLakeReference:
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_securitylake.IAwsLogSourceRef")
-class IAwsLogSourceRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IAwsLogSourceRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a AwsLogSource.
 
     :stability: experimental
@@ -751,6 +756,7 @@ class IAwsLogSourceRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protoc
 
 class _IAwsLogSourceRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a AwsLogSource.
 
@@ -773,7 +779,11 @@ typing.cast(typing.Any, IAwsLogSourceRef).__jsii_proxy_class__ = lambda : _IAwsL
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_securitylake.IDataLakeRef")
-class IDataLakeRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IDataLakeRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a DataLake.
 
     :stability: experimental
@@ -791,6 +801,7 @@ class IDataLakeRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IDataLakeRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a DataLake.
 
@@ -815,6 +826,7 @@ typing.cast(typing.Any, IDataLakeRef).__jsii_proxy_class__ = lambda : _IDataLake
 @jsii.interface(jsii_type="aws-cdk-lib.aws_securitylake.ISubscriberNotificationRef")
 class ISubscriberNotificationRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a SubscriberNotification.
@@ -834,6 +846,7 @@ class ISubscriberNotificationRef(
 
 class _ISubscriberNotificationRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a SubscriberNotification.
 
@@ -856,7 +869,11 @@ typing.cast(typing.Any, ISubscriberNotificationRef).__jsii_proxy_class__ = lambd
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_securitylake.ISubscriberRef")
-class ISubscriberRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class ISubscriberRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Subscriber.
 
     :stability: experimental
@@ -874,6 +891,7 @@ class ISubscriberRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol
 
 class _ISubscriberRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Subscriber.
 

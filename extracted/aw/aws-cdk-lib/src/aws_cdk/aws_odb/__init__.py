@@ -71,6 +71,7 @@ import constructs as _constructs_77d1e7e8
 from .. import (
     CfnResource as _CfnResource_9df397a6,
     CfnTag as _CfnTag_f6864754,
+    IEnvironmentAware as _IEnvironmentAware_a408b00d,
     IInspectable as _IInspectable_c2943556,
     IResolvable as _IResolvable_da3f097b,
     ITaggableV2 as _ITaggableV2_4e6798f8,
@@ -1611,6 +1612,7 @@ class CloudVmClusterReference:
 @jsii.interface(jsii_type="aws-cdk-lib.aws_odb.ICloudAutonomousVmClusterRef")
 class ICloudAutonomousVmClusterRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a CloudAutonomousVmCluster.
@@ -1630,6 +1632,7 @@ class ICloudAutonomousVmClusterRef(
 
 class _ICloudAutonomousVmClusterRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a CloudAutonomousVmCluster.
 
@@ -1654,6 +1657,7 @@ typing.cast(typing.Any, ICloudAutonomousVmClusterRef).__jsii_proxy_class__ = lam
 @jsii.interface(jsii_type="aws-cdk-lib.aws_odb.ICloudExadataInfrastructureRef")
 class ICloudExadataInfrastructureRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a CloudExadataInfrastructure.
@@ -1673,6 +1677,7 @@ class ICloudExadataInfrastructureRef(
 
 class _ICloudExadataInfrastructureRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a CloudExadataInfrastructure.
 
@@ -1695,7 +1700,11 @@ typing.cast(typing.Any, ICloudExadataInfrastructureRef).__jsii_proxy_class__ = l
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_odb.ICloudVmClusterRef")
-class ICloudVmClusterRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class ICloudVmClusterRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a CloudVmCluster.
 
     :stability: experimental
@@ -1713,6 +1722,7 @@ class ICloudVmClusterRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Prot
 
 class _ICloudVmClusterRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a CloudVmCluster.
 
@@ -1735,7 +1745,11 @@ typing.cast(typing.Any, ICloudVmClusterRef).__jsii_proxy_class__ = lambda : _ICl
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_odb.IOdbNetworkRef")
-class IOdbNetworkRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IOdbNetworkRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a OdbNetwork.
 
     :stability: experimental
@@ -1753,6 +1767,7 @@ class IOdbNetworkRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol
 
 class _IOdbNetworkRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a OdbNetwork.
 
@@ -1777,6 +1792,7 @@ typing.cast(typing.Any, IOdbNetworkRef).__jsii_proxy_class__ = lambda : _IOdbNet
 @jsii.interface(jsii_type="aws-cdk-lib.aws_odb.IOdbPeeringConnectionRef")
 class IOdbPeeringConnectionRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a OdbPeeringConnection.
@@ -1796,6 +1812,7 @@ class IOdbPeeringConnectionRef(
 
 class _IOdbPeeringConnectionRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a OdbPeeringConnection.
 

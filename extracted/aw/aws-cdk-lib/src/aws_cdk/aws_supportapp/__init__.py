@@ -60,6 +60,7 @@ from .._jsii import *
 import constructs as _constructs_77d1e7e8
 from .. import (
     CfnResource as _CfnResource_9df397a6,
+    IEnvironmentAware as _IEnvironmentAware_a408b00d,
     IInspectable as _IInspectable_c2943556,
     IResolvable as _IResolvable_da3f097b,
     TreeInspector as _TreeInspector_488e0dd5,
@@ -434,7 +435,11 @@ class CfnSlackWorkspaceConfigurationProps:
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_supportapp.IAccountAliasRef")
-class IAccountAliasRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IAccountAliasRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a AccountAlias.
 
     :stability: experimental
@@ -452,6 +457,7 @@ class IAccountAliasRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protoc
 
 class _IAccountAliasRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a AccountAlias.
 
@@ -476,6 +482,7 @@ typing.cast(typing.Any, IAccountAliasRef).__jsii_proxy_class__ = lambda : _IAcco
 @jsii.interface(jsii_type="aws-cdk-lib.aws_supportapp.ISlackChannelConfigurationRef")
 class ISlackChannelConfigurationRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a SlackChannelConfiguration.
@@ -495,6 +502,7 @@ class ISlackChannelConfigurationRef(
 
 class _ISlackChannelConfigurationRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a SlackChannelConfiguration.
 
@@ -519,6 +527,7 @@ typing.cast(typing.Any, ISlackChannelConfigurationRef).__jsii_proxy_class__ = la
 @jsii.interface(jsii_type="aws-cdk-lib.aws_supportapp.ISlackWorkspaceConfigurationRef")
 class ISlackWorkspaceConfigurationRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a SlackWorkspaceConfiguration.
@@ -540,6 +549,7 @@ class ISlackWorkspaceConfigurationRef(
 
 class _ISlackWorkspaceConfigurationRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a SlackWorkspaceConfiguration.
 

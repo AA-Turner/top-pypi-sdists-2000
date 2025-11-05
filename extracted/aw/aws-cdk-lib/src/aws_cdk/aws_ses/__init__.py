@@ -410,6 +410,7 @@ from .. import (
     CfnResource as _CfnResource_9df397a6,
     CfnTag as _CfnTag_f6864754,
     Duration as _Duration_4839e8c3,
+    IEnvironmentAware as _IEnvironmentAware_a408b00d,
     IInspectable as _IInspectable_c2943556,
     IResolvable as _IResolvable_da3f097b,
     IResource as _IResource_c80c4260,
@@ -4884,6 +4885,7 @@ typing.cast(typing.Any, IConfigurationSetEventDestination).__jsii_proxy_class__ 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_ses.IConfigurationSetEventDestinationRef")
 class IConfigurationSetEventDestinationRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a ConfigurationSetEventDestination.
@@ -4905,6 +4907,7 @@ class IConfigurationSetEventDestinationRef(
 
 class _IConfigurationSetEventDestinationRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a ConfigurationSetEventDestination.
 
@@ -4929,7 +4932,11 @@ typing.cast(typing.Any, IConfigurationSetEventDestinationRef).__jsii_proxy_class
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_ses.IConfigurationSetRef")
-class IConfigurationSetRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IConfigurationSetRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a ConfigurationSet.
 
     :stability: experimental
@@ -4947,6 +4954,7 @@ class IConfigurationSetRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Pr
 
 class _IConfigurationSetRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a ConfigurationSet.
 
@@ -4969,7 +4977,11 @@ typing.cast(typing.Any, IConfigurationSetRef).__jsii_proxy_class__ = lambda : _I
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_ses.IContactListRef")
-class IContactListRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IContactListRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a ContactList.
 
     :stability: experimental
@@ -4987,6 +4999,7 @@ class IContactListRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protoco
 
 class _IContactListRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a ContactList.
 
@@ -5043,7 +5056,11 @@ typing.cast(typing.Any, IDedicatedIpPool).__jsii_proxy_class__ = lambda : _IDedi
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_ses.IDedicatedIpPoolRef")
-class IDedicatedIpPoolRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IDedicatedIpPoolRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a DedicatedIpPool.
 
     :stability: experimental
@@ -5061,6 +5078,7 @@ class IDedicatedIpPoolRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Pro
 
 class _IDedicatedIpPoolRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a DedicatedIpPool.
 
@@ -5188,7 +5206,11 @@ typing.cast(typing.Any, IEmailIdentity).__jsii_proxy_class__ = lambda : _IEmailI
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_ses.IEmailIdentityRef")
-class IEmailIdentityRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IEmailIdentityRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a EmailIdentity.
 
     :stability: experimental
@@ -5206,6 +5228,7 @@ class IEmailIdentityRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Proto
 
 class _IEmailIdentityRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a EmailIdentity.
 
@@ -5230,6 +5253,7 @@ typing.cast(typing.Any, IEmailIdentityRef).__jsii_proxy_class__ = lambda : _IEma
 @jsii.interface(jsii_type="aws-cdk-lib.aws_ses.IMailManagerAddonInstanceRef")
 class IMailManagerAddonInstanceRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a MailManagerAddonInstance.
@@ -5249,6 +5273,7 @@ class IMailManagerAddonInstanceRef(
 
 class _IMailManagerAddonInstanceRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a MailManagerAddonInstance.
 
@@ -5273,6 +5298,7 @@ typing.cast(typing.Any, IMailManagerAddonInstanceRef).__jsii_proxy_class__ = lam
 @jsii.interface(jsii_type="aws-cdk-lib.aws_ses.IMailManagerAddonSubscriptionRef")
 class IMailManagerAddonSubscriptionRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a MailManagerAddonSubscription.
@@ -5294,6 +5320,7 @@ class IMailManagerAddonSubscriptionRef(
 
 class _IMailManagerAddonSubscriptionRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a MailManagerAddonSubscription.
 
@@ -5320,6 +5347,7 @@ typing.cast(typing.Any, IMailManagerAddonSubscriptionRef).__jsii_proxy_class__ =
 @jsii.interface(jsii_type="aws-cdk-lib.aws_ses.IMailManagerAddressListRef")
 class IMailManagerAddressListRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a MailManagerAddressList.
@@ -5339,6 +5367,7 @@ class IMailManagerAddressListRef(
 
 class _IMailManagerAddressListRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a MailManagerAddressList.
 
@@ -5363,6 +5392,7 @@ typing.cast(typing.Any, IMailManagerAddressListRef).__jsii_proxy_class__ = lambd
 @jsii.interface(jsii_type="aws-cdk-lib.aws_ses.IMailManagerArchiveRef")
 class IMailManagerArchiveRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a MailManagerArchive.
@@ -5382,6 +5412,7 @@ class IMailManagerArchiveRef(
 
 class _IMailManagerArchiveRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a MailManagerArchive.
 
@@ -5406,6 +5437,7 @@ typing.cast(typing.Any, IMailManagerArchiveRef).__jsii_proxy_class__ = lambda : 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_ses.IMailManagerIngressPointRef")
 class IMailManagerIngressPointRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a MailManagerIngressPoint.
@@ -5425,6 +5457,7 @@ class IMailManagerIngressPointRef(
 
 class _IMailManagerIngressPointRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a MailManagerIngressPoint.
 
@@ -5447,7 +5480,11 @@ typing.cast(typing.Any, IMailManagerIngressPointRef).__jsii_proxy_class__ = lamb
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_ses.IMailManagerRelayRef")
-class IMailManagerRelayRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IMailManagerRelayRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a MailManagerRelay.
 
     :stability: experimental
@@ -5465,6 +5502,7 @@ class IMailManagerRelayRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Pr
 
 class _IMailManagerRelayRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a MailManagerRelay.
 
@@ -5489,6 +5527,7 @@ typing.cast(typing.Any, IMailManagerRelayRef).__jsii_proxy_class__ = lambda : _I
 @jsii.interface(jsii_type="aws-cdk-lib.aws_ses.IMailManagerRuleSetRef")
 class IMailManagerRuleSetRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a MailManagerRuleSet.
@@ -5508,6 +5547,7 @@ class IMailManagerRuleSetRef(
 
 class _IMailManagerRuleSetRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a MailManagerRuleSet.
 
@@ -5532,6 +5572,7 @@ typing.cast(typing.Any, IMailManagerRuleSetRef).__jsii_proxy_class__ = lambda : 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_ses.IMailManagerTrafficPolicyRef")
 class IMailManagerTrafficPolicyRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a MailManagerTrafficPolicy.
@@ -5551,6 +5592,7 @@ class IMailManagerTrafficPolicyRef(
 
 class _IMailManagerTrafficPolicyRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a MailManagerTrafficPolicy.
 
@@ -5573,7 +5615,11 @@ typing.cast(typing.Any, IMailManagerTrafficPolicyRef).__jsii_proxy_class__ = lam
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_ses.IReceiptFilterRef")
-class IReceiptFilterRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IReceiptFilterRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a ReceiptFilter.
 
     :stability: experimental
@@ -5591,6 +5637,7 @@ class IReceiptFilterRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Proto
 
 class _IReceiptFilterRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a ReceiptFilter.
 
@@ -5680,7 +5727,11 @@ typing.cast(typing.Any, IReceiptRuleAction).__jsii_proxy_class__ = lambda : _IRe
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_ses.IReceiptRuleRef")
-class IReceiptRuleRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IReceiptRuleRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a ReceiptRule.
 
     :stability: experimental
@@ -5698,6 +5749,7 @@ class IReceiptRuleRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protoco
 
 class _IReceiptRuleRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a ReceiptRule.
 
@@ -5825,7 +5877,11 @@ typing.cast(typing.Any, IReceiptRuleSet).__jsii_proxy_class__ = lambda : _IRecei
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_ses.IReceiptRuleSetRef")
-class IReceiptRuleSetRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IReceiptRuleSetRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a ReceiptRuleSet.
 
     :stability: experimental
@@ -5843,6 +5899,7 @@ class IReceiptRuleSetRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Prot
 
 class _IReceiptRuleSetRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a ReceiptRuleSet.
 
@@ -5865,7 +5922,11 @@ typing.cast(typing.Any, IReceiptRuleSetRef).__jsii_proxy_class__ = lambda : _IRe
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_ses.ITemplateRef")
-class ITemplateRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class ITemplateRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Template.
 
     :stability: experimental
@@ -5883,6 +5944,7 @@ class ITemplateRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _ITemplateRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Template.
 
@@ -5939,7 +6001,11 @@ typing.cast(typing.Any, IVdmAttributes).__jsii_proxy_class__ = lambda : _IVdmAtt
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_ses.IVdmAttributesRef")
-class IVdmAttributesRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IVdmAttributesRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a VdmAttributes.
 
     :stability: experimental
@@ -5957,6 +6023,7 @@ class IVdmAttributesRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Proto
 
 class _IVdmAttributesRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a VdmAttributes.
 

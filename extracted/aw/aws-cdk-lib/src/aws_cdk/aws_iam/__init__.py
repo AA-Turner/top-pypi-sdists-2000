@@ -1018,6 +1018,7 @@ from .. import (
     CfnResource as _CfnResource_9df397a6,
     CfnTag as _CfnTag_f6864754,
     Duration as _Duration_4839e8c3,
+    IEnvironmentAware as _IEnvironmentAware_a408b00d,
     IInspectable as _IInspectable_c2943556,
     IResolvable as _IResolvable_da3f097b,
     IResolveContext as _IResolveContext_b2df1921,
@@ -4109,7 +4110,7 @@ class Grant(metaclass=jsii.JSIIMeta, jsii_type="aws-cdk-lib.aws_iam.Grant"):
         cls,
         *,
         statement: "PolicyStatement",
-        resource: "IResourceWithPolicy",
+        resource: "IResourceWithPolicyV2",
         resource_self_arns: typing.Optional[typing.Sequence[builtins.str]] = None,
         actions: typing.Sequence[builtins.str],
         grantee: "IGrantable",
@@ -4136,7 +4137,7 @@ class Grant(metaclass=jsii.JSIIMeta, jsii_type="aws-cdk-lib.aws_iam.Grant"):
         from the provided statement, depending on the resource's implementation of
         addToResourcePolicy.
 
-        :param statement: The policy statement to add to the resource's policy. This statement will be passed to the resource's addToResourcePolicy method. The actual handling of the statement depends on the specific IResourceWithPolicy implementation.
+        :param statement: The policy statement to add to the resource's policy. This statement will be passed to the resource's addToResourcePolicy method. The actual handling of the statement depends on the specific IResourceWithPolicyV2 implementation.
         :param resource: The resource with a resource policy. The statement will be added to the resource policy if it couldn't be added to the principal policy.
         :param resource_self_arns: When referring to the resource in a resource policy, use this as ARN. (Depending on the resource type, this needs to be '*' in a resource policy). Default: Same as regular resource ARNs
         :param actions: The actions to grant.
@@ -4200,7 +4201,7 @@ class Grant(metaclass=jsii.JSIIMeta, jsii_type="aws-cdk-lib.aws_iam.Grant"):
         Absence of a principal leads to a warning, but failing to add
         the permissions to a present principal is not an error.
 
-        :param scope: Construct to report warnings on in case grant could not be registered. Default: - the construct in which this construct is defined
+        :param scope: (deprecated) Construct to report warnings on in case grant could not be registered. Default: - the construct in which this construct is defined
         :param actions: The actions to grant.
         :param grantee: The principal to grant to. Default: if principal is undefined, no work is done.
         :param resource_arns: The resource ARNs to grant to.
@@ -4221,7 +4222,7 @@ class Grant(metaclass=jsii.JSIIMeta, jsii_type="aws-cdk-lib.aws_iam.Grant"):
     def add_to_principal_and_resource(
         cls,
         *,
-        resource: "IResourceWithPolicy",
+        resource: "IResourceWithPolicyV2",
         resource_policy_principal: typing.Optional["IPrincipal"] = None,
         resource_self_arns: typing.Optional[typing.Sequence[builtins.str]] = None,
         actions: typing.Sequence[builtins.str],
@@ -4262,7 +4263,7 @@ class Grant(metaclass=jsii.JSIIMeta, jsii_type="aws-cdk-lib.aws_iam.Grant"):
     def add_to_principal_or_resource(
         cls,
         *,
-        resource: "IResourceWithPolicy",
+        resource: "IResourceWithPolicyV2",
         resource_self_arns: typing.Optional[typing.Sequence[builtins.str]] = None,
         actions: typing.Sequence[builtins.str],
         grantee: "IGrantable",
@@ -4408,7 +4409,7 @@ class GrantOnPrincipalAndResourceOptions(CommonGrantOptions):
         grantee: "IGrantable",
         resource_arns: typing.Sequence[builtins.str],
         conditions: typing.Optional[typing.Mapping[builtins.str, typing.Mapping[builtins.str, typing.Any]]] = None,
-        resource: "IResourceWithPolicy",
+        resource: "IResourceWithPolicyV2",
         resource_policy_principal: typing.Optional["IPrincipal"] = None,
         resource_self_arns: typing.Optional[typing.Sequence[builtins.str]] = None,
     ) -> None:
@@ -4433,12 +4434,12 @@ class GrantOnPrincipalAndResourceOptions(CommonGrantOptions):
             # conditions: Any
             # grantable: iam.IGrantable
             # principal: iam.IPrincipal
-            # resource_with_policy: iam.IResourceWithPolicy
+            # resource_with_policy_v2: iam.IResourceWithPolicyV2
             
             grant_on_principal_and_resource_options = iam.GrantOnPrincipalAndResourceOptions(
                 actions=["actions"],
                 grantee=grantable,
-                resource=resource_with_policy,
+                resource=resource_with_policy_v2,
                 resource_arns=["resourceArns"],
             
                 # the properties below are optional
@@ -4509,14 +4510,14 @@ class GrantOnPrincipalAndResourceOptions(CommonGrantOptions):
         return typing.cast(typing.Optional[typing.Mapping[builtins.str, typing.Mapping[builtins.str, typing.Any]]], result)
 
     @builtins.property
-    def resource(self) -> "IResourceWithPolicy":
+    def resource(self) -> "IResourceWithPolicyV2":
         '''The resource with a resource policy.
 
         The statement will always be added to the resource policy.
         '''
         result = self._values.get("resource")
         assert result is not None, "Required property 'resource' is missing"
-        return typing.cast("IResourceWithPolicy", result)
+        return typing.cast("IResourceWithPolicyV2", result)
 
     @builtins.property
     def resource_policy_principal(self) -> typing.Optional["IPrincipal"]:
@@ -4577,7 +4578,7 @@ class GrantOnPrincipalOptions(CommonGrantOptions):
         :param grantee: The principal to grant to. Default: if principal is undefined, no work is done.
         :param resource_arns: The resource ARNs to grant to.
         :param conditions: Any conditions to attach to the grant. Default: - No conditions
-        :param scope: Construct to report warnings on in case grant could not be registered. Default: - the construct in which this construct is defined
+        :param scope: (deprecated) Construct to report warnings on in case grant could not be registered. Default: - the construct in which this construct is defined
 
         :exampleMetadata: fixture=_generated
 
@@ -4660,9 +4661,13 @@ class GrantOnPrincipalOptions(CommonGrantOptions):
 
     @builtins.property
     def scope(self) -> typing.Optional[_constructs_77d1e7e8.IConstruct]:
-        '''Construct to report warnings on in case grant could not be registered.
+        '''(deprecated) Construct to report warnings on in case grant could not be registered.
 
         :default: - the construct in which this construct is defined
+
+        :deprecated: The scope argument is currently unused.
+
+        :stability: deprecated
         '''
         result = self._values.get("scope")
         return typing.cast(typing.Optional[_constructs_77d1e7e8.IConstruct], result)
@@ -4699,7 +4704,7 @@ class GrantWithResourceOptions(CommonGrantOptions):
         grantee: "IGrantable",
         resource_arns: typing.Sequence[builtins.str],
         conditions: typing.Optional[typing.Mapping[builtins.str, typing.Mapping[builtins.str, typing.Any]]] = None,
-        resource: "IResourceWithPolicy",
+        resource: "IResourceWithPolicyV2",
         resource_self_arns: typing.Optional[typing.Sequence[builtins.str]] = None,
     ) -> None:
         '''Options for a grant operation.
@@ -4721,12 +4726,12 @@ class GrantWithResourceOptions(CommonGrantOptions):
             
             # conditions: Any
             # grantable: iam.IGrantable
-            # resource_with_policy: iam.IResourceWithPolicy
+            # resource_with_policy_v2: iam.IResourceWithPolicyV2
             
             grant_with_resource_options = iam.GrantWithResourceOptions(
                 actions=["actions"],
                 grantee=grantable,
-                resource=resource_with_policy,
+                resource=resource_with_policy_v2,
                 resource_arns=["resourceArns"],
             
                 # the properties below are optional
@@ -4793,7 +4798,7 @@ class GrantWithResourceOptions(CommonGrantOptions):
         return typing.cast(typing.Optional[typing.Mapping[builtins.str, typing.Mapping[builtins.str, typing.Any]]], result)
 
     @builtins.property
-    def resource(self) -> "IResourceWithPolicy":
+    def resource(self) -> "IResourceWithPolicyV2":
         '''The resource with a resource policy.
 
         The statement will be added to the resource policy if it couldn't be
@@ -4801,7 +4806,7 @@ class GrantWithResourceOptions(CommonGrantOptions):
         '''
         result = self._values.get("resource")
         assert result is not None, "Required property 'resource' is missing"
-        return typing.cast("IResourceWithPolicy", result)
+        return typing.cast("IResourceWithPolicyV2", result)
 
     @builtins.property
     def resource_self_arns(self) -> typing.Optional[typing.List[builtins.str]]:
@@ -5054,7 +5059,11 @@ class GroupReference:
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_iam.IAccessKeyRef")
-class IAccessKeyRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IAccessKeyRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a AccessKey.
 
     :stability: experimental
@@ -5072,6 +5081,7 @@ class IAccessKeyRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol)
 
 class _IAccessKeyRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a AccessKey.
 
@@ -5120,7 +5130,11 @@ typing.cast(typing.Any, IGrantable).__jsii_proxy_class__ = lambda : _IGrantableP
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_iam.IGroupPolicyRef")
-class IGroupPolicyRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IGroupPolicyRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a GroupPolicy.
 
     :stability: experimental
@@ -5138,6 +5152,7 @@ class IGroupPolicyRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protoco
 
 class _IGroupPolicyRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a GroupPolicy.
 
@@ -5160,7 +5175,11 @@ typing.cast(typing.Any, IGroupPolicyRef).__jsii_proxy_class__ = lambda : _IGroup
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_iam.IGroupRef")
-class IGroupRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IGroupRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Group.
 
     :stability: experimental
@@ -5178,6 +5197,7 @@ class IGroupRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IGroupRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Group.
 
@@ -5200,7 +5220,11 @@ typing.cast(typing.Any, IGroupRef).__jsii_proxy_class__ = lambda : _IGroupRefPro
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_iam.IInstanceProfileRef")
-class IInstanceProfileRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IInstanceProfileRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a InstanceProfile.
 
     :stability: experimental
@@ -5218,6 +5242,7 @@ class IInstanceProfileRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Pro
 
 class _IInstanceProfileRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a InstanceProfile.
 
@@ -5240,7 +5265,11 @@ typing.cast(typing.Any, IInstanceProfileRef).__jsii_proxy_class__ = lambda : _II
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_iam.IManagedPolicyRef")
-class IManagedPolicyRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IManagedPolicyRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a ManagedPolicy.
 
     :stability: experimental
@@ -5258,6 +5287,7 @@ class IManagedPolicyRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Proto
 
 class _IManagedPolicyRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a ManagedPolicy.
 
@@ -5280,7 +5310,11 @@ typing.cast(typing.Any, IManagedPolicyRef).__jsii_proxy_class__ = lambda : _IMan
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_iam.IOIDCProviderRef")
-class IOIDCProviderRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IOIDCProviderRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a OIDCProvider.
 
     :stability: experimental
@@ -5298,6 +5332,7 @@ class IOIDCProviderRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protoc
 
 class _IOIDCProviderRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a OIDCProvider.
 
@@ -5418,7 +5453,11 @@ typing.cast(typing.Any, IOpenIdConnectProvider).__jsii_proxy_class__ = lambda : 
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_iam.IPolicyRef")
-class IPolicyRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IPolicyRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Policy.
 
     :stability: experimental
@@ -5436,6 +5475,7 @@ class IPolicyRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IPolicyRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Policy.
 
@@ -5576,8 +5616,8 @@ class _IPrincipalProxy(
 typing.cast(typing.Any, IPrincipal).__jsii_proxy_class__ = lambda : _IPrincipalProxy
 
 
-@jsii.interface(jsii_type="aws-cdk-lib.aws_iam.IResourceWithPolicy")
-class IResourceWithPolicy(_IResource_c80c4260, typing_extensions.Protocol):
+@jsii.interface(jsii_type="aws-cdk-lib.aws_iam.IResourceWithPolicyV2")
+class IResourceWithPolicyV2(_IEnvironmentAware_a408b00d, typing_extensions.Protocol):
     '''A resource with a resource policy that can be added to.'''
 
     @jsii.member(jsii_name="addToResourcePolicy")
@@ -5592,12 +5632,12 @@ class IResourceWithPolicy(_IResource_c80c4260, typing_extensions.Protocol):
         ...
 
 
-class _IResourceWithPolicyProxy(
-    jsii.proxy_for(_IResource_c80c4260), # type: ignore[misc]
+class _IResourceWithPolicyV2Proxy(
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''A resource with a resource policy that can be added to.'''
 
-    __jsii_type__: typing.ClassVar[str] = "aws-cdk-lib.aws_iam.IResourceWithPolicy"
+    __jsii_type__: typing.ClassVar[str] = "aws-cdk-lib.aws_iam.IResourceWithPolicyV2"
 
     @jsii.member(jsii_name="addToResourcePolicy")
     def add_to_resource_policy(
@@ -5609,16 +5649,20 @@ class _IResourceWithPolicyProxy(
         :param statement: -
         '''
         if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__dc0b619bfbc345bc9140fcc58d59f27472a211b09306f5c2e6b0147efcef6b18)
+            type_hints = typing.get_type_hints(_typecheckingstub__d0411047245e16030f540e191ce067fdd2216fb84afd5f47032486efe2dddfda)
             check_type(argname="argument statement", value=statement, expected_type=type_hints["statement"])
         return typing.cast(AddToResourcePolicyResult, jsii.invoke(self, "addToResourcePolicy", [statement]))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
-typing.cast(typing.Any, IResourceWithPolicy).__jsii_proxy_class__ = lambda : _IResourceWithPolicyProxy
+typing.cast(typing.Any, IResourceWithPolicyV2).__jsii_proxy_class__ = lambda : _IResourceWithPolicyV2Proxy
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_iam.IRolePolicyRef")
-class IRolePolicyRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IRolePolicyRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a RolePolicy.
 
     :stability: experimental
@@ -5636,6 +5680,7 @@ class IRolePolicyRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol
 
 class _IRolePolicyRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a RolePolicy.
 
@@ -5658,7 +5703,11 @@ typing.cast(typing.Any, IRolePolicyRef).__jsii_proxy_class__ = lambda : _IRolePo
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_iam.IRoleRef")
-class IRoleRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IRoleRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Role.
 
     :stability: experimental
@@ -5676,6 +5725,7 @@ class IRoleRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IRoleRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Role.
 
@@ -5698,7 +5748,11 @@ typing.cast(typing.Any, IRoleRef).__jsii_proxy_class__ = lambda : _IRoleRefProxy
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_iam.ISAMLProviderRef")
-class ISAMLProviderRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class ISAMLProviderRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a SAMLProvider.
 
     :stability: experimental
@@ -5716,6 +5770,7 @@ class ISAMLProviderRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protoc
 
 class _ISAMLProviderRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a SAMLProvider.
 
@@ -5775,6 +5830,7 @@ typing.cast(typing.Any, ISamlProvider).__jsii_proxy_class__ = lambda : _ISamlPro
 @jsii.interface(jsii_type="aws-cdk-lib.aws_iam.IServerCertificateRef")
 class IServerCertificateRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a ServerCertificate.
@@ -5794,6 +5850,7 @@ class IServerCertificateRef(
 
 class _IServerCertificateRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a ServerCertificate.
 
@@ -5818,6 +5875,7 @@ typing.cast(typing.Any, IServerCertificateRef).__jsii_proxy_class__ = lambda : _
 @jsii.interface(jsii_type="aws-cdk-lib.aws_iam.IServiceLinkedRoleRef")
 class IServiceLinkedRoleRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a ServiceLinkedRole.
@@ -5837,6 +5895,7 @@ class IServiceLinkedRoleRef(
 
 class _IServiceLinkedRoleRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a ServiceLinkedRole.
 
@@ -5859,7 +5918,11 @@ typing.cast(typing.Any, IServiceLinkedRoleRef).__jsii_proxy_class__ = lambda : _
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_iam.IUserPolicyRef")
-class IUserPolicyRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IUserPolicyRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a UserPolicy.
 
     :stability: experimental
@@ -5877,6 +5940,7 @@ class IUserPolicyRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol
 
 class _IUserPolicyRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a UserPolicy.
 
@@ -5899,7 +5963,11 @@ typing.cast(typing.Any, IUserPolicyRef).__jsii_proxy_class__ = lambda : _IUserPo
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_iam.IUserRef")
-class IUserRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IUserRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a User.
 
     :stability: experimental
@@ -5917,6 +5985,7 @@ class IUserRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IUserRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a User.
 
@@ -5941,6 +6010,7 @@ typing.cast(typing.Any, IUserRef).__jsii_proxy_class__ = lambda : _IUserRefProxy
 @jsii.interface(jsii_type="aws-cdk-lib.aws_iam.IUserToGroupAdditionRef")
 class IUserToGroupAdditionRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a UserToGroupAddition.
@@ -5960,6 +6030,7 @@ class IUserToGroupAdditionRef(
 
 class _IUserToGroupAdditionRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a UserToGroupAddition.
 
@@ -5982,7 +6053,11 @@ typing.cast(typing.Any, IUserToGroupAdditionRef).__jsii_proxy_class__ = lambda :
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_iam.IVirtualMFADeviceRef")
-class IVirtualMFADeviceRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IVirtualMFADeviceRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a VirtualMFADevice.
 
     :stability: experimental
@@ -6000,6 +6075,7 @@ class IVirtualMFADeviceRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Pr
 
 class _IVirtualMFADeviceRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a VirtualMFADevice.
 
@@ -13505,7 +13581,7 @@ class GrantPolicyWithResourceOptions(GrantWithResourceOptions):
         grantee: IGrantable,
         resource_arns: typing.Sequence[builtins.str],
         conditions: typing.Optional[typing.Mapping[builtins.str, typing.Mapping[builtins.str, typing.Any]]] = None,
-        resource: IResourceWithPolicy,
+        resource: IResourceWithPolicyV2,
         resource_self_arns: typing.Optional[typing.Sequence[builtins.str]] = None,
         statement: PolicyStatement,
     ) -> None:
@@ -13521,7 +13597,7 @@ class GrantPolicyWithResourceOptions(GrantWithResourceOptions):
         :param conditions: Any conditions to attach to the grant. Default: - No conditions
         :param resource: The resource with a resource policy. The statement will be added to the resource policy if it couldn't be added to the principal policy.
         :param resource_self_arns: When referring to the resource in a resource policy, use this as ARN. (Depending on the resource type, this needs to be '*' in a resource policy). Default: Same as regular resource ARNs
-        :param statement: The policy statement to add to the resource's policy. This statement will be passed to the resource's addToResourcePolicy method. The actual handling of the statement depends on the specific IResourceWithPolicy implementation.
+        :param statement: The policy statement to add to the resource's policy. This statement will be passed to the resource's addToResourcePolicy method. The actual handling of the statement depends on the specific IResourceWithPolicyV2 implementation.
 
         :exampleMetadata: infused
 
@@ -13608,7 +13684,7 @@ class GrantPolicyWithResourceOptions(GrantWithResourceOptions):
         return typing.cast(typing.Optional[typing.Mapping[builtins.str, typing.Mapping[builtins.str, typing.Any]]], result)
 
     @builtins.property
-    def resource(self) -> IResourceWithPolicy:
+    def resource(self) -> IResourceWithPolicyV2:
         '''The resource with a resource policy.
 
         The statement will be added to the resource policy if it couldn't be
@@ -13616,7 +13692,7 @@ class GrantPolicyWithResourceOptions(GrantWithResourceOptions):
         '''
         result = self._values.get("resource")
         assert result is not None, "Required property 'resource' is missing"
-        return typing.cast(IResourceWithPolicy, result)
+        return typing.cast(IResourceWithPolicyV2, result)
 
     @builtins.property
     def resource_self_arns(self) -> typing.Optional[typing.List[builtins.str]]:
@@ -13634,7 +13710,7 @@ class GrantPolicyWithResourceOptions(GrantWithResourceOptions):
         '''The policy statement to add to the resource's policy.
 
         This statement will be passed to the resource's addToResourcePolicy method.
-        The actual handling of the statement depends on the specific IResourceWithPolicy
+        The actual handling of the statement depends on the specific IResourceWithPolicyV2
         implementation.
         '''
         result = self._values.get("statement")
@@ -14002,6 +14078,46 @@ class _IPolicyProxy(
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IPolicy).__jsii_proxy_class__ = lambda : _IPolicyProxy
+
+
+@jsii.interface(jsii_type="aws-cdk-lib.aws_iam.IResourceWithPolicy")
+class IResourceWithPolicy(
+    IResourceWithPolicyV2,
+    _IResource_c80c4260,
+    typing_extensions.Protocol,
+):
+    '''(deprecated) A resource with a resource policy that can be added to.
+
+    This interface is maintained for backwards compatibility, but should
+    not be used in new code. Prefer ``IResourceWithPolicyV2`` instead.
+
+    :deprecated: Implement ``IResourceWithPolicyV2`` instead.
+
+    :stability: deprecated
+    '''
+
+    pass
+
+
+class _IResourceWithPolicyProxy(
+    jsii.proxy_for(IResourceWithPolicyV2), # type: ignore[misc]
+    jsii.proxy_for(_IResource_c80c4260), # type: ignore[misc]
+):
+    '''(deprecated) A resource with a resource policy that can be added to.
+
+    This interface is maintained for backwards compatibility, but should
+    not be used in new code. Prefer ``IResourceWithPolicyV2`` instead.
+
+    :deprecated: Implement ``IResourceWithPolicyV2`` instead.
+
+    :stability: deprecated
+    '''
+
+    __jsii_type__: typing.ClassVar[str] = "aws-cdk-lib.aws_iam.IResourceWithPolicy"
+    pass
+
+# Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
+typing.cast(typing.Any, IResourceWithPolicy).__jsii_proxy_class__ = lambda : _IResourceWithPolicyProxy
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_iam.IRole")
@@ -16060,16 +16176,21 @@ class ServicePrincipal(
 
     Example::
 
-        # definition: sfn.IChainable
-        role = iam.Role(self, "Role",
-            assumed_by=iam.ServicePrincipal("lambda.amazonaws.com")
-        )
-        state_machine = sfn.StateMachine(self, "StateMachine",
-            definition_body=sfn.DefinitionBody.from_chainable(definition)
+        lambda_role = iam.Role(self, "Role",
+            assumed_by=iam.ServicePrincipal("lambda.amazonaws.com"),
+            description="Example role..."
         )
         
-        # Give role permission to get execution history of ALL executions for the state machine
-        state_machine.grant_execution(role, "states:GetExecutionHistory")
+        stream = kinesis.Stream(self, "MyEncryptedStream",
+            encryption=kinesis.StreamEncryption.KMS
+        )
+        stream_consumer = kinesis.StreamConsumer(self, "MyStreamConsumer",
+            stream_consumer_name="MyStreamConsumer",
+            stream=stream
+        )
+        
+        # give lambda permissions to read stream via the stream consumer
+        stream_consumer.grant_read(lambda_role)
     '''
 
     def __init__(
@@ -17239,13 +17360,19 @@ class AccountRootPrincipal(
 
     Example::
 
-        bucket = s3.Bucket(self, "MyBucket")
-        result = bucket.add_to_resource_policy(
-            iam.PolicyStatement(
-                actions=["s3:GetObject"],
-                resources=[bucket.arn_for_objects("file.txt")],
-                principals=[iam.AccountRootPrincipal()]
-            ))
+        my_trusted_admin_role = iam.Role.from_role_arn(self, "TrustedRole", "arn:aws:iam:....")
+        # Creates a limited admin policy and assigns to the account root.
+        my_custom_policy = iam.PolicyDocument(
+            statements=[iam.PolicyStatement(
+                actions=["kms:Create*", "kms:Describe*", "kms:Enable*", "kms:List*", "kms:Put*"
+                ],
+                principals=[iam.AccountRootPrincipal()],
+                resources=["*"]
+            )]
+        )
+        key = kms.Key(self, "MyKey",
+            policy=my_custom_policy
+        )
     '''
 
     def __init__(self) -> None:
@@ -17680,6 +17807,7 @@ __all__ = [
     "IPolicyRef",
     "IPrincipal",
     "IResourceWithPolicy",
+    "IResourceWithPolicyV2",
     "IRole",
     "IRolePolicyRef",
     "IRoleRef",
@@ -18032,7 +18160,7 @@ def _typecheckingstub__a60e5877e638d22c44d2e72be768df7f85caf47bec9ab2e6b2adcce82
     grantee: IGrantable,
     resource_arns: typing.Sequence[builtins.str],
     conditions: typing.Optional[typing.Mapping[builtins.str, typing.Mapping[builtins.str, typing.Any]]] = None,
-    resource: IResourceWithPolicy,
+    resource: IResourceWithPolicyV2,
     resource_policy_principal: typing.Optional[IPrincipal] = None,
     resource_self_arns: typing.Optional[typing.Sequence[builtins.str]] = None,
 ) -> None:
@@ -18056,7 +18184,7 @@ def _typecheckingstub__d76f68f1d67dcad526c87768d88423a4092a0ef3127be7cb534620448
     grantee: IGrantable,
     resource_arns: typing.Sequence[builtins.str],
     conditions: typing.Optional[typing.Mapping[builtins.str, typing.Mapping[builtins.str, typing.Any]]] = None,
-    resource: IResourceWithPolicy,
+    resource: IResourceWithPolicyV2,
     resource_self_arns: typing.Optional[typing.Sequence[builtins.str]] = None,
 ) -> None:
     """Type checking stubs"""
@@ -18093,7 +18221,7 @@ def _typecheckingstub__7c10aadcc3756f5f6d5486d7ecd5cabd7845be5964af1722a9d4962d5
     """Type checking stubs"""
     pass
 
-def _typecheckingstub__dc0b619bfbc345bc9140fcc58d59f27472a211b09306f5c2e6b0147efcef6b18(
+def _typecheckingstub__d0411047245e16030f540e191ce067fdd2216fb84afd5f47032486efe2dddfda(
     statement: PolicyStatement,
 ) -> None:
     """Type checking stubs"""
@@ -19479,7 +19607,7 @@ def _typecheckingstub__0475ec23892b6dacf8e0426b204cca68a4091056bb08c20a72dbc06d2
     grantee: IGrantable,
     resource_arns: typing.Sequence[builtins.str],
     conditions: typing.Optional[typing.Mapping[builtins.str, typing.Mapping[builtins.str, typing.Any]]] = None,
-    resource: IResourceWithPolicy,
+    resource: IResourceWithPolicyV2,
     resource_self_arns: typing.Optional[typing.Sequence[builtins.str]] = None,
     statement: PolicyStatement,
 ) -> None:
@@ -20208,5 +20336,5 @@ def _typecheckingstub__c7271e79a3715a166397ac94ded3c4043db8b40c10213ffae6abbb3a1
     """Type checking stubs"""
     pass
 
-for cls in [IAccessKey, IAccessKeyRef, IAssumeRolePrincipal, IComparablePrincipal, IGrantable, IGroup, IGroupPolicyRef, IGroupRef, IIdentity, IInstanceProfile, IInstanceProfileRef, IManagedPolicy, IManagedPolicyRef, IOIDCProviderRef, IOidcProvider, IOpenIdConnectProvider, IPolicy, IPolicyRef, IPrincipal, IResourceWithPolicy, IRole, IRolePolicyRef, IRoleRef, ISAMLProviderRef, ISamlProvider, IServerCertificateRef, IServiceLinkedRoleRef, IUser, IUserPolicyRef, IUserRef, IUserToGroupAdditionRef, IVirtualMFADeviceRef]:
+for cls in [IAccessKey, IAccessKeyRef, IAssumeRolePrincipal, IComparablePrincipal, IGrantable, IGroup, IGroupPolicyRef, IGroupRef, IIdentity, IInstanceProfile, IInstanceProfileRef, IManagedPolicy, IManagedPolicyRef, IOIDCProviderRef, IOidcProvider, IOpenIdConnectProvider, IPolicy, IPolicyRef, IPrincipal, IResourceWithPolicy, IResourceWithPolicyV2, IRole, IRolePolicyRef, IRoleRef, ISAMLProviderRef, ISamlProvider, IServerCertificateRef, IServiceLinkedRoleRef, IUser, IUserPolicyRef, IUserRef, IUserToGroupAdditionRef, IVirtualMFADeviceRef]:
     typing.cast(typing.Any, cls).__protocol_attrs__ = typing.cast(typing.Any, cls).__protocol_attrs__ - set(['__jsii_proxy_class__', '__jsii_type__'])

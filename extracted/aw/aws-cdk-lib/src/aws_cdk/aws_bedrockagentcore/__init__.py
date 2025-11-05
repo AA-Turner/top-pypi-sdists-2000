@@ -70,6 +70,7 @@ from .._jsii import *
 import constructs as _constructs_77d1e7e8
 from .. import (
     CfnResource as _CfnResource_9df397a6,
+    IEnvironmentAware as _IEnvironmentAware_a408b00d,
     IInspectable as _IInspectable_c2943556,
     IResolvable as _IResolvable_da3f097b,
     ITaggableV2 as _ITaggableV2_4e6798f8,
@@ -1651,7 +1652,11 @@ class GatewayTargetReference:
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_bedrockagentcore.IBrowserCustomRef")
-class IBrowserCustomRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IBrowserCustomRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a BrowserCustom.
 
     :stability: experimental
@@ -1669,6 +1674,7 @@ class IBrowserCustomRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Proto
 
 class _IBrowserCustomRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a BrowserCustom.
 
@@ -1693,6 +1699,7 @@ typing.cast(typing.Any, IBrowserCustomRef).__jsii_proxy_class__ = lambda : _IBro
 @jsii.interface(jsii_type="aws-cdk-lib.aws_bedrockagentcore.ICodeInterpreterCustomRef")
 class ICodeInterpreterCustomRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a CodeInterpreterCustom.
@@ -1712,6 +1719,7 @@ class ICodeInterpreterCustomRef(
 
 class _ICodeInterpreterCustomRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a CodeInterpreterCustom.
 
@@ -1734,7 +1742,11 @@ typing.cast(typing.Any, ICodeInterpreterCustomRef).__jsii_proxy_class__ = lambda
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_bedrockagentcore.IGatewayRef")
-class IGatewayRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IGatewayRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Gateway.
 
     :stability: experimental
@@ -1752,6 +1764,7 @@ class IGatewayRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IGatewayRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Gateway.
 
@@ -1774,7 +1787,11 @@ typing.cast(typing.Any, IGatewayRef).__jsii_proxy_class__ = lambda : _IGatewayRe
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_bedrockagentcore.IGatewayTargetRef")
-class IGatewayTargetRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IGatewayTargetRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a GatewayTarget.
 
     :stability: experimental
@@ -1792,6 +1809,7 @@ class IGatewayTargetRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Proto
 
 class _IGatewayTargetRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a GatewayTarget.
 
@@ -1814,7 +1832,11 @@ typing.cast(typing.Any, IGatewayTargetRef).__jsii_proxy_class__ = lambda : _IGat
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_bedrockagentcore.IMemoryRef")
-class IMemoryRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IMemoryRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Memory.
 
     :stability: experimental
@@ -1832,6 +1854,7 @@ class IMemoryRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IMemoryRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Memory.
 
@@ -1854,7 +1877,11 @@ typing.cast(typing.Any, IMemoryRef).__jsii_proxy_class__ = lambda : _IMemoryRefP
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_bedrockagentcore.IRuntimeEndpointRef")
-class IRuntimeEndpointRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IRuntimeEndpointRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a RuntimeEndpoint.
 
     :stability: experimental
@@ -1872,6 +1899,7 @@ class IRuntimeEndpointRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Pro
 
 class _IRuntimeEndpointRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a RuntimeEndpoint.
 
@@ -1894,7 +1922,11 @@ typing.cast(typing.Any, IRuntimeEndpointRef).__jsii_proxy_class__ = lambda : _IR
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_bedrockagentcore.IRuntimeRef")
-class IRuntimeRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IRuntimeRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Runtime.
 
     :stability: experimental
@@ -1912,6 +1944,7 @@ class IRuntimeRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IRuntimeRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Runtime.
 

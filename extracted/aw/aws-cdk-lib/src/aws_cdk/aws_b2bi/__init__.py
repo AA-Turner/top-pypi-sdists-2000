@@ -71,6 +71,7 @@ import constructs as _constructs_77d1e7e8
 from .. import (
     CfnResource as _CfnResource_9df397a6,
     CfnTag as _CfnTag_f6864754,
+    IEnvironmentAware as _IEnvironmentAware_a408b00d,
     IInspectable as _IInspectable_c2943556,
     IResolvable as _IResolvable_da3f097b,
     ITaggableV2 as _ITaggableV2_4e6798f8,
@@ -1004,7 +1005,11 @@ class CfnTransformerProps:
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_b2bi.ICapabilityRef")
-class ICapabilityRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class ICapabilityRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Capability.
 
     :stability: experimental
@@ -1022,6 +1027,7 @@ class ICapabilityRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol
 
 class _ICapabilityRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Capability.
 
@@ -1044,7 +1050,11 @@ typing.cast(typing.Any, ICapabilityRef).__jsii_proxy_class__ = lambda : _ICapabi
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_b2bi.IPartnershipRef")
-class IPartnershipRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IPartnershipRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Partnership.
 
     :stability: experimental
@@ -1062,6 +1072,7 @@ class IPartnershipRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protoco
 
 class _IPartnershipRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Partnership.
 
@@ -1084,7 +1095,11 @@ typing.cast(typing.Any, IPartnershipRef).__jsii_proxy_class__ = lambda : _IPartn
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_b2bi.IProfileRef")
-class IProfileRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IProfileRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Profile.
 
     :stability: experimental
@@ -1102,6 +1117,7 @@ class IProfileRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IProfileRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Profile.
 
@@ -1124,7 +1140,11 @@ typing.cast(typing.Any, IProfileRef).__jsii_proxy_class__ = lambda : _IProfileRe
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_b2bi.ITransformerRef")
-class ITransformerRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class ITransformerRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Transformer.
 
     :stability: experimental
@@ -1142,6 +1162,7 @@ class ITransformerRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protoco
 
 class _ITransformerRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Transformer.
 

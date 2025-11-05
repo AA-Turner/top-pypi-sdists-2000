@@ -66,6 +66,7 @@ import constructs as _constructs_77d1e7e8
 from .. import (
     CfnResource as _CfnResource_9df397a6,
     CfnTag as _CfnTag_f6864754,
+    IEnvironmentAware as _IEnvironmentAware_a408b00d,
     IInspectable as _IInspectable_c2943556,
     IResolvable as _IResolvable_da3f097b,
     ITaggable as _ITaggable_36806126,
@@ -2813,6 +2814,7 @@ class EventSubscriptionReference:
 @jsii.interface(jsii_type="aws-cdk-lib.aws_redshift.IClusterParameterGroupRef")
 class IClusterParameterGroupRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a ClusterParameterGroup.
@@ -2832,6 +2834,7 @@ class IClusterParameterGroupRef(
 
 class _IClusterParameterGroupRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a ClusterParameterGroup.
 
@@ -2854,7 +2857,11 @@ typing.cast(typing.Any, IClusterParameterGroupRef).__jsii_proxy_class__ = lambda
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_redshift.IClusterRef")
-class IClusterRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IClusterRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Cluster.
 
     :stability: experimental
@@ -2872,6 +2879,7 @@ class IClusterRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IClusterRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Cluster.
 
@@ -2896,6 +2904,7 @@ typing.cast(typing.Any, IClusterRef).__jsii_proxy_class__ = lambda : _IClusterRe
 @jsii.interface(jsii_type="aws-cdk-lib.aws_redshift.IClusterSecurityGroupIngressRef")
 class IClusterSecurityGroupIngressRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a ClusterSecurityGroupIngress.
@@ -2917,6 +2926,7 @@ class IClusterSecurityGroupIngressRef(
 
 class _IClusterSecurityGroupIngressRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a ClusterSecurityGroupIngress.
 
@@ -2943,6 +2953,7 @@ typing.cast(typing.Any, IClusterSecurityGroupIngressRef).__jsii_proxy_class__ = 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_redshift.IClusterSecurityGroupRef")
 class IClusterSecurityGroupRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a ClusterSecurityGroup.
@@ -2962,6 +2973,7 @@ class IClusterSecurityGroupRef(
 
 class _IClusterSecurityGroupRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a ClusterSecurityGroup.
 
@@ -2986,6 +2998,7 @@ typing.cast(typing.Any, IClusterSecurityGroupRef).__jsii_proxy_class__ = lambda 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_redshift.IClusterSubnetGroupRef")
 class IClusterSubnetGroupRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a ClusterSubnetGroup.
@@ -3005,6 +3018,7 @@ class IClusterSubnetGroupRef(
 
 class _IClusterSubnetGroupRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a ClusterSubnetGroup.
 
@@ -3027,7 +3041,11 @@ typing.cast(typing.Any, IClusterSubnetGroupRef).__jsii_proxy_class__ = lambda : 
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_redshift.IEndpointAccessRef")
-class IEndpointAccessRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IEndpointAccessRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a EndpointAccess.
 
     :stability: experimental
@@ -3045,6 +3063,7 @@ class IEndpointAccessRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Prot
 
 class _IEndpointAccessRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a EndpointAccess.
 
@@ -3069,6 +3088,7 @@ typing.cast(typing.Any, IEndpointAccessRef).__jsii_proxy_class__ = lambda : _IEn
 @jsii.interface(jsii_type="aws-cdk-lib.aws_redshift.IEndpointAuthorizationRef")
 class IEndpointAuthorizationRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a EndpointAuthorization.
@@ -3088,6 +3108,7 @@ class IEndpointAuthorizationRef(
 
 class _IEndpointAuthorizationRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a EndpointAuthorization.
 
@@ -3112,6 +3133,7 @@ typing.cast(typing.Any, IEndpointAuthorizationRef).__jsii_proxy_class__ = lambda
 @jsii.interface(jsii_type="aws-cdk-lib.aws_redshift.IEventSubscriptionRef")
 class IEventSubscriptionRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a EventSubscription.
@@ -3131,6 +3153,7 @@ class IEventSubscriptionRef(
 
 class _IEventSubscriptionRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a EventSubscription.
 
@@ -3153,7 +3176,11 @@ typing.cast(typing.Any, IEventSubscriptionRef).__jsii_proxy_class__ = lambda : _
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_redshift.IIntegrationRef")
-class IIntegrationRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IIntegrationRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Integration.
 
     :stability: experimental
@@ -3171,6 +3198,7 @@ class IIntegrationRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protoco
 
 class _IIntegrationRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Integration.
 
@@ -3193,7 +3221,11 @@ typing.cast(typing.Any, IIntegrationRef).__jsii_proxy_class__ = lambda : _IInteg
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_redshift.IScheduledActionRef")
-class IScheduledActionRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IScheduledActionRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a ScheduledAction.
 
     :stability: experimental
@@ -3211,6 +3243,7 @@ class IScheduledActionRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Pro
 
 class _IScheduledActionRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a ScheduledAction.
 

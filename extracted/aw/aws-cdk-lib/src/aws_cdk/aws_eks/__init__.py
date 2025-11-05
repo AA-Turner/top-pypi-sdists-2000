@@ -2152,6 +2152,7 @@ from .. import (
     CfnResource as _CfnResource_9df397a6,
     CfnTag as _CfnTag_f6864754,
     Duration as _Duration_4839e8c3,
+    IEnvironmentAware as _IEnvironmentAware_a408b00d,
     IInspectable as _IInspectable_c2943556,
     IResolvable as _IResolvable_da3f097b,
     IResource as _IResource_c80c4260,
@@ -9081,7 +9082,11 @@ typing.cast(typing.Any, IAccessEntry).__jsii_proxy_class__ = lambda : _IAccessEn
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_eks.IAccessEntryRef")
-class IAccessEntryRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IAccessEntryRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a AccessEntry.
 
     :stability: experimental
@@ -9099,6 +9104,7 @@ class IAccessEntryRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protoco
 
 class _IAccessEntryRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a AccessEntry.
 
@@ -9217,7 +9223,11 @@ typing.cast(typing.Any, IAddon).__jsii_proxy_class__ = lambda : _IAddonProxy
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_eks.IAddonRef")
-class IAddonRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IAddonRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Addon.
 
     :stability: experimental
@@ -9235,6 +9245,7 @@ class IAddonRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IAddonRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Addon.
 
@@ -10061,7 +10072,11 @@ typing.cast(typing.Any, ICluster).__jsii_proxy_class__ = lambda : _IClusterProxy
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_eks.IClusterRef")
-class IClusterRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IClusterRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Cluster.
 
     :stability: experimental
@@ -10079,6 +10094,7 @@ class IClusterRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IClusterRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Cluster.
 
@@ -10101,7 +10117,11 @@ typing.cast(typing.Any, IClusterRef).__jsii_proxy_class__ = lambda : _IClusterRe
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_eks.IFargateProfileRef")
-class IFargateProfileRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IFargateProfileRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a FargateProfile.
 
     :stability: experimental
@@ -10119,6 +10139,7 @@ class IFargateProfileRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Prot
 
 class _IFargateProfileRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a FargateProfile.
 
@@ -10143,6 +10164,7 @@ typing.cast(typing.Any, IFargateProfileRef).__jsii_proxy_class__ = lambda : _IFa
 @jsii.interface(jsii_type="aws-cdk-lib.aws_eks.IIdentityProviderConfigRef")
 class IIdentityProviderConfigRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a IdentityProviderConfig.
@@ -10162,6 +10184,7 @@ class IIdentityProviderConfigRef(
 
 class _IIdentityProviderConfigRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a IdentityProviderConfig.
 
@@ -10270,7 +10293,11 @@ typing.cast(typing.Any, INodegroup).__jsii_proxy_class__ = lambda : _INodegroupP
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_eks.INodegroupRef")
-class INodegroupRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class INodegroupRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Nodegroup.
 
     :stability: experimental
@@ -10288,6 +10315,7 @@ class INodegroupRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol)
 
 class _INodegroupRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Nodegroup.
 
@@ -10312,6 +10340,7 @@ typing.cast(typing.Any, INodegroupRef).__jsii_proxy_class__ = lambda : _INodegro
 @jsii.interface(jsii_type="aws-cdk-lib.aws_eks.IPodIdentityAssociationRef")
 class IPodIdentityAssociationRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a PodIdentityAssociation.
@@ -10331,6 +10360,7 @@ class IPodIdentityAssociationRef(
 
 class _IPodIdentityAssociationRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a PodIdentityAssociation.
 

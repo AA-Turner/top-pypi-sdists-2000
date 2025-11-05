@@ -1065,6 +1065,7 @@ from .. import (
     CfnResource as _CfnResource_9df397a6,
     CfnTag as _CfnTag_f6864754,
     Duration as _Duration_4839e8c3,
+    IEnvironmentAware as _IEnvironmentAware_a408b00d,
     IInspectable as _IInspectable_c2943556,
     IResolvable as _IResolvable_da3f097b,
     IResource as _IResource_c80c4260,
@@ -5204,7 +5205,11 @@ class HttpMethods(enum.Enum):
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_s3.IAccessGrantRef")
-class IAccessGrantRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IAccessGrantRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a AccessGrant.
 
     :stability: experimental
@@ -5222,6 +5227,7 @@ class IAccessGrantRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protoco
 
 class _IAccessGrantRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a AccessGrant.
 
@@ -5246,6 +5252,7 @@ typing.cast(typing.Any, IAccessGrantRef).__jsii_proxy_class__ = lambda : _IAcces
 @jsii.interface(jsii_type="aws-cdk-lib.aws_s3.IAccessGrantsInstanceRef")
 class IAccessGrantsInstanceRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a AccessGrantsInstance.
@@ -5265,6 +5272,7 @@ class IAccessGrantsInstanceRef(
 
 class _IAccessGrantsInstanceRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a AccessGrantsInstance.
 
@@ -5289,6 +5297,7 @@ typing.cast(typing.Any, IAccessGrantsInstanceRef).__jsii_proxy_class__ = lambda 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_s3.IAccessGrantsLocationRef")
 class IAccessGrantsLocationRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a AccessGrantsLocation.
@@ -5308,6 +5317,7 @@ class IAccessGrantsLocationRef(
 
 class _IAccessGrantsLocationRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a AccessGrantsLocation.
 
@@ -5330,7 +5340,11 @@ typing.cast(typing.Any, IAccessGrantsLocationRef).__jsii_proxy_class__ = lambda 
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_s3.IAccessPointRef")
-class IAccessPointRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IAccessPointRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a AccessPoint.
 
     :stability: experimental
@@ -5348,6 +5362,7 @@ class IAccessPointRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protoco
 
 class _IAccessPointRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a AccessPoint.
 
@@ -5422,7 +5437,11 @@ typing.cast(typing.Any, IBucketNotificationDestination).__jsii_proxy_class__ = l
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_s3.IBucketPolicyRef")
-class IBucketPolicyRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IBucketPolicyRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a BucketPolicy.
 
     :stability: experimental
@@ -5440,6 +5459,7 @@ class IBucketPolicyRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protoc
 
 class _IBucketPolicyRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a BucketPolicy.
 
@@ -5462,7 +5482,11 @@ typing.cast(typing.Any, IBucketPolicyRef).__jsii_proxy_class__ = lambda : _IBuck
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_s3.IBucketRef")
-class IBucketRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IBucketRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Bucket.
 
     :stability: experimental
@@ -5480,6 +5504,7 @@ class IBucketRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IBucketRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Bucket.
 
@@ -5504,6 +5529,7 @@ typing.cast(typing.Any, IBucketRef).__jsii_proxy_class__ = lambda : _IBucketRefP
 @jsii.interface(jsii_type="aws-cdk-lib.aws_s3.IMultiRegionAccessPointPolicyRef")
 class IMultiRegionAccessPointPolicyRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a MultiRegionAccessPointPolicy.
@@ -5525,6 +5551,7 @@ class IMultiRegionAccessPointPolicyRef(
 
 class _IMultiRegionAccessPointPolicyRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a MultiRegionAccessPointPolicy.
 
@@ -5551,6 +5578,7 @@ typing.cast(typing.Any, IMultiRegionAccessPointPolicyRef).__jsii_proxy_class__ =
 @jsii.interface(jsii_type="aws-cdk-lib.aws_s3.IMultiRegionAccessPointRef")
 class IMultiRegionAccessPointRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a MultiRegionAccessPoint.
@@ -5570,6 +5598,7 @@ class IMultiRegionAccessPointRef(
 
 class _IMultiRegionAccessPointRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a MultiRegionAccessPoint.
 
@@ -5592,7 +5621,11 @@ typing.cast(typing.Any, IMultiRegionAccessPointRef).__jsii_proxy_class__ = lambd
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_s3.IStorageLensGroupRef")
-class IStorageLensGroupRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IStorageLensGroupRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a StorageLensGroup.
 
     :stability: experimental
@@ -5610,6 +5643,7 @@ class IStorageLensGroupRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Pr
 
 class _IStorageLensGroupRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a StorageLensGroup.
 
@@ -5632,7 +5666,11 @@ typing.cast(typing.Any, IStorageLensGroupRef).__jsii_proxy_class__ = lambda : _I
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_s3.IStorageLensRef")
-class IStorageLensRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IStorageLensRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a StorageLens.
 
     :stability: experimental
@@ -5650,6 +5688,7 @@ class IStorageLensRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protoco
 
 class _IStorageLensRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a StorageLens.
 
@@ -6521,24 +6560,39 @@ class Location:
 
         Example::
 
-            # Create an S3 bucket for recordings
-            recording_bucket = s3.Bucket(self, "RecordingBucket",
-                bucket_name="my-browser-recordings",
-                removal_policy=RemovalPolicy.DESTROY
+            bucket = s3.Bucket(self, "memoryBucket",
+                bucket_name="test-memory",
+                removal_policy=cdk.RemovalPolicy.DESTROY,
+                auto_delete_objects=True
             )
             
-            # Create browser with recording enabled
-            browser = agentcore.BrowserCustom(self, "MyBrowser",
-                browser_custom_name="my_browser",
-                description="Browser with recording enabled",
-                network_configuration=agentcore.BrowserNetworkConfiguration.using_public_network(),
-                recording_config=agentcore.RecordingConfig(
-                    enabled=True,
+            topic = sns.Topic(self, "topic")
+            
+            # Create a custom semantic memory strategy
+            self_managed_strategy = agentcore.MemoryStrategy.using_self_managed(
+                name="selfManagedStrategy",
+                description="self managed memory strategy",
+                historical_context_window_size=5,
+                invocation_configuration=agentcore.InvocationConfiguration(
+                    topic=topic,
                     s3_location=s3.Location(
-                        bucket_name=recording_bucket.bucket_name,
-                        object_key="browser-recordings/"
+                        bucket_name=bucket.bucket_name,
+                        object_key="memory/"
                     )
+                ),
+                trigger_conditions=agentcore.TriggerConditions(
+                    message_based_trigger=1,
+                    time_based_trigger=cdk.Duration.seconds(10),
+                    token_based_trigger=100
                 )
+            )
+            
+            # Create memory with custom strategy
+            memory = agentcore.Memory(self, "MyMemory",
+                memory_name="my-custom-memory",
+                description="Memory with custom strategy",
+                expiration_duration=cdk.Duration.days(90),
+                memory_strategies=[self_managed_strategy]
             )
         '''
         if __debug__:

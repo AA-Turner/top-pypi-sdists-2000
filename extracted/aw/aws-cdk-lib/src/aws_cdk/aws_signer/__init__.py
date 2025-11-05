@@ -77,6 +77,7 @@ from .. import (
     CfnResource as _CfnResource_9df397a6,
     CfnTag as _CfnTag_f6864754,
     Duration as _Duration_4839e8c3,
+    IEnvironmentAware as _IEnvironmentAware_a408b00d,
     IInspectable as _IInspectable_c2943556,
     IResolvable as _IResolvable_da3f097b,
     IResource as _IResource_c80c4260,
@@ -336,6 +337,7 @@ class CfnSigningProfileProps:
 @jsii.interface(jsii_type="aws-cdk-lib.aws_signer.IProfilePermissionRef")
 class IProfilePermissionRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a ProfilePermission.
@@ -355,6 +357,7 @@ class IProfilePermissionRef(
 
 class _IProfilePermissionRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a ProfilePermission.
 
@@ -465,7 +468,11 @@ typing.cast(typing.Any, ISigningProfile).__jsii_proxy_class__ = lambda : _ISigni
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_signer.ISigningProfileRef")
-class ISigningProfileRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class ISigningProfileRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a SigningProfile.
 
     :stability: experimental
@@ -483,6 +490,7 @@ class ISigningProfileRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Prot
 
 class _ISigningProfileRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a SigningProfile.
 

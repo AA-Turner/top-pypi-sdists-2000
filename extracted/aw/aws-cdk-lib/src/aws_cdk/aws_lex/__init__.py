@@ -61,6 +61,7 @@ import constructs as _constructs_77d1e7e8
 from .. import (
     CfnResource as _CfnResource_9df397a6,
     CfnTag as _CfnTag_f6864754,
+    IEnvironmentAware as _IEnvironmentAware_a408b00d,
     IInspectable as _IInspectable_c2943556,
     IResolvable as _IResolvable_da3f097b,
     TreeInspector as _TreeInspector_488e0dd5,
@@ -930,7 +931,11 @@ class CfnResourcePolicyProps:
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_lex.IBotAliasRef")
-class IBotAliasRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IBotAliasRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a BotAlias.
 
     :stability: experimental
@@ -948,6 +953,7 @@ class IBotAliasRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IBotAliasRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a BotAlias.
 
@@ -970,7 +976,11 @@ typing.cast(typing.Any, IBotAliasRef).__jsii_proxy_class__ = lambda : _IBotAlias
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_lex.IBotRef")
-class IBotRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IBotRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Bot.
 
     :stability: experimental
@@ -988,6 +998,7 @@ class IBotRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IBotRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Bot.
 
@@ -1010,7 +1021,11 @@ typing.cast(typing.Any, IBotRef).__jsii_proxy_class__ = lambda : _IBotRefProxy
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_lex.IBotVersionRef")
-class IBotVersionRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IBotVersionRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a BotVersion.
 
     :stability: experimental
@@ -1028,6 +1043,7 @@ class IBotVersionRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol
 
 class _IBotVersionRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a BotVersion.
 
@@ -1050,7 +1066,11 @@ typing.cast(typing.Any, IBotVersionRef).__jsii_proxy_class__ = lambda : _IBotVer
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_lex.IResourcePolicyRef")
-class IResourcePolicyRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IResourcePolicyRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a ResourcePolicy.
 
     :stability: experimental
@@ -1068,6 +1088,7 @@ class IResourcePolicyRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Prot
 
 class _IResourcePolicyRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a ResourcePolicy.
 

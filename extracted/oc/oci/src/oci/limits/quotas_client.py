@@ -153,7 +153,7 @@ class QuotasClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/limits/add_quota_lock.py.html>`__ to see an example of how to use add_quota_lock API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/limits/add_quota_lock.py.html>`__ to see an example of how to use add_quota_lock API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['quotaId']
@@ -261,7 +261,7 @@ class QuotasClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/limits/create_quota.py.html>`__ to see an example of how to use create_quota API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/limits/create_quota.py.html>`__ to see an example of how to use create_quota API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -361,7 +361,7 @@ class QuotasClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/limits/delete_quota.py.html>`__ to see an example of how to use delete_quota API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/limits/delete_quota.py.html>`__ to see an example of how to use delete_quota API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['quotaId']
@@ -468,7 +468,7 @@ class QuotasClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/limits/get_quota.py.html>`__ to see an example of how to use get_quota API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/limits/get_quota.py.html>`__ to see an example of how to use get_quota API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['quotaId']
@@ -591,7 +591,7 @@ class QuotasClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/limits/list_quotas.py.html>`__ to see an example of how to use list_quotas API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/limits/list_quotas.py.html>`__ to see an example of how to use list_quotas API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['compartmentId']
@@ -725,7 +725,7 @@ class QuotasClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/limits/remove_quota_lock.py.html>`__ to see an example of how to use remove_quota_lock API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/limits/remove_quota_lock.py.html>`__ to see an example of how to use remove_quota_lock API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['quotaId']
@@ -837,7 +837,7 @@ class QuotasClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/limits/update_quota.py.html>`__ to see an example of how to use update_quota API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/limits/update_quota.py.html>`__ to see an example of how to use update_quota API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['quotaId']

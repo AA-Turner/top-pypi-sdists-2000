@@ -61,6 +61,7 @@ import constructs as _constructs_77d1e7e8
 from .. import (
     CfnResource as _CfnResource_9df397a6,
     CfnTag as _CfnTag_f6864754,
+    IEnvironmentAware as _IEnvironmentAware_a408b00d,
     IInspectable as _IInspectable_c2943556,
     IResolvable as _IResolvable_da3f097b,
     ITaggable as _ITaggable_36806126,
@@ -1501,6 +1502,7 @@ class CfnApplicationV2Props:
 )
 class IApplicationCloudWatchLoggingOptionV2Ref(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(deprecated) Indicates that this resource can be referenced as a ApplicationCloudWatchLoggingOption.
@@ -1524,6 +1526,7 @@ class IApplicationCloudWatchLoggingOptionV2Ref(
 
 class _IApplicationCloudWatchLoggingOptionV2RefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(deprecated) Indicates that this resource can be referenced as a ApplicationCloudWatchLoggingOption.
 
@@ -1552,6 +1555,7 @@ typing.cast(typing.Any, IApplicationCloudWatchLoggingOptionV2Ref).__jsii_proxy_c
 @jsii.interface(jsii_type="aws-cdk-lib.aws_kinesisanalytics.IApplicationOutputRef")
 class IApplicationOutputRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a ApplicationOutput.
@@ -1571,6 +1575,7 @@ class IApplicationOutputRef(
 
 class _IApplicationOutputRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a ApplicationOutput.
 
@@ -1595,6 +1600,7 @@ typing.cast(typing.Any, IApplicationOutputRef).__jsii_proxy_class__ = lambda : _
 @jsii.interface(jsii_type="aws-cdk-lib.aws_kinesisanalytics.IApplicationOutputV2Ref")
 class IApplicationOutputV2Ref(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(deprecated) Indicates that this resource can be referenced as a ApplicationOutput.
@@ -1616,6 +1622,7 @@ class IApplicationOutputV2Ref(
 
 class _IApplicationOutputV2RefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(deprecated) Indicates that this resource can be referenced as a ApplicationOutput.
 
@@ -1640,7 +1647,11 @@ typing.cast(typing.Any, IApplicationOutputV2Ref).__jsii_proxy_class__ = lambda :
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_kinesisanalytics.IApplicationRef")
-class IApplicationRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IApplicationRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Application.
 
     :stability: experimental
@@ -1658,6 +1669,7 @@ class IApplicationRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protoco
 
 class _IApplicationRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Application.
 
@@ -1684,6 +1696,7 @@ typing.cast(typing.Any, IApplicationRef).__jsii_proxy_class__ = lambda : _IAppli
 )
 class IApplicationReferenceDataSourceRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a ApplicationReferenceDataSource.
@@ -1705,6 +1718,7 @@ class IApplicationReferenceDataSourceRef(
 
 class _IApplicationReferenceDataSourceRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a ApplicationReferenceDataSource.
 
@@ -1733,6 +1747,7 @@ typing.cast(typing.Any, IApplicationReferenceDataSourceRef).__jsii_proxy_class__
 )
 class IApplicationReferenceDataSourceV2Ref(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(deprecated) Indicates that this resource can be referenced as a ApplicationReferenceDataSource.
@@ -1756,6 +1771,7 @@ class IApplicationReferenceDataSourceV2Ref(
 
 class _IApplicationReferenceDataSourceV2RefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(deprecated) Indicates that this resource can be referenced as a ApplicationReferenceDataSource.
 
@@ -1782,7 +1798,11 @@ typing.cast(typing.Any, IApplicationReferenceDataSourceV2Ref).__jsii_proxy_class
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_kinesisanalytics.IApplicationV2Ref")
-class IApplicationV2Ref(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IApplicationV2Ref(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(deprecated) Indicates that this resource can be referenced as a Application.
 
     :deprecated: use ``aws-kinesisanalyticsv2`` instead
@@ -1802,6 +1822,7 @@ class IApplicationV2Ref(_constructs_77d1e7e8.IConstruct, typing_extensions.Proto
 
 class _IApplicationV2RefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(deprecated) Indicates that this resource can be referenced as a Application.
 

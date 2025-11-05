@@ -611,6 +611,7 @@ from .. import (
     CfnResource as _CfnResource_9df397a6,
     CfnTag as _CfnTag_f6864754,
     ICfnRuleConditionExpression as _ICfnRuleConditionExpression_9aca991b,
+    IEnvironmentAware as _IEnvironmentAware_a408b00d,
     IInspectable as _IInspectable_c2943556,
     IResolvable as _IResolvable_da3f097b,
     IResource as _IResource_c80c4260,
@@ -3661,6 +3662,7 @@ class CommonConstraintOptions:
 @jsii.interface(jsii_type="aws-cdk-lib.aws_servicecatalog.IAcceptedPortfolioShareRef")
 class IAcceptedPortfolioShareRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a AcceptedPortfolioShare.
@@ -3680,6 +3682,7 @@ class IAcceptedPortfolioShareRef(
 
 class _IAcceptedPortfolioShareRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a AcceptedPortfolioShare.
 
@@ -3704,6 +3707,7 @@ typing.cast(typing.Any, IAcceptedPortfolioShareRef).__jsii_proxy_class__ = lambd
 @jsii.interface(jsii_type="aws-cdk-lib.aws_servicecatalog.ICloudFormationProductRef")
 class ICloudFormationProductRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a CloudFormationProduct.
@@ -3723,6 +3727,7 @@ class ICloudFormationProductRef(
 
 class _ICloudFormationProductRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a CloudFormationProduct.
 
@@ -3749,6 +3754,7 @@ typing.cast(typing.Any, ICloudFormationProductRef).__jsii_proxy_class__ = lambda
 )
 class ICloudFormationProvisionedProductRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a CloudFormationProvisionedProduct.
@@ -3770,6 +3776,7 @@ class ICloudFormationProvisionedProductRef(
 
 class _ICloudFormationProvisionedProductRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a CloudFormationProvisionedProduct.
 
@@ -3798,6 +3805,7 @@ typing.cast(typing.Any, ICloudFormationProvisionedProductRef).__jsii_proxy_class
 )
 class ILaunchNotificationConstraintRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a LaunchNotificationConstraint.
@@ -3819,6 +3827,7 @@ class ILaunchNotificationConstraintRef(
 
 class _ILaunchNotificationConstraintRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a LaunchNotificationConstraint.
 
@@ -3845,6 +3854,7 @@ typing.cast(typing.Any, ILaunchNotificationConstraintRef).__jsii_proxy_class__ =
 @jsii.interface(jsii_type="aws-cdk-lib.aws_servicecatalog.ILaunchRoleConstraintRef")
 class ILaunchRoleConstraintRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a LaunchRoleConstraint.
@@ -3864,6 +3874,7 @@ class ILaunchRoleConstraintRef(
 
 class _ILaunchRoleConstraintRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a LaunchRoleConstraint.
 
@@ -3890,6 +3901,7 @@ typing.cast(typing.Any, ILaunchRoleConstraintRef).__jsii_proxy_class__ = lambda 
 )
 class ILaunchTemplateConstraintRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a LaunchTemplateConstraint.
@@ -3909,6 +3921,7 @@ class ILaunchTemplateConstraintRef(
 
 class _ILaunchTemplateConstraintRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a LaunchTemplateConstraint.
 
@@ -4476,6 +4489,7 @@ typing.cast(typing.Any, IPortfolio).__jsii_proxy_class__ = lambda : _IPortfolioP
 )
 class IPortfolioPrincipalAssociationRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a PortfolioPrincipalAssociation.
@@ -4497,6 +4511,7 @@ class IPortfolioPrincipalAssociationRef(
 
 class _IPortfolioPrincipalAssociationRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a PortfolioPrincipalAssociation.
 
@@ -4525,6 +4540,7 @@ typing.cast(typing.Any, IPortfolioPrincipalAssociationRef).__jsii_proxy_class__ 
 )
 class IPortfolioProductAssociationRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a PortfolioProductAssociation.
@@ -4546,6 +4562,7 @@ class IPortfolioProductAssociationRef(
 
 class _IPortfolioProductAssociationRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a PortfolioProductAssociation.
 
@@ -4570,7 +4587,11 @@ typing.cast(typing.Any, IPortfolioProductAssociationRef).__jsii_proxy_class__ = 
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_servicecatalog.IPortfolioRef")
-class IPortfolioRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IPortfolioRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Portfolio.
 
     :stability: experimental
@@ -4588,6 +4609,7 @@ class IPortfolioRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol)
 
 class _IPortfolioRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Portfolio.
 
@@ -4610,7 +4632,11 @@ typing.cast(typing.Any, IPortfolioRef).__jsii_proxy_class__ = lambda : _IPortfol
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_servicecatalog.IPortfolioShareRef")
-class IPortfolioShareRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IPortfolioShareRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a PortfolioShare.
 
     :stability: experimental
@@ -4628,6 +4654,7 @@ class IPortfolioShareRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Prot
 
 class _IPortfolioShareRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a PortfolioShare.
 
@@ -4749,6 +4776,7 @@ typing.cast(typing.Any, IProduct).__jsii_proxy_class__ = lambda : _IProductProxy
 )
 class IResourceUpdateConstraintRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a ResourceUpdateConstraint.
@@ -4768,6 +4796,7 @@ class IResourceUpdateConstraintRef(
 
 class _IResourceUpdateConstraintRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a ResourceUpdateConstraint.
 
@@ -4794,6 +4823,7 @@ typing.cast(typing.Any, IResourceUpdateConstraintRef).__jsii_proxy_class__ = lam
 )
 class IServiceActionAssociationRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a ServiceActionAssociation.
@@ -4813,6 +4843,7 @@ class IServiceActionAssociationRef(
 
 class _IServiceActionAssociationRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a ServiceActionAssociation.
 
@@ -4835,7 +4866,11 @@ typing.cast(typing.Any, IServiceActionAssociationRef).__jsii_proxy_class__ = lam
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_servicecatalog.IServiceActionRef")
-class IServiceActionRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IServiceActionRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a ServiceAction.
 
     :stability: experimental
@@ -4853,6 +4888,7 @@ class IServiceActionRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Proto
 
 class _IServiceActionRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a ServiceAction.
 
@@ -4877,6 +4913,7 @@ typing.cast(typing.Any, IServiceActionRef).__jsii_proxy_class__ = lambda : _ISer
 @jsii.interface(jsii_type="aws-cdk-lib.aws_servicecatalog.IStackSetConstraintRef")
 class IStackSetConstraintRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a StackSetConstraint.
@@ -4896,6 +4933,7 @@ class IStackSetConstraintRef(
 
 class _IStackSetConstraintRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a StackSetConstraint.
 
@@ -4920,6 +4958,7 @@ typing.cast(typing.Any, IStackSetConstraintRef).__jsii_proxy_class__ = lambda : 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_servicecatalog.ITagOptionAssociationRef")
 class ITagOptionAssociationRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a TagOptionAssociation.
@@ -4939,6 +4978,7 @@ class ITagOptionAssociationRef(
 
 class _ITagOptionAssociationRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a TagOptionAssociation.
 
@@ -4961,7 +5001,11 @@ typing.cast(typing.Any, ITagOptionAssociationRef).__jsii_proxy_class__ = lambda 
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_servicecatalog.ITagOptionRef")
-class ITagOptionRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class ITagOptionRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a TagOption.
 
     :stability: experimental
@@ -4979,6 +5023,7 @@ class ITagOptionRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol)
 
 class _ITagOptionRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a TagOption.
 

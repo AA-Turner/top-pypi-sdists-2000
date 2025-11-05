@@ -61,6 +61,7 @@ import constructs as _constructs_77d1e7e8
 from .. import (
     CfnResource as _CfnResource_9df397a6,
     CfnTag as _CfnTag_f6864754,
+    IEnvironmentAware as _IEnvironmentAware_a408b00d,
     IInspectable as _IInspectable_c2943556,
     IResolvable as _IResolvable_da3f097b,
     ITaggable as _ITaggable_36806126,
@@ -1445,7 +1446,11 @@ class DatasetReference:
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_databrew.IDatasetRef")
-class IDatasetRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IDatasetRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Dataset.
 
     :stability: experimental
@@ -1463,6 +1468,7 @@ class IDatasetRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IDatasetRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Dataset.
 
@@ -1485,7 +1491,11 @@ typing.cast(typing.Any, IDatasetRef).__jsii_proxy_class__ = lambda : _IDatasetRe
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_databrew.IJobRef")
-class IJobRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IJobRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Job.
 
     :stability: experimental
@@ -1503,6 +1513,7 @@ class IJobRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IJobRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Job.
 
@@ -1525,7 +1536,11 @@ typing.cast(typing.Any, IJobRef).__jsii_proxy_class__ = lambda : _IJobRefProxy
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_databrew.IProjectRef")
-class IProjectRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IProjectRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Project.
 
     :stability: experimental
@@ -1543,6 +1558,7 @@ class IProjectRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IProjectRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Project.
 
@@ -1565,7 +1581,11 @@ typing.cast(typing.Any, IProjectRef).__jsii_proxy_class__ = lambda : _IProjectRe
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_databrew.IRecipeRef")
-class IRecipeRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IRecipeRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Recipe.
 
     :stability: experimental
@@ -1583,6 +1603,7 @@ class IRecipeRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IRecipeRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Recipe.
 
@@ -1605,7 +1626,11 @@ typing.cast(typing.Any, IRecipeRef).__jsii_proxy_class__ = lambda : _IRecipeRefP
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_databrew.IRulesetRef")
-class IRulesetRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IRulesetRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Ruleset.
 
     :stability: experimental
@@ -1623,6 +1648,7 @@ class IRulesetRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IRulesetRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Ruleset.
 
@@ -1645,7 +1671,11 @@ typing.cast(typing.Any, IRulesetRef).__jsii_proxy_class__ = lambda : _IRulesetRe
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_databrew.IScheduleRef")
-class IScheduleRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IScheduleRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Schedule.
 
     :stability: experimental
@@ -1663,6 +1693,7 @@ class IScheduleRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IScheduleRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Schedule.
 

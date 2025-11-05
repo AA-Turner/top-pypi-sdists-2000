@@ -60,6 +60,7 @@ from .._jsii import *
 import constructs as _constructs_77d1e7e8
 from .. import (
     CfnResource as _CfnResource_9df397a6,
+    IEnvironmentAware as _IEnvironmentAware_a408b00d,
     IInspectable as _IInspectable_c2943556,
     IResolvable as _IResolvable_da3f097b,
     ITaggable as _ITaggable_36806126,
@@ -401,6 +402,7 @@ class DefaultViewAssociationReference:
 )
 class IDefaultViewAssociationRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a DefaultViewAssociation.
@@ -420,6 +422,7 @@ class IDefaultViewAssociationRef(
 
 class _IDefaultViewAssociationRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a DefaultViewAssociation.
 
@@ -442,7 +445,11 @@ typing.cast(typing.Any, IDefaultViewAssociationRef).__jsii_proxy_class__ = lambd
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_resourceexplorer2.IIndexRef")
-class IIndexRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IIndexRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Index.
 
     :stability: experimental
@@ -460,6 +467,7 @@ class IIndexRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IIndexRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Index.
 
@@ -482,7 +490,11 @@ typing.cast(typing.Any, IIndexRef).__jsii_proxy_class__ = lambda : _IIndexRefPro
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_resourceexplorer2.IViewRef")
-class IViewRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IViewRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a View.
 
     :stability: experimental
@@ -500,6 +512,7 @@ class IViewRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IViewRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a View.
 

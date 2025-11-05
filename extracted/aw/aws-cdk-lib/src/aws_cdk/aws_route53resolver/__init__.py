@@ -66,6 +66,7 @@ import constructs as _constructs_77d1e7e8
 from .. import (
     CfnResource as _CfnResource_9df397a6,
     CfnTag as _CfnTag_f6864754,
+    IEnvironmentAware as _IEnvironmentAware_a408b00d,
     IInspectable as _IInspectable_c2943556,
     IResolvable as _IResolvable_da3f097b,
     ITaggable as _ITaggable_36806126,
@@ -1579,6 +1580,7 @@ class FirewallRuleGroupReference:
 @jsii.interface(jsii_type="aws-cdk-lib.aws_route53resolver.IFirewallDomainListRef")
 class IFirewallDomainListRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a FirewallDomainList.
@@ -1598,6 +1600,7 @@ class IFirewallDomainListRef(
 
 class _IFirewallDomainListRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a FirewallDomainList.
 
@@ -1624,6 +1627,7 @@ typing.cast(typing.Any, IFirewallDomainListRef).__jsii_proxy_class__ = lambda : 
 )
 class IFirewallRuleGroupAssociationRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a FirewallRuleGroupAssociation.
@@ -1645,6 +1649,7 @@ class IFirewallRuleGroupAssociationRef(
 
 class _IFirewallRuleGroupAssociationRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a FirewallRuleGroupAssociation.
 
@@ -1671,6 +1676,7 @@ typing.cast(typing.Any, IFirewallRuleGroupAssociationRef).__jsii_proxy_class__ =
 @jsii.interface(jsii_type="aws-cdk-lib.aws_route53resolver.IFirewallRuleGroupRef")
 class IFirewallRuleGroupRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a FirewallRuleGroup.
@@ -1690,6 +1696,7 @@ class IFirewallRuleGroupRef(
 
 class _IFirewallRuleGroupRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a FirewallRuleGroup.
 
@@ -1712,7 +1719,11 @@ typing.cast(typing.Any, IFirewallRuleGroupRef).__jsii_proxy_class__ = lambda : _
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_route53resolver.IOutpostResolverRef")
-class IOutpostResolverRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IOutpostResolverRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a OutpostResolver.
 
     :stability: experimental
@@ -1730,6 +1741,7 @@ class IOutpostResolverRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Pro
 
 class _IOutpostResolverRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a OutpostResolver.
 
@@ -1752,7 +1764,11 @@ typing.cast(typing.Any, IOutpostResolverRef).__jsii_proxy_class__ = lambda : _IO
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_route53resolver.IResolverConfigRef")
-class IResolverConfigRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IResolverConfigRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a ResolverConfig.
 
     :stability: experimental
@@ -1770,6 +1786,7 @@ class IResolverConfigRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Prot
 
 class _IResolverConfigRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a ResolverConfig.
 
@@ -1794,6 +1811,7 @@ typing.cast(typing.Any, IResolverConfigRef).__jsii_proxy_class__ = lambda : _IRe
 @jsii.interface(jsii_type="aws-cdk-lib.aws_route53resolver.IResolverDNSSECConfigRef")
 class IResolverDNSSECConfigRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a ResolverDNSSECConfig.
@@ -1813,6 +1831,7 @@ class IResolverDNSSECConfigRef(
 
 class _IResolverDNSSECConfigRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a ResolverDNSSECConfig.
 
@@ -1835,7 +1854,11 @@ typing.cast(typing.Any, IResolverDNSSECConfigRef).__jsii_proxy_class__ = lambda 
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_route53resolver.IResolverEndpointRef")
-class IResolverEndpointRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IResolverEndpointRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a ResolverEndpoint.
 
     :stability: experimental
@@ -1853,6 +1876,7 @@ class IResolverEndpointRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Pr
 
 class _IResolverEndpointRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a ResolverEndpoint.
 
@@ -1879,6 +1903,7 @@ typing.cast(typing.Any, IResolverEndpointRef).__jsii_proxy_class__ = lambda : _I
 )
 class IResolverQueryLoggingConfigAssociationRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a ResolverQueryLoggingConfigAssociation.
@@ -1900,6 +1925,7 @@ class IResolverQueryLoggingConfigAssociationRef(
 
 class _IResolverQueryLoggingConfigAssociationRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a ResolverQueryLoggingConfigAssociation.
 
@@ -1928,6 +1954,7 @@ typing.cast(typing.Any, IResolverQueryLoggingConfigAssociationRef).__jsii_proxy_
 )
 class IResolverQueryLoggingConfigRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a ResolverQueryLoggingConfig.
@@ -1949,6 +1976,7 @@ class IResolverQueryLoggingConfigRef(
 
 class _IResolverQueryLoggingConfigRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a ResolverQueryLoggingConfig.
 
@@ -1977,6 +2005,7 @@ typing.cast(typing.Any, IResolverQueryLoggingConfigRef).__jsii_proxy_class__ = l
 )
 class IResolverRuleAssociationRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a ResolverRuleAssociation.
@@ -1996,6 +2025,7 @@ class IResolverRuleAssociationRef(
 
 class _IResolverRuleAssociationRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a ResolverRuleAssociation.
 
@@ -2018,7 +2048,11 @@ typing.cast(typing.Any, IResolverRuleAssociationRef).__jsii_proxy_class__ = lamb
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_route53resolver.IResolverRuleRef")
-class IResolverRuleRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IResolverRuleRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a ResolverRule.
 
     :stability: experimental
@@ -2036,6 +2070,7 @@ class IResolverRuleRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protoc
 
 class _IResolverRuleRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a ResolverRule.
 

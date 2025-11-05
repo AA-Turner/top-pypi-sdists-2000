@@ -65,6 +65,7 @@ from .._jsii import *
 import constructs as _constructs_77d1e7e8
 from .. import (
     CfnResource as _CfnResource_9df397a6,
+    IEnvironmentAware as _IEnvironmentAware_a408b00d,
     IInspectable as _IInspectable_c2943556,
     IResolvable as _IResolvable_da3f097b,
     TreeInspector as _TreeInspector_488e0dd5,
@@ -371,6 +372,7 @@ class CfnAccessPointProps:
 @jsii.interface(jsii_type="aws-cdk-lib.aws_s3objectlambda.IAccessPointPolicyRef")
 class IAccessPointPolicyRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a AccessPointPolicy.
@@ -390,6 +392,7 @@ class IAccessPointPolicyRef(
 
 class _IAccessPointPolicyRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a AccessPointPolicy.
 
@@ -412,7 +415,11 @@ typing.cast(typing.Any, IAccessPointPolicyRef).__jsii_proxy_class__ = lambda : _
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_s3objectlambda.IAccessPointRef")
-class IAccessPointRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IAccessPointRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a AccessPoint.
 
     :stability: experimental
@@ -430,6 +437,7 @@ class IAccessPointRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protoco
 
 class _IAccessPointRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a AccessPoint.
 

@@ -70,6 +70,7 @@ from .._jsii import *
 import constructs as _constructs_77d1e7e8
 from .. import (
     CfnResource as _CfnResource_9df397a6,
+    IEnvironmentAware as _IEnvironmentAware_a408b00d,
     IInspectable as _IInspectable_c2943556,
     IResolvable as _IResolvable_da3f097b,
     ITaggableV2 as _ITaggableV2_4e6798f8,
@@ -490,7 +491,11 @@ class CfnStreamGroupProps:
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_gameliftstreams.IApplicationRef")
-class IApplicationRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IApplicationRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Application.
 
     :stability: experimental
@@ -508,6 +513,7 @@ class IApplicationRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protoco
 
 class _IApplicationRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Application.
 
@@ -530,7 +536,11 @@ typing.cast(typing.Any, IApplicationRef).__jsii_proxy_class__ = lambda : _IAppli
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_gameliftstreams.IStreamGroupRef")
-class IStreamGroupRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IStreamGroupRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a StreamGroup.
 
     :stability: experimental
@@ -548,6 +558,7 @@ class IStreamGroupRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protoco
 
 class _IStreamGroupRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a StreamGroup.
 

@@ -61,6 +61,7 @@ import constructs as _constructs_77d1e7e8
 from .. import (
     CfnResource as _CfnResource_9df397a6,
     CfnTag as _CfnTag_f6864754,
+    IEnvironmentAware as _IEnvironmentAware_a408b00d,
     IInspectable as _IInspectable_c2943556,
     IResolvable as _IResolvable_da3f097b,
     ITaggable as _ITaggable_36806126,
@@ -739,7 +740,11 @@ class ContactReference:
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_ssmcontacts.IContactChannelRef")
-class IContactChannelRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IContactChannelRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a ContactChannel.
 
     :stability: experimental
@@ -757,6 +762,7 @@ class IContactChannelRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Prot
 
 class _IContactChannelRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a ContactChannel.
 
@@ -779,7 +785,11 @@ typing.cast(typing.Any, IContactChannelRef).__jsii_proxy_class__ = lambda : _ICo
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_ssmcontacts.IContactRef")
-class IContactRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IContactRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Contact.
 
     :stability: experimental
@@ -797,6 +807,7 @@ class IContactRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IContactRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Contact.
 
@@ -819,7 +830,11 @@ typing.cast(typing.Any, IContactRef).__jsii_proxy_class__ = lambda : _IContactRe
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_ssmcontacts.IPlanRef")
-class IPlanRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IPlanRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Plan.
 
     :stability: experimental
@@ -837,6 +852,7 @@ class IPlanRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IPlanRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Plan.
 
@@ -859,7 +875,11 @@ typing.cast(typing.Any, IPlanRef).__jsii_proxy_class__ = lambda : _IPlanRefProxy
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_ssmcontacts.IRotationRef")
-class IRotationRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IRotationRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Rotation.
 
     :stability: experimental
@@ -877,6 +897,7 @@ class IRotationRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IRotationRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Rotation.
 

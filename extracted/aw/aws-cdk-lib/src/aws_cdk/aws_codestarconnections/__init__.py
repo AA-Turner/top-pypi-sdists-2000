@@ -61,6 +61,7 @@ import constructs as _constructs_77d1e7e8
 from .. import (
     CfnResource as _CfnResource_9df397a6,
     CfnTag as _CfnTag_f6864754,
+    IEnvironmentAware as _IEnvironmentAware_a408b00d,
     IInspectable as _IInspectable_c2943556,
     ITaggable as _ITaggable_36806126,
     ITaggableV2 as _ITaggableV2_4e6798f8,
@@ -536,7 +537,11 @@ class ConnectionReference:
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_codestarconnections.IConnectionRef")
-class IConnectionRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IConnectionRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Connection.
 
     :stability: experimental
@@ -554,6 +559,7 @@ class IConnectionRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol
 
 class _IConnectionRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Connection.
 
@@ -576,7 +582,11 @@ typing.cast(typing.Any, IConnectionRef).__jsii_proxy_class__ = lambda : _IConnec
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_codestarconnections.IRepositoryLinkRef")
-class IRepositoryLinkRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IRepositoryLinkRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a RepositoryLink.
 
     :stability: experimental
@@ -594,6 +604,7 @@ class IRepositoryLinkRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Prot
 
 class _IRepositoryLinkRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a RepositoryLink.
 
@@ -618,6 +629,7 @@ typing.cast(typing.Any, IRepositoryLinkRef).__jsii_proxy_class__ = lambda : _IRe
 @jsii.interface(jsii_type="aws-cdk-lib.aws_codestarconnections.ISyncConfigurationRef")
 class ISyncConfigurationRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a SyncConfiguration.
@@ -637,6 +649,7 @@ class ISyncConfigurationRef(
 
 class _ISyncConfigurationRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a SyncConfiguration.
 

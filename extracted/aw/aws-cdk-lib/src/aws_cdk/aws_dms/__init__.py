@@ -61,6 +61,7 @@ import constructs as _constructs_77d1e7e8
 from .. import (
     CfnResource as _CfnResource_9df397a6,
     CfnTag as _CfnTag_f6864754,
+    IEnvironmentAware as _IEnvironmentAware_a408b00d,
     IInspectable as _IInspectable_c2943556,
     IResolvable as _IResolvable_da3f097b,
     ITaggable as _ITaggable_36806126,
@@ -3439,7 +3440,11 @@ class EventSubscriptionReference:
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_dms.ICertificateRef")
-class ICertificateRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class ICertificateRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Certificate.
 
     :stability: experimental
@@ -3457,6 +3462,7 @@ class ICertificateRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protoco
 
 class _ICertificateRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Certificate.
 
@@ -3479,7 +3485,11 @@ typing.cast(typing.Any, ICertificateRef).__jsii_proxy_class__ = lambda : _ICerti
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_dms.IDataMigrationRef")
-class IDataMigrationRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IDataMigrationRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a DataMigration.
 
     :stability: experimental
@@ -3497,6 +3507,7 @@ class IDataMigrationRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Proto
 
 class _IDataMigrationRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a DataMigration.
 
@@ -3519,7 +3530,11 @@ typing.cast(typing.Any, IDataMigrationRef).__jsii_proxy_class__ = lambda : _IDat
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_dms.IDataProviderRef")
-class IDataProviderRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IDataProviderRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a DataProvider.
 
     :stability: experimental
@@ -3537,6 +3552,7 @@ class IDataProviderRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protoc
 
 class _IDataProviderRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a DataProvider.
 
@@ -3559,7 +3575,11 @@ typing.cast(typing.Any, IDataProviderRef).__jsii_proxy_class__ = lambda : _IData
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_dms.IEndpointRef")
-class IEndpointRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IEndpointRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Endpoint.
 
     :stability: experimental
@@ -3577,6 +3597,7 @@ class IEndpointRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IEndpointRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Endpoint.
 
@@ -3601,6 +3622,7 @@ typing.cast(typing.Any, IEndpointRef).__jsii_proxy_class__ = lambda : _IEndpoint
 @jsii.interface(jsii_type="aws-cdk-lib.aws_dms.IEventSubscriptionRef")
 class IEventSubscriptionRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a EventSubscription.
@@ -3620,6 +3642,7 @@ class IEventSubscriptionRef(
 
 class _IEventSubscriptionRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a EventSubscription.
 
@@ -3642,7 +3665,11 @@ typing.cast(typing.Any, IEventSubscriptionRef).__jsii_proxy_class__ = lambda : _
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_dms.IInstanceProfileRef")
-class IInstanceProfileRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IInstanceProfileRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a InstanceProfile.
 
     :stability: experimental
@@ -3660,6 +3687,7 @@ class IInstanceProfileRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Pro
 
 class _IInstanceProfileRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a InstanceProfile.
 
@@ -3682,7 +3710,11 @@ typing.cast(typing.Any, IInstanceProfileRef).__jsii_proxy_class__ = lambda : _II
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_dms.IMigrationProjectRef")
-class IMigrationProjectRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IMigrationProjectRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a MigrationProject.
 
     :stability: experimental
@@ -3700,6 +3732,7 @@ class IMigrationProjectRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Pr
 
 class _IMigrationProjectRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a MigrationProject.
 
@@ -3724,6 +3757,7 @@ typing.cast(typing.Any, IMigrationProjectRef).__jsii_proxy_class__ = lambda : _I
 @jsii.interface(jsii_type="aws-cdk-lib.aws_dms.IReplicationConfigRef")
 class IReplicationConfigRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a ReplicationConfig.
@@ -3743,6 +3777,7 @@ class IReplicationConfigRef(
 
 class _IReplicationConfigRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a ReplicationConfig.
 
@@ -3767,6 +3802,7 @@ typing.cast(typing.Any, IReplicationConfigRef).__jsii_proxy_class__ = lambda : _
 @jsii.interface(jsii_type="aws-cdk-lib.aws_dms.IReplicationInstanceRef")
 class IReplicationInstanceRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a ReplicationInstance.
@@ -3786,6 +3822,7 @@ class IReplicationInstanceRef(
 
 class _IReplicationInstanceRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a ReplicationInstance.
 
@@ -3810,6 +3847,7 @@ typing.cast(typing.Any, IReplicationInstanceRef).__jsii_proxy_class__ = lambda :
 @jsii.interface(jsii_type="aws-cdk-lib.aws_dms.IReplicationSubnetGroupRef")
 class IReplicationSubnetGroupRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a ReplicationSubnetGroup.
@@ -3829,6 +3867,7 @@ class IReplicationSubnetGroupRef(
 
 class _IReplicationSubnetGroupRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a ReplicationSubnetGroup.
 
@@ -3851,7 +3890,11 @@ typing.cast(typing.Any, IReplicationSubnetGroupRef).__jsii_proxy_class__ = lambd
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_dms.IReplicationTaskRef")
-class IReplicationTaskRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IReplicationTaskRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a ReplicationTask.
 
     :stability: experimental
@@ -3869,6 +3912,7 @@ class IReplicationTaskRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Pro
 
 class _IReplicationTaskRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a ReplicationTask.
 

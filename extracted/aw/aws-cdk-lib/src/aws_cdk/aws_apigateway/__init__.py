@@ -1845,6 +1845,15 @@ api = apigateway.SpecRestApi(self, "books-api",
 )
 ```
 
+`SpecRestApi` also supports binary media types, similar to `RestApi`:
+
+```python
+api = apigateway.SpecRestApi(self, "books-api",
+    api_definition=apigateway.ApiDefinition.from_asset("path-to-file.json"),
+    binary_media_types=["image/png", "application/pdf"]
+)
+```
+
 ### Endpoint configuration
 
 By default, `SpecRestApi` will create an edge optimized endpoint.
@@ -1940,6 +1949,7 @@ from .. import (
     CfnResource as _CfnResource_9df397a6,
     CfnTag as _CfnTag_f6864754,
     Duration as _Duration_4839e8c3,
+    IEnvironmentAware as _IEnvironmentAware_a408b00d,
     IInspectable as _IInspectable_c2943556,
     IResolvable as _IResolvable_da3f097b,
     IResource as _IResource_c80c4260,
@@ -2195,6 +2205,15 @@ class AccessLogField(
         '''The API callers AWS account ID.'''
         return typing.cast(builtins.str, jsii.sinvoke(cls, "contextCallerAccountId", []))
 
+    @jsii.member(jsii_name="contextConnectionId")
+    @builtins.classmethod
+    def context_connection_id(cls) -> builtins.str:
+        '''A unique ID for the connection that can be used to make a callback to the client.
+
+        :see: https://docs.aws.amazon.com/apigateway/latest/developerguide/websocket-api-logging.html
+        '''
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "contextConnectionId", []))
+
     @jsii.member(jsii_name="contextCustomDomainBasePathMatched")
     @builtins.classmethod
     def context_custom_domain_base_path_matched(cls) -> builtins.str:
@@ -2251,6 +2270,15 @@ class AccessLogField(
     def context_error_validation_error_string(cls) -> builtins.str:
         '''A string containing a detailed validation error message.'''
         return typing.cast(builtins.str, jsii.sinvoke(cls, "contextErrorValidationErrorString", []))
+
+    @jsii.member(jsii_name="contextEventType")
+    @builtins.classmethod
+    def context_event_type(cls) -> builtins.str:
+        '''The event type: CONNECT, MESSAGE, or DISCONNECT.
+
+        :see: https://docs.aws.amazon.com/apigateway/latest/developerguide/websocket-api-logging.html
+        '''
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "contextEventType", []))
 
     @jsii.member(jsii_name="contextExtendedRequestId")
     @builtins.classmethod
@@ -2606,6 +2634,15 @@ class AccessLogField(
         '''
         return typing.cast(builtins.str, jsii.sinvoke(cls, "contextResponseOverrideStatus", []))
 
+    @jsii.member(jsii_name="contextRouteKey")
+    @builtins.classmethod
+    def context_route_key(cls) -> builtins.str:
+        '''The selected route key.
+
+        :see: https://docs.aws.amazon.com/apigateway/latest/developerguide/websocket-api-logging.html
+        '''
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "contextRouteKey", []))
+
     @jsii.member(jsii_name="contextStage")
     @builtins.classmethod
     def context_stage(cls) -> builtins.str:
@@ -2698,6 +2735,15 @@ class AccessLogFormat(
             )
         )
     '''
+
+    def __init__(self, format: builtins.str) -> None:
+        '''
+        :param format: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__0bc4acaae324fa465c0ae63ddfa13df8085530150092a3990e1815dea9b745ec)
+            check_type(argname="argument format", value=format, expected_type=type_hints["format"])
+        jsii.create(self.__class__, self, [format])
 
     @jsii.member(jsii_name="clf")
     @builtins.classmethod
@@ -2895,21 +2941,10 @@ class ApiDefinition(
 
     Example::
 
-        my_api_definition = apigateway.ApiDefinition.from_asset("path-to-file.json")
-        spec_rest_api = apigateway.SpecRestApi(self, "my-specrest-api",
-            deploy=False,
-            api_definition=my_api_definition
+        api = apigateway.SpecRestApi(self, "books-api",
+            api_definition=apigateway.ApiDefinition.from_asset("path-to-file.json"),
+            mode=apigateway.RestApiMode.MERGE
         )
-        
-        # Use `stageName` to deploy to an existing stage
-        deployment = apigateway.Deployment(self, "my-deployment",
-            api=spec_rest_api,
-            stage_name="dev",
-            retain_deployments=True
-        )
-        
-        # Trigger a new deployment on OpenAPI definition updates
-        deployment.add_to_logical_id(my_api_definition)
     '''
 
     def __init__(self) -> None:
@@ -9679,7 +9714,11 @@ typing.cast(typing.Any, IAccessLogDestination).__jsii_proxy_class__ = lambda : _
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_apigateway.IAccountRef")
-class IAccountRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IAccountRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Account.
 
     :stability: experimental
@@ -9697,6 +9736,7 @@ class IAccountRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IAccountRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Account.
 
@@ -9719,7 +9759,11 @@ typing.cast(typing.Any, IAccountRef).__jsii_proxy_class__ = lambda : _IAccountRe
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_apigateway.IApiKeyRef")
-class IApiKeyRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IApiKeyRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a ApiKey.
 
     :stability: experimental
@@ -9737,6 +9781,7 @@ class IApiKeyRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IApiKeyRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a ApiKey.
 
@@ -9803,7 +9848,11 @@ typing.cast(typing.Any, IAuthorizer).__jsii_proxy_class__ = lambda : _IAuthorize
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_apigateway.IAuthorizerRef")
-class IAuthorizerRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IAuthorizerRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Authorizer.
 
     :stability: experimental
@@ -9821,6 +9870,7 @@ class IAuthorizerRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol
 
 class _IAuthorizerRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Authorizer.
 
@@ -9843,7 +9893,11 @@ typing.cast(typing.Any, IAuthorizerRef).__jsii_proxy_class__ = lambda : _IAuthor
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_apigateway.IBasePathMappingRef")
-class IBasePathMappingRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IBasePathMappingRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a BasePathMapping.
 
     :stability: experimental
@@ -9861,6 +9915,7 @@ class IBasePathMappingRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Pro
 
 class _IBasePathMappingRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a BasePathMapping.
 
@@ -9885,6 +9940,7 @@ typing.cast(typing.Any, IBasePathMappingRef).__jsii_proxy_class__ = lambda : _IB
 @jsii.interface(jsii_type="aws-cdk-lib.aws_apigateway.IBasePathMappingV2Ref")
 class IBasePathMappingV2Ref(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a BasePathMappingV2.
@@ -9904,6 +9960,7 @@ class IBasePathMappingV2Ref(
 
 class _IBasePathMappingV2RefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a BasePathMappingV2.
 
@@ -9928,6 +9985,7 @@ typing.cast(typing.Any, IBasePathMappingV2Ref).__jsii_proxy_class__ = lambda : _
 @jsii.interface(jsii_type="aws-cdk-lib.aws_apigateway.IClientCertificateRef")
 class IClientCertificateRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a ClientCertificate.
@@ -9947,6 +10005,7 @@ class IClientCertificateRef(
 
 class _IClientCertificateRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a ClientCertificate.
 
@@ -9969,7 +10028,11 @@ typing.cast(typing.Any, IClientCertificateRef).__jsii_proxy_class__ = lambda : _
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_apigateway.IDeploymentRef")
-class IDeploymentRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IDeploymentRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Deployment.
 
     :stability: experimental
@@ -9987,6 +10050,7 @@ class IDeploymentRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol
 
 class _IDeploymentRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Deployment.
 
@@ -10011,6 +10075,7 @@ typing.cast(typing.Any, IDeploymentRef).__jsii_proxy_class__ = lambda : _IDeploy
 @jsii.interface(jsii_type="aws-cdk-lib.aws_apigateway.IDocumentationPartRef")
 class IDocumentationPartRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a DocumentationPart.
@@ -10030,6 +10095,7 @@ class IDocumentationPartRef(
 
 class _IDocumentationPartRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a DocumentationPart.
 
@@ -10054,6 +10120,7 @@ typing.cast(typing.Any, IDocumentationPartRef).__jsii_proxy_class__ = lambda : _
 @jsii.interface(jsii_type="aws-cdk-lib.aws_apigateway.IDocumentationVersionRef")
 class IDocumentationVersionRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a DocumentationVersion.
@@ -10073,6 +10140,7 @@ class IDocumentationVersionRef(
 
 class _IDocumentationVersionRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a DocumentationVersion.
 
@@ -10097,6 +10165,7 @@ typing.cast(typing.Any, IDocumentationVersionRef).__jsii_proxy_class__ = lambda 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_apigateway.IDomainNameAccessAssociationRef")
 class IDomainNameAccessAssociationRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a DomainNameAccessAssociation.
@@ -10118,6 +10187,7 @@ class IDomainNameAccessAssociationRef(
 
 class _IDomainNameAccessAssociationRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a DomainNameAccessAssociation.
 
@@ -10142,7 +10212,11 @@ typing.cast(typing.Any, IDomainNameAccessAssociationRef).__jsii_proxy_class__ = 
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_apigateway.IDomainNameRef")
-class IDomainNameRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IDomainNameRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a DomainName.
 
     :stability: experimental
@@ -10160,6 +10234,7 @@ class IDomainNameRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol
 
 class _IDomainNameRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a DomainName.
 
@@ -10182,7 +10257,11 @@ typing.cast(typing.Any, IDomainNameRef).__jsii_proxy_class__ = lambda : _IDomain
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_apigateway.IDomainNameV2Ref")
-class IDomainNameV2Ref(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IDomainNameV2Ref(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a DomainNameV2.
 
     :stability: experimental
@@ -10200,6 +10279,7 @@ class IDomainNameV2Ref(_constructs_77d1e7e8.IConstruct, typing_extensions.Protoc
 
 class _IDomainNameV2RefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a DomainNameV2.
 
@@ -10222,7 +10302,11 @@ typing.cast(typing.Any, IDomainNameV2Ref).__jsii_proxy_class__ = lambda : _IDoma
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_apigateway.IGatewayResponseRef")
-class IGatewayResponseRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IGatewayResponseRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a GatewayResponse.
 
     :stability: experimental
@@ -10240,6 +10324,7 @@ class IGatewayResponseRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Pro
 
 class _IGatewayResponseRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a GatewayResponse.
 
@@ -10262,7 +10347,11 @@ typing.cast(typing.Any, IGatewayResponseRef).__jsii_proxy_class__ = lambda : _IG
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_apigateway.IMethodRef")
-class IMethodRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IMethodRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Method.
 
     :stability: experimental
@@ -10280,6 +10369,7 @@ class IMethodRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IMethodRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Method.
 
@@ -10330,7 +10420,11 @@ typing.cast(typing.Any, IModel).__jsii_proxy_class__ = lambda : _IModelProxy
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_apigateway.IModelRef")
-class IModelRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IModelRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Model.
 
     :stability: experimental
@@ -10348,6 +10442,7 @@ class IModelRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IModelRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Model.
 
@@ -10400,7 +10495,11 @@ typing.cast(typing.Any, IRequestValidator).__jsii_proxy_class__ = lambda : _IReq
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_apigateway.IRequestValidatorRef")
-class IRequestValidatorRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IRequestValidatorRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a RequestValidator.
 
     :stability: experimental
@@ -10418,6 +10517,7 @@ class IRequestValidatorRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Pr
 
 class _IRequestValidatorRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a RequestValidator.
 
@@ -10440,7 +10540,11 @@ typing.cast(typing.Any, IRequestValidatorRef).__jsii_proxy_class__ = lambda : _I
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_apigateway.IResourceRef")
-class IResourceRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IResourceRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Resource.
 
     :stability: experimental
@@ -10458,6 +10562,7 @@ class IResourceRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IResourceRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Resource.
 
@@ -10480,7 +10585,11 @@ typing.cast(typing.Any, IResourceRef).__jsii_proxy_class__ = lambda : _IResource
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_apigateway.IRestApiRef")
-class IRestApiRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IRestApiRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a RestApi.
 
     :stability: experimental
@@ -10498,6 +10607,7 @@ class IRestApiRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IRestApiRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a RestApi.
 
@@ -10520,7 +10630,11 @@ typing.cast(typing.Any, IRestApiRef).__jsii_proxy_class__ = lambda : _IRestApiRe
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_apigateway.IStageRef")
-class IStageRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IStageRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Stage.
 
     :stability: experimental
@@ -10538,6 +10652,7 @@ class IStageRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IStageRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Stage.
 
@@ -10560,7 +10675,11 @@ typing.cast(typing.Any, IStageRef).__jsii_proxy_class__ = lambda : _IStageRefPro
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_apigateway.IUsagePlanKeyRef")
-class IUsagePlanKeyRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IUsagePlanKeyRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a UsagePlanKey.
 
     :stability: experimental
@@ -10578,6 +10697,7 @@ class IUsagePlanKeyRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protoc
 
 class _IUsagePlanKeyRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a UsagePlanKey.
 
@@ -10600,7 +10720,11 @@ typing.cast(typing.Any, IUsagePlanKeyRef).__jsii_proxy_class__ = lambda : _IUsag
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_apigateway.IUsagePlanRef")
-class IUsagePlanRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IUsagePlanRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a UsagePlan.
 
     :stability: experimental
@@ -10618,6 +10742,7 @@ class IUsagePlanRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol)
 
 class _IUsagePlanRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a UsagePlan.
 
@@ -10640,7 +10765,11 @@ typing.cast(typing.Any, IUsagePlanRef).__jsii_proxy_class__ = lambda : _IUsagePl
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_apigateway.IVpcLinkRef")
-class IVpcLinkRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IVpcLinkRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a VpcLink.
 
     :stability: experimental
@@ -10658,6 +10787,7 @@ class IVpcLinkRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IVpcLinkRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a VpcLink.
 
@@ -18232,6 +18362,7 @@ class SecurityPolicy(enum.Enum):
         "rest_api_name": "restApiName",
         "retain_deployments": "retainDeployments",
         "api_definition": "apiDefinition",
+        "binary_media_types": "binaryMediaTypes",
         "min_compression_size": "minCompressionSize",
         "mode": "mode",
     },
@@ -18256,6 +18387,7 @@ class SpecRestApiProps(RestApiBaseProps):
         rest_api_name: typing.Optional[builtins.str] = None,
         retain_deployments: typing.Optional[builtins.bool] = None,
         api_definition: ApiDefinition,
+        binary_media_types: typing.Optional[typing.Sequence[builtins.str]] = None,
         min_compression_size: typing.Optional[_Size_7b441c34] = None,
         mode: typing.Optional[RestApiMode] = None,
     ) -> None:
@@ -18277,6 +18409,7 @@ class SpecRestApiProps(RestApiBaseProps):
         :param rest_api_name: A name for the API Gateway RestApi resource. Default: - ID of the RestApi construct.
         :param retain_deployments: Retains old deployment resources when the API changes. This allows manually reverting stages to point to old deployments via the AWS Console. Default: false
         :param api_definition: An OpenAPI definition compatible with API Gateway.
+        :param binary_media_types: The list of binary media mime-types that are supported by the SpecRestApi resource, such as "image/png" or "application/octet-stream". Default: - SpecRestApi supports only UTF-8-encoded text payloads.
         :param min_compression_size: A Size(in bytes, kibibytes, mebibytes etc) that is used to enable compression (with non-negative between 0 and 10485760 (10M) bytes, inclusive) or disable compression (when undefined) on an API. When compression is enabled, compression or decompression is not applied on the payload if the payload size is smaller than this value. Setting it to zero allows compression for any payload size. Default: - Compression is disabled.
         :param mode: The Mode that determines how API Gateway handles resource updates. Valid values are ``overwrite`` or ``merge``. For ``overwrite``, the new API definition replaces the existing one. The existing API identifier remains unchanged. For ``merge``, the new API definition is merged with the existing API. If you don't specify this property, a default value is chosen: - For REST APIs created before March 29, 2021, the default is ``overwrite`` - For REST APIs created after March 29, 2021, the new API definition takes precedence, but any container types such as endpoint configurations and binary media types are merged with the existing API. Use the default mode to define top-level RestApi properties in addition to using OpenAPI. Generally, it's preferred to use API Gateway's OpenAPI extensions to model these properties. Default: - ``merge`` for REST APIs created after March 29, 2021, otherwise ``overwrite``
 
@@ -18313,6 +18446,7 @@ class SpecRestApiProps(RestApiBaseProps):
             check_type(argname="argument rest_api_name", value=rest_api_name, expected_type=type_hints["rest_api_name"])
             check_type(argname="argument retain_deployments", value=retain_deployments, expected_type=type_hints["retain_deployments"])
             check_type(argname="argument api_definition", value=api_definition, expected_type=type_hints["api_definition"])
+            check_type(argname="argument binary_media_types", value=binary_media_types, expected_type=type_hints["binary_media_types"])
             check_type(argname="argument min_compression_size", value=min_compression_size, expected_type=type_hints["min_compression_size"])
             check_type(argname="argument mode", value=mode, expected_type=type_hints["mode"])
         self._values: typing.Dict[builtins.str, typing.Any] = {
@@ -18348,6 +18482,8 @@ class SpecRestApiProps(RestApiBaseProps):
             self._values["rest_api_name"] = rest_api_name
         if retain_deployments is not None:
             self._values["retain_deployments"] = retain_deployments
+        if binary_media_types is not None:
+            self._values["binary_media_types"] = binary_media_types
         if min_compression_size is not None:
             self._values["min_compression_size"] = min_compression_size
         if mode is not None:
@@ -18535,6 +18671,15 @@ class SpecRestApiProps(RestApiBaseProps):
         result = self._values.get("api_definition")
         assert result is not None, "Required property 'api_definition' is missing"
         return typing.cast(ApiDefinition, result)
+
+    @builtins.property
+    def binary_media_types(self) -> typing.Optional[typing.List[builtins.str]]:
+        '''The list of binary media mime-types that are supported by the SpecRestApi resource, such as "image/png" or "application/octet-stream".
+
+        :default: - SpecRestApi supports only UTF-8-encoded text payloads.
+        '''
+        result = self._values.get("binary_media_types")
+        return typing.cast(typing.Optional[typing.List[builtins.str]], result)
 
     @builtins.property
     def min_compression_size(self) -> typing.Optional[_Size_7b441c34]:
@@ -33603,6 +33748,7 @@ class SpecRestApi(
         id: builtins.str,
         *,
         api_definition: ApiDefinition,
+        binary_media_types: typing.Optional[typing.Sequence[builtins.str]] = None,
         min_compression_size: typing.Optional[_Size_7b441c34] = None,
         mode: typing.Optional[RestApiMode] = None,
         cloud_watch_role: typing.Optional[builtins.bool] = None,
@@ -33625,6 +33771,7 @@ class SpecRestApi(
         :param scope: -
         :param id: -
         :param api_definition: An OpenAPI definition compatible with API Gateway.
+        :param binary_media_types: The list of binary media mime-types that are supported by the SpecRestApi resource, such as "image/png" or "application/octet-stream". Default: - SpecRestApi supports only UTF-8-encoded text payloads.
         :param min_compression_size: A Size(in bytes, kibibytes, mebibytes etc) that is used to enable compression (with non-negative between 0 and 10485760 (10M) bytes, inclusive) or disable compression (when undefined) on an API. When compression is enabled, compression or decompression is not applied on the payload if the payload size is smaller than this value. Setting it to zero allows compression for any payload size. Default: - Compression is disabled.
         :param mode: The Mode that determines how API Gateway handles resource updates. Valid values are ``overwrite`` or ``merge``. For ``overwrite``, the new API definition replaces the existing one. The existing API identifier remains unchanged. For ``merge``, the new API definition is merged with the existing API. If you don't specify this property, a default value is chosen: - For REST APIs created before March 29, 2021, the default is ``overwrite`` - For REST APIs created after March 29, 2021, the new API definition takes precedence, but any container types such as endpoint configurations and binary media types are merged with the existing API. Use the default mode to define top-level RestApi properties in addition to using OpenAPI. Generally, it's preferred to use API Gateway's OpenAPI extensions to model these properties. Default: - ``merge`` for REST APIs created after March 29, 2021, otherwise ``overwrite``
         :param cloud_watch_role: Automatically configure an AWS CloudWatch role for API Gateway. Default: - false if ``@aws-cdk/aws-apigateway:disableCloudWatchRole`` is enabled, true otherwise
@@ -33649,6 +33796,7 @@ class SpecRestApi(
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
         props = SpecRestApiProps(
             api_definition=api_definition,
+            binary_media_types=binary_media_types,
             min_compression_size=min_compression_size,
             mode=mode,
             cloud_watch_role=cloud_watch_role,
@@ -36351,6 +36499,12 @@ def _typecheckingstub__d532554505e61f81e1b9ec850cbf52d3ee1550f112073eae6daecd883
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__0bc4acaae324fa465c0ae63ddfa13df8085530150092a3990e1815dea9b745ec(
+    format: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__4692c15f70ce18849ab172ed2332cc4added75850adcf2e0ed8a0ebce52c27db(
     format: builtins.str,
 ) -> None:
@@ -37731,6 +37885,7 @@ def _typecheckingstub__4506705cb637aa3098ad358d76fa29dd7a218f7542020d2e9dbfe8182
     rest_api_name: typing.Optional[builtins.str] = None,
     retain_deployments: typing.Optional[builtins.bool] = None,
     api_definition: ApiDefinition,
+    binary_media_types: typing.Optional[typing.Sequence[builtins.str]] = None,
     min_compression_size: typing.Optional[_Size_7b441c34] = None,
     mode: typing.Optional[RestApiMode] = None,
 ) -> None:
@@ -40165,6 +40320,7 @@ def _typecheckingstub__4722b635be09e87466169ef31b6610061f0fa16d1cff99382f0584fde
     id: builtins.str,
     *,
     api_definition: ApiDefinition,
+    binary_media_types: typing.Optional[typing.Sequence[builtins.str]] = None,
     min_compression_size: typing.Optional[_Size_7b441c34] = None,
     mode: typing.Optional[RestApiMode] = None,
     cloud_watch_role: typing.Optional[builtins.bool] = None,

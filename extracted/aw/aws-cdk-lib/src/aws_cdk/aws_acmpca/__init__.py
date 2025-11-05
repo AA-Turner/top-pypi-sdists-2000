@@ -92,6 +92,7 @@ import constructs as _constructs_77d1e7e8
 from .. import (
     CfnResource as _CfnResource_9df397a6,
     CfnTag as _CfnTag_f6864754,
+    IEnvironmentAware as _IEnvironmentAware_a408b00d,
     IInspectable as _IInspectable_c2943556,
     IResolvable as _IResolvable_da3f097b,
     IResource as _IResource_c80c4260,
@@ -1069,6 +1070,7 @@ typing.cast(typing.Any, ICertificateAuthority).__jsii_proxy_class__ = lambda : _
 @jsii.interface(jsii_type="aws-cdk-lib.aws_acmpca.ICertificateAuthorityActivationRef")
 class ICertificateAuthorityActivationRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a CertificateAuthorityActivation.
@@ -1090,6 +1092,7 @@ class ICertificateAuthorityActivationRef(
 
 class _ICertificateAuthorityActivationRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a CertificateAuthorityActivation.
 
@@ -1116,6 +1119,7 @@ typing.cast(typing.Any, ICertificateAuthorityActivationRef).__jsii_proxy_class__
 @jsii.interface(jsii_type="aws-cdk-lib.aws_acmpca.ICertificateAuthorityRef")
 class ICertificateAuthorityRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a CertificateAuthority.
@@ -1135,6 +1139,7 @@ class ICertificateAuthorityRef(
 
 class _ICertificateAuthorityRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a CertificateAuthority.
 
@@ -1157,7 +1162,11 @@ typing.cast(typing.Any, ICertificateAuthorityRef).__jsii_proxy_class__ = lambda 
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_acmpca.ICertificateRef")
-class ICertificateRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class ICertificateRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Certificate.
 
     :stability: experimental
@@ -1175,6 +1184,7 @@ class ICertificateRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protoco
 
 class _ICertificateRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Certificate.
 
@@ -1197,7 +1207,11 @@ typing.cast(typing.Any, ICertificateRef).__jsii_proxy_class__ = lambda : _ICerti
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_acmpca.IPermissionRef")
-class IPermissionRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IPermissionRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Permission.
 
     :stability: experimental
@@ -1215,6 +1229,7 @@ class IPermissionRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol
 
 class _IPermissionRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Permission.
 

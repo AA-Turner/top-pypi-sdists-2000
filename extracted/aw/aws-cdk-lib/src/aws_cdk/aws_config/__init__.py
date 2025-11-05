@@ -331,6 +331,7 @@ from .. import (
     CfnResource as _CfnResource_9df397a6,
     CfnTag as _CfnTag_f6864754,
     Duration as _Duration_4839e8c3,
+    IEnvironmentAware as _IEnvironmentAware_a408b00d,
     IInspectable as _IInspectable_c2943556,
     IResolvable as _IResolvable_da3f097b,
     IResource as _IResource_c80c4260,
@@ -2409,6 +2410,7 @@ class EvaluationMode(
 @jsii.interface(jsii_type="aws-cdk-lib.aws_config.IAggregationAuthorizationRef")
 class IAggregationAuthorizationRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a AggregationAuthorization.
@@ -2428,6 +2430,7 @@ class IAggregationAuthorizationRef(
 
 class _IAggregationAuthorizationRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a AggregationAuthorization.
 
@@ -2450,7 +2453,11 @@ typing.cast(typing.Any, IAggregationAuthorizationRef).__jsii_proxy_class__ = lam
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_config.IConfigRuleRef")
-class IConfigRuleRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IConfigRuleRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a ConfigRule.
 
     :stability: experimental
@@ -2468,6 +2475,7 @@ class IConfigRuleRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol
 
 class _IConfigRuleRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a ConfigRule.
 
@@ -2492,6 +2500,7 @@ typing.cast(typing.Any, IConfigRuleRef).__jsii_proxy_class__ = lambda : _IConfig
 @jsii.interface(jsii_type="aws-cdk-lib.aws_config.IConfigurationAggregatorRef")
 class IConfigurationAggregatorRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a ConfigurationAggregator.
@@ -2511,6 +2520,7 @@ class IConfigurationAggregatorRef(
 
 class _IConfigurationAggregatorRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a ConfigurationAggregator.
 
@@ -2535,6 +2545,7 @@ typing.cast(typing.Any, IConfigurationAggregatorRef).__jsii_proxy_class__ = lamb
 @jsii.interface(jsii_type="aws-cdk-lib.aws_config.IConfigurationRecorderRef")
 class IConfigurationRecorderRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a ConfigurationRecorder.
@@ -2554,6 +2565,7 @@ class IConfigurationRecorderRef(
 
 class _IConfigurationRecorderRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a ConfigurationRecorder.
 
@@ -2576,7 +2588,11 @@ typing.cast(typing.Any, IConfigurationRecorderRef).__jsii_proxy_class__ = lambda
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_config.IConformancePackRef")
-class IConformancePackRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IConformancePackRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a ConformancePack.
 
     :stability: experimental
@@ -2594,6 +2610,7 @@ class IConformancePackRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Pro
 
 class _IConformancePackRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a ConformancePack.
 
@@ -2616,7 +2633,11 @@ typing.cast(typing.Any, IConformancePackRef).__jsii_proxy_class__ = lambda : _IC
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_config.IDeliveryChannelRef")
-class IDeliveryChannelRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IDeliveryChannelRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a DeliveryChannel.
 
     :stability: experimental
@@ -2634,6 +2655,7 @@ class IDeliveryChannelRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Pro
 
 class _IDeliveryChannelRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a DeliveryChannel.
 
@@ -2658,6 +2680,7 @@ typing.cast(typing.Any, IDeliveryChannelRef).__jsii_proxy_class__ = lambda : _ID
 @jsii.interface(jsii_type="aws-cdk-lib.aws_config.IOrganizationConfigRuleRef")
 class IOrganizationConfigRuleRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a OrganizationConfigRule.
@@ -2677,6 +2700,7 @@ class IOrganizationConfigRuleRef(
 
 class _IOrganizationConfigRuleRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a OrganizationConfigRule.
 
@@ -2701,6 +2725,7 @@ typing.cast(typing.Any, IOrganizationConfigRuleRef).__jsii_proxy_class__ = lambd
 @jsii.interface(jsii_type="aws-cdk-lib.aws_config.IOrganizationConformancePackRef")
 class IOrganizationConformancePackRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a OrganizationConformancePack.
@@ -2722,6 +2747,7 @@ class IOrganizationConformancePackRef(
 
 class _IOrganizationConformancePackRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a OrganizationConformancePack.
 
@@ -2748,6 +2774,7 @@ typing.cast(typing.Any, IOrganizationConformancePackRef).__jsii_proxy_class__ = 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_config.IRemediationConfigurationRef")
 class IRemediationConfigurationRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a RemediationConfiguration.
@@ -2767,6 +2794,7 @@ class IRemediationConfigurationRef(
 
 class _IRemediationConfigurationRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a RemediationConfiguration.
 
@@ -2994,7 +3022,11 @@ typing.cast(typing.Any, IRule).__jsii_proxy_class__ = lambda : _IRuleProxy
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_config.IStoredQueryRef")
-class IStoredQueryRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IStoredQueryRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a StoredQuery.
 
     :stability: experimental
@@ -3012,6 +3044,7 @@ class IStoredQueryRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protoco
 
 class _IStoredQueryRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a StoredQuery.
 

@@ -165,7 +165,7 @@ class LifecycleEnvironmentClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/osmanagementhub/attach_managed_instances_to_lifecycle_stage.py.html>`__ to see an example of how to use attach_managed_instances_to_lifecycle_stage API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/osmanagementhub/attach_managed_instances_to_lifecycle_stage.py.html>`__ to see an example of how to use attach_managed_instances_to_lifecycle_stage API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['lifecycleStageId']
@@ -291,7 +291,7 @@ class LifecycleEnvironmentClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/osmanagementhub/change_lifecycle_environment_compartment.py.html>`__ to see an example of how to use change_lifecycle_environment_compartment API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/osmanagementhub/change_lifecycle_environment_compartment.py.html>`__ to see an example of how to use change_lifecycle_environment_compartment API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['lifecycleEnvironmentId']
@@ -401,7 +401,7 @@ class LifecycleEnvironmentClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/osmanagementhub/create_lifecycle_environment.py.html>`__ to see an example of how to use create_lifecycle_environment API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/osmanagementhub/create_lifecycle_environment.py.html>`__ to see an example of how to use create_lifecycle_environment API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -501,7 +501,7 @@ class LifecycleEnvironmentClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/osmanagementhub/delete_lifecycle_environment.py.html>`__ to see an example of how to use delete_lifecycle_environment API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/osmanagementhub/delete_lifecycle_environment.py.html>`__ to see an example of how to use delete_lifecycle_environment API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['lifecycleEnvironmentId']
@@ -618,7 +618,7 @@ class LifecycleEnvironmentClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/osmanagementhub/detach_managed_instances_from_lifecycle_stage.py.html>`__ to see an example of how to use detach_managed_instances_from_lifecycle_stage API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/osmanagementhub/detach_managed_instances_from_lifecycle_stage.py.html>`__ to see an example of how to use detach_managed_instances_from_lifecycle_stage API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['lifecycleStageId']
@@ -723,7 +723,7 @@ class LifecycleEnvironmentClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/osmanagementhub/get_lifecycle_environment.py.html>`__ to see an example of how to use get_lifecycle_environment API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/osmanagementhub/get_lifecycle_environment.py.html>`__ to see an example of how to use get_lifecycle_environment API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['lifecycleEnvironmentId']
@@ -823,7 +823,7 @@ class LifecycleEnvironmentClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/osmanagementhub/get_lifecycle_stage.py.html>`__ to see an example of how to use get_lifecycle_stage API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/osmanagementhub/get_lifecycle_stage.py.html>`__ to see an example of how to use get_lifecycle_stage API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['lifecycleStageId']
@@ -985,7 +985,7 @@ class LifecycleEnvironmentClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/osmanagementhub/list_lifecycle_environments.py.html>`__ to see an example of how to use list_lifecycle_environments API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/osmanagementhub/list_lifecycle_environments.py.html>`__ to see an example of how to use list_lifecycle_environments API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -1198,7 +1198,7 @@ class LifecycleEnvironmentClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/osmanagementhub/list_lifecycle_stage_installed_packages.py.html>`__ to see an example of how to use list_lifecycle_stage_installed_packages API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/osmanagementhub/list_lifecycle_stage_installed_packages.py.html>`__ to see an example of how to use list_lifecycle_stage_installed_packages API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['lifecycleStageId']
@@ -1409,7 +1409,7 @@ class LifecycleEnvironmentClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/osmanagementhub/list_lifecycle_stages.py.html>`__ to see an example of how to use list_lifecycle_stages API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/osmanagementhub/list_lifecycle_stages.py.html>`__ to see an example of how to use list_lifecycle_stages API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -1606,7 +1606,7 @@ class LifecycleEnvironmentClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/osmanagementhub/promote_software_source_to_lifecycle_stage.py.html>`__ to see an example of how to use promote_software_source_to_lifecycle_stage API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/osmanagementhub/promote_software_source_to_lifecycle_stage.py.html>`__ to see an example of how to use promote_software_source_to_lifecycle_stage API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['lifecycleStageId']
@@ -1736,7 +1736,7 @@ class LifecycleEnvironmentClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/osmanagementhub/reboot_lifecycle_stage.py.html>`__ to see an example of how to use reboot_lifecycle_stage API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/osmanagementhub/reboot_lifecycle_stage.py.html>`__ to see an example of how to use reboot_lifecycle_stage API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['lifecycleStageId']
@@ -1851,7 +1851,7 @@ class LifecycleEnvironmentClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/osmanagementhub/update_lifecycle_environment.py.html>`__ to see an example of how to use update_lifecycle_environment API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/osmanagementhub/update_lifecycle_environment.py.html>`__ to see an example of how to use update_lifecycle_environment API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['lifecycleEnvironmentId']

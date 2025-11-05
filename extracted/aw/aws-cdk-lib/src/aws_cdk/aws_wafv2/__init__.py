@@ -61,6 +61,7 @@ import constructs as _constructs_77d1e7e8
 from .. import (
     CfnResource as _CfnResource_9df397a6,
     CfnTag as _CfnTag_f6864754,
+    IEnvironmentAware as _IEnvironmentAware_a408b00d,
     IInspectable as _IInspectable_c2943556,
     IResolvable as _IResolvable_da3f097b,
     ITaggable as _ITaggable_36806126,
@@ -1137,7 +1138,11 @@ class CfnWebACLProps:
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_wafv2.IIPSetRef")
-class IIPSetRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IIPSetRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a IPSet.
 
     :stability: experimental
@@ -1155,6 +1160,7 @@ class IIPSetRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IIPSetRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a IPSet.
 
@@ -1179,6 +1185,7 @@ typing.cast(typing.Any, IIPSetRef).__jsii_proxy_class__ = lambda : _IIPSetRefPro
 @jsii.interface(jsii_type="aws-cdk-lib.aws_wafv2.ILoggingConfigurationRef")
 class ILoggingConfigurationRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a LoggingConfiguration.
@@ -1198,6 +1205,7 @@ class ILoggingConfigurationRef(
 
 class _ILoggingConfigurationRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a LoggingConfiguration.
 
@@ -1314,7 +1322,11 @@ class IPSetReference:
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_wafv2.IRegexPatternSetRef")
-class IRegexPatternSetRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IRegexPatternSetRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a RegexPatternSet.
 
     :stability: experimental
@@ -1332,6 +1344,7 @@ class IRegexPatternSetRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Pro
 
 class _IRegexPatternSetRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a RegexPatternSet.
 
@@ -1354,7 +1367,11 @@ typing.cast(typing.Any, IRegexPatternSetRef).__jsii_proxy_class__ = lambda : _IR
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_wafv2.IRuleGroupRef")
-class IRuleGroupRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IRuleGroupRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a RuleGroup.
 
     :stability: experimental
@@ -1372,6 +1389,7 @@ class IRuleGroupRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol)
 
 class _IRuleGroupRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a RuleGroup.
 
@@ -1396,6 +1414,7 @@ typing.cast(typing.Any, IRuleGroupRef).__jsii_proxy_class__ = lambda : _IRuleGro
 @jsii.interface(jsii_type="aws-cdk-lib.aws_wafv2.IWebACLAssociationRef")
 class IWebACLAssociationRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a WebACLAssociation.
@@ -1415,6 +1434,7 @@ class IWebACLAssociationRef(
 
 class _IWebACLAssociationRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a WebACLAssociation.
 
@@ -1437,7 +1457,11 @@ typing.cast(typing.Any, IWebACLAssociationRef).__jsii_proxy_class__ = lambda : _
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_wafv2.IWebACLRef")
-class IWebACLRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IWebACLRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a WebACL.
 
     :stability: experimental
@@ -1455,6 +1479,7 @@ class IWebACLRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IWebACLRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a WebACL.
 

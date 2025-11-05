@@ -61,6 +61,7 @@ import constructs as _constructs_77d1e7e8
 from .. import (
     CfnResource as _CfnResource_9df397a6,
     CfnTag as _CfnTag_f6864754,
+    IEnvironmentAware as _IEnvironmentAware_a408b00d,
     IInspectable as _IInspectable_c2943556,
     IResolvable as _IResolvable_da3f097b,
     ITaggable as _ITaggable_36806126,
@@ -604,7 +605,11 @@ class ConnectionAliasReference:
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_workspaces.IConnectionAliasRef")
-class IConnectionAliasRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IConnectionAliasRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a ConnectionAlias.
 
     :stability: experimental
@@ -622,6 +627,7 @@ class IConnectionAliasRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Pro
 
 class _IConnectionAliasRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a ConnectionAlias.
 
@@ -644,7 +650,11 @@ typing.cast(typing.Any, IConnectionAliasRef).__jsii_proxy_class__ = lambda : _IC
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_workspaces.IWorkspaceRef")
-class IWorkspaceRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IWorkspaceRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Workspace.
 
     :stability: experimental
@@ -662,6 +672,7 @@ class IWorkspaceRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol)
 
 class _IWorkspaceRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Workspace.
 
@@ -684,7 +695,11 @@ typing.cast(typing.Any, IWorkspaceRef).__jsii_proxy_class__ = lambda : _IWorkspa
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_workspaces.IWorkspacesPoolRef")
-class IWorkspacesPoolRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IWorkspacesPoolRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a WorkspacesPool.
 
     :stability: experimental
@@ -702,6 +717,7 @@ class IWorkspacesPoolRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Prot
 
 class _IWorkspacesPoolRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a WorkspacesPool.
 

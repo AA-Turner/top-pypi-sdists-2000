@@ -1696,6 +1696,7 @@ from .. import (
     DockerImage as _DockerImage_f97a0c12,
     Duration as _Duration_4839e8c3,
     IAspect as _IAspect_118c810a,
+    IEnvironmentAware as _IEnvironmentAware_a408b00d,
     IInspectable as _IInspectable_c2943556,
     IResolvable as _IResolvable_da3f097b,
     IResource as _IResource_c80c4260,
@@ -12551,7 +12552,11 @@ class HttpMethod(enum.Enum):
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_lambda.IAliasRef")
-class IAliasRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IAliasRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Alias.
 
     :stability: experimental
@@ -12569,6 +12574,7 @@ class IAliasRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IAliasRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Alias.
 
@@ -12593,6 +12599,7 @@ typing.cast(typing.Any, IAliasRef).__jsii_proxy_class__ = lambda : _IAliasRefPro
 @jsii.interface(jsii_type="aws-cdk-lib.aws_lambda.ICodeSigningConfigRef")
 class ICodeSigningConfigRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a CodeSigningConfig.
@@ -12612,6 +12619,7 @@ class ICodeSigningConfigRef(
 
 class _ICodeSigningConfigRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a CodeSigningConfig.
 
@@ -12688,6 +12696,7 @@ typing.cast(typing.Any, IDestination).__jsii_proxy_class__ = lambda : _IDestinat
 @jsii.interface(jsii_type="aws-cdk-lib.aws_lambda.IEventInvokeConfigRef")
 class IEventInvokeConfigRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a EventInvokeConfig.
@@ -12707,6 +12716,7 @@ class IEventInvokeConfigRef(
 
 class _IEventInvokeConfigRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a EventInvokeConfig.
 
@@ -12808,6 +12818,7 @@ typing.cast(typing.Any, IEventSourceDlq).__jsii_proxy_class__ = lambda : _IEvent
 @jsii.interface(jsii_type="aws-cdk-lib.aws_lambda.IEventSourceMappingRef")
 class IEventSourceMappingRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a EventSourceMapping.
@@ -12827,6 +12838,7 @@ class IEventSourceMappingRef(
 
 class _IEventSourceMappingRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a EventSourceMapping.
 
@@ -12849,7 +12861,11 @@ typing.cast(typing.Any, IEventSourceMappingRef).__jsii_proxy_class__ = lambda : 
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_lambda.IFunctionRef")
-class IFunctionRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IFunctionRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Function.
 
     :stability: experimental
@@ -12867,6 +12883,7 @@ class IFunctionRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IFunctionRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Function.
 
@@ -12980,6 +12997,7 @@ typing.cast(typing.Any, IFunctionUrl).__jsii_proxy_class__ = lambda : _IFunction
 @jsii.interface(jsii_type="aws-cdk-lib.aws_lambda.ILayerVersionPermissionRef")
 class ILayerVersionPermissionRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a LayerVersionPermission.
@@ -12999,6 +13017,7 @@ class ILayerVersionPermissionRef(
 
 class _ILayerVersionPermissionRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a LayerVersionPermission.
 
@@ -13021,7 +13040,11 @@ typing.cast(typing.Any, ILayerVersionPermissionRef).__jsii_proxy_class__ = lambd
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_lambda.ILayerVersionRef")
-class ILayerVersionRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class ILayerVersionRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a LayerVersion.
 
     :stability: experimental
@@ -13039,6 +13062,7 @@ class ILayerVersionRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protoc
 
 class _ILayerVersionRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a LayerVersion.
 
@@ -13061,7 +13085,11 @@ typing.cast(typing.Any, ILayerVersionRef).__jsii_proxy_class__ = lambda : _ILaye
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_lambda.IPermissionRef")
-class IPermissionRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IPermissionRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Permission.
 
     :stability: experimental
@@ -13079,6 +13107,7 @@ class IPermissionRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol
 
 class _IPermissionRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Permission.
 
@@ -13280,7 +13309,11 @@ typing.cast(typing.Any, ISchemaRegistry).__jsii_proxy_class__ = lambda : _ISchem
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_lambda.IUrlRef")
-class IUrlRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IUrlRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Url.
 
     :stability: experimental
@@ -13298,6 +13331,7 @@ class IUrlRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IUrlRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Url.
 
@@ -13320,7 +13354,11 @@ typing.cast(typing.Any, IUrlRef).__jsii_proxy_class__ = lambda : _IUrlRefProxy
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_lambda.IVersionRef")
-class IVersionRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IVersionRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Version.
 
     :stability: experimental
@@ -13338,6 +13376,7 @@ class IVersionRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IVersionRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Version.
 
@@ -15977,6 +16016,12 @@ class Runtime(metaclass=jsii.JSIIMeta, jsii_type="aws-cdk-lib.aws_lambda.Runtime
         return typing.cast("Runtime", jsii.sget(cls, "JAVA_21"))
 
     @jsii.python.classproperty
+    @jsii.member(jsii_name="JAVA_25")
+    def JAVA_25(cls) -> "Runtime":
+        '''The Java 25 runtime (java25).'''
+        return typing.cast("Runtime", jsii.sget(cls, "JAVA_25"))
+
+    @jsii.python.classproperty
     @jsii.member(jsii_name="JAVA_8")
     def JAVA_8(cls) -> "Runtime":
         '''(deprecated) The Java 8 runtime (java8).
@@ -16162,6 +16207,12 @@ class Runtime(metaclass=jsii.JSIIMeta, jsii_type="aws-cdk-lib.aws_lambda.Runtime
     def PYTHON_3_13(cls) -> "Runtime":
         '''The Python 3.13 runtime (python3.13).'''
         return typing.cast("Runtime", jsii.sget(cls, "PYTHON_3_13"))
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PYTHON_3_14")
+    def PYTHON_3_14(cls) -> "Runtime":
+        '''The Python 3.14 runtime (python3.14).'''
+        return typing.cast("Runtime", jsii.sget(cls, "PYTHON_3_14"))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="PYTHON_3_6")

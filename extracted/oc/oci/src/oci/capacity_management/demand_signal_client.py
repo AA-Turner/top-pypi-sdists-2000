@@ -154,7 +154,7 @@ class DemandSignalClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/capacitymanagement/bulk_create_occm_demand_signal_item.py.html>`__ to see an example of how to use bulk_create_occm_demand_signal_item API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/capacitymanagement/bulk_create_occm_demand_signal_item.py.html>`__ to see an example of how to use bulk_create_occm_demand_signal_item API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -251,7 +251,7 @@ class DemandSignalClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/capacitymanagement/create_occm_demand_signal.py.html>`__ to see an example of how to use create_occm_demand_signal API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/capacitymanagement/create_occm_demand_signal.py.html>`__ to see an example of how to use create_occm_demand_signal API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -350,7 +350,7 @@ class DemandSignalClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/capacitymanagement/create_occm_demand_signal_item.py.html>`__ to see an example of how to use create_occm_demand_signal_item API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/capacitymanagement/create_occm_demand_signal_item.py.html>`__ to see an example of how to use create_occm_demand_signal_item API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -449,7 +449,7 @@ class DemandSignalClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/capacitymanagement/delete_occm_demand_signal.py.html>`__ to see an example of how to use delete_occm_demand_signal API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/capacitymanagement/delete_occm_demand_signal.py.html>`__ to see an example of how to use delete_occm_demand_signal API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['occmDemandSignalId']
@@ -555,7 +555,7 @@ class DemandSignalClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/capacitymanagement/delete_occm_demand_signal_item.py.html>`__ to see an example of how to use delete_occm_demand_signal_item API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/capacitymanagement/delete_occm_demand_signal_item.py.html>`__ to see an example of how to use delete_occm_demand_signal_item API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['occmDemandSignalItemId']
@@ -654,7 +654,7 @@ class DemandSignalClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/capacitymanagement/get_occm_demand_signal.py.html>`__ to see an example of how to use get_occm_demand_signal API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/capacitymanagement/get_occm_demand_signal.py.html>`__ to see an example of how to use get_occm_demand_signal API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['occmDemandSignalId']
@@ -753,7 +753,7 @@ class DemandSignalClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/capacitymanagement/get_occm_demand_signal_item.py.html>`__ to see an example of how to use get_occm_demand_signal_item API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/capacitymanagement/get_occm_demand_signal_item.py.html>`__ to see an example of how to use get_occm_demand_signal_item API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['occmDemandSignalItemId']
@@ -876,7 +876,7 @@ class DemandSignalClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/capacitymanagement/list_occm_demand_signal_catalog_resources.py.html>`__ to see an example of how to use list_occm_demand_signal_catalog_resources API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/capacitymanagement/list_occm_demand_signal_catalog_resources.py.html>`__ to see an example of how to use list_occm_demand_signal_catalog_resources API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['compartmentId']
@@ -1025,7 +1025,7 @@ class DemandSignalClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/capacitymanagement/list_occm_demand_signal_deliveries.py.html>`__ to see an example of how to use list_occm_demand_signal_deliveries API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/capacitymanagement/list_occm_demand_signal_deliveries.py.html>`__ to see an example of how to use list_occm_demand_signal_deliveries API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['compartmentId']
@@ -1172,7 +1172,7 @@ class DemandSignalClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/capacitymanagement/list_occm_demand_signal_items.py.html>`__ to see an example of how to use list_occm_demand_signal_items API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/capacitymanagement/list_occm_demand_signal_items.py.html>`__ to see an example of how to use list_occm_demand_signal_items API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['compartmentId']
@@ -1326,7 +1326,7 @@ class DemandSignalClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/capacitymanagement/list_occm_demand_signals.py.html>`__ to see an example of how to use list_occm_demand_signals API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/capacitymanagement/list_occm_demand_signals.py.html>`__ to see an example of how to use list_occm_demand_signals API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['compartmentId']
@@ -1458,7 +1458,7 @@ class DemandSignalClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/capacitymanagement/update_occm_demand_signal.py.html>`__ to see an example of how to use update_occm_demand_signal API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/capacitymanagement/update_occm_demand_signal.py.html>`__ to see an example of how to use update_occm_demand_signal API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['occmDemandSignalId']
@@ -1571,7 +1571,7 @@ class DemandSignalClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/capacitymanagement/update_occm_demand_signal_item.py.html>`__ to see an example of how to use update_occm_demand_signal_item API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/capacitymanagement/update_occm_demand_signal_item.py.html>`__ to see an example of how to use update_occm_demand_signal_item API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['occmDemandSignalItemId']

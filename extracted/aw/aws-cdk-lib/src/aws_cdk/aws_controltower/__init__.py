@@ -61,6 +61,7 @@ import constructs as _constructs_77d1e7e8
 from .. import (
     CfnResource as _CfnResource_9df397a6,
     CfnTag as _CfnTag_f6864754,
+    IEnvironmentAware as _IEnvironmentAware_a408b00d,
     IInspectable as _IInspectable_c2943556,
     IResolvable as _IResolvable_da3f097b,
     ITaggableV2 as _ITaggableV2_4e6798f8,
@@ -538,7 +539,11 @@ class EnabledControlReference:
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_controltower.IEnabledBaselineRef")
-class IEnabledBaselineRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IEnabledBaselineRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a EnabledBaseline.
 
     :stability: experimental
@@ -556,6 +561,7 @@ class IEnabledBaselineRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Pro
 
 class _IEnabledBaselineRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a EnabledBaseline.
 
@@ -578,7 +584,11 @@ typing.cast(typing.Any, IEnabledBaselineRef).__jsii_proxy_class__ = lambda : _IE
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_controltower.IEnabledControlRef")
-class IEnabledControlRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IEnabledControlRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a EnabledControl.
 
     :stability: experimental
@@ -596,6 +606,7 @@ class IEnabledControlRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Prot
 
 class _IEnabledControlRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a EnabledControl.
 
@@ -618,7 +629,11 @@ typing.cast(typing.Any, IEnabledControlRef).__jsii_proxy_class__ = lambda : _IEn
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_controltower.ILandingZoneRef")
-class ILandingZoneRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class ILandingZoneRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a LandingZone.
 
     :stability: experimental
@@ -636,6 +651,7 @@ class ILandingZoneRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protoco
 
 class _ILandingZoneRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a LandingZone.
 

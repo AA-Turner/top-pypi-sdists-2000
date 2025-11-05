@@ -66,6 +66,7 @@ import constructs as _constructs_77d1e7e8
 from .. import (
     CfnResource as _CfnResource_9df397a6,
     CfnTag as _CfnTag_f6864754,
+    IEnvironmentAware as _IEnvironmentAware_a408b00d,
     IInspectable as _IInspectable_c2943556,
     IResolvable as _IResolvable_da3f097b,
     ITaggable as _ITaggable_36806126,
@@ -1375,7 +1376,11 @@ class ConfigurationReference:
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_msk.IBatchScramSecretRef")
-class IBatchScramSecretRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IBatchScramSecretRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a BatchScramSecret.
 
     :stability: experimental
@@ -1393,6 +1398,7 @@ class IBatchScramSecretRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Pr
 
 class _IBatchScramSecretRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a BatchScramSecret.
 
@@ -1415,7 +1421,11 @@ typing.cast(typing.Any, IBatchScramSecretRef).__jsii_proxy_class__ = lambda : _I
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_msk.IClusterPolicyRef")
-class IClusterPolicyRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IClusterPolicyRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a ClusterPolicy.
 
     :stability: experimental
@@ -1433,6 +1443,7 @@ class IClusterPolicyRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Proto
 
 class _IClusterPolicyRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a ClusterPolicy.
 
@@ -1455,7 +1466,11 @@ typing.cast(typing.Any, IClusterPolicyRef).__jsii_proxy_class__ = lambda : _IClu
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_msk.IClusterRef")
-class IClusterRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IClusterRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Cluster.
 
     :stability: experimental
@@ -1473,6 +1488,7 @@ class IClusterRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IClusterRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Cluster.
 
@@ -1495,7 +1511,11 @@ typing.cast(typing.Any, IClusterRef).__jsii_proxy_class__ = lambda : _IClusterRe
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_msk.IConfigurationRef")
-class IConfigurationRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IConfigurationRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Configuration.
 
     :stability: experimental
@@ -1513,6 +1533,7 @@ class IConfigurationRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Proto
 
 class _IConfigurationRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Configuration.
 
@@ -1535,7 +1556,11 @@ typing.cast(typing.Any, IConfigurationRef).__jsii_proxy_class__ = lambda : _ICon
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_msk.IReplicatorRef")
-class IReplicatorRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IReplicatorRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Replicator.
 
     :stability: experimental
@@ -1553,6 +1578,7 @@ class IReplicatorRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol
 
 class _IReplicatorRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Replicator.
 
@@ -1577,6 +1603,7 @@ typing.cast(typing.Any, IReplicatorRef).__jsii_proxy_class__ = lambda : _IReplic
 @jsii.interface(jsii_type="aws-cdk-lib.aws_msk.IServerlessClusterRef")
 class IServerlessClusterRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a ServerlessCluster.
@@ -1596,6 +1623,7 @@ class IServerlessClusterRef(
 
 class _IServerlessClusterRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a ServerlessCluster.
 
@@ -1618,7 +1646,11 @@ typing.cast(typing.Any, IServerlessClusterRef).__jsii_proxy_class__ = lambda : _
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_msk.IVpcConnectionRef")
-class IVpcConnectionRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IVpcConnectionRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a VpcConnection.
 
     :stability: experimental
@@ -1636,6 +1668,7 @@ class IVpcConnectionRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Proto
 
 class _IVpcConnectionRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a VpcConnection.
 

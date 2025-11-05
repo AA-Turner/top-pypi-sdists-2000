@@ -138,6 +138,7 @@ from .._jsii import *
 import constructs as _constructs_77d1e7e8
 from .. import (
     CfnResource as _CfnResource_9df397a6,
+    IEnvironmentAware as _IEnvironmentAware_a408b00d,
     IInspectable as _IInspectable_c2943556,
     IResolvable as _IResolvable_da3f097b,
     TreeInspector as _TreeInspector_488e0dd5,
@@ -1521,7 +1522,11 @@ class DataLakeSettingsReference:
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_lakeformation.IDataCellsFilterRef")
-class IDataCellsFilterRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IDataCellsFilterRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a DataCellsFilter.
 
     :stability: experimental
@@ -1539,6 +1544,7 @@ class IDataCellsFilterRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Pro
 
 class _IDataCellsFilterRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a DataCellsFilter.
 
@@ -1561,7 +1567,11 @@ typing.cast(typing.Any, IDataCellsFilterRef).__jsii_proxy_class__ = lambda : _ID
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_lakeformation.IDataLakeSettingsRef")
-class IDataLakeSettingsRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IDataLakeSettingsRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a DataLakeSettings.
 
     :stability: experimental
@@ -1579,6 +1589,7 @@ class IDataLakeSettingsRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Pr
 
 class _IDataLakeSettingsRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a DataLakeSettings.
 
@@ -1601,7 +1612,11 @@ typing.cast(typing.Any, IDataLakeSettingsRef).__jsii_proxy_class__ = lambda : _I
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_lakeformation.IPermissionsRef")
-class IPermissionsRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IPermissionsRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Permissions.
 
     :stability: experimental
@@ -1619,6 +1634,7 @@ class IPermissionsRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protoco
 
 class _IPermissionsRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Permissions.
 
@@ -1643,6 +1659,7 @@ typing.cast(typing.Any, IPermissionsRef).__jsii_proxy_class__ = lambda : _IPermi
 @jsii.interface(jsii_type="aws-cdk-lib.aws_lakeformation.IPrincipalPermissionsRef")
 class IPrincipalPermissionsRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a PrincipalPermissions.
@@ -1662,6 +1679,7 @@ class IPrincipalPermissionsRef(
 
 class _IPrincipalPermissionsRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a PrincipalPermissions.
 
@@ -1684,7 +1702,11 @@ typing.cast(typing.Any, IPrincipalPermissionsRef).__jsii_proxy_class__ = lambda 
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_lakeformation.IResourceRef")
-class IResourceRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IResourceRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Resource.
 
     :stability: experimental
@@ -1702,6 +1724,7 @@ class IResourceRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IResourceRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Resource.
 
@@ -1724,7 +1747,11 @@ typing.cast(typing.Any, IResourceRef).__jsii_proxy_class__ = lambda : _IResource
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_lakeformation.ITagAssociationRef")
-class ITagAssociationRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class ITagAssociationRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a TagAssociation.
 
     :stability: experimental
@@ -1742,6 +1769,7 @@ class ITagAssociationRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Prot
 
 class _ITagAssociationRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a TagAssociation.
 
@@ -1764,7 +1792,11 @@ typing.cast(typing.Any, ITagAssociationRef).__jsii_proxy_class__ = lambda : _ITa
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_lakeformation.ITagRef")
-class ITagRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class ITagRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Tag.
 
     :stability: experimental
@@ -1782,6 +1814,7 @@ class ITagRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _ITagRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Tag.
 

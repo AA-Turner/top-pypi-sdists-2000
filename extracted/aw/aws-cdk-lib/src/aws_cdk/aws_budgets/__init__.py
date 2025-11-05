@@ -60,6 +60,7 @@ from .._jsii import *
 import constructs as _constructs_77d1e7e8
 from .. import (
     CfnResource as _CfnResource_9df397a6,
+    IEnvironmentAware as _IEnvironmentAware_a408b00d,
     IInspectable as _IInspectable_c2943556,
     IResolvable as _IResolvable_da3f097b,
     ITaggableV2 as _ITaggableV2_4e6798f8,
@@ -594,7 +595,11 @@ class CfnBudgetsActionProps:
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_budgets.IBudgetRef")
-class IBudgetRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IBudgetRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Budget.
 
     :stability: experimental
@@ -612,6 +617,7 @@ class IBudgetRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IBudgetRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Budget.
 
@@ -634,7 +640,11 @@ typing.cast(typing.Any, IBudgetRef).__jsii_proxy_class__ = lambda : _IBudgetRefP
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_budgets.IBudgetsActionRef")
-class IBudgetsActionRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IBudgetsActionRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a BudgetsAction.
 
     :stability: experimental
@@ -652,6 +662,7 @@ class IBudgetsActionRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Proto
 
 class _IBudgetsActionRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a BudgetsAction.
 

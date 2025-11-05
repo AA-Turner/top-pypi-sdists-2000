@@ -60,6 +60,7 @@ from .._jsii import *
 import constructs as _constructs_77d1e7e8
 from .. import (
     CfnResource as _CfnResource_9df397a6,
+    IEnvironmentAware as _IEnvironmentAware_a408b00d,
     IInspectable as _IInspectable_c2943556,
     IResolvable as _IResolvable_da3f097b,
     TreeInspector as _TreeInspector_488e0dd5,
@@ -239,6 +240,7 @@ class CfnResourceCollectionProps:
 )
 class ILogAnomalyDetectionIntegrationRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a LogAnomalyDetectionIntegration.
@@ -260,6 +262,7 @@ class ILogAnomalyDetectionIntegrationRef(
 
 class _ILogAnomalyDetectionIntegrationRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a LogAnomalyDetectionIntegration.
 
@@ -286,6 +289,7 @@ typing.cast(typing.Any, ILogAnomalyDetectionIntegrationRef).__jsii_proxy_class__
 @jsii.interface(jsii_type="aws-cdk-lib.aws_devopsguru.INotificationChannelRef")
 class INotificationChannelRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a NotificationChannel.
@@ -305,6 +309,7 @@ class INotificationChannelRef(
 
 class _INotificationChannelRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a NotificationChannel.
 
@@ -329,6 +334,7 @@ typing.cast(typing.Any, INotificationChannelRef).__jsii_proxy_class__ = lambda :
 @jsii.interface(jsii_type="aws-cdk-lib.aws_devopsguru.IResourceCollectionRef")
 class IResourceCollectionRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a ResourceCollection.
@@ -348,6 +354,7 @@ class IResourceCollectionRef(
 
 class _IResourceCollectionRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a ResourceCollection.
 

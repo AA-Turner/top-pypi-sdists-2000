@@ -61,6 +61,7 @@ import constructs as _constructs_77d1e7e8
 from .. import (
     CfnResource as _CfnResource_9df397a6,
     CfnTag as _CfnTag_f6864754,
+    IEnvironmentAware as _IEnvironmentAware_a408b00d,
     IInspectable as _IInspectable_c2943556,
     IResolvable as _IResolvable_da3f097b,
     ITaggable as _ITaggable_36806126,
@@ -1049,7 +1050,11 @@ class DevicePoolReference:
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_devicefarm.IDevicePoolRef")
-class IDevicePoolRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IDevicePoolRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a DevicePool.
 
     :stability: experimental
@@ -1067,6 +1072,7 @@ class IDevicePoolRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol
 
 class _IDevicePoolRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a DevicePool.
 
@@ -1089,7 +1095,11 @@ typing.cast(typing.Any, IDevicePoolRef).__jsii_proxy_class__ = lambda : _IDevice
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_devicefarm.IInstanceProfileRef")
-class IInstanceProfileRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IInstanceProfileRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a InstanceProfile.
 
     :stability: experimental
@@ -1107,6 +1117,7 @@ class IInstanceProfileRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Pro
 
 class _IInstanceProfileRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a InstanceProfile.
 
@@ -1129,7 +1140,11 @@ typing.cast(typing.Any, IInstanceProfileRef).__jsii_proxy_class__ = lambda : _II
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_devicefarm.INetworkProfileRef")
-class INetworkProfileRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class INetworkProfileRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a NetworkProfile.
 
     :stability: experimental
@@ -1147,6 +1162,7 @@ class INetworkProfileRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Prot
 
 class _INetworkProfileRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a NetworkProfile.
 
@@ -1169,7 +1185,11 @@ typing.cast(typing.Any, INetworkProfileRef).__jsii_proxy_class__ = lambda : _INe
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_devicefarm.IProjectRef")
-class IProjectRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IProjectRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Project.
 
     :stability: experimental
@@ -1187,6 +1207,7 @@ class IProjectRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IProjectRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Project.
 
@@ -1209,7 +1230,11 @@ typing.cast(typing.Any, IProjectRef).__jsii_proxy_class__ = lambda : _IProjectRe
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_devicefarm.ITestGridProjectRef")
-class ITestGridProjectRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class ITestGridProjectRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a TestGridProject.
 
     :stability: experimental
@@ -1227,6 +1252,7 @@ class ITestGridProjectRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Pro
 
 class _ITestGridProjectRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a TestGridProject.
 
@@ -1251,6 +1277,7 @@ typing.cast(typing.Any, ITestGridProjectRef).__jsii_proxy_class__ = lambda : _IT
 @jsii.interface(jsii_type="aws-cdk-lib.aws_devicefarm.IVPCEConfigurationRef")
 class IVPCEConfigurationRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a VPCEConfiguration.
@@ -1270,6 +1297,7 @@ class IVPCEConfigurationRef(
 
 class _IVPCEConfigurationRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a VPCEConfiguration.
 

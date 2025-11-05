@@ -61,6 +61,7 @@ import constructs as _constructs_77d1e7e8
 from .. import (
     CfnResource as _CfnResource_9df397a6,
     CfnTag as _CfnTag_f6864754,
+    IEnvironmentAware as _IEnvironmentAware_a408b00d,
     IInspectable as _IInspectable_c2943556,
     IResolvable as _IResolvable_da3f097b,
     ITaggable as _ITaggable_36806126,
@@ -620,7 +621,11 @@ class ControlPanelReference:
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_route53recoverycontrol.IClusterRef")
-class IClusterRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IClusterRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Cluster.
 
     :stability: experimental
@@ -638,6 +643,7 @@ class IClusterRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IClusterRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Cluster.
 
@@ -660,7 +666,11 @@ typing.cast(typing.Any, IClusterRef).__jsii_proxy_class__ = lambda : _IClusterRe
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_route53recoverycontrol.IControlPanelRef")
-class IControlPanelRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IControlPanelRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a ControlPanel.
 
     :stability: experimental
@@ -678,6 +688,7 @@ class IControlPanelRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protoc
 
 class _IControlPanelRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a ControlPanel.
 
@@ -700,7 +711,11 @@ typing.cast(typing.Any, IControlPanelRef).__jsii_proxy_class__ = lambda : _ICont
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_route53recoverycontrol.IRoutingControlRef")
-class IRoutingControlRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IRoutingControlRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a RoutingControl.
 
     :stability: experimental
@@ -718,6 +733,7 @@ class IRoutingControlRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Prot
 
 class _IRoutingControlRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a RoutingControl.
 
@@ -740,7 +756,11 @@ typing.cast(typing.Any, IRoutingControlRef).__jsii_proxy_class__ = lambda : _IRo
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_route53recoverycontrol.ISafetyRuleRef")
-class ISafetyRuleRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class ISafetyRuleRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a SafetyRule.
 
     :stability: experimental
@@ -758,6 +778,7 @@ class ISafetyRuleRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol
 
 class _ISafetyRuleRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a SafetyRule.
 

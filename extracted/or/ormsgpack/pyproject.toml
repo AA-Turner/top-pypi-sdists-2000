@@ -1,6 +1,7 @@
 [project]
 name = "ormsgpack"
-requires-python = ">=3.9"
+version = "1.12.0"
+requires-python = ">=3.10"
 classifiers = [
     "Development Status :: 5 - Production/Stable",
     "Intended Audience :: Developers",
@@ -10,7 +11,6 @@ classifiers = [
     "Operating System :: Microsoft :: Windows",
     "Operating System :: POSIX :: Linux",
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
@@ -22,7 +22,6 @@ classifiers = [
     "Programming Language :: Rust",
     "Typing :: Typed",
 ]
-dynamic = ["version"]
 authors = [
     {name = "Aviram Hassan", email = "aviramyhassan@gmail.com"},
     {name = "Emanuele Giaquinta", email = "emanuele.giaquinta@gmail.com"},
@@ -63,7 +62,7 @@ ignore_missing_imports = true
 [tool.ruff]
 line-length = 88
 src = ["python"]
-target-version = "py39"
+target-version = "py310"
 
 [tool.ruff.lint]
 select = [

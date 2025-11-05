@@ -61,6 +61,7 @@ import constructs as _constructs_77d1e7e8
 from .. import (
     CfnResource as _CfnResource_9df397a6,
     CfnTag as _CfnTag_f6864754,
+    IEnvironmentAware as _IEnvironmentAware_a408b00d,
     IInspectable as _IInspectable_c2943556,
     IResolvable as _IResolvable_da3f097b,
     ITaggable as _ITaggable_36806126,
@@ -589,7 +590,11 @@ class CollectionReference:
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_rekognition.ICollectionRef")
-class ICollectionRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class ICollectionRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Collection.
 
     :stability: experimental
@@ -607,6 +612,7 @@ class ICollectionRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol
 
 class _ICollectionRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Collection.
 
@@ -629,7 +635,11 @@ typing.cast(typing.Any, ICollectionRef).__jsii_proxy_class__ = lambda : _ICollec
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_rekognition.IProjectRef")
-class IProjectRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IProjectRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Project.
 
     :stability: experimental
@@ -647,6 +657,7 @@ class IProjectRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IProjectRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Project.
 
@@ -669,7 +680,11 @@ typing.cast(typing.Any, IProjectRef).__jsii_proxy_class__ = lambda : _IProjectRe
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_rekognition.IStreamProcessorRef")
-class IStreamProcessorRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IStreamProcessorRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a StreamProcessor.
 
     :stability: experimental
@@ -687,6 +702,7 @@ class IStreamProcessorRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Pro
 
 class _IStreamProcessorRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a StreamProcessor.
 

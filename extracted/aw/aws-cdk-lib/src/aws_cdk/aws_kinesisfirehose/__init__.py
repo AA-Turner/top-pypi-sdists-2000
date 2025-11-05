@@ -498,8 +498,11 @@ Data can be transformed before being delivered to destinations. There are two ty
 data processing for delivery streams: record transformation with AWS Lambda, and record
 format conversion using a schema stored in an AWS Glue table. If both types of data
 processing are configured, then the Lambda transformation is performed first. By default,
-no data processing occurs. This construct library currently only supports data
-transformation with AWS Lambda. See [#15501](https://github.com/aws/aws-cdk/issues/15501)
+no data processing occurs.
+
+This construct library currently only supports data
+transformation with AWS Lambda and some built-in data processors.
+See [#15501](https://github.com/aws/aws-cdk/issues/15501)
 to track the status of adding support for record format conversion.
 
 ### Data transformation with AWS Lambda
@@ -535,7 +538,7 @@ lambda_processor = firehose.LambdaFunctionProcessor(lambda_function,
     retries=5
 )
 s3_destination = firehose.S3Bucket(bucket,
-    processor=lambda_processor
+    processors=[lambda_processor]
 )
 firehose.DeliveryStream(self, "Delivery Stream",
     destination=s3_destination
@@ -658,6 +661,62 @@ if s3_api_call instanceof AwsApiCall && s3_api_call.waiter_provider:
 
 See: [Data Transformation](https://docs.aws.amazon.com/firehose/latest/dev/data-transformation.html)
 in the *Amazon Data Firehose Developer Guide*.
+
+### Add a new line delimiter when delivering data to Amazon S3
+
+You can specify the `AppendDelimiterToRecordProcessor` built-in processor to add a new line delimiter between records in objects that are delivered to Amazon S3. This can be helpful for parsing objects in Amazon S3.
+For details, see [Use Amazon S3 bucket prefix to deliver data](https://docs.aws.amazon.com/firehose/latest/dev/dynamic-partitioning-s3bucketprefix.html).
+
+```python
+# bucket: s3.Bucket
+
+s3_destination = firehose.S3Bucket(bucket,
+    processors=[
+        firehose.AppendDelimiterToRecordProcessor()
+    ]
+)
+firehose.DeliveryStream(self, "Delivery Stream",
+    destination=s3_destination
+)
+```
+
+### Decompress and extract message of CloudWatch Logs
+
+CloudWatch Logs events are sent to Firehose in compressed gzip format. If you want to deliver decompressed log events to Firehose destinations, you can use the `DecompressionProcessor` to automatically decompress CloudWatch Logs.
+For details, see [Send CloudWatch Logs to Firehose](https://docs.aws.amazon.com/firehose/latest/dev/writing-with-cloudwatch-logs.html).
+
+You may also needed to specify `AppendDelimiterToRecordProcessor`
+because decompressed log events record has no trailing newline.
+
+```python
+# bucket: s3.Bucket
+
+s3_destination = firehose.S3Bucket(bucket,
+    processors=[
+        firehose.DecompressionProcessor(),
+        firehose.AppendDelimiterToRecordProcessor()
+    ]
+)
+firehose.DeliveryStream(self, "Delivery Stream",
+    destination=s3_destination
+)
+```
+
+When you enable decompression, you have the option to also enable message extraction. When using message extraction, Firehose filters out all metadata, such as owner, loggroup, logstream, and others from the decompressed CloudWatch Logs records and delivers only the content inside the message fields.
+
+```python
+# bucket: s3.Bucket
+
+s3_destination = firehose.S3Bucket(bucket,
+    processors=[
+        firehose.DecompressionProcessor(),
+        firehose.CloudWatchLogProcessor(data_message_extraction=True)
+    ]
+)
+firehose.DeliveryStream(self, "Delivery Stream",
+    destination=s3_destination
+)
+```
 
 ## Specifying an IAM role
 
@@ -783,6 +842,7 @@ from .. import (
     CfnResource as _CfnResource_9df397a6,
     CfnTag as _CfnTag_f6864754,
     Duration as _Duration_4839e8c3,
+    IEnvironmentAware as _IEnvironmentAware_a408b00d,
     IInspectable as _IInspectable_c2943556,
     IResolvable as _IResolvable_da3f097b,
     IResource as _IResource_c80c4260,
@@ -1255,11 +1315,68 @@ class CfnDeliveryStreamProps:
 
 
 @jsii.data_type(
+    jsii_type="aws-cdk-lib.aws_kinesisfirehose.CloudWatchLogProcessorOptions",
+    jsii_struct_bases=[],
+    name_mapping={"data_message_extraction": "dataMessageExtraction"},
+)
+class CloudWatchLogProcessorOptions:
+    def __init__(self, *, data_message_extraction: builtins.bool) -> None:
+        '''Options for CloudWatchLogProcessor.
+
+        :param data_message_extraction: Extract message from CloudWatch logs. This must be true.
+
+        :exampleMetadata: infused
+
+        Example::
+
+            # bucket: s3.Bucket
+            
+            s3_destination = firehose.S3Bucket(bucket,
+                processors=[
+                    firehose.DecompressionProcessor(),
+                    firehose.CloudWatchLogProcessor(data_message_extraction=True)
+                ]
+            )
+            firehose.DeliveryStream(self, "Delivery Stream",
+                destination=s3_destination
+            )
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__66fd938cedc5d28ef73e2df03e081c09f3f293b01e62331467b68a36a802e868)
+            check_type(argname="argument data_message_extraction", value=data_message_extraction, expected_type=type_hints["data_message_extraction"])
+        self._values: typing.Dict[builtins.str, typing.Any] = {
+            "data_message_extraction": data_message_extraction,
+        }
+
+    @builtins.property
+    def data_message_extraction(self) -> builtins.bool:
+        '''Extract message from CloudWatch logs.
+
+        This must be true.
+        '''
+        result = self._values.get("data_message_extraction")
+        assert result is not None, "Required property 'data_message_extraction' is missing"
+        return typing.cast(builtins.bool, result)
+
+    def __eq__(self, rhs: typing.Any) -> builtins.bool:
+        return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+    def __ne__(self, rhs: typing.Any) -> builtins.bool:
+        return not (rhs == self)
+
+    def __repr__(self) -> str:
+        return "CloudWatchLogProcessorOptions(%s)" % ", ".join(
+            k + "=" + repr(v) for k, v in self._values.items()
+        )
+
+
+@jsii.data_type(
     jsii_type="aws-cdk-lib.aws_kinesisfirehose.CommonDestinationProps",
     jsii_struct_bases=[],
     name_mapping={
         "logging_config": "loggingConfig",
         "processor": "processor",
+        "processors": "processors",
         "role": "role",
         "s3_backup": "s3Backup",
     },
@@ -1270,13 +1387,15 @@ class CommonDestinationProps:
         *,
         logging_config: typing.Optional["ILoggingConfig"] = None,
         processor: typing.Optional["IDataProcessor"] = None,
+        processors: typing.Optional[typing.Sequence["IDataProcessor"]] = None,
         role: typing.Optional[_IRole_235f5d8e] = None,
         s3_backup: typing.Optional[typing.Union["DestinationS3BackupProps", typing.Dict[builtins.str, typing.Any]]] = None,
     ) -> None:
         '''Generic properties for defining a delivery stream destination.
 
         :param logging_config: Configuration that determines whether to log errors during data transformation or delivery failures, and specifies the CloudWatch log group for storing error logs. Default: - errors will be logged and a log group will be created for you.
-        :param processor: The data transformation that should be performed on the data before writing to the destination. Default: - no data transformation will occur.
+        :param processor: (deprecated) The data transformation that should be performed on the data before writing to the destination. Default: - no data transformation will occur.
+        :param processors: The data transformation that should be performed on the data before writing to the destination. Default: - no data transformation will occur.
         :param role: The IAM role associated with this destination. Assumed by Amazon Data Firehose to invoke processors and write to destinations Default: - a role will be created with default permissions.
         :param s3_backup: The configuration for backing up source records to S3. Default: - source records will not be backed up to S3.
 
@@ -1303,6 +1422,7 @@ class CommonDestinationProps:
             common_destination_props = kinesisfirehose.CommonDestinationProps(
                 logging_config=logging_config,
                 processor=data_processor,
+                processors=[data_processor],
                 role=role,
                 s3_backup=kinesisfirehose.DestinationS3BackupProps(
                     bucket=bucket,
@@ -1323,6 +1443,7 @@ class CommonDestinationProps:
             type_hints = typing.get_type_hints(_typecheckingstub__2c67ac54054be7496dcf923fd4756691ef492acee6f8731020e20179b0e257c8)
             check_type(argname="argument logging_config", value=logging_config, expected_type=type_hints["logging_config"])
             check_type(argname="argument processor", value=processor, expected_type=type_hints["processor"])
+            check_type(argname="argument processors", value=processors, expected_type=type_hints["processors"])
             check_type(argname="argument role", value=role, expected_type=type_hints["role"])
             check_type(argname="argument s3_backup", value=s3_backup, expected_type=type_hints["s3_backup"])
         self._values: typing.Dict[builtins.str, typing.Any] = {}
@@ -1330,6 +1451,8 @@ class CommonDestinationProps:
             self._values["logging_config"] = logging_config
         if processor is not None:
             self._values["processor"] = processor
+        if processors is not None:
+            self._values["processors"] = processors
         if role is not None:
             self._values["role"] = role
         if s3_backup is not None:
@@ -1346,12 +1469,25 @@ class CommonDestinationProps:
 
     @builtins.property
     def processor(self) -> typing.Optional["IDataProcessor"]:
+        '''(deprecated) The data transformation that should be performed on the data before writing to the destination.
+
+        :default: - no data transformation will occur.
+
+        :deprecated: Use ``processors`` instead.
+
+        :stability: deprecated
+        '''
+        result = self._values.get("processor")
+        return typing.cast(typing.Optional["IDataProcessor"], result)
+
+    @builtins.property
+    def processors(self) -> typing.Optional[typing.List["IDataProcessor"]]:
         '''The data transformation that should be performed on the data before writing to the destination.
 
         :default: - no data transformation will occur.
         '''
-        result = self._values.get("processor")
-        return typing.cast(typing.Optional["IDataProcessor"], result)
+        result = self._values.get("processors")
+        return typing.cast(typing.Optional[typing.List["IDataProcessor"]], result)
 
     @builtins.property
     def role(self) -> typing.Optional[_IRole_235f5d8e]:
@@ -1772,6 +1908,7 @@ class DataProcessorBindOptions:
     name_mapping={
         "processor_identifier": "processorIdentifier",
         "processor_type": "processorType",
+        "parameters": "parameters",
     },
 )
 class DataProcessorConfig:
@@ -1780,12 +1917,15 @@ class DataProcessorConfig:
         *,
         processor_identifier: typing.Union["DataProcessorIdentifier", typing.Dict[builtins.str, typing.Any]],
         processor_type: builtins.str,
+        parameters: typing.Optional[typing.Sequence[typing.Union["CfnDeliveryStream.ProcessorParameterProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''The full configuration of a data processor.
 
-        :param processor_identifier: The key-value pair that identifies the underlying processor resource.
-        :param processor_type: The type of the underlying processor resource. Must be an accepted value in ``CfnDeliveryStream.ProcessorProperty.Type``.
+        :param processor_identifier: The key-value pair that identifies the underlying processor resource. Ignored when the ``parameters`` is specified.
+        :param processor_type: The type of processor.
+        :param parameters: The processor parameters. Default: - No processor parameters
 
+        :see: https://docs.aws.amazon.com/AWSCloudFormation/latest/TemplateReference/aws-properties-kinesisfirehose-deliverystream-processor.html
         :exampleMetadata: fixture=_generated
 
         Example::
@@ -1799,7 +1939,13 @@ class DataProcessorConfig:
                     parameter_name="parameterName",
                     parameter_value="parameterValue"
                 ),
-                processor_type="processorType"
+                processor_type="processorType",
+            
+                # the properties below are optional
+                parameters=[kinesisfirehose.CfnDeliveryStream.ProcessorParameterProperty(
+                    parameter_name="parameterName",
+                    parameter_value="parameterValue"
+                )]
             )
         '''
         if isinstance(processor_identifier, dict):
@@ -1808,33 +1954,41 @@ class DataProcessorConfig:
             type_hints = typing.get_type_hints(_typecheckingstub__1d0329dec95ad7ff26b8989814c21e55edb2fa91a61a992ced2d01569d06f530)
             check_type(argname="argument processor_identifier", value=processor_identifier, expected_type=type_hints["processor_identifier"])
             check_type(argname="argument processor_type", value=processor_type, expected_type=type_hints["processor_type"])
+            check_type(argname="argument parameters", value=parameters, expected_type=type_hints["parameters"])
         self._values: typing.Dict[builtins.str, typing.Any] = {
             "processor_identifier": processor_identifier,
             "processor_type": processor_type,
         }
+        if parameters is not None:
+            self._values["parameters"] = parameters
 
     @builtins.property
     def processor_identifier(self) -> "DataProcessorIdentifier":
-        '''The key-value pair that identifies the underlying processor resource.'''
+        '''The key-value pair that identifies the underlying processor resource.
+
+        Ignored when the ``parameters`` is specified.
+        '''
         result = self._values.get("processor_identifier")
         assert result is not None, "Required property 'processor_identifier' is missing"
         return typing.cast("DataProcessorIdentifier", result)
 
     @builtins.property
     def processor_type(self) -> builtins.str:
-        '''The type of the underlying processor resource.
-
-        Must be an accepted value in ``CfnDeliveryStream.ProcessorProperty.Type``.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisfirehose-deliverystream-processor.html#cfn-kinesisfirehose-deliverystream-processor-type
-
-        Example::
-
-            "Lambda"
-        '''
+        '''The type of processor.'''
         result = self._values.get("processor_type")
         assert result is not None, "Required property 'processor_type' is missing"
         return typing.cast(builtins.str, result)
+
+    @builtins.property
+    def parameters(
+        self,
+    ) -> typing.Optional[typing.List["CfnDeliveryStream.ProcessorParameterProperty"]]:
+        '''The processor parameters.
+
+        :default: - No processor parameters
+        '''
+        result = self._values.get("parameters")
+        return typing.cast(typing.Optional[typing.List["CfnDeliveryStream.ProcessorParameterProperty"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1865,7 +2019,7 @@ class DataProcessorIdentifier:
     ) -> None:
         '''The key-value pair that identifies the underlying processor resource.
 
-        :param parameter_name: The parameter name that corresponds to the processor resource's identifier. Must be an accepted value in ``CfnDeliveryStream.ProcessoryParameterProperty.ParameterName``.
+        :param parameter_name: The parameter name that corresponds to the processor resource's identifier.
         :param parameter_value: The identifier of the underlying processor resource.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisfirehose-deliverystream-processorparameter.html
@@ -1893,10 +2047,7 @@ class DataProcessorIdentifier:
 
     @builtins.property
     def parameter_name(self) -> builtins.str:
-        '''The parameter name that corresponds to the processor resource's identifier.
-
-        Must be an accepted value in ``CfnDeliveryStream.ProcessoryParameterProperty.ParameterName``.
-        '''
+        '''The parameter name that corresponds to the processor resource's identifier.'''
         result = self._values.get("parameter_name")
         assert result is not None, "Required property 'parameter_name' is missing"
         return typing.cast(builtins.str, result)
@@ -1937,7 +2088,7 @@ class DataProcessorProps:
         buffer_size: typing.Optional[_Size_7b441c34] = None,
         retries: typing.Optional[jsii.Number] = None,
     ) -> None:
-        '''Configure the data processor.
+        '''Configure the LambdaFunctionProcessor.
 
         :param buffer_interval: The length of time Amazon Data Firehose will buffer incoming data before calling the processor. s Default: Duration.minutes(1)
         :param buffer_size: The amount of incoming data Amazon Data Firehose will buffer before calling the processor. Default: Size.mebibytes(3)
@@ -1961,7 +2112,7 @@ class DataProcessorProps:
                 retries=5
             )
             s3_destination = firehose.S3Bucket(bucket,
-                processor=lambda_processor
+                processors=[lambda_processor]
             )
             firehose.DeliveryStream(self, "Delivery Stream",
                 destination=s3_destination
@@ -2017,6 +2168,110 @@ class DataProcessorProps:
 
     def __repr__(self) -> str:
         return "DataProcessorProps(%s)" % ", ".join(
+            k + "=" + repr(v) for k, v in self._values.items()
+        )
+
+
+class DecompressionProcessorCompressionFormat(
+    metaclass=jsii.JSIIMeta,
+    jsii_type="aws-cdk-lib.aws_kinesisfirehose.DecompressionProcessorCompressionFormat",
+):
+    '''Compression format for DecompressionProcessor.
+
+    :exampleMetadata: fixture=_generated
+
+    Example::
+
+        # The code below shows an example of how to instantiate this type.
+        # The values are placeholders you should change.
+        from aws_cdk import aws_kinesisfirehose as kinesisfirehose
+        
+        decompression_processor_compression_format = kinesisfirehose.DecompressionProcessorCompressionFormat.of("compressionFormat")
+    '''
+
+    @jsii.member(jsii_name="of")
+    @builtins.classmethod
+    def of(
+        cls,
+        compression_format: builtins.str,
+    ) -> "DecompressionProcessorCompressionFormat":
+        '''A custom compression format.
+
+        :param compression_format: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__f3ec50f5bb1061ad042391c7a0e6b79a631eb886ee85d65e276a31e398ffc1c2)
+            check_type(argname="argument compression_format", value=compression_format, expected_type=type_hints["compression_format"])
+        return typing.cast("DecompressionProcessorCompressionFormat", jsii.sinvoke(cls, "of", [compression_format]))
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="GZIP")
+    def GZIP(cls) -> "DecompressionProcessorCompressionFormat":
+        '''GZIP compression.'''
+        return typing.cast("DecompressionProcessorCompressionFormat", jsii.sget(cls, "GZIP"))
+
+    @builtins.property
+    @jsii.member(jsii_name="compressionFormat")
+    def compression_format(self) -> builtins.str:
+        '''The compression format string.'''
+        return typing.cast(builtins.str, jsii.get(self, "compressionFormat"))
+
+
+@jsii.data_type(
+    jsii_type="aws-cdk-lib.aws_kinesisfirehose.DecompressionProcessorOptions",
+    jsii_struct_bases=[],
+    name_mapping={"compression_format": "compressionFormat"},
+)
+class DecompressionProcessorOptions:
+    def __init__(
+        self,
+        *,
+        compression_format: typing.Optional[DecompressionProcessorCompressionFormat] = None,
+    ) -> None:
+        '''Options for DecompressionProcessor.
+
+        :param compression_format: The input compression format. Default: DecompressionProcessorCompressionFormat.GZIP
+
+        :exampleMetadata: fixture=_generated
+
+        Example::
+
+            # The code below shows an example of how to instantiate this type.
+            # The values are placeholders you should change.
+            from aws_cdk import aws_kinesisfirehose as kinesisfirehose
+            
+            # decompression_processor_compression_format: kinesisfirehose.DecompressionProcessorCompressionFormat
+            
+            decompression_processor_options = kinesisfirehose.DecompressionProcessorOptions(
+                compression_format=decompression_processor_compression_format
+            )
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__8a8c21882cf286b5f96d6ce7798c16eea841da016022944f8d572356c0b66e63)
+            check_type(argname="argument compression_format", value=compression_format, expected_type=type_hints["compression_format"])
+        self._values: typing.Dict[builtins.str, typing.Any] = {}
+        if compression_format is not None:
+            self._values["compression_format"] = compression_format
+
+    @builtins.property
+    def compression_format(
+        self,
+    ) -> typing.Optional[DecompressionProcessorCompressionFormat]:
+        '''The input compression format.
+
+        :default: DecompressionProcessorCompressionFormat.GZIP
+        '''
+        result = self._values.get("compression_format")
+        return typing.cast(typing.Optional[DecompressionProcessorCompressionFormat], result)
+
+    def __eq__(self, rhs: typing.Any) -> builtins.bool:
+        return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+    def __ne__(self, rhs: typing.Any) -> builtins.bool:
+        return not (rhs == self)
+
+    def __repr__(self) -> str:
+        return "DecompressionProcessorOptions(%s)" % ", ".join(
             k + "=" + repr(v) for k, v in self._values.items()
         )
 
@@ -2152,24 +2407,22 @@ class DeliveryStreamProps:
 
         Example::
 
-            # bucket: s3.Bucket
-            # Provide a Lambda function that will transform records before delivery, with custom
-            # buffering and retry configuration
-            lambda_function = lambda_.Function(self, "Processor",
-                runtime=lambda_.Runtime.NODEJS_LATEST,
-                handler="index.handler",
-                code=lambda_.Code.from_asset(path.join(__dirname, "process-records"))
+            import aws_cdk.aws_kinesisfirehose as firehose
+            
+            
+            bucket = s3.Bucket(self, "MyBucket")
+            stream = firehose.DeliveryStream(self, "MyStream",
+                destination=firehose.S3Bucket(bucket)
             )
-            lambda_processor = firehose.LambdaFunctionProcessor(lambda_function,
-                buffer_interval=Duration.minutes(5),
-                buffer_size=Size.mebibytes(5),
-                retries=5
-            )
-            s3_destination = firehose.S3Bucket(bucket,
-                processor=lambda_processor
-            )
-            firehose.DeliveryStream(self, "Delivery Stream",
-                destination=s3_destination
+            
+            topic_rule = iot.TopicRule(self, "TopicRule",
+                sql=iot.IotSql.from_string_as_ver20160323("SELECT * FROM 'device/+/data'"),
+                actions=[
+                    actions.FirehosePutRecordAction(stream,
+                        batch_mode=True,
+                        record_separator=actions.FirehoseRecordSeparator.NEWLINE
+                    )
+                ]
             )
         '''
         if __debug__:
@@ -3535,7 +3788,11 @@ typing.cast(typing.Any, IDeliveryStream).__jsii_proxy_class__ = lambda : _IDeliv
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_kinesisfirehose.IDeliveryStreamRef")
-class IDeliveryStreamRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IDeliveryStreamRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a DeliveryStream.
 
     :stability: experimental
@@ -3553,6 +3810,7 @@ class IDeliveryStreamRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Prot
 
 class _IDeliveryStreamRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a DeliveryStream.
 
@@ -3875,7 +4133,7 @@ class LambdaFunctionProcessor(
             retries=5
         )
         s3_destination = firehose.S3Bucket(bucket,
-            processor=lambda_processor
+            processors=[lambda_processor]
         )
         firehose.DeliveryStream(self, "Delivery Stream",
             destination=s3_destination
@@ -4892,6 +5150,7 @@ class S3Bucket(
         error_output_prefix: typing.Optional[builtins.str] = None,
         logging_config: typing.Optional[ILoggingConfig] = None,
         processor: typing.Optional[IDataProcessor] = None,
+        processors: typing.Optional[typing.Sequence[IDataProcessor]] = None,
         role: typing.Optional[_IRole_235f5d8e] = None,
         s3_backup: typing.Optional[typing.Union[DestinationS3BackupProps, typing.Dict[builtins.str, typing.Any]]] = None,
     ) -> None:
@@ -4907,7 +5166,8 @@ class S3Bucket(
         :param encryption_key: The AWS KMS key used to encrypt the data that it delivers to your Amazon S3 bucket. Default: - Data is not encrypted.
         :param error_output_prefix: A prefix that Amazon Data Firehose evaluates and adds to failed records before writing them to S3. This prefix appears immediately following the bucket name. Default: "YYYY/MM/DD/HH"
         :param logging_config: Configuration that determines whether to log errors during data transformation or delivery failures, and specifies the CloudWatch log group for storing error logs. Default: - errors will be logged and a log group will be created for you.
-        :param processor: The data transformation that should be performed on the data before writing to the destination. Default: - no data transformation will occur.
+        :param processor: (deprecated) The data transformation that should be performed on the data before writing to the destination. Default: - no data transformation will occur.
+        :param processors: The data transformation that should be performed on the data before writing to the destination. Default: - no data transformation will occur.
         :param role: The IAM role associated with this destination. Assumed by Amazon Data Firehose to invoke processors and write to destinations Default: - a role will be created with default permissions.
         :param s3_backup: The configuration for backing up source records to S3. Default: - source records will not be backed up to S3.
         '''
@@ -4926,6 +5186,7 @@ class S3Bucket(
             error_output_prefix=error_output_prefix,
             logging_config=logging_config,
             processor=processor,
+            processors=processors,
             role=role,
             s3_backup=s3_backup,
         )
@@ -4960,6 +5221,7 @@ class S3Bucket(
         "error_output_prefix": "errorOutputPrefix",
         "logging_config": "loggingConfig",
         "processor": "processor",
+        "processors": "processors",
         "role": "role",
         "s3_backup": "s3Backup",
         "data_format_conversion": "dataFormatConversion",
@@ -4979,6 +5241,7 @@ class S3BucketProps(CommonDestinationS3Props, CommonDestinationProps):
         error_output_prefix: typing.Optional[builtins.str] = None,
         logging_config: typing.Optional[ILoggingConfig] = None,
         processor: typing.Optional[IDataProcessor] = None,
+        processors: typing.Optional[typing.Sequence[IDataProcessor]] = None,
         role: typing.Optional[_IRole_235f5d8e] = None,
         s3_backup: typing.Optional[typing.Union[DestinationS3BackupProps, typing.Dict[builtins.str, typing.Any]]] = None,
         data_format_conversion: typing.Optional[typing.Union[DataFormatConversionProps, typing.Dict[builtins.str, typing.Any]]] = None,
@@ -4994,7 +5257,8 @@ class S3BucketProps(CommonDestinationS3Props, CommonDestinationProps):
         :param encryption_key: The AWS KMS key used to encrypt the data that it delivers to your Amazon S3 bucket. Default: - Data is not encrypted.
         :param error_output_prefix: A prefix that Amazon Data Firehose evaluates and adds to failed records before writing them to S3. This prefix appears immediately following the bucket name. Default: "YYYY/MM/DD/HH"
         :param logging_config: Configuration that determines whether to log errors during data transformation or delivery failures, and specifies the CloudWatch log group for storing error logs. Default: - errors will be logged and a log group will be created for you.
-        :param processor: The data transformation that should be performed on the data before writing to the destination. Default: - no data transformation will occur.
+        :param processor: (deprecated) The data transformation that should be performed on the data before writing to the destination. Default: - no data transformation will occur.
+        :param processors: The data transformation that should be performed on the data before writing to the destination. Default: - no data transformation will occur.
         :param role: The IAM role associated with this destination. Assumed by Amazon Data Firehose to invoke processors and write to destinations Default: - a role will be created with default permissions.
         :param s3_backup: The configuration for backing up source records to S3. Default: - source records will not be backed up to S3.
         :param data_format_conversion: The input format, output format, and schema config for converting data from the JSON format to the Parquet or ORC format before writing to Amazon S3. Default: no data format conversion is done
@@ -5005,24 +5269,22 @@ class S3BucketProps(CommonDestinationS3Props, CommonDestinationProps):
 
         Example::
 
+            # Specify the roles created above when defining the destination and delivery stream.
             # bucket: s3.Bucket
-            # Provide a Lambda function that will transform records before delivery, with custom
-            # buffering and retry configuration
-            lambda_function = lambda_.Function(self, "Processor",
-                runtime=lambda_.Runtime.NODEJS_LATEST,
-                handler="index.handler",
-                code=lambda_.Code.from_asset(path.join(__dirname, "process-records"))
+            # Create service roles for the delivery stream and destination.
+            # These can be used for other purposes and granted access to different resources.
+            # They must include the Amazon Data Firehose service principal in their trust policies.
+            # Two separate roles are shown below, but the same role can be used for both purposes.
+            delivery_stream_role = iam.Role(self, "Delivery Stream Role",
+                assumed_by=iam.ServicePrincipal("firehose.amazonaws.com")
             )
-            lambda_processor = firehose.LambdaFunctionProcessor(lambda_function,
-                buffer_interval=Duration.minutes(5),
-                buffer_size=Size.mebibytes(5),
-                retries=5
+            destination_role = iam.Role(self, "Destination Role",
+                assumed_by=iam.ServicePrincipal("firehose.amazonaws.com")
             )
-            s3_destination = firehose.S3Bucket(bucket,
-                processor=lambda_processor
-            )
+            destination = firehose.S3Bucket(bucket, role=destination_role)
             firehose.DeliveryStream(self, "Delivery Stream",
-                destination=s3_destination
+                destination=destination,
+                role=delivery_stream_role
             )
         '''
         if isinstance(s3_backup, dict):
@@ -5039,6 +5301,7 @@ class S3BucketProps(CommonDestinationS3Props, CommonDestinationProps):
             check_type(argname="argument error_output_prefix", value=error_output_prefix, expected_type=type_hints["error_output_prefix"])
             check_type(argname="argument logging_config", value=logging_config, expected_type=type_hints["logging_config"])
             check_type(argname="argument processor", value=processor, expected_type=type_hints["processor"])
+            check_type(argname="argument processors", value=processors, expected_type=type_hints["processors"])
             check_type(argname="argument role", value=role, expected_type=type_hints["role"])
             check_type(argname="argument s3_backup", value=s3_backup, expected_type=type_hints["s3_backup"])
             check_type(argname="argument data_format_conversion", value=data_format_conversion, expected_type=type_hints["data_format_conversion"])
@@ -5061,6 +5324,8 @@ class S3BucketProps(CommonDestinationS3Props, CommonDestinationProps):
             self._values["logging_config"] = logging_config
         if processor is not None:
             self._values["processor"] = processor
+        if processors is not None:
+            self._values["processors"] = processors
         if role is not None:
             self._values["role"] = role
         if s3_backup is not None:
@@ -5155,12 +5420,25 @@ class S3BucketProps(CommonDestinationS3Props, CommonDestinationProps):
 
     @builtins.property
     def processor(self) -> typing.Optional[IDataProcessor]:
+        '''(deprecated) The data transformation that should be performed on the data before writing to the destination.
+
+        :default: - no data transformation will occur.
+
+        :deprecated: Use ``processors`` instead.
+
+        :stability: deprecated
+        '''
+        result = self._values.get("processor")
+        return typing.cast(typing.Optional[IDataProcessor], result)
+
+    @builtins.property
+    def processors(self) -> typing.Optional[typing.List[IDataProcessor]]:
         '''The data transformation that should be performed on the data before writing to the destination.
 
         :default: - no data transformation will occur.
         '''
-        result = self._values.get("processor")
-        return typing.cast(typing.Optional[IDataProcessor], result)
+        result = self._values.get("processors")
+        return typing.cast(typing.Optional[typing.List[IDataProcessor]], result)
 
     @builtins.property
     def role(self) -> typing.Optional[_IRole_235f5d8e]:
@@ -5559,6 +5837,62 @@ class TimestampParser(
     def format(self) -> builtins.str:
         '''The format string to use in Hive JSON input format configuration.'''
         return typing.cast(builtins.str, jsii.get(self, "format"))
+
+
+@jsii.implements(IDataProcessor)
+class AppendDelimiterToRecordProcessor(
+    metaclass=jsii.JSIIMeta,
+    jsii_type="aws-cdk-lib.aws_kinesisfirehose.AppendDelimiterToRecordProcessor",
+):
+    '''The data processor to append new line delimiter to each record.
+
+    :see: https://docs.aws.amazon.com/firehose/latest/dev/dynamic-partitioning-s3bucketprefix.html#dynamic-partitioning-new-line-delimiter
+    :exampleMetadata: infused
+
+    Example::
+
+        # bucket: s3.Bucket
+        
+        s3_destination = firehose.S3Bucket(bucket,
+            processors=[
+                firehose.AppendDelimiterToRecordProcessor()
+            ]
+        )
+        firehose.DeliveryStream(self, "Delivery Stream",
+            destination=s3_destination
+        )
+    '''
+
+    def __init__(self) -> None:
+        jsii.create(self.__class__, self, [])
+
+    @jsii.member(jsii_name="bind")
+    def bind(
+        self,
+        _scope: _constructs_77d1e7e8.Construct,
+        *,
+        role: _IRole_235f5d8e,
+    ) -> DataProcessorConfig:
+        '''Binds this processor to a destination of a delivery stream.
+
+        Implementers should use this method to grant processor invocation permissions to the provided stream and return the
+        necessary configuration to register as a processor.
+
+        :param _scope: -
+        :param role: The IAM role assumed by Amazon Data Firehose to write to the destination that this DataProcessor will bind to.
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__94aaad3dc2400222b9e7ff2475b82e59209d9f2ac94fa8232dce1b9ae58dba89)
+            check_type(argname="argument _scope", value=_scope, expected_type=type_hints["_scope"])
+        _options = DataProcessorBindOptions(role=role)
+
+        return typing.cast(DataProcessorConfig, jsii.invoke(self, "bind", [_scope, _options]))
+
+    @builtins.property
+    @jsii.member(jsii_name="props")
+    def props(self) -> DataProcessorProps:
+        '''The constructor props of the DataProcessor.'''
+        return typing.cast(DataProcessorProps, jsii.get(self, "props"))
 
 
 @jsii.implements(_IInspectable_c2943556, IDeliveryStreamRef, _ITaggable_36806126)
@@ -14195,6 +14529,138 @@ class CfnDeliveryStream(
             )
 
 
+@jsii.implements(IDataProcessor)
+class CloudWatchLogProcessor(
+    metaclass=jsii.JSIIMeta,
+    jsii_type="aws-cdk-lib.aws_kinesisfirehose.CloudWatchLogProcessor",
+):
+    '''The data processor to extract message after decompression of CloudWatch Logs.
+
+    This processor must used with ``DecompressionProcessor``
+
+    :see: https://docs.aws.amazon.com/firehose/latest/dev/Message_extraction.html
+    :exampleMetadata: infused
+
+    Example::
+
+        # bucket: s3.Bucket
+        
+        s3_destination = firehose.S3Bucket(bucket,
+            processors=[
+                firehose.DecompressionProcessor(),
+                firehose.CloudWatchLogProcessor(data_message_extraction=True)
+            ]
+        )
+        firehose.DeliveryStream(self, "Delivery Stream",
+            destination=s3_destination
+        )
+    '''
+
+    def __init__(self, *, data_message_extraction: builtins.bool) -> None:
+        '''
+        :param data_message_extraction: Extract message from CloudWatch logs. This must be true.
+        '''
+        options = CloudWatchLogProcessorOptions(
+            data_message_extraction=data_message_extraction
+        )
+
+        jsii.create(self.__class__, self, [options])
+
+    @jsii.member(jsii_name="bind")
+    def bind(
+        self,
+        _scope: _constructs_77d1e7e8.Construct,
+        *,
+        role: _IRole_235f5d8e,
+    ) -> DataProcessorConfig:
+        '''Binds this processor to a destination of a delivery stream.
+
+        Implementers should use this method to grant processor invocation permissions to the provided stream and return the
+        necessary configuration to register as a processor.
+
+        :param _scope: -
+        :param role: The IAM role assumed by Amazon Data Firehose to write to the destination that this DataProcessor will bind to.
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__d51e6026cf1b0fb2344372d718d66a3b3a99db5cd13862f4a0a5762e09e92b28)
+            check_type(argname="argument _scope", value=_scope, expected_type=type_hints["_scope"])
+        _options = DataProcessorBindOptions(role=role)
+
+        return typing.cast(DataProcessorConfig, jsii.invoke(self, "bind", [_scope, _options]))
+
+    @builtins.property
+    @jsii.member(jsii_name="props")
+    def props(self) -> DataProcessorProps:
+        '''The constructor props of the DataProcessor.'''
+        return typing.cast(DataProcessorProps, jsii.get(self, "props"))
+
+
+@jsii.implements(IDataProcessor)
+class DecompressionProcessor(
+    metaclass=jsii.JSIIMeta,
+    jsii_type="aws-cdk-lib.aws_kinesisfirehose.DecompressionProcessor",
+):
+    '''The data processor to decompress CloudWatch Logs.
+
+    :see: https://docs.aws.amazon.com/firehose/latest/dev/writing-with-cloudwatch-logs-decompression.html
+    :exampleMetadata: infused
+
+    Example::
+
+        # bucket: s3.Bucket
+        
+        s3_destination = firehose.S3Bucket(bucket,
+            processors=[
+                firehose.DecompressionProcessor(),
+                firehose.AppendDelimiterToRecordProcessor()
+            ]
+        )
+        firehose.DeliveryStream(self, "Delivery Stream",
+            destination=s3_destination
+        )
+    '''
+
+    def __init__(
+        self,
+        *,
+        compression_format: typing.Optional[DecompressionProcessorCompressionFormat] = None,
+    ) -> None:
+        '''
+        :param compression_format: The input compression format. Default: DecompressionProcessorCompressionFormat.GZIP
+        '''
+        options = DecompressionProcessorOptions(compression_format=compression_format)
+
+        jsii.create(self.__class__, self, [options])
+
+    @jsii.member(jsii_name="bind")
+    def bind(
+        self,
+        _scope: _constructs_77d1e7e8.Construct,
+        *,
+        role: _IRole_235f5d8e,
+    ) -> DataProcessorConfig:
+        '''Binds this processor to a destination of a delivery stream.
+
+        Implementers should use this method to grant processor invocation permissions to the provided stream and return the
+        necessary configuration to register as a processor.
+
+        :param _scope: -
+        :param role: The IAM role assumed by Amazon Data Firehose to write to the destination that this DataProcessor will bind to.
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__540dc1015370159655052cf41379877e253b1c5232cbd06691963881d2880ffb)
+            check_type(argname="argument _scope", value=_scope, expected_type=type_hints["_scope"])
+        _options = DataProcessorBindOptions(role=role)
+
+        return typing.cast(DataProcessorConfig, jsii.invoke(self, "bind", [_scope, _options]))
+
+    @builtins.property
+    @jsii.member(jsii_name="props")
+    def props(self) -> DataProcessorProps:
+        '''The constructor props of the DataProcessor.'''
+        return typing.cast(DataProcessorProps, jsii.get(self, "props"))
+
+
 @jsii.implements(IDeliveryStream)
 class DeliveryStream(
     _Resource_45bc6135,
@@ -14208,24 +14674,22 @@ class DeliveryStream(
 
     Example::
 
-        # bucket: s3.Bucket
-        # Provide a Lambda function that will transform records before delivery, with custom
-        # buffering and retry configuration
-        lambda_function = lambda_.Function(self, "Processor",
-            runtime=lambda_.Runtime.NODEJS_LATEST,
-            handler="index.handler",
-            code=lambda_.Code.from_asset(path.join(__dirname, "process-records"))
+        import aws_cdk.aws_kinesisfirehose as firehose
+        
+        
+        bucket = s3.Bucket(self, "MyBucket")
+        stream = firehose.DeliveryStream(self, "MyStream",
+            destination=firehose.S3Bucket(bucket)
         )
-        lambda_processor = firehose.LambdaFunctionProcessor(lambda_function,
-            buffer_interval=Duration.minutes(5),
-            buffer_size=Size.mebibytes(5),
-            retries=5
-        )
-        s3_destination = firehose.S3Bucket(bucket,
-            processor=lambda_processor
-        )
-        firehose.DeliveryStream(self, "Delivery Stream",
-            destination=s3_destination
+        
+        topic_rule = iot.TopicRule(self, "TopicRule",
+            sql=iot.IotSql.from_string_as_ver20160323("SELECT * FROM 'device/+/data'"),
+            actions=[
+                actions.FirehosePutRecordAction(stream,
+                    batch_mode=True,
+                    record_separator=actions.FirehoseRecordSeparator.NEWLINE
+                )
+            ]
         )
     '''
 
@@ -14845,9 +15309,12 @@ class HiveJsonInputFormat(
 
 
 __all__ = [
+    "AppendDelimiterToRecordProcessor",
     "BackupMode",
     "CfnDeliveryStream",
     "CfnDeliveryStreamProps",
+    "CloudWatchLogProcessor",
+    "CloudWatchLogProcessorOptions",
     "CommonDestinationProps",
     "CommonDestinationS3Props",
     "Compression",
@@ -14856,6 +15323,9 @@ __all__ = [
     "DataProcessorConfig",
     "DataProcessorIdentifier",
     "DataProcessorProps",
+    "DecompressionProcessor",
+    "DecompressionProcessorCompressionFormat",
+    "DecompressionProcessorOptions",
     "DeliveryStream",
     "DeliveryStreamAttributes",
     "DeliveryStreamProps",
@@ -14925,10 +15395,18 @@ def _typecheckingstub__4f4e310bf0ff2c76f9c126ea4431fb25b9b53c8ba7e0c0eacc1c934de
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__66fd938cedc5d28ef73e2df03e081c09f3f293b01e62331467b68a36a802e868(
+    *,
+    data_message_extraction: builtins.bool,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__2c67ac54054be7496dcf923fd4756691ef492acee6f8731020e20179b0e257c8(
     *,
     logging_config: typing.Optional[ILoggingConfig] = None,
     processor: typing.Optional[IDataProcessor] = None,
+    processors: typing.Optional[typing.Sequence[IDataProcessor]] = None,
     role: typing.Optional[_IRole_235f5d8e] = None,
     s3_backup: typing.Optional[typing.Union[DestinationS3BackupProps, typing.Dict[builtins.str, typing.Any]]] = None,
 ) -> None:
@@ -14974,6 +15452,7 @@ def _typecheckingstub__1d0329dec95ad7ff26b8989814c21e55edb2fa91a61a992ced2d01569
     *,
     processor_identifier: typing.Union[DataProcessorIdentifier, typing.Dict[builtins.str, typing.Any]],
     processor_type: builtins.str,
+    parameters: typing.Optional[typing.Sequence[typing.Union[CfnDeliveryStream.ProcessorParameterProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -14991,6 +15470,19 @@ def _typecheckingstub__824567e49e82c5e0ed6a55fe92d29f1a69f55d0bfe50df023c1b00b9f
     buffer_interval: typing.Optional[_Duration_4839e8c3] = None,
     buffer_size: typing.Optional[_Size_7b441c34] = None,
     retries: typing.Optional[jsii.Number] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__f3ec50f5bb1061ad042391c7a0e6b79a631eb886ee85d65e276a31e398ffc1c2(
+    compression_format: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__8a8c21882cf286b5f96d6ce7798c16eea841da016022944f8d572356c0b66e63(
+    *,
+    compression_format: typing.Optional[DecompressionProcessorCompressionFormat] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -15198,6 +15690,7 @@ def _typecheckingstub__a2eaf455255fc260033aa24d456779f4b21172e8b4cf2c51f6355f415
     error_output_prefix: typing.Optional[builtins.str] = None,
     logging_config: typing.Optional[ILoggingConfig] = None,
     processor: typing.Optional[IDataProcessor] = None,
+    processors: typing.Optional[typing.Sequence[IDataProcessor]] = None,
     role: typing.Optional[_IRole_235f5d8e] = None,
     s3_backup: typing.Optional[typing.Union[DestinationS3BackupProps, typing.Dict[builtins.str, typing.Any]]] = None,
 ) -> None:
@@ -15220,6 +15713,7 @@ def _typecheckingstub__04b12dc503479d22af2396c4df8d38c37536719187eef6ddd01c18b52
     error_output_prefix: typing.Optional[builtins.str] = None,
     logging_config: typing.Optional[ILoggingConfig] = None,
     processor: typing.Optional[IDataProcessor] = None,
+    processors: typing.Optional[typing.Sequence[IDataProcessor]] = None,
     role: typing.Optional[_IRole_235f5d8e] = None,
     s3_backup: typing.Optional[typing.Union[DestinationS3BackupProps, typing.Dict[builtins.str, typing.Any]]] = None,
     data_format_conversion: typing.Optional[typing.Union[DataFormatConversionProps, typing.Dict[builtins.str, typing.Any]]] = None,
@@ -15269,6 +15763,14 @@ def _typecheckingstub__efb44f4c68ce5ed338b1cadc1095db8f6b1ea6c2478ee68c07bb0fa95
 
 def _typecheckingstub__f9355b4b9cb75f1433155f9d39e32472e4f0342bd652e191a412203a56a7a082(
     format: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__94aaad3dc2400222b9e7ff2475b82e59209d9f2ac94fa8232dce1b9ae58dba89(
+    _scope: _constructs_77d1e7e8.Construct,
+    *,
+    role: _IRole_235f5d8e,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -16085,6 +16587,22 @@ def _typecheckingstub__3ecd7f59955db0312a31e14fafedff3746c1d169b6a24f2985f6a096a
     role_arn: builtins.str,
     security_group_ids: typing.Sequence[builtins.str],
     subnet_ids: typing.Sequence[builtins.str],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__d51e6026cf1b0fb2344372d718d66a3b3a99db5cd13862f4a0a5762e09e92b28(
+    _scope: _constructs_77d1e7e8.Construct,
+    *,
+    role: _IRole_235f5d8e,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__540dc1015370159655052cf41379877e253b1c5232cbd06691963881d2880ffb(
+    _scope: _constructs_77d1e7e8.Construct,
+    *,
+    role: _IRole_235f5d8e,
 ) -> None:
     """Type checking stubs"""
     pass

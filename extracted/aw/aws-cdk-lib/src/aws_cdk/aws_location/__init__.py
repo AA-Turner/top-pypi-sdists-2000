@@ -66,6 +66,7 @@ import constructs as _constructs_77d1e7e8
 from .. import (
     CfnResource as _CfnResource_9df397a6,
     CfnTag as _CfnTag_f6864754,
+    IEnvironmentAware as _IEnvironmentAware_a408b00d,
     IInspectable as _IInspectable_c2943556,
     IResolvable as _IResolvable_da3f097b,
     ITaggableV2 as _ITaggableV2_4e6798f8,
@@ -1369,7 +1370,11 @@ class GeofenceCollectionReference:
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_location.IAPIKeyRef")
-class IAPIKeyRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IAPIKeyRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a APIKey.
 
     :stability: experimental
@@ -1387,6 +1392,7 @@ class IAPIKeyRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IAPIKeyRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a APIKey.
 
@@ -1411,6 +1417,7 @@ typing.cast(typing.Any, IAPIKeyRef).__jsii_proxy_class__ = lambda : _IAPIKeyRefP
 @jsii.interface(jsii_type="aws-cdk-lib.aws_location.IGeofenceCollectionRef")
 class IGeofenceCollectionRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a GeofenceCollection.
@@ -1430,6 +1437,7 @@ class IGeofenceCollectionRef(
 
 class _IGeofenceCollectionRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a GeofenceCollection.
 
@@ -1452,7 +1460,11 @@ typing.cast(typing.Any, IGeofenceCollectionRef).__jsii_proxy_class__ = lambda : 
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_location.IMapRef")
-class IMapRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IMapRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Map.
 
     :stability: experimental
@@ -1470,6 +1482,7 @@ class IMapRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IMapRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Map.
 
@@ -1492,7 +1505,11 @@ typing.cast(typing.Any, IMapRef).__jsii_proxy_class__ = lambda : _IMapRefProxy
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_location.IPlaceIndexRef")
-class IPlaceIndexRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IPlaceIndexRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a PlaceIndex.
 
     :stability: experimental
@@ -1510,6 +1527,7 @@ class IPlaceIndexRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol
 
 class _IPlaceIndexRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a PlaceIndex.
 
@@ -1532,7 +1550,11 @@ typing.cast(typing.Any, IPlaceIndexRef).__jsii_proxy_class__ = lambda : _IPlaceI
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_location.IRouteCalculatorRef")
-class IRouteCalculatorRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IRouteCalculatorRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a RouteCalculator.
 
     :stability: experimental
@@ -1550,6 +1572,7 @@ class IRouteCalculatorRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Pro
 
 class _IRouteCalculatorRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a RouteCalculator.
 
@@ -1572,7 +1595,11 @@ typing.cast(typing.Any, IRouteCalculatorRef).__jsii_proxy_class__ = lambda : _IR
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_location.ITrackerConsumerRef")
-class ITrackerConsumerRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class ITrackerConsumerRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a TrackerConsumer.
 
     :stability: experimental
@@ -1590,6 +1617,7 @@ class ITrackerConsumerRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Pro
 
 class _ITrackerConsumerRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a TrackerConsumer.
 
@@ -1612,7 +1640,11 @@ typing.cast(typing.Any, ITrackerConsumerRef).__jsii_proxy_class__ = lambda : _IT
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_location.ITrackerRef")
-class ITrackerRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class ITrackerRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Tracker.
 
     :stability: experimental
@@ -1630,6 +1662,7 @@ class ITrackerRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _ITrackerRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Tracker.
 

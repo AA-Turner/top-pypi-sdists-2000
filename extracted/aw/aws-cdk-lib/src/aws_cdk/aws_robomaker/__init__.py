@@ -60,6 +60,7 @@ from .._jsii import *
 import constructs as _constructs_77d1e7e8
 from .. import (
     CfnResource as _CfnResource_9df397a6,
+    IEnvironmentAware as _IEnvironmentAware_a408b00d,
     IInspectable as _IInspectable_c2943556,
     IResolvable as _IResolvable_da3f097b,
     ITaggable as _ITaggable_36806126,
@@ -832,7 +833,11 @@ class FleetReference:
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_robomaker.IFleetRef")
-class IFleetRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IFleetRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Fleet.
 
     :stability: experimental
@@ -850,6 +855,7 @@ class IFleetRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IFleetRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Fleet.
 
@@ -872,7 +878,11 @@ typing.cast(typing.Any, IFleetRef).__jsii_proxy_class__ = lambda : _IFleetRefPro
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_robomaker.IRobotApplicationRef")
-class IRobotApplicationRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IRobotApplicationRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a RobotApplication.
 
     :stability: experimental
@@ -890,6 +900,7 @@ class IRobotApplicationRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Pr
 
 class _IRobotApplicationRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a RobotApplication.
 
@@ -914,6 +925,7 @@ typing.cast(typing.Any, IRobotApplicationRef).__jsii_proxy_class__ = lambda : _I
 @jsii.interface(jsii_type="aws-cdk-lib.aws_robomaker.IRobotApplicationVersionRef")
 class IRobotApplicationVersionRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a RobotApplicationVersion.
@@ -933,6 +945,7 @@ class IRobotApplicationVersionRef(
 
 class _IRobotApplicationVersionRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a RobotApplicationVersion.
 
@@ -955,7 +968,11 @@ typing.cast(typing.Any, IRobotApplicationVersionRef).__jsii_proxy_class__ = lamb
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_robomaker.IRobotRef")
-class IRobotRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IRobotRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Robot.
 
     :stability: experimental
@@ -973,6 +990,7 @@ class IRobotRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IRobotRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Robot.
 
@@ -997,6 +1015,7 @@ typing.cast(typing.Any, IRobotRef).__jsii_proxy_class__ = lambda : _IRobotRefPro
 @jsii.interface(jsii_type="aws-cdk-lib.aws_robomaker.ISimulationApplicationRef")
 class ISimulationApplicationRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a SimulationApplication.
@@ -1016,6 +1035,7 @@ class ISimulationApplicationRef(
 
 class _ISimulationApplicationRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a SimulationApplication.
 
@@ -1040,6 +1060,7 @@ typing.cast(typing.Any, ISimulationApplicationRef).__jsii_proxy_class__ = lambda
 @jsii.interface(jsii_type="aws-cdk-lib.aws_robomaker.ISimulationApplicationVersionRef")
 class ISimulationApplicationVersionRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a SimulationApplicationVersion.
@@ -1061,6 +1082,7 @@ class ISimulationApplicationVersionRef(
 
 class _ISimulationApplicationVersionRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a SimulationApplicationVersion.
 

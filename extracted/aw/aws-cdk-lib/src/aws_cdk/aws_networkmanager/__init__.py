@@ -61,6 +61,7 @@ import constructs as _constructs_77d1e7e8
 from .. import (
     CfnResource as _CfnResource_9df397a6,
     CfnTag as _CfnTag_f6864754,
+    IEnvironmentAware as _IEnvironmentAware_a408b00d,
     IInspectable as _IInspectable_c2943556,
     IResolvable as _IResolvable_da3f097b,
     ITaggable as _ITaggable_36806126,
@@ -2672,6 +2673,7 @@ class GlobalNetworkReference:
 @jsii.interface(jsii_type="aws-cdk-lib.aws_networkmanager.IConnectAttachmentRef")
 class IConnectAttachmentRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a ConnectAttachment.
@@ -2691,6 +2693,7 @@ class IConnectAttachmentRef(
 
 class _IConnectAttachmentRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a ConnectAttachment.
 
@@ -2713,7 +2716,11 @@ typing.cast(typing.Any, IConnectAttachmentRef).__jsii_proxy_class__ = lambda : _
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_networkmanager.IConnectPeerRef")
-class IConnectPeerRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IConnectPeerRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a ConnectPeer.
 
     :stability: experimental
@@ -2731,6 +2738,7 @@ class IConnectPeerRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protoco
 
 class _IConnectPeerRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a ConnectPeer.
 
@@ -2753,7 +2761,11 @@ typing.cast(typing.Any, IConnectPeerRef).__jsii_proxy_class__ = lambda : _IConne
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_networkmanager.ICoreNetworkRef")
-class ICoreNetworkRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class ICoreNetworkRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a CoreNetwork.
 
     :stability: experimental
@@ -2771,6 +2783,7 @@ class ICoreNetworkRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protoco
 
 class _ICoreNetworkRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a CoreNetwork.
 
@@ -2797,6 +2810,7 @@ typing.cast(typing.Any, ICoreNetworkRef).__jsii_proxy_class__ = lambda : _ICoreN
 )
 class ICustomerGatewayAssociationRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a CustomerGatewayAssociation.
@@ -2816,6 +2830,7 @@ class ICustomerGatewayAssociationRef(
 
 class _ICustomerGatewayAssociationRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a CustomerGatewayAssociation.
 
@@ -2838,7 +2853,11 @@ typing.cast(typing.Any, ICustomerGatewayAssociationRef).__jsii_proxy_class__ = l
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_networkmanager.IDeviceRef")
-class IDeviceRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IDeviceRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Device.
 
     :stability: experimental
@@ -2856,6 +2875,7 @@ class IDeviceRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IDeviceRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Device.
 
@@ -2882,6 +2902,7 @@ typing.cast(typing.Any, IDeviceRef).__jsii_proxy_class__ = lambda : _IDeviceRefP
 )
 class IDirectConnectGatewayAttachmentRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a DirectConnectGatewayAttachment.
@@ -2903,6 +2924,7 @@ class IDirectConnectGatewayAttachmentRef(
 
 class _IDirectConnectGatewayAttachmentRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a DirectConnectGatewayAttachment.
 
@@ -2927,7 +2949,11 @@ typing.cast(typing.Any, IDirectConnectGatewayAttachmentRef).__jsii_proxy_class__
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_networkmanager.IGlobalNetworkRef")
-class IGlobalNetworkRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IGlobalNetworkRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a GlobalNetwork.
 
     :stability: experimental
@@ -2945,6 +2971,7 @@ class IGlobalNetworkRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Proto
 
 class _IGlobalNetworkRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a GlobalNetwork.
 
@@ -2967,7 +2994,11 @@ typing.cast(typing.Any, IGlobalNetworkRef).__jsii_proxy_class__ = lambda : _IGlo
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_networkmanager.ILinkAssociationRef")
-class ILinkAssociationRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class ILinkAssociationRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a LinkAssociation.
 
     :stability: experimental
@@ -2985,6 +3016,7 @@ class ILinkAssociationRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Pro
 
 class _ILinkAssociationRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a LinkAssociation.
 
@@ -3007,7 +3039,11 @@ typing.cast(typing.Any, ILinkAssociationRef).__jsii_proxy_class__ = lambda : _IL
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_networkmanager.ILinkRef")
-class ILinkRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class ILinkRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Link.
 
     :stability: experimental
@@ -3025,6 +3061,7 @@ class ILinkRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _ILinkRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Link.
 
@@ -3047,7 +3084,11 @@ typing.cast(typing.Any, ILinkRef).__jsii_proxy_class__ = lambda : _ILinkRefProxy
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_networkmanager.ISiteRef")
-class ISiteRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class ISiteRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Site.
 
     :stability: experimental
@@ -3065,6 +3106,7 @@ class ISiteRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _ISiteRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Site.
 
@@ -3089,6 +3131,7 @@ typing.cast(typing.Any, ISiteRef).__jsii_proxy_class__ = lambda : _ISiteRefProxy
 @jsii.interface(jsii_type="aws-cdk-lib.aws_networkmanager.ISiteToSiteVpnAttachmentRef")
 class ISiteToSiteVpnAttachmentRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a SiteToSiteVpnAttachment.
@@ -3108,6 +3151,7 @@ class ISiteToSiteVpnAttachmentRef(
 
 class _ISiteToSiteVpnAttachmentRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a SiteToSiteVpnAttachment.
 
@@ -3132,6 +3176,7 @@ typing.cast(typing.Any, ISiteToSiteVpnAttachmentRef).__jsii_proxy_class__ = lamb
 @jsii.interface(jsii_type="aws-cdk-lib.aws_networkmanager.ITransitGatewayPeeringRef")
 class ITransitGatewayPeeringRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a TransitGatewayPeering.
@@ -3151,6 +3196,7 @@ class ITransitGatewayPeeringRef(
 
 class _ITransitGatewayPeeringRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a TransitGatewayPeering.
 
@@ -3177,6 +3223,7 @@ typing.cast(typing.Any, ITransitGatewayPeeringRef).__jsii_proxy_class__ = lambda
 )
 class ITransitGatewayRegistrationRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a TransitGatewayRegistration.
@@ -3196,6 +3243,7 @@ class ITransitGatewayRegistrationRef(
 
 class _ITransitGatewayRegistrationRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a TransitGatewayRegistration.
 
@@ -3222,6 +3270,7 @@ typing.cast(typing.Any, ITransitGatewayRegistrationRef).__jsii_proxy_class__ = l
 )
 class ITransitGatewayRouteTableAttachmentRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a TransitGatewayRouteTableAttachment.
@@ -3243,6 +3292,7 @@ class ITransitGatewayRouteTableAttachmentRef(
 
 class _ITransitGatewayRouteTableAttachmentRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a TransitGatewayRouteTableAttachment.
 
@@ -3267,7 +3317,11 @@ typing.cast(typing.Any, ITransitGatewayRouteTableAttachmentRef).__jsii_proxy_cla
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_networkmanager.IVpcAttachmentRef")
-class IVpcAttachmentRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IVpcAttachmentRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a VpcAttachment.
 
     :stability: experimental
@@ -3285,6 +3339,7 @@ class IVpcAttachmentRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Proto
 
 class _IVpcAttachmentRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a VpcAttachment.
 

@@ -60,6 +60,7 @@ from .._jsii import *
 import constructs as _constructs_77d1e7e8
 from .. import (
     CfnResource as _CfnResource_9df397a6,
+    IEnvironmentAware as _IEnvironmentAware_a408b00d,
     IInspectable as _IInspectable_c2943556,
     IResolvable as _IResolvable_da3f097b,
     ITaggable as _ITaggable_36806126,
@@ -766,7 +767,11 @@ class CfnStudioProps:
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_nimblestudio.ILaunchProfileRef")
-class ILaunchProfileRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class ILaunchProfileRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a LaunchProfile.
 
     :stability: experimental
@@ -784,6 +789,7 @@ class ILaunchProfileRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Proto
 
 class _ILaunchProfileRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a LaunchProfile.
 
@@ -806,7 +812,11 @@ typing.cast(typing.Any, ILaunchProfileRef).__jsii_proxy_class__ = lambda : _ILau
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_nimblestudio.IStreamingImageRef")
-class IStreamingImageRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IStreamingImageRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a StreamingImage.
 
     :stability: experimental
@@ -824,6 +834,7 @@ class IStreamingImageRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Prot
 
 class _IStreamingImageRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a StreamingImage.
 
@@ -846,7 +857,11 @@ typing.cast(typing.Any, IStreamingImageRef).__jsii_proxy_class__ = lambda : _ISt
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_nimblestudio.IStudioComponentRef")
-class IStudioComponentRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IStudioComponentRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a StudioComponent.
 
     :stability: experimental
@@ -864,6 +879,7 @@ class IStudioComponentRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Pro
 
 class _IStudioComponentRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a StudioComponent.
 
@@ -886,7 +902,11 @@ typing.cast(typing.Any, IStudioComponentRef).__jsii_proxy_class__ = lambda : _IS
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_nimblestudio.IStudioRef")
-class IStudioRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IStudioRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Studio.
 
     :stability: experimental
@@ -904,6 +924,7 @@ class IStudioRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IStudioRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Studio.
 

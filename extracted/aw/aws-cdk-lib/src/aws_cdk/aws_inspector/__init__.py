@@ -61,6 +61,7 @@ import constructs as _constructs_77d1e7e8
 from .. import (
     CfnResource as _CfnResource_9df397a6,
     CfnTag as _CfnTag_f6864754,
+    IEnvironmentAware as _IEnvironmentAware_a408b00d,
     IInspectable as _IInspectable_c2943556,
     IResolvable as _IResolvable_da3f097b,
     IResource as _IResource_c80c4260,
@@ -568,7 +569,11 @@ class CfnResourceGroupProps:
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_inspector.IAssessmentTargetRef")
-class IAssessmentTargetRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IAssessmentTargetRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a AssessmentTarget.
 
     :stability: experimental
@@ -586,6 +591,7 @@ class IAssessmentTargetRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Pr
 
 class _IAssessmentTargetRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a AssessmentTarget.
 
@@ -644,6 +650,7 @@ typing.cast(typing.Any, IAssessmentTemplate).__jsii_proxy_class__ = lambda : _IA
 @jsii.interface(jsii_type="aws-cdk-lib.aws_inspector.IAssessmentTemplateRef")
 class IAssessmentTemplateRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a AssessmentTemplate.
@@ -663,6 +670,7 @@ class IAssessmentTemplateRef(
 
 class _IAssessmentTemplateRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a AssessmentTemplate.
 
@@ -685,7 +693,11 @@ typing.cast(typing.Any, IAssessmentTemplateRef).__jsii_proxy_class__ = lambda : 
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_inspector.IResourceGroupRef")
-class IResourceGroupRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IResourceGroupRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a ResourceGroup.
 
     :stability: experimental
@@ -703,6 +715,7 @@ class IResourceGroupRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Proto
 
 class _IResourceGroupRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a ResourceGroup.
 

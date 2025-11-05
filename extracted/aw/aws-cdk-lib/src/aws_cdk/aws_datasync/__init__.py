@@ -61,6 +61,7 @@ import constructs as _constructs_77d1e7e8
 from .. import (
     CfnResource as _CfnResource_9df397a6,
     CfnTag as _CfnTag_f6864754,
+    IEnvironmentAware as _IEnvironmentAware_a408b00d,
     IInspectable as _IInspectable_c2943556,
     IResolvable as _IResolvable_da3f097b,
     ITaggable as _ITaggable_36806126,
@@ -2853,7 +2854,11 @@ class CfnTaskProps:
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_datasync.IAgentRef")
-class IAgentRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IAgentRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Agent.
 
     :stability: experimental
@@ -2871,6 +2876,7 @@ class IAgentRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IAgentRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Agent.
 
@@ -2895,6 +2901,7 @@ typing.cast(typing.Any, IAgentRef).__jsii_proxy_class__ = lambda : _IAgentRefPro
 @jsii.interface(jsii_type="aws-cdk-lib.aws_datasync.ILocationAzureBlobRef")
 class ILocationAzureBlobRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a LocationAzureBlob.
@@ -2914,6 +2921,7 @@ class ILocationAzureBlobRef(
 
 class _ILocationAzureBlobRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a LocationAzureBlob.
 
@@ -2936,7 +2944,11 @@ typing.cast(typing.Any, ILocationAzureBlobRef).__jsii_proxy_class__ = lambda : _
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_datasync.ILocationEFSRef")
-class ILocationEFSRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class ILocationEFSRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a LocationEFS.
 
     :stability: experimental
@@ -2954,6 +2966,7 @@ class ILocationEFSRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protoco
 
 class _ILocationEFSRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a LocationEFS.
 
@@ -2978,6 +2991,7 @@ typing.cast(typing.Any, ILocationEFSRef).__jsii_proxy_class__ = lambda : _ILocat
 @jsii.interface(jsii_type="aws-cdk-lib.aws_datasync.ILocationFSxLustreRef")
 class ILocationFSxLustreRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a LocationFSxLustre.
@@ -2997,6 +3011,7 @@ class ILocationFSxLustreRef(
 
 class _ILocationFSxLustreRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a LocationFSxLustre.
 
@@ -3019,7 +3034,11 @@ typing.cast(typing.Any, ILocationFSxLustreRef).__jsii_proxy_class__ = lambda : _
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_datasync.ILocationFSxONTAPRef")
-class ILocationFSxONTAPRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class ILocationFSxONTAPRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a LocationFSxONTAP.
 
     :stability: experimental
@@ -3037,6 +3056,7 @@ class ILocationFSxONTAPRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Pr
 
 class _ILocationFSxONTAPRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a LocationFSxONTAP.
 
@@ -3061,6 +3081,7 @@ typing.cast(typing.Any, ILocationFSxONTAPRef).__jsii_proxy_class__ = lambda : _I
 @jsii.interface(jsii_type="aws-cdk-lib.aws_datasync.ILocationFSxOpenZFSRef")
 class ILocationFSxOpenZFSRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a LocationFSxOpenZFS.
@@ -3080,6 +3101,7 @@ class ILocationFSxOpenZFSRef(
 
 class _ILocationFSxOpenZFSRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a LocationFSxOpenZFS.
 
@@ -3104,6 +3126,7 @@ typing.cast(typing.Any, ILocationFSxOpenZFSRef).__jsii_proxy_class__ = lambda : 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_datasync.ILocationFSxWindowsRef")
 class ILocationFSxWindowsRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a LocationFSxWindows.
@@ -3123,6 +3146,7 @@ class ILocationFSxWindowsRef(
 
 class _ILocationFSxWindowsRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a LocationFSxWindows.
 
@@ -3145,7 +3169,11 @@ typing.cast(typing.Any, ILocationFSxWindowsRef).__jsii_proxy_class__ = lambda : 
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_datasync.ILocationHDFSRef")
-class ILocationHDFSRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class ILocationHDFSRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a LocationHDFS.
 
     :stability: experimental
@@ -3163,6 +3191,7 @@ class ILocationHDFSRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protoc
 
 class _ILocationHDFSRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a LocationHDFS.
 
@@ -3185,7 +3214,11 @@ typing.cast(typing.Any, ILocationHDFSRef).__jsii_proxy_class__ = lambda : _ILoca
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_datasync.ILocationNFSRef")
-class ILocationNFSRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class ILocationNFSRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a LocationNFS.
 
     :stability: experimental
@@ -3203,6 +3236,7 @@ class ILocationNFSRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protoco
 
 class _ILocationNFSRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a LocationNFS.
 
@@ -3227,6 +3261,7 @@ typing.cast(typing.Any, ILocationNFSRef).__jsii_proxy_class__ = lambda : _ILocat
 @jsii.interface(jsii_type="aws-cdk-lib.aws_datasync.ILocationObjectStorageRef")
 class ILocationObjectStorageRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a LocationObjectStorage.
@@ -3246,6 +3281,7 @@ class ILocationObjectStorageRef(
 
 class _ILocationObjectStorageRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a LocationObjectStorage.
 
@@ -3268,7 +3304,11 @@ typing.cast(typing.Any, ILocationObjectStorageRef).__jsii_proxy_class__ = lambda
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_datasync.ILocationS3Ref")
-class ILocationS3Ref(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class ILocationS3Ref(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a LocationS3.
 
     :stability: experimental
@@ -3286,6 +3326,7 @@ class ILocationS3Ref(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol
 
 class _ILocationS3RefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a LocationS3.
 
@@ -3308,7 +3349,11 @@ typing.cast(typing.Any, ILocationS3Ref).__jsii_proxy_class__ = lambda : _ILocati
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_datasync.ILocationSMBRef")
-class ILocationSMBRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class ILocationSMBRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a LocationSMB.
 
     :stability: experimental
@@ -3326,6 +3371,7 @@ class ILocationSMBRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protoco
 
 class _ILocationSMBRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a LocationSMB.
 
@@ -3348,7 +3394,11 @@ typing.cast(typing.Any, ILocationSMBRef).__jsii_proxy_class__ = lambda : _ILocat
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_datasync.ITaskRef")
-class ITaskRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class ITaskRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Task.
 
     :stability: experimental
@@ -3366,6 +3416,7 @@ class ITaskRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _ITaskRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Task.
 

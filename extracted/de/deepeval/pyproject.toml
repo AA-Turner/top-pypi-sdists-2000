@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "deepeval"
-version = "3.6.9"
+version = "3.7.0"
 description = "The LLM Evaluation Framework"
 authors = ["Jeffrey Ip <jeffreyip@confident-ai.com>"]
 license = "Apache-2.0"
@@ -43,7 +43,7 @@ opentelemetry-exporter-otlp-proto-grpc = "^1.24.0"
 grpcio = "^1.67.1"
 anthropic = "*"
 google-genai = "^1.9.0"
-posthog = "^6.3.0"
+posthog = "^5.4.0, <7.0.0"
 pyfiglet = "*"
 python-dotenv = "^1.1.1"
 pydantic = "^2.11.7"
@@ -80,6 +80,7 @@ build-backend = "poetry.core.masonry.api"
 addopts = "-m 'not skip_test'"
 markers = [
     "skip_test: skip the test",
+    "enable_dotenv: allow this test to load .env files via autoload_dotenv()",
 ]
 asyncio_mode = "auto"
 asyncio_default_fixture_loop_scope = "function"

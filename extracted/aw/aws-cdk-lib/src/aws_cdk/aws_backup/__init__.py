@@ -299,6 +299,7 @@ from .. import (
     CfnResource as _CfnResource_9df397a6,
     CfnTag as _CfnTag_f6864754,
     Duration as _Duration_4839e8c3,
+    IEnvironmentAware as _IEnvironmentAware_a408b00d,
     IInspectable as _IInspectable_c2943556,
     IResolvable as _IResolvable_da3f097b,
     IResource as _IResource_c80c4260,
@@ -3177,7 +3178,11 @@ typing.cast(typing.Any, IBackupPlan).__jsii_proxy_class__ = lambda : _IBackupPla
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_backup.IBackupPlanRef")
-class IBackupPlanRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IBackupPlanRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a BackupPlan.
 
     :stability: experimental
@@ -3195,6 +3200,7 @@ class IBackupPlanRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol
 
 class _IBackupPlanRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a BackupPlan.
 
@@ -3217,7 +3223,11 @@ typing.cast(typing.Any, IBackupPlanRef).__jsii_proxy_class__ = lambda : _IBackup
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_backup.IBackupSelectionRef")
-class IBackupSelectionRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IBackupSelectionRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a BackupSelection.
 
     :stability: experimental
@@ -3235,6 +3245,7 @@ class IBackupSelectionRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Pro
 
 class _IBackupSelectionRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a BackupSelection.
 
@@ -3339,7 +3350,11 @@ typing.cast(typing.Any, IBackupVault).__jsii_proxy_class__ = lambda : _IBackupVa
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_backup.IBackupVaultRef")
-class IBackupVaultRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IBackupVaultRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a BackupVault.
 
     :stability: experimental
@@ -3357,6 +3372,7 @@ class IBackupVaultRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protoco
 
 class _IBackupVaultRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a BackupVault.
 
@@ -3379,7 +3395,11 @@ typing.cast(typing.Any, IBackupVaultRef).__jsii_proxy_class__ = lambda : _IBacku
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_backup.IFrameworkRef")
-class IFrameworkRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IFrameworkRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Framework.
 
     :stability: experimental
@@ -3397,6 +3417,7 @@ class IFrameworkRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol)
 
 class _IFrameworkRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Framework.
 
@@ -3421,6 +3442,7 @@ typing.cast(typing.Any, IFrameworkRef).__jsii_proxy_class__ = lambda : _IFramewo
 @jsii.interface(jsii_type="aws-cdk-lib.aws_backup.ILogicallyAirGappedBackupVaultRef")
 class ILogicallyAirGappedBackupVaultRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a LogicallyAirGappedBackupVault.
@@ -3442,6 +3464,7 @@ class ILogicallyAirGappedBackupVaultRef(
 
 class _ILogicallyAirGappedBackupVaultRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a LogicallyAirGappedBackupVault.
 
@@ -3466,7 +3489,11 @@ typing.cast(typing.Any, ILogicallyAirGappedBackupVaultRef).__jsii_proxy_class__ 
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_backup.IReportPlanRef")
-class IReportPlanRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IReportPlanRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a ReportPlan.
 
     :stability: experimental
@@ -3484,6 +3511,7 @@ class IReportPlanRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol
 
 class _IReportPlanRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a ReportPlan.
 
@@ -3508,6 +3536,7 @@ typing.cast(typing.Any, IReportPlanRef).__jsii_proxy_class__ = lambda : _IReport
 @jsii.interface(jsii_type="aws-cdk-lib.aws_backup.IRestoreTestingPlanRef")
 class IRestoreTestingPlanRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a RestoreTestingPlan.
@@ -3527,6 +3556,7 @@ class IRestoreTestingPlanRef(
 
 class _IRestoreTestingPlanRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a RestoreTestingPlan.
 
@@ -3551,6 +3581,7 @@ typing.cast(typing.Any, IRestoreTestingPlanRef).__jsii_proxy_class__ = lambda : 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_backup.IRestoreTestingSelectionRef")
 class IRestoreTestingSelectionRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a RestoreTestingSelection.
@@ -3570,6 +3601,7 @@ class IRestoreTestingSelectionRef(
 
 class _IRestoreTestingSelectionRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a RestoreTestingSelection.
 

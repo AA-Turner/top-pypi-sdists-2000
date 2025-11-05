@@ -70,6 +70,7 @@ from .._jsii import *
 import constructs as _constructs_77d1e7e8
 from .. import (
     CfnResource as _CfnResource_9df397a6,
+    IEnvironmentAware as _IEnvironmentAware_a408b00d,
     IInspectable as _IInspectable_c2943556,
     IResolvable as _IResolvable_da3f097b,
     ITaggableV2 as _ITaggableV2_4e6798f8,
@@ -355,7 +356,11 @@ class ConnectorReference:
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_pcaconnectorscep.IChallengeRef")
-class IChallengeRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IChallengeRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Challenge.
 
     :stability: experimental
@@ -373,6 +378,7 @@ class IChallengeRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol)
 
 class _IChallengeRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Challenge.
 
@@ -395,7 +401,11 @@ typing.cast(typing.Any, IChallengeRef).__jsii_proxy_class__ = lambda : _IChallen
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_pcaconnectorscep.IConnectorRef")
-class IConnectorRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IConnectorRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Connector.
 
     :stability: experimental
@@ -413,6 +423,7 @@ class IConnectorRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol)
 
 class _IConnectorRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Connector.
 

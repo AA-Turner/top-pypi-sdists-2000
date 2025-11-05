@@ -61,6 +61,7 @@ import constructs as _constructs_77d1e7e8
 from .. import (
     CfnResource as _CfnResource_9df397a6,
     CfnTag as _CfnTag_f6864754,
+    IEnvironmentAware as _IEnvironmentAware_a408b00d,
     IInspectable as _IInspectable_c2943556,
     IResolvable as _IResolvable_da3f097b,
     ITaggable as _ITaggable_36806126,
@@ -1003,6 +1004,7 @@ class DataCatalogReference:
 @jsii.interface(jsii_type="aws-cdk-lib.aws_athena.ICapacityReservationRef")
 class ICapacityReservationRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a CapacityReservation.
@@ -1022,6 +1024,7 @@ class ICapacityReservationRef(
 
 class _ICapacityReservationRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a CapacityReservation.
 
@@ -1044,7 +1047,11 @@ typing.cast(typing.Any, ICapacityReservationRef).__jsii_proxy_class__ = lambda :
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_athena.IDataCatalogRef")
-class IDataCatalogRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IDataCatalogRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a DataCatalog.
 
     :stability: experimental
@@ -1062,6 +1069,7 @@ class IDataCatalogRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protoco
 
 class _IDataCatalogRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a DataCatalog.
 
@@ -1084,7 +1092,11 @@ typing.cast(typing.Any, IDataCatalogRef).__jsii_proxy_class__ = lambda : _IDataC
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_athena.INamedQueryRef")
-class INamedQueryRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class INamedQueryRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a NamedQuery.
 
     :stability: experimental
@@ -1102,6 +1114,7 @@ class INamedQueryRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol
 
 class _INamedQueryRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a NamedQuery.
 
@@ -1126,6 +1139,7 @@ typing.cast(typing.Any, INamedQueryRef).__jsii_proxy_class__ = lambda : _INamedQ
 @jsii.interface(jsii_type="aws-cdk-lib.aws_athena.IPreparedStatementRef")
 class IPreparedStatementRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a PreparedStatement.
@@ -1145,6 +1159,7 @@ class IPreparedStatementRef(
 
 class _IPreparedStatementRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a PreparedStatement.
 
@@ -1167,7 +1182,11 @@ typing.cast(typing.Any, IPreparedStatementRef).__jsii_proxy_class__ = lambda : _
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_athena.IWorkGroupRef")
-class IWorkGroupRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IWorkGroupRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a WorkGroup.
 
     :stability: experimental
@@ -1185,6 +1204,7 @@ class IWorkGroupRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol)
 
 class _IWorkGroupRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a WorkGroup.
 

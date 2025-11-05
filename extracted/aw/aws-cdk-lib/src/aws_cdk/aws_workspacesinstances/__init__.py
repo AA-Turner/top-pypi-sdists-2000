@@ -71,6 +71,7 @@ import constructs as _constructs_77d1e7e8
 from .. import (
     CfnResource as _CfnResource_9df397a6,
     CfnTag as _CfnTag_f6864754,
+    IEnvironmentAware as _IEnvironmentAware_a408b00d,
     IInspectable as _IInspectable_c2943556,
     IResolvable as _IResolvable_da3f097b,
     ITaggableV2 as _ITaggableV2_4e6798f8,
@@ -566,6 +567,7 @@ class CfnWorkspaceInstanceProps:
 @jsii.interface(jsii_type="aws-cdk-lib.aws_workspacesinstances.IVolumeAssociationRef")
 class IVolumeAssociationRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a VolumeAssociation.
@@ -585,6 +587,7 @@ class IVolumeAssociationRef(
 
 class _IVolumeAssociationRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a VolumeAssociation.
 
@@ -607,7 +610,11 @@ typing.cast(typing.Any, IVolumeAssociationRef).__jsii_proxy_class__ = lambda : _
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_workspacesinstances.IVolumeRef")
-class IVolumeRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IVolumeRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Volume.
 
     :stability: experimental
@@ -625,6 +632,7 @@ class IVolumeRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IVolumeRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Volume.
 
@@ -649,6 +657,7 @@ typing.cast(typing.Any, IVolumeRef).__jsii_proxy_class__ = lambda : _IVolumeRefP
 @jsii.interface(jsii_type="aws-cdk-lib.aws_workspacesinstances.IWorkspaceInstanceRef")
 class IWorkspaceInstanceRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a WorkspaceInstance.
@@ -668,6 +677,7 @@ class IWorkspaceInstanceRef(
 
 class _IWorkspaceInstanceRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a WorkspaceInstance.
 

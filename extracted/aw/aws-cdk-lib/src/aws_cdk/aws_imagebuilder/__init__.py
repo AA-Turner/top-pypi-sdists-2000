@@ -60,6 +60,7 @@ from .._jsii import *
 import constructs as _constructs_77d1e7e8
 from .. import (
     CfnResource as _CfnResource_9df397a6,
+    IEnvironmentAware as _IEnvironmentAware_a408b00d,
     IInspectable as _IInspectable_c2943556,
     IResolvable as _IResolvable_da3f097b,
     ITaggable as _ITaggable_36806126,
@@ -2500,7 +2501,11 @@ class DistributionConfigurationReference:
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_imagebuilder.IComponentRef")
-class IComponentRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IComponentRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Component.
 
     :stability: experimental
@@ -2518,6 +2523,7 @@ class IComponentRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol)
 
 class _IComponentRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Component.
 
@@ -2540,7 +2546,11 @@ typing.cast(typing.Any, IComponentRef).__jsii_proxy_class__ = lambda : _ICompone
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_imagebuilder.IContainerRecipeRef")
-class IContainerRecipeRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IContainerRecipeRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a ContainerRecipe.
 
     :stability: experimental
@@ -2558,6 +2568,7 @@ class IContainerRecipeRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Pro
 
 class _IContainerRecipeRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a ContainerRecipe.
 
@@ -2582,6 +2593,7 @@ typing.cast(typing.Any, IContainerRecipeRef).__jsii_proxy_class__ = lambda : _IC
 @jsii.interface(jsii_type="aws-cdk-lib.aws_imagebuilder.IDistributionConfigurationRef")
 class IDistributionConfigurationRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a DistributionConfiguration.
@@ -2601,6 +2613,7 @@ class IDistributionConfigurationRef(
 
 class _IDistributionConfigurationRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a DistributionConfiguration.
 
@@ -2623,7 +2636,11 @@ typing.cast(typing.Any, IDistributionConfigurationRef).__jsii_proxy_class__ = la
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_imagebuilder.IImagePipelineRef")
-class IImagePipelineRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IImagePipelineRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a ImagePipeline.
 
     :stability: experimental
@@ -2641,6 +2658,7 @@ class IImagePipelineRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Proto
 
 class _IImagePipelineRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a ImagePipeline.
 
@@ -2663,7 +2681,11 @@ typing.cast(typing.Any, IImagePipelineRef).__jsii_proxy_class__ = lambda : _IIma
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_imagebuilder.IImageRecipeRef")
-class IImageRecipeRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IImageRecipeRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a ImageRecipe.
 
     :stability: experimental
@@ -2681,6 +2703,7 @@ class IImageRecipeRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protoco
 
 class _IImageRecipeRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a ImageRecipe.
 
@@ -2703,7 +2726,11 @@ typing.cast(typing.Any, IImageRecipeRef).__jsii_proxy_class__ = lambda : _IImage
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_imagebuilder.IImageRef")
-class IImageRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IImageRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Image.
 
     :stability: experimental
@@ -2721,6 +2748,7 @@ class IImageRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IImageRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Image.
 
@@ -2747,6 +2775,7 @@ typing.cast(typing.Any, IImageRef).__jsii_proxy_class__ = lambda : _IImageRefPro
 )
 class IInfrastructureConfigurationRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a InfrastructureConfiguration.
@@ -2768,6 +2797,7 @@ class IInfrastructureConfigurationRef(
 
 class _IInfrastructureConfigurationRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a InfrastructureConfiguration.
 
@@ -2792,7 +2822,11 @@ typing.cast(typing.Any, IInfrastructureConfigurationRef).__jsii_proxy_class__ = 
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_imagebuilder.ILifecyclePolicyRef")
-class ILifecyclePolicyRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class ILifecyclePolicyRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a LifecyclePolicy.
 
     :stability: experimental
@@ -2810,6 +2844,7 @@ class ILifecyclePolicyRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Pro
 
 class _ILifecyclePolicyRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a LifecyclePolicy.
 
@@ -2832,7 +2867,11 @@ typing.cast(typing.Any, ILifecyclePolicyRef).__jsii_proxy_class__ = lambda : _IL
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_imagebuilder.IWorkflowRef")
-class IWorkflowRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IWorkflowRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Workflow.
 
     :stability: experimental
@@ -2850,6 +2889,7 @@ class IWorkflowRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IWorkflowRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Workflow.
 

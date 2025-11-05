@@ -71,6 +71,7 @@ import constructs as _constructs_77d1e7e8
 from .. import (
     CfnResource as _CfnResource_9df397a6,
     CfnTag as _CfnTag_f6864754,
+    IEnvironmentAware as _IEnvironmentAware_a408b00d,
     IInspectable as _IInspectable_c2943556,
     IResolvable as _IResolvable_da3f097b,
     ITaggableV2 as _ITaggableV2_4e6798f8,
@@ -2077,7 +2078,11 @@ class ConfiguredTableReference:
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_cleanrooms.IAnalysisTemplateRef")
-class IAnalysisTemplateRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IAnalysisTemplateRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a AnalysisTemplate.
 
     :stability: experimental
@@ -2095,6 +2100,7 @@ class IAnalysisTemplateRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Pr
 
 class _IAnalysisTemplateRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a AnalysisTemplate.
 
@@ -2117,7 +2123,11 @@ typing.cast(typing.Any, IAnalysisTemplateRef).__jsii_proxy_class__ = lambda : _I
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_cleanrooms.ICollaborationRef")
-class ICollaborationRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class ICollaborationRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Collaboration.
 
     :stability: experimental
@@ -2135,6 +2145,7 @@ class ICollaborationRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Proto
 
 class _ICollaborationRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Collaboration.
 
@@ -2159,6 +2170,7 @@ typing.cast(typing.Any, ICollaborationRef).__jsii_proxy_class__ = lambda : _ICol
 @jsii.interface(jsii_type="aws-cdk-lib.aws_cleanrooms.IConfiguredTableAssociationRef")
 class IConfiguredTableAssociationRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a ConfiguredTableAssociation.
@@ -2178,6 +2190,7 @@ class IConfiguredTableAssociationRef(
 
 class _IConfiguredTableAssociationRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a ConfiguredTableAssociation.
 
@@ -2200,7 +2213,11 @@ typing.cast(typing.Any, IConfiguredTableAssociationRef).__jsii_proxy_class__ = l
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_cleanrooms.IConfiguredTableRef")
-class IConfiguredTableRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IConfiguredTableRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a ConfiguredTable.
 
     :stability: experimental
@@ -2218,6 +2235,7 @@ class IConfiguredTableRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Pro
 
 class _IConfiguredTableRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a ConfiguredTable.
 
@@ -2240,7 +2258,11 @@ typing.cast(typing.Any, IConfiguredTableRef).__jsii_proxy_class__ = lambda : _IC
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_cleanrooms.IIdMappingTableRef")
-class IIdMappingTableRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IIdMappingTableRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a IdMappingTable.
 
     :stability: experimental
@@ -2258,6 +2280,7 @@ class IIdMappingTableRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Prot
 
 class _IIdMappingTableRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a IdMappingTable.
 
@@ -2282,6 +2305,7 @@ typing.cast(typing.Any, IIdMappingTableRef).__jsii_proxy_class__ = lambda : _IId
 @jsii.interface(jsii_type="aws-cdk-lib.aws_cleanrooms.IIdNamespaceAssociationRef")
 class IIdNamespaceAssociationRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a IdNamespaceAssociation.
@@ -2301,6 +2325,7 @@ class IIdNamespaceAssociationRef(
 
 class _IIdNamespaceAssociationRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a IdNamespaceAssociation.
 
@@ -2323,7 +2348,11 @@ typing.cast(typing.Any, IIdNamespaceAssociationRef).__jsii_proxy_class__ = lambd
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_cleanrooms.IMembershipRef")
-class IMembershipRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IMembershipRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Membership.
 
     :stability: experimental
@@ -2341,6 +2370,7 @@ class IMembershipRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol
 
 class _IMembershipRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Membership.
 
@@ -2365,6 +2395,7 @@ typing.cast(typing.Any, IMembershipRef).__jsii_proxy_class__ = lambda : _IMember
 @jsii.interface(jsii_type="aws-cdk-lib.aws_cleanrooms.IPrivacyBudgetTemplateRef")
 class IPrivacyBudgetTemplateRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a PrivacyBudgetTemplate.
@@ -2384,6 +2415,7 @@ class IPrivacyBudgetTemplateRef(
 
 class _IPrivacyBudgetTemplateRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a PrivacyBudgetTemplate.
 

@@ -313,6 +313,7 @@ from .. import (
     CfnResource as _CfnResource_9df397a6,
     CfnTag as _CfnTag_f6864754,
     Duration as _Duration_4839e8c3,
+    IEnvironmentAware as _IEnvironmentAware_a408b00d,
     IInspectable as _IInspectable_c2943556,
     IResolvable as _IResolvable_da3f097b,
     ITaggable as _ITaggable_36806126,
@@ -2132,6 +2133,7 @@ class FileSystemTypeVersion(enum.Enum):
 @jsii.interface(jsii_type="aws-cdk-lib.aws_fsx.IDataRepositoryAssociationRef")
 class IDataRepositoryAssociationRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a DataRepositoryAssociation.
@@ -2151,6 +2153,7 @@ class IDataRepositoryAssociationRef(
 
 class _IDataRepositoryAssociationRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a DataRepositoryAssociation.
 
@@ -2207,7 +2210,11 @@ typing.cast(typing.Any, IFileSystem).__jsii_proxy_class__ = lambda : _IFileSyste
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_fsx.IFileSystemRef")
-class IFileSystemRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IFileSystemRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a FileSystem.
 
     :stability: experimental
@@ -2225,6 +2232,7 @@ class IFileSystemRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol
 
 class _IFileSystemRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a FileSystem.
 
@@ -2249,6 +2257,7 @@ typing.cast(typing.Any, IFileSystemRef).__jsii_proxy_class__ = lambda : _IFileSy
 @jsii.interface(jsii_type="aws-cdk-lib.aws_fsx.IS3AccessPointAttachmentRef")
 class IS3AccessPointAttachmentRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a S3AccessPointAttachment.
@@ -2268,6 +2277,7 @@ class IS3AccessPointAttachmentRef(
 
 class _IS3AccessPointAttachmentRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a S3AccessPointAttachment.
 
@@ -2290,7 +2300,11 @@ typing.cast(typing.Any, IS3AccessPointAttachmentRef).__jsii_proxy_class__ = lamb
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_fsx.ISnapshotRef")
-class ISnapshotRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class ISnapshotRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Snapshot.
 
     :stability: experimental
@@ -2308,6 +2322,7 @@ class ISnapshotRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _ISnapshotRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Snapshot.
 
@@ -2332,6 +2347,7 @@ typing.cast(typing.Any, ISnapshotRef).__jsii_proxy_class__ = lambda : _ISnapshot
 @jsii.interface(jsii_type="aws-cdk-lib.aws_fsx.IStorageVirtualMachineRef")
 class IStorageVirtualMachineRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a StorageVirtualMachine.
@@ -2351,6 +2367,7 @@ class IStorageVirtualMachineRef(
 
 class _IStorageVirtualMachineRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a StorageVirtualMachine.
 
@@ -2373,7 +2390,11 @@ typing.cast(typing.Any, IStorageVirtualMachineRef).__jsii_proxy_class__ = lambda
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_fsx.IVolumeRef")
-class IVolumeRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IVolumeRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Volume.
 
     :stability: experimental
@@ -2391,6 +2412,7 @@ class IVolumeRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IVolumeRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Volume.
 

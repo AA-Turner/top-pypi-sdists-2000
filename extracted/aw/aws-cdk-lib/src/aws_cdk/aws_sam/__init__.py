@@ -60,6 +60,7 @@ from .._jsii import *
 import constructs as _constructs_77d1e7e8
 from .. import (
     CfnResource as _CfnResource_9df397a6,
+    IEnvironmentAware as _IEnvironmentAware_a408b00d,
     IInspectable as _IInspectable_c2943556,
     IResolvable as _IResolvable_da3f097b,
     ITaggable as _ITaggable_36806126,
@@ -2309,7 +2310,11 @@ class HttpApiReference:
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_sam.IApiRef")
-class IApiRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IApiRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Api.
 
     :stability: experimental
@@ -2327,6 +2332,7 @@ class IApiRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IApiRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Api.
 
@@ -2349,7 +2355,11 @@ typing.cast(typing.Any, IApiRef).__jsii_proxy_class__ = lambda : _IApiRefProxy
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_sam.IApplicationRef")
-class IApplicationRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IApplicationRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Application.
 
     :stability: experimental
@@ -2367,6 +2377,7 @@ class IApplicationRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protoco
 
 class _IApplicationRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Application.
 
@@ -2389,7 +2400,11 @@ typing.cast(typing.Any, IApplicationRef).__jsii_proxy_class__ = lambda : _IAppli
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_sam.IFunctionRef")
-class IFunctionRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IFunctionRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Function.
 
     :stability: experimental
@@ -2407,6 +2422,7 @@ class IFunctionRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IFunctionRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Function.
 
@@ -2429,7 +2445,11 @@ typing.cast(typing.Any, IFunctionRef).__jsii_proxy_class__ = lambda : _IFunction
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_sam.IHttpApiRef")
-class IHttpApiRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IHttpApiRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a HttpApi.
 
     :stability: experimental
@@ -2447,6 +2467,7 @@ class IHttpApiRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IHttpApiRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a HttpApi.
 
@@ -2469,7 +2490,11 @@ typing.cast(typing.Any, IHttpApiRef).__jsii_proxy_class__ = lambda : _IHttpApiRe
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_sam.ILayerVersionRef")
-class ILayerVersionRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class ILayerVersionRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a LayerVersion.
 
     :stability: experimental
@@ -2487,6 +2512,7 @@ class ILayerVersionRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protoc
 
 class _ILayerVersionRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a LayerVersion.
 
@@ -2509,7 +2535,11 @@ typing.cast(typing.Any, ILayerVersionRef).__jsii_proxy_class__ = lambda : _ILaye
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_sam.ISimpleTableRef")
-class ISimpleTableRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class ISimpleTableRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a SimpleTable.
 
     :stability: experimental
@@ -2527,6 +2557,7 @@ class ISimpleTableRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protoco
 
 class _ISimpleTableRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a SimpleTable.
 
@@ -2549,7 +2580,11 @@ typing.cast(typing.Any, ISimpleTableRef).__jsii_proxy_class__ = lambda : _ISimpl
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_sam.IStateMachineRef")
-class IStateMachineRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IStateMachineRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a StateMachine.
 
     :stability: experimental
@@ -2567,6 +2602,7 @@ class IStateMachineRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protoc
 
 class _IStateMachineRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a StateMachine.
 

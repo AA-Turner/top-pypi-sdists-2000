@@ -71,6 +71,7 @@ import constructs as _constructs_77d1e7e8
 from .. import (
     CfnResource as _CfnResource_9df397a6,
     CfnTag as _CfnTag_f6864754,
+    IEnvironmentAware as _IEnvironmentAware_a408b00d,
     IInspectable as _IInspectable_c2943556,
     ITaggable as _ITaggable_36806126,
     TagManager as _TagManager_0a598cb3,
@@ -638,6 +639,7 @@ class EnvironmentTemplateReference:
 @jsii.interface(jsii_type="aws-cdk-lib.aws_proton.IEnvironmentAccountConnectionRef")
 class IEnvironmentAccountConnectionRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a EnvironmentAccountConnection.
@@ -659,6 +661,7 @@ class IEnvironmentAccountConnectionRef(
 
 class _IEnvironmentAccountConnectionRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a EnvironmentAccountConnection.
 
@@ -685,6 +688,7 @@ typing.cast(typing.Any, IEnvironmentAccountConnectionRef).__jsii_proxy_class__ =
 @jsii.interface(jsii_type="aws-cdk-lib.aws_proton.IEnvironmentTemplateRef")
 class IEnvironmentTemplateRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a EnvironmentTemplate.
@@ -704,6 +708,7 @@ class IEnvironmentTemplateRef(
 
 class _IEnvironmentTemplateRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a EnvironmentTemplate.
 
@@ -726,7 +731,11 @@ typing.cast(typing.Any, IEnvironmentTemplateRef).__jsii_proxy_class__ = lambda :
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_proton.IServiceTemplateRef")
-class IServiceTemplateRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IServiceTemplateRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a ServiceTemplate.
 
     :stability: experimental
@@ -744,6 +753,7 @@ class IServiceTemplateRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Pro
 
 class _IServiceTemplateRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a ServiceTemplate.
 

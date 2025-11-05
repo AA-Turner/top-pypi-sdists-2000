@@ -1459,6 +1459,7 @@ from .. import (
     CfnTag as _CfnTag_f6864754,
     Duration as _Duration_4839e8c3,
     Expiration as _Expiration_059d47d0,
+    IEnvironmentAware as _IEnvironmentAware_a408b00d,
     IInspectable as _IInspectable_c2943556,
     IResolvable as _IResolvable_da3f097b,
     IResource as _IResource_c80c4260,
@@ -10061,7 +10062,11 @@ typing.cast(typing.Any, IApi).__jsii_proxy_class__ = lambda : _IApiProxy
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_appsync.IApiCacheRef")
-class IApiCacheRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IApiCacheRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a ApiCache.
 
     :stability: experimental
@@ -10079,6 +10084,7 @@ class IApiCacheRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IApiCacheRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a ApiCache.
 
@@ -10101,7 +10107,11 @@ typing.cast(typing.Any, IApiCacheRef).__jsii_proxy_class__ = lambda : _IApiCache
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_appsync.IApiKeyRef")
-class IApiKeyRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IApiKeyRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a ApiKey.
 
     :stability: experimental
@@ -10119,6 +10129,7 @@ class IApiKeyRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IApiKeyRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a ApiKey.
 
@@ -10141,7 +10152,11 @@ typing.cast(typing.Any, IApiKeyRef).__jsii_proxy_class__ = lambda : _IApiKeyRefP
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_appsync.IApiRef")
-class IApiRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IApiRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Api.
 
     :stability: experimental
@@ -10159,6 +10174,7 @@ class IApiRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IApiRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Api.
 
@@ -10394,7 +10410,11 @@ typing.cast(typing.Any, IChannelNamespace).__jsii_proxy_class__ = lambda : _ICha
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_appsync.IChannelNamespaceRef")
-class IChannelNamespaceRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IChannelNamespaceRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a ChannelNamespace.
 
     :stability: experimental
@@ -10412,6 +10432,7 @@ class IChannelNamespaceRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Pr
 
 class _IChannelNamespaceRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a ChannelNamespace.
 
@@ -10434,7 +10455,11 @@ typing.cast(typing.Any, IChannelNamespaceRef).__jsii_proxy_class__ = lambda : _I
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_appsync.IDataSourceRef")
-class IDataSourceRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IDataSourceRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a DataSource.
 
     :stability: experimental
@@ -10452,6 +10477,7 @@ class IDataSourceRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol
 
 class _IDataSourceRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a DataSource.
 
@@ -10476,6 +10502,7 @@ typing.cast(typing.Any, IDataSourceRef).__jsii_proxy_class__ = lambda : _IDataSo
 @jsii.interface(jsii_type="aws-cdk-lib.aws_appsync.IDomainNameApiAssociationRef")
 class IDomainNameApiAssociationRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a DomainNameApiAssociation.
@@ -10495,6 +10522,7 @@ class IDomainNameApiAssociationRef(
 
 class _IDomainNameApiAssociationRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a DomainNameApiAssociation.
 
@@ -10517,7 +10545,11 @@ typing.cast(typing.Any, IDomainNameApiAssociationRef).__jsii_proxy_class__ = lam
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_appsync.IDomainNameRef")
-class IDomainNameRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IDomainNameRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a DomainName.
 
     :stability: experimental
@@ -10535,6 +10567,7 @@ class IDomainNameRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol
 
 class _IDomainNameRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a DomainName.
 
@@ -11069,6 +11102,7 @@ typing.cast(typing.Any, IEventApi).__jsii_proxy_class__ = lambda : _IEventApiPro
 @jsii.interface(jsii_type="aws-cdk-lib.aws_appsync.IFunctionConfigurationRef")
 class IFunctionConfigurationRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a FunctionConfiguration.
@@ -11088,6 +11122,7 @@ class IFunctionConfigurationRef(
 
 class _IFunctionConfigurationRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a FunctionConfiguration.
 
@@ -11110,7 +11145,11 @@ typing.cast(typing.Any, IFunctionConfigurationRef).__jsii_proxy_class__ = lambda
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_appsync.IGraphQLApiRef")
-class IGraphQLApiRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IGraphQLApiRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a GraphQLApi.
 
     :stability: experimental
@@ -11128,6 +11167,7 @@ class IGraphQLApiRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol
 
 class _IGraphQLApiRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a GraphQLApi.
 
@@ -11150,7 +11190,11 @@ typing.cast(typing.Any, IGraphQLApiRef).__jsii_proxy_class__ = lambda : _IGraphQ
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_appsync.IGraphQLSchemaRef")
-class IGraphQLSchemaRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IGraphQLSchemaRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a GraphQLSchema.
 
     :stability: experimental
@@ -11168,6 +11212,7 @@ class IGraphQLSchemaRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Proto
 
 class _IGraphQLSchemaRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a GraphQLSchema.
 
@@ -11917,7 +11962,11 @@ typing.cast(typing.Any, IGraphqlApi).__jsii_proxy_class__ = lambda : _IGraphqlAp
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_appsync.IResolverRef")
-class IResolverRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IResolverRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Resolver.
 
     :stability: experimental
@@ -11935,6 +11984,7 @@ class IResolverRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IResolverRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Resolver.
 
@@ -12134,6 +12184,7 @@ typing.cast(typing.Any, ISourceApiAssociation).__jsii_proxy_class__ = lambda : _
 @jsii.interface(jsii_type="aws-cdk-lib.aws_appsync.ISourceApiAssociationRef")
 class ISourceApiAssociationRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a SourceApiAssociation.
@@ -12153,6 +12204,7 @@ class ISourceApiAssociationRef(
 
 class _ISourceApiAssociationRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a SourceApiAssociation.
 

@@ -61,6 +61,7 @@ import constructs as _constructs_77d1e7e8
 from .. import (
     CfnResource as _CfnResource_9df397a6,
     CfnTag as _CfnTag_f6864754,
+    IEnvironmentAware as _IEnvironmentAware_a408b00d,
     IInspectable as _IInspectable_c2943556,
     IResolvable as _IResolvable_da3f097b,
     ITaggable as _ITaggable_36806126,
@@ -2842,6 +2843,7 @@ class EventBridgeRuleTemplateReference:
 @jsii.interface(jsii_type="aws-cdk-lib.aws_medialive.IChannelPlacementGroupRef")
 class IChannelPlacementGroupRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a ChannelPlacementGroup.
@@ -2861,6 +2863,7 @@ class IChannelPlacementGroupRef(
 
 class _IChannelPlacementGroupRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a ChannelPlacementGroup.
 
@@ -2883,7 +2886,11 @@ typing.cast(typing.Any, IChannelPlacementGroupRef).__jsii_proxy_class__ = lambda
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_medialive.IChannelRef")
-class IChannelRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IChannelRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Channel.
 
     :stability: experimental
@@ -2901,6 +2908,7 @@ class IChannelRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IChannelRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Channel.
 
@@ -2925,6 +2933,7 @@ typing.cast(typing.Any, IChannelRef).__jsii_proxy_class__ = lambda : _IChannelRe
 @jsii.interface(jsii_type="aws-cdk-lib.aws_medialive.ICloudWatchAlarmTemplateGroupRef")
 class ICloudWatchAlarmTemplateGroupRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a CloudWatchAlarmTemplateGroup.
@@ -2946,6 +2955,7 @@ class ICloudWatchAlarmTemplateGroupRef(
 
 class _ICloudWatchAlarmTemplateGroupRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a CloudWatchAlarmTemplateGroup.
 
@@ -2972,6 +2982,7 @@ typing.cast(typing.Any, ICloudWatchAlarmTemplateGroupRef).__jsii_proxy_class__ =
 @jsii.interface(jsii_type="aws-cdk-lib.aws_medialive.ICloudWatchAlarmTemplateRef")
 class ICloudWatchAlarmTemplateRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a CloudWatchAlarmTemplate.
@@ -2991,6 +3002,7 @@ class ICloudWatchAlarmTemplateRef(
 
 class _ICloudWatchAlarmTemplateRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a CloudWatchAlarmTemplate.
 
@@ -3013,7 +3025,11 @@ typing.cast(typing.Any, ICloudWatchAlarmTemplateRef).__jsii_proxy_class__ = lamb
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_medialive.IClusterRef")
-class IClusterRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IClusterRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Cluster.
 
     :stability: experimental
@@ -3031,6 +3047,7 @@ class IClusterRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IClusterRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Cluster.
 
@@ -3055,6 +3072,7 @@ typing.cast(typing.Any, IClusterRef).__jsii_proxy_class__ = lambda : _IClusterRe
 @jsii.interface(jsii_type="aws-cdk-lib.aws_medialive.IEventBridgeRuleTemplateGroupRef")
 class IEventBridgeRuleTemplateGroupRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a EventBridgeRuleTemplateGroup.
@@ -3076,6 +3094,7 @@ class IEventBridgeRuleTemplateGroupRef(
 
 class _IEventBridgeRuleTemplateGroupRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a EventBridgeRuleTemplateGroup.
 
@@ -3102,6 +3121,7 @@ typing.cast(typing.Any, IEventBridgeRuleTemplateGroupRef).__jsii_proxy_class__ =
 @jsii.interface(jsii_type="aws-cdk-lib.aws_medialive.IEventBridgeRuleTemplateRef")
 class IEventBridgeRuleTemplateRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a EventBridgeRuleTemplate.
@@ -3121,6 +3141,7 @@ class IEventBridgeRuleTemplateRef(
 
 class _IEventBridgeRuleTemplateRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a EventBridgeRuleTemplate.
 
@@ -3143,7 +3164,11 @@ typing.cast(typing.Any, IEventBridgeRuleTemplateRef).__jsii_proxy_class__ = lamb
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_medialive.IInputRef")
-class IInputRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IInputRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Input.
 
     :stability: experimental
@@ -3161,6 +3186,7 @@ class IInputRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IInputRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Input.
 
@@ -3185,6 +3211,7 @@ typing.cast(typing.Any, IInputRef).__jsii_proxy_class__ = lambda : _IInputRefPro
 @jsii.interface(jsii_type="aws-cdk-lib.aws_medialive.IInputSecurityGroupRef")
 class IInputSecurityGroupRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a InputSecurityGroup.
@@ -3204,6 +3231,7 @@ class IInputSecurityGroupRef(
 
 class _IInputSecurityGroupRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a InputSecurityGroup.
 
@@ -3226,7 +3254,11 @@ typing.cast(typing.Any, IInputSecurityGroupRef).__jsii_proxy_class__ = lambda : 
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_medialive.IMultiplexRef")
-class IMultiplexRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IMultiplexRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Multiplex.
 
     :stability: experimental
@@ -3244,6 +3276,7 @@ class IMultiplexRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol)
 
 class _IMultiplexRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Multiplex.
 
@@ -3266,7 +3299,11 @@ typing.cast(typing.Any, IMultiplexRef).__jsii_proxy_class__ = lambda : _IMultipl
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_medialive.IMultiplexprogramRef")
-class IMultiplexprogramRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IMultiplexprogramRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Multiplexprogram.
 
     :stability: experimental
@@ -3284,6 +3321,7 @@ class IMultiplexprogramRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Pr
 
 class _IMultiplexprogramRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Multiplexprogram.
 
@@ -3306,7 +3344,11 @@ typing.cast(typing.Any, IMultiplexprogramRef).__jsii_proxy_class__ = lambda : _I
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_medialive.INetworkRef")
-class INetworkRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class INetworkRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Network.
 
     :stability: experimental
@@ -3324,6 +3366,7 @@ class INetworkRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _INetworkRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Network.
 
@@ -3346,7 +3389,11 @@ typing.cast(typing.Any, INetworkRef).__jsii_proxy_class__ = lambda : _INetworkRe
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_medialive.ISdiSourceRef")
-class ISdiSourceRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class ISdiSourceRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a SdiSource.
 
     :stability: experimental
@@ -3364,6 +3411,7 @@ class ISdiSourceRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol)
 
 class _ISdiSourceRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a SdiSource.
 
@@ -3386,7 +3434,11 @@ typing.cast(typing.Any, ISdiSourceRef).__jsii_proxy_class__ = lambda : _ISdiSour
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_medialive.ISignalMapRef")
-class ISignalMapRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class ISignalMapRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a SignalMap.
 
     :stability: experimental
@@ -3404,6 +3456,7 @@ class ISignalMapRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol)
 
 class _ISignalMapRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a SignalMap.
 

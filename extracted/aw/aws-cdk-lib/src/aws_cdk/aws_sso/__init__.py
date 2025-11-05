@@ -61,6 +61,7 @@ import constructs as _constructs_77d1e7e8
 from .. import (
     CfnResource as _CfnResource_9df397a6,
     CfnTag as _CfnTag_f6864754,
+    IEnvironmentAware as _IEnvironmentAware_a408b00d,
     IInspectable as _IInspectable_c2943556,
     IResolvable as _IResolvable_da3f097b,
     ITaggable as _ITaggable_36806126,
@@ -1153,6 +1154,7 @@ class CfnPermissionSetProps:
 @jsii.interface(jsii_type="aws-cdk-lib.aws_sso.IApplicationAssignmentRef")
 class IApplicationAssignmentRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a ApplicationAssignment.
@@ -1172,6 +1174,7 @@ class IApplicationAssignmentRef(
 
 class _IApplicationAssignmentRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a ApplicationAssignment.
 
@@ -1194,7 +1197,11 @@ typing.cast(typing.Any, IApplicationAssignmentRef).__jsii_proxy_class__ = lambda
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_sso.IApplicationRef")
-class IApplicationRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IApplicationRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Application.
 
     :stability: experimental
@@ -1212,6 +1219,7 @@ class IApplicationRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protoco
 
 class _IApplicationRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Application.
 
@@ -1234,7 +1242,11 @@ typing.cast(typing.Any, IApplicationRef).__jsii_proxy_class__ = lambda : _IAppli
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_sso.IAssignmentRef")
-class IAssignmentRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IAssignmentRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Assignment.
 
     :stability: experimental
@@ -1252,6 +1264,7 @@ class IAssignmentRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol
 
 class _IAssignmentRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Assignment.
 
@@ -1278,6 +1291,7 @@ typing.cast(typing.Any, IAssignmentRef).__jsii_proxy_class__ = lambda : _IAssign
 )
 class IInstanceAccessControlAttributeConfigurationRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a InstanceAccessControlAttributeConfiguration.
@@ -1299,6 +1313,7 @@ class IInstanceAccessControlAttributeConfigurationRef(
 
 class _IInstanceAccessControlAttributeConfigurationRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a InstanceAccessControlAttributeConfiguration.
 
@@ -1323,7 +1338,11 @@ typing.cast(typing.Any, IInstanceAccessControlAttributeConfigurationRef).__jsii_
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_sso.IInstanceRef")
-class IInstanceRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IInstanceRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Instance.
 
     :stability: experimental
@@ -1341,6 +1360,7 @@ class IInstanceRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IInstanceRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Instance.
 
@@ -1363,7 +1383,11 @@ typing.cast(typing.Any, IInstanceRef).__jsii_proxy_class__ = lambda : _IInstance
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_sso.IPermissionSetRef")
-class IPermissionSetRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IPermissionSetRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a PermissionSet.
 
     :stability: experimental
@@ -1381,6 +1405,7 @@ class IPermissionSetRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Proto
 
 class _IPermissionSetRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a PermissionSet.
 

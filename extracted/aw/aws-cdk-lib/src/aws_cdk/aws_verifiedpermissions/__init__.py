@@ -71,6 +71,7 @@ import constructs as _constructs_77d1e7e8
 from .. import (
     CfnResource as _CfnResource_9df397a6,
     CfnTag as _CfnTag_f6864754,
+    IEnvironmentAware as _IEnvironmentAware_a408b00d,
     IInspectable as _IInspectable_c2943556,
     IResolvable as _IResolvable_da3f097b,
     ITaggableV2 as _ITaggableV2_4e6798f8,
@@ -546,7 +547,11 @@ class CfnPolicyTemplateProps:
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_verifiedpermissions.IIdentitySourceRef")
-class IIdentitySourceRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IIdentitySourceRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a IdentitySource.
 
     :stability: experimental
@@ -564,6 +569,7 @@ class IIdentitySourceRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Prot
 
 class _IIdentitySourceRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a IdentitySource.
 
@@ -586,7 +592,11 @@ typing.cast(typing.Any, IIdentitySourceRef).__jsii_proxy_class__ = lambda : _IId
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_verifiedpermissions.IPolicyRef")
-class IPolicyRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IPolicyRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Policy.
 
     :stability: experimental
@@ -604,6 +614,7 @@ class IPolicyRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IPolicyRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Policy.
 
@@ -626,7 +637,11 @@ typing.cast(typing.Any, IPolicyRef).__jsii_proxy_class__ = lambda : _IPolicyRefP
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_verifiedpermissions.IPolicyStoreRef")
-class IPolicyStoreRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IPolicyStoreRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a PolicyStore.
 
     :stability: experimental
@@ -644,6 +659,7 @@ class IPolicyStoreRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protoco
 
 class _IPolicyStoreRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a PolicyStore.
 
@@ -666,7 +682,11 @@ typing.cast(typing.Any, IPolicyStoreRef).__jsii_proxy_class__ = lambda : _IPolic
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_verifiedpermissions.IPolicyTemplateRef")
-class IPolicyTemplateRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IPolicyTemplateRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a PolicyTemplate.
 
     :stability: experimental
@@ -684,6 +704,7 @@ class IPolicyTemplateRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Prot
 
 class _IPolicyTemplateRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a PolicyTemplate.
 

@@ -61,6 +61,7 @@ import constructs as _constructs_77d1e7e8
 from .. import (
     CfnResource as _CfnResource_9df397a6,
     CfnTag as _CfnTag_f6864754,
+    IEnvironmentAware as _IEnvironmentAware_a408b00d,
     IInspectable as _IInspectable_c2943556,
     IResolvable as _IResolvable_da3f097b,
     ITaggable as _ITaggable_36806126,
@@ -1970,6 +1971,7 @@ class EventTriggerReference:
 )
 class ICalculatedAttributeDefinitionRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a CalculatedAttributeDefinition.
@@ -1991,6 +1993,7 @@ class ICalculatedAttributeDefinitionRef(
 
 class _ICalculatedAttributeDefinitionRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a CalculatedAttributeDefinition.
 
@@ -2015,7 +2018,11 @@ typing.cast(typing.Any, ICalculatedAttributeDefinitionRef).__jsii_proxy_class__ 
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_customerprofiles.IDomainRef")
-class IDomainRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IDomainRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Domain.
 
     :stability: experimental
@@ -2033,6 +2040,7 @@ class IDomainRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IDomainRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Domain.
 
@@ -2055,7 +2063,11 @@ typing.cast(typing.Any, IDomainRef).__jsii_proxy_class__ = lambda : _IDomainRefP
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_customerprofiles.IEventStreamRef")
-class IEventStreamRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IEventStreamRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a EventStream.
 
     :stability: experimental
@@ -2073,6 +2085,7 @@ class IEventStreamRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protoco
 
 class _IEventStreamRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a EventStream.
 
@@ -2095,7 +2108,11 @@ typing.cast(typing.Any, IEventStreamRef).__jsii_proxy_class__ = lambda : _IEvent
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_customerprofiles.IEventTriggerRef")
-class IEventTriggerRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IEventTriggerRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a EventTrigger.
 
     :stability: experimental
@@ -2113,6 +2130,7 @@ class IEventTriggerRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protoc
 
 class _IEventTriggerRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a EventTrigger.
 
@@ -2135,7 +2153,11 @@ typing.cast(typing.Any, IEventTriggerRef).__jsii_proxy_class__ = lambda : _IEven
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_customerprofiles.IIntegrationRef")
-class IIntegrationRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IIntegrationRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Integration.
 
     :stability: experimental
@@ -2153,6 +2175,7 @@ class IIntegrationRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protoco
 
 class _IIntegrationRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Integration.
 
@@ -2175,7 +2198,11 @@ typing.cast(typing.Any, IIntegrationRef).__jsii_proxy_class__ = lambda : _IInteg
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_customerprofiles.IObjectTypeRef")
-class IObjectTypeRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IObjectTypeRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a ObjectType.
 
     :stability: experimental
@@ -2193,6 +2220,7 @@ class IObjectTypeRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol
 
 class _IObjectTypeRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a ObjectType.
 
@@ -2217,6 +2245,7 @@ typing.cast(typing.Any, IObjectTypeRef).__jsii_proxy_class__ = lambda : _IObject
 @jsii.interface(jsii_type="aws-cdk-lib.aws_customerprofiles.ISegmentDefinitionRef")
 class ISegmentDefinitionRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a SegmentDefinition.
@@ -2236,6 +2265,7 @@ class ISegmentDefinitionRef(
 
 class _ISegmentDefinitionRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a SegmentDefinition.
 

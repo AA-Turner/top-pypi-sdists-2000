@@ -991,6 +991,7 @@ from .. import (
     CfnResource as _CfnResource_9df397a6,
     CfnTag as _CfnTag_f6864754,
     Duration as _Duration_4839e8c3,
+    IEnvironmentAware as _IEnvironmentAware_a408b00d,
     IInspectable as _IInspectable_c2943556,
     IResolvable as _IResolvable_da3f097b,
     IResource as _IResource_c80c4260,
@@ -7888,7 +7889,11 @@ typing.cast(typing.Any, IGatewayRoute).__jsii_proxy_class__ = lambda : _IGateway
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_appmesh.IGatewayRouteRef")
-class IGatewayRouteRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IGatewayRouteRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a GatewayRoute.
 
     :stability: experimental
@@ -7906,6 +7911,7 @@ class IGatewayRouteRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protoc
 
 class _IGatewayRouteRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a GatewayRoute.
 
@@ -8147,7 +8153,11 @@ typing.cast(typing.Any, IMesh).__jsii_proxy_class__ = lambda : _IMeshProxy
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_appmesh.IMeshRef")
-class IMeshRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IMeshRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Mesh.
 
     :stability: experimental
@@ -8165,6 +8175,7 @@ class IMeshRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IMeshRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Mesh.
 
@@ -8251,7 +8262,11 @@ typing.cast(typing.Any, IRoute).__jsii_proxy_class__ = lambda : _IRouteProxy
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_appmesh.IRouteRef")
-class IRouteRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IRouteRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Route.
 
     :stability: experimental
@@ -8269,6 +8284,7 @@ class IRouteRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IRouteRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Route.
 
@@ -8419,7 +8435,11 @@ typing.cast(typing.Any, IVirtualGateway).__jsii_proxy_class__ = lambda : _IVirtu
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_appmesh.IVirtualGatewayRef")
-class IVirtualGatewayRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IVirtualGatewayRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a VirtualGateway.
 
     :stability: experimental
@@ -8437,6 +8457,7 @@ class IVirtualGatewayRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Prot
 
 class _IVirtualGatewayRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a VirtualGateway.
 
@@ -8556,7 +8577,11 @@ typing.cast(typing.Any, IVirtualNode).__jsii_proxy_class__ = lambda : _IVirtualN
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_appmesh.IVirtualNodeRef")
-class IVirtualNodeRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IVirtualNodeRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a VirtualNode.
 
     :stability: experimental
@@ -8574,6 +8599,7 @@ class IVirtualNodeRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protoco
 
 class _IVirtualNodeRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a VirtualNode.
 
@@ -8697,7 +8723,11 @@ typing.cast(typing.Any, IVirtualRouter).__jsii_proxy_class__ = lambda : _IVirtua
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_appmesh.IVirtualRouterRef")
-class IVirtualRouterRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IVirtualRouterRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a VirtualRouter.
 
     :stability: experimental
@@ -8715,6 +8745,7 @@ class IVirtualRouterRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Proto
 
 class _IVirtualRouterRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a VirtualRouter.
 
@@ -8801,7 +8832,11 @@ typing.cast(typing.Any, IVirtualService).__jsii_proxy_class__ = lambda : _IVirtu
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_appmesh.IVirtualServiceRef")
-class IVirtualServiceRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IVirtualServiceRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a VirtualService.
 
     :stability: experimental
@@ -8819,6 +8854,7 @@ class IVirtualServiceRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Prot
 
 class _IVirtualServiceRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a VirtualService.
 

@@ -21,6 +21,7 @@ Currently supported are:
   * [Invoke an API Destination](#invoke-an-api-destination)
   * [Invoke an AppSync GraphQL API](#invoke-an-appsync-graphql-api)
   * [Put an event on an EventBridge bus](#put-an-event-on-an-eventbridge-bus)
+  * [Put an event on a Firehose delivery stream](#put-an-event-on-a-firehose-delivery-stream)
   * [Run an ECS Task](#run-an-ecs-task)
 
     * [Tagging Tasks](#tagging-tasks)
@@ -523,6 +524,28 @@ rule.add_target(targets.EventBus(
     events.EventBus.from_event_bus_arn(self, "External", "arn:aws:events:eu-west-1:999999999999:event-bus/test-bus")))
 ```
 
+## Put an event on a Firehose delivery stream
+
+Use the `FirehoseDeliveryStream` target to put event to an Amazon Data Firehose delivery stream.
+
+The code snippet below creates the scheduled event rule that put events to an Amazon Data Firehose delivery stream.
+
+```python
+import aws_cdk.aws_kinesisfirehose as firehose
+import aws_cdk.aws_s3 as s3
+
+# bucket: s3.Bucket
+
+stream = firehose.DeliveryStream(self, "DeliveryStream",
+    destination=firehose.S3Bucket(bucket)
+)
+
+rule = events.Rule(self, "Rule",
+    schedule=events.Schedule.expression("rate(1 minute)")
+)
+rule.add_target(targets.FirehoseDeliveryStream(stream))
+```
+
 ## Run an ECS Task
 
 Use the `EcsTask` target to run an ECS Task.
@@ -793,7 +816,10 @@ from ..aws_iam import (
     IRole as _IRole_235f5d8e, PolicyStatement as _PolicyStatement_0fe33853
 )
 from ..aws_kinesis import IStream as _IStream_4e2457d2
-from ..aws_kinesisfirehose import CfnDeliveryStream as _CfnDeliveryStream_8f3b1735
+from ..aws_kinesisfirehose import (
+    CfnDeliveryStream as _CfnDeliveryStream_8f3b1735,
+    IDeliveryStream as _IDeliveryStream_8f118861,
+)
 from ..aws_lambda import IFunction as _IFunction_6adb0ab8
 from ..aws_logs import ILogGroup as _ILogGroup_3c4fa718
 from ..aws_secretsmanager import ISecret as _ISecret_6e020e6a
@@ -2372,15 +2398,142 @@ class EventBusProps:
         )
 
 
+@jsii.implements(_IRuleTarget_7a91f454)
+class FirehoseDeliveryStream(
+    metaclass=jsii.JSIIMeta,
+    jsii_type="aws-cdk-lib.aws_events_targets.FirehoseDeliveryStream",
+):
+    '''Customize the Amazon Data Firehose Stream Event Target.
+
+    :exampleMetadata: infused
+
+    Example::
+
+        import aws_cdk.aws_kinesisfirehose as firehose
+        import aws_cdk.aws_s3 as s3
+        
+        # bucket: s3.Bucket
+        
+        stream = firehose.DeliveryStream(self, "DeliveryStream",
+            destination=firehose.S3Bucket(bucket)
+        )
+        
+        rule = events.Rule(self, "Rule",
+            schedule=events.Schedule.expression("rate(1 minute)")
+        )
+        rule.add_target(targets.FirehoseDeliveryStream(stream))
+    '''
+
+    def __init__(
+        self,
+        delivery_stream: _IDeliveryStream_8f118861,
+        *,
+        message: typing.Optional[_RuleTargetInput_6beca786] = None,
+    ) -> None:
+        '''
+        :param delivery_stream: -
+        :param message: The message to send to the stream. Must be a valid JSON text passed to the target stream. Default: - the entire Event Bridge event
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__e8b83537633e15491c91cd6cebe1eddb6bc388617c53b754a40f318f493dc48e)
+            check_type(argname="argument delivery_stream", value=delivery_stream, expected_type=type_hints["delivery_stream"])
+        props = FirehoseDeliveryStreamProps(message=message)
+
+        jsii.create(self.__class__, self, [delivery_stream, props])
+
+    @jsii.member(jsii_name="bind")
+    def bind(
+        self,
+        _rule: _IRule_af9e3d28,
+        _id: typing.Optional[builtins.str] = None,
+    ) -> _RuleTargetConfig_4e70fe03:
+        '''Returns a RuleTarget that can be used to trigger this Firehose Stream as a result from a Event Bridge event.
+
+        :param _rule: -
+        :param _id: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__45499f815ce457b36825c13b8a0a6ffd1d6994523698febc614678776c341fb7)
+            check_type(argname="argument _rule", value=_rule, expected_type=type_hints["_rule"])
+            check_type(argname="argument _id", value=_id, expected_type=type_hints["_id"])
+        return typing.cast(_RuleTargetConfig_4e70fe03, jsii.invoke(self, "bind", [_rule, _id]))
+
+
+@jsii.data_type(
+    jsii_type="aws-cdk-lib.aws_events_targets.FirehoseDeliveryStreamProps",
+    jsii_struct_bases=[],
+    name_mapping={"message": "message"},
+)
+class FirehoseDeliveryStreamProps:
+    def __init__(
+        self,
+        *,
+        message: typing.Optional[_RuleTargetInput_6beca786] = None,
+    ) -> None:
+        '''Customize the Amazon Data Firehose Stream Event Target.
+
+        :param message: The message to send to the stream. Must be a valid JSON text passed to the target stream. Default: - the entire Event Bridge event
+
+        :exampleMetadata: fixture=_generated
+
+        Example::
+
+            # The code below shows an example of how to instantiate this type.
+            # The values are placeholders you should change.
+            from aws_cdk import aws_events as events
+            from aws_cdk import aws_events_targets as events_targets
+            
+            # rule_target_input: events.RuleTargetInput
+            
+            firehose_delivery_stream_props = events_targets.FirehoseDeliveryStreamProps(
+                message=rule_target_input
+            )
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__c2311008fe7ae7c5e650063e35f32620f673ed3b0110bcab83f56ce21512d70c)
+            check_type(argname="argument message", value=message, expected_type=type_hints["message"])
+        self._values: typing.Dict[builtins.str, typing.Any] = {}
+        if message is not None:
+            self._values["message"] = message
+
+    @builtins.property
+    def message(self) -> typing.Optional[_RuleTargetInput_6beca786]:
+        '''The message to send to the stream.
+
+        Must be a valid JSON text passed to the target stream.
+
+        :default: - the entire Event Bridge event
+        '''
+        result = self._values.get("message")
+        return typing.cast(typing.Optional[_RuleTargetInput_6beca786], result)
+
+    def __eq__(self, rhs: typing.Any) -> builtins.bool:
+        return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+    def __ne__(self, rhs: typing.Any) -> builtins.bool:
+        return not (rhs == self)
+
+    def __repr__(self) -> str:
+        return "FirehoseDeliveryStreamProps(%s)" % ", ".join(
+            k + "=" + repr(v) for k, v in self._values.items()
+        )
+
+
 @jsii.interface(jsii_type="aws-cdk-lib.aws_events_targets.IDeliveryStream")
 class IDeliveryStream(_IResource_c80c4260, typing_extensions.Protocol):
-    '''Represents an Amazon Data Firehose delivery stream.'''
+    '''(deprecated) Represents an Amazon Data Firehose delivery stream.
+
+    :deprecated: Use aws_kinesisfirehose.IDeliveryStream
+
+    :stability: deprecated
+    '''
 
     @builtins.property
     @jsii.member(jsii_name="deliveryStreamArn")
     def delivery_stream_arn(self) -> builtins.str:
-        '''The ARN of the delivery stream.
+        '''(deprecated) The ARN of the delivery stream.
 
+        :stability: deprecated
         :attribute: true
         '''
         ...
@@ -2388,8 +2541,9 @@ class IDeliveryStream(_IResource_c80c4260, typing_extensions.Protocol):
     @builtins.property
     @jsii.member(jsii_name="deliveryStreamName")
     def delivery_stream_name(self) -> builtins.str:
-        '''The name of the delivery stream.
+        '''(deprecated) The name of the delivery stream.
 
+        :stability: deprecated
         :attribute: true
         '''
         ...
@@ -2398,15 +2552,21 @@ class IDeliveryStream(_IResource_c80c4260, typing_extensions.Protocol):
 class _IDeliveryStreamProxy(
     jsii.proxy_for(_IResource_c80c4260), # type: ignore[misc]
 ):
-    '''Represents an Amazon Data Firehose delivery stream.'''
+    '''(deprecated) Represents an Amazon Data Firehose delivery stream.
+
+    :deprecated: Use aws_kinesisfirehose.IDeliveryStream
+
+    :stability: deprecated
+    '''
 
     __jsii_type__: typing.ClassVar[str] = "aws-cdk-lib.aws_events_targets.IDeliveryStream"
 
     @builtins.property
     @jsii.member(jsii_name="deliveryStreamArn")
     def delivery_stream_arn(self) -> builtins.str:
-        '''The ARN of the delivery stream.
+        '''(deprecated) The ARN of the delivery stream.
 
+        :stability: deprecated
         :attribute: true
         '''
         return typing.cast(builtins.str, jsii.get(self, "deliveryStreamArn"))
@@ -2414,8 +2574,9 @@ class _IDeliveryStreamProxy(
     @builtins.property
     @jsii.member(jsii_name="deliveryStreamName")
     def delivery_stream_name(self) -> builtins.str:
-        '''The name of the delivery stream.
+        '''(deprecated) The name of the delivery stream.
 
+        :stability: deprecated
         :attribute: true
         '''
         return typing.cast(builtins.str, jsii.get(self, "deliveryStreamName"))
@@ -2494,7 +2655,7 @@ class KinesisFirehoseStream(
 ):
     '''(deprecated) Customize the Amazon Data Firehose Stream Event Target.
 
-    :deprecated: Use KinesisFirehoseStreamV2
+    :deprecated: Use FirehoseDeliveryStream
 
     :stability: deprecated
     :exampleMetadata: fixture=_generated
@@ -2523,7 +2684,7 @@ class KinesisFirehoseStream(
     ) -> None:
         '''
         :param stream: -
-        :param message: The message to send to the stream. Must be a valid JSON text passed to the target stream. Default: - the entire Event Bridge event
+        :param message: (deprecated) The message to send to the stream. Must be a valid JSON text passed to the target stream. Default: - the entire Event Bridge event
 
         :stability: deprecated
         '''
@@ -2565,10 +2726,13 @@ class KinesisFirehoseStreamProps:
         *,
         message: typing.Optional[_RuleTargetInput_6beca786] = None,
     ) -> None:
-        '''Customize the Amazon Data Firehose Stream Event Target.
+        '''(deprecated) Customize the Amazon Data Firehose Stream Event Target.
 
-        :param message: The message to send to the stream. Must be a valid JSON text passed to the target stream. Default: - the entire Event Bridge event
+        :param message: (deprecated) The message to send to the stream. Must be a valid JSON text passed to the target stream. Default: - the entire Event Bridge event
 
+        :deprecated: Use FirehoseDeliveryStreamProps
+
+        :stability: deprecated
         :exampleMetadata: fixture=_generated
 
         Example::
@@ -2593,11 +2757,13 @@ class KinesisFirehoseStreamProps:
 
     @builtins.property
     def message(self) -> typing.Optional[_RuleTargetInput_6beca786]:
-        '''The message to send to the stream.
+        '''(deprecated) The message to send to the stream.
 
         Must be a valid JSON text passed to the target stream.
 
         :default: - the entire Event Bridge event
+
+        :stability: deprecated
         '''
         result = self._values.get("message")
         return typing.cast(typing.Optional[_RuleTargetInput_6beca786], result)
@@ -2619,8 +2785,11 @@ class KinesisFirehoseStreamV2(
     metaclass=jsii.JSIIMeta,
     jsii_type="aws-cdk-lib.aws_events_targets.KinesisFirehoseStreamV2",
 ):
-    '''Customize the Amazon Data Firehose Stream Event Target V2 to support L2 Amazon Data Firehose Delivery Stream instead of L1 Cfn Firehose Delivery Stream.
+    '''(deprecated) Customize the Amazon Data Firehose Stream Event Target V2 to support L2 Amazon Data Firehose Delivery Stream instead of L1 Cfn Firehose Delivery Stream.
 
+    :deprecated: Use FirehoseDeliveryStream
+
+    :stability: deprecated
     :exampleMetadata: fixture=_generated
 
     Example::
@@ -2646,7 +2815,9 @@ class KinesisFirehoseStreamV2(
     ) -> None:
         '''
         :param stream: -
-        :param message: The message to send to the stream. Must be a valid JSON text passed to the target stream. Default: - the entire Event Bridge event
+        :param message: (deprecated) The message to send to the stream. Must be a valid JSON text passed to the target stream. Default: - the entire Event Bridge event
+
+        :stability: deprecated
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__e8230487c5e79599a4ad63af004c2c8350c2b25e209491350274d38019afa418)
@@ -2661,10 +2832,12 @@ class KinesisFirehoseStreamV2(
         _rule: _IRule_af9e3d28,
         _id: typing.Optional[builtins.str] = None,
     ) -> _RuleTargetConfig_4e70fe03:
-        '''Returns a RuleTarget that can be used to trigger this Firehose Stream as a result from a Event Bridge event.
+        '''(deprecated) Returns a RuleTarget that can be used to trigger this Firehose Stream as a result from a Event Bridge event.
 
         :param _rule: -
         :param _id: -
+
+        :stability: deprecated
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__3467ab0e593ed64d775dafc3b3fc1b1835fa2853c7ee8685668bf081dd189e44)
@@ -6121,6 +6294,8 @@ __all__ = [
     "EphemeralStorageOverride",
     "EventBus",
     "EventBusProps",
+    "FirehoseDeliveryStream",
+    "FirehoseDeliveryStreamProps",
     "IDeliveryStream",
     "InferenceAcceleratorOverride",
     "KinesisFirehoseStream",
@@ -6397,6 +6572,28 @@ def _typecheckingstub__5af20e134873490c1ac4788761972ccd53cd625edbd9b75c1c1f0b1a3
     *,
     dead_letter_queue: typing.Optional[_IQueue_7ed6f679] = None,
     role: typing.Optional[_IRole_235f5d8e] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__e8b83537633e15491c91cd6cebe1eddb6bc388617c53b754a40f318f493dc48e(
+    delivery_stream: _IDeliveryStream_8f118861,
+    *,
+    message: typing.Optional[_RuleTargetInput_6beca786] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__45499f815ce457b36825c13b8a0a6ffd1d6994523698febc614678776c341fb7(
+    _rule: _IRule_af9e3d28,
+    _id: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__c2311008fe7ae7c5e650063e35f32620f673ed3b0110bcab83f56ce21512d70c(
+    *,
+    message: typing.Optional[_RuleTargetInput_6beca786] = None,
 ) -> None:
     """Type checking stubs"""
     pass

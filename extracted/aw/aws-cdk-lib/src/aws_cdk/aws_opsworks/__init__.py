@@ -61,6 +61,7 @@ import constructs as _constructs_77d1e7e8
 from .. import (
     CfnResource as _CfnResource_9df397a6,
     CfnTag as _CfnTag_f6864754,
+    IEnvironmentAware as _IEnvironmentAware_a408b00d,
     IInspectable as _IInspectable_c2943556,
     IResolvable as _IResolvable_da3f097b,
     ITaggable as _ITaggable_36806126,
@@ -2243,7 +2244,11 @@ class ElasticLoadBalancerAttachmentReference:
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_opsworks.IAppRef")
-class IAppRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IAppRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a App.
 
     :stability: experimental
@@ -2261,6 +2266,7 @@ class IAppRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IAppRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a App.
 
@@ -2285,6 +2291,7 @@ typing.cast(typing.Any, IAppRef).__jsii_proxy_class__ = lambda : _IAppRefProxy
 @jsii.interface(jsii_type="aws-cdk-lib.aws_opsworks.IElasticLoadBalancerAttachmentRef")
 class IElasticLoadBalancerAttachmentRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a ElasticLoadBalancerAttachment.
@@ -2306,6 +2313,7 @@ class IElasticLoadBalancerAttachmentRef(
 
 class _IElasticLoadBalancerAttachmentRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a ElasticLoadBalancerAttachment.
 
@@ -2330,7 +2338,11 @@ typing.cast(typing.Any, IElasticLoadBalancerAttachmentRef).__jsii_proxy_class__ 
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_opsworks.IInstanceRef")
-class IInstanceRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IInstanceRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Instance.
 
     :stability: experimental
@@ -2348,6 +2360,7 @@ class IInstanceRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IInstanceRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Instance.
 
@@ -2370,7 +2383,11 @@ typing.cast(typing.Any, IInstanceRef).__jsii_proxy_class__ = lambda : _IInstance
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_opsworks.ILayerRef")
-class ILayerRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class ILayerRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Layer.
 
     :stability: experimental
@@ -2388,6 +2405,7 @@ class ILayerRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _ILayerRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Layer.
 
@@ -2410,7 +2428,11 @@ typing.cast(typing.Any, ILayerRef).__jsii_proxy_class__ = lambda : _ILayerRefPro
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_opsworks.IStackRef")
-class IStackRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IStackRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Stack.
 
     :stability: experimental
@@ -2428,6 +2450,7 @@ class IStackRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IStackRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Stack.
 
@@ -2450,7 +2473,11 @@ typing.cast(typing.Any, IStackRef).__jsii_proxy_class__ = lambda : _IStackRefPro
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_opsworks.IUserProfileRef")
-class IUserProfileRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IUserProfileRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a UserProfile.
 
     :stability: experimental
@@ -2468,6 +2495,7 @@ class IUserProfileRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protoco
 
 class _IUserProfileRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a UserProfile.
 
@@ -2490,7 +2518,11 @@ typing.cast(typing.Any, IUserProfileRef).__jsii_proxy_class__ = lambda : _IUserP
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_opsworks.IVolumeRef")
-class IVolumeRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IVolumeRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Volume.
 
     :stability: experimental
@@ -2508,6 +2540,7 @@ class IVolumeRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IVolumeRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Volume.
 

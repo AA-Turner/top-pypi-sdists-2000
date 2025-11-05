@@ -71,6 +71,7 @@ import constructs as _constructs_77d1e7e8
 from .. import (
     CfnResource as _CfnResource_9df397a6,
     CfnTag as _CfnTag_f6864754,
+    IEnvironmentAware as _IEnvironmentAware_a408b00d,
     IInspectable as _IInspectable_c2943556,
     IResolvable as _IResolvable_da3f097b,
     ITaggableV2 as _ITaggableV2_4e6798f8,
@@ -809,6 +810,7 @@ class EventRuleReference:
 @jsii.interface(jsii_type="aws-cdk-lib.aws_notifications.IChannelAssociationRef")
 class IChannelAssociationRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a ChannelAssociation.
@@ -828,6 +830,7 @@ class IChannelAssociationRef(
 
 class _IChannelAssociationRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a ChannelAssociation.
 
@@ -850,7 +853,11 @@ typing.cast(typing.Any, IChannelAssociationRef).__jsii_proxy_class__ = lambda : 
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_notifications.IEventRuleRef")
-class IEventRuleRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IEventRuleRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a EventRule.
 
     :stability: experimental
@@ -868,6 +875,7 @@ class IEventRuleRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol)
 
 class _IEventRuleRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a EventRule.
 
@@ -894,6 +902,7 @@ typing.cast(typing.Any, IEventRuleRef).__jsii_proxy_class__ = lambda : _IEventRu
 )
 class IManagedNotificationAccountContactAssociationRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a ManagedNotificationAccountContactAssociation.
@@ -915,6 +924,7 @@ class IManagedNotificationAccountContactAssociationRef(
 
 class _IManagedNotificationAccountContactAssociationRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a ManagedNotificationAccountContactAssociation.
 
@@ -943,6 +953,7 @@ typing.cast(typing.Any, IManagedNotificationAccountContactAssociationRef).__jsii
 )
 class IManagedNotificationAdditionalChannelAssociationRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a ManagedNotificationAdditionalChannelAssociation.
@@ -964,6 +975,7 @@ class IManagedNotificationAdditionalChannelAssociationRef(
 
 class _IManagedNotificationAdditionalChannelAssociationRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a ManagedNotificationAdditionalChannelAssociation.
 
@@ -992,6 +1004,7 @@ typing.cast(typing.Any, IManagedNotificationAdditionalChannelAssociationRef).__j
 )
 class INotificationConfigurationRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a NotificationConfiguration.
@@ -1011,6 +1024,7 @@ class INotificationConfigurationRef(
 
 class _INotificationConfigurationRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a NotificationConfiguration.
 
@@ -1033,7 +1047,11 @@ typing.cast(typing.Any, INotificationConfigurationRef).__jsii_proxy_class__ = la
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_notifications.INotificationHubRef")
-class INotificationHubRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class INotificationHubRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a NotificationHub.
 
     :stability: experimental
@@ -1051,6 +1069,7 @@ class INotificationHubRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Pro
 
 class _INotificationHubRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a NotificationHub.
 
@@ -1077,6 +1096,7 @@ typing.cast(typing.Any, INotificationHubRef).__jsii_proxy_class__ = lambda : _IN
 )
 class IOrganizationalUnitAssociationRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a OrganizationalUnitAssociation.
@@ -1098,6 +1118,7 @@ class IOrganizationalUnitAssociationRef(
 
 class _IOrganizationalUnitAssociationRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a OrganizationalUnitAssociation.
 

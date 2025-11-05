@@ -39,6 +39,7 @@ import constructs as _constructs_77d1e7e8
 from .. import (
     CfnResource as _CfnResource_9df397a6,
     CfnTag as _CfnTag_f6864754,
+    IEnvironmentAware as _IEnvironmentAware_a408b00d,
     IInspectable as _IInspectable_c2943556,
     IResolvable as _IResolvable_da3f097b,
     ITaggable as _ITaggable_36806126,
@@ -2892,7 +2893,11 @@ class HookVersionReference:
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_cloudformation.ICustomResourceRef")
-class ICustomResourceRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class ICustomResourceRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a CustomResource.
 
     :stability: experimental
@@ -2910,6 +2915,7 @@ class ICustomResourceRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Prot
 
 class _ICustomResourceRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a CustomResource.
 
@@ -2932,7 +2938,11 @@ typing.cast(typing.Any, ICustomResourceRef).__jsii_proxy_class__ = lambda : _ICu
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_cloudformation.IGuardHookRef")
-class IGuardHookRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IGuardHookRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a GuardHook.
 
     :stability: experimental
@@ -2950,6 +2960,7 @@ class IGuardHookRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol)
 
 class _IGuardHookRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a GuardHook.
 
@@ -2974,6 +2985,7 @@ typing.cast(typing.Any, IGuardHookRef).__jsii_proxy_class__ = lambda : _IGuardHo
 @jsii.interface(jsii_type="aws-cdk-lib.aws_cloudformation.IHookDefaultVersionRef")
 class IHookDefaultVersionRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a HookDefaultVersion.
@@ -2993,6 +3005,7 @@ class IHookDefaultVersionRef(
 
 class _IHookDefaultVersionRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a HookDefaultVersion.
 
@@ -3015,7 +3028,11 @@ typing.cast(typing.Any, IHookDefaultVersionRef).__jsii_proxy_class__ = lambda : 
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_cloudformation.IHookTypeConfigRef")
-class IHookTypeConfigRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IHookTypeConfigRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a HookTypeConfig.
 
     :stability: experimental
@@ -3033,6 +3050,7 @@ class IHookTypeConfigRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Prot
 
 class _IHookTypeConfigRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a HookTypeConfig.
 
@@ -3055,7 +3073,11 @@ typing.cast(typing.Any, IHookTypeConfigRef).__jsii_proxy_class__ = lambda : _IHo
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_cloudformation.IHookVersionRef")
-class IHookVersionRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IHookVersionRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a HookVersion.
 
     :stability: experimental
@@ -3073,6 +3095,7 @@ class IHookVersionRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protoco
 
 class _IHookVersionRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a HookVersion.
 
@@ -3095,7 +3118,11 @@ typing.cast(typing.Any, IHookVersionRef).__jsii_proxy_class__ = lambda : _IHookV
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_cloudformation.ILambdaHookRef")
-class ILambdaHookRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class ILambdaHookRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a LambdaHook.
 
     :stability: experimental
@@ -3113,6 +3140,7 @@ class ILambdaHookRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol
 
 class _ILambdaHookRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a LambdaHook.
 
@@ -3135,7 +3163,11 @@ typing.cast(typing.Any, ILambdaHookRef).__jsii_proxy_class__ = lambda : _ILambda
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_cloudformation.IMacroRef")
-class IMacroRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IMacroRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Macro.
 
     :stability: experimental
@@ -3153,6 +3185,7 @@ class IMacroRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IMacroRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Macro.
 
@@ -3177,6 +3210,7 @@ typing.cast(typing.Any, IMacroRef).__jsii_proxy_class__ = lambda : _IMacroRefPro
 @jsii.interface(jsii_type="aws-cdk-lib.aws_cloudformation.IModuleDefaultVersionRef")
 class IModuleDefaultVersionRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a ModuleDefaultVersion.
@@ -3196,6 +3230,7 @@ class IModuleDefaultVersionRef(
 
 class _IModuleDefaultVersionRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a ModuleDefaultVersion.
 
@@ -3218,7 +3253,11 @@ typing.cast(typing.Any, IModuleDefaultVersionRef).__jsii_proxy_class__ = lambda 
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_cloudformation.IModuleVersionRef")
-class IModuleVersionRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IModuleVersionRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a ModuleVersion.
 
     :stability: experimental
@@ -3236,6 +3275,7 @@ class IModuleVersionRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Proto
 
 class _IModuleVersionRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a ModuleVersion.
 
@@ -3260,6 +3300,7 @@ typing.cast(typing.Any, IModuleVersionRef).__jsii_proxy_class__ = lambda : _IMod
 @jsii.interface(jsii_type="aws-cdk-lib.aws_cloudformation.IPublicTypeVersionRef")
 class IPublicTypeVersionRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a PublicTypeVersion.
@@ -3279,6 +3320,7 @@ class IPublicTypeVersionRef(
 
 class _IPublicTypeVersionRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a PublicTypeVersion.
 
@@ -3301,7 +3343,11 @@ typing.cast(typing.Any, IPublicTypeVersionRef).__jsii_proxy_class__ = lambda : _
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_cloudformation.IPublisherRef")
-class IPublisherRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IPublisherRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Publisher.
 
     :stability: experimental
@@ -3319,6 +3365,7 @@ class IPublisherRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol)
 
 class _IPublisherRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Publisher.
 
@@ -3343,6 +3390,7 @@ typing.cast(typing.Any, IPublisherRef).__jsii_proxy_class__ = lambda : _IPublish
 @jsii.interface(jsii_type="aws-cdk-lib.aws_cloudformation.IResourceDefaultVersionRef")
 class IResourceDefaultVersionRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a ResourceDefaultVersion.
@@ -3362,6 +3410,7 @@ class IResourceDefaultVersionRef(
 
 class _IResourceDefaultVersionRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a ResourceDefaultVersion.
 
@@ -3384,7 +3433,11 @@ typing.cast(typing.Any, IResourceDefaultVersionRef).__jsii_proxy_class__ = lambd
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_cloudformation.IResourceVersionRef")
-class IResourceVersionRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IResourceVersionRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a ResourceVersion.
 
     :stability: experimental
@@ -3402,6 +3455,7 @@ class IResourceVersionRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Pro
 
 class _IResourceVersionRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a ResourceVersion.
 
@@ -3424,7 +3478,11 @@ typing.cast(typing.Any, IResourceVersionRef).__jsii_proxy_class__ = lambda : _IR
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_cloudformation.IStackRef")
-class IStackRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IStackRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Stack.
 
     :stability: experimental
@@ -3442,6 +3500,7 @@ class IStackRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IStackRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Stack.
 
@@ -3464,7 +3523,11 @@ typing.cast(typing.Any, IStackRef).__jsii_proxy_class__ = lambda : _IStackRefPro
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_cloudformation.IStackSetRef")
-class IStackSetRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IStackSetRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a StackSet.
 
     :stability: experimental
@@ -3482,6 +3545,7 @@ class IStackSetRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IStackSetRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a StackSet.
 
@@ -3504,7 +3568,11 @@ typing.cast(typing.Any, IStackSetRef).__jsii_proxy_class__ = lambda : _IStackSet
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_cloudformation.ITypeActivationRef")
-class ITypeActivationRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class ITypeActivationRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a TypeActivation.
 
     :stability: experimental
@@ -3522,6 +3590,7 @@ class ITypeActivationRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Prot
 
 class _ITypeActivationRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a TypeActivation.
 
@@ -3546,6 +3615,7 @@ typing.cast(typing.Any, ITypeActivationRef).__jsii_proxy_class__ = lambda : _ITy
 @jsii.interface(jsii_type="aws-cdk-lib.aws_cloudformation.IWaitConditionHandleRef")
 class IWaitConditionHandleRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a WaitConditionHandle.
@@ -3565,6 +3635,7 @@ class IWaitConditionHandleRef(
 
 class _IWaitConditionHandleRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a WaitConditionHandle.
 
@@ -3587,7 +3658,11 @@ typing.cast(typing.Any, IWaitConditionHandleRef).__jsii_proxy_class__ = lambda :
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_cloudformation.IWaitConditionRef")
-class IWaitConditionRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IWaitConditionRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a WaitCondition.
 
     :stability: experimental
@@ -3605,6 +3680,7 @@ class IWaitConditionRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Proto
 
 class _IWaitConditionRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a WaitCondition.
 

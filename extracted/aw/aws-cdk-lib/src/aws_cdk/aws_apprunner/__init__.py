@@ -66,6 +66,7 @@ import constructs as _constructs_77d1e7e8
 from .. import (
     CfnResource as _CfnResource_9df397a6,
     CfnTag as _CfnTag_f6864754,
+    IEnvironmentAware as _IEnvironmentAware_a408b00d,
     IInspectable as _IInspectable_c2943556,
     IResolvable as _IResolvable_da3f097b,
     ITaggable as _ITaggable_36806126,
@@ -923,6 +924,7 @@ class CfnVpcIngressConnectionProps:
 @jsii.interface(jsii_type="aws-cdk-lib.aws_apprunner.IAutoScalingConfigurationRef")
 class IAutoScalingConfigurationRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a AutoScalingConfiguration.
@@ -942,6 +944,7 @@ class IAutoScalingConfigurationRef(
 
 class _IAutoScalingConfigurationRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a AutoScalingConfiguration.
 
@@ -966,6 +969,7 @@ typing.cast(typing.Any, IAutoScalingConfigurationRef).__jsii_proxy_class__ = lam
 @jsii.interface(jsii_type="aws-cdk-lib.aws_apprunner.IObservabilityConfigurationRef")
 class IObservabilityConfigurationRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a ObservabilityConfiguration.
@@ -985,6 +989,7 @@ class IObservabilityConfigurationRef(
 
 class _IObservabilityConfigurationRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a ObservabilityConfiguration.
 
@@ -1007,7 +1012,11 @@ typing.cast(typing.Any, IObservabilityConfigurationRef).__jsii_proxy_class__ = l
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_apprunner.IServiceRef")
-class IServiceRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IServiceRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Service.
 
     :stability: experimental
@@ -1025,6 +1034,7 @@ class IServiceRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IServiceRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Service.
 
@@ -1047,7 +1057,11 @@ typing.cast(typing.Any, IServiceRef).__jsii_proxy_class__ = lambda : _IServiceRe
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_apprunner.IVpcConnectorRef")
-class IVpcConnectorRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IVpcConnectorRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a VpcConnector.
 
     :stability: experimental
@@ -1065,6 +1079,7 @@ class IVpcConnectorRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protoc
 
 class _IVpcConnectorRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a VpcConnector.
 
@@ -1089,6 +1104,7 @@ typing.cast(typing.Any, IVpcConnectorRef).__jsii_proxy_class__ = lambda : _IVpcC
 @jsii.interface(jsii_type="aws-cdk-lib.aws_apprunner.IVpcIngressConnectionRef")
 class IVpcIngressConnectionRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a VpcIngressConnection.
@@ -1108,6 +1124,7 @@ class IVpcIngressConnectionRef(
 
 class _IVpcIngressConnectionRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a VpcIngressConnection.
 

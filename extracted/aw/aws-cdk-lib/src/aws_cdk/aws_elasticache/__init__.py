@@ -61,6 +61,7 @@ import constructs as _constructs_77d1e7e8
 from .. import (
     CfnResource as _CfnResource_9df397a6,
     CfnTag as _CfnTag_f6864754,
+    IEnvironmentAware as _IEnvironmentAware_a408b00d,
     IInspectable as _IInspectable_c2943556,
     IResolvable as _IResolvable_da3f097b,
     ITaggable as _ITaggable_36806126,
@@ -2985,7 +2986,11 @@ class GlobalReplicationGroupReference:
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_elasticache.ICacheClusterRef")
-class ICacheClusterRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class ICacheClusterRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a CacheCluster.
 
     :stability: experimental
@@ -3003,6 +3008,7 @@ class ICacheClusterRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protoc
 
 class _ICacheClusterRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a CacheCluster.
 
@@ -3027,6 +3033,7 @@ typing.cast(typing.Any, ICacheClusterRef).__jsii_proxy_class__ = lambda : _ICach
 @jsii.interface(jsii_type="aws-cdk-lib.aws_elasticache.IGlobalReplicationGroupRef")
 class IGlobalReplicationGroupRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a GlobalReplicationGroup.
@@ -3046,6 +3053,7 @@ class IGlobalReplicationGroupRef(
 
 class _IGlobalReplicationGroupRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a GlobalReplicationGroup.
 
@@ -3068,7 +3076,11 @@ typing.cast(typing.Any, IGlobalReplicationGroupRef).__jsii_proxy_class__ = lambd
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_elasticache.IParameterGroupRef")
-class IParameterGroupRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IParameterGroupRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a ParameterGroup.
 
     :stability: experimental
@@ -3086,6 +3098,7 @@ class IParameterGroupRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Prot
 
 class _IParameterGroupRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a ParameterGroup.
 
@@ -3108,7 +3121,11 @@ typing.cast(typing.Any, IParameterGroupRef).__jsii_proxy_class__ = lambda : _IPa
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_elasticache.IReplicationGroupRef")
-class IReplicationGroupRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IReplicationGroupRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a ReplicationGroup.
 
     :stability: experimental
@@ -3126,6 +3143,7 @@ class IReplicationGroupRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Pr
 
 class _IReplicationGroupRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a ReplicationGroup.
 
@@ -3150,6 +3168,7 @@ typing.cast(typing.Any, IReplicationGroupRef).__jsii_proxy_class__ = lambda : _I
 @jsii.interface(jsii_type="aws-cdk-lib.aws_elasticache.ISecurityGroupIngressRef")
 class ISecurityGroupIngressRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a SecurityGroupIngress.
@@ -3169,6 +3188,7 @@ class ISecurityGroupIngressRef(
 
 class _ISecurityGroupIngressRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a SecurityGroupIngress.
 
@@ -3191,7 +3211,11 @@ typing.cast(typing.Any, ISecurityGroupIngressRef).__jsii_proxy_class__ = lambda 
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_elasticache.ISecurityGroupRef")
-class ISecurityGroupRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class ISecurityGroupRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a SecurityGroup.
 
     :stability: experimental
@@ -3209,6 +3233,7 @@ class ISecurityGroupRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Proto
 
 class _ISecurityGroupRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a SecurityGroup.
 
@@ -3231,7 +3256,11 @@ typing.cast(typing.Any, ISecurityGroupRef).__jsii_proxy_class__ = lambda : _ISec
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_elasticache.IServerlessCacheRef")
-class IServerlessCacheRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IServerlessCacheRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a ServerlessCache.
 
     :stability: experimental
@@ -3249,6 +3278,7 @@ class IServerlessCacheRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Pro
 
 class _IServerlessCacheRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a ServerlessCache.
 
@@ -3271,7 +3301,11 @@ typing.cast(typing.Any, IServerlessCacheRef).__jsii_proxy_class__ = lambda : _IS
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_elasticache.ISubnetGroupRef")
-class ISubnetGroupRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class ISubnetGroupRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a SubnetGroup.
 
     :stability: experimental
@@ -3289,6 +3323,7 @@ class ISubnetGroupRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protoco
 
 class _ISubnetGroupRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a SubnetGroup.
 
@@ -3311,7 +3346,11 @@ typing.cast(typing.Any, ISubnetGroupRef).__jsii_proxy_class__ = lambda : _ISubne
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_elasticache.IUserGroupRef")
-class IUserGroupRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IUserGroupRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a UserGroup.
 
     :stability: experimental
@@ -3329,6 +3368,7 @@ class IUserGroupRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol)
 
 class _IUserGroupRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a UserGroup.
 
@@ -3351,7 +3391,11 @@ typing.cast(typing.Any, IUserGroupRef).__jsii_proxy_class__ = lambda : _IUserGro
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_elasticache.IUserRef")
-class IUserRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IUserRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a User.
 
     :stability: experimental
@@ -3369,6 +3413,7 @@ class IUserRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IUserRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a User.
 

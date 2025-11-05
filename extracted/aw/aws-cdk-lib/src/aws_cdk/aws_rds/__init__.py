@@ -1985,6 +1985,7 @@ from .. import (
     CfnResource as _CfnResource_9df397a6,
     CfnTag as _CfnTag_f6864754,
     Duration as _Duration_4839e8c3,
+    IEnvironmentAware as _IEnvironmentAware_a408b00d,
     IInspectable as _IInspectable_c2943556,
     IResolvable as _IResolvable_da3f097b,
     IResource as _IResource_c80c4260,
@@ -21616,6 +21617,7 @@ typing.cast(typing.Any, IClusterInstance).__jsii_proxy_class__ = lambda : _IClus
 @jsii.interface(jsii_type="aws-cdk-lib.aws_rds.ICustomDBEngineVersionRef")
 class ICustomDBEngineVersionRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a CustomDBEngineVersion.
@@ -21635,6 +21637,7 @@ class ICustomDBEngineVersionRef(
 
 class _ICustomDBEngineVersionRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a CustomDBEngineVersion.
 
@@ -21659,6 +21662,7 @@ typing.cast(typing.Any, ICustomDBEngineVersionRef).__jsii_proxy_class__ = lambda
 @jsii.interface(jsii_type="aws-cdk-lib.aws_rds.IDBClusterParameterGroupRef")
 class IDBClusterParameterGroupRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a DBClusterParameterGroup.
@@ -21678,6 +21682,7 @@ class IDBClusterParameterGroupRef(
 
 class _IDBClusterParameterGroupRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a DBClusterParameterGroup.
 
@@ -21700,7 +21705,11 @@ typing.cast(typing.Any, IDBClusterParameterGroupRef).__jsii_proxy_class__ = lamb
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_rds.IDBClusterRef")
-class IDBClusterRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IDBClusterRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a DBCluster.
 
     :stability: experimental
@@ -21718,6 +21727,7 @@ class IDBClusterRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol)
 
 class _IDBClusterRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a DBCluster.
 
@@ -21740,7 +21750,11 @@ typing.cast(typing.Any, IDBClusterRef).__jsii_proxy_class__ = lambda : _IDBClust
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_rds.IDBInstanceRef")
-class IDBInstanceRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IDBInstanceRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a DBInstance.
 
     :stability: experimental
@@ -21758,6 +21772,7 @@ class IDBInstanceRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol
 
 class _IDBInstanceRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a DBInstance.
 
@@ -21780,7 +21795,11 @@ typing.cast(typing.Any, IDBInstanceRef).__jsii_proxy_class__ = lambda : _IDBInst
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_rds.IDBParameterGroupRef")
-class IDBParameterGroupRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IDBParameterGroupRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a DBParameterGroup.
 
     :stability: experimental
@@ -21798,6 +21817,7 @@ class IDBParameterGroupRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Pr
 
 class _IDBParameterGroupRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a DBParameterGroup.
 
@@ -21820,7 +21840,11 @@ typing.cast(typing.Any, IDBParameterGroupRef).__jsii_proxy_class__ = lambda : _I
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_rds.IDBProxyEndpointRef")
-class IDBProxyEndpointRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IDBProxyEndpointRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a DBProxyEndpoint.
 
     :stability: experimental
@@ -21838,6 +21862,7 @@ class IDBProxyEndpointRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Pro
 
 class _IDBProxyEndpointRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a DBProxyEndpoint.
 
@@ -21860,7 +21885,11 @@ typing.cast(typing.Any, IDBProxyEndpointRef).__jsii_proxy_class__ = lambda : _ID
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_rds.IDBProxyRef")
-class IDBProxyRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IDBProxyRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a DBProxy.
 
     :stability: experimental
@@ -21878,6 +21907,7 @@ class IDBProxyRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IDBProxyRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a DBProxy.
 
@@ -21902,6 +21932,7 @@ typing.cast(typing.Any, IDBProxyRef).__jsii_proxy_class__ = lambda : _IDBProxyRe
 @jsii.interface(jsii_type="aws-cdk-lib.aws_rds.IDBProxyTargetGroupRef")
 class IDBProxyTargetGroupRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a DBProxyTargetGroup.
@@ -21921,6 +21952,7 @@ class IDBProxyTargetGroupRef(
 
 class _IDBProxyTargetGroupRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a DBProxyTargetGroup.
 
@@ -21945,6 +21977,7 @@ typing.cast(typing.Any, IDBProxyTargetGroupRef).__jsii_proxy_class__ = lambda : 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_rds.IDBSecurityGroupIngressRef")
 class IDBSecurityGroupIngressRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a DBSecurityGroupIngress.
@@ -21964,6 +21997,7 @@ class IDBSecurityGroupIngressRef(
 
 class _IDBSecurityGroupIngressRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a DBSecurityGroupIngress.
 
@@ -21986,7 +22020,11 @@ typing.cast(typing.Any, IDBSecurityGroupIngressRef).__jsii_proxy_class__ = lambd
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_rds.IDBSecurityGroupRef")
-class IDBSecurityGroupRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IDBSecurityGroupRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a DBSecurityGroup.
 
     :stability: experimental
@@ -22004,6 +22042,7 @@ class IDBSecurityGroupRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Pro
 
 class _IDBSecurityGroupRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a DBSecurityGroup.
 
@@ -22026,7 +22065,11 @@ typing.cast(typing.Any, IDBSecurityGroupRef).__jsii_proxy_class__ = lambda : _ID
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_rds.IDBShardGroupRef")
-class IDBShardGroupRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IDBShardGroupRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a DBShardGroup.
 
     :stability: experimental
@@ -22044,6 +22087,7 @@ class IDBShardGroupRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protoc
 
 class _IDBShardGroupRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a DBShardGroup.
 
@@ -22066,7 +22110,11 @@ typing.cast(typing.Any, IDBShardGroupRef).__jsii_proxy_class__ = lambda : _IDBSh
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_rds.IDBSubnetGroupRef")
-class IDBSubnetGroupRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IDBSubnetGroupRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a DBSubnetGroup.
 
     :stability: experimental
@@ -22084,6 +22132,7 @@ class IDBSubnetGroupRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Proto
 
 class _IDBSubnetGroupRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a DBSubnetGroup.
 
@@ -24980,6 +25029,7 @@ typing.cast(typing.Any, IEngine).__jsii_proxy_class__ = lambda : _IEngineProxy
 @jsii.interface(jsii_type="aws-cdk-lib.aws_rds.IEventSubscriptionRef")
 class IEventSubscriptionRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a EventSubscription.
@@ -24999,6 +25049,7 @@ class IEventSubscriptionRef(
 
 class _IEventSubscriptionRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a EventSubscription.
 
@@ -25021,7 +25072,11 @@ typing.cast(typing.Any, IEventSubscriptionRef).__jsii_proxy_class__ = lambda : _
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_rds.IGlobalClusterRef")
-class IGlobalClusterRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IGlobalClusterRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a GlobalCluster.
 
     :stability: experimental
@@ -25039,6 +25094,7 @@ class IGlobalClusterRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Proto
 
 class _IGlobalClusterRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a GlobalCluster.
 
@@ -25174,7 +25230,11 @@ typing.cast(typing.Any, IInstanceEngine).__jsii_proxy_class__ = lambda : _IInsta
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_rds.IIntegrationRef")
-class IIntegrationRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IIntegrationRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Integration.
 
     :stability: experimental
@@ -25192,6 +25252,7 @@ class IIntegrationRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protoco
 
 class _IIntegrationRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Integration.
 
@@ -25309,7 +25370,11 @@ typing.cast(typing.Any, IOptionGroup).__jsii_proxy_class__ = lambda : _IOptionGr
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_rds.IOptionGroupRef")
-class IOptionGroupRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IOptionGroupRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a OptionGroup.
 
     :stability: experimental
@@ -25327,6 +25392,7 @@ class IOptionGroupRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protoco
 
 class _IOptionGroupRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a OptionGroup.
 

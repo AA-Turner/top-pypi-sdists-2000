@@ -159,7 +159,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/activate_exadata_infrastructure.py.html>`__ to see an example of how to use activate_exadata_infrastructure API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/activate_exadata_infrastructure.py.html>`__ to see an example of how to use activate_exadata_infrastructure API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['exadataInfrastructureId']
@@ -233,6 +233,126 @@ class DatabaseClient(object):
                 api_reference_link=api_reference_link,
                 required_arguments=required_arguments)
 
+    def add_dbnode_snapshots_for_exadb_vm_cluster(self, add_dbnode_snapshots_for_exadb_vm_cluster_details, exadb_vm_cluster_id, **kwargs):
+        """
+        Add a database node snapshots to the Exadb VM cluster..
+
+
+        :param oci.database.models.AddDbnodeSnapshotsForExadbVmClusterDetails add_dbnode_snapshots_for_exadb_vm_cluster_details: (required)
+            Request to add a database node snapshots to the Exadb VM cluster..
+
+        :param str exadb_vm_cluster_id: (required)
+            The Exadata VM cluster `OCID`__ on Exascale Infrastructure.
+
+            __ https://docs.cloud.oracle.com/Content/General/Concepts/identifiers.htm
+
+        :param str opc_retry_token: (optional)
+            A token that uniquely identifies a request so it can be retried in case of a timeout or
+            server error without risk of executing that same action again. Retry tokens expire after 24
+            hours, but can be invalidated before then due to conflicting operations (for example, if a resource
+            has been deleted and purged from the system, then a retry of the original creation request
+            may be rejected).
+
+        :param str opc_request_id: (optional)
+            Unique identifier for the request.
+
+        :param str if_match: (optional)
+            For optimistic concurrency control. In the PUT or DELETE call for a resource, set the `if-match`
+            parameter to the value of the etag from a previous GET or POST response for that resource.  The resource
+            will be updated or deleted only if the etag you provide matches the resource's current etag value.
+
+        :param obj retry_strategy: (optional)
+            A retry strategy to apply to this specific operation/call. This will override any retry strategy set at the client-level.
+
+            This should be one of the strategies available in the :py:mod:`~oci.retry` module. This operation will not retry by default, users can also use the convenient :py:data:`~oci.retry.DEFAULT_RETRY_STRATEGY` provided by the SDK to enable retries for it.
+            The specifics of the default retry strategy are described `here <https://docs.oracle.com/en-us/iaas/tools/python/latest/sdk_behaviors/retries.html>`__.
+
+            To have this operation explicitly not perform any retries, pass an instance of :py:class:`~oci.retry.NoneRetryStrategy`.
+
+        :param bool allow_control_chars: (optional)
+            allow_control_chars is a boolean to indicate whether or not this request should allow control characters in the response object.
+            By default, the response will not allow control characters in strings
+
+        :return: A :class:`~oci.response.Response` object with data of type :class:`~oci.database.models.DbnodeSnapshots`
+        :rtype: :class:`~oci.response.Response`
+
+        :example:
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/add_dbnode_snapshots_for_exadb_vm_cluster.py.html>`__ to see an example of how to use add_dbnode_snapshots_for_exadb_vm_cluster API.
+        """
+        # Required path and query arguments. These are in camelCase to replace values in service endpoints.
+        required_arguments = ['exadbVmClusterId']
+        resource_path = "/exadbVmClusters/{exadbVmClusterId}/actions/addDbNodeSnapshots"
+        method = "POST"
+        operation_name = "add_dbnode_snapshots_for_exadb_vm_cluster"
+        api_reference_link = "https://docs.oracle.com/iaas/api/#/en/database/20160918/ExadbVmCluster/AddDbnodeSnapshotsForExadbVmCluster"
+
+        # Don't accept unknown kwargs
+        expected_kwargs = [
+            "allow_control_chars",
+            "retry_strategy",
+            "opc_retry_token",
+            "opc_request_id",
+            "if_match"
+        ]
+        extra_kwargs = [_key for _key in six.iterkeys(kwargs) if _key not in expected_kwargs]
+        if extra_kwargs:
+            raise ValueError(
+                f"add_dbnode_snapshots_for_exadb_vm_cluster got unknown kwargs: {extra_kwargs!r}")
+
+        path_params = {
+            "exadbVmClusterId": exadb_vm_cluster_id
+        }
+
+        path_params = {k: v for (k, v) in six.iteritems(path_params) if v is not missing}
+
+        for (k, v) in six.iteritems(path_params):
+            if v is None or (isinstance(v, six.string_types) and len(v.strip()) == 0):
+                raise ValueError(f'Parameter {k} cannot be None, whitespace or empty string')
+
+        header_params = {
+            "accept": "application/json",
+            "content-type": "application/json",
+            "opc-retry-token": kwargs.get("opc_retry_token", missing),
+            "opc-request-id": kwargs.get("opc_request_id", missing),
+            "if-match": kwargs.get("if_match", missing)
+        }
+        header_params = {k: v for (k, v) in six.iteritems(header_params) if v is not missing and v is not None}
+
+        retry_strategy = self.base_client.get_preferred_retry_strategy(
+            operation_retry_strategy=kwargs.get('retry_strategy'),
+            client_retry_strategy=self.retry_strategy
+        )
+
+        if retry_strategy:
+            if not isinstance(retry_strategy, retry.NoneRetryStrategy):
+                self.base_client.add_opc_retry_token_if_needed(header_params)
+                self.base_client.add_opc_client_retries_header(header_params)
+                retry_strategy.add_circuit_breaker_callback(self.circuit_breaker_callback)
+            return retry_strategy.make_retrying_call(
+                self.base_client.call_api,
+                resource_path=resource_path,
+                method=method,
+                path_params=path_params,
+                header_params=header_params,
+                body=add_dbnode_snapshots_for_exadb_vm_cluster_details,
+                response_type="DbnodeSnapshots",
+                allow_control_chars=kwargs.get('allow_control_chars'),
+                operation_name=operation_name,
+                api_reference_link=api_reference_link,
+                required_arguments=required_arguments)
+        else:
+            return self.base_client.call_api(
+                resource_path=resource_path,
+                method=method,
+                path_params=path_params,
+                header_params=header_params,
+                body=add_dbnode_snapshots_for_exadb_vm_cluster_details,
+                response_type="DbnodeSnapshots",
+                allow_control_chars=kwargs.get('allow_control_chars'),
+                operation_name=operation_name,
+                api_reference_link=api_reference_link,
+                required_arguments=required_arguments)
+
     def add_standby_autonomous_container_database(self, add_standby_autonomous_container_database_details, autonomous_container_database_id, **kwargs):
         """
         Add a standby Autonomous Container Database. For more information about Autonomous Data Guard,see
@@ -280,7 +400,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/add_standby_autonomous_container_database.py.html>`__ to see an example of how to use add_standby_autonomous_container_database API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/add_standby_autonomous_container_database.py.html>`__ to see an example of how to use add_standby_autonomous_container_database API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['autonomousContainerDatabaseId']
@@ -397,7 +517,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/add_storage_capacity_cloud_exadata_infrastructure.py.html>`__ to see an example of how to use add_storage_capacity_cloud_exadata_infrastructure API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/add_storage_capacity_cloud_exadata_infrastructure.py.html>`__ to see an example of how to use add_storage_capacity_cloud_exadata_infrastructure API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['cloudExadataInfrastructureId']
@@ -512,7 +632,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/add_storage_capacity_exadata_infrastructure.py.html>`__ to see an example of how to use add_storage_capacity_exadata_infrastructure API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/add_storage_capacity_exadata_infrastructure.py.html>`__ to see an example of how to use add_storage_capacity_exadata_infrastructure API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['exadataInfrastructureId']
@@ -630,7 +750,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/add_virtual_machine_to_cloud_vm_cluster.py.html>`__ to see an example of how to use add_virtual_machine_to_cloud_vm_cluster API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/add_virtual_machine_to_cloud_vm_cluster.py.html>`__ to see an example of how to use add_virtual_machine_to_cloud_vm_cluster API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['cloudVmClusterId']
@@ -750,7 +870,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/add_virtual_machine_to_vm_cluster.py.html>`__ to see an example of how to use add_virtual_machine_to_vm_cluster API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/add_virtual_machine_to_vm_cluster.py.html>`__ to see an example of how to use add_virtual_machine_to_vm_cluster API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['vmClusterId']
@@ -874,7 +994,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/autonomous_database_manual_refresh.py.html>`__ to see an example of how to use autonomous_database_manual_refresh API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/autonomous_database_manual_refresh.py.html>`__ to see an example of how to use autonomous_database_manual_refresh API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['autonomousDatabaseId']
@@ -993,7 +1113,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/cancel_backup.py.html>`__ to see an example of how to use cancel_backup API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/cancel_backup.py.html>`__ to see an example of how to use cancel_backup API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['backupId']
@@ -1109,7 +1229,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/cancel_execution_window.py.html>`__ to see an example of how to use cancel_execution_window API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/cancel_execution_window.py.html>`__ to see an example of how to use cancel_execution_window API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['executionWindowId']
@@ -1226,7 +1346,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/cascading_delete_scheduling_plan.py.html>`__ to see an example of how to use cascading_delete_scheduling_plan API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/cascading_delete_scheduling_plan.py.html>`__ to see an example of how to use cascading_delete_scheduling_plan API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['schedulingPlanId']
@@ -1346,7 +1466,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/change_autonomous_container_database_compartment.py.html>`__ to see an example of how to use change_autonomous_container_database_compartment API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/change_autonomous_container_database_compartment.py.html>`__ to see an example of how to use change_autonomous_container_database_compartment API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['autonomousContainerDatabaseId']
@@ -1472,7 +1592,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/change_autonomous_database_compartment.py.html>`__ to see an example of how to use change_autonomous_database_compartment API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/change_autonomous_database_compartment.py.html>`__ to see an example of how to use change_autonomous_database_compartment API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['autonomousDatabaseId']
@@ -1592,7 +1712,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/change_autonomous_database_software_image_compartment.py.html>`__ to see an example of how to use change_autonomous_database_software_image_compartment API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/change_autonomous_database_software_image_compartment.py.html>`__ to see an example of how to use change_autonomous_database_software_image_compartment API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['autonomousDatabaseSoftwareImageId']
@@ -1714,7 +1834,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/change_autonomous_database_subscription.py.html>`__ to see an example of how to use change_autonomous_database_subscription API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/change_autonomous_database_subscription.py.html>`__ to see an example of how to use change_autonomous_database_subscription API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['autonomousDatabaseId']
@@ -1838,7 +1958,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/change_autonomous_exadata_infrastructure_compartment.py.html>`__ to see an example of how to use change_autonomous_exadata_infrastructure_compartment API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/change_autonomous_exadata_infrastructure_compartment.py.html>`__ to see an example of how to use change_autonomous_exadata_infrastructure_compartment API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['autonomousExadataInfrastructureId']
@@ -1956,7 +2076,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/change_autonomous_vm_cluster_compartment.py.html>`__ to see an example of how to use change_autonomous_vm_cluster_compartment API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/change_autonomous_vm_cluster_compartment.py.html>`__ to see an example of how to use change_autonomous_vm_cluster_compartment API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['autonomousVmClusterId']
@@ -2078,7 +2198,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/change_backup_destination_compartment.py.html>`__ to see an example of how to use change_backup_destination_compartment API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/change_backup_destination_compartment.py.html>`__ to see an example of how to use change_backup_destination_compartment API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['backupDestinationId']
@@ -2196,7 +2316,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/change_cloud_autonomous_vm_cluster_compartment.py.html>`__ to see an example of how to use change_cloud_autonomous_vm_cluster_compartment API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/change_cloud_autonomous_vm_cluster_compartment.py.html>`__ to see an example of how to use change_cloud_autonomous_vm_cluster_compartment API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['cloudAutonomousVmClusterId']
@@ -2314,7 +2434,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/change_cloud_autonomous_vm_cluster_subscription.py.html>`__ to see an example of how to use change_cloud_autonomous_vm_cluster_subscription API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/change_cloud_autonomous_vm_cluster_subscription.py.html>`__ to see an example of how to use change_cloud_autonomous_vm_cluster_subscription API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['cloudAutonomousVmClusterId']
@@ -2432,7 +2552,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/change_cloud_db_system_subscription.py.html>`__ to see an example of how to use change_cloud_db_system_subscription API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/change_cloud_db_system_subscription.py.html>`__ to see an example of how to use change_cloud_db_system_subscription API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['dbSystemId']
@@ -2552,7 +2672,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/change_cloud_exadata_infrastructure_compartment.py.html>`__ to see an example of how to use change_cloud_exadata_infrastructure_compartment API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/change_cloud_exadata_infrastructure_compartment.py.html>`__ to see an example of how to use change_cloud_exadata_infrastructure_compartment API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['cloudExadataInfrastructureId']
@@ -2670,7 +2790,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/change_cloud_exadata_infrastructure_subscription.py.html>`__ to see an example of how to use change_cloud_exadata_infrastructure_subscription API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/change_cloud_exadata_infrastructure_subscription.py.html>`__ to see an example of how to use change_cloud_exadata_infrastructure_subscription API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['cloudExadataInfrastructureId']
@@ -2788,7 +2908,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/change_cloud_vm_cluster_compartment.py.html>`__ to see an example of how to use change_cloud_vm_cluster_compartment API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/change_cloud_vm_cluster_compartment.py.html>`__ to see an example of how to use change_cloud_vm_cluster_compartment API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['cloudVmClusterId']
@@ -2906,7 +3026,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/change_cloud_vm_cluster_subscription.py.html>`__ to see an example of how to use change_cloud_vm_cluster_subscription API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/change_cloud_vm_cluster_subscription.py.html>`__ to see an example of how to use change_cloud_vm_cluster_subscription API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['cloudVmClusterId']
@@ -3028,7 +3148,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/change_database_software_image_compartment.py.html>`__ to see an example of how to use change_database_software_image_compartment API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/change_database_software_image_compartment.py.html>`__ to see an example of how to use change_database_software_image_compartment API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['databaseSoftwareImageId']
@@ -3151,7 +3271,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/change_dataguard_role.py.html>`__ to see an example of how to use change_dataguard_role API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/change_dataguard_role.py.html>`__ to see an example of how to use change_dataguard_role API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['autonomousContainerDatabaseId']
@@ -3282,7 +3402,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/change_db_system_compartment.py.html>`__ to see an example of how to use change_db_system_compartment API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/change_db_system_compartment.py.html>`__ to see an example of how to use change_db_system_compartment API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['dbSystemId']
@@ -3397,7 +3517,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/change_disaster_recovery_configuration.py.html>`__ to see an example of how to use change_disaster_recovery_configuration API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/change_disaster_recovery_configuration.py.html>`__ to see an example of how to use change_disaster_recovery_configuration API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['autonomousDatabaseId']
@@ -3516,7 +3636,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/change_encryption_key_location.py.html>`__ to see an example of how to use change_encryption_key_location API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/change_encryption_key_location.py.html>`__ to see an example of how to use change_encryption_key_location API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['databaseId']
@@ -3635,7 +3755,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/change_exadata_infrastructure_compartment.py.html>`__ to see an example of how to use change_exadata_infrastructure_compartment API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/change_exadata_infrastructure_compartment.py.html>`__ to see an example of how to use change_exadata_infrastructure_compartment API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['exadataInfrastructureId']
@@ -3753,7 +3873,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/change_exadb_vm_cluster_compartment.py.html>`__ to see an example of how to use change_exadb_vm_cluster_compartment API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/change_exadb_vm_cluster_compartment.py.html>`__ to see an example of how to use change_exadb_vm_cluster_compartment API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['exadbVmClusterId']
@@ -3871,7 +3991,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/change_exadb_vm_cluster_subscription.py.html>`__ to see an example of how to use change_exadb_vm_cluster_subscription API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/change_exadb_vm_cluster_subscription.py.html>`__ to see an example of how to use change_exadb_vm_cluster_subscription API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['exadbVmClusterId']
@@ -3989,7 +4109,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/change_exascale_db_storage_vault_compartment.py.html>`__ to see an example of how to use change_exascale_db_storage_vault_compartment API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/change_exascale_db_storage_vault_compartment.py.html>`__ to see an example of how to use change_exascale_db_storage_vault_compartment API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['exascaleDbStorageVaultId']
@@ -4107,7 +4227,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/change_exascale_db_storage_vault_subscription.py.html>`__ to see an example of how to use change_exascale_db_storage_vault_subscription API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/change_exascale_db_storage_vault_subscription.py.html>`__ to see an example of how to use change_exascale_db_storage_vault_subscription API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['exascaleDbStorageVaultId']
@@ -4230,7 +4350,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/change_external_container_database_compartment.py.html>`__ to see an example of how to use change_external_container_database_compartment API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/change_external_container_database_compartment.py.html>`__ to see an example of how to use change_external_container_database_compartment API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['externalContainerDatabaseId']
@@ -4352,7 +4472,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/change_external_non_container_database_compartment.py.html>`__ to see an example of how to use change_external_non_container_database_compartment API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/change_external_non_container_database_compartment.py.html>`__ to see an example of how to use change_external_non_container_database_compartment API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['externalNonContainerDatabaseId']
@@ -4477,7 +4597,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/change_external_pluggable_database_compartment.py.html>`__ to see an example of how to use change_external_pluggable_database_compartment API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/change_external_pluggable_database_compartment.py.html>`__ to see an example of how to use change_external_pluggable_database_compartment API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['externalPluggableDatabaseId']
@@ -4599,7 +4719,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/change_key_store_compartment.py.html>`__ to see an example of how to use change_key_store_compartment API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/change_key_store_compartment.py.html>`__ to see an example of how to use change_key_store_compartment API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['keyStoreId']
@@ -4717,7 +4837,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/change_key_store_type.py.html>`__ to see an example of how to use change_key_store_type API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/change_key_store_type.py.html>`__ to see an example of how to use change_key_store_type API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['databaseId']
@@ -4835,7 +4955,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/change_oneoff_patch_compartment.py.html>`__ to see an example of how to use change_oneoff_patch_compartment API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/change_oneoff_patch_compartment.py.html>`__ to see an example of how to use change_oneoff_patch_compartment API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['oneoffPatchId']
@@ -4953,7 +5073,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/change_scheduling_plan_compartment.py.html>`__ to see an example of how to use change_scheduling_plan_compartment API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/change_scheduling_plan_compartment.py.html>`__ to see an example of how to use change_scheduling_plan_compartment API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['schedulingPlanId']
@@ -5071,7 +5191,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/change_scheduling_policy_compartment.py.html>`__ to see an example of how to use change_scheduling_policy_compartment API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/change_scheduling_policy_compartment.py.html>`__ to see an example of how to use change_scheduling_policy_compartment API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['schedulingPolicyId']
@@ -5190,7 +5310,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/change_vm_cluster_compartment.py.html>`__ to see an example of how to use change_vm_cluster_compartment API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/change_vm_cluster_compartment.py.html>`__ to see an example of how to use change_vm_cluster_compartment API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['vmClusterId']
@@ -5307,7 +5427,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/check_external_database_connector_connection_status.py.html>`__ to see an example of how to use check_external_database_connector_connection_status API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/check_external_database_connector_connection_status.py.html>`__ to see an example of how to use check_external_database_connector_connection_status API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['externalDatabaseConnectorId']
@@ -5424,7 +5544,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/complete_external_backup_job.py.html>`__ to see an example of how to use complete_external_backup_job API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/complete_external_backup_job.py.html>`__ to see an example of how to use complete_external_backup_job API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['backupId']
@@ -5550,7 +5670,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/configure_autonomous_database_vault_key.py.html>`__ to see an example of how to use configure_autonomous_database_vault_key API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/configure_autonomous_database_vault_key.py.html>`__ to see an example of how to use configure_autonomous_database_vault_key API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['autonomousDatabaseId']
@@ -5670,7 +5790,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/configure_exascale_cloud_exadata_infrastructure.py.html>`__ to see an example of how to use configure_exascale_cloud_exadata_infrastructure API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/configure_exascale_cloud_exadata_infrastructure.py.html>`__ to see an example of how to use configure_exascale_cloud_exadata_infrastructure API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['cloudExadataInfrastructureId']
@@ -5790,7 +5910,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/configure_exascale_exadata_infrastructure.py.html>`__ to see an example of how to use configure_exascale_exadata_infrastructure API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/configure_exascale_exadata_infrastructure.py.html>`__ to see an example of how to use configure_exascale_exadata_infrastructure API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['exadataInfrastructureId']
@@ -5907,7 +6027,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/configure_saas_admin_user.py.html>`__ to see an example of how to use configure_saas_admin_user API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/configure_saas_admin_user.py.html>`__ to see an example of how to use configure_saas_admin_user API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['autonomousDatabaseId']
@@ -6024,7 +6144,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/confirm_key_store_details_are_correct.py.html>`__ to see an example of how to use confirm_key_store_details_are_correct API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/confirm_key_store_details_are_correct.py.html>`__ to see an example of how to use confirm_key_store_details_are_correct API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['keyStoreId']
@@ -6144,7 +6264,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/convert_standby_autonomous_container_database.py.html>`__ to see an example of how to use convert_standby_autonomous_container_database API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/convert_standby_autonomous_container_database.py.html>`__ to see an example of how to use convert_standby_autonomous_container_database API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['autonomousContainerDatabaseId']
@@ -6267,7 +6387,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/convert_standby_database_type.py.html>`__ to see an example of how to use convert_standby_database_type API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/convert_standby_database_type.py.html>`__ to see an example of how to use convert_standby_database_type API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['databaseId']
@@ -6380,7 +6500,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/convert_to_pdb.py.html>`__ to see an example of how to use convert_to_pdb API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/convert_to_pdb.py.html>`__ to see an example of how to use convert_to_pdb API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['databaseId']
@@ -6498,7 +6618,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/convert_to_regular_pluggable_database.py.html>`__ to see an example of how to use convert_to_regular_pluggable_database API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/convert_to_regular_pluggable_database.py.html>`__ to see an example of how to use convert_to_regular_pluggable_database API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['pluggableDatabaseId']
@@ -6622,7 +6742,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/convert_to_standalone.py.html>`__ to see an example of how to use convert_to_standalone API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/convert_to_standalone.py.html>`__ to see an example of how to use convert_to_standalone API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['databaseId']
@@ -6732,7 +6852,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/create_application_vip.py.html>`__ to see an example of how to use create_application_vip API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/create_application_vip.py.html>`__ to see an example of how to use create_application_vip API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -6825,7 +6945,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/create_autonomous_container_database.py.html>`__ to see an example of how to use create_autonomous_container_database API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/create_autonomous_container_database.py.html>`__ to see an example of how to use create_autonomous_container_database API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -6924,7 +7044,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/create_autonomous_container_database_dataguard_association.py.html>`__ to see an example of how to use create_autonomous_container_database_dataguard_association API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/create_autonomous_container_database_dataguard_association.py.html>`__ to see an example of how to use create_autonomous_container_database_dataguard_association API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['autonomousContainerDatabaseId']
@@ -7034,7 +7154,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/create_autonomous_database.py.html>`__ to see an example of how to use create_autonomous_database API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/create_autonomous_database.py.html>`__ to see an example of how to use create_autonomous_database API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -7136,7 +7256,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/create_autonomous_database_backup.py.html>`__ to see an example of how to use create_autonomous_database_backup API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/create_autonomous_database_backup.py.html>`__ to see an example of how to use create_autonomous_database_backup API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -7234,7 +7354,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/create_autonomous_database_software_image.py.html>`__ to see an example of how to use create_autonomous_database_software_image API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/create_autonomous_database_software_image.py.html>`__ to see an example of how to use create_autonomous_database_software_image API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -7330,7 +7450,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/create_autonomous_vm_cluster.py.html>`__ to see an example of how to use create_autonomous_vm_cluster API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/create_autonomous_vm_cluster.py.html>`__ to see an example of how to use create_autonomous_vm_cluster API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -7423,7 +7543,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/create_backup.py.html>`__ to see an example of how to use create_backup API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/create_backup.py.html>`__ to see an example of how to use create_backup API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -7517,7 +7637,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/create_backup_destination.py.html>`__ to see an example of how to use create_backup_destination API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/create_backup_destination.py.html>`__ to see an example of how to use create_backup_destination API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -7617,7 +7737,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/create_cloud_autonomous_vm_cluster.py.html>`__ to see an example of how to use create_cloud_autonomous_vm_cluster API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/create_cloud_autonomous_vm_cluster.py.html>`__ to see an example of how to use create_cloud_autonomous_vm_cluster API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -7723,7 +7843,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/create_cloud_exadata_infrastructure.py.html>`__ to see an example of how to use create_cloud_exadata_infrastructure API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/create_cloud_exadata_infrastructure.py.html>`__ to see an example of how to use create_cloud_exadata_infrastructure API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -7827,7 +7947,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/create_cloud_vm_cluster.py.html>`__ to see an example of how to use create_cloud_vm_cluster API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/create_cloud_vm_cluster.py.html>`__ to see an example of how to use create_cloud_vm_cluster API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -7929,7 +8049,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/create_console_connection.py.html>`__ to see an example of how to use create_console_connection API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/create_console_connection.py.html>`__ to see an example of how to use create_console_connection API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['dbNodeId']
@@ -8040,7 +8160,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/create_console_history.py.html>`__ to see an example of how to use create_console_history API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/create_console_history.py.html>`__ to see an example of how to use create_console_history API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['dbNodeId']
@@ -8160,7 +8280,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/create_data_guard_association.py.html>`__ to see an example of how to use create_data_guard_association API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/create_data_guard_association.py.html>`__ to see an example of how to use create_data_guard_association API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['databaseId']
@@ -8270,7 +8390,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/create_database.py.html>`__ to see an example of how to use create_database API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/create_database.py.html>`__ to see an example of how to use create_database API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -8365,7 +8485,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/create_database_software_image.py.html>`__ to see an example of how to use create_database_software_image API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/create_database_software_image.py.html>`__ to see an example of how to use create_database_software_image API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -8456,7 +8576,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/create_db_home.py.html>`__ to see an example of how to use create_db_home API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/create_db_home.py.html>`__ to see an example of how to use create_db_home API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -8551,7 +8671,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/create_exadata_infrastructure.py.html>`__ to see an example of how to use create_exadata_infrastructure API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/create_exadata_infrastructure.py.html>`__ to see an example of how to use create_exadata_infrastructure API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -8649,7 +8769,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/create_exadb_vm_cluster.py.html>`__ to see an example of how to use create_exadb_vm_cluster API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/create_exadb_vm_cluster.py.html>`__ to see an example of how to use create_exadb_vm_cluster API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -8745,7 +8865,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/create_exascale_db_storage_vault.py.html>`__ to see an example of how to use create_exascale_db_storage_vault API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/create_exascale_db_storage_vault.py.html>`__ to see an example of how to use create_exascale_db_storage_vault API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -8841,7 +8961,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/create_execution_action.py.html>`__ to see an example of how to use create_execution_action API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/create_execution_action.py.html>`__ to see an example of how to use create_execution_action API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -8937,7 +9057,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/create_execution_window.py.html>`__ to see an example of how to use create_execution_window API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/create_execution_window.py.html>`__ to see an example of how to use create_execution_window API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -9034,7 +9154,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/create_external_backup_job.py.html>`__ to see an example of how to use create_external_backup_job API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/create_external_backup_job.py.html>`__ to see an example of how to use create_external_backup_job API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -9128,7 +9248,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/create_external_container_database.py.html>`__ to see an example of how to use create_external_container_database API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/create_external_container_database.py.html>`__ to see an example of how to use create_external_container_database API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -9224,7 +9344,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/create_external_database_connector.py.html>`__ to see an example of how to use create_external_database_connector API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/create_external_database_connector.py.html>`__ to see an example of how to use create_external_database_connector API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -9320,7 +9440,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/create_external_non_container_database.py.html>`__ to see an example of how to use create_external_non_container_database API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/create_external_non_container_database.py.html>`__ to see an example of how to use create_external_non_container_database API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -9417,7 +9537,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/create_external_pluggable_database.py.html>`__ to see an example of how to use create_external_pluggable_database API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/create_external_pluggable_database.py.html>`__ to see an example of how to use create_external_pluggable_database API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -9513,7 +9633,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/create_key_store.py.html>`__ to see an example of how to use create_key_store API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/create_key_store.py.html>`__ to see an example of how to use create_key_store API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -9612,7 +9732,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/create_maintenance_run.py.html>`__ to see an example of how to use create_maintenance_run API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/create_maintenance_run.py.html>`__ to see an example of how to use create_maintenance_run API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -9708,7 +9828,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/create_oneoff_patch.py.html>`__ to see an example of how to use create_oneoff_patch API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/create_oneoff_patch.py.html>`__ to see an example of how to use create_oneoff_patch API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -9806,7 +9926,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/create_pluggable_database.py.html>`__ to see an example of how to use create_pluggable_database API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/create_pluggable_database.py.html>`__ to see an example of how to use create_pluggable_database API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -9902,7 +10022,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/create_pluggable_database_snapshot.py.html>`__ to see an example of how to use create_pluggable_database_snapshot API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/create_pluggable_database_snapshot.py.html>`__ to see an example of how to use create_pluggable_database_snapshot API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -9998,7 +10118,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/create_scheduled_action.py.html>`__ to see an example of how to use create_scheduled_action API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/create_scheduled_action.py.html>`__ to see an example of how to use create_scheduled_action API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -10094,7 +10214,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/create_scheduling_plan.py.html>`__ to see an example of how to use create_scheduling_plan API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/create_scheduling_plan.py.html>`__ to see an example of how to use create_scheduling_plan API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -10190,7 +10310,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/create_scheduling_policy.py.html>`__ to see an example of how to use create_scheduling_policy API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/create_scheduling_policy.py.html>`__ to see an example of how to use create_scheduling_policy API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -10291,7 +10411,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/create_scheduling_window.py.html>`__ to see an example of how to use create_scheduling_window API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/create_scheduling_window.py.html>`__ to see an example of how to use create_scheduling_window API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['schedulingPolicyId']
@@ -10400,7 +10520,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/create_vm_cluster.py.html>`__ to see an example of how to use create_vm_cluster API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/create_vm_cluster.py.html>`__ to see an example of how to use create_vm_cluster API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -10502,7 +10622,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/create_vm_cluster_network.py.html>`__ to see an example of how to use create_vm_cluster_network API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/create_vm_cluster_network.py.html>`__ to see an example of how to use create_vm_cluster_network API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['exadataInfrastructureId']
@@ -10631,7 +10751,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/db_node_action.py.html>`__ to see an example of how to use db_node_action API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/db_node_action.py.html>`__ to see an example of how to use db_node_action API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['dbNodeId', 'action']
@@ -10744,7 +10864,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/delete_application_vip.py.html>`__ to see an example of how to use delete_application_vip API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/delete_application_vip.py.html>`__ to see an example of how to use delete_application_vip API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['applicationVipId']
@@ -10854,7 +10974,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/delete_autonomous_database.py.html>`__ to see an example of how to use delete_autonomous_database API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/delete_autonomous_database.py.html>`__ to see an example of how to use delete_autonomous_database API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['autonomousDatabaseId']
@@ -10971,7 +11091,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/delete_autonomous_database_backup.py.html>`__ to see an example of how to use delete_autonomous_database_backup API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/delete_autonomous_database_backup.py.html>`__ to see an example of how to use delete_autonomous_database_backup API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['autonomousDatabaseBackupId']
@@ -11076,7 +11196,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/delete_autonomous_database_software_image.py.html>`__ to see an example of how to use delete_autonomous_database_software_image API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/delete_autonomous_database_software_image.py.html>`__ to see an example of how to use delete_autonomous_database_software_image API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['autonomousDatabaseSoftwareImageId']
@@ -11179,7 +11299,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/delete_autonomous_vm_cluster.py.html>`__ to see an example of how to use delete_autonomous_vm_cluster API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/delete_autonomous_vm_cluster.py.html>`__ to see an example of how to use delete_autonomous_vm_cluster API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['autonomousVmClusterId']
@@ -11279,7 +11399,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/delete_backup.py.html>`__ to see an example of how to use delete_backup API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/delete_backup.py.html>`__ to see an example of how to use delete_backup API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['backupId']
@@ -11380,7 +11500,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/delete_backup_destination.py.html>`__ to see an example of how to use delete_backup_destination API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/delete_backup_destination.py.html>`__ to see an example of how to use delete_backup_destination API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['backupDestinationId']
@@ -11483,7 +11603,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/delete_cloud_autonomous_vm_cluster.py.html>`__ to see an example of how to use delete_cloud_autonomous_vm_cluster API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/delete_cloud_autonomous_vm_cluster.py.html>`__ to see an example of how to use delete_cloud_autonomous_vm_cluster API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['cloudAutonomousVmClusterId']
@@ -11589,7 +11709,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/delete_cloud_exadata_infrastructure.py.html>`__ to see an example of how to use delete_cloud_exadata_infrastructure API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/delete_cloud_exadata_infrastructure.py.html>`__ to see an example of how to use delete_cloud_exadata_infrastructure API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['cloudExadataInfrastructureId']
@@ -11700,7 +11820,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/delete_cloud_vm_cluster.py.html>`__ to see an example of how to use delete_cloud_vm_cluster API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/delete_cloud_vm_cluster.py.html>`__ to see an example of how to use delete_cloud_vm_cluster API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['cloudVmClusterId']
@@ -11803,7 +11923,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/delete_console_connection.py.html>`__ to see an example of how to use delete_console_connection API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/delete_console_connection.py.html>`__ to see an example of how to use delete_console_connection API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['dbNodeId', 'consoleConnectionId']
@@ -11908,7 +12028,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/delete_console_history.py.html>`__ to see an example of how to use delete_console_history API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/delete_console_history.py.html>`__ to see an example of how to use delete_console_history API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['dbNodeId', 'consoleHistoryId']
@@ -12021,7 +12141,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/delete_database.py.html>`__ to see an example of how to use delete_database API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/delete_database.py.html>`__ to see an example of how to use delete_database API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['databaseId']
@@ -12129,7 +12249,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/delete_database_software_image.py.html>`__ to see an example of how to use delete_database_software_image API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/delete_database_software_image.py.html>`__ to see an example of how to use delete_database_software_image API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['databaseSoftwareImageId']
@@ -12236,7 +12356,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/delete_db_home.py.html>`__ to see an example of how to use delete_db_home API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/delete_db_home.py.html>`__ to see an example of how to use delete_db_home API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['dbHomeId']
@@ -12311,6 +12431,109 @@ class DatabaseClient(object):
                 api_reference_link=api_reference_link,
                 required_arguments=required_arguments)
 
+    def delete_dbnode_snapshot(self, dbnode_snapshot_id, **kwargs):
+        """
+        Deletes the specified Exadata Database Node Snapshot.
+
+
+        :param str dbnode_snapshot_id: (required)
+            The Exadata Database Node Snapshot `OCID`__.
+
+            __ https://docs.cloud.oracle.com/Content/General/Concepts/identifiers.htm
+
+        :param str if_match: (optional)
+            For optimistic concurrency control. In the PUT or DELETE call for a resource, set the `if-match`
+            parameter to the value of the etag from a previous GET or POST response for that resource.  The resource
+            will be updated or deleted only if the etag you provide matches the resource's current etag value.
+
+        :param str opc_request_id: (optional)
+            Unique identifier for the request.
+
+        :param obj retry_strategy: (optional)
+            A retry strategy to apply to this specific operation/call. This will override any retry strategy set at the client-level.
+
+            This should be one of the strategies available in the :py:mod:`~oci.retry` module. This operation will not retry by default, users can also use the convenient :py:data:`~oci.retry.DEFAULT_RETRY_STRATEGY` provided by the SDK to enable retries for it.
+            The specifics of the default retry strategy are described `here <https://docs.oracle.com/en-us/iaas/tools/python/latest/sdk_behaviors/retries.html>`__.
+
+            To have this operation explicitly not perform any retries, pass an instance of :py:class:`~oci.retry.NoneRetryStrategy`.
+
+        :param bool allow_control_chars: (optional)
+            allow_control_chars is a boolean to indicate whether or not this request should allow control characters in the response object.
+            By default, the response will not allow control characters in strings
+
+        :return: A :class:`~oci.response.Response` object with data of type None
+        :rtype: :class:`~oci.response.Response`
+
+        :example:
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/delete_dbnode_snapshot.py.html>`__ to see an example of how to use delete_dbnode_snapshot API.
+        """
+        # Required path and query arguments. These are in camelCase to replace values in service endpoints.
+        required_arguments = ['dbnodeSnapshotId']
+        resource_path = "/dbnodeSnapshots/{dbnodeSnapshotId}"
+        method = "DELETE"
+        operation_name = "delete_dbnode_snapshot"
+        api_reference_link = "https://docs.oracle.com/iaas/api/#/en/database/20160918/DbnodeSnapshot/DeleteDbnodeSnapshot"
+
+        # Don't accept unknown kwargs
+        expected_kwargs = [
+            "allow_control_chars",
+            "retry_strategy",
+            "if_match",
+            "opc_request_id"
+        ]
+        extra_kwargs = [_key for _key in six.iterkeys(kwargs) if _key not in expected_kwargs]
+        if extra_kwargs:
+            raise ValueError(
+                f"delete_dbnode_snapshot got unknown kwargs: {extra_kwargs!r}")
+
+        path_params = {
+            "dbnodeSnapshotId": dbnode_snapshot_id
+        }
+
+        path_params = {k: v for (k, v) in six.iteritems(path_params) if v is not missing}
+
+        for (k, v) in six.iteritems(path_params):
+            if v is None or (isinstance(v, six.string_types) and len(v.strip()) == 0):
+                raise ValueError(f'Parameter {k} cannot be None, whitespace or empty string')
+
+        header_params = {
+            "accept": "application/json",
+            "content-type": "application/json",
+            "if-match": kwargs.get("if_match", missing),
+            "opc-request-id": kwargs.get("opc_request_id", missing)
+        }
+        header_params = {k: v for (k, v) in six.iteritems(header_params) if v is not missing and v is not None}
+
+        retry_strategy = self.base_client.get_preferred_retry_strategy(
+            operation_retry_strategy=kwargs.get('retry_strategy'),
+            client_retry_strategy=self.retry_strategy
+        )
+
+        if retry_strategy:
+            if not isinstance(retry_strategy, retry.NoneRetryStrategy):
+                self.base_client.add_opc_client_retries_header(header_params)
+                retry_strategy.add_circuit_breaker_callback(self.circuit_breaker_callback)
+            return retry_strategy.make_retrying_call(
+                self.base_client.call_api,
+                resource_path=resource_path,
+                method=method,
+                path_params=path_params,
+                header_params=header_params,
+                allow_control_chars=kwargs.get('allow_control_chars'),
+                operation_name=operation_name,
+                api_reference_link=api_reference_link,
+                required_arguments=required_arguments)
+        else:
+            return self.base_client.call_api(
+                resource_path=resource_path,
+                method=method,
+                path_params=path_params,
+                header_params=header_params,
+                allow_control_chars=kwargs.get('allow_control_chars'),
+                operation_name=operation_name,
+                api_reference_link=api_reference_link,
+                required_arguments=required_arguments)
+
     def delete_exadata_infrastructure(self, exadata_infrastructure_id, **kwargs):
         """
         Deletes the Exadata Cloud@Customer infrastructure.
@@ -12345,7 +12568,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/delete_exadata_infrastructure.py.html>`__ to see an example of how to use delete_exadata_infrastructure API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/delete_exadata_infrastructure.py.html>`__ to see an example of how to use delete_exadata_infrastructure API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['exadataInfrastructureId']
@@ -12448,7 +12671,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/delete_exadb_vm_cluster.py.html>`__ to see an example of how to use delete_exadb_vm_cluster API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/delete_exadb_vm_cluster.py.html>`__ to see an example of how to use delete_exadb_vm_cluster API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['exadbVmClusterId']
@@ -12551,7 +12774,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/delete_exascale_db_storage_vault.py.html>`__ to see an example of how to use delete_exascale_db_storage_vault API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/delete_exascale_db_storage_vault.py.html>`__ to see an example of how to use delete_exascale_db_storage_vault API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['exascaleDbStorageVaultId']
@@ -12654,7 +12877,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/delete_execution_action.py.html>`__ to see an example of how to use delete_execution_action API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/delete_execution_action.py.html>`__ to see an example of how to use delete_execution_action API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['executionActionId']
@@ -12757,7 +12980,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/delete_execution_window.py.html>`__ to see an example of how to use delete_execution_window API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/delete_execution_window.py.html>`__ to see an example of how to use delete_execution_window API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['executionWindowId']
@@ -12862,7 +13085,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/delete_external_container_database.py.html>`__ to see an example of how to use delete_external_container_database API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/delete_external_container_database.py.html>`__ to see an example of how to use delete_external_container_database API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['externalContainerDatabaseId']
@@ -12968,7 +13191,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/delete_external_database_connector.py.html>`__ to see an example of how to use delete_external_database_connector API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/delete_external_database_connector.py.html>`__ to see an example of how to use delete_external_database_connector API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['externalDatabaseConnectorId']
@@ -13071,7 +13294,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/delete_external_non_container_database.py.html>`__ to see an example of how to use delete_external_non_container_database API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/delete_external_non_container_database.py.html>`__ to see an example of how to use delete_external_non_container_database API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['externalNonContainerDatabaseId']
@@ -13175,7 +13398,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/delete_external_pluggable_database.py.html>`__ to see an example of how to use delete_external_pluggable_database API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/delete_external_pluggable_database.py.html>`__ to see an example of how to use delete_external_pluggable_database API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['externalPluggableDatabaseId']
@@ -13278,7 +13501,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/delete_key_store.py.html>`__ to see an example of how to use delete_key_store API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/delete_key_store.py.html>`__ to see an example of how to use delete_key_store API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['keyStoreId']
@@ -13381,7 +13604,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/delete_oneoff_patch.py.html>`__ to see an example of how to use delete_oneoff_patch API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/delete_oneoff_patch.py.html>`__ to see an example of how to use delete_oneoff_patch API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['oneoffPatchId']
@@ -13484,7 +13707,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/delete_pluggable_database.py.html>`__ to see an example of how to use delete_pluggable_database API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/delete_pluggable_database.py.html>`__ to see an example of how to use delete_pluggable_database API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['pluggableDatabaseId']
@@ -13587,7 +13810,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/delete_pluggable_database_snapshot.py.html>`__ to see an example of how to use delete_pluggable_database_snapshot API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/delete_pluggable_database_snapshot.py.html>`__ to see an example of how to use delete_pluggable_database_snapshot API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['pluggableDatabaseSnapshotId']
@@ -13690,7 +13913,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/delete_scheduled_action.py.html>`__ to see an example of how to use delete_scheduled_action API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/delete_scheduled_action.py.html>`__ to see an example of how to use delete_scheduled_action API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['scheduledActionId']
@@ -13793,7 +14016,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/delete_scheduling_plan.py.html>`__ to see an example of how to use delete_scheduling_plan API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/delete_scheduling_plan.py.html>`__ to see an example of how to use delete_scheduling_plan API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['schedulingPlanId']
@@ -13896,7 +14119,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/delete_scheduling_policy.py.html>`__ to see an example of how to use delete_scheduling_policy API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/delete_scheduling_policy.py.html>`__ to see an example of how to use delete_scheduling_policy API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['schedulingPolicyId']
@@ -14004,7 +14227,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/delete_scheduling_window.py.html>`__ to see an example of how to use delete_scheduling_window API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/delete_scheduling_window.py.html>`__ to see an example of how to use delete_scheduling_window API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['schedulingPolicyId', 'schedulingWindowId']
@@ -14108,7 +14331,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/delete_vm_cluster.py.html>`__ to see an example of how to use delete_vm_cluster API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/delete_vm_cluster.py.html>`__ to see an example of how to use delete_vm_cluster API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['vmClusterId']
@@ -14217,7 +14440,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/delete_vm_cluster_network.py.html>`__ to see an example of how to use delete_vm_cluster_network API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/delete_vm_cluster_network.py.html>`__ to see an example of how to use delete_vm_cluster_network API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['exadataInfrastructureId', 'vmClusterNetworkId']
@@ -14323,7 +14546,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/deregister_autonomous_database_data_safe.py.html>`__ to see an example of how to use deregister_autonomous_database_data_safe API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/deregister_autonomous_database_data_safe.py.html>`__ to see an example of how to use deregister_autonomous_database_data_safe API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['autonomousDatabaseId']
@@ -14428,7 +14651,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/disable_autonomous_database_management.py.html>`__ to see an example of how to use disable_autonomous_database_management API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/disable_autonomous_database_management.py.html>`__ to see an example of how to use disable_autonomous_database_management API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['autonomousDatabaseId']
@@ -14530,7 +14753,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/disable_autonomous_database_operations_insights.py.html>`__ to see an example of how to use disable_autonomous_database_operations_insights API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/disable_autonomous_database_operations_insights.py.html>`__ to see an example of how to use disable_autonomous_database_operations_insights API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['autonomousDatabaseId']
@@ -14640,7 +14863,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/disable_database_management.py.html>`__ to see an example of how to use disable_database_management API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/disable_database_management.py.html>`__ to see an example of how to use disable_database_management API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['databaseId']
@@ -14755,7 +14978,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/disable_external_container_database_database_management.py.html>`__ to see an example of how to use disable_external_container_database_database_management API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/disable_external_container_database_database_management.py.html>`__ to see an example of how to use disable_external_container_database_database_management API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['externalContainerDatabaseId']
@@ -14868,7 +15091,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/disable_external_container_database_stack_monitoring.py.html>`__ to see an example of how to use disable_external_container_database_stack_monitoring API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/disable_external_container_database_stack_monitoring.py.html>`__ to see an example of how to use disable_external_container_database_stack_monitoring API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['externalContainerDatabaseId']
@@ -14985,7 +15208,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/disable_external_non_container_database_database_management.py.html>`__ to see an example of how to use disable_external_non_container_database_database_management API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/disable_external_non_container_database_database_management.py.html>`__ to see an example of how to use disable_external_non_container_database_database_management API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['externalNonContainerDatabaseId']
@@ -15098,7 +15321,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/disable_external_non_container_database_operations_insights.py.html>`__ to see an example of how to use disable_external_non_container_database_operations_insights API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/disable_external_non_container_database_operations_insights.py.html>`__ to see an example of how to use disable_external_non_container_database_operations_insights API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['externalNonContainerDatabaseId']
@@ -15211,7 +15434,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/disable_external_non_container_database_stack_monitoring.py.html>`__ to see an example of how to use disable_external_non_container_database_stack_monitoring API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/disable_external_non_container_database_stack_monitoring.py.html>`__ to see an example of how to use disable_external_non_container_database_stack_monitoring API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['externalNonContainerDatabaseId']
@@ -15328,7 +15551,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/disable_external_pluggable_database_database_management.py.html>`__ to see an example of how to use disable_external_pluggable_database_database_management API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/disable_external_pluggable_database_database_management.py.html>`__ to see an example of how to use disable_external_pluggable_database_database_management API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['externalPluggableDatabaseId']
@@ -15441,7 +15664,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/disable_external_pluggable_database_operations_insights.py.html>`__ to see an example of how to use disable_external_pluggable_database_operations_insights API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/disable_external_pluggable_database_operations_insights.py.html>`__ to see an example of how to use disable_external_pluggable_database_operations_insights API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['externalPluggableDatabaseId']
@@ -15554,7 +15777,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/disable_external_pluggable_database_stack_monitoring.py.html>`__ to see an example of how to use disable_external_pluggable_database_stack_monitoring API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/disable_external_pluggable_database_stack_monitoring.py.html>`__ to see an example of how to use disable_external_pluggable_database_stack_monitoring API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['externalPluggableDatabaseId']
@@ -15667,7 +15890,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/disable_pluggable_database_management.py.html>`__ to see an example of how to use disable_pluggable_database_management API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/disable_pluggable_database_management.py.html>`__ to see an example of how to use disable_pluggable_database_management API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['pluggableDatabaseId']
@@ -15777,7 +16000,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/download_exadata_infrastructure_config_file.py.html>`__ to see an example of how to use download_exadata_infrastructure_config_file API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/download_exadata_infrastructure_config_file.py.html>`__ to see an example of how to use download_exadata_infrastructure_config_file API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['exadataInfrastructureId']
@@ -15890,7 +16113,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/download_oneoff_patch.py.html>`__ to see an example of how to use download_oneoff_patch API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/download_oneoff_patch.py.html>`__ to see an example of how to use download_oneoff_patch API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['oneoffPatchId']
@@ -16005,7 +16228,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/download_validation_report.py.html>`__ to see an example of how to use download_validation_report API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/download_validation_report.py.html>`__ to see an example of how to use download_validation_report API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['exadataInfrastructureId', 'vmClusterNetworkId']
@@ -16119,7 +16342,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/download_vm_cluster_network_config_file.py.html>`__ to see an example of how to use download_vm_cluster_network_config_file API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/download_vm_cluster_network_config_file.py.html>`__ to see an example of how to use download_vm_cluster_network_config_file API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['exadataInfrastructureId', 'vmClusterNetworkId']
@@ -16239,7 +16462,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/edit_autonomous_container_database_dataguard.py.html>`__ to see an example of how to use edit_autonomous_container_database_dataguard API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/edit_autonomous_container_database_dataguard.py.html>`__ to see an example of how to use edit_autonomous_container_database_dataguard API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['autonomousContainerDatabaseId']
@@ -16348,7 +16571,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/enable_autonomous_database_management.py.html>`__ to see an example of how to use enable_autonomous_database_management API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/enable_autonomous_database_management.py.html>`__ to see an example of how to use enable_autonomous_database_management API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['autonomousDatabaseId']
@@ -16450,7 +16673,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/enable_autonomous_database_operations_insights.py.html>`__ to see an example of how to use enable_autonomous_database_operations_insights API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/enable_autonomous_database_operations_insights.py.html>`__ to see an example of how to use enable_autonomous_database_operations_insights API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['autonomousDatabaseId']
@@ -16563,7 +16786,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/enable_database_management.py.html>`__ to see an example of how to use enable_database_management API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/enable_database_management.py.html>`__ to see an example of how to use enable_database_management API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['databaseId']
@@ -16687,7 +16910,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/enable_external_container_database_database_management.py.html>`__ to see an example of how to use enable_external_container_database_database_management API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/enable_external_container_database_database_management.py.html>`__ to see an example of how to use enable_external_container_database_database_management API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['externalContainerDatabaseId']
@@ -16805,7 +17028,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/enable_external_container_database_stack_monitoring.py.html>`__ to see an example of how to use enable_external_container_database_stack_monitoring API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/enable_external_container_database_stack_monitoring.py.html>`__ to see an example of how to use enable_external_container_database_stack_monitoring API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['externalContainerDatabaseId']
@@ -16927,7 +17150,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/enable_external_non_container_database_database_management.py.html>`__ to see an example of how to use enable_external_non_container_database_database_management API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/enable_external_non_container_database_database_management.py.html>`__ to see an example of how to use enable_external_non_container_database_database_management API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['externalNonContainerDatabaseId']
@@ -17045,7 +17268,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/enable_external_non_container_database_operations_insights.py.html>`__ to see an example of how to use enable_external_non_container_database_operations_insights API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/enable_external_non_container_database_operations_insights.py.html>`__ to see an example of how to use enable_external_non_container_database_operations_insights API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['externalNonContainerDatabaseId']
@@ -17163,7 +17386,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/enable_external_non_container_database_stack_monitoring.py.html>`__ to see an example of how to use enable_external_non_container_database_stack_monitoring API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/enable_external_non_container_database_stack_monitoring.py.html>`__ to see an example of how to use enable_external_non_container_database_stack_monitoring API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['externalNonContainerDatabaseId']
@@ -17285,7 +17508,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/enable_external_pluggable_database_database_management.py.html>`__ to see an example of how to use enable_external_pluggable_database_database_management API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/enable_external_pluggable_database_database_management.py.html>`__ to see an example of how to use enable_external_pluggable_database_database_management API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['externalPluggableDatabaseId']
@@ -17403,7 +17626,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/enable_external_pluggable_database_operations_insights.py.html>`__ to see an example of how to use enable_external_pluggable_database_operations_insights API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/enable_external_pluggable_database_operations_insights.py.html>`__ to see an example of how to use enable_external_pluggable_database_operations_insights API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['externalPluggableDatabaseId']
@@ -17521,7 +17744,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/enable_external_pluggable_database_stack_monitoring.py.html>`__ to see an example of how to use enable_external_pluggable_database_stack_monitoring API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/enable_external_pluggable_database_stack_monitoring.py.html>`__ to see an example of how to use enable_external_pluggable_database_stack_monitoring API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['externalPluggableDatabaseId']
@@ -17639,7 +17862,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/enable_pluggable_database_management.py.html>`__ to see an example of how to use enable_pluggable_database_management API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/enable_pluggable_database_management.py.html>`__ to see an example of how to use enable_pluggable_database_management API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['pluggableDatabaseId']
@@ -17768,7 +17991,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/fail_over_autonomous_database.py.html>`__ to see an example of how to use fail_over_autonomous_database API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/fail_over_autonomous_database.py.html>`__ to see an example of how to use fail_over_autonomous_database API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['autonomousDatabaseId']
@@ -17889,7 +18112,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/failover_autonomous_container_database_dataguard.py.html>`__ to see an example of how to use failover_autonomous_container_database_dataguard API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/failover_autonomous_container_database_dataguard.py.html>`__ to see an example of how to use failover_autonomous_container_database_dataguard API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['autonomousContainerDatabaseId']
@@ -17998,7 +18221,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/failover_autonomous_container_database_dataguard_association.py.html>`__ to see an example of how to use failover_autonomous_container_database_dataguard_association API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/failover_autonomous_container_database_dataguard_association.py.html>`__ to see an example of how to use failover_autonomous_container_database_dataguard_association API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['autonomousContainerDatabaseId', 'autonomousContainerDatabaseDataguardAssociationId']
@@ -18118,7 +18341,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/failover_data_guard.py.html>`__ to see an example of how to use failover_data_guard API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/failover_data_guard.py.html>`__ to see an example of how to use failover_data_guard API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['databaseId']
@@ -18237,7 +18460,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/failover_data_guard_association.py.html>`__ to see an example of how to use failover_data_guard_association API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/failover_data_guard_association.py.html>`__ to see an example of how to use failover_data_guard_association API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['databaseId', 'dataGuardAssociationId']
@@ -18352,7 +18575,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/generate_autonomous_database_wallet.py.html>`__ to see an example of how to use generate_autonomous_database_wallet API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/generate_autonomous_database_wallet.py.html>`__ to see an example of how to use generate_autonomous_database_wallet API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['autonomousDatabaseId']
@@ -18467,7 +18690,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/generate_recommended_vm_cluster_network.py.html>`__ to see an example of how to use generate_recommended_vm_cluster_network API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/generate_recommended_vm_cluster_network.py.html>`__ to see an example of how to use generate_recommended_vm_cluster_network API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['exadataInfrastructureId']
@@ -18570,7 +18793,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/get_application_vip.py.html>`__ to see an example of how to use get_application_vip API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/get_application_vip.py.html>`__ to see an example of how to use get_application_vip API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['applicationVipId']
@@ -18665,7 +18888,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/get_autonomous_container_database.py.html>`__ to see an example of how to use get_autonomous_container_database API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/get_autonomous_container_database.py.html>`__ to see an example of how to use get_autonomous_container_database API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['autonomousContainerDatabaseId']
@@ -18758,7 +18981,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/get_autonomous_container_database_dataguard_association.py.html>`__ to see an example of how to use get_autonomous_container_database_dataguard_association API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/get_autonomous_container_database_dataguard_association.py.html>`__ to see an example of how to use get_autonomous_container_database_dataguard_association API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['autonomousContainerDatabaseId', 'autonomousContainerDatabaseDataguardAssociationId']
@@ -18850,7 +19073,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/get_autonomous_container_database_resource_usage.py.html>`__ to see an example of how to use get_autonomous_container_database_resource_usage API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/get_autonomous_container_database_resource_usage.py.html>`__ to see an example of how to use get_autonomous_container_database_resource_usage API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['autonomousContainerDatabaseId']
@@ -18948,7 +19171,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/get_autonomous_database.py.html>`__ to see an example of how to use get_autonomous_database API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/get_autonomous_database.py.html>`__ to see an example of how to use get_autonomous_database API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['autonomousDatabaseId']
@@ -19046,7 +19269,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/get_autonomous_database_backup.py.html>`__ to see an example of how to use get_autonomous_database_backup API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/get_autonomous_database_backup.py.html>`__ to see an example of how to use get_autonomous_database_backup API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['autonomousDatabaseBackupId']
@@ -19149,7 +19372,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/get_autonomous_database_dataguard_association.py.html>`__ to see an example of how to use get_autonomous_database_dataguard_association API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/get_autonomous_database_dataguard_association.py.html>`__ to see an example of how to use get_autonomous_database_dataguard_association API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['autonomousDatabaseId', 'autonomousDatabaseDataguardAssociationId']
@@ -19243,7 +19466,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/get_autonomous_database_regional_wallet.py.html>`__ to see an example of how to use get_autonomous_database_regional_wallet API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/get_autonomous_database_regional_wallet.py.html>`__ to see an example of how to use get_autonomous_database_regional_wallet API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -19329,7 +19552,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/get_autonomous_database_software_image.py.html>`__ to see an example of how to use get_autonomous_database_software_image API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/get_autonomous_database_software_image.py.html>`__ to see an example of how to use get_autonomous_database_software_image API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['autonomousDatabaseSoftwareImageId']
@@ -19427,7 +19650,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/get_autonomous_database_wallet.py.html>`__ to see an example of how to use get_autonomous_database_wallet API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/get_autonomous_database_wallet.py.html>`__ to see an example of how to use get_autonomous_database_wallet API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['autonomousDatabaseId']
@@ -19522,7 +19745,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/get_autonomous_exadata_infrastructure.py.html>`__ to see an example of how to use get_autonomous_exadata_infrastructure API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/get_autonomous_exadata_infrastructure.py.html>`__ to see an example of how to use get_autonomous_exadata_infrastructure API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['autonomousExadataInfrastructureId']
@@ -19610,7 +19833,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/get_autonomous_patch.py.html>`__ to see an example of how to use get_autonomous_patch API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/get_autonomous_patch.py.html>`__ to see an example of how to use get_autonomous_patch API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['autonomousPatchId']
@@ -19701,7 +19924,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/get_autonomous_virtual_machine.py.html>`__ to see an example of how to use get_autonomous_virtual_machine API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/get_autonomous_virtual_machine.py.html>`__ to see an example of how to use get_autonomous_virtual_machine API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['autonomousVirtualMachineId']
@@ -19799,7 +20022,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/get_autonomous_vm_cluster.py.html>`__ to see an example of how to use get_autonomous_vm_cluster API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/get_autonomous_vm_cluster.py.html>`__ to see an example of how to use get_autonomous_vm_cluster API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['autonomousVmClusterId']
@@ -19897,7 +20120,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/get_autonomous_vm_cluster_resource_usage.py.html>`__ to see an example of how to use get_autonomous_vm_cluster_resource_usage API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/get_autonomous_vm_cluster_resource_usage.py.html>`__ to see an example of how to use get_autonomous_vm_cluster_resource_usage API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['autonomousVmClusterId']
@@ -19992,7 +20215,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/get_backup.py.html>`__ to see an example of how to use get_backup API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/get_backup.py.html>`__ to see an example of how to use get_backup API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['backupId']
@@ -20083,7 +20306,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/get_backup_destination.py.html>`__ to see an example of how to use get_backup_destination API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/get_backup_destination.py.html>`__ to see an example of how to use get_backup_destination API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['backupDestinationId']
@@ -20181,7 +20404,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/get_cloud_autonomous_vm_cluster.py.html>`__ to see an example of how to use get_cloud_autonomous_vm_cluster API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/get_cloud_autonomous_vm_cluster.py.html>`__ to see an example of how to use get_cloud_autonomous_vm_cluster API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['cloudAutonomousVmClusterId']
@@ -20279,7 +20502,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/get_cloud_autonomous_vm_cluster_resource_usage.py.html>`__ to see an example of how to use get_cloud_autonomous_vm_cluster_resource_usage API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/get_cloud_autonomous_vm_cluster_resource_usage.py.html>`__ to see an example of how to use get_cloud_autonomous_vm_cluster_resource_usage API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['cloudAutonomousVmClusterId']
@@ -20377,7 +20600,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/get_cloud_exadata_infrastructure.py.html>`__ to see an example of how to use get_cloud_exadata_infrastructure API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/get_cloud_exadata_infrastructure.py.html>`__ to see an example of how to use get_cloud_exadata_infrastructure API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['cloudExadataInfrastructureId']
@@ -20480,7 +20703,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/get_cloud_exadata_infrastructure_unallocated_resources.py.html>`__ to see an example of how to use get_cloud_exadata_infrastructure_unallocated_resources API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/get_cloud_exadata_infrastructure_unallocated_resources.py.html>`__ to see an example of how to use get_cloud_exadata_infrastructure_unallocated_resources API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['cloudExadataInfrastructureId']
@@ -20586,7 +20809,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/get_cloud_vm_cluster.py.html>`__ to see an example of how to use get_cloud_vm_cluster API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/get_cloud_vm_cluster.py.html>`__ to see an example of how to use get_cloud_vm_cluster API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['cloudVmClusterId']
@@ -20685,7 +20908,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/get_cloud_vm_cluster_iorm_config.py.html>`__ to see an example of how to use get_cloud_vm_cluster_iorm_config API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/get_cloud_vm_cluster_iorm_config.py.html>`__ to see an example of how to use get_cloud_vm_cluster_iorm_config API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['cloudVmClusterId']
@@ -20788,7 +21011,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/get_cloud_vm_cluster_update.py.html>`__ to see an example of how to use get_cloud_vm_cluster_update API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/get_cloud_vm_cluster_update.py.html>`__ to see an example of how to use get_cloud_vm_cluster_update API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['cloudVmClusterId', 'updateId']
@@ -20892,7 +21115,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/get_cloud_vm_cluster_update_history_entry.py.html>`__ to see an example of how to use get_cloud_vm_cluster_update_history_entry API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/get_cloud_vm_cluster_update_history_entry.py.html>`__ to see an example of how to use get_cloud_vm_cluster_update_history_entry API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['cloudVmClusterId', 'updateHistoryEntryId']
@@ -20991,7 +21214,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/get_console_connection.py.html>`__ to see an example of how to use get_console_connection API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/get_console_connection.py.html>`__ to see an example of how to use get_console_connection API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['dbNodeId', 'consoleConnectionId']
@@ -21086,7 +21309,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/get_console_history.py.html>`__ to see an example of how to use get_console_history API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/get_console_history.py.html>`__ to see an example of how to use get_console_history API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['dbNodeId', 'consoleHistoryId']
@@ -21188,7 +21411,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/get_console_history_content.py.html>`__ to see an example of how to use get_console_history_content API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/get_console_history_content.py.html>`__ to see an example of how to use get_console_history_content API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['dbNodeId', 'consoleHistoryId']
@@ -21289,7 +21512,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/get_data_guard_association.py.html>`__ to see an example of how to use get_data_guard_association API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/get_data_guard_association.py.html>`__ to see an example of how to use get_data_guard_association API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['databaseId', 'dataGuardAssociationId']
@@ -21378,7 +21601,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/get_database.py.html>`__ to see an example of how to use get_database API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/get_database.py.html>`__ to see an example of how to use get_database API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['databaseId']
@@ -21466,7 +21689,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/get_database_software_image.py.html>`__ to see an example of how to use get_database_software_image API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/get_database_software_image.py.html>`__ to see an example of how to use get_database_software_image API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['databaseSoftwareImageId']
@@ -21562,7 +21785,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/get_database_upgrade_history_entry.py.html>`__ to see an example of how to use get_database_upgrade_history_entry API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/get_database_upgrade_history_entry.py.html>`__ to see an example of how to use get_database_upgrade_history_entry API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['databaseId', 'upgradeHistoryEntryId']
@@ -21658,7 +21881,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/get_db_home.py.html>`__ to see an example of how to use get_db_home API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/get_db_home.py.html>`__ to see an example of how to use get_db_home API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['dbHomeId']
@@ -21751,7 +21974,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/get_db_home_patch.py.html>`__ to see an example of how to use get_db_home_patch API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/get_db_home_patch.py.html>`__ to see an example of how to use get_db_home_patch API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['dbHomeId', 'patchId']
@@ -21845,7 +22068,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/get_db_home_patch_history_entry.py.html>`__ to see an example of how to use get_db_home_patch_history_entry API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/get_db_home_patch_history_entry.py.html>`__ to see an example of how to use get_db_home_patch_history_entry API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['dbHomeId', 'patchHistoryEntryId']
@@ -21934,7 +22157,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/get_db_node.py.html>`__ to see an example of how to use get_db_node API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/get_db_node.py.html>`__ to see an example of how to use get_db_node API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['dbNodeId']
@@ -22030,7 +22253,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/get_db_server.py.html>`__ to see an example of how to use get_db_server API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/get_db_server.py.html>`__ to see an example of how to use get_db_server API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['dbServerId', 'exadataInfrastructureId']
@@ -22139,7 +22362,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/get_db_system.py.html>`__ to see an example of how to use get_db_system API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/get_db_system.py.html>`__ to see an example of how to use get_db_system API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['dbSystemId']
@@ -22232,7 +22455,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/get_db_system_patch.py.html>`__ to see an example of how to use get_db_system_patch API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/get_db_system_patch.py.html>`__ to see an example of how to use get_db_system_patch API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['dbSystemId', 'patchId']
@@ -22326,7 +22549,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/get_db_system_patch_history_entry.py.html>`__ to see an example of how to use get_db_system_patch_history_entry API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/get_db_system_patch_history_entry.py.html>`__ to see an example of how to use get_db_system_patch_history_entry API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['dbSystemId', 'patchHistoryEntryId']
@@ -22423,7 +22646,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/get_db_system_upgrade_history_entry.py.html>`__ to see an example of how to use get_db_system_upgrade_history_entry API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/get_db_system_upgrade_history_entry.py.html>`__ to see an example of how to use get_db_system_upgrade_history_entry API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['dbSystemId', 'upgradeHistoryEntryId']
@@ -22493,6 +22716,104 @@ class DatabaseClient(object):
                 api_reference_link=api_reference_link,
                 required_arguments=required_arguments)
 
+    def get_dbnode_snapshot(self, dbnode_snapshot_id, **kwargs):
+        """
+        Gets information about the specified Exadata Database Node Snapshot in the specified compartment.
+
+
+        :param str dbnode_snapshot_id: (required)
+            The Exadata Database Node Snapshot `OCID`__.
+
+            __ https://docs.cloud.oracle.com/Content/General/Concepts/identifiers.htm
+
+        :param str opc_request_id: (optional)
+            Unique identifier for the request.
+
+        :param obj retry_strategy: (optional)
+            A retry strategy to apply to this specific operation/call. This will override any retry strategy set at the client-level.
+
+            This should be one of the strategies available in the :py:mod:`~oci.retry` module. This operation will not retry by default, users can also use the convenient :py:data:`~oci.retry.DEFAULT_RETRY_STRATEGY` provided by the SDK to enable retries for it.
+            The specifics of the default retry strategy are described `here <https://docs.oracle.com/en-us/iaas/tools/python/latest/sdk_behaviors/retries.html>`__.
+
+            To have this operation explicitly not perform any retries, pass an instance of :py:class:`~oci.retry.NoneRetryStrategy`.
+
+        :param bool allow_control_chars: (optional)
+            allow_control_chars is a boolean to indicate whether or not this request should allow control characters in the response object.
+            By default, the response will not allow control characters in strings
+
+        :return: A :class:`~oci.response.Response` object with data of type :class:`~oci.database.models.DbnodeSnapshot`
+        :rtype: :class:`~oci.response.Response`
+
+        :example:
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/get_dbnode_snapshot.py.html>`__ to see an example of how to use get_dbnode_snapshot API.
+        """
+        # Required path and query arguments. These are in camelCase to replace values in service endpoints.
+        required_arguments = ['dbnodeSnapshotId']
+        resource_path = "/dbnodeSnapshots/{dbnodeSnapshotId}"
+        method = "GET"
+        operation_name = "get_dbnode_snapshot"
+        api_reference_link = "https://docs.oracle.com/iaas/api/#/en/database/20160918/DbnodeSnapshot/GetDbnodeSnapshot"
+
+        # Don't accept unknown kwargs
+        expected_kwargs = [
+            "allow_control_chars",
+            "retry_strategy",
+            "opc_request_id"
+        ]
+        extra_kwargs = [_key for _key in six.iterkeys(kwargs) if _key not in expected_kwargs]
+        if extra_kwargs:
+            raise ValueError(
+                f"get_dbnode_snapshot got unknown kwargs: {extra_kwargs!r}")
+
+        path_params = {
+            "dbnodeSnapshotId": dbnode_snapshot_id
+        }
+
+        path_params = {k: v for (k, v) in six.iteritems(path_params) if v is not missing}
+
+        for (k, v) in six.iteritems(path_params):
+            if v is None or (isinstance(v, six.string_types) and len(v.strip()) == 0):
+                raise ValueError(f'Parameter {k} cannot be None, whitespace or empty string')
+
+        header_params = {
+            "accept": "application/json",
+            "content-type": "application/json",
+            "opc-request-id": kwargs.get("opc_request_id", missing)
+        }
+        header_params = {k: v for (k, v) in six.iteritems(header_params) if v is not missing and v is not None}
+
+        retry_strategy = self.base_client.get_preferred_retry_strategy(
+            operation_retry_strategy=kwargs.get('retry_strategy'),
+            client_retry_strategy=self.retry_strategy
+        )
+
+        if retry_strategy:
+            if not isinstance(retry_strategy, retry.NoneRetryStrategy):
+                self.base_client.add_opc_client_retries_header(header_params)
+                retry_strategy.add_circuit_breaker_callback(self.circuit_breaker_callback)
+            return retry_strategy.make_retrying_call(
+                self.base_client.call_api,
+                resource_path=resource_path,
+                method=method,
+                path_params=path_params,
+                header_params=header_params,
+                response_type="DbnodeSnapshot",
+                allow_control_chars=kwargs.get('allow_control_chars'),
+                operation_name=operation_name,
+                api_reference_link=api_reference_link,
+                required_arguments=required_arguments)
+        else:
+            return self.base_client.call_api(
+                resource_path=resource_path,
+                method=method,
+                path_params=path_params,
+                header_params=header_params,
+                response_type="DbnodeSnapshot",
+                allow_control_chars=kwargs.get('allow_control_chars'),
+                operation_name=operation_name,
+                api_reference_link=api_reference_link,
+                required_arguments=required_arguments)
+
     def get_exadata_infrastructure(self, exadata_infrastructure_id, **kwargs):
         """
         Gets information about the specified Exadata infrastructure. Applies to Exadata Cloud@Customer instances only.
@@ -22528,7 +22849,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/get_exadata_infrastructure.py.html>`__ to see an example of how to use get_exadata_infrastructure API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/get_exadata_infrastructure.py.html>`__ to see an example of how to use get_exadata_infrastructure API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['exadataInfrastructureId']
@@ -22642,7 +22963,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/get_exadata_infrastructure_ocpus.py.html>`__ to see an example of how to use get_exadata_infrastructure_ocpus API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/get_exadata_infrastructure_ocpus.py.html>`__ to see an example of how to use get_exadata_infrastructure_ocpus API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['autonomousExadataInfrastructureId']
@@ -22745,7 +23066,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/get_exadata_infrastructure_un_allocated_resources.py.html>`__ to see an example of how to use get_exadata_infrastructure_un_allocated_resources API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/get_exadata_infrastructure_un_allocated_resources.py.html>`__ to see an example of how to use get_exadata_infrastructure_un_allocated_resources API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['exadataInfrastructureId']
@@ -22862,7 +23183,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/get_exadata_iorm_config.py.html>`__ to see an example of how to use get_exadata_iorm_config API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/get_exadata_iorm_config.py.html>`__ to see an example of how to use get_exadata_iorm_config API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['dbSystemId']
@@ -22960,7 +23281,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/get_exadb_vm_cluster.py.html>`__ to see an example of how to use get_exadb_vm_cluster API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/get_exadb_vm_cluster.py.html>`__ to see an example of how to use get_exadb_vm_cluster API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['exadbVmClusterId']
@@ -23063,7 +23384,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/get_exadb_vm_cluster_update.py.html>`__ to see an example of how to use get_exadb_vm_cluster_update API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/get_exadb_vm_cluster_update.py.html>`__ to see an example of how to use get_exadb_vm_cluster_update API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['exadbVmClusterId', 'updateId']
@@ -23167,7 +23488,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/get_exadb_vm_cluster_update_history_entry.py.html>`__ to see an example of how to use get_exadb_vm_cluster_update_history_entry API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/get_exadb_vm_cluster_update_history_entry.py.html>`__ to see an example of how to use get_exadb_vm_cluster_update_history_entry API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['exadbVmClusterId', 'updateHistoryEntryId']
@@ -23266,7 +23587,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/get_exascale_db_storage_vault.py.html>`__ to see an example of how to use get_exascale_db_storage_vault API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/get_exascale_db_storage_vault.py.html>`__ to see an example of how to use get_exascale_db_storage_vault API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['exascaleDbStorageVaultId']
@@ -23364,7 +23685,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/get_execution_action.py.html>`__ to see an example of how to use get_execution_action API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/get_execution_action.py.html>`__ to see an example of how to use get_execution_action API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['executionActionId']
@@ -23462,7 +23783,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/get_execution_window.py.html>`__ to see an example of how to use get_execution_window API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/get_execution_window.py.html>`__ to see an example of how to use get_execution_window API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['executionWindowId']
@@ -23561,7 +23882,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/get_external_backup_job.py.html>`__ to see an example of how to use get_external_backup_job API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/get_external_backup_job.py.html>`__ to see an example of how to use get_external_backup_job API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['backupId']
@@ -23652,7 +23973,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/get_external_container_database.py.html>`__ to see an example of how to use get_external_container_database API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/get_external_container_database.py.html>`__ to see an example of how to use get_external_container_database API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['externalContainerDatabaseId']
@@ -23751,7 +24072,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/get_external_database_connector.py.html>`__ to see an example of how to use get_external_database_connector API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/get_external_database_connector.py.html>`__ to see an example of how to use get_external_database_connector API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['externalDatabaseConnectorId']
@@ -23849,7 +24170,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/get_external_non_container_database.py.html>`__ to see an example of how to use get_external_non_container_database API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/get_external_non_container_database.py.html>`__ to see an example of how to use get_external_non_container_database API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['externalNonContainerDatabaseId']
@@ -23948,7 +24269,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/get_external_pluggable_database.py.html>`__ to see an example of how to use get_external_pluggable_database API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/get_external_pluggable_database.py.html>`__ to see an example of how to use get_external_pluggable_database API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['externalPluggableDatabaseId']
@@ -24055,7 +24376,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/get_infrastructure_target_versions.py.html>`__ to see an example of how to use get_infrastructure_target_versions API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/get_infrastructure_target_versions.py.html>`__ to see an example of how to use get_infrastructure_target_versions API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['compartmentId']
@@ -24159,7 +24480,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/get_key_store.py.html>`__ to see an example of how to use get_key_store API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/get_key_store.py.html>`__ to see an example of how to use get_key_store API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['keyStoreId']
@@ -24252,7 +24573,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/get_maintenance_run.py.html>`__ to see an example of how to use get_maintenance_run API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/get_maintenance_run.py.html>`__ to see an example of how to use get_maintenance_run API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['maintenanceRunId']
@@ -24338,7 +24659,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/get_maintenance_run_history.py.html>`__ to see an example of how to use get_maintenance_run_history API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/get_maintenance_run_history.py.html>`__ to see an example of how to use get_maintenance_run_history API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['maintenanceRunHistoryId']
@@ -24429,7 +24750,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/get_oneoff_patch.py.html>`__ to see an example of how to use get_oneoff_patch API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/get_oneoff_patch.py.html>`__ to see an example of how to use get_oneoff_patch API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['oneoffPatchId']
@@ -24532,7 +24853,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/get_pdb_conversion_history_entry.py.html>`__ to see an example of how to use get_pdb_conversion_history_entry API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/get_pdb_conversion_history_entry.py.html>`__ to see an example of how to use get_pdb_conversion_history_entry API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['databaseId', 'pdbConversionHistoryEntryId']
@@ -24628,7 +24949,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/get_pluggable_database.py.html>`__ to see an example of how to use get_pluggable_database API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/get_pluggable_database.py.html>`__ to see an example of how to use get_pluggable_database API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['pluggableDatabaseId']
@@ -24719,7 +25040,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/get_pluggable_database_snapshot.py.html>`__ to see an example of how to use get_pluggable_database_snapshot API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/get_pluggable_database_snapshot.py.html>`__ to see an example of how to use get_pluggable_database_snapshot API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['pluggableDatabaseSnapshotId']
@@ -24817,7 +25138,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/get_scheduled_action.py.html>`__ to see an example of how to use get_scheduled_action API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/get_scheduled_action.py.html>`__ to see an example of how to use get_scheduled_action API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['scheduledActionId']
@@ -24915,7 +25236,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/get_scheduling_plan.py.html>`__ to see an example of how to use get_scheduling_plan API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/get_scheduling_plan.py.html>`__ to see an example of how to use get_scheduling_plan API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['schedulingPlanId']
@@ -25013,7 +25334,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/get_scheduling_policy.py.html>`__ to see an example of how to use get_scheduling_policy API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/get_scheduling_policy.py.html>`__ to see an example of how to use get_scheduling_policy API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['schedulingPolicyId']
@@ -25116,7 +25437,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/get_scheduling_window.py.html>`__ to see an example of how to use get_scheduling_window API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/get_scheduling_window.py.html>`__ to see an example of how to use get_scheduling_window API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['schedulingPolicyId', 'schedulingWindowId']
@@ -25215,7 +25536,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/get_vm_cluster.py.html>`__ to see an example of how to use get_vm_cluster API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/get_vm_cluster.py.html>`__ to see an example of how to use get_vm_cluster API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['vmClusterId']
@@ -25319,7 +25640,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/get_vm_cluster_network.py.html>`__ to see an example of how to use get_vm_cluster_network API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/get_vm_cluster_network.py.html>`__ to see an example of how to use get_vm_cluster_network API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['exadataInfrastructureId', 'vmClusterNetworkId']
@@ -25420,7 +25741,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/get_vm_cluster_patch.py.html>`__ to see an example of how to use get_vm_cluster_patch API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/get_vm_cluster_patch.py.html>`__ to see an example of how to use get_vm_cluster_patch API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['vmClusterId', 'patchId']
@@ -25514,7 +25835,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/get_vm_cluster_patch_history_entry.py.html>`__ to see an example of how to use get_vm_cluster_patch_history_entry API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/get_vm_cluster_patch_history_entry.py.html>`__ to see an example of how to use get_vm_cluster_patch_history_entry API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['vmClusterId', 'patchHistoryEntryId']
@@ -25611,7 +25932,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/get_vm_cluster_update.py.html>`__ to see an example of how to use get_vm_cluster_update API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/get_vm_cluster_update.py.html>`__ to see an example of how to use get_vm_cluster_update API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['vmClusterId', 'updateId']
@@ -25715,7 +26036,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/get_vm_cluster_update_history_entry.py.html>`__ to see an example of how to use get_vm_cluster_update_history_entry API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/get_vm_cluster_update_history_entry.py.html>`__ to see an example of how to use get_vm_cluster_update_history_entry API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['vmClusterId', 'updateHistoryEntryId']
@@ -25816,7 +26137,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/launch_autonomous_exadata_infrastructure.py.html>`__ to see an example of how to use launch_autonomous_exadata_infrastructure API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/launch_autonomous_exadata_infrastructure.py.html>`__ to see an example of how to use launch_autonomous_exadata_infrastructure API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -25932,7 +26253,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/launch_db_system.py.html>`__ to see an example of how to use launch_db_system API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/launch_db_system.py.html>`__ to see an example of how to use launch_db_system API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -26052,7 +26373,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/list_application_vips.py.html>`__ to see an example of how to use list_application_vips API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/list_application_vips.py.html>`__ to see an example of how to use list_application_vips API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['compartmentId', 'cloudVmClusterId']
@@ -26216,7 +26537,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/list_autonomous_container_database_backups.py.html>`__ to see an example of how to use list_autonomous_container_database_backups API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/list_autonomous_container_database_backups.py.html>`__ to see an example of how to use list_autonomous_container_database_backups API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -26359,7 +26680,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/list_autonomous_container_database_dataguard_associations.py.html>`__ to see an example of how to use list_autonomous_container_database_dataguard_associations API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/list_autonomous_container_database_dataguard_associations.py.html>`__ to see an example of how to use list_autonomous_container_database_dataguard_associations API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['autonomousContainerDatabaseId']
@@ -26480,7 +26801,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/list_autonomous_container_database_versions.py.html>`__ to see an example of how to use list_autonomous_container_database_versions API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/list_autonomous_container_database_versions.py.html>`__ to see an example of how to use list_autonomous_container_database_versions API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['compartmentId', 'serviceComponent']
@@ -26642,7 +26963,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/list_autonomous_container_databases.py.html>`__ to see an example of how to use list_autonomous_container_databases API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/list_autonomous_container_databases.py.html>`__ to see an example of how to use list_autonomous_container_databases API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['compartmentId']
@@ -26829,7 +27150,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/list_autonomous_database_backups.py.html>`__ to see an example of how to use list_autonomous_database_backups API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/list_autonomous_database_backups.py.html>`__ to see an example of how to use list_autonomous_database_backups API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -26979,7 +27300,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/list_autonomous_database_character_sets.py.html>`__ to see an example of how to use list_autonomous_database_character_sets API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/list_autonomous_database_character_sets.py.html>`__ to see an example of how to use list_autonomous_database_character_sets API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -27120,7 +27441,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/list_autonomous_database_clones.py.html>`__ to see an example of how to use list_autonomous_database_clones API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/list_autonomous_database_clones.py.html>`__ to see an example of how to use list_autonomous_database_clones API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['autonomousDatabaseId', 'compartmentId']
@@ -27270,7 +27591,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/list_autonomous_database_dataguard_associations.py.html>`__ to see an example of how to use list_autonomous_database_dataguard_associations API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/list_autonomous_database_dataguard_associations.py.html>`__ to see an example of how to use list_autonomous_database_dataguard_associations API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['autonomousDatabaseId']
@@ -27381,7 +27702,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/list_autonomous_database_peers.py.html>`__ to see an example of how to use list_autonomous_database_peers API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/list_autonomous_database_peers.py.html>`__ to see an example of how to use list_autonomous_database_peers API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['autonomousDatabaseId']
@@ -27495,7 +27816,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/list_autonomous_database_refreshable_clones.py.html>`__ to see an example of how to use list_autonomous_database_refreshable_clones API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/list_autonomous_database_refreshable_clones.py.html>`__ to see an example of how to use list_autonomous_database_refreshable_clones API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['autonomousDatabaseId']
@@ -27632,7 +27953,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/list_autonomous_database_software_images.py.html>`__ to see an example of how to use list_autonomous_database_software_images API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/list_autonomous_database_software_images.py.html>`__ to see an example of how to use list_autonomous_database_software_images API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['compartmentId', 'imageShapeFamily']
@@ -27833,7 +28154,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/list_autonomous_databases.py.html>`__ to see an example of how to use list_autonomous_databases API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/list_autonomous_databases.py.html>`__ to see an example of how to use list_autonomous_databases API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['compartmentId']
@@ -28019,7 +28340,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/list_autonomous_db_preview_versions.py.html>`__ to see an example of how to use list_autonomous_db_preview_versions API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/list_autonomous_db_preview_versions.py.html>`__ to see an example of how to use list_autonomous_db_preview_versions API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['compartmentId']
@@ -28150,7 +28471,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/list_autonomous_db_versions.py.html>`__ to see an example of how to use list_autonomous_db_versions API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/list_autonomous_db_versions.py.html>`__ to see an example of how to use list_autonomous_db_versions API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['compartmentId']
@@ -28274,7 +28595,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/list_autonomous_exadata_infrastructure_shapes.py.html>`__ to see an example of how to use list_autonomous_exadata_infrastructure_shapes API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/list_autonomous_exadata_infrastructure_shapes.py.html>`__ to see an example of how to use list_autonomous_exadata_infrastructure_shapes API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['availabilityDomain', 'compartmentId']
@@ -28398,7 +28719,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/list_autonomous_exadata_infrastructures.py.html>`__ to see an example of how to use list_autonomous_exadata_infrastructures API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/list_autonomous_exadata_infrastructures.py.html>`__ to see an example of how to use list_autonomous_exadata_infrastructures API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['compartmentId']
@@ -28539,7 +28860,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/list_autonomous_virtual_machines.py.html>`__ to see an example of how to use list_autonomous_virtual_machines API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/list_autonomous_virtual_machines.py.html>`__ to see an example of how to use list_autonomous_virtual_machines API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['compartmentId', 'autonomousVmClusterId']
@@ -28657,7 +28978,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/list_autonomous_vm_cluster_acd_resource_usage.py.html>`__ to see an example of how to use list_autonomous_vm_cluster_acd_resource_usage API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/list_autonomous_vm_cluster_acd_resource_usage.py.html>`__ to see an example of how to use list_autonomous_vm_cluster_acd_resource_usage API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['autonomousVmClusterId']
@@ -28794,7 +29115,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/list_autonomous_vm_clusters.py.html>`__ to see an example of how to use list_autonomous_vm_clusters API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/list_autonomous_vm_clusters.py.html>`__ to see an example of how to use list_autonomous_vm_clusters API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['compartmentId']
@@ -28931,7 +29252,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/list_backup_destination.py.html>`__ to see an example of how to use list_backup_destination API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/list_backup_destination.py.html>`__ to see an example of how to use list_backup_destination API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['compartmentId']
@@ -29063,7 +29384,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/list_backups.py.html>`__ to see an example of how to use list_backups API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/list_backups.py.html>`__ to see an example of how to use list_backups API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -29200,7 +29521,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/list_cloud_autonomous_vm_cluster_acd_resource_usage.py.html>`__ to see an example of how to use list_cloud_autonomous_vm_cluster_acd_resource_usage API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/list_cloud_autonomous_vm_cluster_acd_resource_usage.py.html>`__ to see an example of how to use list_cloud_autonomous_vm_cluster_acd_resource_usage API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['cloudAutonomousVmClusterId']
@@ -29340,7 +29661,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/list_cloud_autonomous_vm_clusters.py.html>`__ to see an example of how to use list_cloud_autonomous_vm_clusters API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/list_cloud_autonomous_vm_clusters.py.html>`__ to see an example of how to use list_cloud_autonomous_vm_clusters API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['compartmentId']
@@ -29497,7 +29818,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/list_cloud_exadata_infrastructures.py.html>`__ to see an example of how to use list_cloud_exadata_infrastructures API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/list_cloud_exadata_infrastructures.py.html>`__ to see an example of how to use list_cloud_exadata_infrastructures API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['compartmentId']
@@ -29636,7 +29957,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/list_cloud_vm_cluster_update_history_entries.py.html>`__ to see an example of how to use list_cloud_vm_cluster_update_history_entries API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/list_cloud_vm_cluster_update_history_entries.py.html>`__ to see an example of how to use list_cloud_vm_cluster_update_history_entries API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['cloudVmClusterId']
@@ -29764,7 +30085,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/list_cloud_vm_cluster_updates.py.html>`__ to see an example of how to use list_cloud_vm_cluster_updates API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/list_cloud_vm_cluster_updates.py.html>`__ to see an example of how to use list_cloud_vm_cluster_updates API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['cloudVmClusterId']
@@ -29913,7 +30234,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/list_cloud_vm_clusters.py.html>`__ to see an example of how to use list_cloud_vm_clusters API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/list_cloud_vm_clusters.py.html>`__ to see an example of how to use list_cloud_vm_clusters API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['compartmentId']
@@ -30047,7 +30368,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/list_console_connections.py.html>`__ to see an example of how to use list_console_connections API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/list_console_connections.py.html>`__ to see an example of how to use list_console_connections API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['dbNodeId']
@@ -30162,7 +30483,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/list_console_histories.py.html>`__ to see an example of how to use list_console_histories API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/list_console_histories.py.html>`__ to see an example of how to use list_console_histories API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['dbNodeId']
@@ -30312,7 +30633,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/list_container_database_patches.py.html>`__ to see an example of how to use list_container_database_patches API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/list_container_database_patches.py.html>`__ to see an example of how to use list_container_database_patches API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['autonomousContainerDatabaseId', 'compartmentId']
@@ -30430,7 +30751,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/list_data_guard_associations.py.html>`__ to see an example of how to use list_data_guard_associations API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/list_data_guard_associations.py.html>`__ to see an example of how to use list_data_guard_associations API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['databaseId']
@@ -30578,7 +30899,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/list_database_software_images.py.html>`__ to see an example of how to use list_database_software_images API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/list_database_software_images.py.html>`__ to see an example of how to use list_database_software_images API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['compartmentId']
@@ -30751,7 +31072,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/list_database_upgrade_history_entries.py.html>`__ to see an example of how to use list_database_upgrade_history_entries API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/list_database_upgrade_history_entries.py.html>`__ to see an example of how to use list_database_upgrade_history_entries API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['databaseId']
@@ -30926,7 +31247,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/list_databases.py.html>`__ to see an example of how to use list_databases API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/list_databases.py.html>`__ to see an example of how to use list_databases API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['compartmentId']
@@ -31056,7 +31377,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/list_db_home_patch_history_entries.py.html>`__ to see an example of how to use list_db_home_patch_history_entries API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/list_db_home_patch_history_entries.py.html>`__ to see an example of how to use list_db_home_patch_history_entries API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['dbHomeId']
@@ -31164,7 +31485,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/list_db_home_patches.py.html>`__ to see an example of how to use list_db_home_patches API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/list_db_home_patches.py.html>`__ to see an example of how to use list_db_home_patches API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['dbHomeId']
@@ -31308,7 +31629,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/list_db_homes.py.html>`__ to see an example of how to use list_db_homes API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/list_db_homes.py.html>`__ to see an example of how to use list_db_homes API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['compartmentId']
@@ -31472,7 +31793,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/list_db_nodes.py.html>`__ to see an example of how to use list_db_nodes API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/list_db_nodes.py.html>`__ to see an example of how to use list_db_nodes API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['compartmentId']
@@ -31628,7 +31949,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/list_db_servers.py.html>`__ to see an example of how to use list_db_servers API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/list_db_servers.py.html>`__ to see an example of how to use list_db_servers API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['compartmentId', 'exadataInfrastructureId']
@@ -31753,7 +32074,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/list_db_system_compute_performances.py.html>`__ to see an example of how to use list_db_system_compute_performances API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/list_db_system_compute_performances.py.html>`__ to see an example of how to use list_db_system_compute_performances API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -31850,7 +32171,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/list_db_system_patch_history_entries.py.html>`__ to see an example of how to use list_db_system_patch_history_entries API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/list_db_system_patch_history_entries.py.html>`__ to see an example of how to use list_db_system_patch_history_entries API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['dbSystemId']
@@ -31958,7 +32279,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/list_db_system_patches.py.html>`__ to see an example of how to use list_db_system_patches API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/list_db_system_patches.py.html>`__ to see an example of how to use list_db_system_patches API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['dbSystemId']
@@ -32072,7 +32393,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/list_db_system_shapes.py.html>`__ to see an example of how to use list_db_system_shapes API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/list_db_system_shapes.py.html>`__ to see an example of how to use list_db_system_shapes API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['compartmentId']
@@ -32185,7 +32506,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/list_db_system_storage_performances.py.html>`__ to see an example of how to use list_db_system_storage_performances API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/list_db_system_storage_performances.py.html>`__ to see an example of how to use list_db_system_storage_performances API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['storageManagement']
@@ -32323,7 +32644,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/list_db_system_upgrade_history_entries.py.html>`__ to see an example of how to use list_db_system_upgrade_history_entries API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/list_db_system_upgrade_history_entries.py.html>`__ to see an example of how to use list_db_system_upgrade_history_entries API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['dbSystemId']
@@ -32470,7 +32791,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/list_db_system_upgrades.py.html>`__ to see an example of how to use list_db_system_upgrades API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/list_db_system_upgrades.py.html>`__ to see an example of how to use list_db_system_upgrades API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['dbSystemId']
@@ -32613,7 +32934,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/list_db_systems.py.html>`__ to see an example of how to use list_db_systems API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/list_db_systems.py.html>`__ to see an example of how to use list_db_systems API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['compartmentId']
@@ -32767,7 +33088,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/list_db_versions.py.html>`__ to see an example of how to use list_db_versions API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/list_db_versions.py.html>`__ to see an example of how to use list_db_versions API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['compartmentId']
@@ -32851,6 +33172,166 @@ class DatabaseClient(object):
                 api_reference_link=api_reference_link,
                 required_arguments=required_arguments)
 
+    def list_dbnode_snapshots(self, compartment_id, **kwargs):
+        """
+        Gets a list of the Exadata Database Node Snapshots in the specified compartment.
+
+
+        :param str compartment_id: (required)
+            The compartment `OCID`__.
+
+            __ https://docs.cloud.oracle.com/Content/General/Concepts/identifiers.htm
+
+        :param int limit: (optional)
+            The maximum number of items to return per page.
+
+        :param str page: (optional)
+            The pagination token to continue listing from.
+
+        :param str sort_by: (optional)
+            The field to sort by.  You can provide one sort order (`sortOrder`).  Default order for TIMECREATED is descending.  Default order for NAME is ascending. The NAME sort order is case sensitive.
+
+            Allowed values are: "TIMECREATED", "NAME"
+
+        :param str name: (optional)
+            A filter to return only resources that match the entire name given. The match is not case sensitive.
+
+        :param str sort_order: (optional)
+            The sort order to use, either ascending (`ASC`) or descending (`DESC`).
+
+            Allowed values are: "ASC", "DESC"
+
+        :param str lifecycle_state: (optional)
+            A filter to return only Exadata Database Snapshots that match the given lifecycle state exactly.
+
+            Allowed values are: "CREATING", "AVAILABLE", "TERMINATING", "TERMINATED", "FAILED", "MOUNTED", "MOUNTING", "UNMOUNTING"
+
+        :param str cluster_id: (optional)
+            A filter to return only Exadata Database Node Snapshots that match the given VM cluster.
+
+        :param str source_dbnode_id: (optional)
+            A filter to return only Exadata Database Snapshots that match the given database node.
+
+        :param str opc_request_id: (optional)
+            Unique identifier for the request.
+
+        :param obj retry_strategy: (optional)
+            A retry strategy to apply to this specific operation/call. This will override any retry strategy set at the client-level.
+
+            This should be one of the strategies available in the :py:mod:`~oci.retry` module. This operation will not retry by default, users can also use the convenient :py:data:`~oci.retry.DEFAULT_RETRY_STRATEGY` provided by the SDK to enable retries for it.
+            The specifics of the default retry strategy are described `here <https://docs.oracle.com/en-us/iaas/tools/python/latest/sdk_behaviors/retries.html>`__.
+
+            To have this operation explicitly not perform any retries, pass an instance of :py:class:`~oci.retry.NoneRetryStrategy`.
+
+        :param bool allow_control_chars: (optional)
+            allow_control_chars is a boolean to indicate whether or not this request should allow control characters in the response object.
+            By default, the response will not allow control characters in strings
+
+        :return: A :class:`~oci.response.Response` object with data of type list of :class:`~oci.database.models.DbnodeSnapshotSummary`
+        :rtype: :class:`~oci.response.Response`
+
+        :example:
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/list_dbnode_snapshots.py.html>`__ to see an example of how to use list_dbnode_snapshots API.
+        """
+        # Required path and query arguments. These are in camelCase to replace values in service endpoints.
+        required_arguments = ['compartmentId']
+        resource_path = "/dbnodeSnapshots"
+        method = "GET"
+        operation_name = "list_dbnode_snapshots"
+        api_reference_link = "https://docs.oracle.com/iaas/api/#/en/database/20160918/DbnodeSnapshot/ListDbnodeSnapshots"
+
+        # Don't accept unknown kwargs
+        expected_kwargs = [
+            "allow_control_chars",
+            "retry_strategy",
+            "limit",
+            "page",
+            "sort_by",
+            "name",
+            "sort_order",
+            "lifecycle_state",
+            "cluster_id",
+            "source_dbnode_id",
+            "opc_request_id"
+        ]
+        extra_kwargs = [_key for _key in six.iterkeys(kwargs) if _key not in expected_kwargs]
+        if extra_kwargs:
+            raise ValueError(
+                f"list_dbnode_snapshots got unknown kwargs: {extra_kwargs!r}")
+
+        if 'sort_by' in kwargs:
+            sort_by_allowed_values = ["TIMECREATED", "NAME"]
+            if kwargs['sort_by'] not in sort_by_allowed_values:
+                raise ValueError(
+                    f"Invalid value for `sort_by`, must be one of { sort_by_allowed_values }"
+                )
+
+        if 'sort_order' in kwargs:
+            sort_order_allowed_values = ["ASC", "DESC"]
+            if kwargs['sort_order'] not in sort_order_allowed_values:
+                raise ValueError(
+                    f"Invalid value for `sort_order`, must be one of { sort_order_allowed_values }"
+                )
+
+        if 'lifecycle_state' in kwargs:
+            lifecycle_state_allowed_values = ["CREATING", "AVAILABLE", "TERMINATING", "TERMINATED", "FAILED", "MOUNTED", "MOUNTING", "UNMOUNTING"]
+            if kwargs['lifecycle_state'] not in lifecycle_state_allowed_values:
+                raise ValueError(
+                    f"Invalid value for `lifecycle_state`, must be one of { lifecycle_state_allowed_values }"
+                )
+
+        query_params = {
+            "compartmentId": compartment_id,
+            "limit": kwargs.get("limit", missing),
+            "page": kwargs.get("page", missing),
+            "sortBy": kwargs.get("sort_by", missing),
+            "name": kwargs.get("name", missing),
+            "sortOrder": kwargs.get("sort_order", missing),
+            "lifecycleState": kwargs.get("lifecycle_state", missing),
+            "clusterId": kwargs.get("cluster_id", missing),
+            "sourceDbnodeId": kwargs.get("source_dbnode_id", missing)
+        }
+        query_params = {k: v for (k, v) in six.iteritems(query_params) if v is not missing and v is not None}
+
+        header_params = {
+            "accept": "application/json",
+            "content-type": "application/json",
+            "opc-request-id": kwargs.get("opc_request_id", missing)
+        }
+        header_params = {k: v for (k, v) in six.iteritems(header_params) if v is not missing and v is not None}
+
+        retry_strategy = self.base_client.get_preferred_retry_strategy(
+            operation_retry_strategy=kwargs.get('retry_strategy'),
+            client_retry_strategy=self.retry_strategy
+        )
+
+        if retry_strategy:
+            if not isinstance(retry_strategy, retry.NoneRetryStrategy):
+                self.base_client.add_opc_client_retries_header(header_params)
+                retry_strategy.add_circuit_breaker_callback(self.circuit_breaker_callback)
+            return retry_strategy.make_retrying_call(
+                self.base_client.call_api,
+                resource_path=resource_path,
+                method=method,
+                query_params=query_params,
+                header_params=header_params,
+                response_type="list[DbnodeSnapshotSummary]",
+                allow_control_chars=kwargs.get('allow_control_chars'),
+                operation_name=operation_name,
+                api_reference_link=api_reference_link,
+                required_arguments=required_arguments)
+        else:
+            return self.base_client.call_api(
+                resource_path=resource_path,
+                method=method,
+                query_params=query_params,
+                header_params=header_params,
+                response_type="list[DbnodeSnapshotSummary]",
+                allow_control_chars=kwargs.get('allow_control_chars'),
+                operation_name=operation_name,
+                api_reference_link=api_reference_link,
+                required_arguments=required_arguments)
+
     def list_exadata_infrastructures(self, compartment_id, **kwargs):
         """
         Lists the Exadata infrastructure resources in the specified compartment. Applies to Exadata Cloud@Customer instances only.
@@ -32910,7 +33391,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/list_exadata_infrastructures.py.html>`__ to see an example of how to use list_exadata_infrastructures API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/list_exadata_infrastructures.py.html>`__ to see an example of how to use list_exadata_infrastructures API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['compartmentId']
@@ -33057,7 +33538,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/list_exadb_vm_cluster_update_history_entries.py.html>`__ to see an example of how to use list_exadb_vm_cluster_update_history_entries API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/list_exadb_vm_cluster_update_history_entries.py.html>`__ to see an example of how to use list_exadb_vm_cluster_update_history_entries API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['exadbVmClusterId']
@@ -33188,7 +33669,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/list_exadb_vm_cluster_updates.py.html>`__ to see an example of how to use list_exadb_vm_cluster_updates API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/list_exadb_vm_cluster_updates.py.html>`__ to see an example of how to use list_exadb_vm_cluster_updates API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['exadbVmClusterId']
@@ -33337,7 +33818,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/list_exadb_vm_clusters.py.html>`__ to see an example of how to use list_exadb_vm_clusters API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/list_exadb_vm_clusters.py.html>`__ to see an example of how to use list_exadb_vm_clusters API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['compartmentId']
@@ -33509,7 +33990,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/list_exascale_db_storage_vaults.py.html>`__ to see an example of how to use list_exascale_db_storage_vaults API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/list_exascale_db_storage_vaults.py.html>`__ to see an example of how to use list_exascale_db_storage_vaults API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['compartmentId']
@@ -33674,7 +34155,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/list_execution_actions.py.html>`__ to see an example of how to use list_execution_actions API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/list_execution_actions.py.html>`__ to see an example of how to use list_execution_actions API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['compartmentId']
@@ -33829,7 +34310,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/list_execution_windows.py.html>`__ to see an example of how to use list_execution_windows API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/list_execution_windows.py.html>`__ to see an example of how to use list_execution_windows API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['compartmentId']
@@ -33984,7 +34465,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/list_external_container_databases.py.html>`__ to see an example of how to use list_external_container_databases API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/list_external_container_databases.py.html>`__ to see an example of how to use list_external_container_databases API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['compartmentId']
@@ -34142,7 +34623,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/list_external_database_connectors.py.html>`__ to see an example of how to use list_external_database_connectors API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/list_external_database_connectors.py.html>`__ to see an example of how to use list_external_database_connectors API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['compartmentId', 'externalDatabaseId']
@@ -34296,7 +34777,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/list_external_non_container_databases.py.html>`__ to see an example of how to use list_external_non_container_databases API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/list_external_non_container_databases.py.html>`__ to see an example of how to use list_external_non_container_databases API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['compartmentId']
@@ -34455,7 +34936,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/list_external_pluggable_databases.py.html>`__ to see an example of how to use list_external_pluggable_databases API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/list_external_pluggable_databases.py.html>`__ to see an example of how to use list_external_pluggable_databases API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['compartmentId']
@@ -34602,7 +35083,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/list_flex_components.py.html>`__ to see an example of how to use list_flex_components API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/list_flex_components.py.html>`__ to see an example of how to use list_flex_components API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['compartmentId']
@@ -34751,7 +35232,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/list_gi_version_minor_versions.py.html>`__ to see an example of how to use list_gi_version_minor_versions API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/list_gi_version_minor_versions.py.html>`__ to see an example of how to use list_gi_version_minor_versions API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['version']
@@ -34914,7 +35395,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/list_gi_versions.py.html>`__ to see an example of how to use list_gi_versions API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/list_gi_versions.py.html>`__ to see an example of how to use list_gi_versions API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['compartmentId']
@@ -35031,7 +35512,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/list_key_stores.py.html>`__ to see an example of how to use list_key_stores API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/list_key_stores.py.html>`__ to see an example of how to use list_key_stores API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['compartmentId']
@@ -35169,7 +35650,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/list_maintenance_run_history.py.html>`__ to see an example of how to use list_maintenance_run_history API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/list_maintenance_run_history.py.html>`__ to see an example of how to use list_maintenance_run_history API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['compartmentId']
@@ -35365,7 +35846,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/list_maintenance_runs.py.html>`__ to see an example of how to use list_maintenance_runs API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/list_maintenance_runs.py.html>`__ to see an example of how to use list_maintenance_runs API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['compartmentId']
@@ -35543,7 +36024,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/list_oneoff_patches.py.html>`__ to see an example of how to use list_oneoff_patches API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/list_oneoff_patches.py.html>`__ to see an example of how to use list_oneoff_patches API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['compartmentId']
@@ -35675,7 +36156,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/list_params_for_action_type.py.html>`__ to see an example of how to use list_params_for_action_type API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/list_params_for_action_type.py.html>`__ to see an example of how to use list_params_for_action_type API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['type']
@@ -35804,7 +36285,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/list_pdb_conversion_history_entries.py.html>`__ to see an example of how to use list_pdb_conversion_history_entries API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/list_pdb_conversion_history_entries.py.html>`__ to see an example of how to use list_pdb_conversion_history_entries API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['databaseId']
@@ -35980,7 +36461,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/list_pluggable_database_snapshots.py.html>`__ to see an example of how to use list_pluggable_database_snapshots API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/list_pluggable_database_snapshots.py.html>`__ to see an example of how to use list_pluggable_database_snapshots API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -36137,7 +36618,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/list_pluggable_databases.py.html>`__ to see an example of how to use list_pluggable_databases API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/list_pluggable_databases.py.html>`__ to see an example of how to use list_pluggable_databases API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -36279,7 +36760,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/list_recommended_scheduled_actions.py.html>`__ to see an example of how to use list_recommended_scheduled_actions API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/list_recommended_scheduled_actions.py.html>`__ to see an example of how to use list_recommended_scheduled_actions API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['schedulingPolicyId', 'schedulingPolicyTargetResourceId', 'planIntent']
@@ -36401,7 +36882,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/list_resource_pool_members.py.html>`__ to see an example of how to use list_resource_pool_members API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/list_resource_pool_members.py.html>`__ to see an example of how to use list_resource_pool_members API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['autonomousDatabaseId']
@@ -36542,7 +37023,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/list_scheduled_actions.py.html>`__ to see an example of how to use list_scheduled_actions API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/list_scheduled_actions.py.html>`__ to see an example of how to use list_scheduled_actions API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['compartmentId']
@@ -36707,7 +37188,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/list_scheduling_plans.py.html>`__ to see an example of how to use list_scheduling_plans API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/list_scheduling_plans.py.html>`__ to see an example of how to use list_scheduling_plans API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['compartmentId']
@@ -36863,7 +37344,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/list_scheduling_policies.py.html>`__ to see an example of how to use list_scheduling_policies API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/list_scheduling_policies.py.html>`__ to see an example of how to use list_scheduling_policies API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['compartmentId']
@@ -37018,7 +37499,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/list_scheduling_windows.py.html>`__ to see an example of how to use list_scheduling_windows API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/list_scheduling_windows.py.html>`__ to see an example of how to use list_scheduling_windows API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['schedulingPolicyId']
@@ -37183,7 +37664,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/list_system_version_minor_versions.py.html>`__ to see an example of how to use list_system_version_minor_versions API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/list_system_version_minor_versions.py.html>`__ to see an example of how to use list_system_version_minor_versions API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['majorVersion', 'compartmentId', 'giVersion']
@@ -37331,7 +37812,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/list_system_versions.py.html>`__ to see an example of how to use list_system_versions API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/list_system_versions.py.html>`__ to see an example of how to use list_system_versions API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['compartmentId', 'giVersion']
@@ -37473,7 +37954,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/list_vm_cluster_networks.py.html>`__ to see an example of how to use list_vm_cluster_networks API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/list_vm_cluster_networks.py.html>`__ to see an example of how to use list_vm_cluster_networks API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['exadataInfrastructureId', 'compartmentId']
@@ -37614,7 +38095,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/list_vm_cluster_patch_history_entries.py.html>`__ to see an example of how to use list_vm_cluster_patch_history_entries API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/list_vm_cluster_patch_history_entries.py.html>`__ to see an example of how to use list_vm_cluster_patch_history_entries API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['vmClusterId']
@@ -37722,7 +38203,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/list_vm_cluster_patches.py.html>`__ to see an example of how to use list_vm_cluster_patches API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/list_vm_cluster_patches.py.html>`__ to see an example of how to use list_vm_cluster_patches API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['vmClusterId']
@@ -37843,7 +38324,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/list_vm_cluster_update_history_entries.py.html>`__ to see an example of how to use list_vm_cluster_update_history_entries API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/list_vm_cluster_update_history_entries.py.html>`__ to see an example of how to use list_vm_cluster_update_history_entries API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['vmClusterId']
@@ -37985,7 +38466,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/list_vm_cluster_updates.py.html>`__ to see an example of how to use list_vm_cluster_updates API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/list_vm_cluster_updates.py.html>`__ to see an example of how to use list_vm_cluster_updates API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['vmClusterId']
@@ -38144,7 +38625,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/list_vm_clusters.py.html>`__ to see an example of how to use list_vm_clusters API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/list_vm_clusters.py.html>`__ to see an example of how to use list_vm_clusters API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['compartmentId']
@@ -38297,7 +38778,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/local_clone_pluggable_database.py.html>`__ to see an example of how to use local_clone_pluggable_database API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/local_clone_pluggable_database.py.html>`__ to see an example of how to use local_clone_pluggable_database API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['pluggableDatabaseId']
@@ -38412,7 +38893,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/migrate_autonomous_container_database_dataguard_association.py.html>`__ to see an example of how to use migrate_autonomous_container_database_dataguard_association API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/migrate_autonomous_container_database_dataguard_association.py.html>`__ to see an example of how to use migrate_autonomous_container_database_dataguard_association API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['autonomousContainerDatabaseId', 'autonomousContainerDatabaseDataguardAssociationId']
@@ -38532,7 +39013,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/migrate_data_guard_association_to_multi_data_guards.py.html>`__ to see an example of how to use migrate_data_guard_association_to_multi_data_guards API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/migrate_data_guard_association_to_multi_data_guards.py.html>`__ to see an example of how to use migrate_data_guard_association_to_multi_data_guards API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['databaseId', 'dataGuardAssociationId']
@@ -38651,7 +39132,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/migrate_exadata_db_system_resource_model.py.html>`__ to see an example of how to use migrate_exadata_db_system_resource_model API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/migrate_exadata_db_system_resource_model.py.html>`__ to see an example of how to use migrate_exadata_db_system_resource_model API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['dbSystemId']
@@ -38771,7 +39252,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/migrate_vault_key.py.html>`__ to see an example of how to use migrate_vault_key API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/migrate_vault_key.py.html>`__ to see an example of how to use migrate_vault_key API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['databaseId']
@@ -38891,7 +39372,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/modify_database_management.py.html>`__ to see an example of how to use modify_database_management API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/modify_database_management.py.html>`__ to see an example of how to use modify_database_management API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['databaseId']
@@ -39011,7 +39492,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/modify_pluggable_database_management.py.html>`__ to see an example of how to use modify_pluggable_database_management API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/modify_pluggable_database_management.py.html>`__ to see an example of how to use modify_pluggable_database_management API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['pluggableDatabaseId']
@@ -39087,6 +39568,126 @@ class DatabaseClient(object):
                 api_reference_link=api_reference_link,
                 required_arguments=required_arguments)
 
+    def mount_dbnode_snapshot(self, mount_dbnode_snapshot_details, dbnode_snapshot_id, **kwargs):
+        """
+        Mounts the snapshot for the provided dbNode.
+
+
+        :param oci.database.models.MountDbnodeSnapshotDetails mount_dbnode_snapshot_details: (required)
+            Request to mount the snapshot for the provided Exadata Database Node.
+
+        :param str dbnode_snapshot_id: (required)
+            The Exadata Database Node Snapshot `OCID`__.
+
+            __ https://docs.cloud.oracle.com/Content/General/Concepts/identifiers.htm
+
+        :param str opc_retry_token: (optional)
+            A token that uniquely identifies a request so it can be retried in case of a timeout or
+            server error without risk of executing that same action again. Retry tokens expire after 24
+            hours, but can be invalidated before then due to conflicting operations (for example, if a resource
+            has been deleted and purged from the system, then a retry of the original creation request
+            may be rejected).
+
+        :param str opc_request_id: (optional)
+            Unique identifier for the request.
+
+        :param str if_match: (optional)
+            For optimistic concurrency control. In the PUT or DELETE call for a resource, set the `if-match`
+            parameter to the value of the etag from a previous GET or POST response for that resource.  The resource
+            will be updated or deleted only if the etag you provide matches the resource's current etag value.
+
+        :param obj retry_strategy: (optional)
+            A retry strategy to apply to this specific operation/call. This will override any retry strategy set at the client-level.
+
+            This should be one of the strategies available in the :py:mod:`~oci.retry` module. This operation will not retry by default, users can also use the convenient :py:data:`~oci.retry.DEFAULT_RETRY_STRATEGY` provided by the SDK to enable retries for it.
+            The specifics of the default retry strategy are described `here <https://docs.oracle.com/en-us/iaas/tools/python/latest/sdk_behaviors/retries.html>`__.
+
+            To have this operation explicitly not perform any retries, pass an instance of :py:class:`~oci.retry.NoneRetryStrategy`.
+
+        :param bool allow_control_chars: (optional)
+            allow_control_chars is a boolean to indicate whether or not this request should allow control characters in the response object.
+            By default, the response will not allow control characters in strings
+
+        :return: A :class:`~oci.response.Response` object with data of type :class:`~oci.database.models.DbnodeSnapshot`
+        :rtype: :class:`~oci.response.Response`
+
+        :example:
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/mount_dbnode_snapshot.py.html>`__ to see an example of how to use mount_dbnode_snapshot API.
+        """
+        # Required path and query arguments. These are in camelCase to replace values in service endpoints.
+        required_arguments = ['dbnodeSnapshotId']
+        resource_path = "/dbnodeSnapshots/{dbnodeSnapshotId}/actions/mount"
+        method = "POST"
+        operation_name = "mount_dbnode_snapshot"
+        api_reference_link = "https://docs.oracle.com/iaas/api/#/en/database/20160918/DbnodeSnapshot/MountDbnodeSnapshot"
+
+        # Don't accept unknown kwargs
+        expected_kwargs = [
+            "allow_control_chars",
+            "retry_strategy",
+            "opc_retry_token",
+            "opc_request_id",
+            "if_match"
+        ]
+        extra_kwargs = [_key for _key in six.iterkeys(kwargs) if _key not in expected_kwargs]
+        if extra_kwargs:
+            raise ValueError(
+                f"mount_dbnode_snapshot got unknown kwargs: {extra_kwargs!r}")
+
+        path_params = {
+            "dbnodeSnapshotId": dbnode_snapshot_id
+        }
+
+        path_params = {k: v for (k, v) in six.iteritems(path_params) if v is not missing}
+
+        for (k, v) in six.iteritems(path_params):
+            if v is None or (isinstance(v, six.string_types) and len(v.strip()) == 0):
+                raise ValueError(f'Parameter {k} cannot be None, whitespace or empty string')
+
+        header_params = {
+            "accept": "application/json",
+            "content-type": "application/json",
+            "opc-retry-token": kwargs.get("opc_retry_token", missing),
+            "opc-request-id": kwargs.get("opc_request_id", missing),
+            "if-match": kwargs.get("if_match", missing)
+        }
+        header_params = {k: v for (k, v) in six.iteritems(header_params) if v is not missing and v is not None}
+
+        retry_strategy = self.base_client.get_preferred_retry_strategy(
+            operation_retry_strategy=kwargs.get('retry_strategy'),
+            client_retry_strategy=self.retry_strategy
+        )
+
+        if retry_strategy:
+            if not isinstance(retry_strategy, retry.NoneRetryStrategy):
+                self.base_client.add_opc_retry_token_if_needed(header_params)
+                self.base_client.add_opc_client_retries_header(header_params)
+                retry_strategy.add_circuit_breaker_callback(self.circuit_breaker_callback)
+            return retry_strategy.make_retrying_call(
+                self.base_client.call_api,
+                resource_path=resource_path,
+                method=method,
+                path_params=path_params,
+                header_params=header_params,
+                body=mount_dbnode_snapshot_details,
+                response_type="DbnodeSnapshot",
+                allow_control_chars=kwargs.get('allow_control_chars'),
+                operation_name=operation_name,
+                api_reference_link=api_reference_link,
+                required_arguments=required_arguments)
+        else:
+            return self.base_client.call_api(
+                resource_path=resource_path,
+                method=method,
+                path_params=path_params,
+                header_params=header_params,
+                body=mount_dbnode_snapshot_details,
+                response_type="DbnodeSnapshot",
+                allow_control_chars=kwargs.get('allow_control_chars'),
+                operation_name=operation_name,
+                api_reference_link=api_reference_link,
+                required_arguments=required_arguments)
+
     def move_execution_action_member(self, execution_action_id, move_execution_action_member_details, **kwargs):
         """
         Moves an execution action member to this execution action resource from another.
@@ -39131,7 +39732,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/move_execution_action_member.py.html>`__ to see an example of how to use move_execution_action_member API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/move_execution_action_member.py.html>`__ to see an example of how to use move_execution_action_member API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['executionActionId']
@@ -39248,7 +39849,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/refresh_pluggable_database.py.html>`__ to see an example of how to use refresh_pluggable_database API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/refresh_pluggable_database.py.html>`__ to see an example of how to use refresh_pluggable_database API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['pluggableDatabaseId']
@@ -39358,7 +39959,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/register_autonomous_database_data_safe.py.html>`__ to see an example of how to use register_autonomous_database_data_safe API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/register_autonomous_database_data_safe.py.html>`__ to see an example of how to use register_autonomous_database_data_safe API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['autonomousDatabaseId']
@@ -39474,7 +40075,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/register_cloud_vm_cluster_pkcs.py.html>`__ to see an example of how to use register_cloud_vm_cluster_pkcs API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/register_cloud_vm_cluster_pkcs.py.html>`__ to see an example of how to use register_cloud_vm_cluster_pkcs API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['cloudVmClusterId']
@@ -39585,7 +40186,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/reinstate_autonomous_container_database_dataguard.py.html>`__ to see an example of how to use reinstate_autonomous_container_database_dataguard API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/reinstate_autonomous_container_database_dataguard.py.html>`__ to see an example of how to use reinstate_autonomous_container_database_dataguard API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['autonomousContainerDatabaseId']
@@ -39692,7 +40293,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/reinstate_autonomous_container_database_dataguard_association.py.html>`__ to see an example of how to use reinstate_autonomous_container_database_dataguard_association API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/reinstate_autonomous_container_database_dataguard_association.py.html>`__ to see an example of how to use reinstate_autonomous_container_database_dataguard_association API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['autonomousContainerDatabaseId', 'autonomousContainerDatabaseDataguardAssociationId']
@@ -39808,7 +40409,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/reinstate_data_guard.py.html>`__ to see an example of how to use reinstate_data_guard API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/reinstate_data_guard.py.html>`__ to see an example of how to use reinstate_data_guard API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['databaseId']
@@ -39923,7 +40524,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/reinstate_data_guard_association.py.html>`__ to see an example of how to use reinstate_data_guard_association API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/reinstate_data_guard_association.py.html>`__ to see an example of how to use reinstate_data_guard_association API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['databaseId', 'dataGuardAssociationId']
@@ -40041,7 +40642,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/remote_clone_pluggable_database.py.html>`__ to see an example of how to use remote_clone_pluggable_database API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/remote_clone_pluggable_database.py.html>`__ to see an example of how to use remote_clone_pluggable_database API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['pluggableDatabaseId']
@@ -40161,7 +40762,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/remove_virtual_machine_from_cloud_vm_cluster.py.html>`__ to see an example of how to use remove_virtual_machine_from_cloud_vm_cluster API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/remove_virtual_machine_from_cloud_vm_cluster.py.html>`__ to see an example of how to use remove_virtual_machine_from_cloud_vm_cluster API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['cloudVmClusterId']
@@ -40281,7 +40882,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/remove_virtual_machine_from_exadb_vm_cluster.py.html>`__ to see an example of how to use remove_virtual_machine_from_exadb_vm_cluster API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/remove_virtual_machine_from_exadb_vm_cluster.py.html>`__ to see an example of how to use remove_virtual_machine_from_exadb_vm_cluster API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['exadbVmClusterId']
@@ -40401,7 +41002,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/remove_virtual_machine_from_vm_cluster.py.html>`__ to see an example of how to use remove_virtual_machine_from_vm_cluster API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/remove_virtual_machine_from_vm_cluster.py.html>`__ to see an example of how to use remove_virtual_machine_from_vm_cluster API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['vmClusterId']
@@ -40521,7 +41122,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/reorder_execution_actions.py.html>`__ to see an example of how to use reorder_execution_actions API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/reorder_execution_actions.py.html>`__ to see an example of how to use reorder_execution_actions API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['executionWindowId']
@@ -40641,7 +41242,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/reorder_scheduled_actions.py.html>`__ to see an example of how to use reorder_scheduled_actions API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/reorder_scheduled_actions.py.html>`__ to see an example of how to use reorder_scheduled_actions API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['schedulingPlanId']
@@ -40767,7 +41368,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/resize_vm_cluster_network.py.html>`__ to see an example of how to use resize_vm_cluster_network API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/resize_vm_cluster_network.py.html>`__ to see an example of how to use resize_vm_cluster_network API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['exadataInfrastructureId', 'vmClusterNetworkId']
@@ -40886,7 +41487,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/resource_pool_shapes.py.html>`__ to see an example of how to use resource_pool_shapes API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/resource_pool_shapes.py.html>`__ to see an example of how to use resource_pool_shapes API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -40992,7 +41593,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/restart_autonomous_container_database.py.html>`__ to see an example of how to use restart_autonomous_container_database API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/restart_autonomous_container_database.py.html>`__ to see an example of how to use restart_autonomous_container_database API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['autonomousContainerDatabaseId']
@@ -41098,7 +41699,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/restart_autonomous_database.py.html>`__ to see an example of how to use restart_autonomous_database API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/restart_autonomous_database.py.html>`__ to see an example of how to use restart_autonomous_database API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['autonomousDatabaseId']
@@ -41207,7 +41808,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/restore_autonomous_database.py.html>`__ to see an example of how to use restore_autonomous_database API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/restore_autonomous_database.py.html>`__ to see an example of how to use restore_autonomous_database API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['autonomousDatabaseId']
@@ -41314,7 +41915,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/restore_database.py.html>`__ to see an example of how to use restore_database API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/restore_database.py.html>`__ to see an example of how to use restore_database API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['databaseId']
@@ -41431,7 +42032,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/rotate_autonomous_container_database_encryption_key.py.html>`__ to see an example of how to use rotate_autonomous_container_database_encryption_key API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/rotate_autonomous_container_database_encryption_key.py.html>`__ to see an example of how to use rotate_autonomous_container_database_encryption_key API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['autonomousContainerDatabaseId']
@@ -41554,7 +42155,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/rotate_autonomous_database_encryption_key.py.html>`__ to see an example of how to use rotate_autonomous_database_encryption_key API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/rotate_autonomous_database_encryption_key.py.html>`__ to see an example of how to use rotate_autonomous_database_encryption_key API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['autonomousDatabaseId']
@@ -41675,7 +42276,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/rotate_autonomous_vm_cluster_ords_certs.py.html>`__ to see an example of how to use rotate_autonomous_vm_cluster_ords_certs API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/rotate_autonomous_vm_cluster_ords_certs.py.html>`__ to see an example of how to use rotate_autonomous_vm_cluster_ords_certs API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['autonomousVmClusterId']
@@ -41793,7 +42394,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/rotate_autonomous_vm_cluster_ssl_certs.py.html>`__ to see an example of how to use rotate_autonomous_vm_cluster_ssl_certs API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/rotate_autonomous_vm_cluster_ssl_certs.py.html>`__ to see an example of how to use rotate_autonomous_vm_cluster_ssl_certs API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['autonomousVmClusterId']
@@ -41911,7 +42512,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/rotate_cloud_autonomous_vm_cluster_ords_certs.py.html>`__ to see an example of how to use rotate_cloud_autonomous_vm_cluster_ords_certs API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/rotate_cloud_autonomous_vm_cluster_ords_certs.py.html>`__ to see an example of how to use rotate_cloud_autonomous_vm_cluster_ords_certs API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['cloudAutonomousVmClusterId']
@@ -42030,7 +42631,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/rotate_cloud_autonomous_vm_cluster_ssl_certs.py.html>`__ to see an example of how to use rotate_cloud_autonomous_vm_cluster_ssl_certs API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/rotate_cloud_autonomous_vm_cluster_ssl_certs.py.html>`__ to see an example of how to use rotate_cloud_autonomous_vm_cluster_ssl_certs API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['cloudAutonomousVmClusterId']
@@ -42146,7 +42747,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/rotate_ords_certs.py.html>`__ to see an example of how to use rotate_ords_certs API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/rotate_ords_certs.py.html>`__ to see an example of how to use rotate_ords_certs API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['autonomousExadataInfrastructureId']
@@ -42259,7 +42860,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/rotate_pluggable_database_encryption_key.py.html>`__ to see an example of how to use rotate_pluggable_database_encryption_key API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/rotate_pluggable_database_encryption_key.py.html>`__ to see an example of how to use rotate_pluggable_database_encryption_key API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['pluggableDatabaseId']
@@ -42372,7 +42973,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/rotate_ssl_certs.py.html>`__ to see an example of how to use rotate_ssl_certs API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/rotate_ssl_certs.py.html>`__ to see an example of how to use rotate_ssl_certs API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['autonomousExadataInfrastructureId']
@@ -42487,7 +43088,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/rotate_vault_key.py.html>`__ to see an example of how to use rotate_vault_key API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/rotate_vault_key.py.html>`__ to see an example of how to use rotate_vault_key API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['databaseId']
@@ -42590,7 +43191,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/saas_admin_user_status.py.html>`__ to see an example of how to use saas_admin_user_status API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/saas_admin_user_status.py.html>`__ to see an example of how to use saas_admin_user_status API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['autonomousDatabaseId']
@@ -42702,7 +43303,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/scan_external_container_database_pluggable_databases.py.html>`__ to see an example of how to use scan_external_container_database_pluggable_databases API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/scan_external_container_database_pluggable_databases.py.html>`__ to see an example of how to use scan_external_container_database_pluggable_databases API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['externalContainerDatabaseId', 'externalDatabaseConnectorId']
@@ -42825,7 +43426,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/set_db_key_version.py.html>`__ to see an example of how to use set_db_key_version API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/set_db_key_version.py.html>`__ to see an example of how to use set_db_key_version API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['databaseId']
@@ -42947,7 +43548,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/set_pdb_key_version.py.html>`__ to see an example of how to use set_pdb_key_version API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/set_pdb_key_version.py.html>`__ to see an example of how to use set_pdb_key_version API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['pluggableDatabaseId']
@@ -43058,7 +43659,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/shrink_autonomous_database.py.html>`__ to see an example of how to use shrink_autonomous_database API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/shrink_autonomous_database.py.html>`__ to see an example of how to use shrink_autonomous_database API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['autonomousDatabaseId']
@@ -43164,7 +43765,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/start_autonomous_database.py.html>`__ to see an example of how to use start_autonomous_database API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/start_autonomous_database.py.html>`__ to see an example of how to use start_autonomous_database API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['autonomousDatabaseId']
@@ -43276,7 +43877,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/start_pluggable_database.py.html>`__ to see an example of how to use start_pluggable_database API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/start_pluggable_database.py.html>`__ to see an example of how to use start_pluggable_database API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['pluggableDatabaseId']
@@ -43388,7 +43989,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/stop_autonomous_database.py.html>`__ to see an example of how to use stop_autonomous_database API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/stop_autonomous_database.py.html>`__ to see an example of how to use stop_autonomous_database API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['autonomousDatabaseId']
@@ -43502,7 +44103,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/stop_pluggable_database.py.html>`__ to see an example of how to use stop_pluggable_database API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/stop_pluggable_database.py.html>`__ to see an example of how to use stop_pluggable_database API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['pluggableDatabaseId']
@@ -43625,7 +44226,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/switch_over_data_guard.py.html>`__ to see an example of how to use switch_over_data_guard API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/switch_over_data_guard.py.html>`__ to see an example of how to use switch_over_data_guard API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['databaseId']
@@ -43738,7 +44339,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/switchover_autonomous_container_database_dataguard.py.html>`__ to see an example of how to use switchover_autonomous_container_database_dataguard API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/switchover_autonomous_container_database_dataguard.py.html>`__ to see an example of how to use switchover_autonomous_container_database_dataguard API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['autonomousContainerDatabaseId']
@@ -43847,7 +44448,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/switchover_autonomous_container_database_dataguard_association.py.html>`__ to see an example of how to use switchover_autonomous_container_database_dataguard_association API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/switchover_autonomous_container_database_dataguard_association.py.html>`__ to see an example of how to use switchover_autonomous_container_database_dataguard_association API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['autonomousContainerDatabaseId', 'autonomousContainerDatabaseDataguardAssociationId']
@@ -43970,7 +44571,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/switchover_autonomous_database.py.html>`__ to see an example of how to use switchover_autonomous_database API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/switchover_autonomous_database.py.html>`__ to see an example of how to use switchover_autonomous_database API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['autonomousDatabaseId']
@@ -44096,7 +44697,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/switchover_data_guard_association.py.html>`__ to see an example of how to use switchover_data_guard_association API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/switchover_data_guard_association.py.html>`__ to see an example of how to use switchover_data_guard_association API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['databaseId', 'dataGuardAssociationId']
@@ -44199,7 +44800,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/terminate_autonomous_container_database.py.html>`__ to see an example of how to use terminate_autonomous_container_database API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/terminate_autonomous_container_database.py.html>`__ to see an example of how to use terminate_autonomous_container_database API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['autonomousContainerDatabaseId']
@@ -44297,7 +44898,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/terminate_autonomous_exadata_infrastructure.py.html>`__ to see an example of how to use terminate_autonomous_exadata_infrastructure API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/terminate_autonomous_exadata_infrastructure.py.html>`__ to see an example of how to use terminate_autonomous_exadata_infrastructure API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['autonomousExadataInfrastructureId']
@@ -44402,7 +45003,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/terminate_db_system.py.html>`__ to see an example of how to use terminate_db_system API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/terminate_db_system.py.html>`__ to see an example of how to use terminate_db_system API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['dbSystemId']
@@ -44469,6 +45070,126 @@ class DatabaseClient(object):
                 api_reference_link=api_reference_link,
                 required_arguments=required_arguments)
 
+    def unmount_dbnode_snapshot(self, unmount_dbnode_snapshot_details, dbnode_snapshot_id, **kwargs):
+        """
+        Unmounts the snapshot for the provided dbNode.
+
+
+        :param oci.database.models.UnmountDbnodeSnapshotDetails unmount_dbnode_snapshot_details: (required)
+            Request to unmount the snapshot for the provided Exadata Database Node.
+
+        :param str dbnode_snapshot_id: (required)
+            The Exadata Database Node Snapshot `OCID`__.
+
+            __ https://docs.cloud.oracle.com/Content/General/Concepts/identifiers.htm
+
+        :param str opc_retry_token: (optional)
+            A token that uniquely identifies a request so it can be retried in case of a timeout or
+            server error without risk of executing that same action again. Retry tokens expire after 24
+            hours, but can be invalidated before then due to conflicting operations (for example, if a resource
+            has been deleted and purged from the system, then a retry of the original creation request
+            may be rejected).
+
+        :param str opc_request_id: (optional)
+            Unique identifier for the request.
+
+        :param str if_match: (optional)
+            For optimistic concurrency control. In the PUT or DELETE call for a resource, set the `if-match`
+            parameter to the value of the etag from a previous GET or POST response for that resource.  The resource
+            will be updated or deleted only if the etag you provide matches the resource's current etag value.
+
+        :param obj retry_strategy: (optional)
+            A retry strategy to apply to this specific operation/call. This will override any retry strategy set at the client-level.
+
+            This should be one of the strategies available in the :py:mod:`~oci.retry` module. This operation will not retry by default, users can also use the convenient :py:data:`~oci.retry.DEFAULT_RETRY_STRATEGY` provided by the SDK to enable retries for it.
+            The specifics of the default retry strategy are described `here <https://docs.oracle.com/en-us/iaas/tools/python/latest/sdk_behaviors/retries.html>`__.
+
+            To have this operation explicitly not perform any retries, pass an instance of :py:class:`~oci.retry.NoneRetryStrategy`.
+
+        :param bool allow_control_chars: (optional)
+            allow_control_chars is a boolean to indicate whether or not this request should allow control characters in the response object.
+            By default, the response will not allow control characters in strings
+
+        :return: A :class:`~oci.response.Response` object with data of type :class:`~oci.database.models.DbnodeSnapshot`
+        :rtype: :class:`~oci.response.Response`
+
+        :example:
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/unmount_dbnode_snapshot.py.html>`__ to see an example of how to use unmount_dbnode_snapshot API.
+        """
+        # Required path and query arguments. These are in camelCase to replace values in service endpoints.
+        required_arguments = ['dbnodeSnapshotId']
+        resource_path = "/dbnodeSnapshots/{dbnodeSnapshotId}/actions/unmount"
+        method = "POST"
+        operation_name = "unmount_dbnode_snapshot"
+        api_reference_link = "https://docs.oracle.com/iaas/api/#/en/database/20160918/DbnodeSnapshot/UnmountDbnodeSnapshot"
+
+        # Don't accept unknown kwargs
+        expected_kwargs = [
+            "allow_control_chars",
+            "retry_strategy",
+            "opc_retry_token",
+            "opc_request_id",
+            "if_match"
+        ]
+        extra_kwargs = [_key for _key in six.iterkeys(kwargs) if _key not in expected_kwargs]
+        if extra_kwargs:
+            raise ValueError(
+                f"unmount_dbnode_snapshot got unknown kwargs: {extra_kwargs!r}")
+
+        path_params = {
+            "dbnodeSnapshotId": dbnode_snapshot_id
+        }
+
+        path_params = {k: v for (k, v) in six.iteritems(path_params) if v is not missing}
+
+        for (k, v) in six.iteritems(path_params):
+            if v is None or (isinstance(v, six.string_types) and len(v.strip()) == 0):
+                raise ValueError(f'Parameter {k} cannot be None, whitespace or empty string')
+
+        header_params = {
+            "accept": "application/json",
+            "content-type": "application/json",
+            "opc-retry-token": kwargs.get("opc_retry_token", missing),
+            "opc-request-id": kwargs.get("opc_request_id", missing),
+            "if-match": kwargs.get("if_match", missing)
+        }
+        header_params = {k: v for (k, v) in six.iteritems(header_params) if v is not missing and v is not None}
+
+        retry_strategy = self.base_client.get_preferred_retry_strategy(
+            operation_retry_strategy=kwargs.get('retry_strategy'),
+            client_retry_strategy=self.retry_strategy
+        )
+
+        if retry_strategy:
+            if not isinstance(retry_strategy, retry.NoneRetryStrategy):
+                self.base_client.add_opc_retry_token_if_needed(header_params)
+                self.base_client.add_opc_client_retries_header(header_params)
+                retry_strategy.add_circuit_breaker_callback(self.circuit_breaker_callback)
+            return retry_strategy.make_retrying_call(
+                self.base_client.call_api,
+                resource_path=resource_path,
+                method=method,
+                path_params=path_params,
+                header_params=header_params,
+                body=unmount_dbnode_snapshot_details,
+                response_type="DbnodeSnapshot",
+                allow_control_chars=kwargs.get('allow_control_chars'),
+                operation_name=operation_name,
+                api_reference_link=api_reference_link,
+                required_arguments=required_arguments)
+        else:
+            return self.base_client.call_api(
+                resource_path=resource_path,
+                method=method,
+                path_params=path_params,
+                header_params=header_params,
+                body=unmount_dbnode_snapshot_details,
+                response_type="DbnodeSnapshot",
+                allow_control_chars=kwargs.get('allow_control_chars'),
+                operation_name=operation_name,
+                api_reference_link=api_reference_link,
+                required_arguments=required_arguments)
+
     def unregister_cloud_vm_cluster_pkcs(self, cloud_vm_cluster_id, unregister_cloud_vm_cluster_pkcs_details, **kwargs):
         """
         Uninstall the PKCS11 driver for given keystore type
@@ -44513,7 +45234,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/unregister_cloud_vm_cluster_pkcs.py.html>`__ to see an example of how to use unregister_cloud_vm_cluster_pkcs API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/unregister_cloud_vm_cluster_pkcs.py.html>`__ to see an example of how to use unregister_cloud_vm_cluster_pkcs API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['cloudVmClusterId']
@@ -44621,7 +45342,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/update_autonomous_container_database.py.html>`__ to see an example of how to use update_autonomous_container_database API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/update_autonomous_container_database.py.html>`__ to see an example of how to use update_autonomous_container_database API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['autonomousContainerDatabaseId']
@@ -44734,7 +45455,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/update_autonomous_container_database_dataguard_association.py.html>`__ to see an example of how to use update_autonomous_container_database_dataguard_association API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/update_autonomous_container_database_dataguard_association.py.html>`__ to see an example of how to use update_autonomous_container_database_dataguard_association API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['autonomousContainerDatabaseId', 'autonomousContainerDatabaseDataguardAssociationId']
@@ -44849,7 +45570,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/update_autonomous_database.py.html>`__ to see an example of how to use update_autonomous_database API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/update_autonomous_database.py.html>`__ to see an example of how to use update_autonomous_database API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['autonomousDatabaseId']
@@ -44965,7 +45686,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/update_autonomous_database_backup.py.html>`__ to see an example of how to use update_autonomous_database_backup API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/update_autonomous_database_backup.py.html>`__ to see an example of how to use update_autonomous_database_backup API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['autonomousDatabaseBackupId']
@@ -45071,7 +45792,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/update_autonomous_database_regional_wallet.py.html>`__ to see an example of how to use update_autonomous_database_regional_wallet API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/update_autonomous_database_regional_wallet.py.html>`__ to see an example of how to use update_autonomous_database_regional_wallet API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -45167,7 +45888,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/update_autonomous_database_software_image.py.html>`__ to see an example of how to use update_autonomous_database_software_image API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/update_autonomous_database_software_image.py.html>`__ to see an example of how to use update_autonomous_database_software_image API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['autonomousDatabaseSoftwareImageId']
@@ -45276,7 +45997,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/update_autonomous_database_wallet.py.html>`__ to see an example of how to use update_autonomous_database_wallet API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/update_autonomous_database_wallet.py.html>`__ to see an example of how to use update_autonomous_database_wallet API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['autonomousDatabaseId']
@@ -45381,7 +46102,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/update_autonomous_exadata_infrastructure.py.html>`__ to see an example of how to use update_autonomous_exadata_infrastructure API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/update_autonomous_exadata_infrastructure.py.html>`__ to see an example of how to use update_autonomous_exadata_infrastructure API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['autonomousExadataInfrastructureId']
@@ -45489,7 +46210,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/update_autonomous_vm_cluster.py.html>`__ to see an example of how to use update_autonomous_vm_cluster API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/update_autonomous_vm_cluster.py.html>`__ to see an example of how to use update_autonomous_vm_cluster API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['autonomousVmClusterId']
@@ -45599,7 +46320,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/update_backup.py.html>`__ to see an example of how to use update_backup API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/update_backup.py.html>`__ to see an example of how to use update_backup API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['backupId']
@@ -45712,7 +46433,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/update_backup_destination.py.html>`__ to see an example of how to use update_backup_destination API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/update_backup_destination.py.html>`__ to see an example of how to use update_backup_destination API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['backupDestinationId']
@@ -45826,7 +46547,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/update_cloud_autonomous_vm_cluster.py.html>`__ to see an example of how to use update_cloud_autonomous_vm_cluster API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/update_cloud_autonomous_vm_cluster.py.html>`__ to see an example of how to use update_cloud_autonomous_vm_cluster API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['cloudAutonomousVmClusterId']
@@ -45938,7 +46659,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/update_cloud_exadata_infrastructure.py.html>`__ to see an example of how to use update_cloud_exadata_infrastructure API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/update_cloud_exadata_infrastructure.py.html>`__ to see an example of how to use update_cloud_exadata_infrastructure API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['cloudExadataInfrastructureId']
@@ -46048,7 +46769,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/update_cloud_vm_cluster.py.html>`__ to see an example of how to use update_cloud_vm_cluster API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/update_cloud_vm_cluster.py.html>`__ to see an example of how to use update_cloud_vm_cluster API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['cloudVmClusterId']
@@ -46158,7 +46879,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/update_cloud_vm_cluster_iorm_config.py.html>`__ to see an example of how to use update_cloud_vm_cluster_iorm_config API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/update_cloud_vm_cluster_iorm_config.py.html>`__ to see an example of how to use update_cloud_vm_cluster_iorm_config API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['cloudVmClusterId']
@@ -46271,7 +46992,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/update_console_connection.py.html>`__ to see an example of how to use update_console_connection API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/update_console_connection.py.html>`__ to see an example of how to use update_console_connection API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['dbNodeId', 'consoleConnectionId']
@@ -46385,7 +47106,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/update_console_history.py.html>`__ to see an example of how to use update_console_history API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/update_console_history.py.html>`__ to see an example of how to use update_console_history API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['dbNodeId', 'consoleHistoryId']
@@ -46506,7 +47227,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/update_data_guard.py.html>`__ to see an example of how to use update_data_guard API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/update_data_guard.py.html>`__ to see an example of how to use update_data_guard API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['databaseId']
@@ -46624,7 +47345,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/update_data_guard_association.py.html>`__ to see an example of how to use update_data_guard_association API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/update_data_guard_association.py.html>`__ to see an example of how to use update_data_guard_association API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['databaseId', 'dataGuardAssociationId']
@@ -46732,7 +47453,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/update_database.py.html>`__ to see an example of how to use update_database API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/update_database.py.html>`__ to see an example of how to use update_database API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['databaseId']
@@ -46837,7 +47558,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/update_database_software_image.py.html>`__ to see an example of how to use update_database_software_image API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/update_database_software_image.py.html>`__ to see an example of how to use update_database_software_image API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['databaseSoftwareImageId']
@@ -46942,7 +47663,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/update_db_home.py.html>`__ to see an example of how to use update_db_home API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/update_db_home.py.html>`__ to see an example of how to use update_db_home API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['dbHomeId']
@@ -47050,7 +47771,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/update_db_node.py.html>`__ to see an example of how to use update_db_node API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/update_db_node.py.html>`__ to see an example of how to use update_db_node API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['dbNodeId']
@@ -47168,7 +47889,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/update_db_system.py.html>`__ to see an example of how to use update_db_system API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/update_db_system.py.html>`__ to see an example of how to use update_db_system API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['dbSystemId']
@@ -47279,7 +48000,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/update_exadata_infrastructure.py.html>`__ to see an example of how to use update_exadata_infrastructure API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/update_exadata_infrastructure.py.html>`__ to see an example of how to use update_exadata_infrastructure API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['exadataInfrastructureId']
@@ -47399,7 +48120,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/update_exadata_iorm_config.py.html>`__ to see an example of how to use update_exadata_iorm_config API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/update_exadata_iorm_config.py.html>`__ to see an example of how to use update_exadata_iorm_config API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['dbSystemId']
@@ -47509,7 +48230,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/update_exadb_vm_cluster.py.html>`__ to see an example of how to use update_exadb_vm_cluster API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/update_exadb_vm_cluster.py.html>`__ to see an example of how to use update_exadb_vm_cluster API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['exadbVmClusterId']
@@ -47619,7 +48340,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/update_exascale_db_storage_vault.py.html>`__ to see an example of how to use update_exascale_db_storage_vault API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/update_exascale_db_storage_vault.py.html>`__ to see an example of how to use update_exascale_db_storage_vault API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['exascaleDbStorageVaultId']
@@ -47729,7 +48450,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/update_execution_action.py.html>`__ to see an example of how to use update_execution_action API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/update_execution_action.py.html>`__ to see an example of how to use update_execution_action API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['executionActionId']
@@ -47839,7 +48560,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/update_execution_window.py.html>`__ to see an example of how to use update_execution_window API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/update_execution_window.py.html>`__ to see an example of how to use update_execution_window API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['executionWindowId']
@@ -47952,7 +48673,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/update_external_container_database.py.html>`__ to see an example of how to use update_external_container_database API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/update_external_container_database.py.html>`__ to see an example of how to use update_external_container_database API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['externalContainerDatabaseId']
@@ -48063,7 +48784,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/update_external_database_connector.py.html>`__ to see an example of how to use update_external_database_connector API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/update_external_database_connector.py.html>`__ to see an example of how to use update_external_database_connector API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['externalDatabaseConnectorId']
@@ -48173,7 +48894,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/update_external_non_container_database.py.html>`__ to see an example of how to use update_external_non_container_database API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/update_external_non_container_database.py.html>`__ to see an example of how to use update_external_non_container_database API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['externalNonContainerDatabaseId']
@@ -48285,7 +49006,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/update_external_pluggable_database.py.html>`__ to see an example of how to use update_external_pluggable_database API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/update_external_pluggable_database.py.html>`__ to see an example of how to use update_external_pluggable_database API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['externalPluggableDatabaseId']
@@ -48395,7 +49116,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/update_key_store.py.html>`__ to see an example of how to use update_key_store API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/update_key_store.py.html>`__ to see an example of how to use update_key_store API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['keyStoreId']
@@ -48500,7 +49221,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/update_maintenance_run.py.html>`__ to see an example of how to use update_maintenance_run API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/update_maintenance_run.py.html>`__ to see an example of how to use update_maintenance_run API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['maintenanceRunId']
@@ -48608,7 +49329,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/update_oneoff_patch.py.html>`__ to see an example of how to use update_oneoff_patch API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/update_oneoff_patch.py.html>`__ to see an example of how to use update_oneoff_patch API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['oneoffPatchId']
@@ -48715,7 +49436,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/update_pluggable_database.py.html>`__ to see an example of how to use update_pluggable_database API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/update_pluggable_database.py.html>`__ to see an example of how to use update_pluggable_database API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['pluggableDatabaseId']
@@ -48823,7 +49544,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/update_scheduled_action.py.html>`__ to see an example of how to use update_scheduled_action API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/update_scheduled_action.py.html>`__ to see an example of how to use update_scheduled_action API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['scheduledActionId']
@@ -48933,7 +49654,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/update_scheduling_policy.py.html>`__ to see an example of how to use update_scheduling_policy API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/update_scheduling_policy.py.html>`__ to see an example of how to use update_scheduling_policy API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['schedulingPolicyId']
@@ -49048,7 +49769,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/update_scheduling_window.py.html>`__ to see an example of how to use update_scheduling_window API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/update_scheduling_window.py.html>`__ to see an example of how to use update_scheduling_window API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['schedulingPolicyId', 'schedulingWindowId']
@@ -49159,7 +49880,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/update_vm_cluster.py.html>`__ to see an example of how to use update_vm_cluster API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/update_vm_cluster.py.html>`__ to see an example of how to use update_vm_cluster API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['vmClusterId']
@@ -49275,7 +49996,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/update_vm_cluster_network.py.html>`__ to see an example of how to use update_vm_cluster_network API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/update_vm_cluster_network.py.html>`__ to see an example of how to use update_vm_cluster_network API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['exadataInfrastructureId', 'vmClusterNetworkId']
@@ -49386,7 +50107,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/upgrade_database.py.html>`__ to see an example of how to use upgrade_database API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/upgrade_database.py.html>`__ to see an example of how to use upgrade_database API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['databaseId']
@@ -49503,7 +50224,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/upgrade_db_system.py.html>`__ to see an example of how to use upgrade_db_system API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/upgrade_db_system.py.html>`__ to see an example of how to use upgrade_db_system API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['dbSystemId']
@@ -49620,7 +50341,7 @@ class DatabaseClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/database/validate_vm_cluster_network.py.html>`__ to see an example of how to use validate_vm_cluster_network API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/database/validate_vm_cluster_network.py.html>`__ to see an example of how to use validate_vm_cluster_network API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['exadataInfrastructureId', 'vmClusterNetworkId']

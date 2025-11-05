@@ -61,6 +61,7 @@ import constructs as _constructs_77d1e7e8
 from .. import (
     CfnResource as _CfnResource_9df397a6,
     CfnTag as _CfnTag_f6864754,
+    IEnvironmentAware as _IEnvironmentAware_a408b00d,
     IInspectable as _IInspectable_c2943556,
     IResolvable as _IResolvable_da3f097b,
     ITaggable as _ITaggable_36806126,
@@ -1743,7 +1744,11 @@ class FilterReference:
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_guardduty.IDetectorRef")
-class IDetectorRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IDetectorRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Detector.
 
     :stability: experimental
@@ -1761,6 +1766,7 @@ class IDetectorRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IDetectorRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Detector.
 
@@ -1783,7 +1789,11 @@ typing.cast(typing.Any, IDetectorRef).__jsii_proxy_class__ = lambda : _IDetector
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_guardduty.IFilterRef")
-class IFilterRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IFilterRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Filter.
 
     :stability: experimental
@@ -1801,6 +1811,7 @@ class IFilterRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IFilterRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Filter.
 
@@ -1823,7 +1834,11 @@ typing.cast(typing.Any, IFilterRef).__jsii_proxy_class__ = lambda : _IFilterRefP
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_guardduty.IIPSetRef")
-class IIPSetRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IIPSetRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a IPSet.
 
     :stability: experimental
@@ -1841,6 +1856,7 @@ class IIPSetRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IIPSetRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a IPSet.
 
@@ -1865,6 +1881,7 @@ typing.cast(typing.Any, IIPSetRef).__jsii_proxy_class__ = lambda : _IIPSetRefPro
 @jsii.interface(jsii_type="aws-cdk-lib.aws_guardduty.IMalwareProtectionPlanRef")
 class IMalwareProtectionPlanRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a MalwareProtectionPlan.
@@ -1884,6 +1901,7 @@ class IMalwareProtectionPlanRef(
 
 class _IMalwareProtectionPlanRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a MalwareProtectionPlan.
 
@@ -1906,7 +1924,11 @@ typing.cast(typing.Any, IMalwareProtectionPlanRef).__jsii_proxy_class__ = lambda
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_guardduty.IMasterRef")
-class IMasterRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IMasterRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Master.
 
     :stability: experimental
@@ -1924,6 +1946,7 @@ class IMasterRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IMasterRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Master.
 
@@ -1946,7 +1969,11 @@ typing.cast(typing.Any, IMasterRef).__jsii_proxy_class__ = lambda : _IMasterRefP
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_guardduty.IMemberRef")
-class IMemberRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IMemberRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Member.
 
     :stability: experimental
@@ -1964,6 +1991,7 @@ class IMemberRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IMemberRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Member.
 
@@ -2048,6 +2076,7 @@ class IPSetReference:
 @jsii.interface(jsii_type="aws-cdk-lib.aws_guardduty.IPublishingDestinationRef")
 class IPublishingDestinationRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a PublishingDestination.
@@ -2067,6 +2096,7 @@ class IPublishingDestinationRef(
 
 class _IPublishingDestinationRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a PublishingDestination.
 
@@ -2089,7 +2119,11 @@ typing.cast(typing.Any, IPublishingDestinationRef).__jsii_proxy_class__ = lambda
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_guardduty.IThreatEntitySetRef")
-class IThreatEntitySetRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IThreatEntitySetRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a ThreatEntitySet.
 
     :stability: experimental
@@ -2107,6 +2141,7 @@ class IThreatEntitySetRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Pro
 
 class _IThreatEntitySetRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a ThreatEntitySet.
 
@@ -2129,7 +2164,11 @@ typing.cast(typing.Any, IThreatEntitySetRef).__jsii_proxy_class__ = lambda : _IT
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_guardduty.IThreatIntelSetRef")
-class IThreatIntelSetRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IThreatIntelSetRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a ThreatIntelSet.
 
     :stability: experimental
@@ -2147,6 +2186,7 @@ class IThreatIntelSetRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Prot
 
 class _IThreatIntelSetRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a ThreatIntelSet.
 
@@ -2169,7 +2209,11 @@ typing.cast(typing.Any, IThreatIntelSetRef).__jsii_proxy_class__ = lambda : _ITh
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_guardduty.ITrustedEntitySetRef")
-class ITrustedEntitySetRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class ITrustedEntitySetRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a TrustedEntitySet.
 
     :stability: experimental
@@ -2187,6 +2231,7 @@ class ITrustedEntitySetRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Pr
 
 class _ITrustedEntitySetRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a TrustedEntitySet.
 

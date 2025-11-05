@@ -801,6 +801,7 @@ import constructs as _constructs_77d1e7e8
 from .. import (
     CfnResource as _CfnResource_9df397a6,
     Duration as _Duration_4839e8c3,
+    IEnvironmentAware as _IEnvironmentAware_a408b00d,
     IInspectable as _IInspectable_c2943556,
     IResolvable as _IResolvable_da3f097b,
     IResource as _IResource_c80c4260,
@@ -5928,6 +5929,7 @@ typing.cast(typing.Any, IComputeEnvironment).__jsii_proxy_class__ = lambda : _IC
 @jsii.interface(jsii_type="aws-cdk-lib.aws_batch.IComputeEnvironmentRef")
 class IComputeEnvironmentRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a ComputeEnvironment.
@@ -5947,6 +5949,7 @@ class IComputeEnvironmentRef(
 
 class _IComputeEnvironmentRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a ComputeEnvironment.
 
@@ -5971,6 +5974,7 @@ typing.cast(typing.Any, IComputeEnvironmentRef).__jsii_proxy_class__ = lambda : 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_batch.IConsumableResourceRef")
 class IConsumableResourceRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a ConsumableResource.
@@ -5990,6 +5994,7 @@ class IConsumableResourceRef(
 
 class _IConsumableResourceRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a ConsumableResource.
 
@@ -7320,7 +7325,11 @@ typing.cast(typing.Any, IJobDefinition).__jsii_proxy_class__ = lambda : _IJobDef
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_batch.IJobDefinitionRef")
-class IJobDefinitionRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IJobDefinitionRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a JobDefinition.
 
     :stability: experimental
@@ -7338,6 +7347,7 @@ class IJobDefinitionRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Proto
 
 class _IJobDefinitionRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a JobDefinition.
 
@@ -7550,7 +7560,11 @@ typing.cast(typing.Any, IJobQueue).__jsii_proxy_class__ = lambda : _IJobQueuePro
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_batch.IJobQueueRef")
-class IJobQueueRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IJobQueueRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a JobQueue.
 
     :stability: experimental
@@ -7568,6 +7582,7 @@ class IJobQueueRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IJobQueueRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a JobQueue.
 
@@ -8200,7 +8215,11 @@ typing.cast(typing.Any, ISchedulingPolicy).__jsii_proxy_class__ = lambda : _ISch
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_batch.ISchedulingPolicyRef")
-class ISchedulingPolicyRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class ISchedulingPolicyRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a SchedulingPolicy.
 
     :stability: experimental
@@ -8218,6 +8237,7 @@ class ISchedulingPolicyRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Pr
 
 class _ISchedulingPolicyRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a SchedulingPolicy.
 
@@ -8242,6 +8262,7 @@ typing.cast(typing.Any, ISchedulingPolicyRef).__jsii_proxy_class__ = lambda : _I
 @jsii.interface(jsii_type="aws-cdk-lib.aws_batch.IServiceEnvironmentRef")
 class IServiceEnvironmentRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a ServiceEnvironment.
@@ -8261,6 +8282,7 @@ class IServiceEnvironmentRef(
 
 class _IServiceEnvironmentRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a ServiceEnvironment.
 

@@ -61,6 +61,7 @@ import constructs as _constructs_77d1e7e8
 from .. import (
     CfnResource as _CfnResource_9df397a6,
     CfnTag as _CfnTag_f6864754,
+    IEnvironmentAware as _IEnvironmentAware_a408b00d,
     IInspectable as _IInspectable_c2943556,
     IResolvable as _IResolvable_da3f097b,
     ITaggable as _ITaggable_36806126,
@@ -3131,7 +3132,11 @@ class FleetReference:
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_appstream.IAppBlockBuilderRef")
-class IAppBlockBuilderRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IAppBlockBuilderRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a AppBlockBuilder.
 
     :stability: experimental
@@ -3149,6 +3154,7 @@ class IAppBlockBuilderRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Pro
 
 class _IAppBlockBuilderRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a AppBlockBuilder.
 
@@ -3171,7 +3177,11 @@ typing.cast(typing.Any, IAppBlockBuilderRef).__jsii_proxy_class__ = lambda : _IA
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_appstream.IAppBlockRef")
-class IAppBlockRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IAppBlockRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a AppBlock.
 
     :stability: experimental
@@ -3189,6 +3199,7 @@ class IAppBlockRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IAppBlockRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a AppBlock.
 
@@ -3215,6 +3226,7 @@ typing.cast(typing.Any, IAppBlockRef).__jsii_proxy_class__ = lambda : _IAppBlock
 )
 class IApplicationEntitlementAssociationRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a ApplicationEntitlementAssociation.
@@ -3236,6 +3248,7 @@ class IApplicationEntitlementAssociationRef(
 
 class _IApplicationEntitlementAssociationRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a ApplicationEntitlementAssociation.
 
@@ -3262,6 +3275,7 @@ typing.cast(typing.Any, IApplicationEntitlementAssociationRef).__jsii_proxy_clas
 @jsii.interface(jsii_type="aws-cdk-lib.aws_appstream.IApplicationFleetAssociationRef")
 class IApplicationFleetAssociationRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a ApplicationFleetAssociation.
@@ -3281,6 +3295,7 @@ class IApplicationFleetAssociationRef(
 
 class _IApplicationFleetAssociationRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a ApplicationFleetAssociation.
 
@@ -3303,7 +3318,11 @@ typing.cast(typing.Any, IApplicationFleetAssociationRef).__jsii_proxy_class__ = 
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_appstream.IApplicationRef")
-class IApplicationRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IApplicationRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Application.
 
     :stability: experimental
@@ -3321,6 +3340,7 @@ class IApplicationRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protoco
 
 class _IApplicationRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Application.
 
@@ -3343,7 +3363,11 @@ typing.cast(typing.Any, IApplicationRef).__jsii_proxy_class__ = lambda : _IAppli
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_appstream.IDirectoryConfigRef")
-class IDirectoryConfigRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IDirectoryConfigRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a DirectoryConfig.
 
     :stability: experimental
@@ -3361,6 +3385,7 @@ class IDirectoryConfigRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Pro
 
 class _IDirectoryConfigRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a DirectoryConfig.
 
@@ -3383,7 +3408,11 @@ typing.cast(typing.Any, IDirectoryConfigRef).__jsii_proxy_class__ = lambda : _ID
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_appstream.IEntitlementRef")
-class IEntitlementRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IEntitlementRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Entitlement.
 
     :stability: experimental
@@ -3401,6 +3430,7 @@ class IEntitlementRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protoco
 
 class _IEntitlementRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Entitlement.
 
@@ -3423,7 +3453,11 @@ typing.cast(typing.Any, IEntitlementRef).__jsii_proxy_class__ = lambda : _IEntit
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_appstream.IFleetRef")
-class IFleetRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IFleetRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Fleet.
 
     :stability: experimental
@@ -3441,6 +3475,7 @@ class IFleetRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IFleetRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Fleet.
 
@@ -3463,7 +3498,11 @@ typing.cast(typing.Any, IFleetRef).__jsii_proxy_class__ = lambda : _IFleetRefPro
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_appstream.IImageBuilderRef")
-class IImageBuilderRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IImageBuilderRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a ImageBuilder.
 
     :stability: experimental
@@ -3481,6 +3520,7 @@ class IImageBuilderRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protoc
 
 class _IImageBuilderRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a ImageBuilder.
 
@@ -3505,6 +3545,7 @@ typing.cast(typing.Any, IImageBuilderRef).__jsii_proxy_class__ = lambda : _IImag
 @jsii.interface(jsii_type="aws-cdk-lib.aws_appstream.IStackFleetAssociationRef")
 class IStackFleetAssociationRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a StackFleetAssociation.
@@ -3524,6 +3565,7 @@ class IStackFleetAssociationRef(
 
 class _IStackFleetAssociationRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a StackFleetAssociation.
 
@@ -3546,7 +3588,11 @@ typing.cast(typing.Any, IStackFleetAssociationRef).__jsii_proxy_class__ = lambda
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_appstream.IStackRef")
-class IStackRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IStackRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Stack.
 
     :stability: experimental
@@ -3564,6 +3610,7 @@ class IStackRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IStackRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Stack.
 
@@ -3588,6 +3635,7 @@ typing.cast(typing.Any, IStackRef).__jsii_proxy_class__ = lambda : _IStackRefPro
 @jsii.interface(jsii_type="aws-cdk-lib.aws_appstream.IStackUserAssociationRef")
 class IStackUserAssociationRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a StackUserAssociation.
@@ -3607,6 +3655,7 @@ class IStackUserAssociationRef(
 
 class _IStackUserAssociationRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a StackUserAssociation.
 
@@ -3629,7 +3678,11 @@ typing.cast(typing.Any, IStackUserAssociationRef).__jsii_proxy_class__ = lambda 
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_appstream.IUserRef")
-class IUserRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IUserRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a User.
 
     :stability: experimental
@@ -3647,6 +3700,7 @@ class IUserRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IUserRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a User.
 

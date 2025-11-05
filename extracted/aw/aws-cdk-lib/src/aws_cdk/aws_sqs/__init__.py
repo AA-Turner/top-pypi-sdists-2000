@@ -146,6 +146,7 @@ from .. import (
     CfnResource as _CfnResource_9df397a6,
     CfnTag as _CfnTag_f6864754,
     Duration as _Duration_4839e8c3,
+    IEnvironmentAware as _IEnvironmentAware_a408b00d,
     IInspectable as _IInspectable_c2943556,
     IResolvable as _IResolvable_da3f097b,
     IResource as _IResource_c80c4260,
@@ -1939,6 +1940,7 @@ typing.cast(typing.Any, IQueue).__jsii_proxy_class__ = lambda : _IQueueProxy
 @jsii.interface(jsii_type="aws-cdk-lib.aws_sqs.IQueueInlinePolicyRef")
 class IQueueInlinePolicyRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a QueueInlinePolicy.
@@ -1958,6 +1960,7 @@ class IQueueInlinePolicyRef(
 
 class _IQueueInlinePolicyRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a QueueInlinePolicy.
 
@@ -1980,7 +1983,11 @@ typing.cast(typing.Any, IQueueInlinePolicyRef).__jsii_proxy_class__ = lambda : _
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_sqs.IQueuePolicyRef")
-class IQueuePolicyRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IQueuePolicyRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a QueuePolicy.
 
     :stability: experimental
@@ -1998,6 +2005,7 @@ class IQueuePolicyRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protoco
 
 class _IQueuePolicyRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a QueuePolicy.
 
@@ -2020,7 +2028,11 @@ typing.cast(typing.Any, IQueuePolicyRef).__jsii_proxy_class__ = lambda : _IQueue
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_sqs.IQueueRef")
-class IQueueRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IQueueRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Queue.
 
     :stability: experimental
@@ -2038,6 +2050,7 @@ class IQueueRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IQueueRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Queue.
 

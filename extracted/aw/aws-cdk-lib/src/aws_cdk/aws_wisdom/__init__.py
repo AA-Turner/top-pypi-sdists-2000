@@ -61,6 +61,7 @@ import constructs as _constructs_77d1e7e8
 from .. import (
     CfnResource as _CfnResource_9df397a6,
     CfnTag as _CfnTag_f6864754,
+    IEnvironmentAware as _IEnvironmentAware_a408b00d,
     IInspectable as _IInspectable_c2943556,
     IResolvable as _IResolvable_da3f097b,
     ITaggable as _ITaggable_36806126,
@@ -2908,7 +2909,11 @@ class CfnQuickResponseProps:
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_wisdom.IAIAgentRef")
-class IAIAgentRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IAIAgentRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a AIAgent.
 
     :stability: experimental
@@ -2926,6 +2931,7 @@ class IAIAgentRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IAIAgentRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a AIAgent.
 
@@ -2948,7 +2954,11 @@ typing.cast(typing.Any, IAIAgentRef).__jsii_proxy_class__ = lambda : _IAIAgentRe
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_wisdom.IAIAgentVersionRef")
-class IAIAgentVersionRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IAIAgentVersionRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a AIAgentVersion.
 
     :stability: experimental
@@ -2966,6 +2976,7 @@ class IAIAgentVersionRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Prot
 
 class _IAIAgentVersionRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a AIAgentVersion.
 
@@ -2988,7 +2999,11 @@ typing.cast(typing.Any, IAIAgentVersionRef).__jsii_proxy_class__ = lambda : _IAI
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_wisdom.IAIGuardrailRef")
-class IAIGuardrailRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IAIGuardrailRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a AIGuardrail.
 
     :stability: experimental
@@ -3006,6 +3021,7 @@ class IAIGuardrailRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protoco
 
 class _IAIGuardrailRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a AIGuardrail.
 
@@ -3030,6 +3046,7 @@ typing.cast(typing.Any, IAIGuardrailRef).__jsii_proxy_class__ = lambda : _IAIGua
 @jsii.interface(jsii_type="aws-cdk-lib.aws_wisdom.IAIGuardrailVersionRef")
 class IAIGuardrailVersionRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a AIGuardrailVersion.
@@ -3049,6 +3066,7 @@ class IAIGuardrailVersionRef(
 
 class _IAIGuardrailVersionRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a AIGuardrailVersion.
 
@@ -3071,7 +3089,11 @@ typing.cast(typing.Any, IAIGuardrailVersionRef).__jsii_proxy_class__ = lambda : 
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_wisdom.IAIPromptRef")
-class IAIPromptRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IAIPromptRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a AIPrompt.
 
     :stability: experimental
@@ -3089,6 +3111,7 @@ class IAIPromptRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IAIPromptRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a AIPrompt.
 
@@ -3111,7 +3134,11 @@ typing.cast(typing.Any, IAIPromptRef).__jsii_proxy_class__ = lambda : _IAIPrompt
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_wisdom.IAIPromptVersionRef")
-class IAIPromptVersionRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IAIPromptVersionRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a AIPromptVersion.
 
     :stability: experimental
@@ -3129,6 +3156,7 @@ class IAIPromptVersionRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Pro
 
 class _IAIPromptVersionRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a AIPromptVersion.
 
@@ -3153,6 +3181,7 @@ typing.cast(typing.Any, IAIPromptVersionRef).__jsii_proxy_class__ = lambda : _IA
 @jsii.interface(jsii_type="aws-cdk-lib.aws_wisdom.IAssistantAssociationRef")
 class IAssistantAssociationRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a AssistantAssociation.
@@ -3172,6 +3201,7 @@ class IAssistantAssociationRef(
 
 class _IAssistantAssociationRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a AssistantAssociation.
 
@@ -3194,7 +3224,11 @@ typing.cast(typing.Any, IAssistantAssociationRef).__jsii_proxy_class__ = lambda 
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_wisdom.IAssistantRef")
-class IAssistantRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IAssistantRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Assistant.
 
     :stability: experimental
@@ -3212,6 +3246,7 @@ class IAssistantRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol)
 
 class _IAssistantRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Assistant.
 
@@ -3234,7 +3269,11 @@ typing.cast(typing.Any, IAssistantRef).__jsii_proxy_class__ = lambda : _IAssista
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_wisdom.IKnowledgeBaseRef")
-class IKnowledgeBaseRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IKnowledgeBaseRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a KnowledgeBase.
 
     :stability: experimental
@@ -3252,6 +3291,7 @@ class IKnowledgeBaseRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Proto
 
 class _IKnowledgeBaseRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a KnowledgeBase.
 
@@ -3274,7 +3314,11 @@ typing.cast(typing.Any, IKnowledgeBaseRef).__jsii_proxy_class__ = lambda : _IKno
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_wisdom.IMessageTemplateRef")
-class IMessageTemplateRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IMessageTemplateRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a MessageTemplate.
 
     :stability: experimental
@@ -3292,6 +3336,7 @@ class IMessageTemplateRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Pro
 
 class _IMessageTemplateRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a MessageTemplate.
 
@@ -3316,6 +3361,7 @@ typing.cast(typing.Any, IMessageTemplateRef).__jsii_proxy_class__ = lambda : _IM
 @jsii.interface(jsii_type="aws-cdk-lib.aws_wisdom.IMessageTemplateVersionRef")
 class IMessageTemplateVersionRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a MessageTemplateVersion.
@@ -3335,6 +3381,7 @@ class IMessageTemplateVersionRef(
 
 class _IMessageTemplateVersionRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a MessageTemplateVersion.
 
@@ -3357,7 +3404,11 @@ typing.cast(typing.Any, IMessageTemplateVersionRef).__jsii_proxy_class__ = lambd
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_wisdom.IQuickResponseRef")
-class IQuickResponseRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IQuickResponseRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a QuickResponse.
 
     :stability: experimental
@@ -3375,6 +3426,7 @@ class IQuickResponseRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Proto
 
 class _IQuickResponseRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a QuickResponse.
 

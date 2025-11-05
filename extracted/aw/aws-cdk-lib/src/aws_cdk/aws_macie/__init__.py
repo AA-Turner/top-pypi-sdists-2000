@@ -61,6 +61,7 @@ import constructs as _constructs_77d1e7e8
 from .. import (
     CfnResource as _CfnResource_9df397a6,
     CfnTag as _CfnTag_f6864754,
+    IEnvironmentAware as _IEnvironmentAware_a408b00d,
     IInspectable as _IInspectable_c2943556,
     IResolvable as _IResolvable_da3f097b,
     ITaggable as _ITaggable_36806126,
@@ -832,7 +833,11 @@ class FindingsFilterReference:
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_macie.IAllowListRef")
-class IAllowListRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IAllowListRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a AllowList.
 
     :stability: experimental
@@ -850,6 +855,7 @@ class IAllowListRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol)
 
 class _IAllowListRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a AllowList.
 
@@ -874,6 +880,7 @@ typing.cast(typing.Any, IAllowListRef).__jsii_proxy_class__ = lambda : _IAllowLi
 @jsii.interface(jsii_type="aws-cdk-lib.aws_macie.ICustomDataIdentifierRef")
 class ICustomDataIdentifierRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a CustomDataIdentifier.
@@ -893,6 +900,7 @@ class ICustomDataIdentifierRef(
 
 class _ICustomDataIdentifierRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a CustomDataIdentifier.
 
@@ -915,7 +923,11 @@ typing.cast(typing.Any, ICustomDataIdentifierRef).__jsii_proxy_class__ = lambda 
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_macie.IFindingsFilterRef")
-class IFindingsFilterRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IFindingsFilterRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a FindingsFilter.
 
     :stability: experimental
@@ -933,6 +945,7 @@ class IFindingsFilterRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Prot
 
 class _IFindingsFilterRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a FindingsFilter.
 
@@ -955,7 +968,11 @@ typing.cast(typing.Any, IFindingsFilterRef).__jsii_proxy_class__ = lambda : _IFi
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_macie.ISessionRef")
-class ISessionRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class ISessionRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Session.
 
     :stability: experimental
@@ -973,6 +990,7 @@ class ISessionRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _ISessionRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Session.
 

@@ -332,6 +332,7 @@ from .._jsii import *
 import constructs as _constructs_77d1e7e8
 from .. import (
     CfnResource as _CfnResource_9df397a6,
+    IEnvironmentAware as _IEnvironmentAware_a408b00d,
     IInspectable as _IInspectable_c2943556,
     IResolvable as _IResolvable_da3f097b,
     IResource as _IResource_c80c4260,
@@ -2157,7 +2158,11 @@ typing.cast(typing.Any, IAccessPoint).__jsii_proxy_class__ = lambda : _IAccessPo
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_efs.IAccessPointRef")
-class IAccessPointRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IAccessPointRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a AccessPoint.
 
     :stability: experimental
@@ -2175,6 +2180,7 @@ class IAccessPointRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protoco
 
 class _IAccessPointRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a AccessPoint.
 
@@ -2353,7 +2359,11 @@ typing.cast(typing.Any, IFileSystem).__jsii_proxy_class__ = lambda : _IFileSyste
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_efs.IFileSystemRef")
-class IFileSystemRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IFileSystemRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a FileSystem.
 
     :stability: experimental
@@ -2371,6 +2381,7 @@ class IFileSystemRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol
 
 class _IFileSystemRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a FileSystem.
 
@@ -2393,7 +2404,11 @@ typing.cast(typing.Any, IFileSystemRef).__jsii_proxy_class__ = lambda : _IFileSy
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_efs.IMountTargetRef")
-class IMountTargetRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IMountTargetRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a MountTarget.
 
     :stability: experimental
@@ -2411,6 +2426,7 @@ class IMountTargetRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protoco
 
 class _IMountTargetRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a MountTarget.
 

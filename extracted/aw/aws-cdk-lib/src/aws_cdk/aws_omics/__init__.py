@@ -60,6 +60,7 @@ from .._jsii import *
 import constructs as _constructs_77d1e7e8
 from .. import (
     CfnResource as _CfnResource_9df397a6,
+    IEnvironmentAware as _IEnvironmentAware_a408b00d,
     IInspectable as _IInspectable_c2943556,
     IResolvable as _IResolvable_da3f097b,
     ITaggable as _ITaggable_36806126,
@@ -1646,7 +1647,11 @@ class CfnWorkflowVersionProps:
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_omics.IAnnotationStoreRef")
-class IAnnotationStoreRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IAnnotationStoreRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a AnnotationStore.
 
     :stability: experimental
@@ -1664,6 +1669,7 @@ class IAnnotationStoreRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Pro
 
 class _IAnnotationStoreRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a AnnotationStore.
 
@@ -1686,7 +1692,11 @@ typing.cast(typing.Any, IAnnotationStoreRef).__jsii_proxy_class__ = lambda : _IA
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_omics.IReferenceStoreRef")
-class IReferenceStoreRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IReferenceStoreRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a ReferenceStore.
 
     :stability: experimental
@@ -1704,6 +1714,7 @@ class IReferenceStoreRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Prot
 
 class _IReferenceStoreRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a ReferenceStore.
 
@@ -1726,7 +1737,11 @@ typing.cast(typing.Any, IReferenceStoreRef).__jsii_proxy_class__ = lambda : _IRe
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_omics.IRunGroupRef")
-class IRunGroupRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IRunGroupRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a RunGroup.
 
     :stability: experimental
@@ -1744,6 +1759,7 @@ class IRunGroupRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IRunGroupRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a RunGroup.
 
@@ -1766,7 +1782,11 @@ typing.cast(typing.Any, IRunGroupRef).__jsii_proxy_class__ = lambda : _IRunGroup
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_omics.ISequenceStoreRef")
-class ISequenceStoreRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class ISequenceStoreRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a SequenceStore.
 
     :stability: experimental
@@ -1784,6 +1804,7 @@ class ISequenceStoreRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Proto
 
 class _ISequenceStoreRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a SequenceStore.
 
@@ -1806,7 +1827,11 @@ typing.cast(typing.Any, ISequenceStoreRef).__jsii_proxy_class__ = lambda : _ISeq
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_omics.IVariantStoreRef")
-class IVariantStoreRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IVariantStoreRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a VariantStore.
 
     :stability: experimental
@@ -1824,6 +1849,7 @@ class IVariantStoreRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protoc
 
 class _IVariantStoreRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a VariantStore.
 
@@ -1846,7 +1872,11 @@ typing.cast(typing.Any, IVariantStoreRef).__jsii_proxy_class__ = lambda : _IVari
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_omics.IWorkflowRef")
-class IWorkflowRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IWorkflowRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Workflow.
 
     :stability: experimental
@@ -1864,6 +1894,7 @@ class IWorkflowRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IWorkflowRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Workflow.
 
@@ -1886,7 +1917,11 @@ typing.cast(typing.Any, IWorkflowRef).__jsii_proxy_class__ = lambda : _IWorkflow
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_omics.IWorkflowVersionRef")
-class IWorkflowVersionRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IWorkflowVersionRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a WorkflowVersion.
 
     :stability: experimental
@@ -1904,6 +1939,7 @@ class IWorkflowVersionRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Pro
 
 class _IWorkflowVersionRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a WorkflowVersion.
 

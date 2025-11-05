@@ -9,16 +9,20 @@ use ahash::AHashMap;
 use pyo3::IntoPyObjectExt;
 
 use super::{
-    infer_json_key, infer_json_key_known, infer_serialize, infer_to_python, BuildSerializer, CombinedSerializer,
-    ComputedFields, Extra, FieldsMode, GeneralFieldsSerializer, ObType, SerCheck, SerField, TypeSerializer,
-    WrappedSerError,
+    infer_json_key, infer_json_key_known, BuildSerializer, CombinedSerializer, ComputedFields, Extra, FieldsMode,
+    GeneralFieldsSerializer, ObType, SerCheck, SerField, TypeSerializer,
 };
 use crate::build_tools::py_schema_err;
 use crate::build_tools::{py_schema_error_type, ExtraBehavior};
 use crate::definitions::DefinitionsBuilder;
+use crate::serializers::extra::FieldName;
+use crate::serializers::shared::serialize_to_json;
+use crate::serializers::shared::serialize_to_python;
+use crate::serializers::shared::DoSerialize;
 use crate::serializers::type_serializers::any::AnySerializer;
 use crate::serializers::type_serializers::function::FunctionPlainSerializer;
 use crate::serializers::type_serializers::function::FunctionWrapSerializer;
+use crate::serializers::SerializationState;
 use crate::tools::SchemaDict;
 
 const ROOT_FIELD: &str = "root";
@@ -160,56 +164,60 @@ impl ModelSerializer {
     /// - extracting the inner value for root models
     /// - applying `serialize_as_any` where needed
     ///
-    /// `do_serialize` should be a function which performs the actual serialization, and should not
-    /// apply any type inference. (`Model` serialization is strongly coupled with its child
-    /// serializer, and in the few cases where `serialize_as_any` applies, it is handled here.)
-    ///
     /// If the value is not applicable, `do_serialize` will be called with `None` to indicate fallback
     /// behaviour should be used.
-    fn serialize<T, E: From<PyErr>>(
+    fn serialize<'py, T, E: From<PyErr>>(
         &self,
-        value: &Bound<'_, PyAny>,
-        extra: &Extra,
-        do_serialize: impl FnOnce(Option<(&Arc<CombinedSerializer>, &Bound<'_, PyAny>, &Extra)>) -> Result<T, E>,
+        value: &Bound<'py, PyAny>,
+        state: &mut SerializationState<'_, 'py>,
+        do_serialize: impl DoSerialize<'py, T, E>,
     ) -> Result<T, E> {
-        match self.root_model {
-            true if self.allow_value_root_model(value, extra.check)? => {
-                let root_extra = Extra {
-                    field_name: Some(ROOT_FIELD),
-                    model: Some(value),
-                    ..extra.clone()
-                };
-                let root = value.getattr(intern!(value.py(), ROOT_FIELD))?;
-
-                // for root models, `serialize_as_any` may apply unless a `field_serializer` is used
-                let serializer = if root_extra.serialize_as_any
-                    && !matches!(
-                        self.serializer.as_ref(),
-                        CombinedSerializer::Function(FunctionPlainSerializer {
-                            is_field_serializer: true,
-                            ..
-                        }) | CombinedSerializer::FunctionWrap(FunctionWrapSerializer {
-                            is_field_serializer: true,
-                            ..
-                        }),
-                    ) {
-                    AnySerializer::get()
-                } else {
-                    &self.serializer
-                };
-
-                do_serialize(Some((serializer, &root, &root_extra)))
-            }
-            false if self.allow_value(value, extra.check)? => {
-                let model_extra = Extra {
-                    model: Some(value),
-                    ..extra.clone()
-                };
-                let inner_value = self.get_inner_value(value, &model_extra)?;
-                do_serialize(Some((&self.serializer, &inner_value, &model_extra)))
-            }
-            _ => do_serialize(None),
+        if self.root_model {
+            return self.serialize_root_model(value, state, do_serialize);
         }
+
+        if !self.allow_value(value, state.check)? {
+            return do_serialize.serialize_fallback(self.get_name(), value, state);
+        }
+
+        let inner_value = self.get_inner_value(value, &state.extra)?;
+
+        let state = &mut state.scoped_set(|s| &mut s.model, Some(value.clone()));
+        do_serialize.serialize_no_infer(&self.serializer, &inner_value, state)
+    }
+
+    fn serialize_root_model<'py, T, E: From<PyErr>>(
+        &self,
+        value: &Bound<'py, PyAny>,
+        state: &mut SerializationState<'_, 'py>,
+        do_serialize: impl DoSerialize<'py, T, E>,
+    ) -> Result<T, E> {
+        if !self.allow_value_root_model(value, state.check)? {
+            return do_serialize.serialize_fallback(self.get_name(), value, state);
+        }
+
+        let root = value.getattr(intern!(value.py(), ROOT_FIELD))?;
+
+        // for root models, `serialize_as_any` may apply unless a `field_serializer` is used
+        let serializer = if state.extra.serialize_as_any
+            && !matches!(
+                self.serializer.as_ref(),
+                CombinedSerializer::Function(FunctionPlainSerializer {
+                    is_field_serializer: true,
+                    ..
+                }) | CombinedSerializer::FunctionWrap(FunctionWrapSerializer {
+                    is_field_serializer: true,
+                    ..
+                }),
+            ) {
+            AnySerializer::get()
+        } else {
+            &self.serializer
+        };
+
+        let state = &mut state.scoped_set(|s| &mut s.field_name, Some(FieldName::Root));
+        let state = &mut state.scoped_set(|s| &mut s.model, Some(value.clone()));
+        do_serialize.serialize_no_infer(serializer, &root, state)
     }
 
     fn get_inner_value<'py>(&self, model: &Bound<'py, PyAny>, extra: &Extra) -> PyResult<Bound<'py, PyAny>> {
@@ -242,53 +250,36 @@ impl ModelSerializer {
 impl_py_gc_traverse!(ModelSerializer { class, serializer });
 
 impl TypeSerializer for ModelSerializer {
-    fn to_python(
+    fn to_python<'py>(
         &self,
-        value: &Bound<'_, PyAny>,
-        include: Option<&Bound<'_, PyAny>>,
-        exclude: Option<&Bound<'_, PyAny>>,
-        extra: &Extra,
+        value: &Bound<'py, PyAny>,
+        state: &mut SerializationState<'_, 'py>,
     ) -> PyResult<Py<PyAny>> {
-        self.serialize(value, extra, |resolved| match resolved {
-            Some((serializer, value, extra)) => serializer.to_python_no_infer(value, include, exclude, extra),
-            None => {
-                extra.warnings.on_fallback_py(self.get_name(), value, extra)?;
-                infer_to_python(value, include, exclude, extra)
-            }
-        })
+        self.serialize(value, state, serialize_to_python())
     }
 
-    fn json_key<'a>(&self, key: &'a Bound<'_, PyAny>, extra: &Extra) -> PyResult<Cow<'a, str>> {
+    fn json_key<'a, 'py>(
+        &self,
+        key: &'a Bound<'py, PyAny>,
+        state: &mut SerializationState<'_, 'py>,
+    ) -> PyResult<Cow<'a, str>> {
         // FIXME: root model in json key position should serialize as inner value?
-        if self.allow_value(key, extra.check)? {
-            infer_json_key_known(ObType::PydanticSerializable, key, extra)
+        if self.allow_value(key, state.check)? {
+            infer_json_key_known(ObType::PydanticSerializable, key, state)
         } else {
-            extra.warnings.on_fallback_py(&self.name, key, extra)?;
-            infer_json_key(key, extra)
+            state.warn_fallback_py(&self.name, key)?;
+            infer_json_key(key, state)
         }
     }
 
-    fn serde_serialize<S: serde::ser::Serializer>(
+    fn serde_serialize<'py, S: serde::ser::Serializer>(
         &self,
-        value: &Bound<'_, PyAny>,
+        value: &Bound<'py, PyAny>,
         serializer: S,
-        include: Option<&Bound<'_, PyAny>>,
-        exclude: Option<&Bound<'_, PyAny>>,
-        extra: &Extra,
+        state: &mut SerializationState<'_, 'py>,
     ) -> Result<S::Ok, S::Error> {
-        self.serialize(value, extra, |resolved| match resolved {
-            Some((cs, value, extra)) => cs
-                .serde_serialize_no_infer(value, serializer, include, exclude, extra)
-                .map_err(WrappedSerError),
-            None => {
-                extra
-                    .warnings
-                    .on_fallback_ser::<S>(self.get_name(), value, extra)
-                    .map_err(WrappedSerError)?;
-                infer_serialize(value, serializer, include, exclude, extra).map_err(WrappedSerError)
-            }
-        })
-        .map_err(|e| e.0)
+        self.serialize(value, state, serialize_to_json(serializer))
+            .map_err(|e| e.0)
     }
 
     fn get_name(&self) -> &str {

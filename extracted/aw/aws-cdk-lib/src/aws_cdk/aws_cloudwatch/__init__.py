@@ -1150,6 +1150,7 @@ from .. import (
     CfnResource as _CfnResource_9df397a6,
     CfnTag as _CfnTag_f6864754,
     Duration as _Duration_4839e8c3,
+    IEnvironmentAware as _IEnvironmentAware_a408b00d,
     IInspectable as _IInspectable_c2943556,
     IResolvable as _IResolvable_da3f097b,
     IResource as _IResource_c80c4260,
@@ -5168,7 +5169,11 @@ typing.cast(typing.Any, IAlarmAction).__jsii_proxy_class__ = lambda : _IAlarmAct
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_cloudwatch.IAlarmRef")
-class IAlarmRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IAlarmRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Alarm.
 
     :stability: experimental
@@ -5186,6 +5191,7 @@ class IAlarmRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IAlarmRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Alarm.
 
@@ -5232,7 +5238,11 @@ typing.cast(typing.Any, IAlarmRule).__jsii_proxy_class__ = lambda : _IAlarmRuleP
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_cloudwatch.IAnomalyDetectorRef")
-class IAnomalyDetectorRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IAnomalyDetectorRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a AnomalyDetector.
 
     :stability: experimental
@@ -5250,6 +5260,7 @@ class IAnomalyDetectorRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Pro
 
 class _IAnomalyDetectorRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a AnomalyDetector.
 
@@ -5272,7 +5283,11 @@ typing.cast(typing.Any, IAnomalyDetectorRef).__jsii_proxy_class__ = lambda : _IA
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_cloudwatch.ICompositeAlarmRef")
-class ICompositeAlarmRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class ICompositeAlarmRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a CompositeAlarm.
 
     :stability: experimental
@@ -5290,6 +5305,7 @@ class ICompositeAlarmRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Prot
 
 class _ICompositeAlarmRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a CompositeAlarm.
 
@@ -5312,7 +5328,11 @@ typing.cast(typing.Any, ICompositeAlarmRef).__jsii_proxy_class__ = lambda : _ICo
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_cloudwatch.IDashboardRef")
-class IDashboardRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IDashboardRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Dashboard.
 
     :stability: experimental
@@ -5330,6 +5350,7 @@ class IDashboardRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol)
 
 class _IDashboardRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Dashboard.
 
@@ -5352,7 +5373,11 @@ typing.cast(typing.Any, IDashboardRef).__jsii_proxy_class__ = lambda : _IDashboa
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_cloudwatch.IInsightRuleRef")
-class IInsightRuleRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IInsightRuleRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a InsightRule.
 
     :stability: experimental
@@ -5370,6 +5395,7 @@ class IInsightRuleRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protoco
 
 class _IInsightRuleRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a InsightRule.
 
@@ -5472,7 +5498,11 @@ typing.cast(typing.Any, IMetric).__jsii_proxy_class__ = lambda : _IMetricProxy
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_cloudwatch.IMetricStreamRef")
-class IMetricStreamRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IMetricStreamRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a MetricStream.
 
     :stability: experimental
@@ -5490,6 +5520,7 @@ class IMetricStreamRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protoc
 
 class _IMetricStreamRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a MetricStream.
 

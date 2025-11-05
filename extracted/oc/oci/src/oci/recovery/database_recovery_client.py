@@ -152,7 +152,7 @@ class DatabaseRecoveryClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/recovery/cancel_protected_database_deletion.py.html>`__ to see an example of how to use cancel_protected_database_deletion API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/recovery/cancel_protected_database_deletion.py.html>`__ to see an example of how to use cancel_protected_database_deletion API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['protectedDatabaseId']
@@ -260,7 +260,7 @@ class DatabaseRecoveryClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/recovery/change_protected_database_compartment.py.html>`__ to see an example of how to use change_protected_database_compartment API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/recovery/change_protected_database_compartment.py.html>`__ to see an example of how to use change_protected_database_compartment API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['protectedDatabaseId']
@@ -370,7 +370,7 @@ class DatabaseRecoveryClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/recovery/change_protected_database_subscription.py.html>`__ to see an example of how to use change_protected_database_subscription API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/recovery/change_protected_database_subscription.py.html>`__ to see an example of how to use change_protected_database_subscription API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['protectedDatabaseId']
@@ -480,7 +480,7 @@ class DatabaseRecoveryClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/recovery/change_protection_policy_compartment.py.html>`__ to see an example of how to use change_protection_policy_compartment API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/recovery/change_protection_policy_compartment.py.html>`__ to see an example of how to use change_protection_policy_compartment API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['protectionPolicyId']
@@ -590,7 +590,7 @@ class DatabaseRecoveryClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/recovery/change_recovery_service_subnet_compartment.py.html>`__ to see an example of how to use change_recovery_service_subnet_compartment API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/recovery/change_recovery_service_subnet_compartment.py.html>`__ to see an example of how to use change_recovery_service_subnet_compartment API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['recoveryServiceSubnetId']
@@ -720,7 +720,7 @@ class DatabaseRecoveryClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/recovery/create_protected_database.py.html>`__ to see an example of how to use create_protected_database API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/recovery/create_protected_database.py.html>`__ to see an example of how to use create_protected_database API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -820,7 +820,7 @@ class DatabaseRecoveryClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/recovery/create_protection_policy.py.html>`__ to see an example of how to use create_protection_policy API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/recovery/create_protection_policy.py.html>`__ to see an example of how to use create_protection_policy API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -918,7 +918,7 @@ class DatabaseRecoveryClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/recovery/create_recovery_service_subnet.py.html>`__ to see an example of how to use create_recovery_service_subnet API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/recovery/create_recovery_service_subnet.py.html>`__ to see an example of how to use create_recovery_service_subnet API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -1023,7 +1023,7 @@ class DatabaseRecoveryClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/recovery/delete_protected_database.py.html>`__ to see an example of how to use delete_protected_database API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/recovery/delete_protected_database.py.html>`__ to see an example of how to use delete_protected_database API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['protectedDatabaseId']
@@ -1144,7 +1144,7 @@ class DatabaseRecoveryClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/recovery/delete_protection_policy.py.html>`__ to see an example of how to use delete_protection_policy API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/recovery/delete_protection_policy.py.html>`__ to see an example of how to use delete_protection_policy API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['protectionPolicyId']
@@ -1249,7 +1249,7 @@ class DatabaseRecoveryClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/recovery/delete_recovery_service_subnet.py.html>`__ to see an example of how to use delete_recovery_service_subnet API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/recovery/delete_recovery_service_subnet.py.html>`__ to see an example of how to use delete_recovery_service_subnet API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['recoveryServiceSubnetId']
@@ -1357,7 +1357,7 @@ class DatabaseRecoveryClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/recovery/fetch_protected_database_configuration.py.html>`__ to see an example of how to use fetch_protected_database_configuration API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/recovery/fetch_protected_database_configuration.py.html>`__ to see an example of how to use fetch_protected_database_configuration API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['protectedDatabaseId']
@@ -1460,7 +1460,7 @@ class DatabaseRecoveryClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/recovery/get_protected_database.py.html>`__ to see an example of how to use get_protected_database API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/recovery/get_protected_database.py.html>`__ to see an example of how to use get_protected_database API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['protectedDatabaseId']
@@ -1558,7 +1558,7 @@ class DatabaseRecoveryClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/recovery/get_protection_policy.py.html>`__ to see an example of how to use get_protection_policy API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/recovery/get_protection_policy.py.html>`__ to see an example of how to use get_protection_policy API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['protectionPolicyId']
@@ -1656,7 +1656,7 @@ class DatabaseRecoveryClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/recovery/get_recovery_service_subnet.py.html>`__ to see an example of how to use get_recovery_service_subnet API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/recovery/get_recovery_service_subnet.py.html>`__ to see an example of how to use get_recovery_service_subnet API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['recoveryServiceSubnetId']
@@ -1754,7 +1754,7 @@ class DatabaseRecoveryClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/recovery/get_work_request.py.html>`__ to see an example of how to use get_work_request API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/recovery/get_work_request.py.html>`__ to see an example of how to use get_work_request API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workRequestId']
@@ -1891,7 +1891,7 @@ class DatabaseRecoveryClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/recovery/list_protected_databases.py.html>`__ to see an example of how to use list_protected_databases API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/recovery/list_protected_databases.py.html>`__ to see an example of how to use list_protected_databases API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['compartmentId']
@@ -2061,7 +2061,7 @@ class DatabaseRecoveryClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/recovery/list_protection_policies.py.html>`__ to see an example of how to use list_protection_policies API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/recovery/list_protection_policies.py.html>`__ to see an example of how to use list_protection_policies API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['compartmentId']
@@ -2234,7 +2234,7 @@ class DatabaseRecoveryClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/recovery/list_recovery_service_subnets.py.html>`__ to see an example of how to use list_recovery_service_subnets API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/recovery/list_recovery_service_subnets.py.html>`__ to see an example of how to use list_recovery_service_subnets API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['compartmentId']
@@ -2383,7 +2383,7 @@ class DatabaseRecoveryClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/recovery/list_work_request_errors.py.html>`__ to see an example of how to use list_work_request_errors API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/recovery/list_work_request_errors.py.html>`__ to see an example of how to use list_work_request_errors API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workRequestId']
@@ -2528,7 +2528,7 @@ class DatabaseRecoveryClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/recovery/list_work_request_logs.py.html>`__ to see an example of how to use list_work_request_logs API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/recovery/list_work_request_logs.py.html>`__ to see an example of how to use list_work_request_logs API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workRequestId']
@@ -2684,7 +2684,7 @@ class DatabaseRecoveryClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/recovery/list_work_requests.py.html>`__ to see an example of how to use list_work_requests API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/recovery/list_work_requests.py.html>`__ to see an example of how to use list_work_requests API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['compartmentId']
@@ -2824,7 +2824,7 @@ class DatabaseRecoveryClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/recovery/schedule_protected_database_deletion.py.html>`__ to see an example of how to use schedule_protected_database_deletion API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/recovery/schedule_protected_database_deletion.py.html>`__ to see an example of how to use schedule_protected_database_deletion API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['protectedDatabaseId']
@@ -2935,7 +2935,7 @@ class DatabaseRecoveryClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/recovery/update_protected_database.py.html>`__ to see an example of how to use update_protected_database API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/recovery/update_protected_database.py.html>`__ to see an example of how to use update_protected_database API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['protectedDatabaseId']
@@ -3045,7 +3045,7 @@ class DatabaseRecoveryClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/recovery/update_protection_policy.py.html>`__ to see an example of how to use update_protection_policy API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/recovery/update_protection_policy.py.html>`__ to see an example of how to use update_protection_policy API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['protectionPolicyId']
@@ -3155,7 +3155,7 @@ class DatabaseRecoveryClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/recovery/update_recovery_service_subnet.py.html>`__ to see an example of how to use update_recovery_service_subnet API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/recovery/update_recovery_service_subnet.py.html>`__ to see an example of how to use update_recovery_service_subnet API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['recoveryServiceSubnetId']

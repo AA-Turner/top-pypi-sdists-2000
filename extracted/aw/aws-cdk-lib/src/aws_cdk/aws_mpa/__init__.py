@@ -71,6 +71,7 @@ import constructs as _constructs_77d1e7e8
 from .. import (
     CfnResource as _CfnResource_9df397a6,
     CfnTag as _CfnTag_f6864754,
+    IEnvironmentAware as _IEnvironmentAware_a408b00d,
     IInspectable as _IInspectable_c2943556,
     IResolvable as _IResolvable_da3f097b,
     ITaggableV2 as _ITaggableV2_4e6798f8,
@@ -387,7 +388,11 @@ class CfnIdentitySourceProps:
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_mpa.IApprovalTeamRef")
-class IApprovalTeamRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IApprovalTeamRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a ApprovalTeam.
 
     :stability: experimental
@@ -405,6 +410,7 @@ class IApprovalTeamRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protoc
 
 class _IApprovalTeamRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a ApprovalTeam.
 
@@ -427,7 +433,11 @@ typing.cast(typing.Any, IApprovalTeamRef).__jsii_proxy_class__ = lambda : _IAppr
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_mpa.IIdentitySourceRef")
-class IIdentitySourceRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IIdentitySourceRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a IdentitySource.
 
     :stability: experimental
@@ -445,6 +455,7 @@ class IIdentitySourceRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Prot
 
 class _IIdentitySourceRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a IdentitySource.
 

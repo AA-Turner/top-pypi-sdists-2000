@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: ormsgpack
-Version: 1.11.0
+Version: 1.12.0
 Classifier: Development Status :: 5 - Production/Stable
 Classifier: Intended Audience :: Developers
 Classifier: License :: OSI Approved :: Apache Software License
@@ -9,7 +9,6 @@ Classifier: Operating System :: MacOS
 Classifier: Operating System :: Microsoft :: Windows
 Classifier: Operating System :: POSIX :: Linux
 Classifier: Programming Language :: Python :: 3
-Classifier: Programming Language :: Python :: 3.9
 Classifier: Programming Language :: Python :: 3.10
 Classifier: Programming Language :: Python :: 3.11
 Classifier: Programming Language :: Python :: 3.12
@@ -24,4 +23,4 @@ License-File: LICENSE-APACHE
 License-File: LICENSE-MIT
 Home-Page: https://github.com/aviramha/ormsgpack
 Author-email: Aviram Hassan <aviramyhassan@gmail.com>, Emanuele Giaquinta <emanuele.giaquinta@gmail.com>
-Requires-Python: >=3.9
+Requires-Python: >=3.10

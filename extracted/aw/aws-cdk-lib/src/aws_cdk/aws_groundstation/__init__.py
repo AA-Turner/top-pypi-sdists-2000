@@ -61,6 +61,7 @@ import constructs as _constructs_77d1e7e8
 from .. import (
     CfnResource as _CfnResource_9df397a6,
     CfnTag as _CfnTag_f6864754,
+    IEnvironmentAware as _IEnvironmentAware_a408b00d,
     IInspectable as _IInspectable_c2943556,
     IResolvable as _IResolvable_da3f097b,
     ITaggable as _ITaggable_36806126,
@@ -709,7 +710,11 @@ class DataflowEndpointGroupReference:
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_groundstation.IConfigRef")
-class IConfigRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IConfigRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Config.
 
     :stability: experimental
@@ -727,6 +732,7 @@ class IConfigRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IConfigRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Config.
 
@@ -751,6 +757,7 @@ typing.cast(typing.Any, IConfigRef).__jsii_proxy_class__ = lambda : _IConfigRefP
 @jsii.interface(jsii_type="aws-cdk-lib.aws_groundstation.IDataflowEndpointGroupRef")
 class IDataflowEndpointGroupRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a DataflowEndpointGroup.
@@ -770,6 +777,7 @@ class IDataflowEndpointGroupRef(
 
 class _IDataflowEndpointGroupRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a DataflowEndpointGroup.
 
@@ -792,7 +800,11 @@ typing.cast(typing.Any, IDataflowEndpointGroupRef).__jsii_proxy_class__ = lambda
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_groundstation.IMissionProfileRef")
-class IMissionProfileRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IMissionProfileRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a MissionProfile.
 
     :stability: experimental
@@ -810,6 +822,7 @@ class IMissionProfileRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Prot
 
 class _IMissionProfileRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a MissionProfile.
 

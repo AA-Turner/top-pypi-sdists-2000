@@ -61,6 +61,7 @@ import constructs as _constructs_77d1e7e8
 from .. import (
     CfnResource as _CfnResource_9df397a6,
     CfnTag as _CfnTag_f6864754,
+    IEnvironmentAware as _IEnvironmentAware_a408b00d,
     IInspectable as _IInspectable_c2943556,
     IResolvable as _IResolvable_da3f097b,
     ITaggable as _ITaggable_36806126,
@@ -1315,7 +1316,11 @@ class ChannelReference:
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_mediatailor.IChannelPolicyRef")
-class IChannelPolicyRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IChannelPolicyRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a ChannelPolicy.
 
     :stability: experimental
@@ -1333,6 +1338,7 @@ class IChannelPolicyRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Proto
 
 class _IChannelPolicyRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a ChannelPolicy.
 
@@ -1355,7 +1361,11 @@ typing.cast(typing.Any, IChannelPolicyRef).__jsii_proxy_class__ = lambda : _ICha
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_mediatailor.IChannelRef")
-class IChannelRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IChannelRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Channel.
 
     :stability: experimental
@@ -1373,6 +1383,7 @@ class IChannelRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IChannelRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Channel.
 
@@ -1395,7 +1406,11 @@ typing.cast(typing.Any, IChannelRef).__jsii_proxy_class__ = lambda : _IChannelRe
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_mediatailor.ILiveSourceRef")
-class ILiveSourceRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class ILiveSourceRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a LiveSource.
 
     :stability: experimental
@@ -1413,6 +1428,7 @@ class ILiveSourceRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol
 
 class _ILiveSourceRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a LiveSource.
 
@@ -1437,6 +1453,7 @@ typing.cast(typing.Any, ILiveSourceRef).__jsii_proxy_class__ = lambda : _ILiveSo
 @jsii.interface(jsii_type="aws-cdk-lib.aws_mediatailor.IPlaybackConfigurationRef")
 class IPlaybackConfigurationRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a PlaybackConfiguration.
@@ -1456,6 +1473,7 @@ class IPlaybackConfigurationRef(
 
 class _IPlaybackConfigurationRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a PlaybackConfiguration.
 
@@ -1478,7 +1496,11 @@ typing.cast(typing.Any, IPlaybackConfigurationRef).__jsii_proxy_class__ = lambda
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_mediatailor.ISourceLocationRef")
-class ISourceLocationRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class ISourceLocationRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a SourceLocation.
 
     :stability: experimental
@@ -1496,6 +1518,7 @@ class ISourceLocationRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Prot
 
 class _ISourceLocationRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a SourceLocation.
 
@@ -1518,7 +1541,11 @@ typing.cast(typing.Any, ISourceLocationRef).__jsii_proxy_class__ = lambda : _ISo
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_mediatailor.IVodSourceRef")
-class IVodSourceRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IVodSourceRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a VodSource.
 
     :stability: experimental
@@ -1536,6 +1563,7 @@ class IVodSourceRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol)
 
 class _IVodSourceRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a VodSource.
 

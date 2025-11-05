@@ -762,6 +762,7 @@ from .. import (
     CfnResource as _CfnResource_9df397a6,
     CfnTag as _CfnTag_f6864754,
     Duration as _Duration_4839e8c3,
+    IEnvironmentAware as _IEnvironmentAware_a408b00d,
     IInspectable as _IInspectable_c2943556,
     IResolvable as _IResolvable_da3f097b,
     IResource as _IResource_c80c4260,
@@ -5992,7 +5993,11 @@ typing.cast(typing.Any, IApplication).__jsii_proxy_class__ = lambda : _IApplicat
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_appconfig.IApplicationRef")
-class IApplicationRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IApplicationRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Application.
 
     :stability: experimental
@@ -6010,6 +6015,7 @@ class IApplicationRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protoco
 
 class _IApplicationRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Application.
 
@@ -6166,6 +6172,7 @@ typing.cast(typing.Any, IConfiguration).__jsii_proxy_class__ = lambda : _IConfig
 @jsii.interface(jsii_type="aws-cdk-lib.aws_appconfig.IConfigurationProfileRef")
 class IConfigurationProfileRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a ConfigurationProfile.
@@ -6185,6 +6192,7 @@ class IConfigurationProfileRef(
 
 class _IConfigurationProfileRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a ConfigurationProfile.
 
@@ -6207,7 +6215,11 @@ typing.cast(typing.Any, IConfigurationProfileRef).__jsii_proxy_class__ = lambda 
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_appconfig.IDeploymentRef")
-class IDeploymentRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IDeploymentRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Deployment.
 
     :stability: experimental
@@ -6225,6 +6237,7 @@ class IDeploymentRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol
 
 class _IDeploymentRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Deployment.
 
@@ -6369,6 +6382,7 @@ typing.cast(typing.Any, IDeploymentStrategy).__jsii_proxy_class__ = lambda : _ID
 @jsii.interface(jsii_type="aws-cdk-lib.aws_appconfig.IDeploymentStrategyRef")
 class IDeploymentStrategyRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a DeploymentStrategy.
@@ -6388,6 +6402,7 @@ class IDeploymentStrategyRef(
 
 class _IDeploymentStrategyRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a DeploymentStrategy.
 
@@ -7095,7 +7110,11 @@ typing.cast(typing.Any, IEnvironment).__jsii_proxy_class__ = lambda : _IEnvironm
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_appconfig.IEnvironmentRef")
-class IEnvironmentRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IEnvironmentRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Environment.
 
     :stability: experimental
@@ -7113,6 +7132,7 @@ class IEnvironmentRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protoco
 
 class _IEnvironmentRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Environment.
 
@@ -7801,6 +7821,7 @@ typing.cast(typing.Any, IExtension).__jsii_proxy_class__ = lambda : _IExtensionP
 @jsii.interface(jsii_type="aws-cdk-lib.aws_appconfig.IExtensionAssociationRef")
 class IExtensionAssociationRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a ExtensionAssociation.
@@ -7820,6 +7841,7 @@ class IExtensionAssociationRef(
 
 class _IExtensionAssociationRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a ExtensionAssociation.
 
@@ -7842,7 +7864,11 @@ typing.cast(typing.Any, IExtensionAssociationRef).__jsii_proxy_class__ = lambda 
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_appconfig.IExtensionRef")
-class IExtensionRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IExtensionRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Extension.
 
     :stability: experimental
@@ -7860,6 +7886,7 @@ class IExtensionRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol)
 
 class _IExtensionRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Extension.
 
@@ -7884,6 +7911,7 @@ typing.cast(typing.Any, IExtensionRef).__jsii_proxy_class__ = lambda : _IExtensi
 @jsii.interface(jsii_type="aws-cdk-lib.aws_appconfig.IHostedConfigurationVersionRef")
 class IHostedConfigurationVersionRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a HostedConfigurationVersion.
@@ -7903,6 +7931,7 @@ class IHostedConfigurationVersionRef(
 
 class _IHostedConfigurationVersionRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a HostedConfigurationVersion.
 

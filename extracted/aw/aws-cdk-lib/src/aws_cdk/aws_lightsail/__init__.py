@@ -61,6 +61,7 @@ import constructs as _constructs_77d1e7e8
 from .. import (
     CfnResource as _CfnResource_9df397a6,
     CfnTag as _CfnTag_f6864754,
+    IEnvironmentAware as _IEnvironmentAware_a408b00d,
     IInspectable as _IInspectable_c2943556,
     IResolvable as _IResolvable_da3f097b,
     ITaggable as _ITaggable_36806126,
@@ -3285,7 +3286,11 @@ class DomainReference:
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_lightsail.IAlarmRef")
-class IAlarmRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IAlarmRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Alarm.
 
     :stability: experimental
@@ -3303,6 +3308,7 @@ class IAlarmRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IAlarmRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Alarm.
 
@@ -3325,7 +3331,11 @@ typing.cast(typing.Any, IAlarmRef).__jsii_proxy_class__ = lambda : _IAlarmRefPro
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_lightsail.IBucketRef")
-class IBucketRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IBucketRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Bucket.
 
     :stability: experimental
@@ -3343,6 +3353,7 @@ class IBucketRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IBucketRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Bucket.
 
@@ -3365,7 +3376,11 @@ typing.cast(typing.Any, IBucketRef).__jsii_proxy_class__ = lambda : _IBucketRefP
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_lightsail.ICertificateRef")
-class ICertificateRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class ICertificateRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Certificate.
 
     :stability: experimental
@@ -3383,6 +3398,7 @@ class ICertificateRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protoco
 
 class _ICertificateRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Certificate.
 
@@ -3405,7 +3421,11 @@ typing.cast(typing.Any, ICertificateRef).__jsii_proxy_class__ = lambda : _ICerti
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_lightsail.IContainerRef")
-class IContainerRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IContainerRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Container.
 
     :stability: experimental
@@ -3423,6 +3443,7 @@ class IContainerRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol)
 
 class _IContainerRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Container.
 
@@ -3445,7 +3466,11 @@ typing.cast(typing.Any, IContainerRef).__jsii_proxy_class__ = lambda : _IContain
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_lightsail.IDatabaseRef")
-class IDatabaseRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IDatabaseRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Database.
 
     :stability: experimental
@@ -3463,6 +3488,7 @@ class IDatabaseRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IDatabaseRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Database.
 
@@ -3485,7 +3511,11 @@ typing.cast(typing.Any, IDatabaseRef).__jsii_proxy_class__ = lambda : _IDatabase
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_lightsail.IDiskRef")
-class IDiskRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IDiskRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Disk.
 
     :stability: experimental
@@ -3503,6 +3533,7 @@ class IDiskRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IDiskRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Disk.
 
@@ -3525,7 +3556,11 @@ typing.cast(typing.Any, IDiskRef).__jsii_proxy_class__ = lambda : _IDiskRefProxy
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_lightsail.IDiskSnapshotRef")
-class IDiskSnapshotRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IDiskSnapshotRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a DiskSnapshot.
 
     :stability: experimental
@@ -3543,6 +3578,7 @@ class IDiskSnapshotRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protoc
 
 class _IDiskSnapshotRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a DiskSnapshot.
 
@@ -3565,7 +3601,11 @@ typing.cast(typing.Any, IDiskSnapshotRef).__jsii_proxy_class__ = lambda : _IDisk
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_lightsail.IDistributionRef")
-class IDistributionRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IDistributionRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Distribution.
 
     :stability: experimental
@@ -3583,6 +3623,7 @@ class IDistributionRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protoc
 
 class _IDistributionRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Distribution.
 
@@ -3605,7 +3646,11 @@ typing.cast(typing.Any, IDistributionRef).__jsii_proxy_class__ = lambda : _IDist
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_lightsail.IDomainRef")
-class IDomainRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IDomainRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Domain.
 
     :stability: experimental
@@ -3623,6 +3668,7 @@ class IDomainRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IDomainRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Domain.
 
@@ -3645,7 +3691,11 @@ typing.cast(typing.Any, IDomainRef).__jsii_proxy_class__ = lambda : _IDomainRefP
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_lightsail.IInstanceRef")
-class IInstanceRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IInstanceRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Instance.
 
     :stability: experimental
@@ -3663,6 +3713,7 @@ class IInstanceRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IInstanceRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Instance.
 
@@ -3685,7 +3736,11 @@ typing.cast(typing.Any, IInstanceRef).__jsii_proxy_class__ = lambda : _IInstance
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_lightsail.IInstanceSnapshotRef")
-class IInstanceSnapshotRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IInstanceSnapshotRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a InstanceSnapshot.
 
     :stability: experimental
@@ -3703,6 +3758,7 @@ class IInstanceSnapshotRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Pr
 
 class _IInstanceSnapshotRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a InstanceSnapshot.
 
@@ -3725,7 +3781,11 @@ typing.cast(typing.Any, IInstanceSnapshotRef).__jsii_proxy_class__ = lambda : _I
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_lightsail.ILoadBalancerRef")
-class ILoadBalancerRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class ILoadBalancerRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a LoadBalancer.
 
     :stability: experimental
@@ -3743,6 +3803,7 @@ class ILoadBalancerRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protoc
 
 class _ILoadBalancerRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a LoadBalancer.
 
@@ -3767,6 +3828,7 @@ typing.cast(typing.Any, ILoadBalancerRef).__jsii_proxy_class__ = lambda : _ILoad
 @jsii.interface(jsii_type="aws-cdk-lib.aws_lightsail.ILoadBalancerTlsCertificateRef")
 class ILoadBalancerTlsCertificateRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a LoadBalancerTlsCertificate.
@@ -3788,6 +3850,7 @@ class ILoadBalancerTlsCertificateRef(
 
 class _ILoadBalancerTlsCertificateRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a LoadBalancerTlsCertificate.
 
@@ -3812,7 +3875,11 @@ typing.cast(typing.Any, ILoadBalancerTlsCertificateRef).__jsii_proxy_class__ = l
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_lightsail.IStaticIpRef")
-class IStaticIpRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IStaticIpRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a StaticIp.
 
     :stability: experimental
@@ -3830,6 +3897,7 @@ class IStaticIpRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IStaticIpRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a StaticIp.
 

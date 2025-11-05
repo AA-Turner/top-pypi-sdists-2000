@@ -70,6 +70,7 @@ from .._jsii import *
 import constructs as _constructs_77d1e7e8
 from .. import (
     CfnResource as _CfnResource_9df397a6,
+    IEnvironmentAware as _IEnvironmentAware_a408b00d,
     IInspectable as _IInspectable_c2943556,
     IResolvable as _IResolvable_da3f097b,
     TreeInspector as _TreeInspector_488e0dd5,
@@ -601,7 +602,11 @@ class CfnTableProps:
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_s3tables.INamespaceRef")
-class INamespaceRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class INamespaceRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Namespace.
 
     :stability: experimental
@@ -619,6 +624,7 @@ class INamespaceRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol)
 
 class _INamespaceRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Namespace.
 
@@ -643,6 +649,7 @@ typing.cast(typing.Any, INamespaceRef).__jsii_proxy_class__ = lambda : _INamespa
 @jsii.interface(jsii_type="aws-cdk-lib.aws_s3tables.ITableBucketPolicyRef")
 class ITableBucketPolicyRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a TableBucketPolicy.
@@ -662,6 +669,7 @@ class ITableBucketPolicyRef(
 
 class _ITableBucketPolicyRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a TableBucketPolicy.
 
@@ -684,7 +692,11 @@ typing.cast(typing.Any, ITableBucketPolicyRef).__jsii_proxy_class__ = lambda : _
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_s3tables.ITableBucketRef")
-class ITableBucketRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class ITableBucketRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a TableBucket.
 
     :stability: experimental
@@ -702,6 +714,7 @@ class ITableBucketRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protoco
 
 class _ITableBucketRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a TableBucket.
 
@@ -724,7 +737,11 @@ typing.cast(typing.Any, ITableBucketRef).__jsii_proxy_class__ = lambda : _ITable
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_s3tables.ITablePolicyRef")
-class ITablePolicyRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class ITablePolicyRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a TablePolicy.
 
     :stability: experimental
@@ -742,6 +759,7 @@ class ITablePolicyRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protoco
 
 class _ITablePolicyRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a TablePolicy.
 
@@ -764,7 +782,11 @@ typing.cast(typing.Any, ITablePolicyRef).__jsii_proxy_class__ = lambda : _ITable
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_s3tables.ITableRef")
-class ITableRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class ITableRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Table.
 
     :stability: experimental
@@ -782,6 +804,7 @@ class ITableRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _ITableRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Table.
 

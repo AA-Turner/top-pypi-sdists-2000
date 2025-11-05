@@ -361,7 +361,7 @@ def _RubricBasedMetricSpec_to_vertex(
         setv(
             to_object,
             ["inline_rubrics", "rubrics"],
-            [item for item in getv(from_object, ["inline_rubrics"])],
+            getv(from_object, ["inline_rubrics"]),
         )
 
     if getv(from_object, ["rubric_group_key"]) is not None:
@@ -970,7 +970,9 @@ class Evals(_api_module.BaseModule):
         self,
         *,
         dataset: Union[
-            types.EvaluationDatasetOrDict, list[types.EvaluationDatasetOrDict]
+            pd.DataFrame,
+            types.EvaluationDatasetOrDict,
+            list[types.EvaluationDatasetOrDict],
         ],
         metrics: list[types.MetricOrDict] = None,
         config: Optional[types.EvaluateMethodConfigOrDict] = None,
@@ -979,10 +981,13 @@ class Evals(_api_module.BaseModule):
         """Evaluates candidate responses in the provided dataset(s) using the specified metrics.
 
         Args:
-          dataset: The dataset(s) to evaluate. Can be a single `types.EvaluationDataset` or a list of `types.EvaluationDataset`.
+          dataset: The dataset(s) to evaluate. Can be a pandas DataFrame, a single
+            `types.EvaluationDataset` or a list of `types.EvaluationDataset`.
           metrics: The list of metrics to use for evaluation.
-          config: Optional configuration for the evaluation. Can be a dictionary or a `types.EvaluateMethodConfig` object.
-            - dataset_schema: Schema to use for the dataset. If not specified, the dataset schema will be inferred from the dataset automatically.
+          config: Optional configuration for the evaluation. Can be a dictionary or a
+            `types.EvaluateMethodConfig` object.
+            - dataset_schema: Schema to use for the dataset. If not specified, the
+              dataset schema will be inferred from the dataset automatically.
             - dest: Destination path for storing evaluation results.
           **kwargs: Extra arguments to pass to evaluation, such as `agent_info`.
 
@@ -993,6 +998,10 @@ class Evals(_api_module.BaseModule):
             config = types.EvaluateMethodConfig()
         if isinstance(config, dict):
             config = types.EvaluateMethodConfig.model_validate(config)
+
+        if isinstance(dataset, pd.DataFrame):
+            dataset = types.EvaluationDataset(eval_dataset_df=dataset)
+
         if isinstance(dataset, list):
             dataset = [
                 (
@@ -1388,15 +1397,6 @@ class Evals(_api_module.BaseModule):
         )
         inference_configs = {}
         if agent_info:
-            if isinstance(agent_info, dict):
-                agent_info = types.evals.AgentInfo.model_validate(agent_info)
-            if (
-                not agent_info.agent
-                or len(agent_info.agent.split("reasoningEngines/")) != 2
-            ):
-                raise ValueError(
-                    "agent_info.agent cannot be empty. Please provide a valid reasoning engine resource name in the format of projects/{project}/locations/{location}/reasoningEngines/{reasoning_engine}."
-                )
             inference_configs[agent_info.name] = types.EvaluationRunInferenceConfig(
                 agent_config=types.EvaluationRunAgentConfig(
                     developer_instruction=genai_types.Content(
@@ -1405,10 +1405,11 @@ class Evals(_api_module.BaseModule):
                     tools=agent_info.tool_declarations,
                 )
             )
-            labels = labels or {}
-            labels["vertex-ai-evaluation-agent-engine-id"] = agent_info.agent.split(
-                "reasoningEngines/"
-            )[-1]
+            if agent_info.agent:
+                labels = labels or {}
+                labels["vertex-ai-evaluation-agent-engine-id"] = agent_info.agent.split(
+                    "reasoningEngines/"
+                )[-1]
         if not name:
             name = f"evaluation_run_{uuid.uuid4()}"
 
@@ -2243,15 +2244,6 @@ class AsyncEvals(_api_module.BaseModule):
         )
         inference_configs = {}
         if agent_info:
-            if isinstance(agent_info, dict):
-                agent_info = types.evals.AgentInfo.model_validate(agent_info)
-            if (
-                not agent_info.agent
-                or len(agent_info.agent.split("reasoningEngines/")) != 2
-            ):
-                raise ValueError(
-                    "agent_info.agent cannot be empty. Please provide a valid reasoning engine resource name in the format of projects/{project}/locations/{location}/reasoningEngines/{reasoning_engine}."
-                )
             inference_configs[agent_info.name] = types.EvaluationRunInferenceConfig(
                 agent_config=types.EvaluationRunAgentConfig(
                     developer_instruction=genai_types.Content(
@@ -2260,10 +2252,11 @@ class AsyncEvals(_api_module.BaseModule):
                     tools=agent_info.tool_declarations,
                 )
             )
-            labels = labels or {}
-            labels["vertex-ai-evaluation-agent-engine-id"] = agent_info.agent.split(
-                "reasoningEngines/"
-            )[-1]
+            if agent_info.agent:
+                labels = labels or {}
+                labels["vertex-ai-evaluation-agent-engine-id"] = agent_info.agent.split(
+                    "reasoningEngines/"
+                )[-1]
         if not name:
             name = f"evaluation_run_{uuid.uuid4()}"
 

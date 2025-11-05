@@ -60,6 +60,7 @@ from .._jsii import *
 import constructs as _constructs_77d1e7e8
 from .. import (
     CfnResource as _CfnResource_9df397a6,
+    IEnvironmentAware as _IEnvironmentAware_a408b00d,
     IInspectable as _IInspectable_c2943556,
     IResolvable as _IResolvable_da3f097b,
     TreeInspector as _TreeInspector_488e0dd5,
@@ -2529,7 +2530,11 @@ class GatewayReference:
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_mediaconnect.IBridgeOutputRef")
-class IBridgeOutputRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IBridgeOutputRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a BridgeOutput.
 
     :stability: experimental
@@ -2547,6 +2552,7 @@ class IBridgeOutputRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protoc
 
 class _IBridgeOutputRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a BridgeOutput.
 
@@ -2569,7 +2575,11 @@ typing.cast(typing.Any, IBridgeOutputRef).__jsii_proxy_class__ = lambda : _IBrid
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_mediaconnect.IBridgeRef")
-class IBridgeRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IBridgeRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Bridge.
 
     :stability: experimental
@@ -2587,6 +2597,7 @@ class IBridgeRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IBridgeRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Bridge.
 
@@ -2609,7 +2620,11 @@ typing.cast(typing.Any, IBridgeRef).__jsii_proxy_class__ = lambda : _IBridgeRefP
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_mediaconnect.IBridgeSourceRef")
-class IBridgeSourceRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IBridgeSourceRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a BridgeSource.
 
     :stability: experimental
@@ -2627,6 +2642,7 @@ class IBridgeSourceRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protoc
 
 class _IBridgeSourceRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a BridgeSource.
 
@@ -2649,7 +2665,11 @@ typing.cast(typing.Any, IBridgeSourceRef).__jsii_proxy_class__ = lambda : _IBrid
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_mediaconnect.IFlowEntitlementRef")
-class IFlowEntitlementRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IFlowEntitlementRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a FlowEntitlement.
 
     :stability: experimental
@@ -2667,6 +2687,7 @@ class IFlowEntitlementRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Pro
 
 class _IFlowEntitlementRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a FlowEntitlement.
 
@@ -2689,7 +2710,11 @@ typing.cast(typing.Any, IFlowEntitlementRef).__jsii_proxy_class__ = lambda : _IF
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_mediaconnect.IFlowOutputRef")
-class IFlowOutputRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IFlowOutputRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a FlowOutput.
 
     :stability: experimental
@@ -2707,6 +2732,7 @@ class IFlowOutputRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol
 
 class _IFlowOutputRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a FlowOutput.
 
@@ -2729,7 +2755,11 @@ typing.cast(typing.Any, IFlowOutputRef).__jsii_proxy_class__ = lambda : _IFlowOu
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_mediaconnect.IFlowRef")
-class IFlowRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IFlowRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Flow.
 
     :stability: experimental
@@ -2747,6 +2777,7 @@ class IFlowRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IFlowRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Flow.
 
@@ -2769,7 +2800,11 @@ typing.cast(typing.Any, IFlowRef).__jsii_proxy_class__ = lambda : _IFlowRefProxy
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_mediaconnect.IFlowSourceRef")
-class IFlowSourceRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IFlowSourceRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a FlowSource.
 
     :stability: experimental
@@ -2787,6 +2822,7 @@ class IFlowSourceRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol
 
 class _IFlowSourceRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a FlowSource.
 
@@ -2809,7 +2845,11 @@ typing.cast(typing.Any, IFlowSourceRef).__jsii_proxy_class__ = lambda : _IFlowSo
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_mediaconnect.IFlowVpcInterfaceRef")
-class IFlowVpcInterfaceRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IFlowVpcInterfaceRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a FlowVpcInterface.
 
     :stability: experimental
@@ -2827,6 +2867,7 @@ class IFlowVpcInterfaceRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Pr
 
 class _IFlowVpcInterfaceRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a FlowVpcInterface.
 
@@ -2849,7 +2890,11 @@ typing.cast(typing.Any, IFlowVpcInterfaceRef).__jsii_proxy_class__ = lambda : _I
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_mediaconnect.IGatewayRef")
-class IGatewayRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IGatewayRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Gateway.
 
     :stability: experimental
@@ -2867,6 +2912,7 @@ class IGatewayRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IGatewayRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Gateway.
 

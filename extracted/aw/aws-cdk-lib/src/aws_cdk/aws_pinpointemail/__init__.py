@@ -61,6 +61,7 @@ import constructs as _constructs_77d1e7e8
 from .. import (
     CfnResource as _CfnResource_9df397a6,
     CfnTag as _CfnTag_f6864754,
+    IEnvironmentAware as _IEnvironmentAware_a408b00d,
     IInspectable as _IInspectable_c2943556,
     IResolvable as _IResolvable_da3f097b,
     ITaggableV2 as _ITaggableV2_4e6798f8,
@@ -719,6 +720,7 @@ class DedicatedIpPoolReference:
 )
 class IConfigurationSetEventDestinationRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a ConfigurationSetEventDestination.
@@ -740,6 +742,7 @@ class IConfigurationSetEventDestinationRef(
 
 class _IConfigurationSetEventDestinationRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a ConfigurationSetEventDestination.
 
@@ -764,7 +767,11 @@ typing.cast(typing.Any, IConfigurationSetEventDestinationRef).__jsii_proxy_class
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_pinpointemail.IConfigurationSetRef")
-class IConfigurationSetRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IConfigurationSetRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a ConfigurationSet.
 
     :stability: experimental
@@ -782,6 +789,7 @@ class IConfigurationSetRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Pr
 
 class _IConfigurationSetRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a ConfigurationSet.
 
@@ -804,7 +812,11 @@ typing.cast(typing.Any, IConfigurationSetRef).__jsii_proxy_class__ = lambda : _I
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_pinpointemail.IDedicatedIpPoolRef")
-class IDedicatedIpPoolRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IDedicatedIpPoolRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a DedicatedIpPool.
 
     :stability: experimental
@@ -822,6 +834,7 @@ class IDedicatedIpPoolRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Pro
 
 class _IDedicatedIpPoolRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a DedicatedIpPool.
 
@@ -844,7 +857,11 @@ typing.cast(typing.Any, IDedicatedIpPoolRef).__jsii_proxy_class__ = lambda : _ID
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_pinpointemail.IIdentityRef")
-class IIdentityRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IIdentityRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Identity.
 
     :stability: experimental
@@ -862,6 +879,7 @@ class IIdentityRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IIdentityRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Identity.
 

@@ -889,6 +889,7 @@ from .. import (
     CfnResource as _CfnResource_9df397a6,
     Duration as _Duration_4839e8c3,
     IAspect as _IAspect_118c810a,
+    IEnvironmentAware as _IEnvironmentAware_a408b00d,
     IInspectable as _IInspectable_c2943556,
     IResolvable as _IResolvable_da3f097b,
     IResource as _IResource_c80c4260,
@@ -7103,7 +7104,11 @@ typing.cast(typing.Any, IAutoScalingGroup).__jsii_proxy_class__ = lambda : _IAut
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_autoscaling.IAutoScalingGroupRef")
-class IAutoScalingGroupRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IAutoScalingGroupRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a AutoScalingGroup.
 
     :stability: experimental
@@ -7121,6 +7126,7 @@ class IAutoScalingGroupRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Pr
 
 class _IAutoScalingGroupRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a AutoScalingGroup.
 
@@ -7145,6 +7151,7 @@ typing.cast(typing.Any, IAutoScalingGroupRef).__jsii_proxy_class__ = lambda : _I
 @jsii.interface(jsii_type="aws-cdk-lib.aws_autoscaling.ILaunchConfigurationRef")
 class ILaunchConfigurationRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a LaunchConfiguration.
@@ -7164,6 +7171,7 @@ class ILaunchConfigurationRef(
 
 class _ILaunchConfigurationRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a LaunchConfiguration.
 
@@ -7226,7 +7234,11 @@ typing.cast(typing.Any, ILifecycleHook).__jsii_proxy_class__ = lambda : _ILifecy
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_autoscaling.ILifecycleHookRef")
-class ILifecycleHookRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class ILifecycleHookRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a LifecycleHook.
 
     :stability: experimental
@@ -7244,6 +7256,7 @@ class ILifecycleHookRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Proto
 
 class _ILifecycleHookRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a LifecycleHook.
 
@@ -7317,7 +7330,11 @@ typing.cast(typing.Any, ILifecycleHookTarget).__jsii_proxy_class__ = lambda : _I
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_autoscaling.IScalingPolicyRef")
-class IScalingPolicyRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IScalingPolicyRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a ScalingPolicy.
 
     :stability: experimental
@@ -7335,6 +7352,7 @@ class IScalingPolicyRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Proto
 
 class _IScalingPolicyRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a ScalingPolicy.
 
@@ -7357,7 +7375,11 @@ typing.cast(typing.Any, IScalingPolicyRef).__jsii_proxy_class__ = lambda : _ISca
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_autoscaling.IScheduledActionRef")
-class IScheduledActionRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IScheduledActionRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a ScheduledAction.
 
     :stability: experimental
@@ -7375,6 +7397,7 @@ class IScheduledActionRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Pro
 
 class _IScheduledActionRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a ScheduledAction.
 
@@ -7397,7 +7420,11 @@ typing.cast(typing.Any, IScheduledActionRef).__jsii_proxy_class__ = lambda : _IS
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_autoscaling.IWarmPoolRef")
-class IWarmPoolRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IWarmPoolRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a WarmPool.
 
     :stability: experimental
@@ -7415,6 +7442,7 @@ class IWarmPoolRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IWarmPoolRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a WarmPool.
 

@@ -1726,6 +1726,7 @@ from .. import (
     BundlingOptions as _BundlingOptions_588cc936,
     CfnResource as _CfnResource_9df397a6,
     Duration as _Duration_4839e8c3,
+    IEnvironmentAware as _IEnvironmentAware_a408b00d,
     IInspectable as _IInspectable_c2943556,
     IResolvable as _IResolvable_da3f097b,
     IResource as _IResource_c80c4260,
@@ -4687,7 +4688,11 @@ typing.cast(typing.Any, IActivity).__jsii_proxy_class__ = lambda : _IActivityPro
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_stepfunctions.IActivityRef")
-class IActivityRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IActivityRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Activity.
 
     :stability: experimental
@@ -4705,6 +4710,7 @@ class IActivityRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IActivityRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Activity.
 
@@ -5844,6 +5850,7 @@ typing.cast(typing.Any, IStateMachine).__jsii_proxy_class__ = lambda : _IStateMa
 @jsii.interface(jsii_type="aws-cdk-lib.aws_stepfunctions.IStateMachineAliasRef")
 class IStateMachineAliasRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a StateMachineAlias.
@@ -5863,6 +5870,7 @@ class IStateMachineAliasRef(
 
 class _IStateMachineAliasRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a StateMachineAlias.
 
@@ -5885,7 +5893,11 @@ typing.cast(typing.Any, IStateMachineAliasRef).__jsii_proxy_class__ = lambda : _
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_stepfunctions.IStateMachineRef")
-class IStateMachineRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IStateMachineRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a StateMachine.
 
     :stability: experimental
@@ -5903,6 +5915,7 @@ class IStateMachineRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protoc
 
 class _IStateMachineRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a StateMachine.
 
@@ -5927,6 +5940,7 @@ typing.cast(typing.Any, IStateMachineRef).__jsii_proxy_class__ = lambda : _IStat
 @jsii.interface(jsii_type="aws-cdk-lib.aws_stepfunctions.IStateMachineVersionRef")
 class IStateMachineVersionRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a StateMachineVersion.
@@ -5946,6 +5960,7 @@ class IStateMachineVersionRef(
 
 class _IStateMachineVersionRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a StateMachineVersion.
 

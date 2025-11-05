@@ -61,6 +61,7 @@ import constructs as _constructs_77d1e7e8
 from .. import (
     CfnResource as _CfnResource_9df397a6,
     CfnTag as _CfnTag_f6864754,
+    IEnvironmentAware as _IEnvironmentAware_a408b00d,
     IInspectable as _IInspectable_c2943556,
     IResolvable as _IResolvable_da3f097b,
     ITaggable as _ITaggable_36806126,
@@ -1401,7 +1402,11 @@ class ClusterReference:
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_memorydb.IACLRef")
-class IACLRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IACLRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a ACL.
 
     :stability: experimental
@@ -1419,6 +1424,7 @@ class IACLRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IACLRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a ACL.
 
@@ -1441,7 +1447,11 @@ typing.cast(typing.Any, IACLRef).__jsii_proxy_class__ = lambda : _IACLRefProxy
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_memorydb.IClusterRef")
-class IClusterRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IClusterRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Cluster.
 
     :stability: experimental
@@ -1459,6 +1469,7 @@ class IClusterRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IClusterRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Cluster.
 
@@ -1483,6 +1494,7 @@ typing.cast(typing.Any, IClusterRef).__jsii_proxy_class__ = lambda : _IClusterRe
 @jsii.interface(jsii_type="aws-cdk-lib.aws_memorydb.IMultiRegionClusterRef")
 class IMultiRegionClusterRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a MultiRegionCluster.
@@ -1502,6 +1514,7 @@ class IMultiRegionClusterRef(
 
 class _IMultiRegionClusterRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a MultiRegionCluster.
 
@@ -1524,7 +1537,11 @@ typing.cast(typing.Any, IMultiRegionClusterRef).__jsii_proxy_class__ = lambda : 
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_memorydb.IParameterGroupRef")
-class IParameterGroupRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IParameterGroupRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a ParameterGroup.
 
     :stability: experimental
@@ -1542,6 +1559,7 @@ class IParameterGroupRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Prot
 
 class _IParameterGroupRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a ParameterGroup.
 
@@ -1564,7 +1582,11 @@ typing.cast(typing.Any, IParameterGroupRef).__jsii_proxy_class__ = lambda : _IPa
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_memorydb.ISubnetGroupRef")
-class ISubnetGroupRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class ISubnetGroupRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a SubnetGroup.
 
     :stability: experimental
@@ -1582,6 +1604,7 @@ class ISubnetGroupRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protoco
 
 class _ISubnetGroupRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a SubnetGroup.
 
@@ -1604,7 +1627,11 @@ typing.cast(typing.Any, ISubnetGroupRef).__jsii_proxy_class__ = lambda : _ISubne
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_memorydb.IUserRef")
-class IUserRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IUserRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a User.
 
     :stability: experimental
@@ -1622,6 +1649,7 @@ class IUserRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IUserRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a User.
 

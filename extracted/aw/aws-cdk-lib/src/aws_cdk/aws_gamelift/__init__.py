@@ -66,6 +66,7 @@ import constructs as _constructs_77d1e7e8
 from .. import (
     CfnResource as _CfnResource_9df397a6,
     CfnTag as _CfnTag_f6864754,
+    IEnvironmentAware as _IEnvironmentAware_a408b00d,
     IInspectable as _IInspectable_c2943556,
     IResolvable as _IResolvable_da3f097b,
     ITaggable as _ITaggable_36806126,
@@ -3303,7 +3304,11 @@ class GameSessionQueueReference:
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_gamelift.IAliasRef")
-class IAliasRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IAliasRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Alias.
 
     :stability: experimental
@@ -3321,6 +3326,7 @@ class IAliasRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IAliasRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Alias.
 
@@ -3343,7 +3349,11 @@ typing.cast(typing.Any, IAliasRef).__jsii_proxy_class__ = lambda : _IAliasRefPro
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_gamelift.IBuildRef")
-class IBuildRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IBuildRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Build.
 
     :stability: experimental
@@ -3361,6 +3371,7 @@ class IBuildRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IBuildRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Build.
 
@@ -3383,7 +3394,11 @@ typing.cast(typing.Any, IBuildRef).__jsii_proxy_class__ = lambda : _IBuildRefPro
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_gamelift.IContainerFleetRef")
-class IContainerFleetRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IContainerFleetRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a ContainerFleet.
 
     :stability: experimental
@@ -3401,6 +3416,7 @@ class IContainerFleetRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Prot
 
 class _IContainerFleetRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a ContainerFleet.
 
@@ -3425,6 +3441,7 @@ typing.cast(typing.Any, IContainerFleetRef).__jsii_proxy_class__ = lambda : _ICo
 @jsii.interface(jsii_type="aws-cdk-lib.aws_gamelift.IContainerGroupDefinitionRef")
 class IContainerGroupDefinitionRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a ContainerGroupDefinition.
@@ -3444,6 +3461,7 @@ class IContainerGroupDefinitionRef(
 
 class _IContainerGroupDefinitionRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a ContainerGroupDefinition.
 
@@ -3466,7 +3484,11 @@ typing.cast(typing.Any, IContainerGroupDefinitionRef).__jsii_proxy_class__ = lam
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_gamelift.IFleetRef")
-class IFleetRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IFleetRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Fleet.
 
     :stability: experimental
@@ -3484,6 +3506,7 @@ class IFleetRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IFleetRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Fleet.
 
@@ -3506,7 +3529,11 @@ typing.cast(typing.Any, IFleetRef).__jsii_proxy_class__ = lambda : _IFleetRefPro
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_gamelift.IGameServerGroupRef")
-class IGameServerGroupRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IGameServerGroupRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a GameServerGroup.
 
     :stability: experimental
@@ -3524,6 +3551,7 @@ class IGameServerGroupRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Pro
 
 class _IGameServerGroupRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a GameServerGroup.
 
@@ -3546,7 +3574,11 @@ typing.cast(typing.Any, IGameServerGroupRef).__jsii_proxy_class__ = lambda : _IG
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_gamelift.IGameSessionQueueRef")
-class IGameSessionQueueRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IGameSessionQueueRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a GameSessionQueue.
 
     :stability: experimental
@@ -3564,6 +3596,7 @@ class IGameSessionQueueRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Pr
 
 class _IGameSessionQueueRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a GameSessionQueue.
 
@@ -3586,7 +3619,11 @@ typing.cast(typing.Any, IGameSessionQueueRef).__jsii_proxy_class__ = lambda : _I
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_gamelift.ILocationRef")
-class ILocationRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class ILocationRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Location.
 
     :stability: experimental
@@ -3604,6 +3641,7 @@ class ILocationRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _ILocationRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Location.
 
@@ -3628,6 +3666,7 @@ typing.cast(typing.Any, ILocationRef).__jsii_proxy_class__ = lambda : _ILocation
 @jsii.interface(jsii_type="aws-cdk-lib.aws_gamelift.IMatchmakingConfigurationRef")
 class IMatchmakingConfigurationRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a MatchmakingConfiguration.
@@ -3647,6 +3686,7 @@ class IMatchmakingConfigurationRef(
 
 class _IMatchmakingConfigurationRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a MatchmakingConfiguration.
 
@@ -3671,6 +3711,7 @@ typing.cast(typing.Any, IMatchmakingConfigurationRef).__jsii_proxy_class__ = lam
 @jsii.interface(jsii_type="aws-cdk-lib.aws_gamelift.IMatchmakingRuleSetRef")
 class IMatchmakingRuleSetRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a MatchmakingRuleSet.
@@ -3690,6 +3731,7 @@ class IMatchmakingRuleSetRef(
 
 class _IMatchmakingRuleSetRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a MatchmakingRuleSet.
 
@@ -3712,7 +3754,11 @@ typing.cast(typing.Any, IMatchmakingRuleSetRef).__jsii_proxy_class__ = lambda : 
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_gamelift.IScriptRef")
-class IScriptRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IScriptRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Script.
 
     :stability: experimental
@@ -3730,6 +3776,7 @@ class IScriptRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IScriptRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Script.
 

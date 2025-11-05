@@ -170,7 +170,7 @@ class GenerativeAiAgentRuntimeClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/generativeaiagentruntime/chat.py.html>`__ to see an example of how to use chat API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/generativeaiagentruntime/chat.py.html>`__ to see an example of how to use chat API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['agentEndpointId']
@@ -287,7 +287,7 @@ class GenerativeAiAgentRuntimeClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/generativeaiagentruntime/create_session.py.html>`__ to see an example of how to use create_session API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/generativeaiagentruntime/create_session.py.html>`__ to see an example of how to use create_session API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['agentEndpointId']
@@ -400,7 +400,7 @@ class GenerativeAiAgentRuntimeClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/generativeaiagentruntime/delete_session.py.html>`__ to see an example of how to use delete_session API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/generativeaiagentruntime/delete_session.py.html>`__ to see an example of how to use delete_session API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['agentEndpointId', 'sessionId']
@@ -502,7 +502,7 @@ class GenerativeAiAgentRuntimeClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/generativeaiagentruntime/get_session.py.html>`__ to see an example of how to use get_session API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/generativeaiagentruntime/get_session.py.html>`__ to see an example of how to use get_session API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['agentEndpointId', 'sessionId']
@@ -618,7 +618,7 @@ class GenerativeAiAgentRuntimeClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/generativeaiagentruntime/retrieve_metadata.py.html>`__ to see an example of how to use retrieve_metadata API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/generativeaiagentruntime/retrieve_metadata.py.html>`__ to see an example of how to use retrieve_metadata API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['knowledgeBaseId']
@@ -736,7 +736,7 @@ class GenerativeAiAgentRuntimeClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.162.0/generativeaiagentruntime/update_session.py.html>`__ to see an example of how to use update_session API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/generativeaiagentruntime/update_session.py.html>`__ to see an example of how to use update_session API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['agentEndpointId', 'sessionId']

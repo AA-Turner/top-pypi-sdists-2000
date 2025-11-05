@@ -66,6 +66,7 @@ import constructs as _constructs_77d1e7e8
 from .. import (
     CfnResource as _CfnResource_9df397a6,
     CfnTag as _CfnTag_f6864754,
+    IEnvironmentAware as _IEnvironmentAware_a408b00d,
     IInspectable as _IInspectable_c2943556,
     IResolvable as _IResolvable_da3f097b,
     ITaggable as _ITaggable_36806126,
@@ -1469,7 +1470,11 @@ class EncoderConfigurationReference:
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_ivs.IChannelRef")
-class IChannelRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IChannelRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Channel.
 
     :stability: experimental
@@ -1487,6 +1492,7 @@ class IChannelRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IChannelRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Channel.
 
@@ -1511,6 +1517,7 @@ typing.cast(typing.Any, IChannelRef).__jsii_proxy_class__ = lambda : _IChannelRe
 @jsii.interface(jsii_type="aws-cdk-lib.aws_ivs.IEncoderConfigurationRef")
 class IEncoderConfigurationRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a EncoderConfiguration.
@@ -1530,6 +1537,7 @@ class IEncoderConfigurationRef(
 
 class _IEncoderConfigurationRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a EncoderConfiguration.
 
@@ -1554,6 +1562,7 @@ typing.cast(typing.Any, IEncoderConfigurationRef).__jsii_proxy_class__ = lambda 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_ivs.IIngestConfigurationRef")
 class IIngestConfigurationRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a IngestConfiguration.
@@ -1573,6 +1582,7 @@ class IIngestConfigurationRef(
 
 class _IIngestConfigurationRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a IngestConfiguration.
 
@@ -1595,7 +1605,11 @@ typing.cast(typing.Any, IIngestConfigurationRef).__jsii_proxy_class__ = lambda :
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_ivs.IPlaybackKeyPairRef")
-class IPlaybackKeyPairRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IPlaybackKeyPairRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a PlaybackKeyPair.
 
     :stability: experimental
@@ -1613,6 +1627,7 @@ class IPlaybackKeyPairRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Pro
 
 class _IPlaybackKeyPairRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a PlaybackKeyPair.
 
@@ -1637,6 +1652,7 @@ typing.cast(typing.Any, IPlaybackKeyPairRef).__jsii_proxy_class__ = lambda : _IP
 @jsii.interface(jsii_type="aws-cdk-lib.aws_ivs.IPlaybackRestrictionPolicyRef")
 class IPlaybackRestrictionPolicyRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a PlaybackRestrictionPolicy.
@@ -1656,6 +1672,7 @@ class IPlaybackRestrictionPolicyRef(
 
 class _IPlaybackRestrictionPolicyRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a PlaybackRestrictionPolicy.
 
@@ -1678,7 +1695,11 @@ typing.cast(typing.Any, IPlaybackRestrictionPolicyRef).__jsii_proxy_class__ = la
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_ivs.IPublicKeyRef")
-class IPublicKeyRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IPublicKeyRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a PublicKey.
 
     :stability: experimental
@@ -1696,6 +1717,7 @@ class IPublicKeyRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol)
 
 class _IPublicKeyRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a PublicKey.
 
@@ -1720,6 +1742,7 @@ typing.cast(typing.Any, IPublicKeyRef).__jsii_proxy_class__ = lambda : _IPublicK
 @jsii.interface(jsii_type="aws-cdk-lib.aws_ivs.IRecordingConfigurationRef")
 class IRecordingConfigurationRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a RecordingConfiguration.
@@ -1739,6 +1762,7 @@ class IRecordingConfigurationRef(
 
 class _IRecordingConfigurationRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a RecordingConfiguration.
 
@@ -1761,7 +1785,11 @@ typing.cast(typing.Any, IRecordingConfigurationRef).__jsii_proxy_class__ = lambd
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_ivs.IStageRef")
-class IStageRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IStageRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Stage.
 
     :stability: experimental
@@ -1779,6 +1807,7 @@ class IStageRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IStageRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Stage.
 
@@ -1803,6 +1832,7 @@ typing.cast(typing.Any, IStageRef).__jsii_proxy_class__ = lambda : _IStageRefPro
 @jsii.interface(jsii_type="aws-cdk-lib.aws_ivs.IStorageConfigurationRef")
 class IStorageConfigurationRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a StorageConfiguration.
@@ -1822,6 +1852,7 @@ class IStorageConfigurationRef(
 
 class _IStorageConfigurationRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a StorageConfiguration.
 
@@ -1844,7 +1875,11 @@ typing.cast(typing.Any, IStorageConfigurationRef).__jsii_proxy_class__ = lambda 
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_ivs.IStreamKeyRef")
-class IStreamKeyRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IStreamKeyRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a StreamKey.
 
     :stability: experimental
@@ -1862,6 +1897,7 @@ class IStreamKeyRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol)
 
 class _IStreamKeyRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a StreamKey.
 

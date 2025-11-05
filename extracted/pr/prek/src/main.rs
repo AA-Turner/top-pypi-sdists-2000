@@ -415,16 +415,8 @@ fn main() -> ExitCode {
         Err(err) => err.exit(),
     };
 
-    // Initialize the profiler guard if the feature is enabled.
-    let mut _profiler_guard = None;
     #[cfg(all(unix, feature = "profiler"))]
-    {
-        _profiler_guard = profiler::start_profiling();
-    }
-    #[cfg(not(all(unix, feature = "profiler")))]
-    {
-        _profiler_guard = Some(());
-    }
+    let _profiler_guard = profiler::start_profiling();
 
     let runtime = tokio::runtime::Builder::new_current_thread()
         .enable_all()
@@ -435,9 +427,7 @@ fn main() -> ExitCode {
 
     // Report the profiler if the feature is enabled
     #[cfg(all(unix, feature = "profiler"))]
-    {
-        profiler::finish_profiling(_profiler_guard);
-    }
+    profiler::finish_profiling(_profiler_guard);
 
     match result {
         Ok(code) => code.into(),

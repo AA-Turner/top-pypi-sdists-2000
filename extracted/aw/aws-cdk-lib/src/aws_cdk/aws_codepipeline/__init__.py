@@ -950,6 +950,7 @@ from .. import (
     CfnResource as _CfnResource_9df397a6,
     CfnTag as _CfnTag_f6864754,
     Duration as _Duration_4839e8c3,
+    IEnvironmentAware as _IEnvironmentAware_a408b00d,
     IInspectable as _IInspectable_c2943556,
     IResolvable as _IResolvable_da3f097b,
     IResource as _IResource_c80c4260,
@@ -4518,7 +4519,11 @@ typing.cast(typing.Any, IAction).__jsii_proxy_class__ = lambda : _IActionProxy
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_codepipeline.ICustomActionTypeRef")
-class ICustomActionTypeRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class ICustomActionTypeRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a CustomActionType.
 
     :stability: experimental
@@ -4536,6 +4541,7 @@ class ICustomActionTypeRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Pr
 
 class _ICustomActionTypeRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a CustomActionType.
 
@@ -5041,7 +5047,11 @@ typing.cast(typing.Any, IPipeline).__jsii_proxy_class__ = lambda : _IPipelinePro
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_codepipeline.IPipelineRef")
-class IPipelineRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IPipelineRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Pipeline.
 
     :stability: experimental
@@ -5059,6 +5069,7 @@ class IPipelineRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IPipelineRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Pipeline.
 
@@ -5224,7 +5235,11 @@ typing.cast(typing.Any, IStage).__jsii_proxy_class__ = lambda : _IStageProxy
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_codepipeline.IWebhookRef")
-class IWebhookRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IWebhookRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Webhook.
 
     :stability: experimental
@@ -5242,6 +5257,7 @@ class IWebhookRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IWebhookRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Webhook.
 

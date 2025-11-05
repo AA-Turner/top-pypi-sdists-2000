@@ -11,6 +11,16 @@ use serde::ser::{Serialize, SerializeMap, Serializer};
 use smallvec::SmallVec;
 use std::ptr::NonNull;
 
+#[inline]
+pub fn is_pydantic_model(ob_type: *mut pyo3::ffi::PyTypeObject, state: *mut State) -> bool {
+    unsafe {
+        let tp_dict = (*ob_type).tp_dict;
+        !tp_dict.is_null()
+            && (pyo3::ffi::PyDict_Contains(tp_dict, (*state).fields_str) == 1
+                || pyo3::ffi::PyDict_Contains(tp_dict, (*state).pydantic_validator_str) == 1)
+    }
+}
+
 pub enum PydanticModelError {
     DictMissing,
 }
@@ -75,17 +85,10 @@ impl Serialize for PydanticModel {
         let mut items: SmallVec<[(&str, *mut pyo3::ffi::PyObject); 8]> =
             SmallVec::with_capacity(len);
         for (key, value) in PyDictIter::from_pyobject(self.ptr) {
-            if unlikely!(!py_is!(
-                ob_type!(key.as_ptr()),
-                &mut pyo3::ffi::PyUnicode_Type
-            )) {
+            if unlikely!(ob_type!(key.as_ptr()) != &raw mut pyo3::ffi::PyUnicode_Type) {
                 return Err(serde::ser::Error::custom(KEY_MUST_BE_STR));
             }
-            let data = unicode_to_str(key.as_ptr());
-            if unlikely!(data.is_none()) {
-                return Err(serde::ser::Error::custom(INVALID_STR));
-            }
-            let key_as_str = data.unwrap();
+            let key_as_str = unicode_to_str(key.as_ptr()).map_err(serde::ser::Error::custom)?;
             if unlikely!(key_as_str.as_bytes()[0] == b'_') {
                 continue;
             }

@@ -337,6 +337,7 @@ from .. import (
     CfnResource as _CfnResource_9df397a6,
     CfnTag as _CfnTag_f6864754,
     Duration as _Duration_4839e8c3,
+    IEnvironmentAware as _IEnvironmentAware_a408b00d,
     IInspectable as _IInspectable_c2943556,
     IResolvable as _IResolvable_da3f097b,
     IResource as _IResource_c80c4260,
@@ -1326,7 +1327,11 @@ class CfnRepositoryProps:
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_ecr.IPublicRepositoryRef")
-class IPublicRepositoryRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IPublicRepositoryRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a PublicRepository.
 
     :stability: experimental
@@ -1344,6 +1349,7 @@ class IPublicRepositoryRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Pr
 
 class _IPublicRepositoryRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a PublicRepository.
 
@@ -1368,6 +1374,7 @@ typing.cast(typing.Any, IPublicRepositoryRef).__jsii_proxy_class__ = lambda : _I
 @jsii.interface(jsii_type="aws-cdk-lib.aws_ecr.IPullThroughCacheRuleRef")
 class IPullThroughCacheRuleRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a PullThroughCacheRule.
@@ -1387,6 +1394,7 @@ class IPullThroughCacheRuleRef(
 
 class _IPullThroughCacheRuleRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a PullThroughCacheRule.
 
@@ -1409,7 +1417,11 @@ typing.cast(typing.Any, IPullThroughCacheRuleRef).__jsii_proxy_class__ = lambda 
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_ecr.IRegistryPolicyRef")
-class IRegistryPolicyRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IRegistryPolicyRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a RegistryPolicy.
 
     :stability: experimental
@@ -1427,6 +1439,7 @@ class IRegistryPolicyRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Prot
 
 class _IRegistryPolicyRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a RegistryPolicy.
 
@@ -1451,6 +1464,7 @@ typing.cast(typing.Any, IRegistryPolicyRef).__jsii_proxy_class__ = lambda : _IRe
 @jsii.interface(jsii_type="aws-cdk-lib.aws_ecr.IRegistryScanningConfigurationRef")
 class IRegistryScanningConfigurationRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a RegistryScanningConfiguration.
@@ -1472,6 +1486,7 @@ class IRegistryScanningConfigurationRef(
 
 class _IRegistryScanningConfigurationRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a RegistryScanningConfiguration.
 
@@ -1498,6 +1513,7 @@ typing.cast(typing.Any, IRegistryScanningConfigurationRef).__jsii_proxy_class__ 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_ecr.IReplicationConfigurationRef")
 class IReplicationConfigurationRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a ReplicationConfiguration.
@@ -1517,6 +1533,7 @@ class IReplicationConfigurationRef(
 
 class _IReplicationConfigurationRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a ReplicationConfiguration.
 
@@ -2109,6 +2126,7 @@ typing.cast(typing.Any, IRepository).__jsii_proxy_class__ = lambda : _IRepositor
 @jsii.interface(jsii_type="aws-cdk-lib.aws_ecr.IRepositoryCreationTemplateRef")
 class IRepositoryCreationTemplateRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a RepositoryCreationTemplate.
@@ -2128,6 +2146,7 @@ class IRepositoryCreationTemplateRef(
 
 class _IRepositoryCreationTemplateRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a RepositoryCreationTemplate.
 
@@ -2150,7 +2169,11 @@ typing.cast(typing.Any, IRepositoryCreationTemplateRef).__jsii_proxy_class__ = l
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_ecr.IRepositoryRef")
-class IRepositoryRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IRepositoryRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Repository.
 
     :stability: experimental
@@ -2168,6 +2191,7 @@ class IRepositoryRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol
 
 class _IRepositoryRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Repository.
 

@@ -232,6 +232,7 @@ from .. import (
     CfnResource as _CfnResource_9df397a6,
     CfnTag as _CfnTag_f6864754,
     Duration as _Duration_4839e8c3,
+    IEnvironmentAware as _IEnvironmentAware_a408b00d,
     IInspectable as _IInspectable_c2943556,
     IResolvable as _IResolvable_da3f097b,
     IResource as _IResource_c80c4260,
@@ -1859,7 +1860,11 @@ typing.cast(typing.Any, IAccelerator).__jsii_proxy_class__ = lambda : _IAccelera
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_globalaccelerator.IAcceleratorRef")
-class IAcceleratorRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IAcceleratorRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Accelerator.
 
     :stability: experimental
@@ -1877,6 +1882,7 @@ class IAcceleratorRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protoco
 
 class _IAcceleratorRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Accelerator.
 
@@ -1903,6 +1909,7 @@ typing.cast(typing.Any, IAcceleratorRef).__jsii_proxy_class__ = lambda : _IAccel
 )
 class ICrossAccountAttachmentRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a CrossAccountAttachment.
@@ -1922,6 +1929,7 @@ class ICrossAccountAttachmentRef(
 
 class _ICrossAccountAttachmentRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a CrossAccountAttachment.
 
@@ -2026,7 +2034,11 @@ typing.cast(typing.Any, IEndpointGroup).__jsii_proxy_class__ = lambda : _IEndpoi
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_globalaccelerator.IEndpointGroupRef")
-class IEndpointGroupRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IEndpointGroupRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a EndpointGroup.
 
     :stability: experimental
@@ -2044,6 +2056,7 @@ class IEndpointGroupRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Proto
 
 class _IEndpointGroupRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a EndpointGroup.
 
@@ -2100,7 +2113,11 @@ typing.cast(typing.Any, IListener).__jsii_proxy_class__ = lambda : _IListenerPro
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_globalaccelerator.IListenerRef")
-class IListenerRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IListenerRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Listener.
 
     :stability: experimental
@@ -2118,6 +2135,7 @@ class IListenerRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IListenerRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Listener.
 

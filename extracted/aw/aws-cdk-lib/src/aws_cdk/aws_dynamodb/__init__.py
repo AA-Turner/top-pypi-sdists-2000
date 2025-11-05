@@ -794,6 +794,61 @@ Using `resourcePolicy` you can add a [resource policy](https://docs.aws.amazon.c
     });
 ```
 
+### Adding Resource Policy Statements Dynamically
+
+You can also add resource policy statements to a table after it's created using the `addToResourcePolicy` method. Following the same pattern as KMS, resource policies use wildcard resources to avoid circular dependencies:
+
+```python
+table = dynamodb.TableV2(self, "Table",
+    partition_key=dynamodb.Attribute(name="pk", type=dynamodb.AttributeType.STRING)
+)
+
+# Standard resource policy (recommended approach)
+table.add_to_resource_policy(iam.PolicyStatement(
+    actions=["dynamodb:GetItem", "dynamodb:PutItem", "dynamodb:Query"],
+    principals=[iam.AccountRootPrincipal()],
+    resources=["*"]
+))
+
+# Allow specific service access
+table.add_to_resource_policy(iam.PolicyStatement(
+    actions=["dynamodb:Query"],
+    principals=[iam.ServicePrincipal("lambda.amazonaws.com")],
+    resources=["*"]
+))
+```
+
+#### Scoped Resource Policies (Advanced)
+
+For scoped resource policies that reference specific table ARNs, you must specify an explicit table name:
+
+```python
+from aws_cdk import Fn
+
+
+# Table with explicit name enables scoped resource policies
+table = dynamodb.TableV2(self, "Table",
+    table_name="my-explicit-table-name",  # Required for scoped resources
+    partition_key=dynamodb.Attribute(name="pk", type=dynamodb.AttributeType.STRING)
+)
+
+# Now you can use scoped resources
+table.add_to_resource_policy(iam.PolicyStatement(
+    actions=["dynamodb:GetItem"],
+    principals=[iam.AccountRootPrincipal()],
+    resources=[
+        Fn.sub("arn:aws:dynamodb:${AWS::Region}:${AWS::AccountId}:table/my-explicit-table-name"),
+        Fn.sub("arn:aws:dynamodb:${AWS::Region}:${AWS::AccountId}:table/my-explicit-table-name/index/*")
+    ]
+))
+```
+
+**Important Limitations:**
+
+* **Auto-generated table names**: Must use `resources: ['*']` to avoid circular dependencies
+* **Explicit table names**: Enable scoped resources but lose CDK's automatic naming benefits
+* **CloudFormation constraint**: Resource policies cannot reference the resource they're attached to during creation
+
 TableV2 doesn’t support creating a replica and adding a resource-based policy to that replica in the same stack update in Regions other than the Region where you deploy the stack update.
 To incorporate a resource-based policy into a replica, you'll need to initially deploy the replica without the policy, followed by a subsequent update to include the desired policy.
 
@@ -1062,6 +1117,7 @@ from .. import (
     CfnResource as _CfnResource_9df397a6,
     CfnTag as _CfnTag_f6864754,
     Duration as _Duration_4839e8c3,
+    IEnvironmentAware as _IEnvironmentAware_a408b00d,
     IInspectable as _IInspectable_c2943556,
     IResolvable as _IResolvable_da3f097b,
     IResource as _IResource_c80c4260,
@@ -3011,7 +3067,11 @@ class GlobalTableReference:
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_dynamodb.IGlobalTableRef")
-class IGlobalTableRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IGlobalTableRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a GlobalTable.
 
     :stability: experimental
@@ -3029,6 +3089,7 @@ class IGlobalTableRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protoco
 
 class _IGlobalTableRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a GlobalTable.
 
@@ -4255,7 +4316,11 @@ typing.cast(typing.Any, ITable).__jsii_proxy_class__ = lambda : _ITableProxy
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_dynamodb.ITableRef")
-class ITableRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class ITableRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Table.
 
     :stability: experimental
@@ -4273,6 +4338,7 @@ class ITableRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _ITableRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Table.
 
@@ -5863,22 +5929,16 @@ class TableBase(
         jsii.create(self.__class__, self, [scope, id, props])
 
     @jsii.member(jsii_name="addToResourcePolicy")
+    @abc.abstractmethod
     def add_to_resource_policy(
         self,
         statement: _PolicyStatement_0fe33853,
     ) -> _AddToResourcePolicyResult_1d0a53ad:
-        '''Adds a statement to the resource policy associated with this file system.
+        '''Adds a statement to the resource policy associated with this table.
 
-        A resource policy will be automatically created upon the first call to ``addToResourcePolicy``.
-
-        Note that this does not work with imported file systems.
-
-        :param statement: The policy statement to add.
+        :param statement: -
         '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__9998fbfc8fdb03f3fe5356d84b9b9390d26bd73efb0eab172a4c638aeae5fc01)
-            check_type(argname="argument statement", value=statement, expected_type=type_hints["statement"])
-        return typing.cast(_AddToResourcePolicyResult_1d0a53ad, jsii.invoke(self, "addToResourcePolicy", [statement]))
+        ...
 
     @jsii.member(jsii_name="grant")
     def grant(
@@ -6671,6 +6731,20 @@ class _TableBaseProxy(
     TableBase,
     jsii.proxy_for(_Resource_45bc6135), # type: ignore[misc]
 ):
+    @jsii.member(jsii_name="addToResourcePolicy")
+    def add_to_resource_policy(
+        self,
+        statement: _PolicyStatement_0fe33853,
+    ) -> _AddToResourcePolicyResult_1d0a53ad:
+        '''Adds a statement to the resource policy associated with this table.
+
+        :param statement: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__9998fbfc8fdb03f3fe5356d84b9b9390d26bd73efb0eab172a4c638aeae5fc01)
+            check_type(argname="argument statement", value=statement, expected_type=type_hints["statement"])
+        return typing.cast(_AddToResourcePolicyResult_1d0a53ad, jsii.invoke(self, "addToResourcePolicy", [statement]))
+
     @builtins.property
     @jsii.member(jsii_name="hasIndex")
     def _has_index(self) -> builtins.bool:
@@ -6769,22 +6843,20 @@ class TableBaseV2(
         jsii.create(self.__class__, self, [scope, id, props])
 
     @jsii.member(jsii_name="addToResourcePolicy")
+    @abc.abstractmethod
     def add_to_resource_policy(
         self,
         statement: _PolicyStatement_0fe33853,
     ) -> _AddToResourcePolicyResult_1d0a53ad:
-        '''Adds a statement to the resource policy associated with this file system.
+        '''Adds a statement to the resource policy associated with this table.
 
         A resource policy will be automatically created upon the first call to ``addToResourcePolicy``.
 
-        Note that this does not work with imported file systems.
+        Note that this does not work with imported tables.
 
         :param statement: The policy statement to add.
         '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__8ddb2818dbfcaf1b52fed7edb8ce145b274541d665df431c417e676bd4f69dec)
-            check_type(argname="argument statement", value=statement, expected_type=type_hints["statement"])
-        return typing.cast(_AddToResourcePolicyResult_1d0a53ad, jsii.invoke(self, "addToResourcePolicy", [statement]))
+        ...
 
     @jsii.member(jsii_name="grant")
     def grant(
@@ -7594,6 +7666,24 @@ class _TableBaseV2Proxy(
     TableBaseV2,
     jsii.proxy_for(_Resource_45bc6135), # type: ignore[misc]
 ):
+    @jsii.member(jsii_name="addToResourcePolicy")
+    def add_to_resource_policy(
+        self,
+        statement: _PolicyStatement_0fe33853,
+    ) -> _AddToResourcePolicyResult_1d0a53ad:
+        '''Adds a statement to the resource policy associated with this table.
+
+        A resource policy will be automatically created upon the first call to ``addToResourcePolicy``.
+
+        Note that this does not work with imported tables.
+
+        :param statement: The policy statement to add.
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__8ddb2818dbfcaf1b52fed7edb8ce145b274541d665df431c417e676bd4f69dec)
+            check_type(argname="argument statement", value=statement, expected_type=type_hints["statement"])
+        return typing.cast(_AddToResourcePolicyResult_1d0a53ad, jsii.invoke(self, "addToResourcePolicy", [statement]))
+
     @builtins.property
     @jsii.member(jsii_name="hasIndex")
     def _has_index(self) -> builtins.bool:
@@ -9240,8 +9330,9 @@ class TablePropsV2(TableOptionsV2):
             mrsc_table = dynamodb.TableV2(stack, "MRSCTable",
                 partition_key=dynamodb.Attribute(name="pk", type=dynamodb.AttributeType.STRING),
                 multi_region_consistency=dynamodb.MultiRegionConsistency.STRONG,
-                replicas=[dynamodb.ReplicaTableProps(region="us-east-1"), dynamodb.ReplicaTableProps(region="us-east-2")
-                ]
+                replicas=[dynamodb.ReplicaTableProps(region="us-east-1")
+                ],
+                witness_region="us-east-2"
             )
         '''
         if isinstance(contributor_insights_specification, dict):
@@ -9966,6 +10057,24 @@ class TableV2(
         )
 
         return typing.cast(None, jsii.invoke(self, "addReplica", [props]))
+
+    @jsii.member(jsii_name="addToResourcePolicy")
+    def add_to_resource_policy(
+        self,
+        statement: _PolicyStatement_0fe33853,
+    ) -> _AddToResourcePolicyResult_1d0a53ad:
+        '''Adds a statement to the resource policy associated with this table.
+
+        A resource policy will be automatically created upon the first call to ``addToResourcePolicy``.
+
+        Note that this does not work with imported tables.
+
+        :param statement: The policy statement to add.
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__3b1216d49044543b59bb31b8cbf4866b8c803b0f0801c1170ed12229f1643c37)
+            check_type(argname="argument statement", value=statement, expected_type=type_hints["statement"])
+        return typing.cast(_AddToResourcePolicyResult_1d0a53ad, jsii.invoke(self, "addToResourcePolicy", [statement]))
 
     @jsii.member(jsii_name="replica")
     def replica(self, region: builtins.str) -> ITableV2:
@@ -17265,6 +17374,24 @@ class Table(
 
         return typing.cast(None, jsii.invoke(self, "addLocalSecondaryIndex", [props]))
 
+    @jsii.member(jsii_name="addToResourcePolicy")
+    def add_to_resource_policy(
+        self,
+        statement: _PolicyStatement_0fe33853,
+    ) -> _AddToResourcePolicyResult_1d0a53ad:
+        '''Adds a statement to the resource policy associated with this table.
+
+        A resource policy will be automatically created upon the first call to ``addToResourcePolicy``.
+
+        Note that this does not work with imported tables.
+
+        :param statement: The policy statement to add.
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__e7e0b5f266fee7a609687021ddb2ebd8d86220f25b39cf2c61b10e2127fad929)
+            check_type(argname="argument statement", value=statement, expected_type=type_hints["statement"])
+        return typing.cast(_AddToResourcePolicyResult_1d0a53ad, jsii.invoke(self, "addToResourcePolicy", [statement]))
+
     @jsii.member(jsii_name="autoScaleGlobalSecondaryIndexReadCapacity")
     def auto_scale_global_secondary_index_read_capacity(
         self,
@@ -17379,6 +17506,11 @@ class Table(
     def _has_index(self) -> builtins.bool:
         '''Whether this table has indexes.'''
         return typing.cast(builtins.bool, jsii.get(self, "hasIndex"))
+
+    @builtins.property
+    @jsii.member(jsii_name="table")
+    def _table(self) -> CfnTable:
+        return typing.cast(CfnTable, jsii.get(self, "table"))
 
     @builtins.property
     @jsii.member(jsii_name="tableArn")
@@ -17794,12 +17926,6 @@ def _typecheckingstub__2ef78b473dc672e1f0a8737346a30df5180e8a2493195d29264f12c0e
     """Type checking stubs"""
     pass
 
-def _typecheckingstub__9998fbfc8fdb03f3fe5356d84b9b9390d26bd73efb0eab172a4c638aeae5fc01(
-    statement: _PolicyStatement_0fe33853,
-) -> None:
-    """Type checking stubs"""
-    pass
-
 def _typecheckingstub__ad55d8fd00d859ce3132dc1316888fe9f09c2a3381b167ac699e89edb96ec936(
     grantee: _IGrantable_71c4f5de,
     *actions: builtins.str,
@@ -17888,6 +18014,12 @@ def _typecheckingstub__95d33a70a83403322cdc035963638859f588f5d47bae922a6083d3acd
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__9998fbfc8fdb03f3fe5356d84b9b9390d26bd73efb0eab172a4c638aeae5fc01(
+    statement: _PolicyStatement_0fe33853,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__385df27fafa61fd6d1e8ebb872e4af26b3119795ee6bb9684e56f891cd86ba94(
     value: typing.Optional[_PolicyDocument_3ac34393],
 ) -> None:
@@ -17902,12 +18034,6 @@ def _typecheckingstub__12cb4b2677f8954ffc9804c993081f8508388207f5fbd561ee30b05d6
     environment_from_arn: typing.Optional[builtins.str] = None,
     physical_name: typing.Optional[builtins.str] = None,
     region: typing.Optional[builtins.str] = None,
-) -> None:
-    """Type checking stubs"""
-    pass
-
-def _typecheckingstub__8ddb2818dbfcaf1b52fed7edb8ce145b274541d665df431c417e676bd4f69dec(
-    statement: _PolicyStatement_0fe33853,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -17997,6 +18123,12 @@ def _typecheckingstub__77d4ef5bc85980ee36c06595f45b530b92a1b51437a40ca9dc19d75ed
     statistic: typing.Optional[builtins.str] = None,
     unit: typing.Optional[_Unit_61bc6f70] = None,
     visible: typing.Optional[builtins.bool] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__8ddb2818dbfcaf1b52fed7edb8ce145b274541d665df431c417e676bd4f69dec(
+    statement: _PolicyStatement_0fe33853,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -18190,6 +18322,12 @@ def _typecheckingstub__3494ea8dbe597bd842685696465746338b46b0c8da870f901557c303d
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     table_name: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__3b1216d49044543b59bb31b8cbf4866b8c803b0f0801c1170ed12229f1643c37(
+    statement: _PolicyStatement_0fe33853,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -19066,6 +19204,12 @@ def _typecheckingstub__525cf1fa874c853a49d3f35821b12e5d75cf2eae5a8ecba00b67f7667
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     table_name: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__e7e0b5f266fee7a609687021ddb2ebd8d86220f25b39cf2c61b10e2127fad929(
+    statement: _PolicyStatement_0fe33853,
 ) -> None:
     """Type checking stubs"""
     pass

@@ -71,6 +71,7 @@ import constructs as _constructs_77d1e7e8
 from .. import (
     CfnResource as _CfnResource_9df397a6,
     CfnTag as _CfnTag_f6864754,
+    IEnvironmentAware as _IEnvironmentAware_a408b00d,
     IInspectable as _IInspectable_c2943556,
     IResolvable as _IResolvable_da3f097b,
     ITaggableV2 as _ITaggableV2_4e6798f8,
@@ -1169,7 +1170,11 @@ class ConfigurationSetReference:
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_smsvoice.IConfigurationSetRef")
-class IConfigurationSetRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IConfigurationSetRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a ConfigurationSet.
 
     :stability: experimental
@@ -1187,6 +1192,7 @@ class IConfigurationSetRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Pr
 
 class _IConfigurationSetRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a ConfigurationSet.
 
@@ -1209,7 +1215,11 @@ typing.cast(typing.Any, IConfigurationSetRef).__jsii_proxy_class__ = lambda : _I
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_smsvoice.IOptOutListRef")
-class IOptOutListRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IOptOutListRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a OptOutList.
 
     :stability: experimental
@@ -1227,6 +1237,7 @@ class IOptOutListRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol
 
 class _IOptOutListRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a OptOutList.
 
@@ -1249,7 +1260,11 @@ typing.cast(typing.Any, IOptOutListRef).__jsii_proxy_class__ = lambda : _IOptOut
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_smsvoice.IPhoneNumberRef")
-class IPhoneNumberRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IPhoneNumberRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a PhoneNumber.
 
     :stability: experimental
@@ -1267,6 +1282,7 @@ class IPhoneNumberRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protoco
 
 class _IPhoneNumberRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a PhoneNumber.
 
@@ -1289,7 +1305,11 @@ typing.cast(typing.Any, IPhoneNumberRef).__jsii_proxy_class__ = lambda : _IPhone
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_smsvoice.IPoolRef")
-class IPoolRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IPoolRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Pool.
 
     :stability: experimental
@@ -1307,6 +1327,7 @@ class IPoolRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _IPoolRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Pool.
 
@@ -1331,6 +1352,7 @@ typing.cast(typing.Any, IPoolRef).__jsii_proxy_class__ = lambda : _IPoolRefProxy
 @jsii.interface(jsii_type="aws-cdk-lib.aws_smsvoice.IProtectConfigurationRef")
 class IProtectConfigurationRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a ProtectConfiguration.
@@ -1350,6 +1372,7 @@ class IProtectConfigurationRef(
 
 class _IProtectConfigurationRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a ProtectConfiguration.
 
@@ -1372,7 +1395,11 @@ typing.cast(typing.Any, IProtectConfigurationRef).__jsii_proxy_class__ = lambda 
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_smsvoice.IResourcePolicyRef")
-class IResourcePolicyRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IResourcePolicyRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a ResourcePolicy.
 
     :stability: experimental
@@ -1390,6 +1417,7 @@ class IResourcePolicyRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Prot
 
 class _IResourcePolicyRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a ResourcePolicy.
 
@@ -1412,7 +1440,11 @@ typing.cast(typing.Any, IResourcePolicyRef).__jsii_proxy_class__ = lambda : _IRe
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_smsvoice.ISenderIdRef")
-class ISenderIdRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class ISenderIdRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a SenderId.
 
     :stability: experimental
@@ -1430,6 +1462,7 @@ class ISenderIdRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 class _ISenderIdRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a SenderId.
 

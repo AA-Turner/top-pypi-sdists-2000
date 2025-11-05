@@ -61,6 +61,7 @@ import constructs as _constructs_77d1e7e8
 from .. import (
     CfnResource as _CfnResource_9df397a6,
     CfnTag as _CfnTag_f6864754,
+    IEnvironmentAware as _IEnvironmentAware_a408b00d,
     IInspectable as _IInspectable_c2943556,
     IResolvable as _IResolvable_da3f097b,
     ITaggable as _ITaggable_36806126,
@@ -2038,7 +2039,11 @@ class FuotaTaskReference:
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_iotwireless.IDestinationRef")
-class IDestinationRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IDestinationRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a Destination.
 
     :stability: experimental
@@ -2056,6 +2061,7 @@ class IDestinationRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protoco
 
 class _IDestinationRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a Destination.
 
@@ -2078,7 +2084,11 @@ typing.cast(typing.Any, IDestinationRef).__jsii_proxy_class__ = lambda : _IDesti
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_iotwireless.IDeviceProfileRef")
-class IDeviceProfileRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IDeviceProfileRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a DeviceProfile.
 
     :stability: experimental
@@ -2096,6 +2106,7 @@ class IDeviceProfileRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Proto
 
 class _IDeviceProfileRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a DeviceProfile.
 
@@ -2118,7 +2129,11 @@ typing.cast(typing.Any, IDeviceProfileRef).__jsii_proxy_class__ = lambda : _IDev
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_iotwireless.IFuotaTaskRef")
-class IFuotaTaskRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IFuotaTaskRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a FuotaTask.
 
     :stability: experimental
@@ -2136,6 +2151,7 @@ class IFuotaTaskRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol)
 
 class _IFuotaTaskRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a FuotaTask.
 
@@ -2158,7 +2174,11 @@ typing.cast(typing.Any, IFuotaTaskRef).__jsii_proxy_class__ = lambda : _IFuotaTa
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_iotwireless.IMulticastGroupRef")
-class IMulticastGroupRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IMulticastGroupRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a MulticastGroup.
 
     :stability: experimental
@@ -2176,6 +2196,7 @@ class IMulticastGroupRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Prot
 
 class _IMulticastGroupRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a MulticastGroup.
 
@@ -2202,6 +2223,7 @@ typing.cast(typing.Any, IMulticastGroupRef).__jsii_proxy_class__ = lambda : _IMu
 )
 class INetworkAnalyzerConfigurationRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a NetworkAnalyzerConfiguration.
@@ -2223,6 +2245,7 @@ class INetworkAnalyzerConfigurationRef(
 
 class _INetworkAnalyzerConfigurationRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a NetworkAnalyzerConfiguration.
 
@@ -2247,7 +2270,11 @@ typing.cast(typing.Any, INetworkAnalyzerConfigurationRef).__jsii_proxy_class__ =
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_iotwireless.IPartnerAccountRef")
-class IPartnerAccountRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IPartnerAccountRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a PartnerAccount.
 
     :stability: experimental
@@ -2265,6 +2292,7 @@ class IPartnerAccountRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Prot
 
 class _IPartnerAccountRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a PartnerAccount.
 
@@ -2287,7 +2315,11 @@ typing.cast(typing.Any, IPartnerAccountRef).__jsii_proxy_class__ = lambda : _IPa
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_iotwireless.IServiceProfileRef")
-class IServiceProfileRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IServiceProfileRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a ServiceProfile.
 
     :stability: experimental
@@ -2305,6 +2337,7 @@ class IServiceProfileRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Prot
 
 class _IServiceProfileRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a ServiceProfile.
 
@@ -2327,7 +2360,11 @@ typing.cast(typing.Any, IServiceProfileRef).__jsii_proxy_class__ = lambda : _ISe
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_iotwireless.ITaskDefinitionRef")
-class ITaskDefinitionRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class ITaskDefinitionRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a TaskDefinition.
 
     :stability: experimental
@@ -2345,6 +2382,7 @@ class ITaskDefinitionRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Prot
 
 class _ITaskDefinitionRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a TaskDefinition.
 
@@ -2369,6 +2407,7 @@ typing.cast(typing.Any, ITaskDefinitionRef).__jsii_proxy_class__ = lambda : _ITa
 @jsii.interface(jsii_type="aws-cdk-lib.aws_iotwireless.IWirelessDeviceImportTaskRef")
 class IWirelessDeviceImportTaskRef(
     _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
     typing_extensions.Protocol,
 ):
     '''(experimental) Indicates that this resource can be referenced as a WirelessDeviceImportTask.
@@ -2388,6 +2427,7 @@ class IWirelessDeviceImportTaskRef(
 
 class _IWirelessDeviceImportTaskRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a WirelessDeviceImportTask.
 
@@ -2410,7 +2450,11 @@ typing.cast(typing.Any, IWirelessDeviceImportTaskRef).__jsii_proxy_class__ = lam
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_iotwireless.IWirelessDeviceRef")
-class IWirelessDeviceRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IWirelessDeviceRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a WirelessDevice.
 
     :stability: experimental
@@ -2428,6 +2472,7 @@ class IWirelessDeviceRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Prot
 
 class _IWirelessDeviceRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a WirelessDevice.
 
@@ -2450,7 +2495,11 @@ typing.cast(typing.Any, IWirelessDeviceRef).__jsii_proxy_class__ = lambda : _IWi
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_iotwireless.IWirelessGatewayRef")
-class IWirelessGatewayRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class IWirelessGatewayRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_a408b00d,
+    typing_extensions.Protocol,
+):
     '''(experimental) Indicates that this resource can be referenced as a WirelessGateway.
 
     :stability: experimental
@@ -2468,6 +2517,7 @@ class IWirelessGatewayRef(_constructs_77d1e7e8.IConstruct, typing_extensions.Pro
 
 class _IWirelessGatewayRefProxy(
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
 ):
     '''(experimental) Indicates that this resource can be referenced as a WirelessGateway.
 
