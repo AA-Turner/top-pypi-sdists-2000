@@ -38,10 +38,11 @@ _value:
   elements: string
 """
 
-import typing as t
+from collections.abc import Callable
 
 from ansible.errors import AnsibleFilterError
 from ansible.module_utils.common.text.converters import to_text
+
 from ansible_collections.community.crypto.plugins.module_utils._crypto.pem import (
     split_pem_list,
 )
@@ -60,7 +61,7 @@ def split_pem_filter(data: str | bytes) -> list[str]:
 class FilterModule:
     """Ansible jinja2 filters"""
 
-    def filters(self) -> dict[str, t.Callable]:
+    def filters(self) -> dict[str, Callable]:
         return {
             "split_pem": split_pem_filter,
         }

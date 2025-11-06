@@ -1,3 +1,4 @@
+import copy
 import re
 
 try:
@@ -9,6 +10,8 @@ try:
     from ..message.sdsb_event_log_msgs import SDSBEventLogValidationMsg
     from ..message.sdsb_storage_pool_msgs import SDSBStoragePoolValidationMsg
     from ..message.sdsb_estimated_capacity_msgs import SDSBEstimatedCapacityValidateMsg
+    from ..message.sdsb_bmc_connection_msgs import SDSBBmcConnectionValidationMsg
+    from ..message.sdsb_cluster_msgs import SDSBClusterValidationMsg
     from ..model.common_base_models import ConnectionInfo
     from ..model.sdsb_volume_models import VolumeFactSpec, VolumeSpec
     from ..model.sdsb_job_models import JobFactSpec
@@ -17,6 +20,7 @@ try:
         StorageNodeFactSpec,
         StorageNodeSpec,
         StorageNodeBmcAccessSettingFactSpec,
+        StorageNodeBmcAccessSettingSpec,
     )
     from ..model.sdsb_storage_pool_models import StoragePoolFactSpec, StoragePoolSpec
     from ..model.sdsb_cluster_models import ClusterFactSpec, ClusterSpec
@@ -31,13 +35,27 @@ try:
         SDSBStorageControllerSpec,
     )
     from ..model.sdsb_port_auth_models import PortAuthSpec
-    from ..model.sdsb_port_models import PortFactSpec
+    from ..model.sdsb_port_models import PortFactSpec, ComputePortSpec
     from ..model.sdsb_vps_models import VpsFactSpec, VpsSpec
     from ..model.sdsb_snapshot_models import SDSBSnapshotSpec, SDSBSnapshotFactsSpec
     from ..model.sdsb_capacity_management_settings_model import (
         SDSBCapacityManagementSettingsFactSpec,
     )
     from ..model.sdsb_estimated_capacity_model import SDSBEstimatedCapacityFactSpec
+    from ..model.sdsb_remote_iscsi_port_models import (
+        SDSBRemoteIscsciPortFactSpec,
+        SDSBRemoteIscsciPortSpec,
+    )
+    from ..model.sdsb_software_update_models import SDSBSoftwareUpdateSpec
+    from ..model.sdsb_protection_domain_model import SDSBProtectionDomainFactSpec
+    from ..model.sdsb_storage_controller_model import (
+        get_snmp_settings_args,
+        SNMPModelSpec,
+        ProtectionDomainSpec,
+        StorageSystemSpec,
+        SDSBSpareNodeSpec,
+        SpareNodeFactsSpec,
+    )
 except ImportError:
     from common.hv_constants import ConnectionTypes
     from common.sdsb_constants import AutomationConstants
@@ -47,6 +65,8 @@ except ImportError:
     from message.sdsb_event_log_msgs import SDSBEventLogValidationMsg
     from message.sdsb_storage_pool_msgs import SDSBStoragePoolValidationMsg
     from message.sdsb_estimated_capacity_msgs import SDSBEstimatedCapacityValidateMsg
+    from message.sdsb_bmc_connection_msgs import SDSBBmcConnectionValidationMsg
+    from message.sdsb_cluster_msgs import SDSBClusterValidationMsg
     from model.common_base_models import ConnectionInfo
     from model.sdsb_volume_models import VolumeFactSpec, VolumeSpec
     from model.sdsb_job_models import JobFactSpec
@@ -55,6 +75,7 @@ except ImportError:
         StorageNodeFactSpec,
         StorageNodeSpec,
         StorageNodeBmcAccessSettingFactSpec,
+        StorageNodeBmcAccessSettingSpec,
     )
     from model.sdsb_storage_pool_models import StoragePoolFactSpec, StoragePoolSpec
     from model.sdsb_cluster_models import ClusterFactSpec, ClusterSpec
@@ -69,13 +90,19 @@ except ImportError:
         SDSBStorageControllerSpec,
     )
     from model.sdsb_port_auth_models import PortAuthSpec
-    from model.sdsb_port_models import PortFactSpec
+    from model.sdsb_port_models import PortFactSpec, ComputePortSpec
     from model.sdsb_vps_models import VpsFactSpec, VpsSpec
     from model.sdsb_snapshot_models import SDSBSnapshotSpec, SDSBSnapshotFactsSpec
     from model.sdsb_capacity_management_settings_model import (
         SDSBCapacityManagementSettingsFactSpec,
     )
     from model.sdsb_estimated_capacity_model import SDSBEstimatedCapacityFactSpec
+    from model.sdsb_remote_iscsi_port_models import (
+        SDSBRemoteIscsciPortFactSpec,
+        SDSBRemoteIscsciPortSpec,
+    )
+    from model.sdsb_software_update_models import SDSBSoftwareUpdateSpec
+    from model.sdsb_protection_domain_model import SDSBProtectionDomainFactSpec
 
 
 # SDSB Parameter manager
@@ -123,6 +150,13 @@ class SDSBParametersManager:
             input_spec = ComputeNodeSpec()
         return input_spec
 
+    def get_compute_port_spec(self):
+        if "spec" in self.params and self.params["spec"] is not None:
+            input_spec = ComputePortSpec(**self.params["spec"])
+        else:
+            input_spec = ComputePortSpec()
+        return input_spec
+
     def get_compute_port_fact_spec(self):
         if "spec" in self.params and self.params["spec"] is not None:
             input_spec = PortFactSpec(**self.params["spec"])
@@ -166,6 +200,13 @@ class SDSBParametersManager:
         else:
             return None
 
+    def get_software_update_spec(self):
+        if "spec" in self.params and self.params["spec"] is not None:
+            input_spec = SDSBSoftwareUpdateSpec(**self.params["spec"])
+            return input_spec
+        else:
+            return None
+
     def get_storage_pool_spec(self):
         if "spec" in self.params and self.params["spec"] is not None:
             input_spec = StoragePoolSpec(**self.params["spec"])
@@ -180,6 +221,14 @@ class SDSBParametersManager:
             return input_spec
         else:
             return None
+
+    def get_storage_node_bmc_access_setting_spec(self):
+        if "spec" in self.params and self.params["spec"] is not None:
+            input_spec = StorageNodeBmcAccessSettingSpec(**self.params["spec"])
+            SDSBSpecValidators.validate_storage_node_bmc_access_setting_spec(input_spec)
+        else:
+            input_spec = StorageNodeBmcAccessSettingSpec()
+        return input_spec
 
     def get_storage_node_bmc_access_setting_fact_spec(self):
         if "spec" in self.params and self.params["spec"] is not None:
@@ -225,6 +274,14 @@ class SDSBParametersManager:
             input_spec = SDSBFaultDomainSpec()
         return input_spec
 
+    def get_protection_domain_fact_spec(self):
+        if "spec" in self.params and self.params["spec"] is not None:
+            input_spec = SDSBProtectionDomainFactSpec(**self.params["spec"])
+            SDSBSpecValidators.validate_pd_fact_spec(input_spec)
+        else:
+            input_spec = None
+        return input_spec
+
     def get_users_spec(self):
         if "spec" in self.params and self.params["spec"] is not None:
             input_spec = SDSBUsersSpec(**self.params["spec"])
@@ -237,6 +294,20 @@ class SDSBParametersManager:
             input_spec = SDSBStorageControllerSpec(**self.params["spec"])
         else:
             input_spec = SDSBStorageControllerSpec()
+        return input_spec
+
+    def get_remote_iscsi_port_fact_spec(self):
+        if "spec" in self.params and self.params["spec"] is not None:
+            input_spec = SDSBRemoteIscsciPortFactSpec(**self.params["spec"])
+        else:
+            input_spec = SDSBRemoteIscsciPortFactSpec()
+        return input_spec
+
+    def get_remote_iscsi_port_spec(self):
+        if "spec" in self.params and self.params["spec"] is not None:
+            input_spec = SDSBRemoteIscsciPortSpec(**self.params["spec"])
+        else:
+            input_spec = SDSBRemoteIscsciPortSpec()
         return input_spec
 
     def get_capacity_management_settings_fact_spec(self):
@@ -311,6 +382,31 @@ class SDSBParametersManager:
         input_spec = SDSBSnapshotFactsSpec(**self.params["spec"])
 
         return input_spec
+
+    def get_snmp_settings_spec(self):
+
+        input_spec = SNMPModelSpec(**self.params["spec"])
+
+        return input_spec
+
+    def protection_domain_settings_spec(self):
+        return ProtectionDomainSpec(**self.params["spec"])
+
+    def spare_node_spec(self):
+
+        return SDSBSpareNodeSpec(**self.params["spec"])
+
+    def spare_node_fact_spec(self):
+
+        return SpareNodeFactsSpec(
+            **self.params["spec"] if self.params.get("spec") else {}
+        )
+
+    def storage_system_spec(self):
+
+        return StorageSystemSpec(
+            **self.params["spec"] if self.params.get("spec") else {}
+        )
 
 
 class SDSBCommonParameters:
@@ -395,6 +491,14 @@ class SDSBComputeNodeArguments:
                 "required": False,
                 "type": "str",
             },
+            "vps_id": {
+                "required": False,
+                "type": "str",
+            },
+            "vps_name": {
+                "required": False,
+                "type": "str",
+            },
             "os_type": {
                 "required": False,
                 "type": "str",
@@ -435,11 +539,14 @@ class SDSBComputeNodeArguments:
                 "required": False,
                 "type": "str",
             },
-            # "vps_name": {
-            #     "required": False,
-            #     "type": "str",
-            #     "description": "Compute nodes that belongs to this vps",
-            # },
+            "vps_name": {
+                "required": False,
+                "type": "str",
+            },
+            "vps_id": {
+                "required": False,
+                "type": "str",
+            },
         }
         cls.common_arguments["spec"]["options"] = spec_options
         cls.common_arguments.pop("state")
@@ -461,6 +568,7 @@ class SDSBClusterArguments:
                 "download_config_file",
                 "stop_removing_storage_node",
                 "replace_storage_node",
+                "system_requirement_file_present",
             ],
             "default": "present",
         },
@@ -646,6 +754,14 @@ class SDSBClusterArguments:
                 "required": False,
                 "type": "str",
             },
+            "template_s3_url": {
+                "required": False,
+                "type": "str",
+            },
+            "vm_configuration_file_s3_uri": {
+                "required": False,
+                "type": "str",
+            },
             "is_capacity_balancing_enabled": {
                 "required": False,
                 "type": "bool",
@@ -658,17 +774,25 @@ class SDSBClusterArguments:
                 "required": False,
                 "type": "str",
                 "choices": [
-                    "Normal",
-                    "AddStorageNodes",
-                    # "ReplaceStorageNode",
-                    "AddDrives",
+                    "normal",
+                    "add_storage_nodes",
+                    "replace_storage_node",
+                    "add_drives",
                     # "ReplaceDrive",
                 ],
-                "default": "Normal",
+                "default": "normal",
             },
             "no_of_drives": {
                 "required": False,
                 "type": "int",
+            },
+            "should_recover_single_node": {
+                "required": False,
+                "type": "bool",
+            },
+            "system_requirement_file": {
+                "required": False,
+                "type": "str",
             },
         }
         cls.common_arguments["spec"]["options"] = spec_options
@@ -886,10 +1010,14 @@ class SDSBVolumeArguments:
                 "required": False,
                 "type": "str",
             },
-            # "vps_name": {
-            #     "required": False,
-            #     "type": "str",
-            # },
+            "vps_name": {
+                "required": False,
+                "type": "str",
+            },
+            "vps_id": {
+                "required": False,
+                "type": "str",
+            },
             "state": {
                 "required": False,
                 "type": "str",
@@ -949,6 +1077,14 @@ class SDSBVolumeArguments:
                 "type": "str",
                 "choices": ["Disabled", "Compression"],
             },
+            "vps_name": {
+                "required": False,
+                "type": "str",
+            },
+            "vps_id": {
+                "required": False,
+                "type": "str",
+            },
         }
         cls.common_arguments["spec"]["options"] = spec_options
         cls.common_arguments.pop("state")
@@ -960,6 +1096,12 @@ class SDSBPortArguments:
 
     common_arguments = {
         "connection_info": SDSBCommonParameters.get_connection_info(),
+        "state": {
+            "required": False,
+            "type": "str",
+            "choices": ["present"],
+            "default": "present",
+        },
         "spec": {
             "required": False,
             "type": "dict",
@@ -982,7 +1124,39 @@ class SDSBPortArguments:
             },
             # 'protocol': {'required': False, 'type': 'str', 'description': 'Compute nodes that belongs to this vps'},
         }
+        args = copy.deepcopy(cls.common_arguments)
+        args["spec"]["options"] = spec_options
+        args.pop("state")
+        return args
+        # cls.common_arguments["spec"]["options"] = spec_options
+        # cls.common_arguments.pop("state")
+        # return cls.common_arguments
+
+    @classmethod
+    def compute_port(cls):
+        spec_options = {
+            "id": {
+                "required": False,
+                "type": "str",
+            },
+            "name": {
+                "required": False,
+                "type": "str",
+            },
+            "nick_name": {
+                "required": False,
+                "type": "str",
+            },
+            "protocol": {
+                "required": False,
+                "type": "str",
+                "choices": ["iscsi", "nvme_tcp"],
+            },
+        }
         cls.common_arguments["spec"]["options"] = spec_options
+        cls.common_arguments["spec"]["required"] = True
+        # cls.common_arguments.pop("state")
+
         return cls.common_arguments
 
 
@@ -1122,6 +1296,8 @@ class SDSBSnapshotArguments:
                 "required": False,
                 "type": "str",
             },
+            "vps_id": {"required": False, "type": "str"},
+            "vps_name": {"required": False, "type": "str"},
         }
         cls.common_arguments["spec"]["options"] = spec_options
         cls.common_arguments["spec"]["required"] = True
@@ -1315,6 +1491,10 @@ class SDSBDrivesArguments:
     @classmethod
     def drives_facts(cls):
         spec_options = {
+            "id": {
+                "required": False,
+                "type": "str",
+            },
             "status_summary": {
                 "required": False,
                 "type": "str",
@@ -1328,7 +1508,6 @@ class SDSBDrivesArguments:
             "storage_node_id": {
                 "required": False,
                 "type": "str",
-                # "format": "uuid",
             },
             "locator_led_status": {
                 "required": False,
@@ -1347,12 +1526,46 @@ class SDSBStotagrNodeBmcAccessSettingArguments:
 
     common_arguments = {
         "connection_info": SDSBCommonParameters.get_connection_info(),
-        "spec": {
+        "state": {
             "required": False,
+            "type": "str",
+            "choices": ["present"],
+            "default": "present",
+        },
+        "spec": {
+            "required": True,
             "type": "dict",
             "options": {},
         },
     }
+
+    @classmethod
+    def storage_node_bmc_access_setting(cls):
+        spec_options = {
+            "id": {
+                "required": False,
+                "type": "str",
+            },
+            "name": {
+                "required": False,
+                "type": "str",
+            },
+            "bmc_name": {
+                "required": False,
+                "type": "str",
+            },
+            "bmc_user": {
+                "required": False,
+                "type": "str",
+            },
+            "bmc_password": {
+                "required": False,
+                "no_log": True,
+                "type": "str",
+            },
+        }
+        cls.common_arguments["spec"]["options"] = spec_options
+        return cls.common_arguments
 
     @classmethod
     def storage_node_bmc_access_setting_facts(cls):
@@ -1363,6 +1576,8 @@ class SDSBStotagrNodeBmcAccessSettingArguments:
             },
         }
         cls.common_arguments["spec"]["options"] = spec_options
+        cls.common_arguments["spec"]["required"] = False
+        cls.common_arguments.pop("state")
         return cls.common_arguments
 
 
@@ -1619,6 +1834,89 @@ class SDSBEstimatedCapacityArguments:
             },
         }
         cls.common_arguments["spec"]["options"] = spec_options
+        return cls.common_arguments
+
+
+class SDSBRemoteIscsiPortArguments:
+
+    common_arguments = {
+        "connection_info": SDSBCommonParameters.get_connection_info(),
+        "state": {
+            "required": False,
+            "type": "str",
+            "choices": ["present", "absent"],
+            "default": "present",
+        },
+        "spec": {
+            "required": False,
+            "type": "dict",
+            "options": {},
+        },
+    }
+
+    @classmethod
+    def remote_iscsi_port(cls):
+        spec_options = {
+            "id": {
+                "required": False,
+                "type": "str",
+            },
+            "local_port": {
+                "required": False,
+                "type": "str",
+            },
+            "remote_serial": {
+                "required": False,
+                "type": "str",
+            },
+            "remote_storage_system_type": {
+                "required": False,
+                "type": "str",
+                "choices": ["R9", "M8"],
+            },
+            "remote_port": {
+                "required": False,
+                "type": "str",
+            },
+            "remote_ip_address": {
+                "required": False,
+                "type": "str",
+            },
+            "remote_tcp_port": {
+                "required": False,
+                "type": "int",
+            },
+        }
+        cls.common_arguments["spec"]["options"] = spec_options
+        return cls.common_arguments
+
+    @classmethod
+    def remote_iscsi_port_facts(cls):
+        spec_options = {
+            "id": {
+                "required": False,
+                "type": "str",
+            },
+            "local_port": {
+                "required": False,
+                "type": "str",
+            },
+            "remote_serial": {
+                "required": False,
+                "type": "str",
+            },
+            "remote_storage_system_type": {
+                "required": False,
+                "type": "str",
+                "choices": ["R9", "M8"],
+            },
+            "remote_port": {
+                "required": False,
+                "type": "int",
+            },
+        }
+        cls.common_arguments["spec"]["options"] = spec_options
+        cls.common_arguments.pop("state")
 
         return cls.common_arguments
 
@@ -1678,15 +1976,108 @@ class SDSBStorageControllerArguments:
         return cls.common_arguments
 
 
+class SDSBSoftwareUpdateArguments:
+
+    common_arguments = {
+        "connection_info": SDSBCommonParameters.get_connection_info(),
+        "state": {
+            "required": False,
+            "type": "str",
+            "choices": ["present", "software_update_file_present"],
+            "default": "present",
+        },
+        "spec": {
+            "required": False,
+            "type": "dict",
+            "options": {},
+        },
+    }
+
+    @classmethod
+    def software_update(cls):
+        spec_options = {
+            "should_stop_software_update": {
+                "required": False,
+                "type": "bool",
+                "default": False,
+            },
+            "is_software_downgrade": {
+                "required": False,
+                "type": "bool",
+                "default": False,
+            },
+            "software_update_file": {
+                "required": False,
+                "type": "str",
+            },
+        }
+        args = copy.deepcopy(cls.common_arguments)
+        args["spec"]["options"] = spec_options
+        return args
+
+    @classmethod
+    def software_update_facts(cls):
+
+        args = copy.deepcopy(cls.common_arguments)
+        args.pop("state")
+        args.pop("spec")
+
+        return args
+
+
 class SDSBStorageSystemArguments:
 
     common_arguments = {
         "connection_info": SDSBCommonParameters.get_connection_info(),
+        "state": {
+            "required": False,
+            "type": "str",
+            "choices": [
+                "present",
+                "absent",
+                "delete_root_certificate",
+                "import_root_certificate",
+                "download_root_certificate",
+            ],
+            "default": "present",
+        },
+        "spec": {
+            "required": False,
+            "type": "dict",
+            "options": {},
+        },
     }
 
     @classmethod
     def storage_system_fact(cls):
-        return cls.common_arguments
+        args = copy.deepcopy(cls.common_arguments)
+        args.pop("state")
+        args.pop("spec")
+        return args
+
+    @classmethod
+    def storage_system_version_fact(cls):
+        spec_options = {
+            "root_certificate_file_path": {
+                "required": False,
+                "type": "str",
+            },
+            "download_path": {
+                "required": False,
+                "type": "str",
+            },
+            "enable_write_back_mode_with_cache_protection": {
+                "required": False,
+                "type": "bool",
+            },
+            "force": {
+                "required": False,
+                "type": "bool",
+            },
+        }
+        args = copy.deepcopy(cls.common_arguments)
+        args["spec"]["options"] = spec_options
+        return args
 
 
 class SDSBVpsArguments:
@@ -1708,48 +2099,103 @@ class SDSBVpsArguments:
 
     @classmethod
     def vps(cls):
-        spec_options = {
-            "vps_name": {
-                "required": False,
+        volume_settings = {
+            "pool_id": {
+                "required": True,
                 "type": "str",
             },
-            "vps_id": {
-                "required": False,
-                "type": "str",
+            "upper_limit_for_number_of_volumes": {
+                "required": True,
+                "type": "int",
             },
-            # "id": {
-            #     "required": False,
-            #     "type": "str",
-            # },
-            # "name": {
-            #     "required": False,
-            #     "type": "str",
-            # },
-            # "upper_limit_for_number_of_user_groups": {
-            #     "required": False,
-            #     "type": "int",
-            # },
-            # "upper_limit_for_number_of_users": {
-            #     "required": False,
-            #     "type": "int",
-            # },
-            # "upper_limit_for_number_of_sessions": {
-            #     "required": False,
-            #     "type": "int",
-            # },
-            # "upper_limit_for_number_of_servers": {
-            #     "required": False,
-            #     "type": "int",
-            # },
-            # "volume_settings": {
-            #     "required": False,
-            #     "type": "list",
-            # },
+            "upper_limit_for_capacity_of_volumes_mb": {
+                "required": True,
+                "type": "int",
+            },
+            "upper_limit_for_capacity_of_single_volume_mb": {
+                "required": False,
+                "type": "int",
+            },
+            "upper_limit_for_iops_of_volume": {
+                "required": False,
+                "type": "int",
+            },
+            "upper_limit_for_transfer_rate_of_volume_mbps": {
+                "required": False,
+                "type": "int",
+            },
+            "upper_alert_allowable_time_of_volume": {
+                "required": False,
+                "type": "int",
+            },
             "capacity_saving": {
                 "required": False,
                 "type": "str",
                 "choices": ["Disabled", "Compression"],
                 "default": "Disabled",
+            },
+        }
+
+        spec_options = {
+            "id": {
+                "required": False,
+                "type": "str",
+            },
+            "name": {
+                "required": False,
+                "type": "str",
+            },
+            "upper_limit_for_number_of_user_groups": {
+                "required": False,
+                "type": "int",
+            },
+            "upper_limit_for_number_of_users": {
+                "required": False,
+                "type": "int",
+            },
+            "upper_limit_for_number_of_sessions": {
+                "required": False,
+                "type": "int",
+            },
+            "upper_limit_for_number_of_servers": {
+                "required": False,
+                "type": "int",
+            },
+            "volume_settings": {
+                "required": False,
+                "type": "list",
+                "elements": "dict",
+                "options": volume_settings,
+            },
+            "capacity_saving": {
+                "required": False,
+                "type": "str",
+                "choices": ["Disabled", "Compression"],
+                "default": "Disabled",
+            },
+            "upper_limit_for_number_of_volumes": {
+                "required": False,
+                "type": "int",
+            },
+            "upper_limit_for_capacity_of_volumes_mb": {
+                "required": False,
+                "type": "int",
+            },
+            "upper_limit_for_capacity_of_single_volume_mb": {
+                "required": False,
+                "type": "int",
+            },
+            "upper_limit_for_iops_of_volume": {
+                "required": False,
+                "type": "int",
+            },
+            "upper_limit_for_transfer_rate_of_volume_mbps": {
+                "required": False,
+                "type": "int",
+            },
+            "upper_alert_allowable_time_of_volume": {
+                "required": False,
+                "type": "int",
             },
         }
         cls.common_arguments["spec"]["options"] = spec_options
@@ -1774,7 +2220,154 @@ class SDSBVpsArguments:
         return cls.common_arguments
 
 
+class SDSBStorageSNMPSettingsArguments:
+
+    common_arguments = {
+        "connection_info": SDSBCommonParameters.get_connection_info(),
+        "spec": {
+            "required": True,
+            "type": "dict",
+            "options": {},
+        },
+    }
+
+    @classmethod
+    def storage_snmp_settings(cls):
+        cls.common_arguments["spec"]["options"] = get_snmp_settings_args()
+
+        return cls.common_arguments
+
+    @classmethod
+    def storage_snmp_settings_facts(cls):
+
+        args = copy.deepcopy(cls.common_arguments)
+        args.pop("spec")
+
+        return args
+
+
+class ProtectionDomainSettingsArgs:
+
+    common_arguments = {
+        "connection_info": SDSBCommonParameters.get_connection_info(),
+        "state": {
+            "required": False,
+            "type": "str",
+            "choices": [
+                "present",
+                "resume_drive_data_relocation",
+                "suspend_drive_data_relocation",
+            ],
+            "default": "present",
+        },
+        "spec": {
+            "required": True,
+            "type": "dict",
+            "options": {},
+        },
+    }
+
+    @classmethod
+    def protection_domain_settings(cls):
+        spec_options = {
+            "id": {
+                "required": False,
+                "type": "str",
+            },
+            "async_processing_resource_usage_rate": {
+                "required": False,
+                "type": "str",
+            },
+        }
+        cls.common_arguments["spec"]["options"] = spec_options
+        return cls.common_arguments
+
+    @classmethod
+    def protection_domain_settings_facts(cls):
+        spec_options = {
+            "id": {
+                "required": False,
+                "type": "str",
+            },
+        }
+        args = copy.deepcopy(cls.common_arguments)
+        args["spec"]["options"] = spec_options
+        args.pop("state")
+        return args
+
+
+class SpareNodeArgs:
+
+    common_arguments = {
+        "connection_info": SDSBCommonParameters.get_connection_info(),
+        "state": {
+            "required": False,
+            "type": "str",
+            "choices": ["present", "absent"],
+            "default": "present",
+        },
+        "spec": {
+            "required": True,
+            "type": "dict",
+            "options": {},
+        },
+    }
+
+    @classmethod
+    def spare_node(cls):
+        spec_options = {
+            "id": {
+                "required": False,
+                "type": "str",
+            },
+            "fault_domain_id": {
+                "required": False,
+                "type": "str",
+            },
+            "control_port_ipv4_address": {
+                "required": False,
+                "type": "str",
+            },
+            "setup_user_password": {
+                "required": False,
+                "type": "str",
+                "no_log": True,
+            },
+            "bmc_name": {
+                "required": False,
+                "type": "str",
+            },
+            "bmc_user": {
+                "required": False,
+                "type": "str",
+            },
+            "bmc_password": {
+                "required": False,
+                "type": "str",
+                "no_log": True,
+            },
+        }
+        cls.common_arguments["spec"]["options"] = spec_options
+        return cls.common_arguments
+
+    @classmethod
+    def spare_node_facts(cls):
+        spec_options = {
+            "id": {
+                "required": False,
+                "type": "str",
+            },
+        }
+        args = copy.deepcopy(cls.common_arguments)
+        args["spec"]["options"] = spec_options
+        args["spec"]["required"] = False
+        args.pop("state")
+        return args
+
+
 # Validator functions
+
+
 class SDSBSpecValidators:
 
     @staticmethod
@@ -1853,6 +2446,15 @@ class SDSBSpecValidators:
             raise ValueError(SDSBEventLogValidationMsg.BOTH_SEVERITY_SPECIFIED.value)
 
     @staticmethod
+    def validate_storage_node_bmc_access_setting_spec(spec):
+        if spec.name is None and spec.id is None:
+            raise ValueError(SDSBBmcConnectionValidationMsg.BOTH_ID_AND_NAME_NONE.value)
+        if spec.bmc_name is None or spec.bmc_user is None:
+            raise ValueError(
+                SDSBBmcConnectionValidationMsg.BOTH_BMC_NAME_AND_USERNAME_REQD.value
+            )
+
+    @staticmethod
     def validate_storage_pool_spec(spec):
         if spec.name is None and spec.id is None:
             raise ValueError(SDSBStoragePoolValidationMsg.BOTH_ID_AND_NAME_NONE.value)
@@ -1866,7 +2468,8 @@ class SDSBSpecValidators:
                 )
         if (
             spec
-            and spec.rebuild_capacity_policy and spec.rebuild_capacity_policy == "Fixed"
+            and spec.rebuild_capacity_policy
+            and spec.rebuild_capacity_policy == "Fixed"
             and spec.number_of_tolerable_drive_failures is None
         ):
             raise ValueError(
@@ -1889,6 +2492,11 @@ class SDSBSpecValidators:
             )
         # if spec.number_of_storage_nodes is None and spec.number_of_drives is None and spec.number_of_tolerable_drive_failures is None:
         #     raise ValueError(SDSBEstimatedCapacityValidateMsg.ONE_INPUT_NEEDED.value)
+
+    @staticmethod
+    def validate_pd_fact_spec(spec):
+        if spec.id is not None and not is_valid_uuid(spec.id):
+            raise ValueError(SDSBClusterValidationMsg.INVALID_PD_ID.value)
 
 
 def camel_to_snake(name):
@@ -1916,3 +2524,16 @@ def replace_nulls(obj):
         return ""
     else:
         return obj
+
+
+def is_valid_uuid(val):
+    import re
+
+    pattern = re.compile(
+        r"^[0-9a-fA-F]{8}-"
+        r"[0-9a-fA-F]{4}-"
+        r"[1-5][0-9a-fA-F]{3}-"
+        r"[89abAB][0-9a-fA-F]{3}-"
+        r"[0-9a-fA-F]{12}$"
+    )
+    return bool(pattern.fullmatch(val))

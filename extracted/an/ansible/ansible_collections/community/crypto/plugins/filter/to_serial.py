@@ -39,9 +39,10 @@ _value:
   type: string
 """
 
-import typing as t
+from collections.abc import Callable
 
 from ansible.errors import AnsibleFilterError
+
 from ansible_collections.community.crypto.plugins.module_utils._serial import to_serial
 
 
@@ -63,7 +64,7 @@ def to_serial_filter(serial_int: int) -> str:
 class FilterModule:
     """Ansible jinja2 filters"""
 
-    def filters(self) -> dict[str, t.Callable]:
+    def filters(self) -> dict[str, Callable]:
         return {
             "to_serial": to_serial_filter,
         }

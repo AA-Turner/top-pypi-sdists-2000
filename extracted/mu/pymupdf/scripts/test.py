@@ -162,10 +162,17 @@ Command line args:
     --graal
         Use graal - run inside a Graal VM instead of a Python venv.
         
-        As of 2025-08-04 we:
-        * Clone the latest pyenv and build it.
-        * Use pyenv to install graalpy.
-        * Use graalpy to create venv.
+        As of 2025-08-04, if specified:
+        * We assert-fail if cibw and non-cibw commands are specified.
+        * If `cibw` is specified:
+            * We use a conventional venv.
+            * We set CIBW_ENABLE=graalpy.
+            * We set CIBW_BUILD = 'gp*'.
+        * Otherwise:
+            * We don't create a conventional venv.
+            * Clone the latest pyenv and build it.
+            * Use pyenv to install graalpy.
+            * Use graalpy to create venv.
         
         [After the first time, suggest `-v 1` to avoid delay from
         updating/building pyenv and recreating the graal venv.]
@@ -652,6 +659,12 @@ def main(argv):
             # Rerun ourselves inside a venv if not already in a venv.
             if not venv_in():
                 if graal:
+                    if 'cibw' in commands:
+                        # We don't create graal/pyenv so wheel/build commands
+                        # will not work.
+                        assert 'wheel' not in commands
+                        assert 'build' not in commands
+                if graal and 'cibw' not in commands:
                     # 2025-07-24: We need the latest pyenv.
                     graalpy = 'graalpy-24.2.1'
                     venv_name = f'venv-pymupdf-{graalpy}'
@@ -725,6 +738,7 @@ def main(argv):
                     cibw_test_project,
                     cibw_test_project_setjmp,
                     cibw_skip_add_defaults,
+                    graal,
                     )
         
         elif command == 'install':
@@ -877,6 +891,7 @@ def cibuildwheel(
         cibw_test_project,
         cibw_test_project_setjmp,
         cibw_skip_add_defaults,
+        graal,
         ):
     
     if cibw_sdist and platform.system() == 'Linux':
@@ -935,7 +950,10 @@ def cibuildwheel(
     CIBW_BUILD = env_extra.get('CIBW_BUILD')
     log(f'{CIBW_BUILD=}')
     if CIBW_BUILD is None:
-        if cibw_pyodide:
+        if graal:
+            CIBW_BUILD = 'gp*'
+            env_extra['CIBW_ENABLE'] = 'graalpy'
+        elif cibw_pyodide:
             # Using python-3.13 fixes problems with MuPDF's setjmp/longjmp.
             CIBW_BUILD = 'cp313*'
         elif os.environ.get('GITHUB_ACTIONS') == 'true':
@@ -978,23 +996,9 @@ def cibuildwheel(
                 )
         return
     
-    # Build for lowest (assumed first) Python version.
-    #
-    CIBW_BUILD_0 = CIBW_BUILD.split()[0]
-    log(f'Building for first Python version {CIBW_BUILD_0}.')
-    env_extra['CIBW_BUILD'] = CIBW_BUILD_0
-    run(f'cd {pymupdf_dir} && cibuildwheel{cibw_pyodide_args}', env_extra=env_extra)
-
-    # Tell cibuildwheel to build and test all specified Python versions; it
-    # will notice that the wheel we built above supports all versions of
-    # Python, so will not actually do any builds here.
-    #
-    # We only do this if there are more than one Python versions. This still
-    # duplicates the testing of the first python version.
-    if len(CIBW_BUILD.split()) > 1:
-        env_extra['CIBW_BUILD'] = CIBW_BUILD
-        run(f'cd {pymupdf_dir} && cibuildwheel{cibw_pyodide_args}', env_extra=env_extra)
-        run(f'ls -ld {pymupdf_dir}/wheelhouse/*')
+    env_extra['CIBW_BUILD'] = CIBW_BUILD
+    run(f'cd {pymupdf_dir} && cibuildwheel{cibw_pyodide_args}', env_extra=env_extra, prefix='cibw: ')
+    run(f'ls -ld {pymupdf_dir}/wheelhouse/*')
 
 
 def cibw_do_test_project(
@@ -1156,7 +1160,10 @@ def cibw_do_test_project(
     env_extra['CIBW_TEST_COMMAND'] = CIBW_TEST_COMMAND
     #env_extra['CIBW_TEST_COMMAND'] = ''
     
-    run(f'cd {testdir} && cibuildwheel --output-dir ../wheelhouse{cibw_pyodide_args}', env_extra=env_extra)
+    run(f'cd {testdir} && cibuildwheel --output-dir ../wheelhouse{cibw_pyodide_args}',
+            env_extra=env_extra,
+            prefix='cibw: ',
+            )
     run(f'ls -ldt {pymupdf_dir_abs}/wheelhouse/*')
         
 

@@ -78,6 +78,14 @@ options:
         description: Will delete the volumes that are not attached to any compute node.
         type: bool
         required: false
+      vps_id:
+        description: The ID of the VPS where the compute node will be created.
+        type: str
+        required: false
+      vps_name:
+        description: The name of the VPS where the compute node will be created.
+        type: str
+        required: false
 """
 
 EXAMPLES = """
@@ -338,7 +346,7 @@ class SDSBComputeNodeManager:
 
         response = {
             "changed": self.connection_info.changed,
-            "data": compute_node_data_extracted,
+            "compute_nodes": compute_node_data_extracted,
         }
         if registration_message:
             response["user_consent_required"] = registration_message

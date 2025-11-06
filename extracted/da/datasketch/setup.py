@@ -39,11 +39,11 @@ setup(
         'Topic :: Database',
         'Topic :: Scientific/Engineering :: Information Analysis',
         'License :: OSI Approved :: MIT License',
-        'Programming Language :: Python :: 3.7',
         'Programming Language :: Python :: 3.8',
         'Programming Language :: Python :: 3.9',
         'Programming Language :: Python :: 3.10',
         'Programming Language :: Python :: 3.11',
+        'Programming Language :: Python :: 3.12',
     ],
     keywords='database datamining',
     packages=find_packages(include=['datasketch*']),
@@ -57,6 +57,10 @@ setup(
         ],
         'redis': [
             'redis>=2.10.0',
+        ],
+        'bloom': [
+            'pybloomfilter3>=0.7.2 ; python_version>="3.9"',
+            'pybloomfiltermmap3==0.6.0 ; python_version<"3.9"',
         ],
         'benchmark': [
             'pyhash>=0.9.3',
@@ -80,8 +84,8 @@ setup(
             'pytest',
         ],
         'experimental_aio': [
-            "aiounittest ; python_version>='3.6'",
-            "motor ; python_version>='3.6'",
+            "aiounittest ; python_version>='3.8'",
+            "motor>3.6.0 ; python_version>='3.8'",
         ],
     },
 )

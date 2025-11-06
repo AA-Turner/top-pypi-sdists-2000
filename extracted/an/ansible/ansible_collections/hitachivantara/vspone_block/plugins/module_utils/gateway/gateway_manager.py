@@ -12,6 +12,7 @@ import os
 import mimetypes
 
 try:
+    from ..common.ansible_common import mask_token
     from ..common.hv_api_constants import API
     from ..common.hv_log import Log
     from ..common.vsp_constants import Endpoints
@@ -19,6 +20,7 @@ try:
     from .vsp_session_manager import SessionManager
     from ..model.common_base_models import ConnectionInfo
 except ImportError:
+    from common.ansible_common import mask_token
     from common.hv_api_constants import API
     from common.hv_log import Log
     from common.vsp_constants import Endpoints
@@ -62,6 +64,9 @@ class ConnectionManager(ABC):
         """get job method"""
         return {}
 
+    def _process_job_till_running_state(self, job_id):
+        pass
+
     def _load_response(self, response, download=False):
         """returns dict if json, native string otherwise"""
         # logger.writeException("response = {}", response)
@@ -99,6 +104,10 @@ class ConnectionManager(ABC):
             headers = {
                 "Content-Length": 0,
             }
+        elif headers_input and headers_input.get("Content-Length") == 0:
+            headers = {
+                "Content-Length": 0,
+            }
         else:
             headers = {
                 "Accept": "application/json",
@@ -108,14 +117,14 @@ class ConnectionManager(ABC):
             if headers_input is not None:
                 headers.update(headers_input)
 
-        if data is not None:
+        if data is not None and headers.get("Content-Type") == "application/json":
             data = json.dumps(data)
-            x = url.endswith("chap-users")
+            x = url.endswith("chap-users") or url.endswith("password")
             if not x:
                 logger.writeDebug("data = {}", data)
 
-        logger.writeDebug("method = {}", method)
-        logger.writeDebug("headers = {}", headers)
+        logger.writeDebug("method = {} URL ={}", method, url)
+        logger.writeDebug("headers_input = {}", headers)
 
         MAX_TIME_OUT = 300
 
@@ -219,7 +228,7 @@ class ConnectionManager(ABC):
         logger.writeDebug("resourceId = {}", resourceId)
         return resourceId
 
-    def post(self, endpoint, data, headers_input=None):
+    def post(self, endpoint, data, headers_input=None, long_running=None):
 
         post_response = self._make_request(
             method="POST", end_point=endpoint, data=data, headers_input=headers_input
@@ -228,7 +237,10 @@ class ConnectionManager(ABC):
         if API.JOB_ID not in post_response:
             return post_response
         job_id = post_response[API.JOB_ID]
-        return self._process_job(job_id)
+        if long_running is None or long_running is False:
+            return self._process_job(job_id)
+        else:
+            return self._process_job_till_running_state(job_id)
 
     def post_wo_job(self, endpoint, data, headers_input=None):
 
@@ -327,60 +339,12 @@ class SDSBConnectionManager(ConnectionManager):
                 retry_count = retry_count + 1
                 time.sleep(1)
 
-    # Construct multipart/form-data body manually
-    # def build_multipart_form_data(self, setup_user_password, csv_path=None, exported_config_file=None):
-    #     csv_content = None
-    #     exported_content = None
-
-    #     if csv_path:
-    #         # Read CSV content
-    #         with open(csv_path, "rb") as f:
-    #             csv_content = f.read()
-
-    #     if exported_config_file:
-    #         # Read exported config file content
-    #         with open(exported_config_file, "rb") as f2:
-    #             exported_content = f2.read()
-
-    #     # Random boundary string
-    #     lines = []
-
-    #     # Text field
-    #     lines.append(f"--{self.boundary}")
-    #     lines.append('Content-Disposition: form-data; name="setupUserPassword"')
-    #     lines.append("")
-    #     lines.append(setup_user_password)
-
-    #     # File field
-    #     if csv_path:
-    #         filename = os.path.basename(csv_path)
-    #         content_type = mimetypes.guess_type(filename)[0] or "application/octet-stream"
-    #         lines.append(f"--{self.boundary}")
-    #         lines.append(
-    #             f'Content-Disposition: form-data; name="configurationFile"; filename="{filename}"'
-    #         )
-    #         lines.append(f"Content-Type: {content_type}")
-    #         lines.append("")
-    #         lines.append(csv_content.decode("utf-8", errors="replace"))
-
-    #     if exported_config_file:
-    #         filename = os.path.basename(exported_config_file)
-    #         content_type = mimetypes.guess_type(filename)[0] or "application/octet-stream"
-    #         lines.append(f"--{self.boundary}")
-    #         lines.append(
-    #             f'Content-Disposition: form-data; name="exportedConfigurationFile"; filename="{filename}"'
-    #         )
-    #         lines.append(f"Content-Type: {content_type}")
-    #         lines.append("")
-    #         lines.append(exported_content.decode("utf-8", errors="replace"))
-
-    #     # Final boundary
-    #     lines.append(f"--{self.boundary}--")
-    #     lines.append("")
-    #     return "\r\n".join(lines).encode("utf-8")
-
     def build_multipart_form_data(
-        self, setup_user_password, csv_path=None, exported_config_file=None
+        self,
+        setup_user_password=None,
+        csv_path=None,
+        exported_config_file=None,
+        vm_configuration_file_s3_uri=None,
     ):
         boundary = self.boundary.encode("utf-8")
         body = bytearray()
@@ -409,7 +373,11 @@ class SDSBConnectionManager(ConnectionManager):
             body.extend(b"\r\n")
 
         # Add text field
-        add_field("setupUserPassword", setup_user_password)
+        if setup_user_password:
+            add_field("setupUserPassword", setup_user_password)
+
+        if vm_configuration_file_s3_uri:
+            add_field("vmConfigurationFileS3Uri", vm_configuration_file_s3_uri)
 
         # Add files
         if csv_path:
@@ -427,17 +395,134 @@ class SDSBConnectionManager(ConnectionManager):
 
         return bytes(body)
 
+    def upload_file(
+        self, end_point, file_to_upload, file_parameter_name, monitor_job=False
+    ):
+        response = self.upload_software_update_file(
+            end_point, file_to_upload, file_parameter_name
+        )
+        if response:
+            decoded = response.decode("utf-8")
+            data = json.loads(decoded)
+            job_id = data.get("jobId")
+            if monitor_job:
+                self._process_job(job_id)
+            return job_id
+
+    def upload_software_update_file(
+        self, end_point, software_update_file, file_parameter_name=None
+    ):
+        import os
+        import mimetypes
+        import http.client
+        import ssl
+        from urllib.parse import urlparse
+
+        try:
+            url = urlparse(self.base_url + "/" + end_point)
+            logger.writeDebug(
+                "Uploading software update file to URL = {}", url.geturl()
+            )
+
+            boundary = "----WebKitFormBoundary7MA4YWxkTrZu0gW"
+            filename = os.path.basename(software_update_file)
+            content_type = (
+                mimetypes.guess_type(filename)[0] or "application/octet-stream"
+            )
+            if file_parameter_name is None:
+                file_parameter_name = "softwareUpdateFile"
+
+            # Build multipart preamble and closing
+            preamble = (
+                f"--{boundary}\r\n"
+                f'Content-Disposition: form-data; name="{file_parameter_name}"; filename="{filename}"\r\n'
+                f"Content-Type: {content_type}\r\n\r\n"
+            ).encode("utf-8")
+            closing = f"\r\n--{boundary}--\r\n".encode("utf-8")
+
+            file_size = os.path.getsize(software_update_file)
+            total_length = len(preamble) + file_size + len(closing)
+
+            headers = {
+                "Content-Type": f"multipart/form-data; boundary={boundary}",
+                "Content-Length": str(total_length),
+            }
+
+            # Pick connection type
+            if url.scheme == "https":
+                context = ssl._create_unverified_context()  # nosec
+                # ignores cert validation like open_url(validate_certs=False)
+                conn = http.client.HTTPSConnection(
+                    url.hostname, url.port or 443, context=context, timeout=3000
+                )
+            else:
+                conn = http.client.HTTPConnection(
+                    url.hostname, url.port or 80, timeout=3000
+                )
+
+            # Send request headers
+            conn.putrequest("POST", url.path or "/")
+            for k, v in headers.items():
+                conn.putheader(k, v)
+            if self.username and self.password:
+                import base64
+
+                creds = f"{self.username}:{self.password}".encode("utf-8")
+                auth_header = "Basic " + base64.b64encode(creds).decode("utf-8")
+                conn.putheader("Authorization", auth_header)
+            conn.endheaders()
+
+            # Send preamble
+            conn.send(preamble)
+
+            # Send file in chunks
+            with open(software_update_file, "rb") as f:
+                for chunk in iter(lambda: f.read(8192), b""):
+                    conn.send(chunk)
+
+            # Send closing
+            conn.send(closing)
+
+            # Get response
+            response = conn.getresponse()
+            resp_body = response.read()
+            logger.writeDebug(
+                "upload_software_update_file response: status={}, body={}",
+                response.status,
+                resp_body,
+            )
+
+            if response.status not in (200, 201, 202, 204):
+                raise Exception(
+                    f"Failed upload: status={response.status}, body={resp_body}"
+                )
+
+            return resp_body
+
+        except Exception as err:
+            logger.writeException(err)
+            raise err
+        finally:
+            try:
+                conn.close()
+            except Exception:
+                pass
+
     def add_storage_node(
         self,
         end_point,
-        setup_user_password,
+        setup_user_password=None,
         config_file=None,
         exported_config_file=None,
+        vm_configuration_file_s3_uri=None,
     ):
 
         # Encode form data
         body = self.build_multipart_form_data(
-            setup_user_password, config_file, exported_config_file
+            setup_user_password,
+            config_file,
+            exported_config_file,
+            vm_configuration_file_s3_uri,
         )
 
         # Headers
@@ -479,16 +564,10 @@ class SDSBConnectionManager(ConnectionManager):
         if headers_input is not None:
             headers.update(headers_input)
 
-        # if data is not None:
-        #     data = json.dumps(data)
-        #     x = url.endswith("chap-users")
-        #     if not x:
-        #         logger.writeDebug("data = {}", data)
-
         logger.writeDebug("method = {}", method)
         logger.writeDebug("headers = {}", headers)
 
-        MAX_TIME_OUT = 300
+        MAX_TIME_OUT = 3000
 
         try:
             response = open_url(
@@ -518,7 +597,9 @@ class SDSBConnectionManager(ConnectionManager):
                     )
                     time.sleep(300)
                     self.retryCount += 1
-                    return self._make_request(method, end_point, data)
+                    return self._make_request_for_file(
+                        method, end_point, data, headers, download
+                    )
                 else:
                     if hasattr(err, "read"):
                         error_resp = json.loads(err.read().decode())
@@ -548,7 +629,7 @@ class SDSBConnectionManager(ConnectionManager):
             # raise Exception(error_msg, response.status)
             raise Exception(error_msg)
 
-        # logger.writeDebug(f"response = {response}")
+        logger.writeDebug(f"response = {response}")
         return self._load_response(response, download)
 
 
@@ -588,7 +669,9 @@ class VSPConnectionManager(ConnectionManager):
         session_id = response.get(API.SESSION_ID)
         token = response.get(API.TOKEN)
         logger.writeDebug(
-            "get_lock_session_token session id = {} token = {}", session_id, token
+            "get_lock_session_token session id = {} token = {}",
+            session_id,
+            mask_token(token),
         )
         return session_id, token
 
@@ -737,7 +820,15 @@ class VSPConnectionManager(ConnectionManager):
         job_id = delete_response[API.JOB_ID]
         return self._process_job(job_id)
 
-    def post(self, endpoint, data, headers_input=None, token=None, timeout=None):
+    def post(
+        self,
+        endpoint,
+        data,
+        headers_input=None,
+        long_running=None,
+        token=None,
+        timeout=None,
+    ):
 
         post_response = self._make_vsp_request(
             method="POST",
@@ -749,7 +840,10 @@ class VSPConnectionManager(ConnectionManager):
         )
         logger.writeDebug("post_response = {}", post_response)
         job_id = post_response[API.JOB_ID]
-        return self._process_job(job_id)
+        if long_running is None or long_running is False:
+            return self._process_job(job_id)
+        else:
+            return self._process_job_till_running_state(job_id)
 
     def post_without_job(
         self, endpoint, data, headers_input=None, token=None, timeout=None
@@ -802,7 +896,7 @@ class VSPConnectionManager(ConnectionManager):
     ):
 
         logger.writeDebug(
-            f"VSPConnectionManager._make_vsp_request token= {token} self.token = {self.token}"
+            f"VSPConnectionManager._make_vsp_request token= {mask_token(token)} self.token = {mask_token(self.token)}"
         )
 
         url = self.base_url + "/" + end_point
@@ -823,8 +917,8 @@ class VSPConnectionManager(ConnectionManager):
         if headers_input is not None:
             headers.update(headers_input)
 
-        logger.writeDebug("url = {}", url)
-        logger.writeDebug("headers = {}", headers)
+        logger.writeDebug("method = {} URL = {}", method, url)
+        # logger.writeDebug("headers = {}", headers)
 
         if timeout:
             TIME_OUT = timeout
@@ -891,7 +985,11 @@ class VSPConnectionManager(ConnectionManager):
                     if error_resp.get("solution"):
                         error_dtls = error_dtls + " " + error_resp.get("solution")
 
-                    if error_dtls and self.session_expired_msg in error_dtls and self.retryCount < 5:
+                    if (
+                        error_dtls
+                        and self.session_expired_msg in error_dtls
+                        and self.retryCount < 5
+                    ):
                         logger.writeDebug(
                             "The specified token is invalid, trying to re-authenticate."
                         )

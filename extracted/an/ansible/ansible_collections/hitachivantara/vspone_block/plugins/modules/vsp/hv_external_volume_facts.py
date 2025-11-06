@@ -44,12 +44,12 @@ options:
     required: false
     suboptions:
       external_storage_serial:
-        description: The external storage serial number.
+        description: The external storage serial number. Required for the Get all external volume for specific ldev_id task.
         type: str
         required: false
       external_ldev_id:
-        description: The external LDEV ID.
-        type: int
+        description: The external LDEV ID. Required for the Get all external volume for specific ldev_id task.
+        type: str
         required: false
 
 """

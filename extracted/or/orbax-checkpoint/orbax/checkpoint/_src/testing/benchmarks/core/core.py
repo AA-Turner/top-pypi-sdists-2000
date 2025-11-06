@@ -185,10 +185,13 @@ class Benchmark(abc.ABC):
             f"[process_id={multihost.process_index()}], {test_context_summary}"
         )
       logging.error(
-          "[process_id=%s] Test function '%s' raised an exception: %s",
+          "[process_id=%s] Test function '%s' context: %s, raised an"
+          " exception: %s",
           multihost.process_index(),
           self.name,
+          test_context_summary,
           e,
+          exc_info=True,
       )
       result = TestResult(metrics=metric_lib.Metrics(), error=e)
     result.metrics.name = self.name

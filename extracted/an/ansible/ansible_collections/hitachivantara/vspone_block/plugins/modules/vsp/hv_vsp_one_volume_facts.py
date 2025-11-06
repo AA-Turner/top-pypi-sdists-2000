@@ -28,6 +28,10 @@ attributes:
     support: full
 extends_documentation_fragment:
   - hitachivantara.vspone_block.common.connection_info
+notes:
+- With each request, you can obtain information about a maximum of 500 volumes.
+- To obtain information about additional volumes, execute the ansible task multiple times by using a combination of the count and start_volume_id parameters.
+- By specifying the count parameter, you can also filter the volume information you require.
 options:
   spec:
     description: Specification for the volume task.
@@ -73,7 +77,7 @@ options:
       start_volume_id:
         description: Starting volume ID.
         required: false
-        type: int
+        type: str
       count:
         description: Number of volumes.
         required: false
@@ -81,7 +85,7 @@ options:
       volume_id:
         description: ID of the volume.
         required: false
-        type: int
+        type: str
 """
 
 EXAMPLES = """
@@ -92,7 +96,7 @@ EXAMPLES = """
       username: "admin"
       password: "password"
     spec:
-      pool_id: 101
+      pool_id: 1
 
 - name: Get facts for volumes in a specific pool by pool_name
   hitachivantara.vspone_block.vsp.hv_vsp_one_volume_facts:
@@ -176,6 +180,9 @@ ansible_facts:
         id:
           description: ID of the volume.
           type: int
+        id_hex:
+          description: ID of the volume in hexadecimal.
+          type: str
         nickname:
           description: Nickname of the volume.
           type: str
@@ -206,8 +213,8 @@ ansible_facts:
         reserved_capacity:
           description: Reserved capacity of the volume.
           type: int
-        saving_setting:
-          description: Saving setting (e.g., COMPRESSION).
+        capacity_saving:
+          description: Capacity saving setting (e.g., COMPRESSION).
           type: str
         capacity_saving_status:
           description: Capacity saving status.

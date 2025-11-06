@@ -156,9 +156,11 @@ _value:
 import base64
 import binascii
 import typing as t
+from collections.abc import Callable
 
 from ansible.errors import AnsibleFilterError
 from ansible.module_utils.common.text.converters import to_bytes, to_text
+
 from ansible_collections.community.crypto.plugins.module_utils._crypto.basic import (
     OpenSSLObjectError,
 )
@@ -220,7 +222,7 @@ def x509_crl_info_filter(
 class FilterModule:
     """Ansible jinja2 filters"""
 
-    def filters(self) -> dict[str, t.Callable]:
+    def filters(self) -> dict[str, Callable]:
         return {
             "x509_crl_info": x509_crl_info_filter,
         }

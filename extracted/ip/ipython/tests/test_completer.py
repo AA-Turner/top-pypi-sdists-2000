@@ -1481,9 +1481,14 @@ class TestCompleter(unittest.TestCase):
         sys.modules["my.unsafe.lib"] = unsafe_lib
         exec(factory_code, unsafe_lib.__dict__)
 
+        fake_safe_lib = types.ModuleType("my_fake_lib")
+        sys.modules["my_fake_lib"] = fake_safe_lib
+        exec(factory_code, fake_safe_lib.__dict__)
+
         ip = get_ipython()
         ip.user_ns["safe_list_factory"] = safe_lib.ListFactory()
         ip.user_ns["unsafe_list_factory"] = unsafe_lib.ListFactory()
+        ip.user_ns["fake_safe_factory"] = fake_safe_lib.ListFactory()
         complete = ip.Completer.complete
         with (
             evaluation_policy("limited", allowed_getattr_external={"my.safe.lib"}),
@@ -1506,6 +1511,8 @@ class TestCompleter(unittest.TestCase):
             self.assertIn(".append", matches)
             _, matches = complete(line_buffer="unsafe_list_factory.example.")
             self.assertIn(".append", matches)
+            _, matches = complete(line_buffer="fake_safe_factory.example.")
+            self.assertNotIn(".append", matches)
 
         with (
             evaluation_policy("limited"),
@@ -1515,6 +1522,56 @@ class TestCompleter(unittest.TestCase):
             self.assertNotIn(".append", matches)
             _, matches = complete(line_buffer="unsafe_list_factory.example.")
             self.assertNotIn(".append", matches)
+
+    def test_completion_allow_subclass_of_trusted_module(self):
+        factory_code = textwrap.dedent(
+            """
+            class ListFactory:
+                def __getattr__(self, attr):
+                    return []
+            """
+        )
+        trusted_lib = types.ModuleType("my.trusted.lib")
+        sys.modules["my.trusted.lib"] = trusted_lib
+        exec(factory_code, trusted_lib.__dict__)
+
+        ip = get_ipython()
+        # Create a subclass in __main__ (untrusted namespace)
+        subclass_code = textwrap.dedent(
+            """
+            class SubclassFactory(trusted_lib.ListFactory):
+                pass
+            """
+        )
+        ip.user_ns["trusted_lib"] = trusted_lib
+        exec(subclass_code, ip.user_ns)
+        ip.user_ns["subclass_factory"] = ip.user_ns["SubclassFactory"]()
+        complete = ip.Completer.complete
+        with (
+            evaluation_policy("limited", allowed_getattr_external={"my.trusted.lib"}),
+            jedi_status(False),
+        ):
+            _, matches = complete(line_buffer="subclass_factory.example.")
+            self.assertIn(".append", matches)
+
+        # Test that overriding __getattr__ in subclass in untrusted namespace prevents completion
+        overriding_subclass_code = textwrap.dedent(
+            """
+            class OverridingSubclass(trusted_lib.ListFactory):
+                def __getattr__(self, attr):
+                    return {}
+            """
+        )
+        exec(overriding_subclass_code, ip.user_ns)
+        ip.user_ns["overriding_factory"] = ip.user_ns["OverridingSubclass"]()
+
+        with (
+            evaluation_policy("limited", allowed_getattr_external={"my.trusted.lib"}),
+            jedi_status(False),
+        ):
+            _, matches = complete(line_buffer="overriding_factory.example.")
+            self.assertNotIn(".append", matches)
+            self.assertNotIn(".keys", matches)
 
     def test_policy_warnings(self):
         with self.assertWarns(
@@ -2023,6 +2080,31 @@ class TestCompleter(unittest.TestCase):
         [
             "\n".join(
                 [
+                    "class NotYetDefined:",
+                    "    def my_method(self):",
+                    "        return []",
+                    "my_instance = NotYetDefined()",
+                    "my_instance.my_method().",
+                ]
+            ),
+            "append",
+        ],
+        [
+            "\n".join(
+                [
+                    "class NotYetDefined:",
+                    "    @property",
+                    "    def my_property(self):",
+                    "        return 1.1",
+                    "my_instance = NotYetDefined()",
+                    "my_instance.my_property.",
+                ]
+            ),
+            "as_integer_ratio",
+        ],
+        [
+            "\n".join(
+                [
                     "my_instance = 1.1",
                     "assert my_instance.",
                 ]
@@ -2039,6 +2121,380 @@ class TestCompleter(unittest.TestCase):
             ),
             "as_integer_ratio",
         ],
+        [
+            "\n".join(
+                [
+                    "def my_test():",
+                    "    return {}",
+                    "my_test().",
+                ]
+            ),
+            "keys",
+        ],
+        [
+            "\n".join(
+                [
+                    "l = []",
+                    "def my_test():",
+                    "    return l",
+                    "my_test().",
+                ]
+            ),
+            "append",
+        ],
+        [
+            "\n".join(
+                [
+                    "num = {1: 'one'}",
+                    "num[2] = 'two'",
+                    "num.",
+                ]
+            ),
+            "keys",
+        ],
+        [
+            "\n".join(
+                [
+                    "num = {1: 'one'}",
+                    "num[2] = ['two']",
+                    "num[2].",
+                ]
+            ),
+            "append",
+        ],
+        [
+            "\n".join(
+                [
+                    "l = []",
+                    "class NotYetDefined:",
+                    "    def my_method(self):",
+                    "        return l",
+                    "my_instance = NotYetDefined()",
+                    "my_instance.my_method().",
+                ]
+            ),
+            "append",
+        ],
+        [
+            "\n".join(
+                [
+                    "def string_or_int(flag):",
+                    "    if flag:",
+                    "        return 'test'",
+                    "    return 1",
+                    "string_or_int().",
+                ]
+            ),
+            ["capitalize", "as_integer_ratio"],
+        ],
+        [
+            "\n".join(
+                [
+                    "def foo():",
+                    "    l = []",
+                    "    return l",
+                    "foo().",
+                ]
+            ),
+            "append",
+        ],
+        [
+            "\n".join(
+                [
+                    "class NotYetDefined:",
+                    "    def __init__(self):",
+                    "        self.test = []",
+                    "instance = NotYetDefined()",
+                    "instance.",
+                ]
+            ),
+            "test",
+        ],
+        [
+            "\n".join(
+                [
+                    "class NotYetDefined:",
+                    "    def __init__(instance):",
+                    "        instance.test = []",
+                    "instance = NotYetDefined()",
+                    "instance.test.",
+                ]
+            ),
+            "append",
+        ],
+        [
+            "\n".join(
+                [
+                    "class NotYetDefined:",
+                    "    def __init__(this):",
+                    "        this.test:str = []",
+                    "instance = NotYetDefined()",
+                    "instance.test.",
+                ]
+            ),
+            "capitalize",
+        ],
+        [
+            "\n".join(
+                [
+                    "l = []",
+                    "class NotYetDefined:",
+                    "    def __init__(me):",
+                    "        me.test = l",
+                    "instance = NotYetDefined()",
+                    "instance.test.",
+                ]
+            ),
+            "append",
+        ],
+        [
+            "\n".join(
+                [
+                    "class NotYetDefined:",
+                    "    def test(self):",
+                    "        self.l = []",
+                    "        return self.l",
+                    "instance = NotYetDefined()",
+                    "instance.test().",
+                ]
+            ),
+            "append",
+        ],
+        [
+            "\n".join(
+                [
+                    "class NotYetDefined:",
+                    "    def test():",
+                    "        return []",
+                    "instance = NotYetDefined()",
+                    "instance.test().",
+                ]
+            ),
+            "append",
+        ],
+        [
+            "\n".join(
+                [
+                    "def foo():",
+                    "    if some_condition:",
+                    "        return {'top':{'mid':{'leaf': 2}}}",
+                    "    return {'top': {'mid':[]}}",
+                    "foo()['top']['mid'].",
+                ]
+            ),
+            ["keys", "append"],
+        ],
+        [
+            "\n".join(
+                [
+                    "def foo():",
+                    "    if some_condition:",
+                    "        return {'top':{'mid':{'leaf': 2}}}",
+                    "    return {'top': {'mid':[]}}",
+                    "foo()['top']['mid']['leaf'].",
+                ]
+            ),
+            "as_integer_ratio",
+        ],
+        [
+            "\n".join(
+                [
+                    "async def async_func():",
+                    "    return []",
+                    "async_func().",
+                ]
+            ),
+            "cr_await",
+        ],
+        [
+            "\n".join(
+                [
+                    "async def async_func():",
+                    "    return []",
+                    "(await async_func()).",
+                ]
+            ),
+            "append",
+        ],
+        [
+            "\n".join(["t = []", "if some_condition:", "    t."]),
+            "append",
+        ],
+        [
+            "\n".join(
+                [
+                    "t = []",
+                    "if some_condition:",
+                    "    t = 'string'",
+                    "t.",
+                ]
+            ),
+            ["append", "capitalize"],
+        ],
+        [
+            "\n".join(
+                [
+                    "t = []",
+                    "if some_condition:",
+                    "    t = 'string'",
+                    "else:",
+                    "    t.",
+                ]
+            ),
+            "append",
+        ],
+        [
+            "\n".join(
+                [
+                    "t = []",
+                    "if some_condition:",
+                    "    t = 'string'",
+                    "else:",
+                    "    t = 1",
+                    "t.",
+                ]
+            ),
+            ["append", "capitalize", "as_integer_ratio"],
+        ],
+        [
+            "\n".join(
+                [
+                    "t = []",
+                    "if condition_1:",
+                    "    t = 'string'",
+                    "elif condition_2:",
+                    "    t = 1",
+                    "elif condition_3:",
+                    "    t.",
+                ]
+            ),
+            "append",
+        ],
+        [
+            "\n".join(
+                [
+                    "t = []",
+                    "if condition_1:",
+                    "    t = 'string'",
+                    "elif condition_2:",
+                    "    t = 1",
+                    "elif condition_3:",
+                    "    t = {}",
+                    "t.",
+                ]
+            ),
+            ["append", "capitalize", "as_integer_ratio", "keys"],
+        ],
+        [
+            "\n".join(
+                [
+                    "t = []",
+                    "if condition_1:",
+                    "    if condition_2:",
+                    "        t = 'nested'",
+                    "t.",
+                ]
+            ),
+            ["append", "capitalize"],
+        ],
+        [
+            "\n".join(
+                [
+                    "a = []",
+                    "while condition:",
+                    "    a.",
+                ]
+            ),
+            "append",
+        ],
+        [
+            "\n".join(
+                [
+                    "t = []",
+                    "while condition:",
+                    "    t = 'str'",
+                    "t.",
+                ]
+            ),
+            ["append", "capitalize"],
+        ],
+        [
+            "\n".join(
+                [
+                    "t = []",
+                    "while condition_1:",
+                    "    while condition_2:",
+                    "        t = 'str'",
+                    "t.",
+                ]
+            ),
+            ["append", "capitalize"],
+        ],
+        [
+            "\n".join(
+                [
+                    "for i in range(10):",
+                    "    i.",
+                ]
+            ),
+            "bit_length",
+        ],
+        [
+            "\n".join(
+                [
+                    "for i in range(10):",
+                    "    if i % 2 == 0:",
+                    "        i.",
+                ]
+            ),
+            "bit_length",
+        ],
+        [
+            "\n".join(
+                [
+                    "for item in ['a', 'b', 'c']:",
+                    "    item.",
+                ]
+            ),
+            "capitalize",
+        ],
+        [
+            "\n".join(
+                [
+                    "for key, value in {'a': 1, 'b': 2}.items():",
+                    "    key.",
+                ]
+            ),
+            "capitalize",
+        ],
+        [
+            "\n".join(
+                [
+                    "for key, value in {'a': 1, 'b': 2}.items():",
+                    "    value.",
+                ]
+            ),
+            "bit_length",
+        ],
+        [
+            "\n".join(
+                [
+                    "for sublist in [[1, 2], [3, 4]]:",
+                    "    sublist.",
+                ]
+            ),
+            "append",
+        ],
+        [
+            "\n".join(
+                [
+                    "for sublist in [[1, 2], [3, 4]]:",
+                    "    for item in sublist:",
+                    "        item.",
+                ]
+            ),
+            "bit_length",
+        ],
     ],
 )
 def test_undefined_variables(use_jedi, evaluation, code, insert_text):
@@ -2048,11 +2504,45 @@ def test_undefined_variables(use_jedi, evaluation, code, insert_text):
 
     with provisionalcompleter():
         completions = list(ip.Completer.completions(text=code, offset=offset))
-        match = [c for c in completions if c.text.lstrip(".") == insert_text]
-        message_on_fail = (
-            f"{insert_text} not found among {[c.text for c in completions]}"
-        )
-        assert len(match) == 1, message_on_fail
+        insert_texts = insert_text if isinstance(insert_text, list) else [insert_text]
+        for text in insert_texts:
+            match = [c for c in completions if c.text.lstrip(".") == text]
+            message_on_fail = f"{text} not found among {[c.text for c in completions]}"
+            assert len(match) == 1, message_on_fail
+
+
+@pytest.mark.parametrize(
+    "code",
+    [
+        "\n".join(
+            [
+                "def my_test() -> float:",
+                "    return 1.1",
+                "my_test().",
+            ]
+        ),
+        "\n".join(
+            [
+                "class MyClass():",
+                "    b: list[str]",
+                "x = MyClass()",
+                "x.b[0].",
+            ]
+        ),
+    ],
+)
+def test_no_file_completions_in_attr_access(code):
+    """Test that files are not suggested during attribute/method completion."""
+    with TemporaryWorkingDirectory():
+        open(".hidden", "w", encoding="utf-8").close()
+        offset = len(code)
+        for use_jedi in (True, False):
+            with provisionalcompleter(), jedi_status(use_jedi):
+                completions = list(ip.Completer.completions(text=code, offset=offset))
+                matches = [c for c in completions if c.text.lstrip(".") == "hidden"]
+                assert (
+                    len(matches) == 0
+                ), f"File '.hidden' should not appear in attribute completion"
 
 
 @pytest.mark.parametrize(

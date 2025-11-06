@@ -113,7 +113,21 @@ try:
         convert_to_bytes,
         check_range,
     )
-
+    from ..model.vsp_one_server_models import (
+        CreateServerSpec,
+        ServerFactsSpec,
+        ServerHBAFactsSpec,
+    )
+    from ..model.vsp_one_port_models import (
+        VspOnePortSpec,
+        vsp_one_port_args,
+        VspOnePortFactsSpec,
+    )
+    from ..model.vsp_one_snapshot_models import (
+        VspOneSnapshotFactSpec,
+        VspOneSnapshotSpec,
+        VspOneSnapshotGroupFactSpec,
+    )
     from ..message.vsp_lun_msgs import VSPVolValidationMsg
     from ..message.vsp_snapshot_msgs import VSPSnapShotValidateMsg
     from ..message.vsp_parity_group_msgs import VSPParityGroupValidateMsg
@@ -242,6 +256,10 @@ except ImportError:
         SNMPRequestSpec,
     )
     from model.vsp_server_priority_manager_models import SpmFactSpec, SpmSpec
+    from model.vsp_one_snapshot_models import (
+        VspOneSnapshotFactSpec,
+        VspOneSnapshotSpec,
+    )
     from common.hv_constants import ConnectionTypes, StateValue
     from common.vsp_constants import AutomationConstants
     from common.ansible_common import camel_to_snake_case, convert_to_bytes, check_range
@@ -817,8 +835,72 @@ class VSPParametersManager:
             **self.params["spec"] if self.params.get("spec") else {}
         )
 
+    def get_vsp_one_server_spec(self):
+        """
+        This method is used to get the VSP One server spec.
+        :return: VSP One server spec
+        """
+        return CreateServerSpec(**self.params["spec"])
+
+    def get_vsp_one_server_facts_spec(self):
+        """
+        This method is used to get the VSP One server facts spec.
+        :return: VSP One server facts spec
+        """
+        return ServerFactsSpec(**self.params["spec"] if self.params.get("spec") else {})
+
+    def get_vsp_server_hba_facts_spec(self):
+        """
+        This method is used to get the VSP One server HBA facts spec.
+        :return: VSP One server HBA facts spec
+        """
+        return ServerHBAFactsSpec(
+            **self.params["spec"] if self.params.get("spec") else {}
+        )
+
+    def get_vsp_one_port_spec(self):
+        """
+        This method is used to get the VSP One port spec.
+        :return: VSP One port spec
+        """
+        return VspOnePortSpec(**self.params["spec"])
+
+    def get_vsp_one_port_facts_spec(self):
+        """
+        This method is used to get the VSP One port spec.
+        :return: VSP One port spec
+        """
+        return VspOnePortFactsSpec(
+            **self.params["spec"] if self.params.get("spec") else {}
+        )
+
+    def get_vsp_one_snapshot_facts_spec(self):
+
+        return VspOneSnapshotFactSpec(
+            **self.params["spec"] if self.params.get("spec") else {}
+        )
+
+    def get_vsp_one_snapshot_spec(self):
+        """
+        This method is used to get the VSP One snapshot spec.
+        :return: VSP One server spec
+        """
+        return VspOneSnapshotSpec(**self.params["spec"])
+
+    def get_vsp_one_snapshot_group_facts_spec(self):
+        return VspOneSnapshotGroupFactSpec(
+            **self.params["spec"] if self.params.get("spec") else {}
+        )
+
+    def get_vsp_one_snapshot_group_spec(self):
+        return VspOneSnapshotGroupFactSpec(
+            **self.params["spec"] if self.params.get("spec") else {}
+        )
+
 
 # Arguments Managements ##
+
+
 class VSPCommonParameters:
 
     @staticmethod
@@ -943,15 +1025,15 @@ class VSPVolumeArguments:
         spec_options = {
             "ldev_id": {
                 "required": False,
-                "type": "int",
+                "type": "str",
             },
             "start_ldev_id": {
                 "required": False,
-                "type": "int",
+                "type": "str",
             },
             "end_ldev_id": {
                 "required": False,
-                "type": "int",
+                "type": "str",
             },
             "count": {
                 "required": False,
@@ -1057,11 +1139,11 @@ class VSPVolumeArguments:
         spec_options = {
             "ldev_id": {
                 "required": False,
-                "type": "int",
+                "type": "str",
             },
             "vldev_id": {
                 "required": False,
-                "type": "int",
+                "type": "str",
             },
             "pool_id": {
                 "required": False,
@@ -1150,11 +1232,11 @@ class VSPVolumeArguments:
             },
             "start_ldev_id": {
                 "required": False,
-                "type": "int",
+                "type": "str",
             },
             "end_ldev_id": {
                 "required": False,
-                "type": "int",
+                "type": "str",
             },
             "external_parity_group": {
                 "required": False,
@@ -1361,7 +1443,7 @@ class VSPShadowImagePairArguments:
         spec_options = {
             "primary_volume_id": {
                 "required": False,
-                "type": "int",
+                "type": "str",
             },
             "copy_group_name": {
                 "required": False,
@@ -1387,11 +1469,11 @@ class VSPShadowImagePairArguments:
         spec_options = {
             "primary_volume_id": {
                 "required": False,
-                "type": "int",
+                "type": "str",
             },
             "secondary_volume_id": {
                 "required": False,
-                "type": "int",
+                "type": "str",
             },
             "should_delete_svol": {
                 "required": False,
@@ -1520,10 +1602,6 @@ class VSPClprArguments:
 
 class VSPSnapshotArguments:
     ssi = copy.deepcopy(VSPCommonParameters.connection_info())
-    # ssi["options"].pop("api_token")
-    # ssi["options"].pop("subscriber_id")
-    # ssi["options"]["username"]["required"] = True
-    # ssi["options"]["password"]["required"] = True
     ssi["options"]["connection_type"]["choices"] = ["direct"]
 
     snapshot_image_state = VSPCommonParameters.state()
@@ -1608,7 +1686,7 @@ class VSPSnapshotArguments:
         spec_options = {
             "primary_volume_id": {
                 "required": False,
-                "type": "int",
+                "type": "str",
             },
             "mirror_unit_id": {
                 "required": False,
@@ -1626,11 +1704,11 @@ class VSPSnapshotArguments:
         spec_options = {
             "primary_volume_id": {
                 "required": True,
-                "type": "int",
+                "type": "str",
             },
             "secondary_volume_id": {
                 "required": False,
-                "type": "int",
+                "type": "str",
             },
             "pool_id": {
                 "required": False,
@@ -1828,13 +1906,8 @@ class VSPIscsiTargetArguments:
             "ldevs": {
                 "required": False,
                 "type": "list",
-                "elements": "int",
+                "elements": "str",
             },
-            # "iqn_initiators": {
-            #     "required": False,
-            #     "type": "list",
-            #     "elements": "str",
-            # },
             "chap_users": {
                 "required": False,
                 "type": "list",
@@ -1972,16 +2045,16 @@ class VSPStoragePoolArguments:
             },
             "start_ldev_id": {
                 "required": False,
-                "type": "int",
+                "type": "str",
             },
             "end_ldev_id": {
                 "required": False,
-                "type": "int",
+                "type": "str",
             },
             "ldev_ids": {
                 "required": False,
                 "type": "list",
-                "elements": "int",
+                "elements": "str",
             },
             "suspend_snapshot": {
                 "required": False,
@@ -2104,7 +2177,7 @@ class VSPServerPriorityManagerArguments:
         spec_options = {
             "ldev_id": {
                 "required": False,
-                "type": "int",
+                "type": "str",
             },
             "host_wwn": {
                 "required": False,
@@ -2125,7 +2198,7 @@ class VSPServerPriorityManagerArguments:
         spec_options = {
             "ldev_id": {
                 "required": True,
-                "type": "int",
+                "type": "str",
             },
             "host_wwn": {
                 "required": False,
@@ -2207,21 +2280,24 @@ class VSPJournalVolumeArguments:
                 "required": False,
                 "type": "int",
             },
-            # "startLdevId": {
-            #     "required": False,
-            #     "type": "int",
-            # },
-            # "endLdevId": {
-            #     "required": False,
-            #     "type": "int",
-            # },
+            "start_ldev_id": {
+                "required": False,
+                "type": "str",
+                "aliases": ["startLdevId"],
+            },
+            "end_ldev_id": {
+                "required": False,
+                "type": "str",
+                "aliases": ["endLdevId"],
+            },
             "is_cache_mode_enabled": {
                 "required": False,
                 "type": "bool",
             },
-            "data_overflow_watchIn_seconds": {
+            "data_overflow_watch_in_seconds": {
                 "required": False,
                 "type": "int",
+                "aliases": ["data_overflow_watchIn_seconds"],
             },
             "mp_blade_id": {
                 "required": False,
@@ -2230,7 +2306,7 @@ class VSPJournalVolumeArguments:
             "ldev_ids": {
                 "required": False,
                 "type": "list",
-                "elements": "int",
+                "elements": "str",
             },
             "mirror_unit_number": {
                 "required": False,
@@ -2277,7 +2353,31 @@ class VSPJournalArguments:
 
     @classmethod
     def journal_fact(cls):
-        return VSPJournalVolumeArguments.journal_volume_fact()
+        spec_options = {
+            "journal_id": {
+                "required": False,
+                "type": "int",
+            },
+            "is_free_journal_pool_id": {
+                "required": False,
+                "type": "bool",
+                "default": False,
+            },
+            "free_journal_pool_id_count": {
+                "required": False,
+                "type": "int",
+                "default": 1,
+            },
+            "is_mirror_not_used": {
+                "required": False,
+                "type": "bool",
+                "default": False,
+            },
+        }
+        args = copy.deepcopy(cls.common_arguments)
+        args["spec"]["options"] = spec_options
+        args.pop("state")
+        return args
 
     @classmethod
     def journal(cls):
@@ -2286,21 +2386,24 @@ class VSPJournalArguments:
                 "required": False,
                 "type": "int",
             },
-            "startLdevId": {
+            "start_ldev_id": {
                 "required": False,
-                "type": "int",
+                "type": "str",
+                "aliases": ["startLdevId"],
             },
-            "endLdevId": {
+            "end_ldev_id": {
                 "required": False,
-                "type": "int",
+                "type": "str",
+                "aliases": ["endLdevId"],
             },
             "is_cache_mode_enabled": {
                 "required": False,
                 "type": "bool",
             },
-            "data_overflow_watchIn_seconds": {
+            "data_overflow_watch_in_seconds": {
                 "required": False,
                 "type": "int",
+                "aliases": ["data_overflow_watchIn_seconds"],
             },
             "mp_blade_id": {
                 "required": False,
@@ -2309,7 +2412,7 @@ class VSPJournalArguments:
             "ldev_ids": {
                 "required": False,
                 "type": "list",
-                "elements": "int",
+                "elements": "str",
             },
             "mirror_unit_number": {
                 "required": False,
@@ -2378,7 +2481,7 @@ class VSPQuorumDiskArguments:
             },
             "ldev_id": {
                 "required": False,
-                "type": "int",
+                "type": "str",
             },
             "id": {
                 "required": False,
@@ -2421,7 +2524,7 @@ class VSPExternalVolumeArguments:
             },
             "external_ldev_id": {
                 "required": False,
-                "type": "int",
+                "type": "str",
             },
         }
         args = copy.deepcopy(cls.common_arguments)
@@ -2440,11 +2543,11 @@ class VSPExternalVolumeArguments:
             },
             "external_ldev_id": {
                 "required": False,
-                "type": "int",
+                "type": "str",
             },
             "ldev_id": {
                 "required": False,
-                "type": "int",
+                "type": "str",
             },
             "external_parity_group": {
                 "required": False,
@@ -3102,11 +3205,7 @@ class VSPTrueCopyArguments:
         spec_options = {
             "primary_volume_id": {
                 "required": False,
-                "type": "int",
-            },
-            "secondary_volume_id": {
-                "required": False,
-                "type": "int",
+                "type": "str",
             },
             "consistency_group_id": {
                 "required": False,
@@ -3118,30 +3217,21 @@ class VSPTrueCopyArguments:
                 "choices": ["NEVER", "DATA", "STATUS"],
                 "default": "NEVER",
             },
-            # "allocate_new_consistency_group": {
-            #     "required": False,
-            #     "type": "bool",
-            #     "default": False,
-            # },
-            # "secondary_storage_serial_number": {
-            #     "required": False,
-            #     "type": "int",
-            # },
             "secondary_pool_id": {
                 "required": False,
                 "type": "int",
             },
             "begin_secondary_volume_id": {
                 "required": False,
-                "type": "int",
+                "type": "str",
             },
             "end_secondary_volume_id": {
                 "required": False,
-                "type": "int",
+                "type": "str",
             },
             "provisioned_secondary_volume_id": {
                 "required": False,
-                "type": "int",
+                "type": "str",
             },
             "secondary_hostgroup": {
                 "required": False,
@@ -3244,11 +3334,11 @@ class VSPTrueCopyArguments:
         spec_options = {
             "primary_volume_id": {
                 "required": False,
-                "type": "int",
+                "type": "str",
             },
             "secondary_volume_id": {
                 "required": False,
-                "type": "int",
+                "type": "str",
             },
             "copy_group_name": {
                 "required": False,
@@ -3394,12 +3484,12 @@ class VSPHurArguments:
         spec_options = {
             "primary_volume_id": {
                 "required": False,
-                "type": "int",
+                "type": "str",
             },
-            "secondary_volume_id": {
-                "required": False,
-                "type": "int",
-            },
+            # "secondary_volume_id": {
+            #     "required": False,
+            #     "type": "str",
+            # },
             "mirror_unit_id": {
                 "required": False,
                 "choices": [0, 1, 2, 3],
@@ -3494,15 +3584,15 @@ class VSPHurArguments:
             },
             "begin_secondary_volume_id": {
                 "required": False,
-                "type": "int",
+                "type": "str",
             },
             "end_secondary_volume_id": {
                 "required": False,
-                "type": "int",
+                "type": "str",
             },
             "provisioned_secondary_volume_id": {
                 "required": False,
-                "type": "int",
+                "type": "str",
             },
             "secondary_hostgroup": {
                 "required": False,
@@ -3554,11 +3644,11 @@ class VSPHurArguments:
         spec_options = {
             "primary_volume_id": {
                 "required": False,
-                "type": "int",
+                "type": "str",
             },
             "secondary_volume_id": {
                 "required": False,
-                "type": "int",
+                "type": "str",
             },
             "copy_group_name": {
                 "required": False,
@@ -3745,7 +3835,7 @@ class VSPNvmeSubsystemArguments:
         namespace_options = {
             "ldev_id": {
                 "required": True,
-                "type": "int",
+                "type": "str",
             },
             "nickname": {
                 "required": False,
@@ -3934,15 +4024,15 @@ class VSPResourceGroupArguments:
             "ldevs": {
                 "required": False,
                 "type": "list",
-                "elements": "int",
+                "elements": "str",
             },
             "start_ldev": {
                 "required": False,
-                "type": "int",
+                "type": "str",
             },
             "end_ldev": {
                 "required": False,
-                "type": "int",
+                "type": "str",
             },
             "ports": {
                 "required": False,
@@ -4041,7 +4131,7 @@ class VSPGADArguments:
         spec_options = {
             "primary_volume_id": {
                 "required": False,
-                "type": "int",
+                "type": "str",
             },
             "copy_group_name": {"required": False, "type": "str"},
             "secondary_storage_serial_number": {
@@ -4050,7 +4140,7 @@ class VSPGADArguments:
             },
             "secondary_volume_id": {
                 "required": False,
-                "type": "int",
+                "type": "str",
             },
             "copy_pair_name": {
                 "required": False,
@@ -4103,7 +4193,7 @@ class VSPGADArguments:
             },
             "primary_volume_id": {
                 "required": False,
-                "type": "int",
+                "type": "str",
             },
             "secondary_pool_id": {
                 "required": False,
@@ -4211,15 +4301,15 @@ class VSPGADArguments:
             },
             "begin_secondary_volume_id": {
                 "required": False,
-                "type": "int",
+                "type": "str",
             },
             "end_secondary_volume_id": {
                 "required": False,
-                "type": "int",
+                "type": "str",
             },
             "provisioned_secondary_volume_id": {
                 "required": False,
-                "type": "int",
+                "type": "str",
             },
             "secondary_nvm_subsystem": {
                 "required": False,
@@ -4415,7 +4505,7 @@ class VSPCmdDevArguments:
         spec_options = {
             "ldev_id": {
                 "required": True,
-                "type": "int",
+                "type": "str",
             },
             # "is_command_device_enabled": {
             #     "required": False,
@@ -5291,6 +5381,7 @@ class VSPVolumeSimpleAPIArguments:
                 "attach_server",
                 "detach_server",
                 "change_qos_settings",
+                "server_present",
             ],
             "default": "present",
         },
@@ -5308,6 +5399,11 @@ class VSPVolumeSimpleAPIArguments:
                 "required": False,
                 "type": "int",
                 "default": 1,
+            },
+            "volume_ids": {
+                "required": False,
+                "type": "list",
+                "elements": "str",
             },
             "volume_name": {
                 "required": False,
@@ -5338,7 +5434,7 @@ class VSPVolumeSimpleAPIArguments:
             },
             "volume_id": {
                 "required": False,
-                "type": "int",
+                "type": "str",
             },
             "qos_settings": {
                 "required": False,
@@ -5427,10 +5523,11 @@ class VSPVolumeSimpleAPIArguments:
                 "type": "list",
                 "elements": "int",
             },
-            "saving_setting": {
+            "capacity_saving": {
+                "aliases": ["saving_setting"],
                 "required": False,
                 "type": "str",
-                "choices": ["compression", "deduplication_and_compression", "disabled"],
+                "choices": ["compression", "deduplication_and_compression", "disable"],
             },
             "compression_acceleration": {
                 "required": False,
@@ -5482,13 +5579,74 @@ class VSPVolumeSimpleAPIArguments:
             },
             "start_volume_id": {
                 "required": False,
-                "type": "int",
+                "type": "str",
             },
             "count": {
                 "required": False,
                 "type": "int",
             },
             "volume_id": {
+                "required": False,
+                "type": "str",
+            },
+        }
+        args = copy.deepcopy(cls.common_arguments)
+        args["spec"]["options"] = spec_options
+        args["spec"]["required"] = False
+        args.pop("state")
+        return args
+
+
+class VSPOneSnapshotArguments:
+    common_arguments = {
+        "connection_info": VSPCommonParameters.connection_info(),
+        "state": {
+            "required": False,
+            "type": "str",
+            "choices": [
+                "present",
+                "absent",
+                "map",
+                "restore",
+            ],
+            "default": "present",
+        },
+        "spec": {
+            "required": True,
+            "type": "dict",
+            "options": {},
+        },
+    }
+    common_arguments["connection_info"]["options"].pop("connection_type")
+
+    @classmethod
+    def get_vsp_one_snapshot_facts_args(cls):
+        spec_options = {
+            "master_volume_id": {
+                "required": False,
+                "type": "str",
+            },
+            "snapshot_date_from": {
+                "required": False,
+                "type": "str",
+            },
+            "snapshot_date_to": {
+                "required": False,
+                "type": "str",
+            },
+            "snapshot_group_name": {
+                "required": False,
+                "type": "str",
+            },
+            "start_id": {
+                "required": False,
+                "type": "str",
+            },
+            "count": {
+                "required": False,
+                "type": "int",
+            },
+            "snapshot_id": {
                 "required": False,
                 "type": "int",
             },
@@ -5497,6 +5655,344 @@ class VSPVolumeSimpleAPIArguments:
         args["spec"]["options"] = spec_options
         args["spec"]["required"] = False
         args.pop("state")
+        return args
+
+    @classmethod
+    def get_vsp_one_snapshot_args(cls):
+        new_snapshot_arg = {
+            "master_volume_id": {
+                "required": True,
+                "type": "str",
+            },
+            "pool_id": {
+                "required": True,
+                "type": "int",
+            },
+            "snapshot_group_name": {
+                "required": True,
+                "type": "str",
+            },
+            "type": {
+                "required": True,
+                "type": "str",
+            },
+        }
+        spec_options = {
+            "new_snapshots": {
+                "required": False,
+                "type": "list",
+                "elements": "dict",
+                "options": new_snapshot_arg,
+            },
+            "master_volume_id": {
+                "required": False,
+                "type": "str",
+            },
+            "snapshot_id": {
+                "required": False,
+                "type": "int",
+            },
+            "pool_id": {
+                "required": False,
+                "type": "int",
+            },
+            "should_delete_svol": {
+                "required": False,
+                "type": "bool",
+                "default": False,
+            },
+        }
+        args = copy.deepcopy(cls.common_arguments)
+        args["spec"]["options"] = spec_options
+        return args
+
+    @classmethod
+    def get_vsp_one_snapshot_group_args(cls):
+        spec_options = {
+            "snapshot_group_name": {
+                "required": False,
+                "type": "str",
+            },
+            "include_snapshots": {
+                "required": False,
+                "type": "bool",
+                "default": False,
+            },
+        }
+        args = copy.deepcopy(cls.common_arguments)
+        args["spec"]["options"] = spec_options
+        args["spec"]["required"] = False
+        args.pop("state")
+        return args
+
+    @classmethod
+    def get_vsp_one_snapshot_group(cls):
+        spec_options = {
+            "snapshot_group_name": {
+                "required": True,
+                "type": "str",
+            },
+        }
+        args = copy.deepcopy(cls.common_arguments)
+        args["spec"]["options"] = spec_options
+        state = args.get("state", {})
+        choices = state.get("choices", [])
+        for item in ["map", "restore"]:
+            if item in choices:
+                choices.remove(item)
+        return args
+
+
+class VSPOneServerArguments:
+    common_arguments = {
+        "connection_info": VSPCommonParameters.connection_info(),
+        "state": {
+            "required": False,
+            "type": "str",
+            "choices": [
+                "present",
+                "absent",
+                "sync_server_nick_name",
+                "add_host_groups",
+                "add_hba",
+                "remove_hba",
+                "add_path",
+                "remove_path",
+                "change_iscsi_target_settings",
+            ],
+            "default": "present",
+        },
+        "spec": {
+            "required": True,
+            "type": "dict",
+            "options": {},
+        },
+    }
+    common_arguments["connection_info"]["options"].pop("connection_type")
+
+    @classmethod
+    def get_vsp_one_server_args(cls):
+        spec_options = {
+            "nick_name": {
+                "required": False,
+                "type": "str",
+            },
+            "protocol": {
+                "required": False,
+                "type": "str",
+                "choices": ["FC", "iSCSI"],
+            },
+            "server_id": {
+                "required": False,
+                "type": "int",
+            },
+            "os_type": {
+                "required": False,
+                "type": "str",
+                "choices": ["Linux", "HP-UX", "Solaris", "AIX", "VMware", "Windows"],
+            },
+            "port_ids": {
+                "required": False,
+                "type": "list",
+                "elements": "str",
+            },
+            "is_reserved": {
+                "required": False,
+                "type": "bool",
+            },
+            "os_type_options": {
+                "required": False,
+                "type": "list",
+                "elements": "int",
+            },
+            "hbas": {
+                "required": False,
+                "type": "list",
+                "elements": "dict",
+                "options": {
+                    "hba_wwn": {
+                        "required": False,
+                        "type": "str",
+                    },
+                    "iscsi_name": {
+                        "required": False,
+                        "type": "str",
+                    },
+                },
+            },
+            "paths": {
+                "required": False,
+                "type": "list",
+                "elements": "dict",
+                "options": {
+                    "port_ids": {
+                        "required": True,
+                        "type": "list",
+                        "elements": "str",
+                    },
+                    "hba_wwn": {
+                        "required": False,
+                        "type": "str",
+                    },
+                    "iscsi_name": {
+                        "required": False,
+                        "type": "str",
+                    },
+                },
+            },
+            "keep_lun_config": {
+                "required": False,
+                "type": "bool",
+            },
+            "iscsi_target_settings": {
+                "required": False,
+                "type": "list",
+                "elements": "dict",
+                "options": {
+                    "port_id": {
+                        "required": True,
+                        "type": "str",
+                    },
+                    "target_iscsi_name": {
+                        "required": True,
+                        "type": "str",
+                    },
+                },
+            },
+            "host_groups": {
+                "required": False,
+                "type": "list",
+                "elements": "dict",
+                "options": {
+                    "host_group_id": {
+                        "required": False,
+                        "type": "int",
+                    },
+                    "host_group_name": {
+                        "required": False,
+                        "type": "str",
+                    },
+                    "port_id": {
+                        "required": False,
+                        "type": "str",
+                    },
+                },
+            },
+            "iscsi_targets": {
+                "required": False,
+                "type": "list",
+                "elements": "dict",
+                "options": {
+                    "iscsi_target_id": {
+                        "required": False,
+                        "type": "int",
+                    },
+                    "iscsi_target_name": {
+                        "required": False,
+                        "type": "str",
+                    },
+                    "port_id": {
+                        "required": False,
+                        "type": "str",
+                    },
+                },
+            },
+        }
+        args = copy.deepcopy(cls.common_arguments)
+        args["spec"]["options"] = spec_options
+        return args
+
+    @classmethod
+    def get_vsp_one_server_facts_args(cls):
+        spec_options = {
+            "server_id": {
+                "required": False,
+                "type": "int",
+            },
+            "nick_name": {
+                "required": False,
+                "type": "str",
+            },
+            "hba_wwn": {
+                "required": False,
+                "type": "str",
+            },
+            "iscsi_name": {
+                "required": False,
+                "type": "str",
+            },
+            "include_details": {
+                "required": False,
+                "type": "bool",
+                "default": False,
+            },
+        }
+        args = copy.deepcopy(cls.common_arguments)
+        args["spec"]["options"] = spec_options
+        args["spec"]["required"] = False
+        args.pop("state")
+        return args
+
+    @classmethod
+    def get_vsp_one_hba_facts_args(cls):
+        spec_options = {
+            "server_id": {
+                "required": False,
+                "type": "int",
+            },
+            "hba_wwn": {
+                "required": False,
+                "type": "str",
+            },
+            "iscsi_name": {
+                "required": False,
+                "type": "str",
+            },
+            "nick_name": {
+                "required": False,
+                "type": "str",
+            },
+        }
+        args = copy.deepcopy(cls.common_arguments)
+        args["spec"]["options"] = spec_options
+        args["spec"]["required"] = False
+        args.pop("state")
+        return args
+
+
+class VSPOnePortArguments:
+    common_arguments = {
+        "connection_info": VSPCommonParameters.connection_info(),
+        "spec": {
+            "required": True,
+            "type": "dict",
+            "options": {},
+        },
+    }
+    common_arguments["connection_info"]["options"].pop("connection_type")
+
+    @classmethod
+    def get_vsp_one_port_facts_args(cls):
+        spec_options = {
+            "port_id": {
+                "required": False,
+                "type": "str",
+            },
+            "protocol": {
+                "required": False,
+                "type": "str",
+            },
+        }
+        args = copy.deepcopy(cls.common_arguments)
+        args["spec"]["options"] = spec_options
+        args["spec"]["required"] = False
+        return args
+
+    @classmethod
+    def get_vsp_one_port_args(cls):
+        spec_options = vsp_one_port_args()
+        args = copy.deepcopy(cls.common_arguments)
+        args["spec"]["options"] = spec_options
         return args
 
 
@@ -5599,7 +6095,7 @@ class VSPSpecValidators:
             raise ValueError(VSPVolValidationMsg.LDEV_ID_OUT_OF_RANGE.value)
         if isinstance(input_spec.vldev_id, int) and (
             input_spec.vldev_id < -1
-            or input_spec.vldev_id > AutomationConstants.LDEV_ID_MAX
+            or input_spec.vldev_id > AutomationConstants.LDEV_ID_MAX_FULL
         ):
             raise ValueError(VSPVolValidationMsg.VLDEV_ID_OUT_OF_RANGE.value)
         if state == StateValue.ABSENT:
@@ -6515,7 +7011,6 @@ class VSPSpecValidators:
     @staticmethod
     def validate_hur_module(input_spec, state):
         logger = Log()
-        logger.writeDebug("input_spec={}", input_spec)
         logger.writeDebug("state={}", state)
         state = state.lower()
 

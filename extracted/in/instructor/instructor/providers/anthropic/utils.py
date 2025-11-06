@@ -9,8 +9,6 @@ from __future__ import annotations
 from textwrap import dedent
 from typing import Any, TypedDict, Union
 
-from pydantic import ValidationError
-from ...core.exceptions import ValidationError as InstructorValidationError
 
 from ...mode import Mode
 from ...processing.schema import generate_anthropic_schema
@@ -156,11 +154,7 @@ def reask_anthropic_tools(
     tool_use_id = None
     for content in response.content:
         assistant_content.append(content.model_dump())  # type: ignore
-        if (
-            content.type == "tool_use"
-            and isinstance(exception, (ValidationError, InstructorValidationError))
-            and content.name == exception.title
-        ):
+        if content.type == "tool_use":
             tool_use_id = content.id
 
     reask_msgs = [{"role": "assistant", "content": assistant_content}]  # type: ignore

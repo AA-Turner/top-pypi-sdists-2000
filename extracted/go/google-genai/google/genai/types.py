@@ -19,12 +19,13 @@ from abc import ABC, abstractmethod
 import datetime
 from enum import Enum, EnumMeta
 import inspect
+import io
 import json
 import logging
 import sys
 import types as builtin_types
 import typing
-from typing import Any, Callable, Literal, Optional, Sequence, Union, _UnionGenericAlias  # type: ignore
+from typing import Any, Callable, Dict, List, Literal, Optional, Sequence, Union, _UnionGenericAlias  # type: ignore
 import pydantic
 from pydantic import ConfigDict, Field, PrivateAttr, model_validator
 from typing_extensions import Self, TypedDict
@@ -32,6 +33,8 @@ from . import _common
 from ._operations_converters import (
     _GenerateVideosOperation_from_mldev,
     _GenerateVideosOperation_from_vertex,
+    _ImportFileOperation_from_mldev,
+    _UploadToFileSearchStoreOperation_from_mldev,
 )
 
 
@@ -182,6 +185,20 @@ class Mode(_common.CaseInSensitiveEnum):
   """Run retrieval only when system decides it is necessary."""
 
 
+class ApiSpec(_common.CaseInSensitiveEnum):
+  """The API spec that the external API implements.
+
+  This enum is not supported in Gemini API.
+  """
+
+  API_SPEC_UNSPECIFIED = 'API_SPEC_UNSPECIFIED'
+  """Unspecified API spec. This value should not be used."""
+  SIMPLE_SEARCH = 'SIMPLE_SEARCH'
+  """Simple search API spec."""
+  ELASTIC_SEARCH = 'ELASTIC_SEARCH'
+  """Elastic search API spec."""
+
+
 class AuthType(_common.CaseInSensitiveEnum):
   """Type of auth scheme. This enum is not supported in Gemini API."""
 
@@ -200,18 +217,20 @@ class AuthType(_common.CaseInSensitiveEnum):
   """OpenID Connect (OIDC) Auth."""
 
 
-class ApiSpec(_common.CaseInSensitiveEnum):
-  """The API spec that the external API implements.
+class HttpElementLocation(_common.CaseInSensitiveEnum):
+  """The location of the API key. This enum is not supported in Gemini API."""
 
-  This enum is not supported in Gemini API.
-  """
-
-  API_SPEC_UNSPECIFIED = 'API_SPEC_UNSPECIFIED'
-  """Unspecified API spec. This value should not be used."""
-  SIMPLE_SEARCH = 'SIMPLE_SEARCH'
-  """Simple search API spec."""
-  ELASTIC_SEARCH = 'ELASTIC_SEARCH'
-  """Elastic search API spec."""
+  HTTP_IN_UNSPECIFIED = 'HTTP_IN_UNSPECIFIED'
+  HTTP_IN_QUERY = 'HTTP_IN_QUERY'
+  """Element is in the HTTP request query."""
+  HTTP_IN_HEADER = 'HTTP_IN_HEADER'
+  """Element is in the HTTP request header."""
+  HTTP_IN_PATH = 'HTTP_IN_PATH'
+  """Element is in the HTTP request path."""
+  HTTP_IN_BODY = 'HTTP_IN_BODY'
+  """Element is in the HTTP request body."""
+  HTTP_IN_COOKIE = 'HTTP_IN_COOKIE'
+  """Element is in the HTTP request cookie."""
 
 
 class PhishBlockThreshold(_common.CaseInSensitiveEnum):
@@ -409,14 +428,13 @@ class BlockedReason(_common.CaseInSensitiveEnum):
 class TrafficType(_common.CaseInSensitiveEnum):
   """Output only.
 
-  Traffic type. This shows whether a request consumes Pay-As-You-Go or
-  Provisioned Throughput quota. This enum is not supported in Gemini API.
+  The traffic type for this request. This enum is not supported in Gemini API.
   """
 
   TRAFFIC_TYPE_UNSPECIFIED = 'TRAFFIC_TYPE_UNSPECIFIED'
   """Unspecified request traffic type."""
   ON_DEMAND = 'ON_DEMAND'
-  """Type for Pay-As-You-Go traffic."""
+  """The request was processed using Pay-As-You-Go quota."""
   PROVISIONED_THROUGHPUT = 'PROVISIONED_THROUGHPUT'
   """Type for Provisioned Throughput traffic."""
 
@@ -518,6 +536,8 @@ class TuningTask(_common.CaseInSensitiveEnum):
   """Tuning task for image to video."""
   TUNING_TASK_T2V = 'TUNING_TASK_T2V'
   """Tuning task for text to video."""
+  TUNING_TASK_R2V = 'TUNING_TASK_R2V'
+  """Tuning task for reference to video."""
 
 
 class JSONSchemaType(Enum):
@@ -735,6 +755,15 @@ class TuningMethod(_common.CaseInSensitiveEnum):
   """Preference optimization tuning."""
 
 
+class DocumentState(_common.CaseInSensitiveEnum):
+  """State for the lifecycle of a Document."""
+
+  STATE_UNSPECIFIED = 'STATE_UNSPECIFIED'
+  STATE_PENDING = 'STATE_PENDING'
+  STATE_ACTIVE = 'STATE_ACTIVE'
+  STATE_FAILED = 'STATE_FAILED'
+
+
 class FileState(_common.CaseInSensitiveEnum):
   """State for the lifecycle of a File."""
 
@@ -904,7 +933,7 @@ class FunctionCall(_common.BaseModel):
   )
   name: Optional[str] = Field(
       default=None,
-      description="""Required. The name of the function to call. Matches [FunctionDeclaration.name].""",
+      description="""Optional. The name of the function to call. Matches [FunctionDeclaration.name].""",
   )
 
 
@@ -919,7 +948,7 @@ class FunctionCallDict(TypedDict, total=False):
   """Optional. The function parameters and values in JSON object format. See [FunctionDeclaration.parameters] for parameter details."""
 
   name: Optional[str]
-  """Required. The name of the function to call. Matches [FunctionDeclaration.name]."""
+  """Optional. The name of the function to call. Matches [FunctionDeclaration.name]."""
 
 
 FunctionCallOrDict = Union[FunctionCall, FunctionCallDict]
@@ -1359,6 +1388,81 @@ class Part(_common.BaseModel):
       default=None,
       description="""Optional. Video metadata. The metadata should only be specified while the video data is presented in inline_data or file_data.""",
   )
+
+  def __init__(
+      self,
+      value: Optional['PartUnionDict'] = None,
+      /,
+      *,
+      video_metadata: Optional[VideoMetadata] = None,
+      thought: Optional[bool] = None,
+      inline_data: Optional[Blob] = None,
+      file_data: Optional[FileData] = None,
+      thought_signature: Optional[bytes] = None,
+      function_call: Optional[FunctionCall] = None,
+      code_execution_result: Optional[CodeExecutionResult] = None,
+      executable_code: Optional[ExecutableCode] = None,
+      function_response: Optional[FunctionResponse] = None,
+      text: Optional[str] = None,
+      # Pydantic allows CamelCase in addition to snake_case attribute
+      # names. kwargs here catch these aliases.
+      **kwargs: Any,
+  ):
+    part_dict = dict(
+        video_metadata=video_metadata,
+        thought=thought,
+        inline_data=inline_data,
+        file_data=file_data,
+        thought_signature=thought_signature,
+        function_call=function_call,
+        code_execution_result=code_execution_result,
+        executable_code=executable_code,
+        function_response=function_response,
+        text=text,
+    )
+    part_dict = {k: v for k, v in part_dict.items() if v is not None}
+
+    if part_dict and value is not None:
+      raise ValueError(
+          'Positional and keyword arguments can not be combined when '
+          'initializing a Part.'
+      )
+
+    if value is None:
+      pass
+    elif isinstance(value, str):
+      part_dict['text'] = value
+    elif isinstance(value, File):
+      if not value.uri or not value.mime_type:
+        raise ValueError('file uri and mime_type are required.')
+      part_dict['file_data'] = FileData(
+          file_uri=value.uri,
+          mime_type=value.mime_type,
+          display_name=value.display_name,
+      )
+    elif isinstance(value, dict):
+      try:
+        Part.model_validate(value)
+        part_dict.update(value)  # type: ignore[arg-type]
+      except pydantic.ValidationError:
+        part_dict['file_data'] = FileData.model_validate(value)
+    elif isinstance(value, Part):
+      part_dict.update(value.dict())
+    elif 'image' in value.__class__.__name__.lower():
+      # PIL.Image case.
+
+      suffix = value.format.lower() if value.format else 'jpeg'
+      mimetype = f'image/{suffix}'
+      bytes_io = io.BytesIO()
+      value.save(bytes_io, suffix.upper())
+
+      part_dict['inline_data'] = Blob(
+          data=bytes_io.getvalue(), mime_type=mimetype
+      )
+    else:
+      raise ValueError(f'Unsupported content part type: {type(value)}')
+
+    super().__init__(**part_dict, **kwargs)
 
   def as_image(self) -> Optional['Image']:
     """Returns the part as a PIL Image, or None if the part is not an image."""
@@ -1905,8 +2009,39 @@ class Schema(_common.BaseModel):
   def json_schema(self) -> JSONSchema:
     """Converts the Schema object to a JSONSchema object, that is compatible with 2020-12 JSON Schema draft.
 
-    If a Schema field is not supported by JSONSchema, it will be ignored.
+     Note: Conversion of fields that are not included in the JSONSchema class
+     are ignored.
+     Json Schema is now supported natively by both Vertex AI and Gemini API.
+     Users
+     are recommended to pass/receive Json Schema directly to/from the API. For
+     example:
+     1. the counter part of GenerateContentConfig.response_schema is
+        GenerateContentConfig.response_json_schema, which accepts [JSON
+       Schema](https://json-schema.org/)
+     2. the counter part of FunctionDeclaration.parameters is
+        FunctionDeclaration.parameters_json_schema, which accepts [JSON
+        Schema](https://json-schema.org/)
+     3. the counter part of FunctionDeclaration.response is
+        FunctionDeclaration.response_json_schema, which accepts [JSON
+    Schema](https://json-schema.org/)
     """
+
+    info_message = """
+Note: Conversion of fields that are not included in the JSONSchema class are
+ignored.
+Json Schema is now supported natively by both Vertex AI and Gemini API. Users
+are recommended to pass/receive Json Schema directly to/from the API. For example:
+1. the counter part of GenerateContentConfig.response_schema is
+   GenerateContentConfig.response_json_schema, which accepts [JSON
+  Schema](https://json-schema.org/)
+2. the counter part of FunctionDeclaration.parameters is
+   FunctionDeclaration.parameters_json_schema, which accepts [JSON
+   Schema](https://json-schema.org/)
+3. the counter part of FunctionDeclaration.response is
+   FunctionDeclaration.response_json_schema, which accepts [JSON
+   Schema](https://json-schema.org/)
+"""
+    logger.info(info_message)
     json_schema_field_names: set[str] = set(JSONSchema.model_fields.keys())
     schema_field_names: tuple[str] = (
         'items',
@@ -1977,27 +2112,57 @@ class Schema(_common.BaseModel):
   ) -> 'Schema':
     """Converts a JSONSchema object to a Schema object.
 
-    The JSONSchema is compatible with 2020-12 JSON Schema draft, specified by
-    OpenAPI 3.1.
+     Note: Conversion of fields that are not included in the JSONSchema class
+     are ignored.
+     Json Schema is now supported natively by both Vertex AI and Gemini API.
+     Users
+     are recommended to pass/receive Json Schema directly to/from the API. For
+     example:
+     1. the counter part of GenerateContentConfig.response_schema is
+        GenerateContentConfig.response_json_schema, which accepts [JSON
+       Schema](https://json-schema.org/)
+     2. the counter part of FunctionDeclaration.parameters is
+        FunctionDeclaration.parameters_json_schema, which accepts [JSON
+        Schema](https://json-schema.org/)
+     3. the counter part of FunctionDeclaration.response is
+        FunctionDeclaration.response_json_schema, which accepts [JSON
+    Schema](https://json-schema.org/)
+     The JSONSchema is compatible with 2020-12 JSON Schema draft, specified by
+     OpenAPI 3.1.
 
-    Args:
-        json_schema: JSONSchema object to be converted.
-        api_option: API option to be used. If set to 'VERTEX_AI', the JSONSchema
-          will be converted to a Schema object that is compatible with Vertex AI
-          API. If set to 'GEMINI_API', the JSONSchema will be converted to a
-          Schema object that is compatible with Gemini API. Default is
-          'GEMINI_API'.
-        raise_error_on_unsupported_field: If set to True, an error will be
-          raised if the JSONSchema contains any unsupported fields. Default is
-          False.
+     Args:
+         json_schema: JSONSchema object to be converted.
+         api_option: API option to be used. If set to 'VERTEX_AI', the
+           JSONSchema will be converted to a Schema object that is compatible
+           with Vertex AI API. If set to 'GEMINI_API', the JSONSchema will be
+           converted to a Schema object that is compatible with Gemini API.
+           Default is 'GEMINI_API'.
+         raise_error_on_unsupported_field: If set to True, an error will be
+           raised if the JSONSchema contains any unsupported fields. Default is
+           False.
 
-    Returns:
-        Schema object that is compatible with the specified API option.
-    Raises:
-        ValueError: If the JSONSchema contains any unsupported fields and
-          raise_error_on_unsupported_field is set to True. Or if the JSONSchema
-          is not compatible with the specified API option.
+     Returns:
+         Schema object that is compatible with the specified API option.
+     Raises:
+         ValueError: If the JSONSchema contains any unsupported fields and
+           raise_error_on_unsupported_field is set to True. Or if the JSONSchema
+           is not compatible with the specified API option.
     """
+    info_message = """
+Note: Conversion of fields that are not included in the JSONSchema class are ignored.
+Json Schema is now supported natively by both Vertex AI and Gemini API. Users
+are recommended to pass/receive Json Schema directly to/from the API. For example:
+1. the counter part of GenerateContentConfig.response_schema is
+   GenerateContentConfig.response_json_schema, which accepts [JSON
+  Schema](https://json-schema.org/)
+2. the counter part of FunctionDeclaration.parameters is
+   FunctionDeclaration.parameters_json_schema, which accepts [JSON
+   Schema](https://json-schema.org/)
+3. the counter part of FunctionDeclaration.response is
+   FunctionDeclaration.response_json_schema, which accepts [JSON
+   Schema](https://json-schema.org/)
+"""
+    logger.info(info_message)
     google_schema_field_names: set[str] = set(cls.model_fields.keys())
     schema_field_names: tuple[str, ...] = (
         'items',
@@ -2713,20 +2878,166 @@ GoogleSearchRetrievalOrDict = Union[
 ]
 
 
-class ApiKeyConfig(_common.BaseModel):
-  """Config for authentication with API key."""
+class ComputerUse(_common.BaseModel):
+  """Tool to support computer use."""
 
+  environment: Optional[Environment] = Field(
+      default=None, description="""Required. The environment being operated."""
+  )
+  excluded_predefined_functions: Optional[list[str]] = Field(
+      default=None,
+      description="""By default, predefined functions are included in the final model call.
+    Some of them can be explicitly excluded from being automatically included.
+    This can serve two purposes:
+      1. Using a more restricted / different action space.
+      2. Improving the definitions / instructions of predefined functions.""",
+  )
+
+
+class ComputerUseDict(TypedDict, total=False):
+  """Tool to support computer use."""
+
+  environment: Optional[Environment]
+  """Required. The environment being operated."""
+
+  excluded_predefined_functions: Optional[list[str]]
+  """By default, predefined functions are included in the final model call.
+    Some of them can be explicitly excluded from being automatically included.
+    This can serve two purposes:
+      1. Using a more restricted / different action space.
+      2. Improving the definitions / instructions of predefined functions."""
+
+
+ComputerUseOrDict = Union[ComputerUse, ComputerUseDict]
+
+
+class FileSearch(_common.BaseModel):
+  """Tool to retrieve knowledge from the File Search Stores."""
+
+  file_search_store_names: Optional[list[str]] = Field(
+      default=None,
+      description="""The names of the file_search_stores to retrieve from.
+      Example: `fileSearchStores/my-file-search-store-123`""",
+  )
+  top_k: Optional[int] = Field(
+      default=None,
+      description="""The number of file search retrieval chunks to retrieve.""",
+  )
+  metadata_filter: Optional[str] = Field(
+      default=None,
+      description="""Metadata filter to apply to the file search retrieval documents. See https://google.aip.dev/160 for the syntax of the filter expression.""",
+  )
+
+
+class FileSearchDict(TypedDict, total=False):
+  """Tool to retrieve knowledge from the File Search Stores."""
+
+  file_search_store_names: Optional[list[str]]
+  """The names of the file_search_stores to retrieve from.
+      Example: `fileSearchStores/my-file-search-store-123`"""
+
+  top_k: Optional[int]
+  """The number of file search retrieval chunks to retrieve."""
+
+  metadata_filter: Optional[str]
+  """Metadata filter to apply to the file search retrieval documents. See https://google.aip.dev/160 for the syntax of the filter expression."""
+
+
+FileSearchOrDict = Union[FileSearch, FileSearchDict]
+
+
+class ApiAuthApiKeyConfig(_common.BaseModel):
+  """The API secret. This data type is not supported in Gemini API."""
+
+  api_key_secret_version: Optional[str] = Field(
+      default=None,
+      description="""Required. The SecretManager secret version resource name storing API key. e.g. projects/{project}/secrets/{secret}/versions/{version}""",
+  )
   api_key_string: Optional[str] = Field(
       default=None,
-      description="""The API key to be used in the request directly.""",
+      description="""The API key string. Either this or `api_key_secret_version` must be set.""",
+  )
+
+
+class ApiAuthApiKeyConfigDict(TypedDict, total=False):
+  """The API secret. This data type is not supported in Gemini API."""
+
+  api_key_secret_version: Optional[str]
+  """Required. The SecretManager secret version resource name storing API key. e.g. projects/{project}/secrets/{secret}/versions/{version}"""
+
+  api_key_string: Optional[str]
+  """The API key string. Either this or `api_key_secret_version` must be set."""
+
+
+ApiAuthApiKeyConfigOrDict = Union[ApiAuthApiKeyConfig, ApiAuthApiKeyConfigDict]
+
+
+class ApiAuth(_common.BaseModel):
+  """The generic reusable api auth config.
+
+  Deprecated. Please use AuthConfig (google/cloud/aiplatform/master/auth.proto)
+  instead. This data type is not supported in Gemini API.
+  """
+
+  api_key_config: Optional[ApiAuthApiKeyConfig] = Field(
+      default=None, description="""The API secret."""
+  )
+
+
+class ApiAuthDict(TypedDict, total=False):
+  """The generic reusable api auth config.
+
+  Deprecated. Please use AuthConfig (google/cloud/aiplatform/master/auth.proto)
+  instead. This data type is not supported in Gemini API.
+  """
+
+  api_key_config: Optional[ApiAuthApiKeyConfigDict]
+  """The API secret."""
+
+
+ApiAuthOrDict = Union[ApiAuth, ApiAuthDict]
+
+
+class ApiKeyConfig(_common.BaseModel):
+  """Config for authentication with API key.
+
+  This data type is not supported in Gemini API.
+  """
+
+  api_key_secret: Optional[str] = Field(
+      default=None,
+      description="""Optional. The name of the SecretManager secret version resource storing the API key. Format: `projects/{project}/secrets/{secrete}/versions/{version}` - If both `api_key_secret` and `api_key_string` are specified, this field takes precedence over `api_key_string`. - If specified, the `secretmanager.versions.access` permission should be granted to Vertex AI Extension Service Agent (https://cloud.google.com/vertex-ai/docs/general/access-control#service-agents) on the specified resource.""",
+  )
+  api_key_string: Optional[str] = Field(
+      default=None,
+      description="""Optional. The API key to be used in the request directly.""",
+  )
+  http_element_location: Optional[HttpElementLocation] = Field(
+      default=None, description="""Optional. The location of the API key."""
+  )
+  name: Optional[str] = Field(
+      default=None,
+      description="""Optional. The parameter name of the API key. E.g. If the API request is "https://example.com/act?api_key=", "api_key" would be the parameter name.""",
   )
 
 
 class ApiKeyConfigDict(TypedDict, total=False):
-  """Config for authentication with API key."""
+  """Config for authentication with API key.
+
+  This data type is not supported in Gemini API.
+  """
+
+  api_key_secret: Optional[str]
+  """Optional. The name of the SecretManager secret version resource storing the API key. Format: `projects/{project}/secrets/{secrete}/versions/{version}` - If both `api_key_secret` and `api_key_string` are specified, this field takes precedence over `api_key_string`. - If specified, the `secretmanager.versions.access` permission should be granted to Vertex AI Extension Service Agent (https://cloud.google.com/vertex-ai/docs/general/access-control#service-agents) on the specified resource."""
 
   api_key_string: Optional[str]
-  """The API key to be used in the request directly."""
+  """Optional. The API key to be used in the request directly."""
+
+  http_element_location: Optional[HttpElementLocation]
+  """Optional. The location of the API key."""
+
+  name: Optional[str]
+  """Optional. The parameter name of the API key. E.g. If the API request is "https://example.com/act?api_key=", "api_key" would be the parameter name."""
 
 
 ApiKeyConfigOrDict = Union[ApiKeyConfig, ApiKeyConfigDict]
@@ -2850,7 +3161,10 @@ AuthConfigOidcConfigOrDict = Union[
 
 
 class AuthConfig(_common.BaseModel):
-  """Auth configuration to run the extension."""
+  """Auth configuration to run the extension.
+
+  This data type is not supported in Gemini API.
+  """
 
   api_key_config: Optional[ApiKeyConfig] = Field(
       default=None, description="""Config for API key auth."""
@@ -2875,7 +3189,10 @@ class AuthConfig(_common.BaseModel):
 
 
 class AuthConfigDict(TypedDict, total=False):
-  """Auth configuration to run the extension."""
+  """Auth configuration to run the extension.
+
+  This data type is not supported in Gemini API.
+  """
 
   api_key_config: Optional[ApiKeyConfigDict]
   """Config for API key auth."""
@@ -2899,117 +3216,6 @@ class AuthConfigDict(TypedDict, total=False):
 
 
 AuthConfigOrDict = Union[AuthConfig, AuthConfigDict]
-
-
-class GoogleMaps(_common.BaseModel):
-  """Tool to support Google Maps in Model."""
-
-  auth_config: Optional[AuthConfig] = Field(
-      default=None,
-      description="""Optional. Auth config for the Google Maps tool.""",
-  )
-  enable_widget: Optional[bool] = Field(
-      default=None,
-      description="""Optional. If true, include the widget context token in the response.""",
-  )
-
-
-class GoogleMapsDict(TypedDict, total=False):
-  """Tool to support Google Maps in Model."""
-
-  auth_config: Optional[AuthConfigDict]
-  """Optional. Auth config for the Google Maps tool."""
-
-  enable_widget: Optional[bool]
-  """Optional. If true, include the widget context token in the response."""
-
-
-GoogleMapsOrDict = Union[GoogleMaps, GoogleMapsDict]
-
-
-class ComputerUse(_common.BaseModel):
-  """Tool to support computer use."""
-
-  environment: Optional[Environment] = Field(
-      default=None, description="""Required. The environment being operated."""
-  )
-  excluded_predefined_functions: Optional[list[str]] = Field(
-      default=None,
-      description="""By default, predefined functions are included in the final model call.
-    Some of them can be explicitly excluded from being automatically included.
-    This can serve two purposes:
-      1. Using a more restricted / different action space.
-      2. Improving the definitions / instructions of predefined functions.""",
-  )
-
-
-class ComputerUseDict(TypedDict, total=False):
-  """Tool to support computer use."""
-
-  environment: Optional[Environment]
-  """Required. The environment being operated."""
-
-  excluded_predefined_functions: Optional[list[str]]
-  """By default, predefined functions are included in the final model call.
-    Some of them can be explicitly excluded from being automatically included.
-    This can serve two purposes:
-      1. Using a more restricted / different action space.
-      2. Improving the definitions / instructions of predefined functions."""
-
-
-ComputerUseOrDict = Union[ComputerUse, ComputerUseDict]
-
-
-class ApiAuthApiKeyConfig(_common.BaseModel):
-  """The API secret. This data type is not supported in Gemini API."""
-
-  api_key_secret_version: Optional[str] = Field(
-      default=None,
-      description="""Required. The SecretManager secret version resource name storing API key. e.g. projects/{project}/secrets/{secret}/versions/{version}""",
-  )
-  api_key_string: Optional[str] = Field(
-      default=None,
-      description="""The API key string. Either this or `api_key_secret_version` must be set.""",
-  )
-
-
-class ApiAuthApiKeyConfigDict(TypedDict, total=False):
-  """The API secret. This data type is not supported in Gemini API."""
-
-  api_key_secret_version: Optional[str]
-  """Required. The SecretManager secret version resource name storing API key. e.g. projects/{project}/secrets/{secret}/versions/{version}"""
-
-  api_key_string: Optional[str]
-  """The API key string. Either this or `api_key_secret_version` must be set."""
-
-
-ApiAuthApiKeyConfigOrDict = Union[ApiAuthApiKeyConfig, ApiAuthApiKeyConfigDict]
-
-
-class ApiAuth(_common.BaseModel):
-  """The generic reusable api auth config.
-
-  Deprecated. Please use AuthConfig (google/cloud/aiplatform/master/auth.proto)
-  instead. This data type is not supported in Gemini API.
-  """
-
-  api_key_config: Optional[ApiAuthApiKeyConfig] = Field(
-      default=None, description="""The API secret."""
-  )
-
-
-class ApiAuthDict(TypedDict, total=False):
-  """The generic reusable api auth config.
-
-  Deprecated. Please use AuthConfig (google/cloud/aiplatform/master/auth.proto)
-  instead. This data type is not supported in Gemini API.
-  """
-
-  api_key_config: Optional[ApiAuthApiKeyConfigDict]
-  """The API secret."""
-
-
-ApiAuthOrDict = Union[ApiAuth, ApiAuthDict]
 
 
 class ExternalApiElasticSearchParams(_common.BaseModel):
@@ -3598,6 +3804,32 @@ class EnterpriseWebSearchDict(TypedDict, total=False):
 EnterpriseWebSearchOrDict = Union[EnterpriseWebSearch, EnterpriseWebSearchDict]
 
 
+class GoogleMaps(_common.BaseModel):
+  """Tool to retrieve public maps data for grounding, powered by Google."""
+
+  auth_config: Optional[AuthConfig] = Field(
+      default=None,
+      description="""The authentication config to access the API. Only API key is supported. This field is not supported in Gemini API.""",
+  )
+  enable_widget: Optional[bool] = Field(
+      default=None,
+      description="""Optional. If true, include the widget context token in the response.""",
+  )
+
+
+class GoogleMapsDict(TypedDict, total=False):
+  """Tool to retrieve public maps data for grounding, powered by Google."""
+
+  auth_config: Optional[AuthConfigDict]
+  """The authentication config to access the API. Only API key is supported. This field is not supported in Gemini API."""
+
+  enable_widget: Optional[bool]
+  """Optional. If true, include the widget context token in the response."""
+
+
+GoogleMapsOrDict = Union[GoogleMaps, GoogleMapsDict]
+
+
 class Interval(_common.BaseModel):
   """Represents a time interval, encoded as a Timestamp start (inclusive) and a Timestamp end (exclusive).
 
@@ -3701,18 +3933,17 @@ class Tool(_common.BaseModel):
   )
   google_search_retrieval: Optional[GoogleSearchRetrieval] = Field(
       default=None,
-      description="""Optional. GoogleSearchRetrieval tool type. Specialized retrieval tool that is powered by Google search.""",
-  )
-  google_maps: Optional[GoogleMaps] = Field(
-      default=None,
-      description="""Optional. Google Maps tool type. Specialized retrieval tool
-      that is powered by Google Maps.""",
+      description="""Optional. Specialized retrieval tool that is powered by Google Search.""",
   )
   computer_use: Optional[ComputerUse] = Field(
       default=None,
       description="""Optional. Tool to support the model interacting directly with the
       computer. If enabled, it automatically populates computer-use specific
       Function Declarations.""",
+  )
+  file_search: Optional[FileSearch] = Field(
+      default=None,
+      description="""Optional. Tool to retrieve knowledge from the File Search Stores.""",
   )
   code_execution: Optional[ToolCodeExecution] = Field(
       default=None,
@@ -3721,6 +3952,10 @@ class Tool(_common.BaseModel):
   enterprise_web_search: Optional[EnterpriseWebSearch] = Field(
       default=None,
       description="""Optional. Tool to support searching public web data, powered by Vertex AI Search and Sec4 compliance. This field is not supported in Gemini API.""",
+  )
+  google_maps: Optional[GoogleMaps] = Field(
+      default=None,
+      description="""Optional. GoogleMaps tool type. Tool to support Google Maps in Model.""",
   )
   google_search: Optional[GoogleSearch] = Field(
       default=None,
@@ -3742,22 +3977,24 @@ class ToolDict(TypedDict, total=False):
   """Optional. Retrieval tool type. System will always execute the provided retrieval tool(s) to get external knowledge to answer the prompt. Retrieval results are presented to the model for generation. This field is not supported in Gemini API."""
 
   google_search_retrieval: Optional[GoogleSearchRetrievalDict]
-  """Optional. GoogleSearchRetrieval tool type. Specialized retrieval tool that is powered by Google search."""
-
-  google_maps: Optional[GoogleMapsDict]
-  """Optional. Google Maps tool type. Specialized retrieval tool
-      that is powered by Google Maps."""
+  """Optional. Specialized retrieval tool that is powered by Google Search."""
 
   computer_use: Optional[ComputerUseDict]
   """Optional. Tool to support the model interacting directly with the
       computer. If enabled, it automatically populates computer-use specific
       Function Declarations."""
 
+  file_search: Optional[FileSearchDict]
+  """Optional. Tool to retrieve knowledge from the File Search Stores."""
+
   code_execution: Optional[ToolCodeExecutionDict]
   """Optional. CodeExecution tool type. Enables the model to execute code as part of generation."""
 
   enterprise_web_search: Optional[EnterpriseWebSearchDict]
   """Optional. Tool to support searching public web data, powered by Vertex AI Search and Sec4 compliance. This field is not supported in Gemini API."""
+
+  google_maps: Optional[GoogleMapsDict]
+  """Optional. GoogleMaps tool type. Tool to support Google Maps in Model."""
 
   google_search: Optional[GoogleSearchDict]
   """Optional. GoogleSearch tool type. Tool to support Google Search in Model. Powered by Google."""
@@ -4001,6 +4238,12 @@ class ImageConfig(_common.BaseModel):
       description="""Aspect ratio of the generated images. Supported values are
       "1:1", "2:3", "3:2", "3:4", "4:3", "9:16", "16:9", and "21:9".""",
   )
+  image_size: Optional[str] = Field(
+      default=None,
+      description="""Optional. Specifies the size of generated images. Supported
+      values are `1K`, `2K`, `4K`. If not specified, the model will use default
+      value `1K`.""",
+  )
 
 
 class ImageConfigDict(TypedDict, total=False):
@@ -4009,6 +4252,11 @@ class ImageConfigDict(TypedDict, total=False):
   aspect_ratio: Optional[str]
   """Aspect ratio of the generated images. Supported values are
       "1:1", "2:3", "3:2", "3:4", "4:3", "9:16", "16:9", and "21:9"."""
+
+  image_size: Optional[str]
+  """Optional. Specifies the size of generated images. Supported
+      values are `1K`, `2K`, `4K`. If not specified, the model will use default
+      value `1K`."""
 
 
 ImageConfigOrDict = Union[ImageConfig, ImageConfigDict]
@@ -5115,13 +5363,13 @@ class GroundingChunkMaps(_common.BaseModel):
       description="""This Place's resource name, in `places/{place_id}` format. Can be used to look up the Place.""",
   )
   text: Optional[str] = Field(
-      default=None, description="""Text of the chunk."""
+      default=None, description="""Text of the place answer."""
   )
   title: Optional[str] = Field(
-      default=None, description="""Title of the chunk."""
+      default=None, description="""Title of the place."""
   )
   uri: Optional[str] = Field(
-      default=None, description="""URI reference of the chunk."""
+      default=None, description="""URI reference of the place."""
   )
 
 
@@ -5135,13 +5383,13 @@ class GroundingChunkMapsDict(TypedDict, total=False):
   """This Place's resource name, in `places/{place_id}` format. Can be used to look up the Place."""
 
   text: Optional[str]
-  """Text of the chunk."""
+  """Text of the place answer."""
 
   title: Optional[str]
-  """Title of the chunk."""
+  """Title of the place."""
 
   uri: Optional[str]
-  """URI reference of the chunk."""
+  """URI reference of the place."""
 
 
 GroundingChunkMapsOrDict = Union[GroundingChunkMaps, GroundingChunkMapsDict]
@@ -5896,94 +6144,97 @@ ModalityTokenCountOrDict = Union[ModalityTokenCount, ModalityTokenCountDict]
 
 
 class GenerateContentResponseUsageMetadata(_common.BaseModel):
-  """Usage metadata about response(s).
+  """Usage metadata about the content generation request and response.
 
-  This data type is not supported in Gemini API.
+  This message provides a detailed breakdown of token usage and other relevant
+  metrics. This data type is not supported in Gemini API.
   """
 
   cache_tokens_details: Optional[list[ModalityTokenCount]] = Field(
       default=None,
-      description="""Output only. List of modalities of the cached content in the request input.""",
+      description="""Output only. A detailed breakdown of the token count for each modality in the cached content.""",
   )
   cached_content_token_count: Optional[int] = Field(
       default=None,
-      description="""Output only. Number of tokens in the cached part in the input (the cached content).""",
+      description="""Output only. The number of tokens in the cached content that was used for this request.""",
   )
   candidates_token_count: Optional[int] = Field(
-      default=None, description="""Number of tokens in the response(s)."""
+      default=None,
+      description="""The total number of tokens in the generated candidates.""",
   )
   candidates_tokens_details: Optional[list[ModalityTokenCount]] = Field(
       default=None,
-      description="""Output only. List of modalities that were returned in the response.""",
+      description="""Output only. A detailed breakdown of the token count for each modality in the generated candidates.""",
   )
   prompt_token_count: Optional[int] = Field(
       default=None,
-      description="""Number of tokens in the request. When `cached_content` is set, this is still the total effective prompt size meaning this includes the number of tokens in the cached content.""",
+      description="""The total number of tokens in the prompt. This includes any text, images, or other media provided in the request. When `cached_content` is set, this also includes the number of tokens in the cached content.""",
   )
   prompt_tokens_details: Optional[list[ModalityTokenCount]] = Field(
       default=None,
-      description="""Output only. List of modalities that were processed in the request input.""",
+      description="""Output only. A detailed breakdown of the token count for each modality in the prompt.""",
   )
   thoughts_token_count: Optional[int] = Field(
       default=None,
-      description="""Output only. Number of tokens present in thoughts output.""",
+      description="""Output only. The number of tokens that were part of the model's generated "thoughts" output, if applicable.""",
   )
   tool_use_prompt_token_count: Optional[int] = Field(
       default=None,
-      description="""Output only. Number of tokens present in tool-use prompt(s).""",
+      description="""Output only. The number of tokens in the results from tool executions, which are provided back to the model as input, if applicable.""",
   )
   tool_use_prompt_tokens_details: Optional[list[ModalityTokenCount]] = Field(
       default=None,
-      description="""Output only. List of modalities that were processed for tool-use request inputs.""",
+      description="""Output only. A detailed breakdown by modality of the token counts from the results of tool executions, which are provided back to the model as input.""",
   )
   total_token_count: Optional[int] = Field(
       default=None,
-      description="""Total token count for prompt, response candidates, and tool-use prompts (if present).""",
+      description="""The total number of tokens for the entire request. This is the sum of `prompt_token_count`, `candidates_token_count`, `tool_use_prompt_token_count`, and `thoughts_token_count`.""",
   )
   traffic_type: Optional[TrafficType] = Field(
       default=None,
-      description="""Output only. Traffic type. This shows whether a request consumes Pay-As-You-Go or Provisioned Throughput quota.""",
+      description="""Output only. The traffic type for this request.""",
   )
 
 
 class GenerateContentResponseUsageMetadataDict(TypedDict, total=False):
-  """Usage metadata about response(s).
+  """Usage metadata about the content generation request and response.
 
-  This data type is not supported in Gemini API.
+  This message provides a detailed breakdown of token usage and other relevant
+  metrics. This data type is not supported in Gemini API.
   """
 
   cache_tokens_details: Optional[list[ModalityTokenCountDict]]
-  """Output only. List of modalities of the cached content in the request input."""
+  """Output only. A detailed breakdown of the token count for each modality in the cached content."""
 
   cached_content_token_count: Optional[int]
-  """Output only. Number of tokens in the cached part in the input (the cached content)."""
+  """Output only. The number of tokens in the cached content that was used for this request."""
 
   candidates_token_count: Optional[int]
-  """Number of tokens in the response(s)."""
+  """The total number of tokens in the generated candidates."""
 
   candidates_tokens_details: Optional[list[ModalityTokenCountDict]]
-  """Output only. List of modalities that were returned in the response."""
+  """Output only. A detailed breakdown of the token count for each modality in the generated candidates."""
 
   prompt_token_count: Optional[int]
-  """Number of tokens in the request. When `cached_content` is set, this is still the total effective prompt size meaning this includes the number of tokens in the cached content."""
+  """The total number of tokens in the prompt. This includes any text, images, or other media provided in the request. When `cached_content` is set, this also includes the number of tokens in the cached content."""
 
   prompt_tokens_details: Optional[list[ModalityTokenCountDict]]
-  """Output only. List of modalities that were processed in the request input."""
+  """Output only. A detailed breakdown of the token count for each modality in the prompt."""
 
   thoughts_token_count: Optional[int]
-  """Output only. Number of tokens present in thoughts output."""
+  """Output only. The number of tokens that were part of the model's generated "thoughts" output, if applicable."""
 
   tool_use_prompt_token_count: Optional[int]
-  """Output only. Number of tokens present in tool-use prompt(s)."""
+  """Output only. The number of tokens in the results from tool executions, which are provided back to the model as input, if applicable."""
 
   tool_use_prompt_tokens_details: Optional[list[ModalityTokenCountDict]]
-  """Output only. List of modalities that were processed for tool-use request inputs."""
+  """Output only. A detailed breakdown by modality of the token counts from the results of tool executions, which are provided back to the model as input."""
 
   total_token_count: Optional[int]
-  """Total token count for prompt, response candidates, and tool-use prompts (if present)."""
+  """The total number of tokens for the entire request. This is the sum of `prompt_token_count`, `candidates_token_count`, `tool_use_prompt_token_count`, and `thoughts_token_count`."""
 
   traffic_type: Optional[TrafficType]
-  """Output only. Traffic type. This shows whether a request consumes Pay-As-You-Go or Provisioned Throughput quota."""
+  """Output only. The traffic type for this request."""
 
 
 GenerateContentResponseUsageMetadataOrDict = Union[
@@ -8501,32 +8752,26 @@ VoiceConfigOrDict = Union[VoiceConfig, VoiceConfigDict]
 
 
 class SpeakerVoiceConfig(_common.BaseModel):
-  """The configuration for a single speaker in a multi speaker setup.
-
-  This data type is not supported in Vertex AI.
-  """
+  """Configuration for a single speaker in a multi speaker setup."""
 
   speaker: Optional[str] = Field(
       default=None,
-      description="""Required. The name of the speaker to use. Should be the same as in the prompt.""",
+      description="""Required. The name of the speaker. This should be the same as the speaker name used in the prompt.""",
   )
   voice_config: Optional[VoiceConfig] = Field(
       default=None,
-      description="""Required. The configuration for the voice to use.""",
+      description="""Required. The configuration for the voice of this speaker.""",
   )
 
 
 class SpeakerVoiceConfigDict(TypedDict, total=False):
-  """The configuration for a single speaker in a multi speaker setup.
-
-  This data type is not supported in Vertex AI.
-  """
+  """Configuration for a single speaker in a multi speaker setup."""
 
   speaker: Optional[str]
-  """Required. The name of the speaker to use. Should be the same as in the prompt."""
+  """Required. The name of the speaker. This should be the same as the speaker name used in the prompt."""
 
   voice_config: Optional[VoiceConfigDict]
-  """Required. The configuration for the voice to use."""
+  """Required. The configuration for the voice of this speaker."""
 
 
 SpeakerVoiceConfigOrDict = Union[SpeakerVoiceConfig, SpeakerVoiceConfigDict]
@@ -8564,6 +8809,12 @@ class GenerationConfig(_common.BaseModel):
   model_selection_config: Optional[ModelSelectionConfig] = Field(
       default=None, description="""Optional. Config for model selection."""
   )
+  response_json_schema: Optional[Any] = Field(
+      default=None,
+      description="""Output schema of the generated response. This is an alternative to
+      `response_schema` that accepts [JSON Schema](https://json-schema.org/).
+      """,
+  )
   audio_timestamp: Optional[bool] = Field(
       default=None,
       description="""Optional. If enabled, audio timestamp will be included in the request to the model. This field is not supported in Gemini API.""",
@@ -8592,10 +8843,6 @@ class GenerationConfig(_common.BaseModel):
   )
   presence_penalty: Optional[float] = Field(
       default=None, description="""Optional. Positive penalties."""
-  )
-  response_json_schema: Optional[Any] = Field(
-      default=None,
-      description="""Optional. Output schema of the generated response. This is an alternative to `response_schema` that accepts [JSON Schema](https://json-schema.org/). If set, `response_schema` must be omitted, but `response_mime_type` is required. While the full JSON Schema may be sent, not all features are supported. Specifically, only the following properties are supported: - `$id` - `$defs` - `$ref` - `$anchor` - `type` - `format` - `title` - `description` - `enum` (for strings and numbers) - `items` - `prefixItems` - `minItems` - `maxItems` - `minimum` - `maximum` - `anyOf` - `oneOf` (interpreted the same as `anyOf`) - `properties` - `additionalProperties` - `required` The non-standard `propertyOrdering` property may also be set. Cyclic references are unrolled to a limited degree and, as such, may only be used within non-required properties. (Nullable properties are not sufficient.) If `$ref` is set on a sub-schema, no other properties, except for than those starting as a `$`, may be set.""",
   )
   response_logprobs: Optional[bool] = Field(
       default=None,
@@ -8651,6 +8898,11 @@ class GenerationConfigDict(TypedDict, total=False):
   model_selection_config: Optional[ModelSelectionConfigDict]
   """Optional. Config for model selection."""
 
+  response_json_schema: Optional[Any]
+  """Output schema of the generated response. This is an alternative to
+      `response_schema` that accepts [JSON Schema](https://json-schema.org/).
+      """
+
   audio_timestamp: Optional[bool]
   """Optional. If enabled, audio timestamp will be included in the request to the model. This field is not supported in Gemini API."""
 
@@ -8674,9 +8926,6 @@ class GenerationConfigDict(TypedDict, total=False):
 
   presence_penalty: Optional[float]
   """Optional. Positive penalties."""
-
-  response_json_schema: Optional[Any]
-  """Optional. Output schema of the generated response. This is an alternative to `response_schema` that accepts [JSON Schema](https://json-schema.org/). If set, `response_schema` must be omitted, but `response_mime_type` is required. While the full JSON Schema may be sent, not all features are supported. Specifically, only the following properties are supported: - `$id` - `$defs` - `$ref` - `$anchor` - `type` - `format` - `title` - `description` - `enum` (for strings and numbers) - `items` - `prefixItems` - `minItems` - `maxItems` - `minimum` - `maximum` - `anyOf` - `oneOf` (interpreted the same as `anyOf`) - `properties` - `additionalProperties` - `required` The non-standard `propertyOrdering` property may also be set. Cyclic references are unrolled to a limited degree and, as such, may only be used within non-required properties. (Nullable properties are not sufficient.) If `$ref` is set on a sub-schema, no other properties, except for than those starting as a `$`, may be set."""
 
   response_logprobs: Optional[bool]
   """Optional. If true, export the logprobs results in response."""
@@ -9766,6 +10015,10 @@ PreferenceOptimizationHyperParametersOrDict = Union[
 class PreferenceOptimizationSpec(_common.BaseModel):
   """Preference optimization tuning spec for tuning."""
 
+  export_last_checkpoint_only: Optional[bool] = Field(
+      default=None,
+      description="""Optional. If set to true, disable intermediate checkpoints for Preference Optimization and only the last checkpoint will be exported. Otherwise, enable intermediate checkpoints for Preference Optimization. Default is false.""",
+  )
   hyper_parameters: Optional[PreferenceOptimizationHyperParameters] = Field(
       default=None,
       description="""Optional. Hyperparameters for Preference Optimization.""",
@@ -9782,6 +10035,9 @@ class PreferenceOptimizationSpec(_common.BaseModel):
 
 class PreferenceOptimizationSpecDict(TypedDict, total=False):
   """Preference optimization tuning spec for tuning."""
+
+  export_last_checkpoint_only: Optional[bool]
+  """Optional. If set to true, disable intermediate checkpoints for Preference Optimization and only the last checkpoint will be exported. Otherwise, enable intermediate checkpoints for Preference Optimization. Default is false."""
 
   hyper_parameters: Optional[PreferenceOptimizationHyperParametersDict]
   """Optional. Hyperparameters for Preference Optimization."""
@@ -9875,6 +10131,10 @@ class AutoraterConfig(_common.BaseModel):
   Tuned model endpoint format:
   `projects/{project}/locations/{location}/endpoints/{endpoint}`""",
   )
+  generation_config: Optional[GenerationConfig] = Field(
+      default=None,
+      description="""Configuration options for model generation and outputs.""",
+  )
 
 
 class AutoraterConfigDict(TypedDict, total=False):
@@ -9902,6 +10162,9 @@ class AutoraterConfigDict(TypedDict, total=False):
 
   Tuned model endpoint format:
   `projects/{project}/locations/{location}/endpoints/{endpoint}`"""
+
+  generation_config: Optional[GenerationConfigDict]
+  """Configuration options for model generation and outputs."""
 
 
 AutoraterConfigOrDict = Union[AutoraterConfig, AutoraterConfigDict]
@@ -9950,12 +10213,11 @@ class Metric(_common.BaseModel):
   """An optional string indicating the version of the metric."""
 
   @model_validator(mode='after')  # type: ignore[arg-type]
-  @classmethod
-  def validate_name(cls, model: 'Metric') -> 'Metric':
-    if not model.name:
+  def validate_name(self) -> 'Metric':
+    if not self.name:
       raise ValueError('Metric name cannot be empty.')
-    model.name = model.name.lower()
-    return model
+    self.name = self.name.lower()
+    return self
 
   def to_yaml_file(self, file_path: str, version: Optional[str] = None) -> None:
     """Dumps the metric object to a YAML file.
@@ -11027,7 +11289,7 @@ class TuningJob(_common.BaseModel):
   )
   tuned_model_display_name: Optional[str] = Field(
       default=None,
-      description="""Optional. The display name of the TunedModel. The name can be up to 128 characters long and can consist of any UTF-8 characters.""",
+      description="""Optional. The display name of the TunedModel. The name can be up to 128 characters long and can consist of any UTF-8 characters. For continuous tuning, tuned_model_display_name will by default use the same display name as the pre-tuned model. If a new display name is provided, the tuning job will create a new model instead of a new version.""",
   )
   veo_tuning_spec: Optional[VeoTuningSpec] = Field(
       default=None, description="""Tuning Spec for Veo Tuning."""
@@ -11120,7 +11382,7 @@ class TuningJobDict(TypedDict, total=False):
   """The service account that the tuningJob workload runs as. If not specified, the Vertex AI Secure Fine-Tuned Service Agent in the project will be used. See https://cloud.google.com/iam/docs/service-agents#vertex-ai-secure-fine-tuning-service-agent Users starting the pipeline must have the `iam.serviceAccounts.actAs` permission on this service account."""
 
   tuned_model_display_name: Optional[str]
-  """Optional. The display name of the TunedModel. The name can be up to 128 characters long and can consist of any UTF-8 characters."""
+  """Optional. The display name of the TunedModel. The name can be up to 128 characters long and can consist of any UTF-8 characters. For continuous tuning, tuned_model_display_name will by default use the same display name as the pre-tuned model. If a new display name is provided, the tuning job will create a new model instead of a new version."""
 
   veo_tuning_spec: Optional[VeoTuningSpecDict]
   """Tuning Spec for Veo Tuning."""
@@ -12060,6 +12322,904 @@ ListCachedContentsResponseOrDict = Union[
 ]
 
 
+class GetDocumentConfig(_common.BaseModel):
+  """Optional Config."""
+
+  http_options: Optional[HttpOptions] = Field(
+      default=None, description="""Used to override HTTP request options."""
+  )
+
+
+class GetDocumentConfigDict(TypedDict, total=False):
+  """Optional Config."""
+
+  http_options: Optional[HttpOptionsDict]
+  """Used to override HTTP request options."""
+
+
+GetDocumentConfigOrDict = Union[GetDocumentConfig, GetDocumentConfigDict]
+
+
+class _GetDocumentParameters(_common.BaseModel):
+  """Parameters for documents.get."""
+
+  name: Optional[str] = Field(
+      default=None,
+      description="""The resource name of the Document.
+    Example: fileSearchStores/file-search-store-foo/documents/documents-bar""",
+  )
+  config: Optional[GetDocumentConfig] = Field(
+      default=None, description="""Optional parameters for the request."""
+  )
+
+
+class _GetDocumentParametersDict(TypedDict, total=False):
+  """Parameters for documents.get."""
+
+  name: Optional[str]
+  """The resource name of the Document.
+    Example: fileSearchStores/file-search-store-foo/documents/documents-bar"""
+
+  config: Optional[GetDocumentConfigDict]
+  """Optional parameters for the request."""
+
+
+_GetDocumentParametersOrDict = Union[
+    _GetDocumentParameters, _GetDocumentParametersDict
+]
+
+
+class StringList(_common.BaseModel):
+  """User provided string values assigned to a single metadata key.
+
+  This data type is not supported in Vertex AI.
+  """
+
+  values: Optional[list[str]] = Field(
+      default=None,
+      description="""The string values of the metadata to store.""",
+  )
+
+
+class StringListDict(TypedDict, total=False):
+  """User provided string values assigned to a single metadata key.
+
+  This data type is not supported in Vertex AI.
+  """
+
+  values: Optional[list[str]]
+  """The string values of the metadata to store."""
+
+
+StringListOrDict = Union[StringList, StringListDict]
+
+
+class CustomMetadata(_common.BaseModel):
+  """User provided metadata stored as key-value pairs.
+
+  This data type is not supported in Vertex AI.
+  """
+
+  key: Optional[str] = Field(
+      default=None,
+      description="""Required. The key of the metadata to store.""",
+  )
+  numeric_value: Optional[float] = Field(
+      default=None,
+      description="""The numeric value of the metadata to store.""",
+  )
+  string_list_value: Optional[StringList] = Field(
+      default=None,
+      description="""The StringList value of the metadata to store.""",
+  )
+  string_value: Optional[str] = Field(
+      default=None, description="""The string value of the metadata to store."""
+  )
+
+
+class CustomMetadataDict(TypedDict, total=False):
+  """User provided metadata stored as key-value pairs.
+
+  This data type is not supported in Vertex AI.
+  """
+
+  key: Optional[str]
+  """Required. The key of the metadata to store."""
+
+  numeric_value: Optional[float]
+  """The numeric value of the metadata to store."""
+
+  string_list_value: Optional[StringListDict]
+  """The StringList value of the metadata to store."""
+
+  string_value: Optional[str]
+  """The string value of the metadata to store."""
+
+
+CustomMetadataOrDict = Union[CustomMetadata, CustomMetadataDict]
+
+
+class Document(_common.BaseModel):
+  """A Document is a collection of Chunks."""
+
+  name: Optional[str] = Field(
+      default=None,
+      description="""The resource name of the Document.
+      Example: fileSearchStores/file-search-store-foo/documents/documents-bar""",
+  )
+  display_name: Optional[str] = Field(
+      default=None,
+      description="""The human-readable display name for the Document.""",
+  )
+  state: Optional[DocumentState] = Field(
+      default=None, description="""The current state of the Document."""
+  )
+  size_bytes: Optional[int] = Field(
+      default=None, description="""The size of the Document in bytes."""
+  )
+  mime_type: Optional[str] = Field(
+      default=None, description="""The MIME type of the Document."""
+  )
+  create_time: Optional[datetime.datetime] = Field(
+      default=None,
+      description="""Output only. The Timestamp of when the `Document` was created.""",
+  )
+  custom_metadata: Optional[list[CustomMetadata]] = Field(
+      default=None,
+      description="""Optional. User provided custom metadata stored as key-value pairs used for querying. A `Document` can have a maximum of 20 `CustomMetadata`.""",
+  )
+  update_time: Optional[datetime.datetime] = Field(
+      default=None,
+      description="""Output only. The Timestamp of when the `Document` was last updated.""",
+  )
+
+
+class DocumentDict(TypedDict, total=False):
+  """A Document is a collection of Chunks."""
+
+  name: Optional[str]
+  """The resource name of the Document.
+      Example: fileSearchStores/file-search-store-foo/documents/documents-bar"""
+
+  display_name: Optional[str]
+  """The human-readable display name for the Document."""
+
+  state: Optional[DocumentState]
+  """The current state of the Document."""
+
+  size_bytes: Optional[int]
+  """The size of the Document in bytes."""
+
+  mime_type: Optional[str]
+  """The MIME type of the Document."""
+
+  create_time: Optional[datetime.datetime]
+  """Output only. The Timestamp of when the `Document` was created."""
+
+  custom_metadata: Optional[list[CustomMetadataDict]]
+  """Optional. User provided custom metadata stored as key-value pairs used for querying. A `Document` can have a maximum of 20 `CustomMetadata`."""
+
+  update_time: Optional[datetime.datetime]
+  """Output only. The Timestamp of when the `Document` was last updated."""
+
+
+DocumentOrDict = Union[Document, DocumentDict]
+
+
+class DeleteDocumentConfig(_common.BaseModel):
+  """Config for optional parameters."""
+
+  http_options: Optional[HttpOptions] = Field(
+      default=None, description="""Used to override HTTP request options."""
+  )
+  force: Optional[bool] = Field(
+      default=None,
+      description="""If set to true, any `Chunk`s and objects related to this `Document` will
+      also be deleted.
+      """,
+  )
+
+
+class DeleteDocumentConfigDict(TypedDict, total=False):
+  """Config for optional parameters."""
+
+  http_options: Optional[HttpOptionsDict]
+  """Used to override HTTP request options."""
+
+  force: Optional[bool]
+  """If set to true, any `Chunk`s and objects related to this `Document` will
+      also be deleted.
+      """
+
+
+DeleteDocumentConfigOrDict = Union[
+    DeleteDocumentConfig, DeleteDocumentConfigDict
+]
+
+
+class _DeleteDocumentParameters(_common.BaseModel):
+  """Config for documents.delete parameters."""
+
+  name: Optional[str] = Field(
+      default=None,
+      description="""The resource name of the Document.
+    Example: fileSearchStores/file-search-store-foo/documents/documents-bar""",
+  )
+  config: Optional[DeleteDocumentConfig] = Field(
+      default=None, description="""Optional parameters for the request."""
+  )
+
+
+class _DeleteDocumentParametersDict(TypedDict, total=False):
+  """Config for documents.delete parameters."""
+
+  name: Optional[str]
+  """The resource name of the Document.
+    Example: fileSearchStores/file-search-store-foo/documents/documents-bar"""
+
+  config: Optional[DeleteDocumentConfigDict]
+  """Optional parameters for the request."""
+
+
+_DeleteDocumentParametersOrDict = Union[
+    _DeleteDocumentParameters, _DeleteDocumentParametersDict
+]
+
+
+class ListDocumentsConfig(_common.BaseModel):
+  """Config for optional parameters."""
+
+  http_options: Optional[HttpOptions] = Field(
+      default=None, description="""Used to override HTTP request options."""
+  )
+  page_size: Optional[int] = Field(default=None, description="""""")
+  page_token: Optional[str] = Field(default=None, description="""""")
+
+
+class ListDocumentsConfigDict(TypedDict, total=False):
+  """Config for optional parameters."""
+
+  http_options: Optional[HttpOptionsDict]
+  """Used to override HTTP request options."""
+
+  page_size: Optional[int]
+  """"""
+
+  page_token: Optional[str]
+  """"""
+
+
+ListDocumentsConfigOrDict = Union[ListDocumentsConfig, ListDocumentsConfigDict]
+
+
+class _ListDocumentsParameters(_common.BaseModel):
+  """Config for documents.list parameters."""
+
+  parent: Optional[str] = Field(
+      default=None,
+      description="""The resource name of the FileSearchStores. Example: `fileSearchStore/file-search-store-foo`""",
+  )
+  config: Optional[ListDocumentsConfig] = Field(
+      default=None, description=""""""
+  )
+
+
+class _ListDocumentsParametersDict(TypedDict, total=False):
+  """Config for documents.list parameters."""
+
+  parent: Optional[str]
+  """The resource name of the FileSearchStores. Example: `fileSearchStore/file-search-store-foo`"""
+
+  config: Optional[ListDocumentsConfigDict]
+  """"""
+
+
+_ListDocumentsParametersOrDict = Union[
+    _ListDocumentsParameters, _ListDocumentsParametersDict
+]
+
+
+class ListDocumentsResponse(_common.BaseModel):
+  """Config for documents.list return value."""
+
+  sdk_http_response: Optional[HttpResponse] = Field(
+      default=None, description="""Used to retain the full HTTP response."""
+  )
+  next_page_token: Optional[str] = Field(
+      default=None,
+      description="""A token, which can be sent as `page_token` to retrieve the next page. If this field is omitted, there are no more pages.""",
+  )
+  documents: Optional[list[Document]] = Field(
+      default=None, description="""The returned `Document`s."""
+  )
+
+
+class ListDocumentsResponseDict(TypedDict, total=False):
+  """Config for documents.list return value."""
+
+  sdk_http_response: Optional[HttpResponseDict]
+  """Used to retain the full HTTP response."""
+
+  next_page_token: Optional[str]
+  """A token, which can be sent as `page_token` to retrieve the next page. If this field is omitted, there are no more pages."""
+
+  documents: Optional[list[DocumentDict]]
+  """The returned `Document`s."""
+
+
+ListDocumentsResponseOrDict = Union[
+    ListDocumentsResponse, ListDocumentsResponseDict
+]
+
+
+class CreateFileSearchStoreConfig(_common.BaseModel):
+  """Optional parameters for creating a file search store."""
+
+  http_options: Optional[HttpOptions] = Field(
+      default=None, description="""Used to override HTTP request options."""
+  )
+  display_name: Optional[str] = Field(
+      default=None,
+      description="""The human-readable display name for the file search store.
+      """,
+  )
+
+
+class CreateFileSearchStoreConfigDict(TypedDict, total=False):
+  """Optional parameters for creating a file search store."""
+
+  http_options: Optional[HttpOptionsDict]
+  """Used to override HTTP request options."""
+
+  display_name: Optional[str]
+  """The human-readable display name for the file search store.
+      """
+
+
+CreateFileSearchStoreConfigOrDict = Union[
+    CreateFileSearchStoreConfig, CreateFileSearchStoreConfigDict
+]
+
+
+class _CreateFileSearchStoreParameters(_common.BaseModel):
+  """Config for file_search_stores.create parameters."""
+
+  config: Optional[CreateFileSearchStoreConfig] = Field(
+      default=None,
+      description="""Optional parameters for creating a file search store.
+      """,
+  )
+
+
+class _CreateFileSearchStoreParametersDict(TypedDict, total=False):
+  """Config for file_search_stores.create parameters."""
+
+  config: Optional[CreateFileSearchStoreConfigDict]
+  """Optional parameters for creating a file search store.
+      """
+
+
+_CreateFileSearchStoreParametersOrDict = Union[
+    _CreateFileSearchStoreParameters, _CreateFileSearchStoreParametersDict
+]
+
+
+class FileSearchStore(_common.BaseModel):
+  """A collection of Documents."""
+
+  name: Optional[str] = Field(
+      default=None,
+      description="""The resource name of the FileSearchStore. Example: `fileSearchStores/my-file-search-store-123`""",
+  )
+  display_name: Optional[str] = Field(
+      default=None,
+      description="""The human-readable display name for the FileSearchStore.""",
+  )
+  create_time: Optional[datetime.datetime] = Field(
+      default=None,
+      description="""The Timestamp of when the FileSearchStore was created.""",
+  )
+  update_time: Optional[datetime.datetime] = Field(
+      default=None,
+      description="""The Timestamp of when the FileSearchStore was last updated.""",
+  )
+  active_documents_count: Optional[int] = Field(
+      default=None,
+      description="""The number of documents in the FileSearchStore that are active and ready for retrieval.""",
+  )
+  pending_documents_count: Optional[int] = Field(
+      default=None,
+      description="""The number of documents in the FileSearchStore that are being processed.""",
+  )
+  failed_documents_count: Optional[int] = Field(
+      default=None,
+      description="""The number of documents in the FileSearchStore that have failed processing.""",
+  )
+  size_bytes: Optional[int] = Field(
+      default=None,
+      description="""The size of raw bytes ingested into the FileSearchStore. This is the
+      total size of all the documents in the FileSearchStore.""",
+  )
+
+
+class FileSearchStoreDict(TypedDict, total=False):
+  """A collection of Documents."""
+
+  name: Optional[str]
+  """The resource name of the FileSearchStore. Example: `fileSearchStores/my-file-search-store-123`"""
+
+  display_name: Optional[str]
+  """The human-readable display name for the FileSearchStore."""
+
+  create_time: Optional[datetime.datetime]
+  """The Timestamp of when the FileSearchStore was created."""
+
+  update_time: Optional[datetime.datetime]
+  """The Timestamp of when the FileSearchStore was last updated."""
+
+  active_documents_count: Optional[int]
+  """The number of documents in the FileSearchStore that are active and ready for retrieval."""
+
+  pending_documents_count: Optional[int]
+  """The number of documents in the FileSearchStore that are being processed."""
+
+  failed_documents_count: Optional[int]
+  """The number of documents in the FileSearchStore that have failed processing."""
+
+  size_bytes: Optional[int]
+  """The size of raw bytes ingested into the FileSearchStore. This is the
+      total size of all the documents in the FileSearchStore."""
+
+
+FileSearchStoreOrDict = Union[FileSearchStore, FileSearchStoreDict]
+
+
+class GetFileSearchStoreConfig(_common.BaseModel):
+  """Optional parameters for getting a FileSearchStore."""
+
+  http_options: Optional[HttpOptions] = Field(
+      default=None, description="""Used to override HTTP request options."""
+  )
+
+
+class GetFileSearchStoreConfigDict(TypedDict, total=False):
+  """Optional parameters for getting a FileSearchStore."""
+
+  http_options: Optional[HttpOptionsDict]
+  """Used to override HTTP request options."""
+
+
+GetFileSearchStoreConfigOrDict = Union[
+    GetFileSearchStoreConfig, GetFileSearchStoreConfigDict
+]
+
+
+class _GetFileSearchStoreParameters(_common.BaseModel):
+  """Config for file_search_stores.get parameters."""
+
+  name: Optional[str] = Field(
+      default=None,
+      description="""The resource name of the FileSearchStore. Example: `fileSearchStores/my-file-search-store-123`""",
+  )
+  config: Optional[GetFileSearchStoreConfig] = Field(
+      default=None, description="""Optional parameters for the request."""
+  )
+
+
+class _GetFileSearchStoreParametersDict(TypedDict, total=False):
+  """Config for file_search_stores.get parameters."""
+
+  name: Optional[str]
+  """The resource name of the FileSearchStore. Example: `fileSearchStores/my-file-search-store-123`"""
+
+  config: Optional[GetFileSearchStoreConfigDict]
+  """Optional parameters for the request."""
+
+
+_GetFileSearchStoreParametersOrDict = Union[
+    _GetFileSearchStoreParameters, _GetFileSearchStoreParametersDict
+]
+
+
+class DeleteFileSearchStoreConfig(_common.BaseModel):
+  """Optional parameters for deleting a FileSearchStore."""
+
+  http_options: Optional[HttpOptions] = Field(
+      default=None, description="""Used to override HTTP request options."""
+  )
+  force: Optional[bool] = Field(
+      default=None,
+      description="""If set to true, any Documents and objects related to this FileSearchStore will also be deleted.
+      If false (the default), a FAILED_PRECONDITION error will be returned if
+      the FileSearchStore contains any Documents.
+      """,
+  )
+
+
+class DeleteFileSearchStoreConfigDict(TypedDict, total=False):
+  """Optional parameters for deleting a FileSearchStore."""
+
+  http_options: Optional[HttpOptionsDict]
+  """Used to override HTTP request options."""
+
+  force: Optional[bool]
+  """If set to true, any Documents and objects related to this FileSearchStore will also be deleted.
+      If false (the default), a FAILED_PRECONDITION error will be returned if
+      the FileSearchStore contains any Documents.
+      """
+
+
+DeleteFileSearchStoreConfigOrDict = Union[
+    DeleteFileSearchStoreConfig, DeleteFileSearchStoreConfigDict
+]
+
+
+class _DeleteFileSearchStoreParameters(_common.BaseModel):
+  """Config for file_search_stores.delete parameters."""
+
+  name: Optional[str] = Field(
+      default=None,
+      description="""The resource name of the FileSearchStore. Example: `fileSearchStores/my-file-search-store-123`""",
+  )
+  config: Optional[DeleteFileSearchStoreConfig] = Field(
+      default=None, description="""Optional parameters for the request."""
+  )
+
+
+class _DeleteFileSearchStoreParametersDict(TypedDict, total=False):
+  """Config for file_search_stores.delete parameters."""
+
+  name: Optional[str]
+  """The resource name of the FileSearchStore. Example: `fileSearchStores/my-file-search-store-123`"""
+
+  config: Optional[DeleteFileSearchStoreConfigDict]
+  """Optional parameters for the request."""
+
+
+_DeleteFileSearchStoreParametersOrDict = Union[
+    _DeleteFileSearchStoreParameters, _DeleteFileSearchStoreParametersDict
+]
+
+
+class ListFileSearchStoresConfig(_common.BaseModel):
+  """Optional parameters for listing FileSearchStore."""
+
+  http_options: Optional[HttpOptions] = Field(
+      default=None, description="""Used to override HTTP request options."""
+  )
+  page_size: Optional[int] = Field(default=None, description="""""")
+  page_token: Optional[str] = Field(default=None, description="""""")
+
+
+class ListFileSearchStoresConfigDict(TypedDict, total=False):
+  """Optional parameters for listing FileSearchStore."""
+
+  http_options: Optional[HttpOptionsDict]
+  """Used to override HTTP request options."""
+
+  page_size: Optional[int]
+  """"""
+
+  page_token: Optional[str]
+  """"""
+
+
+ListFileSearchStoresConfigOrDict = Union[
+    ListFileSearchStoresConfig, ListFileSearchStoresConfigDict
+]
+
+
+class _ListFileSearchStoresParameters(_common.BaseModel):
+  """Config for file_search_stores.list parameters."""
+
+  config: Optional[ListFileSearchStoresConfig] = Field(
+      default=None, description="""Optional parameters for the list request."""
+  )
+
+
+class _ListFileSearchStoresParametersDict(TypedDict, total=False):
+  """Config for file_search_stores.list parameters."""
+
+  config: Optional[ListFileSearchStoresConfigDict]
+  """Optional parameters for the list request."""
+
+
+_ListFileSearchStoresParametersOrDict = Union[
+    _ListFileSearchStoresParameters, _ListFileSearchStoresParametersDict
+]
+
+
+class ListFileSearchStoresResponse(_common.BaseModel):
+  """Config for file_search_stores.list return value."""
+
+  sdk_http_response: Optional[HttpResponse] = Field(
+      default=None, description="""Used to retain the full HTTP response."""
+  )
+  next_page_token: Optional[str] = Field(default=None, description="""""")
+  file_search_stores: Optional[list[FileSearchStore]] = Field(
+      default=None, description="""The returned file search stores."""
+  )
+
+
+class ListFileSearchStoresResponseDict(TypedDict, total=False):
+  """Config for file_search_stores.list return value."""
+
+  sdk_http_response: Optional[HttpResponseDict]
+  """Used to retain the full HTTP response."""
+
+  next_page_token: Optional[str]
+  """"""
+
+  file_search_stores: Optional[list[FileSearchStoreDict]]
+  """The returned file search stores."""
+
+
+ListFileSearchStoresResponseOrDict = Union[
+    ListFileSearchStoresResponse, ListFileSearchStoresResponseDict
+]
+
+
+class WhiteSpaceConfig(_common.BaseModel):
+  """Configuration for a white space chunking algorithm."""
+
+  max_tokens_per_chunk: Optional[int] = Field(
+      default=None, description="""Maximum number of tokens per chunk."""
+  )
+  max_overlap_tokens: Optional[int] = Field(
+      default=None,
+      description="""Maximum number of overlapping tokens between two adjacent chunks.""",
+  )
+
+
+class WhiteSpaceConfigDict(TypedDict, total=False):
+  """Configuration for a white space chunking algorithm."""
+
+  max_tokens_per_chunk: Optional[int]
+  """Maximum number of tokens per chunk."""
+
+  max_overlap_tokens: Optional[int]
+  """Maximum number of overlapping tokens between two adjacent chunks."""
+
+
+WhiteSpaceConfigOrDict = Union[WhiteSpaceConfig, WhiteSpaceConfigDict]
+
+
+class ChunkingConfig(_common.BaseModel):
+  """Config for telling the service how to chunk the file."""
+
+  white_space_config: Optional[WhiteSpaceConfig] = Field(
+      default=None, description="""White space chunking configuration."""
+  )
+
+
+class ChunkingConfigDict(TypedDict, total=False):
+  """Config for telling the service how to chunk the file."""
+
+  white_space_config: Optional[WhiteSpaceConfigDict]
+  """White space chunking configuration."""
+
+
+ChunkingConfigOrDict = Union[ChunkingConfig, ChunkingConfigDict]
+
+
+class UploadToFileSearchStoreConfig(_common.BaseModel):
+  """Optional parameters for uploading a file to a FileSearchStore."""
+
+  http_options: Optional[HttpOptions] = Field(
+      default=None, description="""Used to override HTTP request options."""
+  )
+  should_return_http_response: Optional[bool] = Field(
+      default=None,
+      description=""" If true, the raw HTTP response will be returned in the 'sdk_http_response' field.""",
+  )
+  mime_type: Optional[str] = Field(
+      default=None,
+      description="""MIME type of the file to be uploaded. If not provided, it will be inferred from the file extension.""",
+  )
+  display_name: Optional[str] = Field(
+      default=None, description="""Display name of the created document."""
+  )
+  custom_metadata: Optional[list[CustomMetadata]] = Field(
+      default=None,
+      description="""User provided custom metadata stored as key-value pairs used for querying.""",
+  )
+  chunking_config: Optional[ChunkingConfig] = Field(
+      default=None,
+      description="""Config for telling the service how to chunk the file.""",
+  )
+
+
+class UploadToFileSearchStoreConfigDict(TypedDict, total=False):
+  """Optional parameters for uploading a file to a FileSearchStore."""
+
+  http_options: Optional[HttpOptionsDict]
+  """Used to override HTTP request options."""
+
+  should_return_http_response: Optional[bool]
+  """ If true, the raw HTTP response will be returned in the 'sdk_http_response' field."""
+
+  mime_type: Optional[str]
+  """MIME type of the file to be uploaded. If not provided, it will be inferred from the file extension."""
+
+  display_name: Optional[str]
+  """Display name of the created document."""
+
+  custom_metadata: Optional[list[CustomMetadataDict]]
+  """User provided custom metadata stored as key-value pairs used for querying."""
+
+  chunking_config: Optional[ChunkingConfigDict]
+  """Config for telling the service how to chunk the file."""
+
+
+UploadToFileSearchStoreConfigOrDict = Union[
+    UploadToFileSearchStoreConfig, UploadToFileSearchStoreConfigDict
+]
+
+
+class _UploadToFileSearchStoreParameters(_common.BaseModel):
+  """Generates the parameters for the private _upload_to_file_search_store method."""
+
+  file_search_store_name: Optional[str] = Field(
+      default=None,
+      description="""The resource name of the FileSearchStore. Example: `fileSearchStores/my-file-search-store-123`""",
+  )
+  config: Optional[UploadToFileSearchStoreConfig] = Field(
+      default=None,
+      description="""Used to override the default configuration.""",
+  )
+
+
+class _UploadToFileSearchStoreParametersDict(TypedDict, total=False):
+  """Generates the parameters for the private _upload_to_file_search_store method."""
+
+  file_search_store_name: Optional[str]
+  """The resource name of the FileSearchStore. Example: `fileSearchStores/my-file-search-store-123`"""
+
+  config: Optional[UploadToFileSearchStoreConfigDict]
+  """Used to override the default configuration."""
+
+
+_UploadToFileSearchStoreParametersOrDict = Union[
+    _UploadToFileSearchStoreParameters, _UploadToFileSearchStoreParametersDict
+]
+
+
+class UploadToFileSearchStoreResumableResponse(_common.BaseModel):
+  """Response for the resumable upload method."""
+
+  sdk_http_response: Optional[HttpResponse] = Field(
+      default=None, description="""Used to retain the full HTTP response."""
+  )
+
+
+class UploadToFileSearchStoreResumableResponseDict(TypedDict, total=False):
+  """Response for the resumable upload method."""
+
+  sdk_http_response: Optional[HttpResponseDict]
+  """Used to retain the full HTTP response."""
+
+
+UploadToFileSearchStoreResumableResponseOrDict = Union[
+    UploadToFileSearchStoreResumableResponse,
+    UploadToFileSearchStoreResumableResponseDict,
+]
+
+
+class ImportFileConfig(_common.BaseModel):
+  """Optional parameters for importing a file."""
+
+  http_options: Optional[HttpOptions] = Field(
+      default=None, description="""Used to override HTTP request options."""
+  )
+  custom_metadata: Optional[list[CustomMetadata]] = Field(
+      default=None,
+      description="""User provided custom metadata stored as key-value pairs used for querying.""",
+  )
+  chunking_config: Optional[ChunkingConfig] = Field(
+      default=None,
+      description="""Config for telling the service how to chunk the file.""",
+  )
+
+
+class ImportFileConfigDict(TypedDict, total=False):
+  """Optional parameters for importing a file."""
+
+  http_options: Optional[HttpOptionsDict]
+  """Used to override HTTP request options."""
+
+  custom_metadata: Optional[list[CustomMetadataDict]]
+  """User provided custom metadata stored as key-value pairs used for querying."""
+
+  chunking_config: Optional[ChunkingConfigDict]
+  """Config for telling the service how to chunk the file."""
+
+
+ImportFileConfigOrDict = Union[ImportFileConfig, ImportFileConfigDict]
+
+
+class _ImportFileParameters(_common.BaseModel):
+  """Config for file_search_stores.import_file parameters."""
+
+  file_search_store_name: Optional[str] = Field(
+      default=None,
+      description="""The resource name of the FileSearchStore. Example: `fileSearchStores/my-file-search-store-123`""",
+  )
+  file_name: Optional[str] = Field(
+      default=None,
+      description="""The name of the File API File to import. Example: `files/abc-123`""",
+  )
+  config: Optional[ImportFileConfig] = Field(
+      default=None, description="""Optional parameters for the request."""
+  )
+
+
+class _ImportFileParametersDict(TypedDict, total=False):
+  """Config for file_search_stores.import_file parameters."""
+
+  file_search_store_name: Optional[str]
+  """The resource name of the FileSearchStore. Example: `fileSearchStores/my-file-search-store-123`"""
+
+  file_name: Optional[str]
+  """The name of the File API File to import. Example: `files/abc-123`"""
+
+  config: Optional[ImportFileConfigDict]
+  """Optional parameters for the request."""
+
+
+_ImportFileParametersOrDict = Union[
+    _ImportFileParameters, _ImportFileParametersDict
+]
+
+
+class ImportFileResponse(_common.BaseModel):
+  """Response for ImportFile to import a File API file with a file search store."""
+
+  sdk_http_response: Optional[HttpResponse] = Field(
+      default=None, description="""Used to retain the full HTTP response."""
+  )
+  parent: Optional[str] = Field(
+      default=None,
+      description="""The name of the FileSearchStore containing Documents.""",
+  )
+  document_name: Optional[str] = Field(
+      default=None, description="""The identifier for the Document imported."""
+  )
+
+
+class ImportFileResponseDict(TypedDict, total=False):
+  """Response for ImportFile to import a File API file with a file search store."""
+
+  sdk_http_response: Optional[HttpResponseDict]
+  """Used to retain the full HTTP response."""
+
+  parent: Optional[str]
+  """The name of the FileSearchStore containing Documents."""
+
+  document_name: Optional[str]
+  """The identifier for the Document imported."""
+
+
+ImportFileResponseOrDict = Union[ImportFileResponse, ImportFileResponseDict]
+
+
+class ImportFileOperation(_common.BaseModel, Operation):
+  """Long-running operation for importing a file to a FileSearchStore."""
+
+  response: Optional[ImportFileResponse] = Field(
+      default=None,
+      description="""The result of the ImportFile operation, available when the operation is done.""",
+  )
+
+  @classmethod
+  def from_api_response(
+      cls, api_response: Any, is_vertex_ai: bool = False
+  ) -> Self:
+    """Instantiates a ImportFileOperation from an API response."""
+
+    response_dict = _ImportFileOperation_from_mldev(api_response)
+    return cls._from_response(response=response_dict, kwargs={})
+
+
 class ListFilesConfig(_common.BaseModel):
   """Used to override the default configuration."""
 
@@ -12745,6 +13905,52 @@ _CreateBatchJobParametersOrDict = Union[
 ]
 
 
+class CompletionStats(_common.BaseModel):
+  """Success and error statistics of processing multiple entities (for example, DataItems or structured data rows) in batch.
+
+  This data type is not supported in Gemini API.
+  """
+
+  failed_count: Optional[int] = Field(
+      default=None,
+      description="""Output only. The number of entities for which any error was encountered.""",
+  )
+  incomplete_count: Optional[int] = Field(
+      default=None,
+      description="""Output only. In cases when enough errors are encountered a job, pipeline, or operation may be failed as a whole. Below is the number of entities for which the processing had not been finished (either in successful or failed state). Set to -1 if the number is unknown (for example, the operation failed before the total entity number could be collected).""",
+  )
+  successful_count: Optional[int] = Field(
+      default=None,
+      description="""Output only. The number of entities that had been processed successfully.""",
+  )
+  successful_forecast_point_count: Optional[int] = Field(
+      default=None,
+      description="""Output only. The number of the successful forecast points that are generated by the forecasting model. This is ONLY used by the forecasting batch prediction.""",
+  )
+
+
+class CompletionStatsDict(TypedDict, total=False):
+  """Success and error statistics of processing multiple entities (for example, DataItems or structured data rows) in batch.
+
+  This data type is not supported in Gemini API.
+  """
+
+  failed_count: Optional[int]
+  """Output only. The number of entities for which any error was encountered."""
+
+  incomplete_count: Optional[int]
+  """Output only. In cases when enough errors are encountered a job, pipeline, or operation may be failed as a whole. Below is the number of entities for which the processing had not been finished (either in successful or failed state). Set to -1 if the number is unknown (for example, the operation failed before the total entity number could be collected)."""
+
+  successful_count: Optional[int]
+  """Output only. The number of entities that had been processed successfully."""
+
+  successful_forecast_point_count: Optional[int]
+  """Output only. The number of the successful forecast points that are generated by the forecasting model. This is ONLY used by the forecasting batch prediction."""
+
+
+CompletionStatsOrDict = Union[CompletionStats, CompletionStatsDict]
+
+
 class BatchJob(_common.BaseModel):
   """Config for batches.create return value."""
 
@@ -12778,7 +13984,7 @@ class BatchJob(_common.BaseModel):
   )
   end_time: Optional[datetime.datetime] = Field(
       default=None,
-      description="""The time when the BatchJob was completed.
+      description="""The time when the BatchJob was completed. This field is for Vertex AI only.
       """,
   )
   update_time: Optional[datetime.datetime] = Field(
@@ -12793,12 +13999,17 @@ class BatchJob(_common.BaseModel):
   )
   src: Optional[BatchJobSource] = Field(
       default=None,
-      description="""Configuration for the input data.
+      description="""Configuration for the input data. This field is for Vertex AI only.
       """,
   )
   dest: Optional[BatchJobDestination] = Field(
       default=None,
       description="""Configuration for the output data.
+      """,
+  )
+  completion_stats: Optional[CompletionStats] = Field(
+      default=None,
+      description="""Statistics on completed and failed prediction instances. This field is for Vertex AI only.
       """,
   )
 
@@ -12855,7 +14066,7 @@ class BatchJobDict(TypedDict, total=False):
   """Output only. Time when the Job for the first time entered the `JOB_STATE_RUNNING` state."""
 
   end_time: Optional[datetime.datetime]
-  """The time when the BatchJob was completed.
+  """The time when the BatchJob was completed. This field is for Vertex AI only.
       """
 
   update_time: Optional[datetime.datetime]
@@ -12867,11 +14078,15 @@ class BatchJobDict(TypedDict, total=False):
       """
 
   src: Optional[BatchJobSourceDict]
-  """Configuration for the input data.
+  """Configuration for the input data. This field is for Vertex AI only.
       """
 
   dest: Optional[BatchJobDestinationDict]
   """Configuration for the output data.
+      """
+
+  completion_stats: Optional[CompletionStatsDict]
+  """Statistics on completed and failed prediction instances. This field is for Vertex AI only.
       """
 
 
@@ -16551,3 +17766,54 @@ class RougeSpecDict(TypedDict, total=False):
 
 
 RougeSpecOrDict = Union[RougeSpec, RougeSpecDict]
+
+
+class UploadToFileSearchStoreResponse(_common.BaseModel):
+  """The response when long-running operation for uploading a file to a FileSearchStore complete."""
+
+  sdk_http_response: Optional[HttpResponse] = Field(
+      default=None, description="""Used to retain the full HTTP response."""
+  )
+  parent: Optional[str] = Field(
+      default=None,
+      description="""The name of the FileSearchStore containing Documents.""",
+  )
+  document_name: Optional[str] = Field(
+      default=None, description="""The identifier for the Document imported."""
+  )
+
+
+class UploadToFileSearchStoreResponseDict(TypedDict, total=False):
+  """The response when long-running operation for uploading a file to a FileSearchStore complete."""
+
+  sdk_http_response: Optional[HttpResponseDict]
+  """Used to retain the full HTTP response."""
+
+  parent: Optional[str]
+  """The name of the FileSearchStore containing Documents."""
+
+  document_name: Optional[str]
+  """The identifier for the Document imported."""
+
+
+UploadToFileSearchStoreResponseOrDict = Union[
+    UploadToFileSearchStoreResponse, UploadToFileSearchStoreResponseDict
+]
+
+
+class UploadToFileSearchStoreOperation(_common.BaseModel, Operation):
+  """Long-running operation for uploading a file to a FileSearchStore."""
+
+  response: Optional[UploadToFileSearchStoreResponse] = Field(
+      default=None,
+      description="""The result of the UploadToFileSearchStore operation, available when the operation is done.""",
+  )
+
+  @classmethod
+  def from_api_response(
+      cls, api_response: Any, is_vertex_ai: bool = False
+  ) -> Self:
+    """Instantiates a UploadToFileSearchStoreOperation from an API response."""
+
+    response_dict = _UploadToFileSearchStoreOperation_from_mldev(api_response)
+    return cls._from_response(response=response_dict, kwargs={})

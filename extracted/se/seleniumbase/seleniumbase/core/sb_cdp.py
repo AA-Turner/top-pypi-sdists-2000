@@ -2,6 +2,7 @@
 import asyncio
 import fasteners
 import os
+import random
 import re
 import sys
 import time
@@ -479,7 +480,7 @@ class CDPMethods():
             text = text[:-1]
         for key in text:
             element.send_keys(key)
-            time.sleep(0.044)
+            time.sleep(float(0.042 + (random.random() / 110.0)))
         if submit:
             element.send_keys("\r\n")
             time.sleep(0.044)
@@ -938,7 +939,7 @@ class CDPMethods():
             text = text.replace("\n", "\r")
         for key in text:
             element.send_keys(key)
-            time.sleep(0.044)
+            time.sleep(float(0.042 + (random.random() / 110.0)))
         if submit:
             element.send_keys("\r\n")
             time.sleep(0.044)
@@ -1699,7 +1700,7 @@ class CDPMethods():
             self.__make_sure_pyautogui_lock_is_writable()
             for key in keys:
                 pyautogui.press(key)
-                time.sleep(0.044)
+                time.sleep(float(0.042 + (random.random() / 110.0)))
         self.__slow_mode_pause_if_set()
         self.loop.run_until_complete(self.page.sleep(0.025))
 
@@ -1803,6 +1804,16 @@ class CDPMethods():
     def click_with_offset(self, selector, x, y, center=False):
         element = self.find_element(selector)
         element.scroll_into_view()
+        if "--debug" in sys.argv:
+            displayed_selector = "`%s`" % selector
+            if '"' not in selector:
+                displayed_selector = '"%s"' % selector
+            elif "'" not in selector:
+                displayed_selector = "'%s'" % selector
+            print(
+                " <DEBUG> sb.click_with_offset(%s, %s, %s, center=%s)"
+                % (displayed_selector, x, y, center)
+            )
         element.click_with_offset(x=x, y=y, center=center)
         self.__slow_mode_pause_if_set()
         self.loop.run_until_complete(self.page.wait())
@@ -1875,10 +1886,12 @@ class CDPMethods():
         """Uses PyAutoGUI unless use_cdp == True"""
         self.sleep(0.056)
         source = self.get_page_source()
-        if self._on_a_g_recaptcha_page(source):
+        if self._on_a_cf_turnstile_page(source):
+            pass
+        elif self._on_a_g_recaptcha_page(source):
             self.__gui_click_recaptcha(use_cdp)
             return
-        elif not self._on_a_cf_turnstile_page(source):
+        else:
             return
         selector = None
         if (
@@ -2078,13 +2091,17 @@ class CDPMethods():
         if uc_lock:
             gui_lock = FileLock(constants.MultiBrowser.PYAUTOGUILOCK)
             with gui_lock:  # Prevent issues with multiple processes
+                if "--debug" in sys.argv:
+                    print(" <DEBUG> pyautogui.moveTo(%s, %s)" % (x1, y1))
                 pyautogui.moveTo(x1, y1, 0.25, pyautogui.easeOutQuad)
                 self.__add_light_pause()
                 if "--debug" in sys.argv:
-                    print(" <DEBUG> pyautogui.moveTo(%s, %s)" % (x1, y1))
+                    print(" <DEBUG> pyautogui.dragTo(%s, %s)" % (x2, y2))
                 pyautogui.dragTo(x2, y2, button="left", duration=timeframe)
         else:
             # Called from a method where the gui_lock is already active
+            if "--debug" in sys.argv:
+                print(" <DEBUG> pyautogui.moveTo(%s, %s)" % (x1, y1))
             pyautogui.moveTo(x1, y1, 0.25, pyautogui.easeOutQuad)
             self.__add_light_pause()
             if "--debug" in sys.argv:
@@ -2163,16 +2180,16 @@ class CDPMethods():
         if uc_lock:
             gui_lock = FileLock(constants.MultiBrowser.PYAUTOGUILOCK)
             with gui_lock:  # Prevent issues with multiple processes
-                pyautogui.moveTo(x, y, timeframe, pyautogui.easeOutQuad)
-                time.sleep(0.056)
                 if "--debug" in sys.argv:
                     print(" <DEBUG> pyautogui.moveTo(%s, %s)" % (x, y))
+                pyautogui.moveTo(x, y, timeframe, pyautogui.easeOutQuad)
+                time.sleep(0.056)
         else:
             # Called from a method where the gui_lock is already active
-            pyautogui.moveTo(x, y, timeframe, pyautogui.easeOutQuad)
-            time.sleep(0.056)
             if "--debug" in sys.argv:
                 print(" <DEBUG> pyautogui.moveTo(%s, %s)" % (x, y))
+            pyautogui.moveTo(x, y, timeframe, pyautogui.easeOutQuad)
+            time.sleep(0.056)
 
     def gui_hover_x_y(self, x, y, timeframe=0.25):
         gui_lock = FileLock(constants.MultiBrowser.PYAUTOGUILOCK)

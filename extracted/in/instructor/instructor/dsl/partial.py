@@ -115,14 +115,17 @@ def _make_field_optional(
             Optional[generic_base[modified_args]] if generic_base else None
         )
         tmp_field.default = None
+        tmp_field.default_factory = None
     # If the field is a BaseModel, then recursively convert it's
     # attributes to optionals.
     elif isinstance(annotation, type) and issubclass(annotation, BaseModel):
         tmp_field.annotation = Optional[Partial[annotation, MakeFieldsOptional]]  # type: ignore[assignment, valid-type]
         tmp_field.default = {}
+        tmp_field.default_factory = None
     else:
         tmp_field.annotation = Optional[field.annotation]  # type:ignore
         tmp_field.default = None
+        tmp_field.default_factory = None
 
     return tmp_field.annotation, tmp_field  # type: ignore
 
@@ -174,10 +177,13 @@ class PartialBase(Generic[T_Model]):
 
         if mode == Mode.MD_JSON:
             json_chunks = extract_json_from_stream_async(json_chunks)
-        elif mode == Mode.WRITER_TOOLS:
-            return cls.writer_model_from_chunks_async(json_chunks, **kwargs)
 
-        return cls.model_from_chunks_async(json_chunks, **kwargs)
+        if mode == Mode.WRITER_TOOLS:
+            async for item in cls.writer_model_from_chunks_async(json_chunks, **kwargs):
+                yield item
+        else:
+            async for item in cls.model_from_chunks_async(json_chunks, **kwargs):
+                yield item
 
     @classmethod
     def writer_model_from_chunks(

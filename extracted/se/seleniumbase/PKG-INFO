@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: seleniumbase
-Version: 4.44.5
+Version: 4.44.7
 Summary: A complete web automation framework for end-to-end testing.
 Home-page: https://github.com/seleniumbase/SeleniumBase
 Author: Michael Mintz
@@ -274,29 +274,31 @@ Dynamic: summary
 <br />
 </p>
 
-<p>SeleniumBase is a browser automation framework for the modern web. Both new and experienced Python users alike can easily get started. With special stealth features like UC Mode and CDP Mode, you'll be evading bot-detection and bypassing CAPTCHAs in minutes.</p>
+<p>SeleniumBase is a browser automation framework that empowers software teams to innovate faster and handle modern web challenges with ease. With stealth options like CDP Mode, you'll avoid the usual restrictions imposed by websites deploying bot-detection services.</p>
 
 --------
 
 📚 Learn from [**over 200 examples** in the **SeleniumBase/examples/** folder](https://github.com/seleniumbase/SeleniumBase/tree/master/examples).
 
-🐙 Stealth modes: <a translate="no" href="https://github.com/seleniumbase/SeleniumBase/blob/master/help_docs/uc_mode.md"><b>UC Mode</b></a> and <a translate="no" href="https://github.com/seleniumbase/SeleniumBase/blob/master/examples/cdp_mode/ReadMe.md"><b>CDP Mode</b></a> help you evade bot-detection.
+🐙 Stealth modes: <a translate="no" href="https://github.com/seleniumbase/SeleniumBase/blob/master/help_docs/uc_mode.md"><b>UC Mode</b></a> and <a translate="no" href="https://github.com/seleniumbase/SeleniumBase/blob/master/examples/cdp_mode/ReadMe.md"><b>CDP Mode</b></a> can bypass bot-detection, solve CAPTCHAs, and call advanced methods from the <a href="https://chromedevtools.github.io/devtools-protocol/" translate="no">Chrome Devtools Protocol</a>.
 
-ℹ️ Most scripts run with raw <code translate="no"><b>python</b></code>, although some scripts use <a href="https://github.com/seleniumbase/SeleniumBase/blob/master/help_docs/syntax_formats.md">Syntax Formats</a> that expect <a href="https://docs.pytest.org/en/latest/how-to/usage.html" translate="no"><b>pytest</b></a> (a Python unit-testing framework included with SeleniumBase that can discover, collect, and run tests automatically).
+ℹ️ Many examples run with raw <code translate="no"><b>python</b></code>, although some use <a href="https://github.com/seleniumbase/SeleniumBase/blob/master/help_docs/syntax_formats.md">Syntax Formats</a> that expect <a href="https://docs.pytest.org/en/latest/how-to/usage.html" translate="no"><b>pytest</b></a> (a Python unit-testing framework included with SeleniumBase that can discover, collect, and run tests automatically).
 
 --------
 
-<p align="left">📗 Here's a test script that performs a Google Search using SeleniumBase UC Mode:<br /><a href="https://github.com/seleniumbase/SeleniumBase/blob/master/examples/raw_google.py">SeleniumBase/examples/raw_google.py</a> (Results are saved as PDF, HTML, and PNG)</p>
+<p align="left">📗 This script performs a Google Search using SeleniumBase UC Mode + CDP Mode:<br /><a href="https://github.com/seleniumbase/SeleniumBase/blob/master/examples/raw_google.py">SeleniumBase/examples/raw_google.py</a> (Results are saved as PDF, HTML, and PNG)</p>
 
 ```python
 from seleniumbase import SB
 
-with SB(test=True, uc=True) as sb:
-    sb.open("https://google.com/ncr")
+with SB(uc=True, test=True) as sb:
+    url = "https://google.com/ncr"
+    sb.activate_cdp_mode(url)
     sb.type('[title="Search"]', "SeleniumBase GitHub page")
     sb.click("div:not([jsname]) > * > input")
+    sb.sleep(2)
     print(sb.get_page_title())
-    sb.sleep(2)  # Wait for the "AI Overview" result
+    sb.sleep(1)  # Wait for the "AI Overview" result
     if sb.is_text_visible("Generating"):
         sb.wait_for_text("AI Overview")
     sb.save_as_pdf_to_logs()  # Saved to ./latest_logs/
@@ -318,8 +320,8 @@ from seleniumbase import SB
 with SB(uc=True, test=True, locale="en") as sb:
     url = "https://gitlab.com/users/sign_in"
     sb.activate_cdp_mode(url)
-    sb.sleep(2.2)
-    sb.uc_gui_click_captcha()
+    sb.sleep(2)
+    sb.solve_captcha()
     # (The rest is for testing and demo purposes)
     sb.assert_text("Username", '[for="user_login"]', timeout=3)
     sb.assert_element('label[for="user_login"]')
@@ -338,7 +340,7 @@ from seleniumbase import sb_cdp
 url = "https://gitlab.com/users/sign_in"
 sb = sb_cdp.Chrome(url)
 sb.sleep(2.5)
-sb.gui_click_captcha()
+sb.solve_captcha()
 sb.highlight('h1:contains("GitLab")')
 sb.highlight('button:contains("Sign in")')
 sb.driver.stop()

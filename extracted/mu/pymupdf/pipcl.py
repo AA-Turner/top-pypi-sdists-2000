@@ -796,6 +796,7 @@ class Package:
 
         Returns leafname of generated archive within `sdist_directory`.
         '''
+        assert self.fn_sdist, f'fn_sdist() not provided.'
         log2(
                 f' sdist_directory={sdist_directory!r}'
                 f' formats={formats!r}'
@@ -804,11 +805,10 @@ class Package:
         if formats and formats != 'gztar':
             raise Exception( f'Unsupported: formats={formats}')
         items = list()
-        if self.fn_sdist:
-            if inspect.signature(self.fn_sdist).parameters:
-                items = self.fn_sdist(config_settings)
-            else:
-                items = self.fn_sdist()
+        if inspect.signature(self.fn_sdist).parameters:
+            items = self.fn_sdist(config_settings)
+        else:
+            items = self.fn_sdist()
 
         prefix = f'{_normalise2(self.name)}-{self.version}'
         os.makedirs(sdist_directory, exist_ok=True)
@@ -928,17 +928,7 @@ class Package:
             ret = ret.replace('-', '_').replace('.', '_').lower()
             log0(f'From sysconfig.get_platform(): {ret=}.')
 
-            # We need to patch things on MacOS.
-            #
-            # E.g. `foo-1.2.3-cp311-none-macosx_13_x86_64.whl`
-            # causes `pip` to fail with: `not a supported wheel on this
-            # platform`. We seem to need to add `_0` to the OS version.
-            #
-            m = re.match( '^(macosx_[0-9]+)(_[^0-9].+)$', ret)
-            if m:
-                ret2 = f'{m.group(1)}_0{m.group(2)}'
-                log0(f'After macos patch, changing from {ret!r} to {ret2!r}.')
-                ret = ret2
+            ret = _macos_fixup_platform_tag(ret)
 
         log0( f'tag_platform(): returning {ret=}.')
         assert '-' not in ret
@@ -2182,7 +2172,7 @@ def git_get(
             If true, we clone with `--recursive --shallow-submodules` and run
             `git submodule update --init --recursive` before returning.
     '''
-    log0(f'{remote=} {local=} {branch=} {tag=}')
+    log0(f'{remote=} {local=} {branch=} {tag=} {text=}')
     
     if text:
         if text.startswith('git:'):
@@ -2276,6 +2266,8 @@ def run(
         timeout=None,
         caller=1,
         prefix=None,
+        encoding=None,  # System default.
+        errors='backslashreplace',
         ):
     '''
     Runs a command using `subprocess.run()`.
@@ -2331,11 +2323,12 @@ def run(
     lines = _command_lines( command)
     if verbose:
         text = f'Running:'
-        if env_extra:
-            for k in sorted(env_extra.keys()):
-                text += f' {k}={shlex.quote(env_extra[k])}'
-        nl = '\n'
+        nl = '\n    '
         text += f' {nl.join(lines)}'
+        if env_extra:
+            text += f'\nwith:\n'
+            for k in sorted(env_extra.keys()):
+                text += f'    {k}={shlex.quote(env_extra[k])}\n'
         log1(text, caller=caller+1)
     sep = ' ' if windows() else ' \\\n'
     command2 = sep.join( lines)
@@ -2347,29 +2340,30 @@ def run(
                 shell=True,
                 stdout=subprocess.PIPE,
                 stderr=subprocess.STDOUT,
-                encoding='utf8',
+                encoding=encoding,
+                errors=errors,
                 env=env,
                 )
         if capture:
             capture_text = ''
-        decoder = codecs.getincrementaldecoder('utf8')('replace')
+        decoder = codecs.getincrementaldecoder(child.stdout.encoding)(errors)
         line_start = True
+        
         while 1:
             raw = os.read( child.stdout.fileno(), 10000)
             text = decoder.decode(raw, final=not raw)
-            if text:
-                if capture:
-                    capture_text += text
-                lines = text.split('\n')
-                for i, line in enumerate(lines):
-                    if line_start:
-                        sys.stdout.write(prefix)
-                        line_start = False
-                    sys.stdout.write(line)
-                    if i < len(lines) - 1:
-                        sys.stdout.write('\n')
-                        line_start = True
-                sys.stdout.flush()
+            if capture:
+                capture_text += text
+            lines = text.split('\n')
+            for i, line in enumerate(lines):
+                if line_start:
+                    sys.stdout.write(prefix)
+                    line_start = False
+                sys.stdout.write(line)
+                if i < len(lines) - 1:
+                    sys.stdout.write('\n')
+                    line_start = True
+            sys.stdout.flush()
             if not raw:
                 break
         if not line_start:
@@ -2388,7 +2382,8 @@ def run(
                 stdout=subprocess.PIPE if capture else None,
                 stderr=subprocess.STDOUT if capture else None,
                 check=check,
-                encoding='utf8',
+                encoding=encoding,
+                errors=errors,
                 env=env,
                 timeout=timeout,
                 )
@@ -2617,6 +2612,40 @@ def macos_patch( library, *sublibraries):
     subprocess.run( command, shell=1, check=1)
     subprocess.run( f'otool -L {library}', shell=1, check=1)
 
+
+def _macos_fixup_platform_tag(tag):
+    '''
+    Patch up platform tag on MacOS.
+
+    E.g. `foo-1.2.3-cp311-none-macosx_13_x86_64.whl` causes `pip` to fail with:
+    `not a supported wheel on this platform`. We seem to need to add `_0` to
+    the OS version. (This is documented at
+    https://packaging.python.org/en/latest/specifications/platform-compatibility-tags/#macos).
+
+    And with graal we need to replace trailing `universal2` with x86_64
+    or arm64. On non-graal this causes problems because non-universal
+    platform tags seem more restricted than platform tags from
+    sysconfig.get_platform(). For example:
+    
+        pip install ...-macosx_10_13_arm64.whl
+            ERROR: ...-macosx_10_13_arm64.whl is not a supported wheel on this platform.
+        pip install ...-macosx_10_13_universal2.whl
+            Ok.
+    '''
+    m = re.match( '^macosx_([0-9_]+)_([^0-9].+)$', tag)
+    if not m:
+        return tag
+    a = m.group(1)
+    if '_' not in a:
+        a += '_0'
+    b = m.group(2)
+    if sys.implementation.name == 'graalpy' and b == 'universal2':
+        # Replace 'universal2' with x86_64 or arm64.
+        b = platform.machine()
+    ret = f'macosx_{a}_{b}'
+    #log0(f'Changing from {tag=} to {ret=}.')
+    return ret
+    
 
 # Internal helpers.
 #
@@ -2940,7 +2969,7 @@ def log2(text='', caller=1):
 
 def _log(text, level, caller):
     '''
-    Logs lines with prefix, if <level> is lower than <g_verbose>.
+    Logs lines with prefix, if <level> is lower or equal to <g_verbose>.
     '''
     if level <= g_verbose:
         fr = inspect.stack(context=0)[caller]
@@ -3202,6 +3231,7 @@ def swig_get(swig, quick, swig_local='pipcl-swig-git'):
             if darwin():
                 run(f'brew install automake')
                 run(f'brew install pcre2')
+                run(f'brew install bison')
                 # Default bison doesn't work, and Brew's bison is not added to $PATH.
                 #
                 # > bison is keg-only, which means it was not symlinked into /opt/homebrew,
@@ -3230,6 +3260,8 @@ def macos_add_brew_path(package, env=None, gnubin=True):
     '''
     Adds path(s) for Brew <package>'s binaries to env['PATH'].
     
+    We assert-fail if the relevant directory does no exist.
+    
     Args:
         package:
             Name of package. We get <package_root> of installed package by
@@ -3248,14 +3280,22 @@ def macos_add_brew_path(package, env=None, gnubin=True):
     if 'PATH' not in env:
         env['PATH'] = os.environ['PATH']
     package_root = run(f'brew --prefix {package}', capture=1).strip()
+    log(f'{package=} {package_root=}')
     def add(path):
+        log(f'{path=}')
         if os.path.isdir(path):
-            log1(f'Adding to $PATH: {path}')
+            log(f'Prepending to $PATH: {path}')
             PATH = env['PATH']
             env['PATH'] = f'{path}:{PATH}'
-    add(f'{package_root}/bin')
+            return 1
+        else:
+            log(f'Not a directory: {path=}')
+            return 0
+    n = 0
+    n += add(f'{package_root}/bin')
     if gnubin:
-        add(f'{package_root}/libexec/gnubin')
+        n += add(f'{package_root}/libexec/gnubin')
+    assert n, f'Failed to add to $PATH, {package=} {gnubin=}.'
 
 
 def _show_dict(d):

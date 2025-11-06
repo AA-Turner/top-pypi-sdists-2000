@@ -198,13 +198,14 @@ def test_magic_parse_long_options():
 def doctest_hist_f():
     """Test %hist -f with temporary filename.
 
-    In [9]: import tempfile
+    In [9]: import tempfile, os
 
-    In [10]: tfile = tempfile.mktemp('.py','tmp-ipython-')
+    In [10]: fd, tfile = tempfile.mkstemp('.py','tmp-ipython-')
+    In [11]: os.close(fd)
 
-    In [11]: %hist -nl -f $tfile 3
+    In [12]: %history -nl -y -f $tfile 3
 
-    In [13]: import os; os.unlink(tfile)
+    In [14]: import os; os.unlink(tfile)
     """
 
 
@@ -437,6 +438,11 @@ def test_time():
     with tt.AssertPrints("Wall time: "):
         with tt.AssertPrints("hihi", suppress=False):
             ip.run_cell("f('hi')")
+
+    with tt.AssertPrints("a space"):
+        with tt.AssertPrints("Wall time: ", suppress=False):
+            with tt.AssertPrints("CPU times: ", suppress=False):
+                ip.run_cell('%time print("a space")')
 
 
 # ';' at the end of %time prevents instruction value to be printed.

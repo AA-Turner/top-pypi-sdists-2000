@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: Cython
-Version: 3.1.6
+Version: 3.2.0
 Summary: The Cython compiler for writing C extensions in the Python language.
 Home-page: https://cython.org/
 Author: Robert Bradshaw, Stefan Behnel, David Woods, Greg Ewing, et al.
@@ -65,17 +65,11 @@ to install an uncompiled (slower) version of Cython with::
 
 .. _Pyrex: https://www.cosc.canterbury.ac.nz/greg.ewing/python/Pyrex/
 
-3.1.6 (2025-10-23)
+3.2.0 (2025-11-05)
 ==================
 
 Bugs fixed
 ----------
 
-* Unicode characters formatted from C integers with ``f"{value:c}"`` could result in
-  invalid Python string objects since Cython 3.1.0.
-  (Github issue https://github.com/cython/cython/issues/7240)
-
-* ``cythonize`` (program and function) now uses ``concurrent.futures.ProcessPoolExecutor``
-  instead of ``multiprocessing.Pool`` to fix a hang on build failures in parallel builds.
-  A possible work-around is to disable parallel builds.
-  Patch by Sviatoslav Sydorenko.  (Github issue https://github.com/cython/cython/issues/7183)
+* The ``cygdb`` program failed to work with virtualenvs on Windows.
+  Patch by Merlin.  (Github issue https://github.com/cython/cython/issues/7268)

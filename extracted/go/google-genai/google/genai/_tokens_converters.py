@@ -454,15 +454,11 @@ def _Tool_to_mldev(
         getv(from_object, ['google_search_retrieval']),
     )
 
-  if getv(from_object, ['google_maps']) is not None:
-    setv(
-        to_object,
-        ['googleMaps'],
-        _GoogleMaps_to_mldev(getv(from_object, ['google_maps']), to_object),
-    )
-
   if getv(from_object, ['computer_use']) is not None:
     setv(to_object, ['computerUse'], getv(from_object, ['computer_use']))
+
+  if getv(from_object, ['file_search']) is not None:
+    setv(to_object, ['fileSearch'], getv(from_object, ['file_search']))
 
   if getv(from_object, ['code_execution']) is not None:
     setv(to_object, ['codeExecution'], getv(from_object, ['code_execution']))
@@ -470,6 +466,13 @@ def _Tool_to_mldev(
   if getv(from_object, ['enterprise_web_search']) is not None:
     raise ValueError(
         'enterprise_web_search parameter is not supported in Gemini API.'
+    )
+
+  if getv(from_object, ['google_maps']) is not None:
+    setv(
+        to_object,
+        ['googleMaps'],
+        _GoogleMaps_to_mldev(getv(from_object, ['google_maps']), to_object),
     )
 
   if getv(from_object, ['google_search']) is not None:

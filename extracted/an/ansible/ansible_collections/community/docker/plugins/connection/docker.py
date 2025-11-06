@@ -320,7 +320,7 @@ class Connection(ConnectionBase):
                 actual_user = self._get_docker_remote_user()
                 if actual_user != self.get_option('remote_user'):
                     display.warning(u'docker {0} does not support remote_user, using container default: {1}'
-                                    .format(self.docker_version, self.actual_user or u'?'))
+                                    .format(self.docker_version, actual_user or u'?'))
                 return actual_user
         elif self._display.verbosity > 2:
             # Since we are not setting the actual_user, look it up so we have it for logging later
@@ -378,16 +378,21 @@ class Connection(ConnectionBase):
                         stdout, stderr = p.communicate()
                         raise AnsibleError('timeout waiting for privilege escalation password prompt:\n' + to_native(become_output))
 
+                    chunks = b""
                     for key, event in events:
                         if key.fileobj == p.stdout:
                             chunk = p.stdout.read()
+                            if chunk:
+                                chunks += chunk
                         elif key.fileobj == p.stderr:
                             chunk = p.stderr.read()
+                            if chunk:
+                                chunks += chunk
 
-                    if not chunk:
+                    if not chunks:
                         stdout, stderr = p.communicate()
                         raise AnsibleError('privilege output closed while waiting for password prompt:\n' + to_native(become_output))
-                    become_output += chunk
+                    become_output += chunks
             finally:
                 selector.close()
 

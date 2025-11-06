@@ -190,7 +190,6 @@ class VSPGadPairReconciler:
         spec.remote_connection_info = secondary_connection_info
         spec.secondary_storage_connection_info = secondary_connection_info
         spec.secondary_connection_info = secondary_connection_info
-        # logger.writeDebug("RC: 172:spec={}", spec)
 
         # sng20241114 - TODO
         spec.is_svol_readwriteable = False
@@ -962,12 +961,12 @@ class DirectGADInfoExtractor:
                     # Handle missing keys by assigning default values
                     default_value = get_default_value(value_type)
                     new_dict[cased_key] = default_value
-            if new_dict.get("primary_hex_volume_id") == "":
-                new_dict["primary_hex_volume_id"] = volume_id_to_hex_format(
+            if new_dict.get("primary_volume_id_hex") == "":
+                new_dict["primary_volume_id_hex"] = volume_id_to_hex_format(
                     new_dict.get("primary_volume_id")
                 )
-            if new_dict.get("secondary_hex_volume_id") == "":
-                new_dict["secondary_hex_volume_id"] = volume_id_to_hex_format(
+            if new_dict.get("secondary_volume_id_hex") == "":
+                new_dict["secondary_volume_id_hex"] = volume_id_to_hex_format(
                     new_dict.get("secondary_volume_id")
                 )
             new_items.append(new_dict)
@@ -993,12 +992,12 @@ class DirectGADInfoExtractor:
                 default_value = get_default_value(value_type)
                 new_dict[cased_key] = default_value
 
-        if new_dict.get("primary_hex_volume_id") == "":
-            new_dict["primary_hex_volume_id"] = volume_id_to_hex_format(
+        if new_dict.get("primary_volume_id_hex") == "":
+            new_dict["primary_volume_id_hex"] = volume_id_to_hex_format(
                 new_dict.get("primary_volume_id")
             )
-        if new_dict.get("secondary_hex_volume_id") == "":
-            new_dict["secondary_hex_volume_id"] = volume_id_to_hex_format(
+        if new_dict.get("secondary_volume_id_hex") == "":
+            new_dict["secondary_volume_id_hex"] = volume_id_to_hex_format(
                 new_dict.get("secondary_volume_id")
             )
 
@@ -1035,6 +1034,8 @@ class DirectGADCopyPairInfoExtractor:
             # "subscriberId": str,
             "isAluaEnabled": bool,
             "quorumDiskId": int,
+            "primaryVolumeIdHex": str,
+            "secondaryVolumeIdHex": str,
         }
 
         self.parameter_mapping = {
@@ -1111,14 +1112,12 @@ class DirectGADCopyPairInfoExtractor:
                     # Handle missing keys by assigning default values
                     default_value = get_default_value(value_type)
                     new_dict[cased_key] = default_value
-            if new_dict.get("primary_hex_volume_id") == "":
-                new_dict["primary_hex_volume_id"] = volume_id_to_hex_format(
+            if new_dict.get("primary_volume_id_hex") == "":
+                new_dict["primary_volume_id_hex"] = volume_id_to_hex_format(
                     new_dict.get("primary_volume_id")
                 )
-                # new_dict["primary_virtual_volume_id"] = ""
-                # new_dict["primary_virtual_hex_volume_id"] = ""
-            if new_dict.get("secondary_hex_volume_id") == "":
-                new_dict["secondary_hex_volume_id"] = volume_id_to_hex_format(
+            if new_dict.get("secondary_volume_id_hex") == "":
+                new_dict["secondary_volume_id_hex"] = volume_id_to_hex_format(
                     new_dict.get("secondary_volume_id")
                 )
                 # new_dict["secondary_virtual_hex_volume_id"] = ""
@@ -1153,12 +1152,12 @@ class DirectGADCopyPairInfoExtractor:
                 default_value = get_default_value(value_type)
                 new_dict[cased_key] = default_value
 
-        if new_dict.get("primary_hex_volume_id") == "":
-            new_dict["primary_hex_volume_id"] = volume_id_to_hex_format(
+        if new_dict.get("primary_volume_id_hex") == "":
+            new_dict["primary_volume_id_hex"] = volume_id_to_hex_format(
                 new_dict.get("primary_volume_id")
             )
-        if new_dict.get("secondary_hex_volume_id") == "":
-            new_dict["secondary_hex_volume_id"] = volume_id_to_hex_format(
+        if new_dict.get("secondary_volume_id_hex") == "":
+            new_dict["secondary_volume_id_hex"] = volume_id_to_hex_format(
                 new_dict.get("secondary_volume_id")
             )
         if new_dict.get("copy_rate"):

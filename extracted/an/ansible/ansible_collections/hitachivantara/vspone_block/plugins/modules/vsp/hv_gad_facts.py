@@ -68,8 +68,8 @@ options:
     required: true
     suboptions:
       primary_volume_id:
-        description: Primary Volume Id.
-        type: int
+        description: Primary Volume Id. Required for the Get GAD pair using primary volume ID task.
+        type: str
         required: false
       copy_group_name:
           description: Copy Group Name.
@@ -80,8 +80,8 @@ options:
           type: int
           required: False
       secondary_volume_id:
-          description: Secondary Volume Id.
-          type: int
+          description: Secondary Volume Id. Required for the Get GAD pair using secondary volume ID task.
+          type: str
           required: False
       copy_pair_name:
           description: Copy Pair Name.

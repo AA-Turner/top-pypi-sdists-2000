@@ -106,11 +106,14 @@ try:
     import cryptography.hazmat.primitives.asymmetric.padding
     import cryptography.hazmat.primitives.hashes
 
-    CRYPTOGRAPHY_VERSION = LooseVersion(cryptography.__version__)
 except ImportError:
-    CRYPTOGRAPHY_VERSION = LooseVersion("0.0")
+    CRYPTOGRAPHY_VERSION = LooseVersion("0.0")  # pylint: disable=invalid-name
+else:
+    # pylint: disable-next=invalid-name
+    CRYPTOGRAPHY_VERSION = LooseVersion(cryptography.__version__)
 
 from ansible.module_utils.basic import AnsibleModule
+
 from ansible_collections.community.crypto.plugins.module_utils._crypto.basic import (
     OpenSSLObjectError,
 )
@@ -194,15 +197,10 @@ class SignatureInfoCryptography(SignatureInfoBase):
 
                 elif isinstance(
                     public_key,
-                    cryptography.hazmat.primitives.asymmetric.ed25519.Ed25519PublicKey,
-                ):
-                    public_key.verify(_signature, _in)
-                    verified = True
-                    valid = True
-
-                elif isinstance(
-                    public_key,
-                    cryptography.hazmat.primitives.asymmetric.ed448.Ed448PublicKey,
+                    (
+                        cryptography.hazmat.primitives.asymmetric.ed25519.Ed25519PublicKey,
+                        cryptography.hazmat.primitives.asymmetric.ed448.Ed448PublicKey,
+                    ),
                 ):
                     public_key.verify(_signature, _in)
                     verified = True

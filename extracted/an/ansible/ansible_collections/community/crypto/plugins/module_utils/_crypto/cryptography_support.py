@@ -20,6 +20,7 @@ from urllib.parse import (
 )
 
 from ansible.module_utils.common.text.converters import to_bytes, to_text
+
 from ansible_collections.community.crypto.plugins.module_utils._crypto._asn1 import (
     serialize_asn1_string_as_der,
 )
@@ -71,6 +72,7 @@ except ImportError:
     IDNA_IMP_ERROR = traceback.format_exc()
 
 from ansible.module_utils.basic import missing_required_lib
+
 from ansible_collections.community.crypto.plugins.module_utils._crypto._obj2txt import (
     obj2txt,
 )
@@ -112,19 +114,16 @@ if t.TYPE_CHECKING:
         PrivateKeyTypes,
         PublicKeyTypes,
     )
-    from cryptography.hazmat.primitives.serialization.pkcs12 import (  # pragma: no cover
-        PKCS12KeyAndCertificates,
-    )
 
-    CertificatePrivateKeyTypes = t.Union[
+    CertificatePrivateKeyTypes = t.Union[  # noqa: UP007
         CertificateIssuerPrivateKeyTypes,
         cryptography.hazmat.primitives.asymmetric.x25519.X25519PrivateKey,
         cryptography.hazmat.primitives.asymmetric.x448.X448PrivateKey,
     ]  # pragma: no cover
-    PublicKeyTypesWOEdwards = t.Union[  # pylint: disable=invalid-name
+    PublicKeyTypesWOEdwards = t.Union[  # noqa: UP007 # pylint: disable=invalid-name
         DHPublicKey, DSAPublicKey, EllipticCurvePublicKey, RSAPublicKey
     ]  # pragma: no cover
-    PrivateKeyTypesWOEdwards = t.Union[  # pylint: disable=invalid-name
+    PrivateKeyTypesWOEdwards = t.Union[  # noqa: UP007 # pylint: disable=invalid-name
         DHPrivateKey, DSAPrivateKey, EllipticCurvePrivateKey, RSAPrivateKey
     ]  # pragma: no cover
 else:
@@ -132,8 +131,8 @@ else:
     PrivateKeyTypesWOEdwards = None  # pylint: disable=invalid-name
 
 
-CRYPTOGRAPHY_TIMEZONE = False
-_CRYPTOGRAPHY_36_0_OR_NEWER = False
+CRYPTOGRAPHY_TIMEZONE = False  # pylint: disable=invalid-name
+_CRYPTOGRAPHY_36_0_OR_NEWER = False  # pylint: disable=invalid-name
 if _HAS_CRYPTOGRAPHY:
     CRYPTOGRAPHY_TIMEZONE = LooseVersion(cryptography.__version__) >= LooseVersion(
         "42.0.0"
@@ -725,9 +724,9 @@ def cryptography_key_needs_digest_for_signing(
         key, cryptography.hazmat.primitives.asymmetric.ed25519.Ed25519PrivateKey
     ):
         return False
-    if isinstance(key, cryptography.hazmat.primitives.asymmetric.ed448.Ed448PrivateKey):
-        return False
-    return True
+    return not isinstance(
+        key, cryptography.hazmat.primitives.asymmetric.ed448.Ed448PrivateKey
+    )
 
 
 def _compare_public_keys(

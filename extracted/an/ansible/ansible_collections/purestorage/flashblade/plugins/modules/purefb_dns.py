@@ -118,10 +118,7 @@ def remove(duplicate):
 
 def _get_source(module, blade):
     res = blade.get_network_interfaces(names=[module.params["source"]])
-    if res.status_code == 200:
-        return True
-    else:
-        return False
+    return bool(res.status_code == 200)
 
 
 def delete_dns(module, blade):
@@ -289,7 +286,7 @@ def main():
     if NON_MGMT_DNS in api_version:
         configs = list(blade.get_dns().items)
         exists = False
-        for config in range(0, len(configs)):
+        for config in range(len(configs)):
             if configs[config].name == module.params["name"]:
                 exists = True
         if module.params["source"] and not _get_source(module, blade):

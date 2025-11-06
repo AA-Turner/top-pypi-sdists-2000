@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import time
 import typing as t
+from collections.abc import Callable
 
 from ansible_collections.community.crypto.plugins.module_utils._acme.challenges import (
     Authorization,
@@ -62,21 +63,21 @@ class Order:
 
     @classmethod
     def from_json(
-        cls: t.Type[_Order], *, client: ACMEClient, data: dict[str, t.Any], url: str
+        cls: type[_Order], *, client: ACMEClient, data: dict[str, t.Any], url: str
     ) -> _Order:
         result = cls(url=url)
         result._setup(client=client, data=data)
         return result
 
     @classmethod
-    def from_url(cls: t.Type[_Order], *, client: ACMEClient, url: str) -> _Order:
+    def from_url(cls: type[_Order], *, client: ACMEClient, url: str) -> _Order:
         result = cls(url=url)
         result.refresh(client=client)
         return result
 
     @classmethod
     def create(
-        cls: t.Type[_Order],
+        cls: type[_Order],
         *,
         client: ACMEClient,
         identifiers: list[tuple[str, str]],
@@ -116,7 +117,7 @@ class Order:
 
     @classmethod
     def create_with_error_handling(
-        cls: t.Type[_Order],
+        cls: type[_Order],
         *,
         client: ACMEClient,
         identifiers: list[tuple[str, str]],
@@ -126,7 +127,7 @@ class Order:
         error_max_retries: int = 3,
         replaces_cert_id: str | None = None,
         profile: str | None = None,
-        message_callback: t.Callable[[str], None] | None = None,
+        message_callback: Callable[[str], None] | None = None,
     ) -> _Order:
         """
         error_strategy can be one of the following strings:

@@ -48,20 +48,24 @@ options:
     required: false
     suboptions:
       primary_volume_id:
-        type: int
+        type: str
         description: Primary volume id.
+          Required for the Get ShadowImage pairs by P-VOL task.
         required: false
       copy_group_name:
         type: str
         description: Name of the copy group.
+          Required for the Get ShadowImage pairs by copy_group_name and copy_pair_name task.
         required: false
       copy_pair_name:
         type: str
         description: Name of the copy pair.
+          Required for the Get ShadowImage pairs by copy_group_name and copy_pair_name task.
         required: false
       refresh:
         type: bool
         description: Whether refresh pairs
+          Required for the Get all ShadowImage pairs along with refresh task.
         required: false
 """
 
@@ -124,8 +128,8 @@ ansible_facts:
           description: Mirror unit ID.
           type: int
           sample: -1
-        primary_hex_volume_id:
-          description: Primary hex volume ID.
+        primary_volume_id_hex:
+          description: Primary hex volume ID in hexadecimal.
           type: str
           sample: "00:01:12"
         primary_volume_id:
@@ -136,8 +140,8 @@ ansible_facts:
           description: Resource ID.
           type: str
           sample: "localpair-2749fed78e8d23a61ed17a8af71c85f8"
-        secondary_hex_volume_id:
-          description: Secondary hex volume ID.
+        secondary_volume_id_hex:
+          description: Secondary hex volume ID in hexadecimal.
           type: str
           sample: "00:01:17"
         secondary_volume_id:
