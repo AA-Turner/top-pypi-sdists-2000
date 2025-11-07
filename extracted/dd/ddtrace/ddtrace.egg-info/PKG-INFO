@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: ddtrace
-Version: 3.17.2
+Version: 3.18.0
 Summary: Datadog APM client library
 Author-email: "Datadog, Inc." <dev@datadoghq.com>
 License: LICENSE.BSD3
@@ -35,13 +35,11 @@ Requires-Dist: envier~=0.6.1
 Requires-Dist: legacy-cgi>=2.0.0; python_version >= "3.13.0"
 Requires-Dist: opentelemetry-api>=1
 Requires-Dist: protobuf>=3
-Requires-Dist: wrapt<2,>=1
+Requires-Dist: wrapt>=1
 Provides-Extra: opentracing
 Requires-Dist: opentracing>=2.0.0; extra == "opentracing"
 Provides-Extra: opentelemetry
 Requires-Dist: opentelemetry-exporter-otlp>=1.0.0; extra == "opentelemetry"
-Provides-Extra: openai
-Requires-Dist: tiktoken; extra == "openai"
 Dynamic: license-file
 
 # `ddtrace`

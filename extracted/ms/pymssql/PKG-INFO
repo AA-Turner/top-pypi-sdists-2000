@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: pymssql
-Version: 2.3.8
+Version: 2.3.9
 Summary: DB-API interface to Microsoft SQL Server for Python. (new Cython-based version)
 Author-email: Damien Churchill <damoxc@gmail.com>
 Maintainer-email: Mikhail Terekhov <termim@gmail.com>
@@ -110,6 +110,15 @@ Recent Changes
 ==============
 
 
+Version 2.3.9 - 2025-11-06 - Mikhail Terekhov
+=============================================
+
+General
+-------
+
+- Fix build with Cython-3.2.0, thanks to mkeener (PR #977).
+
+
 Version 2.3.8 - 2025-10-11 - Mikhail Terekhov
 =============================================
 
@@ -117,12 +126,3 @@ General
 -------
 
 - Build Python 3.14 wheels, thanks to Edgar Ramírez Mondragón (PR #964).
-
-
-Version 2.3.7 - 2025-07-10 - Mikhail Terekhov
-=============================================
-
-General
--------
-
-- Allow to specify openssl dependency on macos, thanks to dwt (PR #934).

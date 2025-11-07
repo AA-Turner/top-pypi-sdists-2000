@@ -1,12 +1,11 @@
 from abc import ABC, abstractmethod
 import json
-import os
 import sys
 from pathlib import Path
 import shutil
 import subprocess
 import time
-from typing import Any, Dict, List, Optional, Set, Tuple, Union
+from typing import Any, Dict, List, Optional, Set, Tuple, Union, Literal, Mapping
 from dataclasses import dataclass
 import typer
 from safety.events.utils import emit_tool_command_executed
@@ -16,6 +15,7 @@ from safety.tool.constants import (
     MOST_FREQUENTLY_DOWNLOADED_PYPI_PACKAGES,
 )
 from safety.tool.typosquatting import TyposquattingProtection
+from safety.utils.pyapp_utils import get_env
 
 from .environment_diff import EnvironmentDiffTracker
 from .intents import CommandToolIntention, ToolIntentionType, Dependency
@@ -60,9 +60,7 @@ class BaseCommand(ABC):
         self._command_alias_used = command_alias_used
 
         self._tool_type = self.get_tool_type()
-        self.__typosquatting_protection = TyposquattingProtection(
-            MOST_FREQUENTLY_DOWNLOADED_PYPI_PACKAGES
-        )
+        self.__typosquatting_protection = self._build_typosquatting_protection()
 
         self._diff_tracker = self.get_diff_tracker()
         self._should_track_state = self.should_track_state()
@@ -89,6 +87,16 @@ class BaseCommand(ABC):
         """
         pass
 
+    def get_ecosystem(self) -> Literal["pypi", "npmjs"]:
+        """
+        Get the ecosystem for this command type.
+        Must be implemented by subclasses.
+
+        Returns:
+            Literal["pypi", "npmjs"]: Ecosystem
+        """
+        return "pypi"
+
     @abstractmethod
     def get_diff_tracker(self) -> EnvironmentDiffTracker:
         """
@@ -112,6 +120,31 @@ class BaseCommand(ABC):
             return self._intention.modifies_packages()
 
         return False
+
+    def _get_typosquatting_reference_packages(self) -> Tuple[str]:
+        """
+        Return the corpus of well-known package names used by the
+        TypoSquatting protection to validate/correct package names.
+
+        Child classes should override this if they target a different
+        package ecosystem (e.g., npm) or want a custom corpus.
+
+        Returns:
+            Tuple[str]: Default set of popular PyPI package names.
+        """
+        return MOST_FREQUENTLY_DOWNLOADED_PYPI_PACKAGES
+
+    def _build_typosquatting_protection(self) -> TyposquattingProtection:
+        """
+        Factory method for the TypoSquatting protection instance.
+
+        Child classes may override this to customize the protection
+        strategy entirely (not only the corpus), if needed.
+
+        Returns:
+            TyposquattingProtection: Configured protection instance.
+        """
+        return TyposquattingProtection(self._get_typosquatting_reference_packages())
 
     def get_package_list_command(self) -> List[str]:
         """
@@ -249,14 +282,20 @@ class BaseCommand(ABC):
 
         cmd = self.get_command_name()
         cmd_name = cmd[0]
+        logger.debug(f"Getting unwrapped command for: {cmd_name}")
         tool_path = get_unwrapped_command(name=cmd_name)
+        logger.debug(f"Resolved tool_path: {tool_path}")
+
         pre_args = [tool_path] + cmd[1:]
         args = pre_args + self.__remove_safety_args(self._args)
+        logger.debug(f"Final command args: {args}")
 
         started_at = time.monotonic()
+        logger.debug(f"Running subprocess with capture_output={self._capture_output}")
         process = subprocess.run(
             args, capture_output=self._capture_output, env=self.env(ctx)
         )
+        logger.debug(f"Subprocess completed with returncode: {process.returncode}")
 
         duration_ms = int((time.monotonic() - started_at) * 1000)
 
@@ -276,7 +315,7 @@ class BaseCommand(ABC):
         Returns:
             dict: The environment.
         """
-        return os.environ.copy()
+        return get_env()
 
     def __remove_safety_args(self, args: List[str]):
         return [arg for arg in args if not arg.startswith("--safety")]
@@ -336,7 +375,7 @@ class ToolCommandLineParser(ABC):
         pass
 
     @abstractmethod
-    def get_command_hierarchy(self) -> Dict[str, Union[ToolIntentionType, Dict]]:
+    def get_command_hierarchy(self) -> Mapping[str, Union[ToolIntentionType, Mapping]]:
         """
         Return command hierarchy only. No option definitions needed.
 
@@ -428,7 +467,7 @@ class ToolCommandLineParser(ABC):
             arg = args[i].lower()
 
             # Check if this argument is a valid command at current level
-            if isinstance(current_level, dict) and arg in current_level:
+            if isinstance(current_level, Mapping) and arg in current_level:
                 command_chain.append(arg)
                 current_level = current_level[arg]
 

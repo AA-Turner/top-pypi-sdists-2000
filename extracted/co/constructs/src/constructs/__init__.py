@@ -45,7 +45,22 @@ import jsii
 import publication
 import typing_extensions
 
-from typeguard import check_type
+import typeguard
+from importlib.metadata import version as _metadata_package_version
+TYPEGUARD_MAJOR_VERSION = int(_metadata_package_version('typeguard').split('.')[0])
+
+def check_type(argname: str, value: object, expected_type: typing.Any) -> typing.Any:
+    if TYPEGUARD_MAJOR_VERSION <= 2:
+        return typeguard.check_type(argname=argname, value=value, expected_type=expected_type) # type:ignore
+    else:
+        if isinstance(value, jsii._reference_map.InterfaceDynamicProxy): # pyright: ignore [reportAttributeAccessIssue]
+           pass
+        else:
+            if TYPEGUARD_MAJOR_VERSION == 3:
+                typeguard.config.collection_check_strategy = typeguard.CollectionCheckStrategy.ALL_ITEMS # type:ignore
+                typeguard.check_type(value=value, expected_type=expected_type) # type:ignore
+            else:
+                typeguard.check_type(value=value, expected_type=expected_type, collection_check_strategy=typeguard.CollectionCheckStrategy.ALL_ITEMS) # type:ignore
 
 from ._jsii import *
 
@@ -697,7 +712,7 @@ class Node(metaclass=jsii.JSIIMeta, jsii_type="constructs.Node"):
     @builtins.property
     @jsii.member(jsii_name="defaultChild")
     def default_child(self) -> typing.Optional["IConstruct"]:
-        '''Returns the child construct that has the id ``Default`` or ``Resource"``.
+        '''Returns the child construct that has the id ``Default`` or ``Resource``.
 
         This is usually the construct that provides the bulk of the underlying functionality.
         Useful for modifications of the underlying construct that are not available at the higher levels.
@@ -1036,3 +1051,6 @@ def _typecheckingstub__43869d89939a2770444321abd60b2fdb0daaa395e2fa7d025fe7acd93
 ) -> None:
     """Type checking stubs"""
     pass
+
+for cls in [IConstruct, IDependable, IValidation]:
+    typing.cast(typing.Any, cls).__protocol_attrs__ = typing.cast(typing.Any, cls).__protocol_attrs__ - set(['__jsii_proxy_class__', '__jsii_type__'])

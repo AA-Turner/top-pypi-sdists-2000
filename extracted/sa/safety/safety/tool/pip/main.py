@@ -9,14 +9,15 @@ import typer
 from rich.console import Console
 
 from safety.tool.constants import (
-    PUBLIC_REPOSITORY_URL,
-    ORGANIZATION_REPOSITORY_URL,
-    PROJECT_REPOSITORY_URL,
+    PYPI_PUBLIC_REPOSITORY_URL,
+    PYPI_ORGANIZATION_REPOSITORY_URL,
+    PYPI_PROJECT_REPOSITORY_URL,
 )
 from safety.tool.resolver import get_unwrapped_command
+from safety.utils.pyapp_utils import get_path, get_env
 
 from safety.console import main_console
-from safety.tool.auth import build_pypi_index_url
+from safety.tool.auth import build_index_url
 from ...encoding import detect_encoding
 
 logger = logging.getLogger(__name__)
@@ -31,7 +32,7 @@ class Pip:
         Returns:
             True if PIP is installed on system, or false otherwise
         """
-        return shutil.which("pip") is not None
+        return shutil.which("pip", path=get_path()) is not None
 
     @classmethod
     def configure_requirements(
@@ -55,12 +56,12 @@ class Pip:
             content = f.read()
 
             repository_url = (
-                PROJECT_REPOSITORY_URL.format(org_slug, project_id)
+                PYPI_PROJECT_REPOSITORY_URL.format(org_slug, project_id)
                 if project_id and org_slug
                 else (
-                    ORGANIZATION_REPOSITORY_URL.format(org_slug)
+                    PYPI_ORGANIZATION_REPOSITORY_URL.format(org_slug)
                     if org_slug
-                    else PUBLIC_REPOSITORY_URL
+                    else PYPI_PUBLIC_REPOSITORY_URL
                 )
             )
             index_config = f"-i {repository_url}\n"
@@ -84,10 +85,11 @@ class Pip:
         """
         try:
             repository_url = (
-                ORGANIZATION_REPOSITORY_URL.format(org_slug)
+                PYPI_ORGANIZATION_REPOSITORY_URL.format(org_slug)
                 if org_slug
-                else PUBLIC_REPOSITORY_URL
+                else PYPI_PUBLIC_REPOSITORY_URL
             )
+
             result = subprocess.run(
                 [
                     get_unwrapped_command(name="pip"),
@@ -98,6 +100,7 @@ class Pip:
                     repository_url,
                 ],
                 capture_output=True,
+                env=get_env(),
             )
 
             if result.returncode != 0:
@@ -133,6 +136,7 @@ class Pip:
                     "global.index-url",
                 ],
                 capture_output=True,
+                env=get_env(),
             )
         except Exception:
             console.print("Failed to reset PIP global settings.")
@@ -143,4 +147,4 @@ class Pip:
 
     @classmethod
     def build_index_url(cls, ctx: typer.Context, index_url: Optional[str]) -> str:
-        return build_pypi_index_url(ctx, index_url)
+        return build_index_url(ctx, index_url, "pypi")

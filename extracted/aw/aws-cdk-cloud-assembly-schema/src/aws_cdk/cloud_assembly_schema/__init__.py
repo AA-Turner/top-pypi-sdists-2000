@@ -8346,3 +8346,6 @@ def _typecheckingstub__a15ed4761f9994da082716c3f328395dce904f39530d9fe41636f5e52
 ) -> None:
     """Type checking stubs"""
     pass
+
+for cls in [ICloudAssembly]:
+    typing.cast(typing.Any, cls).__protocol_attrs__ = typing.cast(typing.Any, cls).__protocol_attrs__ - set(['__jsii_proxy_class__', '__jsii_type__'])

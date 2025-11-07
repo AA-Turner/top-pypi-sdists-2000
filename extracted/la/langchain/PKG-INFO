@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: langchain
-Version: 1.0.3
+Version: 1.0.4
 Summary: Building applications with LLMs through composability
 Project-URL: Homepage, https://docs.langchain.com/
 Project-URL: Documentation, https://reference.langchain.com/python/langchain/langchain/
@@ -19,6 +19,8 @@ Provides-Extra: anthropic
 Requires-Dist: langchain-anthropic; extra == 'anthropic'
 Provides-Extra: aws
 Requires-Dist: langchain-aws; extra == 'aws'
+Provides-Extra: azure-ai
+Requires-Dist: langchain-azure-ai; extra == 'azure-ai'
 Provides-Extra: community
 Requires-Dist: langchain-community; extra == 'community'
 Provides-Extra: deepseek
@@ -35,6 +37,8 @@ Provides-Extra: huggingface
 Requires-Dist: langchain-huggingface; extra == 'huggingface'
 Provides-Extra: mistralai
 Requires-Dist: langchain-mistralai; extra == 'mistralai'
+Provides-Extra: model-profiles
+Requires-Dist: langchain-model-profiles; extra == 'model-profiles'
 Provides-Extra: ollama
 Requires-Dist: langchain-ollama; extra == 'ollama'
 Provides-Extra: openai

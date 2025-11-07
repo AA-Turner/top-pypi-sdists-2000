@@ -19,7 +19,7 @@ from itertools import product, zip_longest
 from numbers import Integral, Number
 from operator import add, mul
 from threading import Lock
-from typing import Any, Literal, TypeVar, Union, cast
+from typing import Any, Literal, TypeVar, cast
 
 import numpy as np
 from numpy.typing import ArrayLike
@@ -101,7 +101,7 @@ try:
 except ImportError:
     ARRAY_TEMPLATE = None
 
-T_IntOrNaN = Union[int, float]  # Should be Union[int, Literal[np.nan]]
+T_IntOrNaN = int | float  # Should be int | Literal[np.nan]
 
 DEFAULT_GET = named_schedulers.get("threads", named_schedulers["sync"])
 
@@ -3661,6 +3661,18 @@ def from_array(
 
     previous_chunks = getattr(x, "chunks", None)
 
+    # As of Zarr 3.x, arrays can have a shards attribute. If present,
+    # this defines the smallest array region that is safe to write, and
+    # thus this is a better starting point than the chunks attribute.
+    # We check for chunks AND shards to be somewhat specific to Zarr 3.x arrays
+    if (
+        hasattr(x, "chunks")
+        and hasattr(x, "shards")
+        and (x.shards is not None)
+        and chunks == "auto"
+    ):
+        previous_chunks = x.shards
+
     chunks = normalize_chunks(
         chunks, x.shape, dtype=x.dtype, previous_chunks=previous_chunks
     )
@@ -3877,30 +3889,58 @@ def to_zarr(
                     "Cannot store into in memory Zarr Array using "
                     "the distributed scheduler."
                 )
+        zarr_write_chunks = _get_zarr_write_chunks(z)
+        dask_write_chunks = normalize_chunks(
+            chunks="auto",
+            shape=z.shape,
+            dtype=z.dtype,
+            previous_chunks=zarr_write_chunks,
+        )
 
+        for ax, (dw, zw) in enumerate(
+            zip(dask_write_chunks, zarr_write_chunks, strict=True)
+        ):
+            if len(dw) >= 1:
+                nominal_dask_chunk_size = dw[0]
+                if not nominal_dask_chunk_size % zw == 0:
+                    safe_chunk_size = np.prod(zarr_write_chunks) * max(
+                        1, z.dtype.itemsize
+                    )
+                    msg = (
+                        f"The input Dask array will be rechunked along axis {ax} with chunk size "
+                        f"{nominal_dask_chunk_size}, but a chunk size divisible by {zw} is "
+                        f"required for Dask to write safely to the Zarr array {z}. "
+                        "To avoid risk of data loss when writing to this Zarr array, set the "
+                        '"array.chunk-size" configuration parameter to at least the size in'
+                        " bytes of a single on-disk "
+                        f"chunk (or shard) of the Zarr array, which in this case is "
+                        f"{safe_chunk_size} bytes. "
+                        f'E.g., dask.config.set({{"array.chunk-size": {safe_chunk_size}}})'
+                    )
+                    raise PerformanceWarning(msg)
+                    break
         if region is None:
-            arr = arr.rechunk(z.chunks)
+            # Get the appropriate write granularity (shard shape if sharding, else chunk shape)
+            arr = arr.rechunk(dask_write_chunks)
             regions = None
         else:
             from dask.array.slicing import new_blockdim, normalize_index
 
-            old_chunks = normalize_chunks(z.chunks, z.shape)
             index = normalize_index(region, z.shape)
             chunks = tuple(
                 tuple(new_blockdim(s, c, r))
-                for s, c, r in zip(z.shape, old_chunks, index)
+                for s, c, r in zip(z.shape, dask_write_chunks, index)
             )
             arr = arr.rechunk(chunks)
             regions = [region]
         return arr.store(
             z, lock=False, regions=regions, compute=compute, return_stored=return_stored
         )
-    else:
-        if not _check_regular_chunks(arr.chunks):
-            # We almost certainly get here because auto chunking has been used
-            # on irregular chunks. The max will then be smaller than auto, so using
-            # max is a safe choice
-            arr = arr.rechunk(tuple(map(max, arr.chunks)))
+    elif not _check_regular_chunks(arr.chunks):
+        # We almost certainly get here because auto chunking has been used
+        # on irregular chunks. The max will then be smaller than auto, so using
+        # max is a safe choice
+        arr = arr.rechunk(tuple(map(max, arr.chunks)))
 
     if region is not None:
         raise ValueError("Cannot use `region` keyword when url is not a `zarr.Array`.")
@@ -3940,6 +3980,30 @@ def to_zarr(
         **kwargs,
     )
     return arr.store(z, lock=False, compute=compute, return_stored=return_stored)
+
+
+def _get_zarr_write_chunks(zarr_array) -> tuple[int, ...]:
+    """Get the appropriate chunk shape for writing to a Zarr array.
+
+    For Zarr v3 arrays with sharding, returns the shard shape.
+    For arrays without sharding, returns the chunk shape.
+    For Zarr v2 arrays, returns the chunk shape.
+
+    Parameters
+    ----------
+    zarr_array : zarr.Array
+        The target zarr array
+
+    Returns
+    -------
+    tuple
+        The chunk shape to use for rechunking the dask array
+    """
+    # Zarr V3 array with shards
+    if hasattr(zarr_array, "shards") and zarr_array.shards is not None:
+        return zarr_array.shards
+    # Zarr V3 array without shards, or Zarr V2 array
+    return zarr_array.chunks
 
 
 def _check_regular_chunks(chunkset):
