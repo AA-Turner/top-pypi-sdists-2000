@@ -2157,6 +2157,7 @@ data = {
  '61851294':{'en': 'Wyndham'},
  '618513':{'en': 'Marble Bar/Millstream/Mitchell/Mount Bruce/Newman/Onslow/Ord/Pannawonica/Paraburdoo/Port Hedland/Roebuck/Sandfire/Telfer/Tom Price/Whaleback/Wittenoom/Wyndham/Derby/Broome/Christmas Island/Cocos Island/Dampier/De Grey/Fitzroy Crossing/Great Sandy/Hall\'s Creek/Karratha/Kununurra/Leopold'},
  '618514':{'en': 'Roebuck /Sandfire /Tom Price/Telfer/Wyndham/Whaleback /Wittenoom/Wyndham'},
+ '61855':{'en': 'Bakers Hill/Bindoon/Bullsbrook East/Byford/Dwellingup/Gidgegannup/Gingin/Guilderton/Mandurah/Mount Helena/Mount Wells/Pinjarra/Rockingham/Toodyay/Yanchep'},
  '61860000':{'en': 'Kalgoorlie'},
  '61860001':{'en': 'Burracoppin'},
  '61860002':{'en': 'Burracoppin'},
@@ -10018,5 +10019,4 @@ data = {
  '61885876':{'en': 'Wunkar'},
  '61885877':{'en': 'Wunkar'},
  '61885878':{'en': 'Paruna'},
- '61885879':{'en': 'Wanbi'},
 }

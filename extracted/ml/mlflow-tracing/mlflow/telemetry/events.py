@@ -28,6 +28,17 @@ class CreatePromptEvent(Event):
     name: str = "create_prompt"
 
 
+class LoadPromptEvent(Event):
+    name: str = "load_prompt"
+
+    @classmethod
+    def parse(cls, arguments: dict[str, Any]) -> dict[str, Any] | None:
+        name_or_uri = arguments.get("name_or_uri", "")
+        # Check if alias is used (format: "prompts:/name@alias")
+        uses_alias = "@" in name_or_uri
+        return {"uses_alias": uses_alias}
+
+
 class StartTraceEvent(Event):
     name: str = "start_trace"
 
@@ -251,6 +262,10 @@ class McpRunEvent(Event):
     name: str = "mcp_run"
 
 
+class AiCommandRunEvent(Event):
+    name: str = "ai_command_run"
+
+
 class GitModelVersioningEvent(Event):
     name: str = "git_model_versioning"
 
@@ -301,3 +316,7 @@ class AlignJudgeEvent(Event):
             result["optimizer_type"] = "default"
 
         return result
+
+
+class AutologgingEvent(Event):
+    name: str = "autologging"

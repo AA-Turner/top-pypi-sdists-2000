@@ -5,6 +5,8 @@ from packaging.version import Version
 
 import mlflow
 from mlflow.dspy.constant import FLAVOR_NAME
+from mlflow.telemetry.events import AutologgingEvent
+from mlflow.telemetry.track import _record_event
 from mlflow.tracing.provider import trace_disabled
 from mlflow.tracing.utils import construct_full_inputs
 from mlflow.utils.autologging_utils import (
@@ -109,6 +111,10 @@ def autolog(
             _patched_evaluate,
         )
 
+    _record_event(
+        AutologgingEvent, {"flavor": FLAVOR_NAME, "log_traces": log_traces, "disable": disable}
+    )
+
 
 # This is required by mlflow.autolog()
 autolog.integration_name = FLAVOR_NAME
@@ -202,11 +208,6 @@ def _patched_compile(original, self, *args, **kwargs):
     if valset := inputs.get("valset"):
         log_dspy_dataset(valset, "valset.json")
     return program
-
-    if get_autologging_config(FLAVOR_NAME, "log_traces_from_compile"):
-        return original(self, *args, **kwargs)
-    else:
-        return _trace_disabled_fn(self, *args, **kwargs)
 
 
 def _patched_evaluate(original, self, *args, **kwargs):

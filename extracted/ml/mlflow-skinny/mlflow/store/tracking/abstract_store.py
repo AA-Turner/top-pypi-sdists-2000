@@ -13,6 +13,7 @@ from mlflow.entities import (
     LoggedModelParameter,
     LoggedModelStatus,
     LoggedModelTag,
+    ScorerVersion,
     ViewType,
 )
 
@@ -1284,7 +1285,9 @@ class AbstractStore:
             "A SQL backend is required to use this feature."
         )
 
-    def register_scorer(self, experiment_id: str, name: str, serialized_scorer: str) -> int:
+    def register_scorer(
+        self, experiment_id: str, name: str, serialized_scorer: str
+    ) -> ScorerVersion:
         """
         Register a scorer for an experiment.
 
@@ -1294,11 +1297,11 @@ class AbstractStore:
             serialized_scorer: The serialized scorer string (JSON).
 
         Returns:
-            The new version number for the scorer.
+            mlflow.entities.ScorerVersion: The newly registered scorer version with scorer_id.
         """
         raise NotImplementedError(self.__class__.__name__)
 
-    def list_scorers(self, experiment_id):
+    def list_scorers(self, experiment_id) -> list[ScorerVersion]:
         """
         List all scorers for an experiment.
 
@@ -1311,7 +1314,7 @@ class AbstractStore:
         """
         raise NotImplementedError(self.__class__.__name__)
 
-    def get_scorer(self, experiment_id, name, version=None):
+    def get_scorer(self, experiment_id, name, version=None) -> ScorerVersion:
         """
         Get a specific scorer for an experiment.
 
@@ -1328,7 +1331,7 @@ class AbstractStore:
         """
         raise NotImplementedError(self.__class__.__name__)
 
-    def list_scorer_versions(self, experiment_id, name):
+    def list_scorer_versions(self, experiment_id, name) -> list[ScorerVersion]:
         """
         List all versions of a specific scorer for an experiment.
 
@@ -1344,7 +1347,7 @@ class AbstractStore:
         """
         raise NotImplementedError(self.__class__.__name__)
 
-    def delete_scorer(self, experiment_id, name, version=None):
+    def delete_scorer(self, experiment_id, name, version=None) -> None:
         """
         Delete all versions of a scorer for an experiment.
 

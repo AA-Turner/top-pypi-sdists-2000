@@ -13,7 +13,7 @@ import os
 import sys
 import warnings
 
-from collections.abc import Iterator
+from collections.abc import Iterable
 
 import pytest
 
@@ -57,14 +57,12 @@ def set_warnings() -> None:
     # https://github.com/python/cpython/issues/105539
     warnings.filterwarnings("ignore", r"unclosed database", category=ResourceWarning)
 
-    warnings.filterwarnings("ignore", r".*no-sysmon")
-
     # We have a test that has a return in a finally: test_bug_1891.
     warnings.filterwarnings("ignore", "'return' in a 'finally' block", category=SyntaxWarning)
 
 
 @pytest.fixture(autouse=True)
-def reset_sys_path() -> Iterator[None]:
+def reset_sys_path() -> Iterable[None]:
     """Clean up sys.path changes around every test."""
     sys_path = list(sys.path)
     yield
@@ -72,7 +70,7 @@ def reset_sys_path() -> Iterator[None]:
 
 
 @pytest.fixture(autouse=True)
-def reset_environment() -> Iterator[None]:
+def reset_environment() -> Iterable[None]:
     """Make sure a test setting an envvar doesn't leak into another test."""
     old_environ = os.environ.copy()
     yield
@@ -96,7 +94,7 @@ def force_local_pyc_files() -> None:
 
 # Give this an underscored name so pylint won't complain when we use the fixture.
 @pytest.fixture(name="_create_pth_file")
-def create_pth_file_fixture() -> Iterator[None]:
+def create_pth_file_fixture() -> Iterable[None]:
     """Create and clean up a .pth file for tests that need it for subprocesses."""
     pth_files = create_pth_files()
     try:
@@ -104,3 +102,19 @@ def create_pth_file_fixture() -> Iterator[None]:
     finally:
         for p in pth_files:
             p.unlink()
+
+
+@pytest.hookimpl(wrapper=True)
+def pytest_runtest_call() -> Iterable[None]:
+    """Check the exception raised by the test, and skip the test if needed."""
+    try:
+        yield
+    except Exception as e:  # pragma: never metacov
+        # This code is for dealing with the exception raised when we are
+        # measuring with a core that doesn't support branch measurement.
+        # During metacov, we skip those situations entirely by not running
+        # sysmon on 3.12 or 3.13, so this code is never needed during metacov.
+        if getattr(e, "skip_tests", False):
+            pytest.skip(f"Skipping for exception: {e}")
+        else:
+            raise

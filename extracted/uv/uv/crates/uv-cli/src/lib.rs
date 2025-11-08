@@ -757,7 +757,6 @@ pub enum CacheCommand {
     Prune(PruneArgs),
     /// Show the cache directory.
     ///
-    ///
     /// By default, the cache is stored in `$XDG_CACHE_HOME/uv` or `$HOME/.cache/uv` on Unix and
     /// `%LOCALAPPDATA%\uv\cache` on Windows.
     ///
@@ -770,6 +769,12 @@ pub enum CacheCommand {
     /// Note that it is important for performance for the cache directory to be located on the same
     /// file system as the Python environment uv is operating on.
     Dir,
+    /// Show the cache size.
+    ///
+    /// Displays the total size of the cache directory. This includes all downloaded and built
+    /// wheels, source distributions, and other cached data. By default, outputs the size in raw
+    /// bytes; use `--human` for human-readable output.
+    Size(SizeArgs),
 }
 
 #[derive(Args, Debug)]
@@ -809,6 +814,13 @@ pub struct PruneArgs {
     /// `--force` is used, `uv cache prune` will proceed without taking a lock.
     #[arg(long)]
     pub force: bool,
+}
+
+#[derive(Args, Debug)]
+pub struct SizeArgs {
+    /// Display the cache size in human-readable format (e.g., `1.2 GiB` instead of raw bytes).
+    #[arg(long = "human", short = 'H', alias = "human-readable")]
+    pub human: bool,
 }
 
 #[derive(Args)]
@@ -1023,8 +1035,8 @@ pub enum ProjectCommand {
     /// uv will search for a project in the current directory or any parent directory. If a project
     /// cannot be found, uv will exit with an error.
     ///
-    /// If operating in a workspace, the root will be exported by default; however, a specific
-    /// member can be selected using the `--package` option.
+    /// If operating in a workspace, the root will be exported by default; however, specific
+    /// members can be selected using the `--package` option.
     #[command(
         after_help = "Use `uv help export` for more details.",
         after_long_help = ""
@@ -1245,6 +1257,16 @@ pub struct PipCompileArgs {
     /// requirements of the constituent packages.
     #[arg(long, alias = "override", env = EnvVars::UV_OVERRIDE, value_delimiter = ' ', value_parser = parse_maybe_file_path)]
     pub overrides: Vec<Maybe<PathBuf>>,
+
+    /// Exclude packages from resolution using the given requirements files.
+    ///
+    /// Excludes files are `requirements.txt`-like files that specify packages to exclude
+    /// from the resolution. When a package is excluded, it will be omitted from the
+    /// dependency list entirely and its own dependencies will be ignored during the resolution
+    /// phase. Excludes are unconditional in that requirement specifiers and markers are ignored;
+    /// any package listed in the provided file will be omitted from all resolved environments.
+    #[arg(long, alias = "exclude", env = EnvVars::UV_EXCLUDE, value_delimiter = ' ', value_parser = parse_maybe_file_path)]
+    pub excludes: Vec<Maybe<PathBuf>>,
 
     /// Constrain build dependencies using the given requirements files when building source
     /// distributions.
@@ -1896,6 +1918,16 @@ pub struct PipInstallArgs {
     /// requirements of the constituent packages.
     #[arg(long, alias = "override", env = EnvVars::UV_OVERRIDE, value_delimiter = ' ', value_parser = parse_maybe_file_path)]
     pub overrides: Vec<Maybe<PathBuf>>,
+
+    /// Exclude packages from resolution using the given requirements files.
+    ///
+    /// Excludes files are `requirements.txt`-like files that specify packages to exclude
+    /// from the resolution. When a package is excluded, it will be omitted from the
+    /// dependency list entirely and its own dependencies will be ignored during the resolution
+    /// phase. Excludes are unconditional in that requirement specifiers and markers are ignored;
+    /// any package listed in the provided file will be omitted from all resolved environments.
+    #[arg(long, alias = "exclude", env = EnvVars::UV_EXCLUDE, value_delimiter = ' ', value_parser = parse_maybe_file_path)]
+    pub excludes: Vec<Maybe<PathBuf>>,
 
     /// Constrain build dependencies using the given requirements files when building source
     /// distributions.
@@ -3172,7 +3204,7 @@ pub struct RunArgs {
     /// `--all-groups`, and `--group`.
     ///
     /// May be provided multiple times.
-    #[arg(long)]
+    #[arg(long, env = EnvVars::UV_NO_GROUP, value_delimiter = ' ')]
     pub no_group: Vec<GroupName>,
 
     /// Ignore the default dependency groups.
@@ -3501,7 +3533,7 @@ pub struct SyncArgs {
     /// `--all-groups`, and `--group`.
     ///
     /// May be provided multiple times.
-    #[arg(long)]
+    #[arg(long, env = EnvVars::UV_NO_GROUP, value_delimiter = ' ')]
     pub no_group: Vec<GroupName>,
 
     /// Ignore the default dependency groups.
@@ -3637,14 +3669,14 @@ pub struct SyncArgs {
     #[arg(long, conflicts_with = "package")]
     pub all_packages: bool,
 
-    /// Sync for a specific package in the workspace.
+    /// Sync for specific packages in the workspace.
     ///
     /// The workspace's environment (`.venv`) is updated to reflect the subset of dependencies
-    /// declared by the specified workspace member package.
+    /// declared by the specified workspace member packages.
     ///
-    /// If the workspace member does not exist, uv will exit with an error.
+    /// If any workspace member does not exist, uv will exit with an error.
     #[arg(long, conflicts_with = "all_packages")]
-    pub package: Option<PackageName>,
+    pub package: Vec<PackageName>,
 
     /// Sync the environment for a Python script, rather than the current project.
     ///
@@ -3733,7 +3765,7 @@ pub struct LockArgs {
     /// missing or needs to be updated, uv will exit with an error.
     ///
     /// Equivalent to `--locked`.
-    #[arg(long, value_parser = clap::builder::BoolishValueParser::new(), conflicts_with_all = ["check_exists", "upgrade", "locked"])]
+    #[arg(long, value_parser = clap::builder::BoolishValueParser::new(), conflicts_with_all = ["check_exists", "upgrade"], overrides_with = "check")]
     pub check: bool,
 
     /// Check if the lockfile is up-to-date.
@@ -3742,7 +3774,7 @@ pub struct LockArgs {
     /// missing or needs to be updated, uv will exit with an error.
     ///
     /// Equivalent to `--check`.
-    #[arg(long, env = EnvVars::UV_LOCKED, value_parser = clap::builder::BoolishValueParser::new(), conflicts_with_all = ["check_exists", "upgrade", "check"], hide = true)]
+    #[arg(long, env = EnvVars::UV_LOCKED, value_parser = clap::builder::BoolishValueParser::new(), conflicts_with_all = ["check_exists", "upgrade"], hide = true)]
     pub locked: bool,
 
     /// Assert that a `uv.lock` exists without checking if it is up-to-date.
@@ -4178,7 +4210,7 @@ pub struct TreeArgs {
     /// `--all-groups`, and `--group`.
     ///
     /// May be provided multiple times.
-    #[arg(long)]
+    #[arg(long, env = EnvVars::UV_NO_GROUP, value_delimiter = ' ')]
     pub no_group: Vec<GroupName>,
 
     /// Ignore the default dependency groups.
@@ -4288,11 +4320,11 @@ pub struct ExportArgs {
     #[arg(long, conflicts_with = "package")]
     pub all_packages: bool,
 
-    /// Export the dependencies for a specific package in the workspace.
+    /// Export the dependencies for specific packages in the workspace.
     ///
-    /// If the workspace member does not exist, uv will exit with an error.
+    /// If any workspace member does not exist, uv will exit with an error.
     #[arg(long, conflicts_with = "all_packages")]
-    pub package: Option<PackageName>,
+    pub package: Vec<PackageName>,
 
     /// Prune the given package from the dependency tree.
     ///
@@ -4353,7 +4385,7 @@ pub struct ExportArgs {
     /// `--all-groups`, and `--group`.
     ///
     /// May be provided multiple times.
-    #[arg(long)]
+    #[arg(long, env = EnvVars::UV_NO_GROUP, value_delimiter = ' ')]
     pub no_group: Vec<GroupName>,
 
     /// Ignore the default dependency groups.
@@ -4848,6 +4880,16 @@ pub struct ToolInstallArgs {
     #[arg(long, alias = "override", env = EnvVars::UV_OVERRIDE, value_delimiter = ' ', value_parser = parse_maybe_file_path)]
     pub overrides: Vec<Maybe<PathBuf>>,
 
+    /// Exclude packages from resolution using the given requirements files.
+    ///
+    /// Excludes files are `requirements.txt`-like files that specify packages to exclude
+    /// from the resolution. When a package is excluded, it will be omitted from the
+    /// dependency list entirely and its own dependencies will be ignored during the resolution
+    /// phase. Excludes are unconditional in that requirement specifiers and markers are ignored;
+    /// any package listed in the provided file will be omitted from all resolved environments.
+    #[arg(long, alias = "exclude", env = EnvVars::UV_EXCLUDE, value_delimiter = ' ', value_parser = parse_maybe_file_path)]
+    pub excludes: Vec<Maybe<PathBuf>>,
+
     /// Constrain build dependencies using the given requirements files when building source
     /// distributions.
     ///
@@ -4927,7 +4969,7 @@ pub struct ToolListArgs {
     #[arg(long)]
     pub show_extras: bool,
 
-    /// Whether to display the Python version associated with run each tool.
+    /// Whether to display the Python version associated with each tool.
     #[arg(long)]
     pub show_python: bool,
 
@@ -5235,7 +5277,12 @@ pub struct ToolUpgradeArgs {
     /// Ignore the `tool.uv.sources` table when resolving dependencies. Used to lock against the
     /// standards-compliant, publishable package metadata, as opposed to using any workspace, Git,
     /// URL, or local path sources.
-    #[arg(long, help_heading = "Resolver options")]
+    #[arg(
+        long,
+        env = EnvVars::UV_NO_SOURCES,
+        value_parser = clap::builder::BoolishValueParser::new(),
+        help_heading = "Resolver options",
+    )]
     pub no_sources: bool,
 
     #[command(flatten)]
@@ -6153,7 +6200,12 @@ pub struct InstallerArgs {
     /// Ignore the `tool.uv.sources` table when resolving dependencies. Used to lock against the
     /// standards-compliant, publishable package metadata, as opposed to using any workspace, Git,
     /// URL, or local path sources.
-    #[arg(long, help_heading = "Resolver options")]
+    #[arg(
+        long,
+        env = EnvVars::UV_NO_SOURCES,
+        value_parser = clap::builder::BoolishValueParser::new(),
+        help_heading = "Resolver options"
+    )]
     pub no_sources: bool,
 }
 
@@ -6341,7 +6393,12 @@ pub struct ResolverArgs {
     /// Ignore the `tool.uv.sources` table when resolving dependencies. Used to lock against the
     /// standards-compliant, publishable package metadata, as opposed to using any workspace, Git,
     /// URL, or local path sources.
-    #[arg(long, help_heading = "Resolver options")]
+    #[arg(
+        long,
+        env = EnvVars::UV_NO_SOURCES,
+        value_parser = clap::builder::BoolishValueParser::new(),
+        help_heading = "Resolver options",
+    )]
     pub no_sources: bool,
 }
 
@@ -6579,7 +6636,12 @@ pub struct ResolverInstallerArgs {
     /// Ignore the `tool.uv.sources` table when resolving dependencies. Used to lock against the
     /// standards-compliant, publishable package metadata, as opposed to using any workspace, Git,
     /// URL, or local path sources.
-    #[arg(long, help_heading = "Resolver options")]
+    #[arg(
+        long,
+        env = EnvVars::UV_NO_SOURCES,
+        value_parser = clap::builder::BoolishValueParser::new(),
+        help_heading = "Resolver options",
+    )]
     pub no_sources: bool,
 }
 

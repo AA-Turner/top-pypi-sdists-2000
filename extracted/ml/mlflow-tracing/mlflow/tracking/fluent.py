@@ -14,6 +14,7 @@ from copy import deepcopy
 from typing import TYPE_CHECKING, Any, Generator, Literal, Optional, Union, overload
 
 import mlflow
+from mlflow.entities import Dataset as DatasetEntity
 from mlflow.entities import (
     DatasetInput,
     Experiment,
@@ -46,6 +47,8 @@ from mlflow.protos.databricks_pb2 import (
     RESOURCE_DOES_NOT_EXIST,
 )
 from mlflow.store.tracking import SEARCH_MAX_RESULTS_DEFAULT
+from mlflow.telemetry.events import AutologgingEvent
+from mlflow.telemetry.track import _record_event
 from mlflow.tracing.provider import _get_trace_exporter
 from mlflow.tracking._tracking_service.client import TrackingServiceClient
 from mlflow.tracking._tracking_service.utils import _resolve_tracking_uri
@@ -414,7 +417,7 @@ def start_run(
         # Use previous `end_time` because a value is required for `update_run_info`.
         end_time = active_run_obj.info.end_time
         _get_store().update_run_info(
-            existing_run_id, run_status=RunStatus.RUNNING, end_time=end_time, run_name=None
+            existing_run_id, run_status=RunStatus.RUNNING, end_time=end_time, run_name=run_name
         )
         tags = tags or {}
         if description:
@@ -928,7 +931,7 @@ def log_metric(
     timestamp: int | None = None,
     run_id: str | None = None,
     model_id: str | None = None,
-    dataset: Optional["Dataset"] = None,
+    dataset: Union["Dataset", DatasetEntity] | None = None,
 ) -> RunOperations | None:
     """
     Log a metric under the current run. If no run is active, this method will create
@@ -1055,7 +1058,11 @@ def _log_inputs_for_metrics_if_necessary(
                 None,
             )
             if matching_dataset is not None:
-                datasets_to_log.append(DatasetInput(matching_dataset._to_mlflow_entity(), tags=[]))
+                if isinstance(matching_dataset, DatasetEntity):
+                    dataset_entity = matching_dataset
+                else:
+                    dataset_entity = matching_dataset._to_mlflow_entity()
+                datasets_to_log.append(DatasetInput(dataset_entity, tags=[]))
     if models_to_log or datasets_to_log:
         client.log_inputs(run.info.run_id, models=models_to_log, datasets=datasets_to_log)
         # update in-memory run inputs to avoid duplicate logging
@@ -1079,7 +1086,7 @@ def log_metrics(
     run_id: str | None = None,
     timestamp: int | None = None,
     model_id: str | None = None,
-    dataset: Optional["Dataset"] = None,
+    dataset: Union["Dataset", DatasetEntity] | None = None,
 ) -> RunOperations | None:
     """
     Log multiple metrics for the current run. If no run is active, this method will create a new
@@ -3334,6 +3341,8 @@ def autolog(
             register_post_import_hook(setup_autologging, "pyspark", overwrite=True)
         if "pyspark.ml" in target_library_and_module:
             register_post_import_hook(setup_autologging, "pyspark.ml", overwrite=True)
+
+    _record_event(AutologgingEvent, {"flavor": "all", "log_traces": log_traces, "disable": disable})
 
 
 _active_model_id_env_lock = threading.Lock()

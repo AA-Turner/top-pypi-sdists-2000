@@ -437,10 +437,12 @@ class _RestClient(_BaseRestClient):
                              " application/vnd.schemaregistry+json,"
                              " application/json"}
 
+        body_str: Optional[str] = None
         if body is not None:
-            body = json.dumps(body)
-            headers = {'Content-Length': str(len(body)),
-                       'Content-Type': "application/vnd.schemaregistry.v1+json"}
+            body_str = json.dumps(body)
+            headers = {'Content-Length': str(len(body_str)),
+                       'Content-Type': "application/vnd.schemaregistry.v1+json",
+                       'Confluent-Accept-Unknown-Properties': "true"}
 
         if self.bearer_auth_credentials_source:
             self.handle_bearer_auth(headers)
@@ -449,7 +451,7 @@ class _RestClient(_BaseRestClient):
         for i, base_url in enumerate(self.base_urls):
             try:
                 response = self.send_http_request(
-                    base_url, url, method, headers, body, query)
+                    base_url, url, method, headers, body_str, query)
 
                 if is_success(response.status_code):
                     return response.json()

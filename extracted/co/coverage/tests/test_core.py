@@ -75,16 +75,17 @@ class CoverageCoreTest(CoverageTest):
 
     def test_core_request_sysmon(self) -> None:
         self.set_environ("COVERAGE_CORE", "sysmon")
-        out = self.run_command("coverage run --debug=sys numbers.py")
-        assert out.endswith("123 456\n")
-        core = re_line(r" core:", out).strip()
-        warns = re_lines(r"\(no-sysmon\)", out)
         if env.PYBEHAVIOR.pep669:
-            assert core == "core: SysMonitor"
-            assert not warns
+            status = 0
         else:
-            assert core in ["core: CTracer", "core: PyTracer"]
-            assert warns
+            status = 1
+        out = self.run_command("coverage run --debug=sys numbers.py", status=status)
+        if status == 0:
+            assert out.endswith("123 456\n")
+            core = re_line(r" core:", out).strip()
+            assert core == "core: SysMonitor"
+        else:
+            assert "Can't use core=sysmon: sys.monitoring isn't available in this version;" in out
 
     def test_core_request_sysmon_no_dyncontext(self) -> None:
         # Use config core= for this test just to be different.
@@ -96,19 +97,11 @@ class CoverageCoreTest(CoverageTest):
             dynamic_context = test_function
             """,
         )
-        out = self.run_command("coverage run --debug=sys numbers.py")
-        assert out.endswith("123 456\n")
-        core = re_line(r" core:", out).strip()
-        assert core in ["core: CTracer", "core: PyTracer"]
-        warns = re_lines(r"\(no-sysmon\)", out)
-        assert len(warns) == 1
+        out = self.run_command("coverage run --debug=sys numbers.py", status=1)
         if env.PYBEHAVIOR.pep669:
-            assert (
-                "sys.monitoring doesn't yet support dynamic contexts, using default core"
-                in warns[0]
-            )
+            assert "Can't use core=sysmon: it doesn't yet support dynamic contexts;" in out
         else:
-            assert "sys.monitoring isn't available in this version, using default core" in warns[0]
+            assert "Can't use core=sysmon: sys.monitoring isn't available in this version;" in out
 
     def test_core_request_sysmon_no_branches(self) -> None:
         # Use config core= for this test just to be different.
@@ -120,25 +113,21 @@ class CoverageCoreTest(CoverageTest):
             branch = True
             """,
         )
-        out = self.run_command("coverage run --debug=sys numbers.py")
-        assert out.endswith("123 456\n")
-        core = re_line(r" core:", out).strip()
-        warns = re_lines(r"\(no-sysmon\)", out)
         if env.PYBEHAVIOR.branch_right_left:
-            assert core == "core: SysMonitor"
-            assert not warns
+            status = 0
+        elif env.PYBEHAVIOR.pep669:
+            status = 1
+            msg = "Can't use core=sysmon: sys.monitoring can't measure branches in this version;"
         else:
-            assert core in ["core: CTracer", "core: PyTracer"]
-            assert len(warns) == 1
-            if env.PYBEHAVIOR.pep669:
-                assert (
-                    "sys.monitoring can't measure branches in this version, using default core"
-                    in warns[0]
-                )
-            else:
-                assert (
-                    "sys.monitoring isn't available in this version, using default core" in warns[0]
-                )
+            status = 1
+            msg = "Can't use core=sysmon: sys.monitoring isn't available in this version;"
+        out = self.run_command("coverage run --debug=sys numbers.py", status=status)
+        if status == 0:
+            assert out.endswith("123 456\n")
+            core = re_line(r" core:", out).strip()
+            assert core == "core: SysMonitor"
+        else:
+            assert msg in out  # pylint: disable=possibly-used-before-assignment
 
     def test_core_request_nosuchcore(self) -> None:
         # Test the coverage misconfigurations in-process with pytest. Running a

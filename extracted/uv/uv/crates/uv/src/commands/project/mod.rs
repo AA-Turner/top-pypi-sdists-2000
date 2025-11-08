@@ -161,7 +161,7 @@ pub(crate) enum ProjectError {
     MissingGroupProject(GroupName),
 
     #[error("Group `{0}` is not defined in any project's `dependency-groups` table")]
-    MissingGroupWorkspace(GroupName),
+    MissingGroupProjects(GroupName),
 
     #[error("PEP 723 scripts do not support dependency groups, but group `{0}` was specified")]
     MissingGroupScript(GroupName),
@@ -175,7 +175,7 @@ pub(crate) enum ProjectError {
     MissingExtraProject(ExtraName),
 
     #[error("Extra `{0}` is not defined in any project's `optional-dependencies` table")]
-    MissingExtraWorkspace(ExtraName),
+    MissingExtraProjects(ExtraName),
 
     #[error("PEP 723 scripts do not support optional dependencies, but extra `{0}` was specified")]
     MissingExtraScript(ExtraName),
@@ -1008,16 +1008,18 @@ impl ProjectInterpreter {
         if managed {
             writeln!(
                 printer.stderr(),
-                "Using {} {}",
+                "Using {} {}{}",
                 implementation.pretty(),
-                interpreter.python_version().cyan()
+                interpreter.python_version().cyan(),
+                interpreter.variant().display_suffix().cyan(),
             )?;
         } else {
             writeln!(
                 printer.stderr(),
-                "Using {} {} interpreter at: {}",
+                "Using {} {}{} interpreter at: {}",
                 implementation.pretty(),
                 interpreter.python_version(),
+                interpreter.variant().display_suffix(),
                 interpreter.sys_executable().user_display().cyan()
             )?;
         }
@@ -1878,6 +1880,7 @@ pub(crate) async fn resolve_environment(
         requirements,
         constraints,
         overrides,
+        excludes,
         source_trees,
         ..
     } = spec.requirements;
@@ -1997,6 +2000,7 @@ pub(crate) async fn resolve_environment(
         requirements,
         constraints,
         overrides,
+        excludes,
         source_trees,
         project,
         BTreeSet::default(),
@@ -2234,6 +2238,7 @@ pub(crate) async fn update_environment(
         requirements,
         constraints,
         overrides,
+        excludes,
         source_trees,
         ..
     } = spec;
@@ -2366,6 +2371,7 @@ pub(crate) async fn update_environment(
         requirements,
         constraints,
         overrides,
+        excludes,
         source_trees,
         project,
         BTreeSet::default(),
