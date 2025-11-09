@@ -403,6 +403,7 @@ __all__ = (
     "IpamResourceDiscoveryAssociationStateType",
     "IpamResourceDiscoveryStateType",
     "IpamResourceTypeType",
+    "IpamScopeExternalAuthorityTypeType",
     "IpamScopeStateType",
     "IpamScopeTypeType",
     "IpamStateType",
@@ -2197,6 +2198,18 @@ InstanceTypeType = Literal[
     "r7iz.metal-16xl",
     "r7iz.metal-32xl",
     "r7iz.xlarge",
+    "r8a.12xlarge",
+    "r8a.16xlarge",
+    "r8a.24xlarge",
+    "r8a.2xlarge",
+    "r8a.48xlarge",
+    "r8a.4xlarge",
+    "r8a.8xlarge",
+    "r8a.large",
+    "r8a.medium",
+    "r8a.metal-24xl",
+    "r8a.metal-48xl",
+    "r8a.xlarge",
     "r8g.12xlarge",
     "r8g.16xlarge",
     "r8g.24xlarge",
@@ -2295,6 +2308,7 @@ InstanceTypeType = Literal[
     "trn1.2xlarge",
     "trn1.32xlarge",
     "trn1n.32xlarge",
+    "trn2.3xlarge",
     "trn2.48xlarge",
     "u-12tb1.112xlarge",
     "u-12tb1.metal",
@@ -2513,6 +2527,7 @@ IpamResourceDiscoveryStateType = Literal[
     "restore-in-progress",
 ]
 IpamResourceTypeType = Literal["eip", "eni", "ipv6-pool", "public-ipv4-pool", "subnet", "vpc"]
+IpamScopeExternalAuthorityTypeType = Literal["infoblox"]
 IpamScopeStateType = Literal[
     "create-complete",
     "create-failed",

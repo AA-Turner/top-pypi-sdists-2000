@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: litellm
-Version: 1.79.1
+Version: 1.79.3
 Summary: Library to easily interface with LLM API providers
 License: MIT
 Author: BerriAI
@@ -40,7 +40,7 @@ Requires-Dist: importlib-metadata (>=6.8.0)
 Requires-Dist: jinja2 (>=3.1.2,<4.0.0)
 Requires-Dist: jsonschema (>=4.22.0,<5.0.0)
 Requires-Dist: litellm-enterprise (==0.1.20) ; extra == "proxy"
-Requires-Dist: litellm-proxy-extras (==0.2.31) ; extra == "proxy"
+Requires-Dist: litellm-proxy-extras (==0.4.3) ; extra == "proxy"
 Requires-Dist: mcp (>=1.10.0,<2.0.0) ; (python_version >= "3.10") and (extra == "proxy")
 Requires-Dist: mlflow (>3.1.4) ; (python_version >= "3.10") and (extra == "mlflow")
 Requires-Dist: numpydoc ; extra == "utils"
@@ -58,6 +58,7 @@ Requires-Dist: resend (>=0.8.0,<0.9.0) ; extra == "extra-proxy"
 Requires-Dist: rich (==13.7.1) ; extra == "proxy"
 Requires-Dist: rq ; extra == "proxy"
 Requires-Dist: semantic-router ; (python_version >= "3.9") and (extra == "semantic-router")
+Requires-Dist: soundfile (>=0.12.1,<0.13.0) ; extra == "proxy"
 Requires-Dist: tiktoken (>=0.7.0)
 Requires-Dist: tokenizers
 Requires-Dist: uvicorn (>=0.29.0,<0.30.0) ; extra == "proxy"

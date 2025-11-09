@@ -6,8 +6,6 @@ from collections.abc import Iterator
 from typing import TYPE_CHECKING
 from typing import Any
 
-from smbprotocol.exceptions import SMBOSError
-
 from upath.core import UPath
 from upath.types import UNSET_DEFAULT
 from upath.types import JoinablePathLike
@@ -40,6 +38,19 @@ class SMBPath(UPath):
             **storage_options: Unpack[SMBStorageOptions],
         ) -> None: ...
 
+    @property
+    def path(self) -> str:
+        path = super().path
+        if len(path) > 1:
+            return path.removesuffix("/")
+        return path
+
+    def __str__(self) -> str:
+        path_str = super().__str__()
+        if path_str.startswith("smb:///"):
+            return path_str.removesuffix("/")
+        return path_str
+
     def mkdir(
         self,
         mode: int = 0o777,
@@ -47,6 +58,8 @@ class SMBPath(UPath):
         exist_ok: bool = False,
     ) -> None:
         # smbclient does not support setting mode externally
+        from smbprotocol.exceptions import SMBOSError
+
         if parents and not exist_ok and self.exists():
             raise FileExistsError(str(self))
         try:

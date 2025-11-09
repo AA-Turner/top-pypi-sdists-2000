@@ -62,10 +62,10 @@ def _add_hook_type_option(parser: argparse.ArgumentParser) -> None:
 
 def _add_run_options(parser: argparse.ArgumentParser) -> None:
     parser.add_argument('hook', nargs='?', help='A single hook-id to run')
-    parser.add_argument('--verbose', '-v', action='store_true', default=False)
+    parser.add_argument('--verbose', '-v', action='store_true')
     mutex_group = parser.add_mutually_exclusive_group(required=False)
     mutex_group.add_argument(
-        '--all-files', '-a', action='store_true', default=False,
+        '--all-files', '-a', action='store_true',
         help='Run on all the files in the repo.',
     )
     mutex_group.add_argument(
@@ -75,6 +75,10 @@ def _add_run_options(parser: argparse.ArgumentParser) -> None:
     parser.add_argument(
         '--show-diff-on-failure', action='store_true',
         help='When hooks fail, run `git diff` directly afterward.',
+    )
+    parser.add_argument(
+        '--fail-fast', action='store_true',
+        help='Stop after the first failing hook.',
     )
     parser.add_argument(
         '--hook-stage',
@@ -275,7 +279,7 @@ def main(argv: Sequence[str] | None = None) -> int:
     )
     _add_hook_type_option(install_parser)
     install_parser.add_argument(
-        '--allow-missing-config', action='store_true', default=False,
+        '--allow-missing-config', action='store_true',
         help=(
             'Whether to allow a missing `pre-commit` configuration file '
             'or exit with a failure code.'

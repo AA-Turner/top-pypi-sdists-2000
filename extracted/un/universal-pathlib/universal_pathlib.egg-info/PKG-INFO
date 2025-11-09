@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: universal_pathlib
-Version: 0.3.4
+Version: 0.3.5
 Summary: pathlib api extended to use fsspec backends
 Author-email: Andrew Fulton <andrewfulton9@gmail.com>
 Maintainer: Norman Rzepka
@@ -40,6 +40,7 @@ Requires-Dist: fsspec[adl,gcs,github,http,s3,smb,ssh]>=2024.5.0; extra == "dev"
 Requires-Dist: s3fs>=2024.5.0; extra == "dev"
 Requires-Dist: gcsfs>=2024.5.0; extra == "dev"
 Requires-Dist: adlfs>=2024; extra == "dev"
+Requires-Dist: huggingface_hub; extra == "dev"
 Requires-Dist: webdav4[fsspec]; extra == "dev"
 Requires-Dist: moto[s3,server]; extra == "dev"
 Requires-Dist: wsgidav; extra == "dev"
@@ -52,11 +53,12 @@ Dynamic: license-file
 
 # Universal Pathlib
 
-[![PyPI](https://img.shields.io/pypi/v/universal_pathlib.svg)](https://pypi.org/project/universal_pathlib/)
 [![PyPI - Python Version](https://img.shields.io/pypi/pyversions/universal_pathlib)](https://pypi.org/project/universal_pathlib/)
 [![PyPI - License](https://img.shields.io/pypi/l/universal_pathlib)](https://github.com/fsspec/universal_pathlib/blob/main/LICENSE)
+[![PyPI](https://img.shields.io/pypi/v/universal_pathlib.svg)](https://pypi.org/project/universal_pathlib/)
 [![Conda (channel only)](https://img.shields.io/conda/vn/conda-forge/universal_pathlib?label=conda)](https://anaconda.org/conda-forge/universal_pathlib)
 
+[![Docs](https://readthedocs.org/projects/universal-pathlib/badge/?version=latest)](https://universal-pathlib.readthedocs.io/en/latest/?badge=latest)
 [![Tests](https://github.com/fsspec/universal_pathlib/actions/workflows/tests.yml/badge.svg)](https://github.com/fsspec/universal_pathlib/actions/workflows/tests.yml)
 [![GitHub issues](https://img.shields.io/github/issues/fsspec/universal_pathlib)](https://github.com/fsspec/universal_pathlib/issues)
 [![Codestyle black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
@@ -143,6 +145,7 @@ For more examples, see the [example notebook here][example-notebook].
 - `az:`, `adl:`, `abfs:` and `abfss:` Azure Storage _(requires `adlfs`)_
 - `data:` RFC 2397 style data URLs _(requires `fsspec>=2023.12.2`)_
 - `github:` GitHub repository filesystem
+- `hf:` Hugging Face filesystem _(requires `huggingface_hub`)_
 - `http:` and `https:` HTTP(S)-based filesystem
 - `hdfs:` Hadoop distributed filesystem
 - `gs:` and `gcs:` Google Cloud Storage _(requires `gcsfs`)_
@@ -284,11 +287,11 @@ simplify interaction with `filesystem_spec`. Think of the `UPath` class in terms
 of the following code:
 
 ```python
-from pathlib import Path
+from pathlib_abc import ReadablePath, WritablePath
 from typing import Any, Mapping
 from fsspec import AbstractFileSystem
 
-class UPath(Path):
+class UPath(ReadablePath, WriteablePath):
     # the real implementation is more complex, but this is the general idea
 
     @property

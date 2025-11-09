@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: hishel
-Version: 1.1.4
+Version: 1.1.5
 Summary:  Elegant HTTP Caching for Python
 Project-URL: Homepage, https://hishel.com
 Project-URL: Source, https://github.com/karpetrosyan/hishel
@@ -405,6 +405,16 @@ Hishel is inspired by and builds upon the excellent work in the Python HTTP ecos
 <p align="center">
   <strong>Made with ❤️ by <a href="https://github.com/karpetrosyan">Kar Petrosyan</a></strong>
 </p>
+
+## What's Changed in 1.1.5
+### 🐛 Bug Fixes
+
+* filter out soft-deleted, expired and incomplete entries in `get_entries` by @karpetrosyan
+
+### Contributors
+* @karpetrosyan
+
+**Full Changelog**: https://github.com/karpetrosyan/hishel/compare/1.1.4...1.1.5
 
 ## What's Changed in 1.1.4
 ### 🐛 Bug Fixes

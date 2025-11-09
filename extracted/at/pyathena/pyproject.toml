@@ -59,6 +59,7 @@ dev = [
     "pytest-xdist",
     "pytest-dependency",
     "sphinx",
+    "sphinx-multiversion",
     "furo",
     "types-python-dateutil",
 ]
@@ -105,7 +106,6 @@ line-length = 100
 exclude = [
     ".venv",
     ".tox",
-    "docs",
 ]
 target-version = "py39"
 

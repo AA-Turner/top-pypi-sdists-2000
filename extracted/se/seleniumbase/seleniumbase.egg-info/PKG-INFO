@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: seleniumbase
-Version: 4.44.7
+Version: 4.44.8
 Summary: A complete web automation framework for end-to-end testing.
 Home-page: https://github.com/seleniumbase/SeleniumBase
 Author: Michael Mintz
@@ -152,7 +152,7 @@ Requires-Dist: allure-behave>=2.13.5; extra == "allure"
 Provides-Extra: coverage
 Requires-Dist: coverage>=7.6.1; python_version < "3.9" and extra == "coverage"
 Requires-Dist: coverage>=7.10.7; (python_version >= "3.9" and python_version < "3.10") and extra == "coverage"
-Requires-Dist: coverage>=7.11.0; python_version >= "3.10" and extra == "coverage"
+Requires-Dist: coverage>=7.11.1; python_version >= "3.10" and extra == "coverage"
 Requires-Dist: pytest-cov>=5.0.0; python_version < "3.9" and extra == "coverage"
 Requires-Dist: pytest-cov>=7.0.0; python_version >= "3.9" and extra == "coverage"
 Provides-Extra: flake8
@@ -171,7 +171,7 @@ Requires-Dist: mss==9.0.2; python_version < "3.9" and extra == "mss"
 Requires-Dist: mss==10.0.0; python_version >= "3.9" and extra == "mss"
 Provides-Extra: pdfminer
 Requires-Dist: pdfminer.six==20250324; python_version < "3.9" and extra == "pdfminer"
-Requires-Dist: pdfminer.six==20250506; python_version >= "3.9" and extra == "pdfminer"
+Requires-Dist: pdfminer.six==20251107; python_version >= "3.9" and extra == "pdfminer"
 Requires-Dist: cryptography==39.0.2; python_version < "3.9" and extra == "pdfminer"
 Requires-Dist: cryptography==46.0.3; python_version >= "3.9" and extra == "pdfminer"
 Requires-Dist: cffi==1.17.1; python_version < "3.9" and extra == "pdfminer"
