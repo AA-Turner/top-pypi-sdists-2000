@@ -1,5 +1,5 @@
 # Licensed under the Apache License: http://www.apache.org/licenses/LICENSE-2.0
-# For details: https://github.com/nedbat/coveragepy/blob/master/NOTICE.txt
+# For details: https://github.com/coveragepy/coveragepy/blob/main/NOTICE.txt
 
 """Code coverage measurement for Python"""
 
@@ -109,14 +109,14 @@ setup_args = dict(
     license="Apache-2.0",
     license_files=["LICENSE.txt"],
     classifiers=classifier_list,
-    url="https://github.com/nedbat/coveragepy",
+    url="https://github.com/coveragepy/coveragepy",
     project_urls={
         "Documentation": __url__,
         "Funding": (
             "https://tidelift.com/subscription/pkg/pypi-coverage"
             + "?utm_source=pypi-coverage&utm_medium=referral&utm_campaign=pypi"
         ),
-        "Issues": "https://github.com/nedbat/coveragepy/issues",
+        "Issues": "https://github.com/coveragepy/coveragepy/issues",
         "Mastodon": "https://hachyderm.io/@coveragepy",
         "Mastodon (nedbat)": "https://hachyderm.io/@nedbat",
     },

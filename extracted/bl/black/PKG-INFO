@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: black
-Version: 25.9.0
+Version: 25.11.0
 Summary: The uncompromising code formatter.
 Project-URL: Documentation, https://black.readthedocs.io/
 Project-URL: Changelog, https://github.com/psf/black/blob/main/CHANGES.md
@@ -8,13 +8,11 @@ Project-URL: Repository, https://github.com/psf/black
 Project-URL: Issues, https://github.com/psf/black/issues
 Author-email: Łukasz Langa <lukasz@langa.pl>
 License-Expression: MIT
-License-File: AUTHORS.md
 License-File: LICENSE
 Keywords: automation,autopep8,formatter,gofmt,pyfmt,rustfmt,yapf
 Classifier: Development Status :: 5 - Production/Stable
 Classifier: Environment :: Console
 Classifier: Intended Audience :: Developers
-Classifier: License :: OSI Approved :: MIT License
 Classifier: Operating System :: OS Independent
 Classifier: Programming Language :: Python
 Classifier: Programming Language :: Python :: 3 :: Only
@@ -23,6 +21,7 @@ Classifier: Programming Language :: Python :: 3.10
 Classifier: Programming Language :: Python :: 3.11
 Classifier: Programming Language :: Python :: 3.12
 Classifier: Programming Language :: Python :: 3.13
+Classifier: Programming Language :: Python :: 3.14
 Classifier: Topic :: Software Development :: Libraries :: Python Modules
 Classifier: Topic :: Software Development :: Quality Assurance
 Requires-Python: >=3.9
@@ -31,7 +30,7 @@ Requires-Dist: mypy-extensions>=0.4.3
 Requires-Dist: packaging>=22.0
 Requires-Dist: pathspec>=0.9.0
 Requires-Dist: platformdirs>=2
-Requires-Dist: pytokens>=0.1.10
+Requires-Dist: pytokens>=0.3.0
 Requires-Dist: tomli>=1.1.0; python_version < '3.11'
 Requires-Dist: typing-extensions>=4.0.1; python_version < '3.11'
 Provides-Extra: colorama
@@ -55,6 +54,7 @@ Description-Content-Type: text/markdown
 <a href="https://coveralls.io/github/psf/black?branch=main"><img alt="Coverage Status" src="https://coveralls.io/repos/github/psf/black/badge.svg?branch=main"></a>
 <a href="https://github.com/psf/black/blob/main/LICENSE"><img alt="License: MIT" src="https://black.readthedocs.io/en/stable/_static/license.svg"></a>
 <a href="https://pypi.org/project/black/"><img alt="PyPI" src="https://img.shields.io/pypi/v/black"></a>
+<a href="https://pypi.org/project/black"><img alt="Supported Python Versions" src="https://img.shields.io/pypi/pyversions/black?color=brightgreen"></a>
 <a href="https://pepy.tech/project/black"><img alt="Downloads" src="https://static.pepy.tech/badge/black"></a>
 <a href="https://anaconda.org/conda-forge/black/"><img alt="conda-forge" src="https://img.shields.io/conda/dn/conda-forge/black.svg?label=conda-forge"></a>
 <a href="https://github.com/psf/black"><img alt="Code style: black" src="https://img.shields.io/badge/code%20style-black-000000.svg"></a>
@@ -87,10 +87,6 @@ Try it out now using the [Black Playground](https://black.vercel.app). Watch the
 
 _Black_ can be installed by running `pip install black`. It requires Python 3.9+ to run.
 If you want to format Jupyter Notebooks, install with `pip install "black[jupyter]"`.
-
-If you can't wait for the latest _hotness_ and want to install from GitHub, use:
-
-`pip install git+https://github.com/psf/black`
 
 ### Usage
 
@@ -227,7 +223,7 @@ Use the badge in your project's README.md:
 
 Using the badge in README.rst:
 
-```
+```rst
 .. image:: https://img.shields.io/badge/code%20style-black-000000.svg
     :target: https://github.com/psf/black
 ```
@@ -276,6 +272,57 @@ Flying Circus is expected. We are not savages.
 
 And if you _really_ need to slap somebody, do it with a fish while dancing.
 # Change Log
+
+## 25.11.0
+
+### Highlights
+
+- Enable base 3.14 support (#4804)
+- Add support for the new Python 3.14 t-string syntax introduced by PEP 750 (#4805)
+
+### Stable style
+
+- Fix bug where comments between `# fmt: off` and `# fmt: on` were reformatted (#4811)
+- Comments containing fmt directives now preserve their exact formatting instead of
+  being normalized (#4811)
+
+### Preview style
+
+- Move `multiline_string_handling` from `--unstable` to `--preview` (#4760)
+- Fix bug where module docstrings would be treated as normal strings if preceded by
+  comments (#4764)
+- Fix bug where python 3.12 generics syntax split line happens weirdly (#4777)
+- Standardize type comments to form `# type: <value>` (#4645)
+- Fix `fix_fmt_skip_in_one_liners` preview feature to respect `# fmt: skip` for compound
+  statements with semicolon-separated bodies (#4800)
+
+### Configuration
+
+- Add `no_cache` option to control caching behavior. (#4803)
+
+### Packaging
+
+- Releases now include arm64 Linux binaries (#4773)
+
+### Output
+
+- Write unchanged content to stdout when excluding formatting from stdin using pipes
+  (#4610)
+
+### _Blackd_
+
+- Implemented BlackDClient. This simple python client allows to easily send formatting
+  requests to blackd (#4774)
+
+### Integrations
+
+- Enable 3.14 base CI (#4804)
+- Enhance GitHub Action `psf/black` to support the `required-version` major-version-only
+  "stability" format when using pyproject.toml (#4770)
+- Improve error message for vim plugin users. It now handles independently vim version
+- Vim: Warn on unsupported Vim and Python versions independently (#4772)
+- Vim: Print the import paths when importing black fails (#4675)
+- Vim: Fix handling of virtualenvs that have a different Python version (#4675)
 
 ## 25.9.0
 

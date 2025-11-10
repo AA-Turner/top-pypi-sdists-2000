@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: inspect_ai
-Version: 0.3.144
+Version: 0.3.145
 Summary: Framework for large language model evaluations
 Author: UK AI Security Institute
 License: MIT License
@@ -93,6 +93,7 @@ Requires-Dist: textual-dev>=0.86.2; extra == "dev"
 Requires-Dist: trio; extra == "dev"
 Requires-Dist: pandas-stubs; extra == "dev"
 Requires-Dist: pyarrow-stubs; extra == "dev"
+Requires-Dist: types-grpcio; extra == "dev"
 Requires-Dist: types-Markdown; extra == "dev"
 Requires-Dist: types-PyYAML; extra == "dev"
 Requires-Dist: types-beautifulsoup4; extra == "dev"
@@ -104,6 +105,7 @@ Requires-Dist: types-jsonschema; extra == "dev"
 Requires-Dist: types-protobuf; extra == "dev"
 Requires-Dist: types-psutil; extra == "dev"
 Requires-Dist: types-python-dateutil; extra == "dev"
+Requires-Dist: xai_sdk; extra == "dev"
 Requires-Dist: uvicorn; extra == "dev"
 Provides-Extra: dev-mcp-tests
 Requires-Dist: mcp-server-fetch; extra == "dev-mcp-tests"

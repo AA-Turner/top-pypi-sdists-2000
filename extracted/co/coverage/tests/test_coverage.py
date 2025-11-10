@@ -1,5 +1,5 @@
 # Licensed under the Apache License: http://www.apache.org/licenses/LICENSE-2.0
-# For details: https://github.com/nedbat/coveragepy/blob/master/NOTICE.txt
+# For details: https://github.com/coveragepy/coveragepy/blob/main/NOTICE.txt
 
 """Tests for coverage.py."""
 
@@ -1581,7 +1581,7 @@ class ExcludeTest(CoverageTest):
         )
 
     def test_excluded_comprehension_branches(self) -> None:
-        # https://github.com/nedbat/coveragepy/issues/1271
+        # https://github.com/coveragepy/coveragepy/issues/1271
         self.check_coverage(
             """\
             x, y = [0], [1]

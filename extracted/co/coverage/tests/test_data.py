@@ -1,5 +1,5 @@
 # Licensed under the Apache License: http://www.apache.org/licenses/LICENSE-2.0
-# For details: https://github.com/nedbat/coveragepy/blob/master/NOTICE.txt
+# For details: https://github.com/coveragepy/coveragepy/blob/main/NOTICE.txt
 
 """Tests for coverage.data, and coverage.sqldata."""
 
@@ -542,7 +542,7 @@ class CoverageDataTest(CoverageTest):
         ]
 
     def test_add_to_lines_hash_with_missing_file(self) -> None:
-        # https://github.com/nedbat/coveragepy/issues/403
+        # https://github.com/coveragepy/coveragepy/issues/403
         covdata = DebugCoverageData()
         covdata.add_lines(LINES_1)
         hasher = mock.Mock()
@@ -553,7 +553,7 @@ class CoverageDataTest(CoverageTest):
         ]
 
     def test_add_to_arcs_hash_with_missing_file(self) -> None:
-        # https://github.com/nedbat/coveragepy/issues/403
+        # https://github.com/coveragepy/coveragepy/issues/403
         covdata = DebugCoverageData()
         covdata.add_arcs(ARCS_3)
         covdata.add_file_tracers({"y.py": "hologram_plugin"})
@@ -1045,7 +1045,7 @@ class NoDiskTest(CoverageTest):
     run_in_temp_dir = False
 
     def test_updating(self) -> None:
-        # https://github.com/nedbat/coveragepy/issues/1323
+        # https://github.com/coveragepy/coveragepy/issues/1323
         a = CoverageData(no_disk=True)
         a.add_lines({"foo.py": [10, 20, 30]})
         assert a.measured_files() == {"foo.py"}

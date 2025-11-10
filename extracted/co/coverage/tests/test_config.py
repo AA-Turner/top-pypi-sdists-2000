@@ -1,5 +1,5 @@
 # Licensed under the Apache License: http://www.apache.org/licenses/LICENSE-2.0
-# For details: https://github.com/nedbat/coveragepy/blob/master/NOTICE.txt
+# For details: https://github.com/coveragepy/coveragepy/blob/main/NOTICE.txt
 
 """Test the config file handling for coverage.py"""
 
@@ -348,7 +348,7 @@ class ConfigTest(CoverageTest):
                 "huh$${X}what",
             ]
             [othersection]
-            # This reproduces the failure from https://github.com/nedbat/coveragepy/issues/1481
+            # This reproduces the failure from https://github.com/coveragepy/coveragepy/issues/1481
             # When OTHER has a backslash that isn't a valid escape, like \\z (see below).
             something = "if [ $OTHER ]; then printf '%s\\n' 'Hi'; fi"
             """,

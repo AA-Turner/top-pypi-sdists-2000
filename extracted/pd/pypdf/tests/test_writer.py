@@ -2406,7 +2406,7 @@ def test_selfont():
         b"Text_1" in writer.pages[0]["/Annots"][1].get_object()["/AP"]["/N"].get_data()
     )
     assert (
-        b"/F3 12 Tf"
+        b"/F3 12.0 Tf"
         in writer.pages[0]["/Annots"][2].get_object()["/AP"]["/N"].get_data()
     )
     assert (
@@ -2867,8 +2867,7 @@ def test_wrong_size_in_incremental_pdf(caplog):
     assert len(writer._objects) == 20
 
     caplog.clear()
-    writer = PdfWriter(incremental=False)
-    writer.strict = True
+    writer = PdfWriter(incremental=False, strict=True)
     with pytest.raises(expected_exception=PdfReadError, match=r"^Object count 19 exceeds defined trailer size 2$"):
         writer.clone_reader_document_root(reader=PdfReader(BytesIO(modified_data)))
 

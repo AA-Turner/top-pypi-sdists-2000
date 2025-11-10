@@ -1,5 +1,5 @@
 # Licensed under the Apache License: http://www.apache.org/licenses/LICENSE-2.0
-# For details: https://github.com/nedbat/coveragepy/blob/master/NOTICE.txt
+# For details: https://github.com/coveragepy/coveragepy/blob/main/NOTICE.txt
 
 """Helper for building, testing, and linting coverage.py.
 
@@ -450,7 +450,7 @@ def do_cheats():
     print()
     print(f"Coverage version is {facts.ver}")
 
-    repo = "nedbat/coveragepy"
+    repo = "coveragepy/coveragepy"
     github = f"https://github.com/{repo}"
     egg = "egg=coverage==0.0"  # to force a re-install
     print(
@@ -464,16 +464,16 @@ def do_cheats():
     )
 
     print("\n## To install this code:")
-    if facts.branch == "master":
+    if facts.branch == "main":
         print(f"python3 -m pip install git+{github}#{egg}")
     else:
         print(f"python3 -m pip install git+{github}@{facts.branch}#{egg}")
     print(f"python3 -m pip install git+{github}@{facts.sha[:20]}#{egg}")
 
     print("\n## To read this code on GitHub:")
-    print(f"https://github.com/nedbat/coveragepy/commit/{facts.sha}")
-    print(f"https://github.com/nedbat/coveragepy/commits/{facts.sha}")
-    print(f"https://github.com/nedbat/coveragepy/tree/{facts.branch}")
+    print(f"https://github.com/coveragepy/coveragepy/commit/{facts.sha}")
+    print(f"https://github.com/coveragepy/coveragepy/commits/{facts.sha}")
+    print(f"https://github.com/coveragepy/coveragepy/tree/{facts.branch}")
 
     print(
         "\n## For other collaborators to get this code:\n"

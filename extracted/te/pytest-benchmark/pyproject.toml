@@ -4,12 +4,15 @@ requires = [
 ]
 build-backend = "setuptools.build_meta"
 
+[tool.setuptools.dynamic]
+readme = { file = ["README.rst", "CHANGELOG.rst"] }
+
 [project]
 dynamic = [
     "readme",
 ]
 name = "pytest-benchmark"
-version = "5.2.2"
+version = "5.2.3"
 license = "BSD-2-Clause"
 license-files = ["LICENSE"]
 description = "A ``pytest`` fixture for benchmarking code. It will group the tests into rounds that are calibrated to the chosen timer."

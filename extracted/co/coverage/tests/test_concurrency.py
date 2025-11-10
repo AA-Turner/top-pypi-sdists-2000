@@ -1,5 +1,5 @@
 # Licensed under the Apache License: http://www.apache.org/licenses/LICENSE-2.0
-# For details: https://github.com/nedbat/coveragepy/blob/master/NOTICE.txt
+# For details: https://github.com/coveragepy/coveragepy/blob/main/NOTICE.txt
 
 """Tests for concurrency libraries."""
 
@@ -183,7 +183,7 @@ def cant_trace_msg(concurrency: str, the_module: ModuleType | None) -> str | Non
         concurrency = ",".join(parts)
 
     if testenv.SYS_MON and concurrency:
-        expected_out = f"Can't use core=sysmon: it doesn't support concurrency={concurrency};"
+        expected_out = f"Can't use core=sysmon: it doesn't support concurrency={concurrency}"
     elif the_module is None:
         # We don't even have the underlying module installed, we expect
         # coverage to alert us to this fact.
@@ -273,7 +273,7 @@ class ConcurrencyTest(CoverageTest):
         code = SIMPLE.format(QLIMIT=self.QLIMIT)
         self.try_some_code(code, "eventlet", eventlet)
 
-    # https://github.com/nedbat/coveragepy/issues/663
+    # https://github.com/coveragepy/coveragepy/issues/663
     @pytest.mark.skipif(env.WINDOWS, reason="gevent has problems on Windows: #663")
     def test_gevent(self) -> None:
         code = (GEVENT + SUM_RANGE_Q + PRINT_SUM_RANGE).format(QLIMIT=self.QLIMIT)
@@ -401,10 +401,7 @@ class WithoutConcurrencyModuleTest(CoverageTest):
     def test_missing_module(self, module: str) -> None:
         self.make_file("prog.py", "a = 1")
         sys.modules[module] = None  # type: ignore[assignment]
-        if testenv.SYS_MON:
-            msg = rf"Can't use core=sysmon: it doesn't support concurrency={module}"
-        else:
-            msg = rf"Couldn't trace with concurrency={module}, the module isn't installed."
+        msg = rf"Couldn't trace with concurrency={module}, the module isn't installed."
         with pytest.raises(ConfigError, match=msg):
             self.command_line(f"run --concurrency={module} prog.py")
 
@@ -675,7 +672,7 @@ def test_coverage_stop_in_threads() -> None:
 
 
 def test_thread_safe_save_data(tmp_path: pathlib.Path) -> None:
-    # Non-regression test for: https://github.com/nedbat/coveragepy/issues/581
+    # Non-regression test for: https://github.com/coveragepy/coveragepy/issues/581
 
     # Create some Python modules and put them in the path
     modules_dir = tmp_path / "test_modules"
