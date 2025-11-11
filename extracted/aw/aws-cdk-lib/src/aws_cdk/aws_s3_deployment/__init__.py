@@ -543,6 +543,67 @@ cdk.CfnOutput(self, "ObjectKey",
 )
 ```
 
+## Specifying a Custom VPC, Subnets, and Security Groups in BucketDeployment
+
+By default, the AWS CDK BucketDeployment construct runs in a publicly accessible environment. However, for enhanced security and compliance, you may need to deploy your assets from within a VPC while restricting network access through custom subnets and security groups.
+
+### Using a Custom VPC
+
+To deploy assets within a private network, specify the vpc property in BucketDeploymentProps. This ensures that the deployment Lambda function executes within your specified VPC.
+
+```python
+vpc = ec2.Vpc.from_lookup(self, "ExistingVPC", vpc_id="vpc-12345678")
+bucket = s3.Bucket(self, "MyBucket")
+
+s3deploy.BucketDeployment(self, "DeployToS3",
+    destination_bucket=bucket,
+    vpc=vpc,
+    sources=[s3deploy.Source.asset("./website")]
+)
+```
+
+### Specifying Subnets for Deployment
+
+By default, when you specify a VPC, the BucketDeployment function is deployed in the private subnets of that VPC.
+However, you can customize the subnet selection using the vpcSubnets property.
+
+```python
+vpc = ec2.Vpc.from_lookup(self, "ExistingVPC", vpc_id="vpc-12345678")
+bucket = s3.Bucket(self, "MyBucket")
+
+s3deploy.BucketDeployment(self, "DeployToS3",
+    destination_bucket=bucket,
+    vpc=vpc,
+    vpc_subnets=ec2.SubnetSelection(subnet_type=ec2.SubnetType.PUBLIC),
+    sources=[s3deploy.Source.asset("./website")]
+)
+```
+
+### Defining Custom Security Groups
+
+For enhanced network security, you can now specify custom security groups in BucketDeploymentProps.
+This allows fine-grained control over ingress and egress rules for the deployment Lambda function.
+
+```python
+vpc = ec2.Vpc.from_lookup(self, "ExistingVPC", vpc_id="vpc-12345678")
+bucket = s3.Bucket(self, "MyBucket")
+
+security_group = ec2.SecurityGroup(self, "CustomSG",
+    vpc=vpc,
+    description="Allow HTTPS outbound access",
+    allow_all_outbound=False
+)
+
+security_group.add_egress_rule(ec2.Peer.any_ipv4(), ec2.Port.tcp(443), "Allow HTTPS traffic")
+
+s3deploy.BucketDeployment(self, "DeployWithSecurityGroup",
+    destination_bucket=bucket,
+    vpc=vpc,
+    security_groups=[security_group],
+    sources=[s3deploy.Source.asset("./website")]
+)
+```
+
 ## Notes
 
 * This library uses an AWS CloudFormation custom resource which is about 10MiB in
@@ -620,7 +681,9 @@ from .. import (
 )
 from ..aws_cloudfront import IDistributionRef as _IDistributionRef_ca11229b
 from ..aws_ec2 import (
-    IVpc as _IVpc_f30d5663, SubnetSelection as _SubnetSelection_e57d76df
+    ISecurityGroup as _ISecurityGroup_acf8a799,
+    IVpc as _IVpc_f30d5663,
+    SubnetSelection as _SubnetSelection_e57d76df,
 )
 from ..aws_iam import IGrantable as _IGrantable_71c4f5de, IRole as _IRole_235f5d8e
 from ..aws_kms import IKeyRef as _IKeyRef_1e82344b
@@ -689,6 +752,7 @@ class BucketDeployment(
         prune: typing.Optional[builtins.bool] = None,
         retain_on_delete: typing.Optional[builtins.bool] = None,
         role: typing.Optional[_IRole_235f5d8e] = None,
+        security_groups: typing.Optional[typing.Sequence[_ISecurityGroup_acf8a799]] = None,
         server_side_encryption: typing.Optional["ServerSideEncryption"] = None,
         server_side_encryption_aws_kms_key_id: typing.Optional[builtins.str] = None,
         server_side_encryption_customer_algorithm: typing.Optional[builtins.str] = None,
@@ -727,6 +791,7 @@ class BucketDeployment(
         :param prune: By default, files in the destination bucket that don't exist in the source will be deleted when the BucketDeployment resource is created or updated. If this is set to false, files in the destination bucket that do not exist in the asset, will NOT be deleted during deployment (create/update). Default: true
         :param retain_on_delete: If this is set to "false", the destination files will be deleted when the resource is deleted or the destination is updated. NOTICE: Configuring this to "false" might have operational implications. Please visit to the package documentation referred below to make sure you fully understand those implications. Default: true - when resource is deleted/updated, files are retained
         :param role: Execution role associated with this function. Default: - A role is automatically created
+        :param security_groups: The list of security groups to associate with the lambda handlers network interfaces. Only used if 'vpc' is supplied. Default: undefined - If the function is placed within a VPC and a security group is not specified a dedicated security group will be created for this function.
         :param server_side_encryption: System-defined x-amz-server-side-encryption metadata to be set on all objects in the deployment. Default: - Server side encryption is not used.
         :param server_side_encryption_aws_kms_key_id: System-defined x-amz-server-side-encryption-aws-kms-key-id metadata to be set on all objects in the deployment. Default: - Not set.
         :param server_side_encryption_customer_algorithm: System-defined x-amz-server-side-encryption-customer-algorithm metadata to be set on all objects in the deployment. Warning: This is not a useful parameter until this bug is fixed: https://github.com/aws/aws-cdk/issues/6080 Default: - Not set.
@@ -767,6 +832,7 @@ class BucketDeployment(
             prune=prune,
             retain_on_delete=retain_on_delete,
             role=role,
+            security_groups=security_groups,
             server_side_encryption=server_side_encryption,
             server_side_encryption_aws_kms_key_id=server_side_encryption_aws_kms_key_id,
             server_side_encryption_customer_algorithm=server_side_encryption_customer_algorithm,
@@ -875,6 +941,7 @@ class BucketDeployment(
         "prune": "prune",
         "retain_on_delete": "retainOnDelete",
         "role": "role",
+        "security_groups": "securityGroups",
         "server_side_encryption": "serverSideEncryption",
         "server_side_encryption_aws_kms_key_id": "serverSideEncryptionAwsKmsKeyId",
         "server_side_encryption_customer_algorithm": "serverSideEncryptionCustomerAlgorithm",
@@ -915,6 +982,7 @@ class BucketDeploymentProps:
         prune: typing.Optional[builtins.bool] = None,
         retain_on_delete: typing.Optional[builtins.bool] = None,
         role: typing.Optional[_IRole_235f5d8e] = None,
+        security_groups: typing.Optional[typing.Sequence[_ISecurityGroup_acf8a799]] = None,
         server_side_encryption: typing.Optional["ServerSideEncryption"] = None,
         server_side_encryption_aws_kms_key_id: typing.Optional[builtins.str] = None,
         server_side_encryption_customer_algorithm: typing.Optional[builtins.str] = None,
@@ -952,6 +1020,7 @@ class BucketDeploymentProps:
         :param prune: By default, files in the destination bucket that don't exist in the source will be deleted when the BucketDeployment resource is created or updated. If this is set to false, files in the destination bucket that do not exist in the asset, will NOT be deleted during deployment (create/update). Default: true
         :param retain_on_delete: If this is set to "false", the destination files will be deleted when the resource is deleted or the destination is updated. NOTICE: Configuring this to "false" might have operational implications. Please visit to the package documentation referred below to make sure you fully understand those implications. Default: true - when resource is deleted/updated, files are retained
         :param role: Execution role associated with this function. Default: - A role is automatically created
+        :param security_groups: The list of security groups to associate with the lambda handlers network interfaces. Only used if 'vpc' is supplied. Default: undefined - If the function is placed within a VPC and a security group is not specified a dedicated security group will be created for this function.
         :param server_side_encryption: System-defined x-amz-server-side-encryption metadata to be set on all objects in the deployment. Default: - Server side encryption is not used.
         :param server_side_encryption_aws_kms_key_id: System-defined x-amz-server-side-encryption-aws-kms-key-id metadata to be set on all objects in the deployment. Default: - Not set.
         :param server_side_encryption_customer_algorithm: System-defined x-amz-server-side-encryption-customer-algorithm metadata to be set on all objects in the deployment. Warning: This is not a useful parameter until this bug is fixed: https://github.com/aws/aws-cdk/issues/6080 Default: - Not set.
@@ -1010,6 +1079,7 @@ class BucketDeploymentProps:
             check_type(argname="argument prune", value=prune, expected_type=type_hints["prune"])
             check_type(argname="argument retain_on_delete", value=retain_on_delete, expected_type=type_hints["retain_on_delete"])
             check_type(argname="argument role", value=role, expected_type=type_hints["role"])
+            check_type(argname="argument security_groups", value=security_groups, expected_type=type_hints["security_groups"])
             check_type(argname="argument server_side_encryption", value=server_side_encryption, expected_type=type_hints["server_side_encryption"])
             check_type(argname="argument server_side_encryption_aws_kms_key_id", value=server_side_encryption_aws_kms_key_id, expected_type=type_hints["server_side_encryption_aws_kms_key_id"])
             check_type(argname="argument server_side_encryption_customer_algorithm", value=server_side_encryption_customer_algorithm, expected_type=type_hints["server_side_encryption_customer_algorithm"])
@@ -1068,6 +1138,8 @@ class BucketDeploymentProps:
             self._values["retain_on_delete"] = retain_on_delete
         if role is not None:
             self._values["role"] = role
+        if security_groups is not None:
+            self._values["security_groups"] = security_groups
         if server_side_encryption is not None:
             self._values["server_side_encryption"] = server_side_encryption
         if server_side_encryption_aws_kms_key_id is not None:
@@ -1362,6 +1434,20 @@ class BucketDeploymentProps:
         '''
         result = self._values.get("role")
         return typing.cast(typing.Optional[_IRole_235f5d8e], result)
+
+    @builtins.property
+    def security_groups(self) -> typing.Optional[typing.List[_ISecurityGroup_acf8a799]]:
+        '''The list of security groups to associate with the lambda handlers network interfaces.
+
+        Only used if 'vpc' is supplied.
+
+        :default:
+
+        undefined - If the function is placed within a VPC and a security group is
+        not specified a dedicated security group will be created for this function.
+        '''
+        result = self._values.get("security_groups")
+        return typing.cast(typing.Optional[typing.List[_ISecurityGroup_acf8a799]], result)
 
     @builtins.property
     def server_side_encryption(self) -> typing.Optional["ServerSideEncryption"]:
@@ -2542,6 +2628,7 @@ def _typecheckingstub__2544491e92aa50a255b927ef16b9cde2961eae48803afca3b5d1105bf
     prune: typing.Optional[builtins.bool] = None,
     retain_on_delete: typing.Optional[builtins.bool] = None,
     role: typing.Optional[_IRole_235f5d8e] = None,
+    security_groups: typing.Optional[typing.Sequence[_ISecurityGroup_acf8a799]] = None,
     server_side_encryption: typing.Optional[ServerSideEncryption] = None,
     server_side_encryption_aws_kms_key_id: typing.Optional[builtins.str] = None,
     server_side_encryption_customer_algorithm: typing.Optional[builtins.str] = None,
@@ -2588,6 +2675,7 @@ def _typecheckingstub__cbabf07e8b4adfb2b2058c075c4f35512ebc580f80a6db9bf13e90589
     prune: typing.Optional[builtins.bool] = None,
     retain_on_delete: typing.Optional[builtins.bool] = None,
     role: typing.Optional[_IRole_235f5d8e] = None,
+    security_groups: typing.Optional[typing.Sequence[_ISecurityGroup_acf8a799]] = None,
     server_side_encryption: typing.Optional[ServerSideEncryption] = None,
     server_side_encryption_aws_kms_key_id: typing.Optional[builtins.str] = None,
     server_side_encryption_customer_algorithm: typing.Optional[builtins.str] = None,

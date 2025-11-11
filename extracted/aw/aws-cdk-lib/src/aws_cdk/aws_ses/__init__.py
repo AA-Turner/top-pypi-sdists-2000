@@ -11606,6 +11606,27 @@ class CfnMailManagerAddressList(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="fromAddressListId")
+    @builtins.classmethod
+    def from_address_list_id(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        address_list_id: builtins.str,
+    ) -> IMailManagerAddressListRef:
+        '''Creates a new IMailManagerAddressListRef from a addressListId.
+
+        :param scope: -
+        :param id: -
+        :param address_list_id: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__120660db0c0d7502ce27d42115e731ab20d88dfeccd8fa2bb55ed90b870488c4)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument address_list_id", value=address_list_id, expected_type=type_hints["address_list_id"])
+        return typing.cast(IMailManagerAddressListRef, jsii.sinvoke(cls, "fromAddressListId", [scope, id, address_list_id]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -21821,6 +21842,14 @@ def _typecheckingstub__6a8a172d98fe048a3419d1b92dcaf2e59e8461e9b0baf073f812b3916
     *,
     address_list_name: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__120660db0c0d7502ce27d42115e731ab20d88dfeccd8fa2bb55ed90b870488c4(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    address_list_id: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass

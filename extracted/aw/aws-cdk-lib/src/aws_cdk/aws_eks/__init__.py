@@ -6427,7 +6427,17 @@ class CfnNodegroupProps:
                 ),
                 nodegroup_name="nodegroupName",
                 node_repair_config=eks.CfnNodegroup.NodeRepairConfigProperty(
-                    enabled=False
+                    enabled=False,
+                    max_parallel_nodes_repaired_count=123,
+                    max_parallel_nodes_repaired_percentage=123,
+                    max_unhealthy_node_threshold_count=123,
+                    max_unhealthy_node_threshold_percentage=123,
+                    node_repair_config_overrides=[eks.CfnNodegroup.NodeRepairConfigOverridesProperty(
+                        min_repair_wait_time_mins=123,
+                        node_monitoring_condition="nodeMonitoringCondition",
+                        node_unhealthy_reason="nodeUnhealthyReason",
+                        repair_action="repairAction"
+                    )]
                 ),
                 release_version="releaseVersion",
                 remote_access=eks.CfnNodegroup.RemoteAccessProperty(
@@ -18507,7 +18517,17 @@ class CfnNodegroup(
             ),
             nodegroup_name="nodegroupName",
             node_repair_config=eks.CfnNodegroup.NodeRepairConfigProperty(
-                enabled=False
+                enabled=False,
+                max_parallel_nodes_repaired_count=123,
+                max_parallel_nodes_repaired_percentage=123,
+                max_unhealthy_node_threshold_count=123,
+                max_unhealthy_node_threshold_percentage=123,
+                node_repair_config_overrides=[eks.CfnNodegroup.NodeRepairConfigOverridesProperty(
+                    min_repair_wait_time_mins=123,
+                    node_monitoring_condition="nodeMonitoringCondition",
+                    node_unhealthy_reason="nodeUnhealthyReason",
+                    repair_action="repairAction"
+                )]
             ),
             release_version="releaseVersion",
             remote_access=eks.CfnNodegroup.RemoteAccessProperty(
@@ -19082,19 +19102,143 @@ class CfnNodegroup(
             )
 
     @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_eks.CfnNodegroup.NodeRepairConfigOverridesProperty",
+        jsii_struct_bases=[],
+        name_mapping={
+            "min_repair_wait_time_mins": "minRepairWaitTimeMins",
+            "node_monitoring_condition": "nodeMonitoringCondition",
+            "node_unhealthy_reason": "nodeUnhealthyReason",
+            "repair_action": "repairAction",
+        },
+    )
+    class NodeRepairConfigOverridesProperty:
+        def __init__(
+            self,
+            *,
+            min_repair_wait_time_mins: typing.Optional[jsii.Number] = None,
+            node_monitoring_condition: typing.Optional[builtins.str] = None,
+            node_unhealthy_reason: typing.Optional[builtins.str] = None,
+            repair_action: typing.Optional[builtins.str] = None,
+        ) -> None:
+            '''Specify granular overrides for specific repair actions.
+
+            These overrides control the repair action and the repair delay time before a node is considered eligible for repair. If you use this, you must specify all the values.
+
+            :param min_repair_wait_time_mins: Specify the minimum time in minutes to wait before attempting to repair a node with this specific NodeMonitoringCondition and NodeUnhealthyReason.
+            :param node_monitoring_condition: Specify an unhealthy condition reported by the node monitoring agent that this override would apply to.
+            :param node_unhealthy_reason: Specify a reason reported by the node monitoring agent that this override would apply to.
+            :param repair_action: Specify the repair action to take for nodes when all of the specified conditions are met.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-eks-nodegroup-noderepairconfigoverrides.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_eks as eks
+                
+                node_repair_config_overrides_property = eks.CfnNodegroup.NodeRepairConfigOverridesProperty(
+                    min_repair_wait_time_mins=123,
+                    node_monitoring_condition="nodeMonitoringCondition",
+                    node_unhealthy_reason="nodeUnhealthyReason",
+                    repair_action="repairAction"
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__1c8182284f4e249d40ce1280381d42d4de802714ccdb98dd8928f394e7a79a18)
+                check_type(argname="argument min_repair_wait_time_mins", value=min_repair_wait_time_mins, expected_type=type_hints["min_repair_wait_time_mins"])
+                check_type(argname="argument node_monitoring_condition", value=node_monitoring_condition, expected_type=type_hints["node_monitoring_condition"])
+                check_type(argname="argument node_unhealthy_reason", value=node_unhealthy_reason, expected_type=type_hints["node_unhealthy_reason"])
+                check_type(argname="argument repair_action", value=repair_action, expected_type=type_hints["repair_action"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if min_repair_wait_time_mins is not None:
+                self._values["min_repair_wait_time_mins"] = min_repair_wait_time_mins
+            if node_monitoring_condition is not None:
+                self._values["node_monitoring_condition"] = node_monitoring_condition
+            if node_unhealthy_reason is not None:
+                self._values["node_unhealthy_reason"] = node_unhealthy_reason
+            if repair_action is not None:
+                self._values["repair_action"] = repair_action
+
+        @builtins.property
+        def min_repair_wait_time_mins(self) -> typing.Optional[jsii.Number]:
+            '''Specify the minimum time in minutes to wait before attempting to repair a node with this specific NodeMonitoringCondition and NodeUnhealthyReason.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-eks-nodegroup-noderepairconfigoverrides.html#cfn-eks-nodegroup-noderepairconfigoverrides-minrepairwaittimemins
+            '''
+            result = self._values.get("min_repair_wait_time_mins")
+            return typing.cast(typing.Optional[jsii.Number], result)
+
+        @builtins.property
+        def node_monitoring_condition(self) -> typing.Optional[builtins.str]:
+            '''Specify an unhealthy condition reported by the node monitoring agent that this override would apply to.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-eks-nodegroup-noderepairconfigoverrides.html#cfn-eks-nodegroup-noderepairconfigoverrides-nodemonitoringcondition
+            '''
+            result = self._values.get("node_monitoring_condition")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        @builtins.property
+        def node_unhealthy_reason(self) -> typing.Optional[builtins.str]:
+            '''Specify a reason reported by the node monitoring agent that this override would apply to.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-eks-nodegroup-noderepairconfigoverrides.html#cfn-eks-nodegroup-noderepairconfigoverrides-nodeunhealthyreason
+            '''
+            result = self._values.get("node_unhealthy_reason")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        @builtins.property
+        def repair_action(self) -> typing.Optional[builtins.str]:
+            '''Specify the repair action to take for nodes when all of the specified conditions are met.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-eks-nodegroup-noderepairconfigoverrides.html#cfn-eks-nodegroup-noderepairconfigoverrides-repairaction
+            '''
+            result = self._values.get("repair_action")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "NodeRepairConfigOverridesProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
         jsii_type="aws-cdk-lib.aws_eks.CfnNodegroup.NodeRepairConfigProperty",
         jsii_struct_bases=[],
-        name_mapping={"enabled": "enabled"},
+        name_mapping={
+            "enabled": "enabled",
+            "max_parallel_nodes_repaired_count": "maxParallelNodesRepairedCount",
+            "max_parallel_nodes_repaired_percentage": "maxParallelNodesRepairedPercentage",
+            "max_unhealthy_node_threshold_count": "maxUnhealthyNodeThresholdCount",
+            "max_unhealthy_node_threshold_percentage": "maxUnhealthyNodeThresholdPercentage",
+            "node_repair_config_overrides": "nodeRepairConfigOverrides",
+        },
     )
     class NodeRepairConfigProperty:
         def __init__(
             self,
             *,
             enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            max_parallel_nodes_repaired_count: typing.Optional[jsii.Number] = None,
+            max_parallel_nodes_repaired_percentage: typing.Optional[jsii.Number] = None,
+            max_unhealthy_node_threshold_count: typing.Optional[jsii.Number] = None,
+            max_unhealthy_node_threshold_percentage: typing.Optional[jsii.Number] = None,
+            node_repair_config_overrides: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnNodegroup.NodeRepairConfigOverridesProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         ) -> None:
             '''The node auto repair configuration for the node group.
 
             :param enabled: Specifies whether to enable node auto repair for the node group. Node auto repair is disabled by default.
+            :param max_parallel_nodes_repaired_count: Specify the maximum number of nodes that can be repaired concurrently or in parallel, expressed as a count of unhealthy nodes. This gives you finer-grained control over the pace of node replacements. When using this, you cannot also set MaxParallelNodesRepairedPercentage at the same time.
+            :param max_parallel_nodes_repaired_percentage: Specify the maximum number of nodes that can be repaired concurrently or in parallel, expressed as a percentage of unhealthy nodes. This gives you finer-grained control over the pace of node replacements. When using this, you cannot also set MaxParallelNodesRepairedCount at the same time.
+            :param max_unhealthy_node_threshold_count: Specify a count threshold of unhealthy nodes, above which node auto repair actions will stop. When using this, you cannot also set MaxUnhealthyNodeThresholdPercentage at the same time.
+            :param max_unhealthy_node_threshold_percentage: Specify a percentage threshold of unhealthy nodes, above which node auto repair actions will stop. When using this, you cannot also set MaxUnhealthyNodeThresholdCount at the same time.
+            :param node_repair_config_overrides: Specify granular overrides for specific repair actions. These overrides control the repair action and the repair delay time before a node is considered eligible for repair. If you use this, you must specify all the values.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-eks-nodegroup-noderepairconfig.html
             :exampleMetadata: fixture=_generated
@@ -19106,15 +19250,40 @@ class CfnNodegroup(
                 from aws_cdk import aws_eks as eks
                 
                 node_repair_config_property = eks.CfnNodegroup.NodeRepairConfigProperty(
-                    enabled=False
+                    enabled=False,
+                    max_parallel_nodes_repaired_count=123,
+                    max_parallel_nodes_repaired_percentage=123,
+                    max_unhealthy_node_threshold_count=123,
+                    max_unhealthy_node_threshold_percentage=123,
+                    node_repair_config_overrides=[eks.CfnNodegroup.NodeRepairConfigOverridesProperty(
+                        min_repair_wait_time_mins=123,
+                        node_monitoring_condition="nodeMonitoringCondition",
+                        node_unhealthy_reason="nodeUnhealthyReason",
+                        repair_action="repairAction"
+                    )]
                 )
             '''
             if __debug__:
                 type_hints = typing.get_type_hints(_typecheckingstub__29dbda55ee07f00e62bcfcbc392973b5c2850e347abc3e6692b5d82704d445f0)
                 check_type(argname="argument enabled", value=enabled, expected_type=type_hints["enabled"])
+                check_type(argname="argument max_parallel_nodes_repaired_count", value=max_parallel_nodes_repaired_count, expected_type=type_hints["max_parallel_nodes_repaired_count"])
+                check_type(argname="argument max_parallel_nodes_repaired_percentage", value=max_parallel_nodes_repaired_percentage, expected_type=type_hints["max_parallel_nodes_repaired_percentage"])
+                check_type(argname="argument max_unhealthy_node_threshold_count", value=max_unhealthy_node_threshold_count, expected_type=type_hints["max_unhealthy_node_threshold_count"])
+                check_type(argname="argument max_unhealthy_node_threshold_percentage", value=max_unhealthy_node_threshold_percentage, expected_type=type_hints["max_unhealthy_node_threshold_percentage"])
+                check_type(argname="argument node_repair_config_overrides", value=node_repair_config_overrides, expected_type=type_hints["node_repair_config_overrides"])
             self._values: typing.Dict[builtins.str, typing.Any] = {}
             if enabled is not None:
                 self._values["enabled"] = enabled
+            if max_parallel_nodes_repaired_count is not None:
+                self._values["max_parallel_nodes_repaired_count"] = max_parallel_nodes_repaired_count
+            if max_parallel_nodes_repaired_percentage is not None:
+                self._values["max_parallel_nodes_repaired_percentage"] = max_parallel_nodes_repaired_percentage
+            if max_unhealthy_node_threshold_count is not None:
+                self._values["max_unhealthy_node_threshold_count"] = max_unhealthy_node_threshold_count
+            if max_unhealthy_node_threshold_percentage is not None:
+                self._values["max_unhealthy_node_threshold_percentage"] = max_unhealthy_node_threshold_percentage
+            if node_repair_config_overrides is not None:
+                self._values["node_repair_config_overrides"] = node_repair_config_overrides
 
         @builtins.property
         def enabled(
@@ -19128,6 +19297,67 @@ class CfnNodegroup(
             '''
             result = self._values.get("enabled")
             return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+
+        @builtins.property
+        def max_parallel_nodes_repaired_count(self) -> typing.Optional[jsii.Number]:
+            '''Specify the maximum number of nodes that can be repaired concurrently or in parallel, expressed as a count of unhealthy nodes.
+
+            This gives you finer-grained control over the pace of node replacements. When using this, you cannot also set MaxParallelNodesRepairedPercentage at the same time.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-eks-nodegroup-noderepairconfig.html#cfn-eks-nodegroup-noderepairconfig-maxparallelnodesrepairedcount
+            '''
+            result = self._values.get("max_parallel_nodes_repaired_count")
+            return typing.cast(typing.Optional[jsii.Number], result)
+
+        @builtins.property
+        def max_parallel_nodes_repaired_percentage(
+            self,
+        ) -> typing.Optional[jsii.Number]:
+            '''Specify the maximum number of nodes that can be repaired concurrently or in parallel, expressed as a percentage of unhealthy nodes.
+
+            This gives you finer-grained control over the pace of node replacements. When using this, you cannot also set MaxParallelNodesRepairedCount at the same time.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-eks-nodegroup-noderepairconfig.html#cfn-eks-nodegroup-noderepairconfig-maxparallelnodesrepairedpercentage
+            '''
+            result = self._values.get("max_parallel_nodes_repaired_percentage")
+            return typing.cast(typing.Optional[jsii.Number], result)
+
+        @builtins.property
+        def max_unhealthy_node_threshold_count(self) -> typing.Optional[jsii.Number]:
+            '''Specify a count threshold of unhealthy nodes, above which node auto repair actions will stop.
+
+            When using this, you cannot also set MaxUnhealthyNodeThresholdPercentage at the same time.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-eks-nodegroup-noderepairconfig.html#cfn-eks-nodegroup-noderepairconfig-maxunhealthynodethresholdcount
+            '''
+            result = self._values.get("max_unhealthy_node_threshold_count")
+            return typing.cast(typing.Optional[jsii.Number], result)
+
+        @builtins.property
+        def max_unhealthy_node_threshold_percentage(
+            self,
+        ) -> typing.Optional[jsii.Number]:
+            '''Specify a percentage threshold of unhealthy nodes, above which node auto repair actions will stop.
+
+            When using this, you cannot also set MaxUnhealthyNodeThresholdCount at the same time.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-eks-nodegroup-noderepairconfig.html#cfn-eks-nodegroup-noderepairconfig-maxunhealthynodethresholdpercentage
+            '''
+            result = self._values.get("max_unhealthy_node_threshold_percentage")
+            return typing.cast(typing.Optional[jsii.Number], result)
+
+        @builtins.property
+        def node_repair_config_overrides(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnNodegroup.NodeRepairConfigOverridesProperty"]]]]:
+            '''Specify granular overrides for specific repair actions.
+
+            These overrides control the repair action and the repair delay time before a node is considered eligible for repair. If you use this, you must specify all the values.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-eks-nodegroup-noderepairconfig.html#cfn-eks-nodegroup-noderepairconfig-noderepairconfigoverrides
+            '''
+            result = self._values.get("node_repair_config_overrides")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnNodegroup.NodeRepairConfigOverridesProperty"]]]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -24977,9 +25207,24 @@ def _typecheckingstub__e659212680af90c8732b5ec096030b6902f35121f1ca1a82a513ebaa5
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__1c8182284f4e249d40ce1280381d42d4de802714ccdb98dd8928f394e7a79a18(
+    *,
+    min_repair_wait_time_mins: typing.Optional[jsii.Number] = None,
+    node_monitoring_condition: typing.Optional[builtins.str] = None,
+    node_unhealthy_reason: typing.Optional[builtins.str] = None,
+    repair_action: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__29dbda55ee07f00e62bcfcbc392973b5c2850e347abc3e6692b5d82704d445f0(
     *,
     enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+    max_parallel_nodes_repaired_count: typing.Optional[jsii.Number] = None,
+    max_parallel_nodes_repaired_percentage: typing.Optional[jsii.Number] = None,
+    max_unhealthy_node_threshold_count: typing.Optional[jsii.Number] = None,
+    max_unhealthy_node_threshold_percentage: typing.Optional[jsii.Number] = None,
+    node_repair_config_overrides: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnNodegroup.NodeRepairConfigOverridesProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
 ) -> None:
     """Type checking stubs"""
     pass

@@ -1,5 +1,6 @@
 import collections.abc
 import modal._functions
+import modal._load_context
 import modal._partial_function
 import modal._utils.function_utils
 import modal.client
@@ -150,6 +151,7 @@ class _App:
     _app_id: typing.Optional[str]
     _running_app: typing.Optional[modal.running_app.RunningApp]
     _client: typing.Optional[modal.client._Client]
+    _root_load_context: modal._load_context.LoadContext
 
     @property
     def _local_state(self) -> _LocalAppState:
@@ -667,6 +669,7 @@ class App:
     _app_id: typing.Optional[str]
     _running_app: typing.Optional[modal.running_app.RunningApp]
     _client: typing.Optional[modal.client.Client]
+    _root_load_context: modal._load_context.LoadContext
 
     def __init__(
         self,

@@ -122,7 +122,7 @@ class CfnPipelineProps:
         :param buffer_options: Options that specify the configuration of a persistent buffer. To configure how OpenSearch Ingestion encrypts this data, set the ``EncryptionAtRestOptions`` . For more information, see `Persistent buffering <https://docs.aws.amazon.com/opensearch-service/latest/developerguide/osis-features-overview.html#persistent-buffering>`_ .
         :param encryption_at_rest_options: Options to control how OpenSearch encrypts buffer data.
         :param log_publishing_options: Key-value pairs that represent log publishing settings.
-        :param pipeline_role_arn: The Pipeline Role (ARN) for the pipeline.
+        :param pipeline_role_arn: The Amazon Resource Name (ARN) of the IAM role that the pipeline uses to access AWS resources.
         :param resource_policy: 
         :param tags: List of tags to add to the pipeline upon creation.
         :param vpc_options: Options that specify the subnets and security groups for an OpenSearch Ingestion VPC endpoint.
@@ -289,7 +289,7 @@ class CfnPipelineProps:
 
     @builtins.property
     def pipeline_role_arn(self) -> typing.Optional[builtins.str]:
-        '''The Pipeline Role (ARN) for the pipeline.
+        '''The Amazon Resource Name (ARN) of the IAM role that the pipeline uses to access AWS resources.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-osis-pipeline.html#cfn-osis-pipeline-pipelinerolearn
         '''
@@ -520,7 +520,7 @@ class CfnPipeline(
         :param buffer_options: Options that specify the configuration of a persistent buffer. To configure how OpenSearch Ingestion encrypts this data, set the ``EncryptionAtRestOptions`` . For more information, see `Persistent buffering <https://docs.aws.amazon.com/opensearch-service/latest/developerguide/osis-features-overview.html#persistent-buffering>`_ .
         :param encryption_at_rest_options: Options to control how OpenSearch encrypts buffer data.
         :param log_publishing_options: Key-value pairs that represent log publishing settings.
-        :param pipeline_role_arn: The Pipeline Role (ARN) for the pipeline.
+        :param pipeline_role_arn: The Amazon Resource Name (ARN) of the IAM role that the pipeline uses to access AWS resources.
         :param resource_policy: 
         :param tags: List of tags to add to the pipeline upon creation.
         :param vpc_options: Options that specify the subnets and security groups for an OpenSearch Ingestion VPC endpoint.
@@ -739,7 +739,7 @@ class CfnPipeline(
     @builtins.property
     @jsii.member(jsii_name="pipelineRoleArn")
     def pipeline_role_arn(self) -> typing.Optional[builtins.str]:
-        '''The Pipeline Role (ARN) for the pipeline.'''
+        '''The Amazon Resource Name (ARN) of the IAM role that the pipeline uses to access AWS resources.'''
         return typing.cast(typing.Optional[builtins.str], jsii.get(self, "pipelineRoleArn"))
 
     @pipeline_role_arn.setter

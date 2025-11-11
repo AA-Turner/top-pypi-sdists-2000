@@ -809,15 +809,34 @@ global___AppClientDisconnectRequest = AppClientDisconnectRequest
 class AppCreateRequest(google.protobuf.message.Message):
     DESCRIPTOR: google.protobuf.descriptor.Descriptor
 
+    class TagsEntry(google.protobuf.message.Message):
+        DESCRIPTOR: google.protobuf.descriptor.Descriptor
+
+        KEY_FIELD_NUMBER: builtins.int
+        VALUE_FIELD_NUMBER: builtins.int
+        key: builtins.str
+        value: builtins.str
+        def __init__(
+            self,
+            *,
+            key: builtins.str = ...,
+            value: builtins.str = ...,
+        ) -> None: ...
+        def ClearField(self, field_name: typing_extensions.Literal["key", b"key", "value", b"value"]) -> None: ...
+
     CLIENT_ID_FIELD_NUMBER: builtins.int
     DESCRIPTION_FIELD_NUMBER: builtins.int
     ENVIRONMENT_NAME_FIELD_NUMBER: builtins.int
     APP_STATE_FIELD_NUMBER: builtins.int
+    TAGS_FIELD_NUMBER: builtins.int
     client_id: builtins.str
     description: builtins.str
     """Human readable label for the app"""
     environment_name: builtins.str
     app_state: global___AppState.ValueType
+    @property
+    def tags(self) -> google.protobuf.internal.containers.ScalarMap[builtins.str, builtins.str]:
+        """Additional metadata to attach to the App"""
     def __init__(
         self,
         *,
@@ -825,8 +844,9 @@ class AppCreateRequest(google.protobuf.message.Message):
         description: builtins.str = ...,
         environment_name: builtins.str = ...,
         app_state: global___AppState.ValueType = ...,
+        tags: collections.abc.Mapping[builtins.str, builtins.str] | None = ...,
     ) -> None: ...
-    def ClearField(self, field_name: typing_extensions.Literal["app_state", b"app_state", "client_id", b"client_id", "description", b"description", "environment_name", b"environment_name"]) -> None: ...
+    def ClearField(self, field_name: typing_extensions.Literal["app_state", b"app_state", "client_id", b"client_id", "description", b"description", "environment_name", b"environment_name", "tags", b"tags"]) -> None: ...
 
 global___AppCreateRequest = AppCreateRequest
 
@@ -2726,6 +2746,21 @@ class CloudBucketMount(google.protobuf.message.Message):
     R2: CloudBucketMount.BucketType.ValueType  # 2
     GCP: CloudBucketMount.BucketType.ValueType  # 3
 
+    class _MetadataTTLType:
+        ValueType = typing.NewType("ValueType", builtins.int)
+        V: typing_extensions.TypeAlias = ValueType
+
+    class _MetadataTTLTypeEnumTypeWrapper(google.protobuf.internal.enum_type_wrapper._EnumTypeWrapper[CloudBucketMount._MetadataTTLType.ValueType], builtins.type):  # noqa: F821
+        DESCRIPTOR: google.protobuf.descriptor.EnumDescriptor
+        METADATA_TTL_TYPE_UNSPECIFIED: CloudBucketMount._MetadataTTLType.ValueType  # 0
+        METADATA_TTL_TYPE_MINIMAL: CloudBucketMount._MetadataTTLType.ValueType  # 1
+        METADATA_TTL_TYPE_INDEFINITE: CloudBucketMount._MetadataTTLType.ValueType  # 2
+
+    class MetadataTTLType(_MetadataTTLType, metaclass=_MetadataTTLTypeEnumTypeWrapper): ...
+    METADATA_TTL_TYPE_UNSPECIFIED: CloudBucketMount.MetadataTTLType.ValueType  # 0
+    METADATA_TTL_TYPE_MINIMAL: CloudBucketMount.MetadataTTLType.ValueType  # 1
+    METADATA_TTL_TYPE_INDEFINITE: CloudBucketMount.MetadataTTLType.ValueType  # 2
+
     BUCKET_NAME_FIELD_NUMBER: builtins.int
     MOUNT_PATH_FIELD_NUMBER: builtins.int
     CREDENTIALS_SECRET_ID_FIELD_NUMBER: builtins.int
@@ -2735,6 +2770,9 @@ class CloudBucketMount(google.protobuf.message.Message):
     BUCKET_ENDPOINT_URL_FIELD_NUMBER: builtins.int
     KEY_PREFIX_FIELD_NUMBER: builtins.int
     OIDC_AUTH_ROLE_ARN_FIELD_NUMBER: builtins.int
+    FORCE_PATH_STYLE_FIELD_NUMBER: builtins.int
+    METADATA_TTL_TYPE_FIELD_NUMBER: builtins.int
+    METADATA_TTL_SECONDS_FIELD_NUMBER: builtins.int
     bucket_name: builtins.str
     mount_path: builtins.str
     credentials_secret_id: builtins.str
@@ -2744,6 +2782,9 @@ class CloudBucketMount(google.protobuf.message.Message):
     bucket_endpoint_url: builtins.str
     key_prefix: builtins.str
     oidc_auth_role_arn: builtins.str
+    force_path_style: builtins.bool
+    metadata_ttl_type: global___CloudBucketMount.MetadataTTLType.ValueType
+    metadata_ttl_seconds: builtins.int
     def __init__(
         self,
         *,
@@ -2756,15 +2797,20 @@ class CloudBucketMount(google.protobuf.message.Message):
         bucket_endpoint_url: builtins.str | None = ...,
         key_prefix: builtins.str | None = ...,
         oidc_auth_role_arn: builtins.str | None = ...,
+        force_path_style: builtins.bool = ...,
+        metadata_ttl_type: global___CloudBucketMount.MetadataTTLType.ValueType = ...,
+        metadata_ttl_seconds: builtins.int = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing_extensions.Literal["_bucket_endpoint_url", b"_bucket_endpoint_url", "_key_prefix", b"_key_prefix", "_oidc_auth_role_arn", b"_oidc_auth_role_arn", "bucket_endpoint_url", b"bucket_endpoint_url", "key_prefix", b"key_prefix", "oidc_auth_role_arn", b"oidc_auth_role_arn"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing_extensions.Literal["_bucket_endpoint_url", b"_bucket_endpoint_url", "_key_prefix", b"_key_prefix", "_oidc_auth_role_arn", b"_oidc_auth_role_arn", "bucket_endpoint_url", b"bucket_endpoint_url", "bucket_name", b"bucket_name", "bucket_type", b"bucket_type", "credentials_secret_id", b"credentials_secret_id", "key_prefix", b"key_prefix", "mount_path", b"mount_path", "oidc_auth_role_arn", b"oidc_auth_role_arn", "read_only", b"read_only", "requester_pays", b"requester_pays"]) -> None: ...
+    def HasField(self, field_name: typing_extensions.Literal["_bucket_endpoint_url", b"_bucket_endpoint_url", "_key_prefix", b"_key_prefix", "_oidc_auth_role_arn", b"_oidc_auth_role_arn", "bucket_endpoint_url", b"bucket_endpoint_url", "key_prefix", b"key_prefix", "metadata_ttl_oneof", b"metadata_ttl_oneof", "metadata_ttl_seconds", b"metadata_ttl_seconds", "metadata_ttl_type", b"metadata_ttl_type", "oidc_auth_role_arn", b"oidc_auth_role_arn"]) -> builtins.bool: ...
+    def ClearField(self, field_name: typing_extensions.Literal["_bucket_endpoint_url", b"_bucket_endpoint_url", "_key_prefix", b"_key_prefix", "_oidc_auth_role_arn", b"_oidc_auth_role_arn", "bucket_endpoint_url", b"bucket_endpoint_url", "bucket_name", b"bucket_name", "bucket_type", b"bucket_type", "credentials_secret_id", b"credentials_secret_id", "force_path_style", b"force_path_style", "key_prefix", b"key_prefix", "metadata_ttl_oneof", b"metadata_ttl_oneof", "metadata_ttl_seconds", b"metadata_ttl_seconds", "metadata_ttl_type", b"metadata_ttl_type", "mount_path", b"mount_path", "oidc_auth_role_arn", b"oidc_auth_role_arn", "read_only", b"read_only", "requester_pays", b"requester_pays"]) -> None: ...
     @typing.overload
     def WhichOneof(self, oneof_group: typing_extensions.Literal["_bucket_endpoint_url", b"_bucket_endpoint_url"]) -> typing_extensions.Literal["bucket_endpoint_url"] | None: ...
     @typing.overload
     def WhichOneof(self, oneof_group: typing_extensions.Literal["_key_prefix", b"_key_prefix"]) -> typing_extensions.Literal["key_prefix"] | None: ...
     @typing.overload
     def WhichOneof(self, oneof_group: typing_extensions.Literal["_oidc_auth_role_arn", b"_oidc_auth_role_arn"]) -> typing_extensions.Literal["oidc_auth_role_arn"] | None: ...
+    @typing.overload
+    def WhichOneof(self, oneof_group: typing_extensions.Literal["metadata_ttl_oneof", b"metadata_ttl_oneof"]) -> typing_extensions.Literal["metadata_ttl_type", "metadata_ttl_seconds"] | None: ...
 
 global___CloudBucketMount = CloudBucketMount
 
@@ -4222,12 +4268,20 @@ class EnvironmentListItem(google.protobuf.message.Message):
     DEFAULT_FIELD_NUMBER: builtins.int
     IS_MANAGED_FIELD_NUMBER: builtins.int
     ENVIRONMENT_ID_FIELD_NUMBER: builtins.int
+    MAX_CONCURRENT_TASKS_FIELD_NUMBER: builtins.int
+    MAX_CONCURRENT_GPUS_FIELD_NUMBER: builtins.int
+    CURRENT_CONCURRENT_TASKS_FIELD_NUMBER: builtins.int
+    CURRENT_CONCURRENT_GPUS_FIELD_NUMBER: builtins.int
     name: builtins.str
     webhook_suffix: builtins.str
     created_at: builtins.float
     default: builtins.bool
     is_managed: builtins.bool
     environment_id: builtins.str
+    max_concurrent_tasks: builtins.int
+    max_concurrent_gpus: builtins.int
+    current_concurrent_tasks: builtins.int
+    current_concurrent_gpus: builtins.int
     def __init__(
         self,
         *,
@@ -4237,8 +4291,17 @@ class EnvironmentListItem(google.protobuf.message.Message):
         default: builtins.bool = ...,
         is_managed: builtins.bool = ...,
         environment_id: builtins.str = ...,
+        max_concurrent_tasks: builtins.int | None = ...,
+        max_concurrent_gpus: builtins.int | None = ...,
+        current_concurrent_tasks: builtins.int = ...,
+        current_concurrent_gpus: builtins.int = ...,
     ) -> None: ...
-    def ClearField(self, field_name: typing_extensions.Literal["created_at", b"created_at", "default", b"default", "environment_id", b"environment_id", "is_managed", b"is_managed", "name", b"name", "webhook_suffix", b"webhook_suffix"]) -> None: ...
+    def HasField(self, field_name: typing_extensions.Literal["_max_concurrent_gpus", b"_max_concurrent_gpus", "_max_concurrent_tasks", b"_max_concurrent_tasks", "max_concurrent_gpus", b"max_concurrent_gpus", "max_concurrent_tasks", b"max_concurrent_tasks"]) -> builtins.bool: ...
+    def ClearField(self, field_name: typing_extensions.Literal["_max_concurrent_gpus", b"_max_concurrent_gpus", "_max_concurrent_tasks", b"_max_concurrent_tasks", "created_at", b"created_at", "current_concurrent_gpus", b"current_concurrent_gpus", "current_concurrent_tasks", b"current_concurrent_tasks", "default", b"default", "environment_id", b"environment_id", "is_managed", b"is_managed", "max_concurrent_gpus", b"max_concurrent_gpus", "max_concurrent_tasks", b"max_concurrent_tasks", "name", b"name", "webhook_suffix", b"webhook_suffix"]) -> None: ...
+    @typing.overload
+    def WhichOneof(self, oneof_group: typing_extensions.Literal["_max_concurrent_gpus", b"_max_concurrent_gpus"]) -> typing_extensions.Literal["max_concurrent_gpus"] | None: ...
+    @typing.overload
+    def WhichOneof(self, oneof_group: typing_extensions.Literal["_max_concurrent_tasks", b"_max_concurrent_tasks"]) -> typing_extensions.Literal["max_concurrent_tasks"] | None: ...
 
 global___EnvironmentListItem = EnvironmentListItem
 
@@ -4304,20 +4367,30 @@ class EnvironmentUpdateRequest(google.protobuf.message.Message):
     CURRENT_NAME_FIELD_NUMBER: builtins.int
     NAME_FIELD_NUMBER: builtins.int
     WEB_SUFFIX_FIELD_NUMBER: builtins.int
+    MAX_CONCURRENT_TASKS_FIELD_NUMBER: builtins.int
+    MAX_CONCURRENT_GPUS_FIELD_NUMBER: builtins.int
     current_name: builtins.str
     @property
     def name(self) -> google.protobuf.wrappers_pb2.StringValue: ...
     @property
     def web_suffix(self) -> google.protobuf.wrappers_pb2.StringValue: ...
+    max_concurrent_tasks: builtins.int
+    max_concurrent_gpus: builtins.int
     def __init__(
         self,
         *,
         current_name: builtins.str = ...,
         name: google.protobuf.wrappers_pb2.StringValue | None = ...,
         web_suffix: google.protobuf.wrappers_pb2.StringValue | None = ...,
+        max_concurrent_tasks: builtins.int | None = ...,
+        max_concurrent_gpus: builtins.int | None = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing_extensions.Literal["name", b"name", "web_suffix", b"web_suffix"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing_extensions.Literal["current_name", b"current_name", "name", b"name", "web_suffix", b"web_suffix"]) -> None: ...
+    def HasField(self, field_name: typing_extensions.Literal["_max_concurrent_gpus", b"_max_concurrent_gpus", "_max_concurrent_tasks", b"_max_concurrent_tasks", "max_concurrent_gpus", b"max_concurrent_gpus", "max_concurrent_tasks", b"max_concurrent_tasks", "name", b"name", "web_suffix", b"web_suffix"]) -> builtins.bool: ...
+    def ClearField(self, field_name: typing_extensions.Literal["_max_concurrent_gpus", b"_max_concurrent_gpus", "_max_concurrent_tasks", b"_max_concurrent_tasks", "current_name", b"current_name", "max_concurrent_gpus", b"max_concurrent_gpus", "max_concurrent_tasks", b"max_concurrent_tasks", "name", b"name", "web_suffix", b"web_suffix"]) -> None: ...
+    @typing.overload
+    def WhichOneof(self, oneof_group: typing_extensions.Literal["_max_concurrent_gpus", b"_max_concurrent_gpus"]) -> typing_extensions.Literal["max_concurrent_gpus"] | None: ...
+    @typing.overload
+    def WhichOneof(self, oneof_group: typing_extensions.Literal["_max_concurrent_tasks", b"_max_concurrent_tasks"]) -> typing_extensions.Literal["max_concurrent_tasks"] | None: ...
 
 global___EnvironmentUpdateRequest = EnvironmentUpdateRequest
 
@@ -7990,15 +8063,18 @@ class ProxyCreateRequest(google.protobuf.message.Message):
 
     NAME_FIELD_NUMBER: builtins.int
     ENVIRONMENT_NAME_FIELD_NUMBER: builtins.int
+    REGION_FIELD_NUMBER: builtins.int
     name: builtins.str
     environment_name: builtins.str
+    region: builtins.str
     def __init__(
         self,
         *,
         name: builtins.str = ...,
         environment_name: builtins.str = ...,
+        region: builtins.str = ...,
     ) -> None: ...
-    def ClearField(self, field_name: typing_extensions.Literal["environment_name", b"environment_name", "name", b"name"]) -> None: ...
+    def ClearField(self, field_name: typing_extensions.Literal["environment_name", b"environment_name", "name", b"name", "region", b"region"]) -> None: ...
 
 global___ProxyCreateRequest = ProxyCreateRequest
 
@@ -9643,29 +9719,23 @@ class Schedule(google.protobuf.message.Message):
 global___Schedule = Schedule
 
 class SchedulerPlacement(google.protobuf.message.Message):
-    """TODO(irfansharif):
-    - Fold in cloud, resource needs here too.
-    - Allow specifying list of zones, cloud, fallback and alternative
-      GPU types.
-    """
-
     DESCRIPTOR: google.protobuf.descriptor.Descriptor
 
     REGIONS_FIELD_NUMBER: builtins.int
     _ZONE_FIELD_NUMBER: builtins.int
     _LIFECYCLE_FIELD_NUMBER: builtins.int
     _INSTANCE_TYPES_FIELD_NUMBER: builtins.int
+    NONPREEMPTIBLE_FIELD_NUMBER: builtins.int
     @property
     def regions(self) -> google.protobuf.internal.containers.RepeatedScalarFieldContainer[builtins.str]: ...
     _zone: builtins.str
-    """TODO(irfansharif): Make these two repeated.
-    admin-only
-    """
+    """TODO: Deprecate"""
     _lifecycle: builtins.str
-    """admin-only, "on-demand" or "spot", else ignored"""
+    """TODO: Deprecate"""
     @property
     def _instance_types(self) -> google.protobuf.internal.containers.RepeatedScalarFieldContainer[builtins.str]:
-        """admin-only"""
+        """TODO: Deprecate"""
+    nonpreemptible: builtins.bool
     def __init__(
         self,
         *,
@@ -9673,9 +9743,10 @@ class SchedulerPlacement(google.protobuf.message.Message):
         _zone: builtins.str | None = ...,
         _lifecycle: builtins.str | None = ...,
         _instance_types: collections.abc.Iterable[builtins.str] | None = ...,
+        nonpreemptible: builtins.bool = ...,
     ) -> None: ...
     def HasField(self, field_name: typing_extensions.Literal["X_lifecycle", b"X_lifecycle", "X_zone", b"X_zone", "_lifecycle", b"_lifecycle", "_zone", b"_zone"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing_extensions.Literal["X_lifecycle", b"X_lifecycle", "X_zone", b"X_zone", "_instance_types", b"_instance_types", "_lifecycle", b"_lifecycle", "_zone", b"_zone", "regions", b"regions"]) -> None: ...
+    def ClearField(self, field_name: typing_extensions.Literal["X_lifecycle", b"X_lifecycle", "X_zone", b"X_zone", "_instance_types", b"_instance_types", "_lifecycle", b"_lifecycle", "_zone", b"_zone", "nonpreemptible", b"nonpreemptible", "regions", b"regions"]) -> None: ...
     @typing.overload
     def WhichOneof(self, oneof_group: typing_extensions.Literal["X_lifecycle", b"X_lifecycle"]) -> typing_extensions.Literal["_lifecycle"] | None: ...
     @typing.overload

@@ -20809,6 +20809,7 @@ class InstanceRequirementsOutputTypeDef(TypedDict):
     AllowedInstanceTypes: NotRequired[list[str]]
     MaxSpotPriceAsPercentageOfOptimalOnDemandPrice: NotRequired[int]
     BaselinePerformanceFactors: NotRequired[BaselinePerformanceFactorsOutputTypeDef]
+    RequireEncryptionInTransit: NotRequired[bool]
 
 
 class BaselinePerformanceFactorsTypeDef(TypedDict):
@@ -20841,6 +20842,7 @@ class InstanceRequirementsRequestTypeDef(TypedDict):
     AllowedInstanceTypes: NotRequired[Sequence[str]]
     MaxSpotPriceAsPercentageOfOptimalOnDemandPrice: NotRequired[int]
     BaselinePerformanceFactors: NotRequired[BaselinePerformanceFactorsRequestTypeDef]
+    RequireEncryptionInTransit: NotRequired[bool]
 
 
 class CreateIpamPrefixListResolverRequestTypeDef(TypedDict):
@@ -22017,6 +22019,7 @@ class InstanceRequirementsTypeDef(TypedDict):
     AllowedInstanceTypes: NotRequired[Sequence[str]]
     MaxSpotPriceAsPercentageOfOptimalOnDemandPrice: NotRequired[int]
     BaselinePerformanceFactors: NotRequired[BaselinePerformanceFactorsUnionTypeDef]
+    RequireEncryptionInTransit: NotRequired[bool]
 
 
 class FleetLaunchTemplateConfigRequestTypeDef(TypedDict):

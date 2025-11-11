@@ -630,6 +630,7 @@ class CfnFileSystemProps:
                         mode="mode"
                     ),
                     endpoint_ip_address_range="endpointIpAddressRange",
+                    endpoint_ipv6_address_range="endpointIpv6AddressRange",
                     fsx_admin_password="fsxAdminPassword",
                     ha_pairs=123,
                     preferred_subnet_id="preferredSubnetId",
@@ -3948,6 +3949,7 @@ class CfnFileSystem(
                     mode="mode"
                 ),
                 endpoint_ip_address_range="endpointIpAddressRange",
+                endpoint_ipv6_address_range="endpointIpv6AddressRange",
                 fsx_admin_password="fsxAdminPassword",
                 ha_pairs=123,
                 preferred_subnet_id="preferredSubnetId",
@@ -5272,6 +5274,7 @@ class CfnFileSystem(
             "daily_automatic_backup_start_time": "dailyAutomaticBackupStartTime",
             "disk_iops_configuration": "diskIopsConfiguration",
             "endpoint_ip_address_range": "endpointIpAddressRange",
+            "endpoint_ipv6_address_range": "endpointIpv6AddressRange",
             "fsx_admin_password": "fsxAdminPassword",
             "ha_pairs": "haPairs",
             "preferred_subnet_id": "preferredSubnetId",
@@ -5290,6 +5293,7 @@ class CfnFileSystem(
             daily_automatic_backup_start_time: typing.Optional[builtins.str] = None,
             disk_iops_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnFileSystem.DiskIopsConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             endpoint_ip_address_range: typing.Optional[builtins.str] = None,
+            endpoint_ipv6_address_range: typing.Optional[builtins.str] = None,
             fsx_admin_password: typing.Optional[builtins.str] = None,
             ha_pairs: typing.Optional[jsii.Number] = None,
             preferred_subnet_id: typing.Optional[builtins.str] = None,
@@ -5305,6 +5309,7 @@ class CfnFileSystem(
             :param daily_automatic_backup_start_time: A recurring daily time, in the format ``HH:MM`` . ``HH`` is the zero-padded hour of the day (0-23), and ``MM`` is the zero-padded minute of the hour. For example, ``05:00`` specifies 5 AM daily.
             :param disk_iops_configuration: The SSD IOPS configuration for the FSx for ONTAP file system.
             :param endpoint_ip_address_range: (Multi-AZ only) Specifies the IPv4 address range in which the endpoints to access your file system will be created. By default in the Amazon FSx API, Amazon FSx selects an unused IP address range for you from the 198.19.* range. By default in the Amazon FSx console, Amazon FSx chooses the last 64 IP addresses from the VPC’s primary CIDR range to use as the endpoint IP address range for the file system. You can have overlapping endpoint IP addresses for file systems deployed in the same VPC/route tables, as long as they don't overlap with any subnet.
+            :param endpoint_ipv6_address_range: 
             :param fsx_admin_password: The ONTAP administrative password for the ``fsxadmin`` user with which you administer your file system using the NetApp ONTAP CLI and REST API.
             :param ha_pairs: Specifies how many high-availability (HA) pairs of file servers will power your file system. First-generation file systems are powered by 1 HA pair. Second-generation multi-AZ file systems are powered by 1 HA pair. Second generation single-AZ file systems are powered by up to 12 HA pairs. The default value is 1. The value of this property affects the values of ``StorageCapacity`` , ``Iops`` , and ``ThroughputCapacity`` . For more information, see `High-availability (HA) pairs <https://docs.aws.amazon.com/fsx/latest/ONTAPGuide/administering-file-systems.html#HA-pairs>`_ in the FSx for ONTAP user guide. Block storage protocol support (iSCSI and NVMe over TCP) is disabled on file systems with more than 6 HA pairs. For more information, see `Using block storage protocols <https://docs.aws.amazon.com/fsx/latest/ONTAPGuide/supported-fsx-clients.html#using-block-storage>`_ . Amazon FSx responds with an HTTP status code 400 (Bad Request) for the following conditions: - The value of ``HAPairs`` is less than 1 or greater than 12. - The value of ``HAPairs`` is greater than 1 and the value of ``DeploymentType`` is ``SINGLE_AZ_1`` , ``MULTI_AZ_1`` , or ``MULTI_AZ_2`` .
             :param preferred_subnet_id: Required when ``DeploymentType`` is set to ``MULTI_AZ_1`` or ``MULTI_AZ_2`` . This specifies the subnet in which you want the preferred file server to be located.
@@ -5333,6 +5338,7 @@ class CfnFileSystem(
                         mode="mode"
                     ),
                     endpoint_ip_address_range="endpointIpAddressRange",
+                    endpoint_ipv6_address_range="endpointIpv6AddressRange",
                     fsx_admin_password="fsxAdminPassword",
                     ha_pairs=123,
                     preferred_subnet_id="preferredSubnetId",
@@ -5349,6 +5355,7 @@ class CfnFileSystem(
                 check_type(argname="argument daily_automatic_backup_start_time", value=daily_automatic_backup_start_time, expected_type=type_hints["daily_automatic_backup_start_time"])
                 check_type(argname="argument disk_iops_configuration", value=disk_iops_configuration, expected_type=type_hints["disk_iops_configuration"])
                 check_type(argname="argument endpoint_ip_address_range", value=endpoint_ip_address_range, expected_type=type_hints["endpoint_ip_address_range"])
+                check_type(argname="argument endpoint_ipv6_address_range", value=endpoint_ipv6_address_range, expected_type=type_hints["endpoint_ipv6_address_range"])
                 check_type(argname="argument fsx_admin_password", value=fsx_admin_password, expected_type=type_hints["fsx_admin_password"])
                 check_type(argname="argument ha_pairs", value=ha_pairs, expected_type=type_hints["ha_pairs"])
                 check_type(argname="argument preferred_subnet_id", value=preferred_subnet_id, expected_type=type_hints["preferred_subnet_id"])
@@ -5367,6 +5374,8 @@ class CfnFileSystem(
                 self._values["disk_iops_configuration"] = disk_iops_configuration
             if endpoint_ip_address_range is not None:
                 self._values["endpoint_ip_address_range"] = endpoint_ip_address_range
+            if endpoint_ipv6_address_range is not None:
+                self._values["endpoint_ipv6_address_range"] = endpoint_ipv6_address_range
             if fsx_admin_password is not None:
                 self._values["fsx_admin_password"] = fsx_admin_password
             if ha_pairs is not None:
@@ -5441,6 +5450,14 @@ class CfnFileSystem(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-fsx-filesystem-ontapconfiguration.html#cfn-fsx-filesystem-ontapconfiguration-endpointipaddressrange
             '''
             result = self._values.get("endpoint_ip_address_range")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        @builtins.property
+        def endpoint_ipv6_address_range(self) -> typing.Optional[builtins.str]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-fsx-filesystem-ontapconfiguration.html#cfn-fsx-filesystem-ontapconfiguration-endpointipv6addressrange
+            '''
+            result = self._values.get("endpoint_ipv6_address_range")
             return typing.cast(typing.Optional[builtins.str], result)
 
         @builtins.property
@@ -10648,6 +10665,7 @@ def _typecheckingstub__0edc01444089461fa7f6973acca3d475ebd67f0229380856776cb1bcb
     daily_automatic_backup_start_time: typing.Optional[builtins.str] = None,
     disk_iops_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnFileSystem.DiskIopsConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     endpoint_ip_address_range: typing.Optional[builtins.str] = None,
+    endpoint_ipv6_address_range: typing.Optional[builtins.str] = None,
     fsx_admin_password: typing.Optional[builtins.str] = None,
     ha_pairs: typing.Optional[jsii.Number] = None,
     preferred_subnet_id: typing.Optional[builtins.str] = None,

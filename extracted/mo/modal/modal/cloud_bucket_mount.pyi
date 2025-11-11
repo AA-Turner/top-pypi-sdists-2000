@@ -99,6 +99,7 @@ class _CloudBucketMount:
     oidc_auth_role_arn: typing.Optional[str]
     read_only: bool
     requester_pays: bool
+    force_path_style: bool
 
     def __init__(
         self,
@@ -109,6 +110,7 @@ class _CloudBucketMount:
         oidc_auth_role_arn: typing.Optional[str] = None,
         read_only: bool = False,
         requester_pays: bool = False,
+        force_path_style: bool = False,
     ) -> None:
         """Initialize self.  See help(type(self)) for accurate signature."""
         ...
@@ -224,6 +226,7 @@ class CloudBucketMount:
     oidc_auth_role_arn: typing.Optional[str]
     read_only: bool
     requester_pays: bool
+    force_path_style: bool
 
     def __init__(
         self,
@@ -234,6 +237,7 @@ class CloudBucketMount:
         oidc_auth_role_arn: typing.Optional[str] = None,
         read_only: bool = False,
         requester_pays: bool = False,
+        force_path_style: bool = False,
     ) -> None: ...
     def __repr__(self): ...
     def __eq__(self, other): ...

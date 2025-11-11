@@ -1110,9 +1110,11 @@ class CfnImagePipelineProps:
     jsii_struct_bases=[],
     name_mapping={
         "container_recipe_arn": "containerRecipeArn",
+        "deletion_settings": "deletionSettings",
         "distribution_configuration_arn": "distributionConfigurationArn",
         "enhanced_image_metadata_enabled": "enhancedImageMetadataEnabled",
         "execution_role": "executionRole",
+        "image_pipeline_execution_settings": "imagePipelineExecutionSettings",
         "image_recipe_arn": "imageRecipeArn",
         "image_scanning_configuration": "imageScanningConfiguration",
         "image_tests_configuration": "imageTestsConfiguration",
@@ -1127,9 +1129,11 @@ class CfnImageProps:
         self,
         *,
         container_recipe_arn: typing.Optional[builtins.str] = None,
+        deletion_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnImage.DeletionSettingsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         distribution_configuration_arn: typing.Optional[builtins.str] = None,
         enhanced_image_metadata_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
         execution_role: typing.Optional[builtins.str] = None,
+        image_pipeline_execution_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnImage.ImagePipelineExecutionSettingsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         image_recipe_arn: typing.Optional[builtins.str] = None,
         image_scanning_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnImage.ImageScanningConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         image_tests_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnImage.ImageTestsConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -1141,9 +1145,11 @@ class CfnImageProps:
         '''Properties for defining a ``CfnImage``.
 
         :param container_recipe_arn: The Amazon Resource Name (ARN) of the container recipe that defines how images are configured and tested.
+        :param deletion_settings: The deletion settings of the image, indicating whether to delete the underlying resources in addition to the image.
         :param distribution_configuration_arn: The Amazon Resource Name (ARN) of the distribution configuration that defines and configures the outputs of your pipeline.
         :param enhanced_image_metadata_enabled: Collects additional information about the image being created, including the operating system (OS) version and package list. This information is used to enhance the overall experience of using EC2 Image Builder. Enabled by default.
         :param execution_role: The name or Amazon Resource Name (ARN) for the IAM role you create that grants Image Builder access to perform workflow actions.
+        :param image_pipeline_execution_settings: The settings for starting an image pipeline execution.
         :param image_recipe_arn: The Amazon Resource Name (ARN) of the image recipe that defines how images are configured, tested, and assessed.
         :param image_scanning_configuration: Contains settings for vulnerability scans.
         :param image_tests_configuration: The image tests configuration of the image.
@@ -1163,9 +1169,16 @@ class CfnImageProps:
             
             cfn_image_props = imagebuilder.CfnImageProps(
                 container_recipe_arn="containerRecipeArn",
+                deletion_settings=imagebuilder.CfnImage.DeletionSettingsProperty(
+                    execution_role="executionRole"
+                ),
                 distribution_configuration_arn="distributionConfigurationArn",
                 enhanced_image_metadata_enabled=False,
                 execution_role="executionRole",
+                image_pipeline_execution_settings=imagebuilder.CfnImage.ImagePipelineExecutionSettingsProperty(
+                    deployment_id="deploymentId",
+                    on_update=False
+                ),
                 image_recipe_arn="imageRecipeArn",
                 image_scanning_configuration=imagebuilder.CfnImage.ImageScanningConfigurationProperty(
                     ecr_configuration=imagebuilder.CfnImage.EcrConfigurationProperty(
@@ -1199,9 +1212,11 @@ class CfnImageProps:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__5f217922888735234464ee573256caba679b2c1215a99c91ad609c9c75d22d47)
             check_type(argname="argument container_recipe_arn", value=container_recipe_arn, expected_type=type_hints["container_recipe_arn"])
+            check_type(argname="argument deletion_settings", value=deletion_settings, expected_type=type_hints["deletion_settings"])
             check_type(argname="argument distribution_configuration_arn", value=distribution_configuration_arn, expected_type=type_hints["distribution_configuration_arn"])
             check_type(argname="argument enhanced_image_metadata_enabled", value=enhanced_image_metadata_enabled, expected_type=type_hints["enhanced_image_metadata_enabled"])
             check_type(argname="argument execution_role", value=execution_role, expected_type=type_hints["execution_role"])
+            check_type(argname="argument image_pipeline_execution_settings", value=image_pipeline_execution_settings, expected_type=type_hints["image_pipeline_execution_settings"])
             check_type(argname="argument image_recipe_arn", value=image_recipe_arn, expected_type=type_hints["image_recipe_arn"])
             check_type(argname="argument image_scanning_configuration", value=image_scanning_configuration, expected_type=type_hints["image_scanning_configuration"])
             check_type(argname="argument image_tests_configuration", value=image_tests_configuration, expected_type=type_hints["image_tests_configuration"])
@@ -1212,12 +1227,16 @@ class CfnImageProps:
         self._values: typing.Dict[builtins.str, typing.Any] = {}
         if container_recipe_arn is not None:
             self._values["container_recipe_arn"] = container_recipe_arn
+        if deletion_settings is not None:
+            self._values["deletion_settings"] = deletion_settings
         if distribution_configuration_arn is not None:
             self._values["distribution_configuration_arn"] = distribution_configuration_arn
         if enhanced_image_metadata_enabled is not None:
             self._values["enhanced_image_metadata_enabled"] = enhanced_image_metadata_enabled
         if execution_role is not None:
             self._values["execution_role"] = execution_role
+        if image_pipeline_execution_settings is not None:
+            self._values["image_pipeline_execution_settings"] = image_pipeline_execution_settings
         if image_recipe_arn is not None:
             self._values["image_recipe_arn"] = image_recipe_arn
         if image_scanning_configuration is not None:
@@ -1241,6 +1260,17 @@ class CfnImageProps:
         '''
         result = self._values.get("container_recipe_arn")
         return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def deletion_settings(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnImage.DeletionSettingsProperty"]]:
+        '''The deletion settings of the image, indicating whether to delete the underlying resources in addition to the image.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-imagebuilder-image.html#cfn-imagebuilder-image-deletionsettings
+        '''
+        result = self._values.get("deletion_settings")
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnImage.DeletionSettingsProperty"]], result)
 
     @builtins.property
     def distribution_configuration_arn(self) -> typing.Optional[builtins.str]:
@@ -1272,6 +1302,17 @@ class CfnImageProps:
         '''
         result = self._values.get("execution_role")
         return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def image_pipeline_execution_settings(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnImage.ImagePipelineExecutionSettingsProperty"]]:
+        '''The settings for starting an image pipeline execution.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-imagebuilder-image.html#cfn-imagebuilder-image-imagepipelineexecutionsettings
+        '''
+        result = self._values.get("image_pipeline_execution_settings")
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnImage.ImagePipelineExecutionSettingsProperty"]], result)
 
     @builtins.property
     def image_recipe_arn(self) -> typing.Optional[builtins.str]:
@@ -6039,9 +6080,16 @@ class CfnImage(
         
         cfn_image = imagebuilder.CfnImage(self, "MyCfnImage",
             container_recipe_arn="containerRecipeArn",
+            deletion_settings=imagebuilder.CfnImage.DeletionSettingsProperty(
+                execution_role="executionRole"
+            ),
             distribution_configuration_arn="distributionConfigurationArn",
             enhanced_image_metadata_enabled=False,
             execution_role="executionRole",
+            image_pipeline_execution_settings=imagebuilder.CfnImage.ImagePipelineExecutionSettingsProperty(
+                deployment_id="deploymentId",
+                on_update=False
+            ),
             image_recipe_arn="imageRecipeArn",
             image_scanning_configuration=imagebuilder.CfnImage.ImageScanningConfigurationProperty(
                 ecr_configuration=imagebuilder.CfnImage.EcrConfigurationProperty(
@@ -6079,9 +6127,11 @@ class CfnImage(
         id: builtins.str,
         *,
         container_recipe_arn: typing.Optional[builtins.str] = None,
+        deletion_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnImage.DeletionSettingsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         distribution_configuration_arn: typing.Optional[builtins.str] = None,
         enhanced_image_metadata_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
         execution_role: typing.Optional[builtins.str] = None,
+        image_pipeline_execution_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnImage.ImagePipelineExecutionSettingsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         image_recipe_arn: typing.Optional[builtins.str] = None,
         image_scanning_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnImage.ImageScanningConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         image_tests_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnImage.ImageTestsConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -6094,9 +6144,11 @@ class CfnImage(
         :param scope: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
         :param container_recipe_arn: The Amazon Resource Name (ARN) of the container recipe that defines how images are configured and tested.
+        :param deletion_settings: The deletion settings of the image, indicating whether to delete the underlying resources in addition to the image.
         :param distribution_configuration_arn: The Amazon Resource Name (ARN) of the distribution configuration that defines and configures the outputs of your pipeline.
         :param enhanced_image_metadata_enabled: Collects additional information about the image being created, including the operating system (OS) version and package list. This information is used to enhance the overall experience of using EC2 Image Builder. Enabled by default.
         :param execution_role: The name or Amazon Resource Name (ARN) for the IAM role you create that grants Image Builder access to perform workflow actions.
+        :param image_pipeline_execution_settings: The settings for starting an image pipeline execution.
         :param image_recipe_arn: The Amazon Resource Name (ARN) of the image recipe that defines how images are configured, tested, and assessed.
         :param image_scanning_configuration: Contains settings for vulnerability scans.
         :param image_tests_configuration: The image tests configuration of the image.
@@ -6111,9 +6163,11 @@ class CfnImage(
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
         props = CfnImageProps(
             container_recipe_arn=container_recipe_arn,
+            deletion_settings=deletion_settings,
             distribution_configuration_arn=distribution_configuration_arn,
             enhanced_image_metadata_enabled=enhanced_image_metadata_enabled,
             execution_role=execution_role,
+            image_pipeline_execution_settings=image_pipeline_execution_settings,
             image_recipe_arn=image_recipe_arn,
             image_scanning_configuration=image_scanning_configuration,
             image_tests_configuration=image_tests_configuration,
@@ -6281,6 +6335,24 @@ class CfnImage(
         jsii.set(self, "containerRecipeArn", value) # pyright: ignore[reportArgumentType]
 
     @builtins.property
+    @jsii.member(jsii_name="deletionSettings")
+    def deletion_settings(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnImage.DeletionSettingsProperty"]]:
+        '''The deletion settings of the image, indicating whether to delete the underlying resources in addition to the image.'''
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnImage.DeletionSettingsProperty"]], jsii.get(self, "deletionSettings"))
+
+    @deletion_settings.setter
+    def deletion_settings(
+        self,
+        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnImage.DeletionSettingsProperty"]],
+    ) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__544bfce84559868094f3e7328078dc35550b7f93a784ac66c94b1cff10f3ccd7)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "deletionSettings", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
     @jsii.member(jsii_name="distributionConfigurationArn")
     def distribution_configuration_arn(self) -> typing.Optional[builtins.str]:
         '''The Amazon Resource Name (ARN) of the distribution configuration that defines and configures the outputs of your pipeline.'''
@@ -6326,6 +6398,24 @@ class CfnImage(
             type_hints = typing.get_type_hints(_typecheckingstub__94668d5e5e8eb55befbec215426086ba0771bd0ba96fb3d147c8a3a31346c1b4)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
         jsii.set(self, "executionRole", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="imagePipelineExecutionSettings")
+    def image_pipeline_execution_settings(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnImage.ImagePipelineExecutionSettingsProperty"]]:
+        '''The settings for starting an image pipeline execution.'''
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnImage.ImagePipelineExecutionSettingsProperty"]], jsii.get(self, "imagePipelineExecutionSettings"))
+
+    @image_pipeline_execution_settings.setter
+    def image_pipeline_execution_settings(
+        self,
+        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnImage.ImagePipelineExecutionSettingsProperty"]],
+    ) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__765c97cee8e3215eb55f2245654b86c14b65f3a9ba1e2438b730740600208e50)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "imagePipelineExecutionSettings", value) # pyright: ignore[reportArgumentType]
 
     @builtins.property
     @jsii.member(jsii_name="imageRecipeArn")
@@ -6443,6 +6533,58 @@ class CfnImage(
             type_hints = typing.get_type_hints(_typecheckingstub__97523463f160d96768440c69c3873ddb86b0d5ac22775529d935489f314a6737)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
         jsii.set(self, "workflows", value) # pyright: ignore[reportArgumentType]
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_imagebuilder.CfnImage.DeletionSettingsProperty",
+        jsii_struct_bases=[],
+        name_mapping={"execution_role": "executionRole"},
+    )
+    class DeletionSettingsProperty:
+        def __init__(self, *, execution_role: builtins.str) -> None:
+            '''The deletion settings of the image, indicating whether to delete the underlying resources in addition to the image.
+
+            :param execution_role: The execution role to use for deleting the image, as well as underlying resources.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-imagebuilder-image-deletionsettings.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_imagebuilder as imagebuilder
+                
+                deletion_settings_property = imagebuilder.CfnImage.DeletionSettingsProperty(
+                    execution_role="executionRole"
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__04bf6cab8b7124cbcc9788607150e16fc9081a064182f087aec262ac81413c5c)
+                check_type(argname="argument execution_role", value=execution_role, expected_type=type_hints["execution_role"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "execution_role": execution_role,
+            }
+
+        @builtins.property
+        def execution_role(self) -> builtins.str:
+            '''The execution role to use for deleting the image, as well as underlying resources.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-imagebuilder-image-deletionsettings.html#cfn-imagebuilder-image-deletionsettings-executionrole
+            '''
+            result = self._values.get("execution_role")
+            assert result is not None, "Required property 'execution_role' is missing"
+            return typing.cast(builtins.str, result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "DeletionSettingsProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
 
     @jsii.data_type(
         jsii_type="aws-cdk-lib.aws_imagebuilder.CfnImage.EcrConfigurationProperty",
@@ -6577,6 +6719,80 @@ class CfnImage(
 
         def __repr__(self) -> str:
             return "ImageLoggingConfigurationProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_imagebuilder.CfnImage.ImagePipelineExecutionSettingsProperty",
+        jsii_struct_bases=[],
+        name_mapping={"deployment_id": "deploymentId", "on_update": "onUpdate"},
+    )
+    class ImagePipelineExecutionSettingsProperty:
+        def __init__(
+            self,
+            *,
+            deployment_id: typing.Optional[builtins.str] = None,
+            on_update: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        ) -> None:
+            '''The settings for starting an image pipeline execution.
+
+            :param deployment_id: The deployment ID of the pipeline, used to trigger new image pipeline executions.
+            :param on_update: Whether to trigger the image pipeline when the pipeline is updated. False by default.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-imagebuilder-image-imagepipelineexecutionsettings.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_imagebuilder as imagebuilder
+                
+                image_pipeline_execution_settings_property = imagebuilder.CfnImage.ImagePipelineExecutionSettingsProperty(
+                    deployment_id="deploymentId",
+                    on_update=False
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__c579bbf2bc5b9c4748f83c74527cc9691311ca16fad5b824db5e51bc59607877)
+                check_type(argname="argument deployment_id", value=deployment_id, expected_type=type_hints["deployment_id"])
+                check_type(argname="argument on_update", value=on_update, expected_type=type_hints["on_update"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if deployment_id is not None:
+                self._values["deployment_id"] = deployment_id
+            if on_update is not None:
+                self._values["on_update"] = on_update
+
+        @builtins.property
+        def deployment_id(self) -> typing.Optional[builtins.str]:
+            '''The deployment ID of the pipeline, used to trigger new image pipeline executions.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-imagebuilder-image-imagepipelineexecutionsettings.html#cfn-imagebuilder-image-imagepipelineexecutionsettings-deploymentid
+            '''
+            result = self._values.get("deployment_id")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        @builtins.property
+        def on_update(
+            self,
+        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+            '''Whether to trigger the image pipeline when the pipeline is updated.
+
+            False by default.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-imagebuilder-image-imagepipelineexecutionsettings.html#cfn-imagebuilder-image-imagepipelineexecutionsettings-onupdate
+            '''
+            result = self._values.get("on_update")
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "ImagePipelineExecutionSettingsProperty(%s)" % ", ".join(
                 k + "=" + repr(v) for k, v in self._values.items()
             )
 
@@ -7212,6 +7428,15 @@ class CfnImagePipeline(
         :cloudformationAttribute: Arn
         '''
         return typing.cast(builtins.str, jsii.get(self, "attrArn"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrDeploymentId")
+    def attr_deployment_id(self) -> builtins.str:
+        '''The deployment ID of the pipeline, used for resource create/update triggers.
+
+        :cloudformationAttribute: DeploymentId
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrDeploymentId"))
 
     @builtins.property
     @jsii.member(jsii_name="attrName")
@@ -11459,9 +11684,11 @@ def _typecheckingstub__95f10c4451c6bf3f2cf15951831cd372e35975262c0be294c1ae7c774
 def _typecheckingstub__5f217922888735234464ee573256caba679b2c1215a99c91ad609c9c75d22d47(
     *,
     container_recipe_arn: typing.Optional[builtins.str] = None,
+    deletion_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnImage.DeletionSettingsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     distribution_configuration_arn: typing.Optional[builtins.str] = None,
     enhanced_image_metadata_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     execution_role: typing.Optional[builtins.str] = None,
+    image_pipeline_execution_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnImage.ImagePipelineExecutionSettingsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     image_recipe_arn: typing.Optional[builtins.str] = None,
     image_scanning_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnImage.ImageScanningConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     image_tests_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnImage.ImageTestsConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -12032,9 +12259,11 @@ def _typecheckingstub__1406bc225111bc54a87c50d1d8180aed46d22e10134235c4fa581d313
     id: builtins.str,
     *,
     container_recipe_arn: typing.Optional[builtins.str] = None,
+    deletion_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnImage.DeletionSettingsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     distribution_configuration_arn: typing.Optional[builtins.str] = None,
     enhanced_image_metadata_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     execution_role: typing.Optional[builtins.str] = None,
+    image_pipeline_execution_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnImage.ImagePipelineExecutionSettingsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     image_recipe_arn: typing.Optional[builtins.str] = None,
     image_scanning_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnImage.ImageScanningConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     image_tests_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnImage.ImageTestsConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -12064,6 +12293,12 @@ def _typecheckingstub__a6e036331c49a5f902af4e72bc4f291c89a7f5f03a4453a10c55e0f2b
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__544bfce84559868094f3e7328078dc35550b7f93a784ac66c94b1cff10f3ccd7(
+    value: typing.Optional[typing.Union[_IResolvable_da3f097b, CfnImage.DeletionSettingsProperty]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__889890f98c732641897f78af3545740dd9c7c236d01f0d3e3c038263bc80498c(
     value: typing.Optional[builtins.str],
 ) -> None:
@@ -12078,6 +12313,12 @@ def _typecheckingstub__a5e9d51fefc7d1e1bc910eea2e49d7094b0e13fbcbdb19541025c1306
 
 def _typecheckingstub__94668d5e5e8eb55befbec215426086ba0771bd0ba96fb3d147c8a3a31346c1b4(
     value: typing.Optional[builtins.str],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__765c97cee8e3215eb55f2245654b86c14b65f3a9ba1e2438b730740600208e50(
+    value: typing.Optional[typing.Union[_IResolvable_da3f097b, CfnImage.ImagePipelineExecutionSettingsProperty]],
 ) -> None:
     """Type checking stubs"""
     pass
@@ -12124,6 +12365,13 @@ def _typecheckingstub__97523463f160d96768440c69c3873ddb86b0d5ac22775529d935489f3
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__04bf6cab8b7124cbcc9788607150e16fc9081a064182f087aec262ac81413c5c(
+    *,
+    execution_role: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__8e752dc7f51b470c209f9741b4ee9c9b1b8ab926ba9ba46ae3160a1876f4c556(
     *,
     container_tags: typing.Optional[typing.Sequence[builtins.str]] = None,
@@ -12135,6 +12383,14 @@ def _typecheckingstub__8e752dc7f51b470c209f9741b4ee9c9b1b8ab926ba9ba46ae3160a187
 def _typecheckingstub__f48c0bf82989235f735b3b537ceae8bf7cbb63f48573c8a5dac03547706ff000(
     *,
     log_group_name: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__c579bbf2bc5b9c4748f83c74527cc9691311ca16fad5b824db5e51bc59607877(
+    *,
+    deployment_id: typing.Optional[builtins.str] = None,
+    on_update: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
 ) -> None:
     """Type checking stubs"""
     pass

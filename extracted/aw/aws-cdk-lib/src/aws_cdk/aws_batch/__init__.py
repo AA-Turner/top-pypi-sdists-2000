@@ -1390,6 +1390,7 @@ class CfnConsumableResourceProps:
         "parameters": "parameters",
         "platform_capabilities": "platformCapabilities",
         "propagate_tags": "propagateTags",
+        "resource_retention_policy": "resourceRetentionPolicy",
         "retry_strategy": "retryStrategy",
         "scheduling_priority": "schedulingPriority",
         "tags": "tags",
@@ -1410,6 +1411,7 @@ class CfnJobDefinitionProps:
         parameters: typing.Any = None,
         platform_capabilities: typing.Optional[typing.Sequence[builtins.str]] = None,
         propagate_tags: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        resource_retention_policy: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnJobDefinition.ResourceRetentionPolicyProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         retry_strategy: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnJobDefinition.RetryStrategyProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         scheduling_priority: typing.Optional[jsii.Number] = None,
         tags: typing.Any = None,
@@ -1427,6 +1429,7 @@ class CfnJobDefinitionProps:
         :param parameters: Default parameters or parameter substitution placeholders that are set in the job definition. Parameters are specified as a key-value pair mapping. Parameters in a ``SubmitJob`` request override any corresponding parameter defaults from the job definition. For more information about specifying parameters, see `Job definition parameters <https://docs.aws.amazon.com/batch/latest/userguide/job_definition_parameters.html>`_ in the *AWS Batch User Guide* .
         :param platform_capabilities: The platform capabilities required by the job definition. If no value is specified, it defaults to ``EC2`` . Jobs run on Fargate resources specify ``FARGATE`` .
         :param propagate_tags: Specifies whether to propagate the tags from the job or job definition to the corresponding Amazon ECS task. If no value is specified, the tags aren't propagated. Tags can only be propagated to the tasks when the tasks are created. For tags with the same name, job tags are given priority over job definitions tags. If the total number of combined tags from the job and job definition is over 50, the job is moved to the ``FAILED`` state.
+        :param resource_retention_policy: 
         :param retry_strategy: The retry strategy to use for failed jobs that are submitted with this job definition.
         :param scheduling_priority: The scheduling priority of the job definition. This only affects jobs in job queues with a fair-share policy. Jobs with a higher scheduling priority are scheduled before jobs with a lower scheduling priority.
         :param tags: The tags that are applied to the job definition.
@@ -1451,6 +1454,7 @@ class CfnJobDefinitionProps:
             check_type(argname="argument parameters", value=parameters, expected_type=type_hints["parameters"])
             check_type(argname="argument platform_capabilities", value=platform_capabilities, expected_type=type_hints["platform_capabilities"])
             check_type(argname="argument propagate_tags", value=propagate_tags, expected_type=type_hints["propagate_tags"])
+            check_type(argname="argument resource_retention_policy", value=resource_retention_policy, expected_type=type_hints["resource_retention_policy"])
             check_type(argname="argument retry_strategy", value=retry_strategy, expected_type=type_hints["retry_strategy"])
             check_type(argname="argument scheduling_priority", value=scheduling_priority, expected_type=type_hints["scheduling_priority"])
             check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
@@ -1476,6 +1480,8 @@ class CfnJobDefinitionProps:
             self._values["platform_capabilities"] = platform_capabilities
         if propagate_tags is not None:
             self._values["propagate_tags"] = propagate_tags
+        if resource_retention_policy is not None:
+            self._values["resource_retention_policy"] = resource_retention_policy
         if retry_strategy is not None:
             self._values["retry_strategy"] = retry_strategy
         if scheduling_priority is not None:
@@ -1611,6 +1617,16 @@ class CfnJobDefinitionProps:
         '''
         result = self._values.get("propagate_tags")
         return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+
+    @builtins.property
+    def resource_retention_policy(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnJobDefinition.ResourceRetentionPolicyProperty"]]:
+        '''
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-batch-jobdefinition.html#cfn-batch-jobdefinition-resourceretentionpolicy
+        '''
+        result = self._values.get("resource_retention_policy")
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnJobDefinition.ResourceRetentionPolicyProperty"]], result)
 
     @builtins.property
     def retry_strategy(
@@ -15303,6 +15319,7 @@ class CfnJobDefinition(
         parameters: typing.Any = None,
         platform_capabilities: typing.Optional[typing.Sequence[builtins.str]] = None,
         propagate_tags: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        resource_retention_policy: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnJobDefinition.ResourceRetentionPolicyProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         retry_strategy: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnJobDefinition.RetryStrategyProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         scheduling_priority: typing.Optional[jsii.Number] = None,
         tags: typing.Any = None,
@@ -15321,6 +15338,7 @@ class CfnJobDefinition(
         :param parameters: Default parameters or parameter substitution placeholders that are set in the job definition. Parameters are specified as a key-value pair mapping. Parameters in a ``SubmitJob`` request override any corresponding parameter defaults from the job definition. For more information about specifying parameters, see `Job definition parameters <https://docs.aws.amazon.com/batch/latest/userguide/job_definition_parameters.html>`_ in the *AWS Batch User Guide* .
         :param platform_capabilities: The platform capabilities required by the job definition. If no value is specified, it defaults to ``EC2`` . Jobs run on Fargate resources specify ``FARGATE`` .
         :param propagate_tags: Specifies whether to propagate the tags from the job or job definition to the corresponding Amazon ECS task. If no value is specified, the tags aren't propagated. Tags can only be propagated to the tasks when the tasks are created. For tags with the same name, job tags are given priority over job definitions tags. If the total number of combined tags from the job and job definition is over 50, the job is moved to the ``FAILED`` state.
+        :param resource_retention_policy: 
         :param retry_strategy: The retry strategy to use for failed jobs that are submitted with this job definition.
         :param scheduling_priority: The scheduling priority of the job definition. This only affects jobs in job queues with a fair-share policy. Jobs with a higher scheduling priority are scheduled before jobs with a lower scheduling priority.
         :param tags: The tags that are applied to the job definition.
@@ -15341,6 +15359,7 @@ class CfnJobDefinition(
             parameters=parameters,
             platform_capabilities=platform_capabilities,
             propagate_tags=propagate_tags,
+            resource_retention_policy=resource_retention_policy,
             retry_strategy=retry_strategy,
             scheduling_priority=scheduling_priority,
             tags=tags,
@@ -15609,6 +15628,23 @@ class CfnJobDefinition(
             type_hints = typing.get_type_hints(_typecheckingstub__269e7fe24ddc93928c4ed8726528871fc789de7275942860c547acd761f99025)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
         jsii.set(self, "propagateTags", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="resourceRetentionPolicy")
+    def resource_retention_policy(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnJobDefinition.ResourceRetentionPolicyProperty"]]:
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnJobDefinition.ResourceRetentionPolicyProperty"]], jsii.get(self, "resourceRetentionPolicy"))
+
+    @resource_retention_policy.setter
+    def resource_retention_policy(
+        self,
+        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnJobDefinition.ResourceRetentionPolicyProperty"]],
+    ) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__24d6c12e4e40e86cb18eef4cad19675ced395908001d3f74f425b06ab99bb085)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "resourceRetentionPolicy", value) # pyright: ignore[reportArgumentType]
 
     @builtins.property
     @jsii.member(jsii_name="retryStrategy")
@@ -21157,6 +21193,63 @@ class CfnJobDefinition(
             )
 
     @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_batch.CfnJobDefinition.ResourceRetentionPolicyProperty",
+        jsii_struct_bases=[],
+        name_mapping={"skip_deregister_on_update": "skipDeregisterOnUpdate"},
+    )
+    class ResourceRetentionPolicyProperty:
+        def __init__(
+            self,
+            *,
+            skip_deregister_on_update: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        ) -> None:
+            '''
+            :param skip_deregister_on_update: Default: - false
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-batch-jobdefinition-resourceretentionpolicy.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_batch as batch
+                
+                resource_retention_policy_property = batch.CfnJobDefinition.ResourceRetentionPolicyProperty(
+                    skip_deregister_on_update=False
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__96a556bd9c16087d87c49ecc18104d825d1cd7dc2f678a8e272fcb8ad46b87ff)
+                check_type(argname="argument skip_deregister_on_update", value=skip_deregister_on_update, expected_type=type_hints["skip_deregister_on_update"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if skip_deregister_on_update is not None:
+                self._values["skip_deregister_on_update"] = skip_deregister_on_update
+
+        @builtins.property
+        def skip_deregister_on_update(
+            self,
+        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+            '''
+            :default: - false
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-batch-jobdefinition-resourceretentionpolicy.html#cfn-batch-jobdefinition-resourceretentionpolicy-skipderegisteronupdate
+            '''
+            result = self._values.get("skip_deregister_on_update")
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "ResourceRetentionPolicyProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
         jsii_type="aws-cdk-lib.aws_batch.CfnJobDefinition.ResourcesProperty",
         jsii_struct_bases=[],
         name_mapping={"limits": "limits", "requests": "requests"},
@@ -26507,6 +26600,7 @@ def _typecheckingstub__ed150d027b29486332c3fd2205a51f3c6f64c25946114fb86a6eba384
     parameters: typing.Any = None,
     platform_capabilities: typing.Optional[typing.Sequence[builtins.str]] = None,
     propagate_tags: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+    resource_retention_policy: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnJobDefinition.ResourceRetentionPolicyProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     retry_strategy: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnJobDefinition.RetryStrategyProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     scheduling_priority: typing.Optional[jsii.Number] = None,
     tags: typing.Any = None,
@@ -27553,6 +27647,7 @@ def _typecheckingstub__37959c68856ab28ea1a57515db976bc2215806d52c75f6166834df6ae
     parameters: typing.Any = None,
     platform_capabilities: typing.Optional[typing.Sequence[builtins.str]] = None,
     propagate_tags: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+    resource_retention_policy: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnJobDefinition.ResourceRetentionPolicyProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     retry_strategy: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnJobDefinition.RetryStrategyProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     scheduling_priority: typing.Optional[jsii.Number] = None,
     tags: typing.Any = None,
@@ -27645,6 +27740,12 @@ def _typecheckingstub__df387fd03e7b9707eac2330bd1c2776f56a71ead17f60e9cc8606c215
 
 def _typecheckingstub__269e7fe24ddc93928c4ed8726528871fc789de7275942860c547acd761f99025(
     value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__24d6c12e4e40e86cb18eef4cad19675ced395908001d3f74f425b06ab99bb085(
+    value: typing.Optional[typing.Union[_IResolvable_da3f097b, CfnJobDefinition.ResourceRetentionPolicyProperty]],
 ) -> None:
     """Type checking stubs"""
     pass
@@ -28026,6 +28127,13 @@ def _typecheckingstub__7384d4b3b97f8aebbaa3dfe7ec74991276f6b53d6e1885662f675369f
     *,
     type: typing.Optional[builtins.str] = None,
     value: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__96a556bd9c16087d87c49ecc18104d825d1cd7dc2f678a8e272fcb8ad46b87ff(
+    *,
+    skip_deregister_on_update: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
 ) -> None:
     """Type checking stubs"""
     pass

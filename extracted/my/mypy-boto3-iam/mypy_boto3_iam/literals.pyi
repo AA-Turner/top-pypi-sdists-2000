@@ -71,6 +71,7 @@ __all__ = (
     "PolicyEvaluationDecisionTypeType",
     "PolicyExistsWaiterName",
     "PolicyOwnerEntityTypeType",
+    "PolicyParameterTypeEnumType",
     "PolicyScopeTypeType",
     "PolicySourceTypeType",
     "PolicyTypeType",
@@ -149,6 +150,7 @@ PermissionsBoundaryAttachmentTypeType = Literal["PermissionsBoundaryPolicy"]
 PolicyEvaluationDecisionTypeType = Literal["allowed", "explicitDeny", "implicitDeny"]
 PolicyExistsWaiterName = Literal["policy_exists"]
 PolicyOwnerEntityTypeType = Literal["GROUP", "ROLE", "USER"]
+PolicyParameterTypeEnumType = Literal["string", "stringList"]
 PolicyScopeTypeType = Literal["AWS", "All", "Local"]
 PolicySourceTypeType = Literal[
     "aws-managed", "group", "none", "resource", "role", "user", "user-managed"
@@ -231,7 +233,6 @@ ServiceName = Literal[
     "apprunner",
     "appstream",
     "appsync",
-    "apptest",
     "arc-region-switch",
     "arc-zonal-shift",
     "artifact",
@@ -399,7 +400,6 @@ ServiceName = Literal[
     "iotdeviceadvisor",
     "iotevents",
     "iotevents-data",
-    "iotfleethub",
     "iotfleetwise",
     "iotsecuretunneling",
     "iotsitewise",
@@ -438,8 +438,6 @@ ServiceName = Literal[
     "location",
     "logs",
     "lookoutequipment",
-    "lookoutmetrics",
-    "lookoutvision",
     "m2",
     "machinelearning",
     "macie2",
@@ -514,8 +512,6 @@ ServiceName = Literal[
     "qapps",
     "qbusiness",
     "qconnect",
-    "qldb",
-    "qldb-session",
     "quicksight",
     "ram",
     "rbin",
@@ -530,7 +526,6 @@ ServiceName = Literal[
     "resource-explorer-2",
     "resource-groups",
     "resourcegroupstaggingapi",
-    "robomaker",
     "rolesanywhere",
     "route53",
     "route53-recovery-cluster",

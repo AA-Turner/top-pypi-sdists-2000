@@ -17,6 +17,7 @@ Usage::
 from __future__ import annotations
 
 import sys
+from collections.abc import Sequence
 from datetime import datetime
 from typing import Union
 
@@ -33,6 +34,7 @@ from .literals import (
     JobStatusTypeType,
     PolicyEvaluationDecisionTypeType,
     PolicyOwnerEntityTypeType,
+    PolicyParameterTypeEnumType,
     PolicyScopeTypeType,
     PolicySourceTypeType,
     PolicyTypeType,
@@ -43,12 +45,6 @@ from .literals import (
     SummaryKeyTypeType,
 )
 
-if sys.version_info >= (3, 9):
-    from builtins import dict as Dict
-    from builtins import list as List
-    from collections.abc import Sequence
-else:
-    from typing import Dict, List, Sequence
 if sys.version_info >= (3, 12):
     from typing import Literal, NotRequired, TypedDict
 else:
@@ -83,6 +79,8 @@ __all__ = (
     "CreateAccessKeyResponseTypeDef",
     "CreateAccountAliasRequestServiceResourceCreateAccountAliasTypeDef",
     "CreateAccountAliasRequestTypeDef",
+    "CreateDelegationRequestRequestTypeDef",
+    "CreateDelegationRequestResponseTypeDef",
     "CreateGroupRequestGroupCreateTypeDef",
     "CreateGroupRequestServiceResourceCreateGroupTypeDef",
     "CreateGroupRequestTypeDef",
@@ -120,6 +118,7 @@ __all__ = (
     "CreateVirtualMFADeviceRequestTypeDef",
     "CreateVirtualMFADeviceResponseTypeDef",
     "DeactivateMFADeviceRequestTypeDef",
+    "DelegationPermissionTypeDef",
     "DeleteAccessKeyRequestTypeDef",
     "DeleteAccountAliasRequestTypeDef",
     "DeleteGroupPolicyRequestTypeDef",
@@ -339,6 +338,7 @@ __all__ = (
     "PolicyDocumentTypeDef",
     "PolicyGrantingServiceAccessTypeDef",
     "PolicyGroupTypeDef",
+    "PolicyParameterTypeDef",
     "PolicyRoleTypeDef",
     "PolicyTypeDef",
     "PolicyUserTypeDef",
@@ -561,7 +561,7 @@ class CreateAccessKeyRequestTypeDef(TypedDict):
 class ResponseMetadataTypeDef(TypedDict):
     RequestId: str
     HTTPStatusCode: int
-    HTTPHeaders: Dict[str, str]
+    HTTPHeaders: dict[str, str]
     RetryAttempts: int
     HostId: NotRequired[str]
 
@@ -653,6 +653,15 @@ class DeactivateMFADeviceRequestTypeDef(TypedDict):
     SerialNumber: str
     UserName: NotRequired[str]
 
+PolicyParameterTypeDef = TypedDict(
+    "PolicyParameterTypeDef",
+    {
+        "Name": NotRequired[str],
+        "Values": NotRequired[Sequence[str]],
+        "Type": NotRequired[PolicyParameterTypeEnumType],
+    },
+)
+
 class DeleteAccessKeyRequestTypeDef(TypedDict):
     AccessKeyId: str
     UserName: NotRequired[str]
@@ -729,7 +738,7 @@ class DeleteVirtualMFADeviceRequestTypeDef(TypedDict):
 
 class RoleUsageTypeTypeDef(TypedDict):
     Region: NotRequired[str]
-    Resources: NotRequired[List[str]]
+    Resources: NotRequired[list[str]]
 
 class DetachGroupPolicyRequestGroupDetachPolicyTypeDef(TypedDict):
     PolicyArn: str
@@ -1169,9 +1178,9 @@ class ListVirtualMFADevicesRequestTypeDef(TypedDict):
 
 class PolicyDocumentStatementTypeDef(TypedDict):
     Effect: str
-    Resource: str | List[str]
+    Resource: str | list[str]
     Sid: str
-    Action: str | List[str]
+    Action: str | list[str]
 
 class PositionTypeDef(TypedDict):
     Line: NotRequired[int]
@@ -1486,18 +1495,23 @@ class CreateAccessKeyResponseTypeDef(TypedDict):
     AccessKey: AccessKeyTypeDef
     ResponseMetadata: ResponseMetadataTypeDef
 
+class CreateDelegationRequestResponseTypeDef(TypedDict):
+    ConsoleDeepLink: str
+    DelegationRequestId: str
+    ResponseMetadata: ResponseMetadataTypeDef
+
 class DeleteServiceLinkedRoleResponseTypeDef(TypedDict):
     DeletionTaskId: str
     ResponseMetadata: ResponseMetadataTypeDef
 
 class DisableOrganizationsRootCredentialsManagementResponseTypeDef(TypedDict):
     OrganizationId: str
-    EnabledFeatures: List[FeatureTypeType]
+    EnabledFeatures: list[FeatureTypeType]
     ResponseMetadata: ResponseMetadataTypeDef
 
 class DisableOrganizationsRootSessionsResponseTypeDef(TypedDict):
     OrganizationId: str
-    EnabledFeatures: List[FeatureTypeType]
+    EnabledFeatures: list[FeatureTypeType]
     ResponseMetadata: ResponseMetadataTypeDef
 
 class EmptyResponseMetadataTypeDef(TypedDict):
@@ -1505,12 +1519,12 @@ class EmptyResponseMetadataTypeDef(TypedDict):
 
 class EnableOrganizationsRootCredentialsManagementResponseTypeDef(TypedDict):
     OrganizationId: str
-    EnabledFeatures: List[FeatureTypeType]
+    EnabledFeatures: list[FeatureTypeType]
     ResponseMetadata: ResponseMetadataTypeDef
 
 class EnableOrganizationsRootSessionsResponseTypeDef(TypedDict):
     OrganizationId: str
-    EnabledFeatures: List[FeatureTypeType]
+    EnabledFeatures: list[FeatureTypeType]
     ResponseMetadata: ResponseMetadataTypeDef
 
 class GenerateCredentialReportResponseTypeDef(TypedDict):
@@ -1532,11 +1546,11 @@ class GetAccessKeyLastUsedResponseTypeDef(TypedDict):
     ResponseMetadata: ResponseMetadataTypeDef
 
 class GetAccountSummaryResponseTypeDef(TypedDict):
-    SummaryMap: Dict[SummaryKeyTypeType, int]
+    SummaryMap: dict[SummaryKeyTypeType, int]
     ResponseMetadata: ResponseMetadataTypeDef
 
 class GetContextKeysForPolicyResponseTypeDef(TypedDict):
-    ContextKeyNames: List[str]
+    ContextKeyNames: list[str]
     ResponseMetadata: ResponseMetadataTypeDef
 
 class GetCredentialReportResponseTypeDef(TypedDict):
@@ -1549,58 +1563,58 @@ class GetMFADeviceResponseTypeDef(TypedDict):
     UserName: str
     SerialNumber: str
     EnableDate: datetime
-    Certifications: Dict[str, str]
+    Certifications: dict[str, str]
     ResponseMetadata: ResponseMetadataTypeDef
 
 class ListAccessKeysResponseTypeDef(TypedDict):
-    AccessKeyMetadata: List[AccessKeyMetadataTypeDef]
+    AccessKeyMetadata: list[AccessKeyMetadataTypeDef]
     IsTruncated: bool
     Marker: str
     ResponseMetadata: ResponseMetadataTypeDef
 
 class ListAccountAliasesResponseTypeDef(TypedDict):
-    AccountAliases: List[str]
+    AccountAliases: list[str]
     IsTruncated: bool
     Marker: str
     ResponseMetadata: ResponseMetadataTypeDef
 
 class ListAttachedGroupPoliciesResponseTypeDef(TypedDict):
-    AttachedPolicies: List[AttachedPolicyTypeDef]
+    AttachedPolicies: list[AttachedPolicyTypeDef]
     IsTruncated: bool
     Marker: str
     ResponseMetadata: ResponseMetadataTypeDef
 
 class ListAttachedRolePoliciesResponseTypeDef(TypedDict):
-    AttachedPolicies: List[AttachedPolicyTypeDef]
+    AttachedPolicies: list[AttachedPolicyTypeDef]
     IsTruncated: bool
     Marker: str
     ResponseMetadata: ResponseMetadataTypeDef
 
 class ListAttachedUserPoliciesResponseTypeDef(TypedDict):
-    AttachedPolicies: List[AttachedPolicyTypeDef]
+    AttachedPolicies: list[AttachedPolicyTypeDef]
     IsTruncated: bool
     Marker: str
     ResponseMetadata: ResponseMetadataTypeDef
 
 class ListGroupPoliciesResponseTypeDef(TypedDict):
-    PolicyNames: List[str]
+    PolicyNames: list[str]
     IsTruncated: bool
     Marker: str
     ResponseMetadata: ResponseMetadataTypeDef
 
 class ListOrganizationsFeaturesResponseTypeDef(TypedDict):
     OrganizationId: str
-    EnabledFeatures: List[FeatureTypeType]
+    EnabledFeatures: list[FeatureTypeType]
     ResponseMetadata: ResponseMetadataTypeDef
 
 class ListRolePoliciesResponseTypeDef(TypedDict):
-    PolicyNames: List[str]
+    PolicyNames: list[str]
     IsTruncated: bool
     Marker: str
     ResponseMetadata: ResponseMetadataTypeDef
 
 class ListUserPoliciesResponseTypeDef(TypedDict):
-    PolicyNames: List[str]
+    PolicyNames: list[str]
     IsTruncated: bool
     Marker: str
     ResponseMetadata: ResponseMetadataTypeDef
@@ -1614,13 +1628,13 @@ class CreateGroupResponseTypeDef(TypedDict):
     ResponseMetadata: ResponseMetadataTypeDef
 
 class ListGroupsForUserResponseTypeDef(TypedDict):
-    Groups: List[GroupTypeDef]
+    Groups: list[GroupTypeDef]
     IsTruncated: bool
     Marker: str
     ResponseMetadata: ResponseMetadataTypeDef
 
 class ListGroupsResponseTypeDef(TypedDict):
-    Groups: List[GroupTypeDef]
+    Groups: list[GroupTypeDef]
     IsTruncated: bool
     Marker: str
     ResponseMetadata: ResponseMetadataTypeDef
@@ -1643,7 +1657,7 @@ class CreateOpenIDConnectProviderRequestTypeDef(TypedDict):
 
 class CreateOpenIDConnectProviderResponseTypeDef(TypedDict):
     OpenIDConnectProviderArn: str
-    Tags: List[TagTypeDef]
+    Tags: list[TagTypeDef]
     ResponseMetadata: ResponseMetadataTypeDef
 
 class CreatePolicyRequestServiceResourceCreatePolicyTypeDef(TypedDict):
@@ -1694,7 +1708,7 @@ class CreateSAMLProviderRequestTypeDef(TypedDict):
 
 class CreateSAMLProviderResponseTypeDef(TypedDict):
     SAMLProviderArn: str
-    Tags: List[TagTypeDef]
+    Tags: list[TagTypeDef]
     ResponseMetadata: ResponseMetadataTypeDef
 
 class CreateUserRequestServiceResourceCreateUserTypeDef(TypedDict):
@@ -1726,56 +1740,56 @@ class CreateVirtualMFADeviceRequestTypeDef(TypedDict):
 
 class GetOpenIDConnectProviderResponseTypeDef(TypedDict):
     Url: str
-    ClientIDList: List[str]
-    ThumbprintList: List[str]
+    ClientIDList: list[str]
+    ThumbprintList: list[str]
     CreateDate: datetime
-    Tags: List[TagTypeDef]
+    Tags: list[TagTypeDef]
     ResponseMetadata: ResponseMetadataTypeDef
 
 class ListInstanceProfileTagsResponseTypeDef(TypedDict):
-    Tags: List[TagTypeDef]
+    Tags: list[TagTypeDef]
     IsTruncated: bool
     Marker: str
     ResponseMetadata: ResponseMetadataTypeDef
 
 class ListMFADeviceTagsResponseTypeDef(TypedDict):
-    Tags: List[TagTypeDef]
+    Tags: list[TagTypeDef]
     IsTruncated: bool
     Marker: str
     ResponseMetadata: ResponseMetadataTypeDef
 
 class ListOpenIDConnectProviderTagsResponseTypeDef(TypedDict):
-    Tags: List[TagTypeDef]
+    Tags: list[TagTypeDef]
     IsTruncated: bool
     Marker: str
     ResponseMetadata: ResponseMetadataTypeDef
 
 class ListPolicyTagsResponseTypeDef(TypedDict):
-    Tags: List[TagTypeDef]
+    Tags: list[TagTypeDef]
     IsTruncated: bool
     Marker: str
     ResponseMetadata: ResponseMetadataTypeDef
 
 class ListRoleTagsResponseTypeDef(TypedDict):
-    Tags: List[TagTypeDef]
+    Tags: list[TagTypeDef]
     IsTruncated: bool
     Marker: str
     ResponseMetadata: ResponseMetadataTypeDef
 
 class ListSAMLProviderTagsResponseTypeDef(TypedDict):
-    Tags: List[TagTypeDef]
+    Tags: list[TagTypeDef]
     IsTruncated: bool
     Marker: str
     ResponseMetadata: ResponseMetadataTypeDef
 
 class ListServerCertificateTagsResponseTypeDef(TypedDict):
-    Tags: List[TagTypeDef]
+    Tags: list[TagTypeDef]
     IsTruncated: bool
     Marker: str
     ResponseMetadata: ResponseMetadataTypeDef
 
 class ListUserTagsResponseTypeDef(TypedDict):
-    Tags: List[TagTypeDef]
+    Tags: list[TagTypeDef]
     IsTruncated: bool
     Marker: str
     ResponseMetadata: ResponseMetadataTypeDef
@@ -1792,7 +1806,7 @@ class PolicyTypeDef(TypedDict):
     Description: NotRequired[str]
     CreateDate: NotRequired[datetime]
     UpdateDate: NotRequired[datetime]
-    Tags: NotRequired[List[TagTypeDef]]
+    Tags: NotRequired[list[TagTypeDef]]
 
 class TagInstanceProfileRequestTypeDef(TypedDict):
     InstanceProfileName: str
@@ -1850,7 +1864,7 @@ class UserTypeDef(TypedDict):
     CreateDate: datetime
     PasswordLastUsed: NotRequired[datetime]
     PermissionsBoundary: NotRequired[AttachedPermissionsBoundaryTypeDef]
-    Tags: NotRequired[List[TagTypeDef]]
+    Tags: NotRequired[list[TagTypeDef]]
 
 class CreateLoginProfileResponseTypeDef(TypedDict):
     LoginProfile: LoginProfileTypeDef
@@ -1868,9 +1882,13 @@ class ResetServiceSpecificCredentialResponseTypeDef(TypedDict):
     ServiceSpecificCredential: ServiceSpecificCredentialTypeDef
     ResponseMetadata: ResponseMetadataTypeDef
 
+class DelegationPermissionTypeDef(TypedDict):
+    PolicyTemplateArn: NotRequired[str]
+    Parameters: NotRequired[Sequence[PolicyParameterTypeDef]]
+
 class DeletionTaskFailureReasonTypeTypeDef(TypedDict):
     Reason: NotRequired[str]
-    RoleUsageList: NotRequired[List[RoleUsageTypeTypeDef]]
+    RoleUsageList: NotRequired[list[RoleUsageTypeTypeDef]]
 
 class EntityDetailsTypeDef(TypedDict):
     EntityInfo: EntityInfoTypeDef
@@ -1882,7 +1900,7 @@ class GetOrganizationsAccessReportResponseTypeDef(TypedDict):
     JobCompletionDate: datetime
     NumberOfServicesAccessible: int
     NumberOfServicesNotAccessed: int
-    AccessDetails: List[AccessDetailTypeDef]
+    AccessDetails: list[AccessDetailTypeDef]
     IsTruncated: bool
     Marker: str
     ErrorDetails: ErrorDetailsTypeDef
@@ -2074,9 +2092,9 @@ class GetSAMLProviderResponseTypeDef(TypedDict):
     SAMLMetadataDocument: str
     CreateDate: datetime
     ValidUntil: datetime
-    Tags: List[TagTypeDef]
+    Tags: list[TagTypeDef]
     AssertionEncryptionMode: AssertionEncryptionModeTypeType
-    PrivateKeyList: List[SAMLPrivateKeyTypeDef]
+    PrivateKeyList: list[SAMLPrivateKeyTypeDef]
     ResponseMetadata: ResponseMetadataTypeDef
 
 class GetSSHPublicKeyResponseTypeDef(TypedDict):
@@ -2088,39 +2106,39 @@ class UploadSSHPublicKeyResponseTypeDef(TypedDict):
     ResponseMetadata: ResponseMetadataTypeDef
 
 class ListEntitiesForPolicyResponseTypeDef(TypedDict):
-    PolicyGroups: List[PolicyGroupTypeDef]
-    PolicyUsers: List[PolicyUserTypeDef]
-    PolicyRoles: List[PolicyRoleTypeDef]
+    PolicyGroups: list[PolicyGroupTypeDef]
+    PolicyUsers: list[PolicyUserTypeDef]
+    PolicyRoles: list[PolicyRoleTypeDef]
     IsTruncated: bool
     Marker: str
     ResponseMetadata: ResponseMetadataTypeDef
 
 class ListMFADevicesResponseTypeDef(TypedDict):
-    MFADevices: List[MFADeviceTypeDef]
+    MFADevices: list[MFADeviceTypeDef]
     IsTruncated: bool
     Marker: str
     ResponseMetadata: ResponseMetadataTypeDef
 
 class ListOpenIDConnectProvidersResponseTypeDef(TypedDict):
-    OpenIDConnectProviderList: List[OpenIDConnectProviderListEntryTypeDef]
+    OpenIDConnectProviderList: list[OpenIDConnectProviderListEntryTypeDef]
     ResponseMetadata: ResponseMetadataTypeDef
 
 class ListPoliciesGrantingServiceAccessEntryTypeDef(TypedDict):
     ServiceNamespace: NotRequired[str]
-    Policies: NotRequired[List[PolicyGrantingServiceAccessTypeDef]]
+    Policies: NotRequired[list[PolicyGrantingServiceAccessTypeDef]]
 
 class ListSAMLProvidersResponseTypeDef(TypedDict):
-    SAMLProviderList: List[SAMLProviderListEntryTypeDef]
+    SAMLProviderList: list[SAMLProviderListEntryTypeDef]
     ResponseMetadata: ResponseMetadataTypeDef
 
 class ListSSHPublicKeysResponseTypeDef(TypedDict):
-    SSHPublicKeys: List[SSHPublicKeyMetadataTypeDef]
+    SSHPublicKeys: list[SSHPublicKeyMetadataTypeDef]
     IsTruncated: bool
     Marker: str
     ResponseMetadata: ResponseMetadataTypeDef
 
 class ListServerCertificatesResponseTypeDef(TypedDict):
-    ServerCertificateMetadataList: List[ServerCertificateMetadataTypeDef]
+    ServerCertificateMetadataList: list[ServerCertificateMetadataTypeDef]
     IsTruncated: bool
     Marker: str
     ResponseMetadata: ResponseMetadataTypeDef
@@ -2129,21 +2147,21 @@ class ServerCertificateTypeDef(TypedDict):
     ServerCertificateMetadata: ServerCertificateMetadataTypeDef
     CertificateBody: str
     CertificateChain: NotRequired[str]
-    Tags: NotRequired[List[TagTypeDef]]
+    Tags: NotRequired[list[TagTypeDef]]
 
 class UploadServerCertificateResponseTypeDef(TypedDict):
     ServerCertificateMetadata: ServerCertificateMetadataTypeDef
-    Tags: List[TagTypeDef]
+    Tags: list[TagTypeDef]
     ResponseMetadata: ResponseMetadataTypeDef
 
 class ListServiceSpecificCredentialsResponseTypeDef(TypedDict):
-    ServiceSpecificCredentials: List[ServiceSpecificCredentialMetadataTypeDef]
+    ServiceSpecificCredentials: list[ServiceSpecificCredentialMetadataTypeDef]
     Marker: str
     IsTruncated: bool
     ResponseMetadata: ResponseMetadataTypeDef
 
 class ListSigningCertificatesResponseTypeDef(TypedDict):
-    Certificates: List[SigningCertificateTypeDef]
+    Certificates: list[SigningCertificateTypeDef]
     IsTruncated: bool
     Marker: str
     ResponseMetadata: ResponseMetadataTypeDef
@@ -2154,7 +2172,7 @@ class UploadSigningCertificateResponseTypeDef(TypedDict):
 
 class PolicyDocumentDictTypeDef(TypedDict):
     Version: str
-    Statement: List[PolicyDocumentStatementTypeDef]
+    Statement: list[PolicyDocumentStatementTypeDef]
 
 class StatementTypeDef(TypedDict):
     SourcePolicyId: NotRequired[str]
@@ -2171,7 +2189,7 @@ ServiceLastAccessedTypeDef = TypedDict(
         "LastAuthenticatedEntity": NotRequired[str],
         "LastAuthenticatedRegion": NotRequired[str],
         "TotalAuthenticatedEntities": NotRequired[int],
-        "TrackedActionsLastAccessed": NotRequired[List[TrackedActionLastAccessedTypeDef]],
+        "TrackedActionsLastAccessed": NotRequired[list[TrackedActionLastAccessedTypeDef]],
     },
 )
 
@@ -2184,7 +2202,7 @@ class GetPolicyResponseTypeDef(TypedDict):
     ResponseMetadata: ResponseMetadataTypeDef
 
 class ListPoliciesResponseTypeDef(TypedDict):
-    Policies: List[PolicyTypeDef]
+    Policies: list[PolicyTypeDef]
     IsTruncated: bool
     Marker: str
     ResponseMetadata: ResponseMetadataTypeDef
@@ -2195,7 +2213,7 @@ class CreateUserResponseTypeDef(TypedDict):
 
 class GetGroupResponseTypeDef(TypedDict):
     Group: GroupTypeDef
-    Users: List[UserTypeDef]
+    Users: list[UserTypeDef]
     IsTruncated: bool
     Marker: str
     ResponseMetadata: ResponseMetadataTypeDef
@@ -2205,7 +2223,7 @@ class GetUserResponseTypeDef(TypedDict):
     ResponseMetadata: ResponseMetadataTypeDef
 
 class ListUsersResponseTypeDef(TypedDict):
-    Users: List[UserTypeDef]
+    Users: list[UserTypeDef]
     IsTruncated: bool
     Marker: str
     ResponseMetadata: ResponseMetadataTypeDef
@@ -2216,7 +2234,18 @@ class VirtualMFADeviceTypeDef(TypedDict):
     QRCodePNG: NotRequired[bytes]
     User: NotRequired[UserTypeDef]
     EnableDate: NotRequired[datetime]
-    Tags: NotRequired[List[TagTypeDef]]
+    Tags: NotRequired[list[TagTypeDef]]
+
+class CreateDelegationRequestRequestTypeDef(TypedDict):
+    Description: str
+    Permissions: DelegationPermissionTypeDef
+    RequestorWorkflowId: str
+    NotificationChannel: str
+    SessionDuration: int
+    OwnerAccountId: NotRequired[str]
+    RequestMessage: NotRequired[str]
+    RedirectUrl: NotRequired[str]
+    OnlySendByOwner: NotRequired[bool]
 
 class GetServiceLinkedRoleDeletionStatusResponseTypeDef(TypedDict):
     Status: DeletionTaskStatusTypeType
@@ -2227,14 +2256,14 @@ class GetServiceLastAccessedDetailsWithEntitiesResponseTypeDef(TypedDict):
     JobStatus: JobStatusTypeType
     JobCreationDate: datetime
     JobCompletionDate: datetime
-    EntityDetailsList: List[EntityDetailsTypeDef]
+    EntityDetailsList: list[EntityDetailsTypeDef]
     IsTruncated: bool
     Marker: str
     Error: ErrorDetailsTypeDef
     ResponseMetadata: ResponseMetadataTypeDef
 
 class ListPoliciesGrantingServiceAccessResponseTypeDef(TypedDict):
-    PoliciesGrantingServiceAccess: List[ListPoliciesGrantingServiceAccessEntryTypeDef]
+    PoliciesGrantingServiceAccess: list[ListPoliciesGrantingServiceAccessEntryTypeDef]
     IsTruncated: bool
     Marker: str
     ResponseMetadata: ResponseMetadataTypeDef
@@ -2248,16 +2277,16 @@ PolicyDocumentTypeDef = Union[str, PolicyDocumentDictTypeDef]
 class ResourceSpecificResultTypeDef(TypedDict):
     EvalResourceName: str
     EvalResourceDecision: PolicyEvaluationDecisionTypeType
-    MatchedStatements: NotRequired[List[StatementTypeDef]]
-    MissingContextValues: NotRequired[List[str]]
-    EvalDecisionDetails: NotRequired[Dict[str, PolicyEvaluationDecisionTypeType]]
+    MatchedStatements: NotRequired[list[StatementTypeDef]]
+    MissingContextValues: NotRequired[list[str]]
+    EvalDecisionDetails: NotRequired[dict[str, PolicyEvaluationDecisionTypeType]]
     PermissionsBoundaryDecisionDetail: NotRequired[PermissionsBoundaryDecisionDetailTypeDef]
 
 class GetServiceLastAccessedDetailsResponseTypeDef(TypedDict):
     JobStatus: JobStatusTypeType
     JobType: AccessAdvisorUsageGranularityTypeType
     JobCreationDate: datetime
-    ServicesLastAccessed: List[ServiceLastAccessedTypeDef]
+    ServicesLastAccessed: list[ServiceLastAccessedTypeDef]
     JobCompletionDate: datetime
     IsTruncated: bool
     Marker: str
@@ -2269,7 +2298,7 @@ class CreateVirtualMFADeviceResponseTypeDef(TypedDict):
     ResponseMetadata: ResponseMetadataTypeDef
 
 class ListVirtualMFADevicesResponseTypeDef(TypedDict):
-    VirtualMFADevices: List[VirtualMFADeviceTypeDef]
+    VirtualMFADevices: list[VirtualMFADeviceTypeDef]
     IsTruncated: bool
     Marker: str
     ResponseMetadata: ResponseMetadataTypeDef
@@ -2312,19 +2341,19 @@ class RoleTypeDef(TypedDict):
     Description: NotRequired[str]
     MaxSessionDuration: NotRequired[int]
     PermissionsBoundary: NotRequired[AttachedPermissionsBoundaryTypeDef]
-    Tags: NotRequired[List[TagTypeDef]]
+    Tags: NotRequired[list[TagTypeDef]]
     RoleLastUsed: NotRequired[RoleLastUsedTypeDef]
 
 class EvaluationResultTypeDef(TypedDict):
     EvalActionName: str
     EvalDecision: PolicyEvaluationDecisionTypeType
     EvalResourceName: NotRequired[str]
-    MatchedStatements: NotRequired[List[StatementTypeDef]]
-    MissingContextValues: NotRequired[List[str]]
+    MatchedStatements: NotRequired[list[StatementTypeDef]]
+    MissingContextValues: NotRequired[list[str]]
     OrganizationsDecisionDetail: NotRequired[OrganizationsDecisionDetailTypeDef]
     PermissionsBoundaryDecisionDetail: NotRequired[PermissionsBoundaryDecisionDetailTypeDef]
-    EvalDecisionDetails: NotRequired[Dict[str, PolicyEvaluationDecisionTypeType]]
-    ResourceSpecificResults: NotRequired[List[ResourceSpecificResultTypeDef]]
+    EvalDecisionDetails: NotRequired[dict[str, PolicyEvaluationDecisionTypeType]]
+    ResourceSpecificResults: NotRequired[list[ResourceSpecificResultTypeDef]]
 
 class GroupDetailTypeDef(TypedDict):
     Path: NotRequired[str]
@@ -2332,8 +2361,8 @@ class GroupDetailTypeDef(TypedDict):
     GroupId: NotRequired[str]
     Arn: NotRequired[str]
     CreateDate: NotRequired[datetime]
-    GroupPolicyList: NotRequired[List[PolicyDetailTypeDef]]
-    AttachedManagedPolicies: NotRequired[List[AttachedPolicyTypeDef]]
+    GroupPolicyList: NotRequired[list[PolicyDetailTypeDef]]
+    AttachedManagedPolicies: NotRequired[list[AttachedPolicyTypeDef]]
 
 class UserDetailTypeDef(TypedDict):
     Path: NotRequired[str]
@@ -2341,11 +2370,11 @@ class UserDetailTypeDef(TypedDict):
     UserId: NotRequired[str]
     Arn: NotRequired[str]
     CreateDate: NotRequired[datetime]
-    UserPolicyList: NotRequired[List[PolicyDetailTypeDef]]
-    GroupList: NotRequired[List[str]]
-    AttachedManagedPolicies: NotRequired[List[AttachedPolicyTypeDef]]
+    UserPolicyList: NotRequired[list[PolicyDetailTypeDef]]
+    GroupList: NotRequired[list[str]]
+    AttachedManagedPolicies: NotRequired[list[AttachedPolicyTypeDef]]
     PermissionsBoundary: NotRequired[AttachedPermissionsBoundaryTypeDef]
-    Tags: NotRequired[List[TagTypeDef]]
+    Tags: NotRequired[list[TagTypeDef]]
 
 class CreatePolicyVersionResponseTypeDef(TypedDict):
     PolicyVersion: PolicyVersionTypeDef
@@ -2356,7 +2385,7 @@ class GetPolicyVersionResponseTypeDef(TypedDict):
     ResponseMetadata: ResponseMetadataTypeDef
 
 class ListPolicyVersionsResponseTypeDef(TypedDict):
-    Versions: List[PolicyVersionTypeDef]
+    Versions: list[PolicyVersionTypeDef]
     IsTruncated: bool
     Marker: str
     ResponseMetadata: ResponseMetadataTypeDef
@@ -2373,7 +2402,7 @@ class ManagedPolicyDetailTypeDef(TypedDict):
     Description: NotRequired[str]
     CreateDate: NotRequired[datetime]
     UpdateDate: NotRequired[datetime]
-    PolicyVersionList: NotRequired[List[PolicyVersionTypeDef]]
+    PolicyVersionList: NotRequired[list[PolicyVersionTypeDef]]
 
 class CreateRoleResponseTypeDef(TypedDict):
     Role: RoleTypeDef
@@ -2393,11 +2422,11 @@ class InstanceProfileTypeDef(TypedDict):
     InstanceProfileId: str
     Arn: str
     CreateDate: datetime
-    Roles: List[RoleTypeDef]
-    Tags: NotRequired[List[TagTypeDef]]
+    Roles: list[RoleTypeDef]
+    Tags: NotRequired[list[TagTypeDef]]
 
 class ListRolesResponseTypeDef(TypedDict):
-    Roles: List[RoleTypeDef]
+    Roles: list[RoleTypeDef]
     IsTruncated: bool
     Marker: str
     ResponseMetadata: ResponseMetadataTypeDef
@@ -2407,7 +2436,7 @@ class UpdateRoleDescriptionResponseTypeDef(TypedDict):
     ResponseMetadata: ResponseMetadataTypeDef
 
 class SimulatePolicyResponseTypeDef(TypedDict):
-    EvaluationResults: List[EvaluationResultTypeDef]
+    EvaluationResults: list[EvaluationResultTypeDef]
     IsTruncated: bool
     Marker: str
     ResponseMetadata: ResponseMetadataTypeDef
@@ -2421,13 +2450,13 @@ class GetInstanceProfileResponseTypeDef(TypedDict):
     ResponseMetadata: ResponseMetadataTypeDef
 
 class ListInstanceProfilesForRoleResponseTypeDef(TypedDict):
-    InstanceProfiles: List[InstanceProfileTypeDef]
+    InstanceProfiles: list[InstanceProfileTypeDef]
     IsTruncated: bool
     Marker: str
     ResponseMetadata: ResponseMetadataTypeDef
 
 class ListInstanceProfilesResponseTypeDef(TypedDict):
-    InstanceProfiles: List[InstanceProfileTypeDef]
+    InstanceProfiles: list[InstanceProfileTypeDef]
     IsTruncated: bool
     Marker: str
     ResponseMetadata: ResponseMetadataTypeDef
@@ -2439,18 +2468,18 @@ class RoleDetailTypeDef(TypedDict):
     Arn: NotRequired[str]
     CreateDate: NotRequired[datetime]
     AssumeRolePolicyDocument: NotRequired[PolicyDocumentTypeDef]
-    InstanceProfileList: NotRequired[List[InstanceProfileTypeDef]]
-    RolePolicyList: NotRequired[List[PolicyDetailTypeDef]]
-    AttachedManagedPolicies: NotRequired[List[AttachedPolicyTypeDef]]
+    InstanceProfileList: NotRequired[list[InstanceProfileTypeDef]]
+    RolePolicyList: NotRequired[list[PolicyDetailTypeDef]]
+    AttachedManagedPolicies: NotRequired[list[AttachedPolicyTypeDef]]
     PermissionsBoundary: NotRequired[AttachedPermissionsBoundaryTypeDef]
-    Tags: NotRequired[List[TagTypeDef]]
+    Tags: NotRequired[list[TagTypeDef]]
     RoleLastUsed: NotRequired[RoleLastUsedTypeDef]
 
 class GetAccountAuthorizationDetailsResponseTypeDef(TypedDict):
-    UserDetailList: List[UserDetailTypeDef]
-    GroupDetailList: List[GroupDetailTypeDef]
-    RoleDetailList: List[RoleDetailTypeDef]
-    Policies: List[ManagedPolicyDetailTypeDef]
+    UserDetailList: list[UserDetailTypeDef]
+    GroupDetailList: list[GroupDetailTypeDef]
+    RoleDetailList: list[RoleDetailTypeDef]
+    Policies: list[ManagedPolicyDetailTypeDef]
     IsTruncated: bool
     Marker: str
     ResponseMetadata: ResponseMetadataTypeDef

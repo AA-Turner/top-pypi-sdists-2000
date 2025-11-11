@@ -589,6 +589,7 @@ class CfnOriginEndpointPolicyProps:
         "force_endpoint_error_configuration": "forceEndpointErrorConfiguration",
         "hls_manifests": "hlsManifests",
         "low_latency_hls_manifests": "lowLatencyHlsManifests",
+        "mss_manifests": "mssManifests",
         "segment": "segment",
         "startover_window_seconds": "startoverWindowSeconds",
         "tags": "tags",
@@ -607,6 +608,7 @@ class CfnOriginEndpointProps:
         force_endpoint_error_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnOriginEndpoint.ForceEndpointErrorConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         hls_manifests: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnOriginEndpoint.HlsManifestConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         low_latency_hls_manifests: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnOriginEndpoint.LowLatencyHlsManifestConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        mss_manifests: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnOriginEndpoint.MssManifestConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         segment: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnOriginEndpoint.SegmentProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         startover_window_seconds: typing.Optional[jsii.Number] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -622,6 +624,7 @@ class CfnOriginEndpointProps:
         :param force_endpoint_error_configuration: The failover settings for the endpoint.
         :param hls_manifests: The HLS manifests associated with the origin endpoint configuration.
         :param low_latency_hls_manifests: The low-latency HLS (LL-HLS) manifests associated with the origin endpoint.
+        :param mss_manifests: A list of Microsoft Smooth Streaming (MSS) manifest configurations associated with the origin endpoint. Each configuration represents a different MSS streaming option available from this endpoint.
         :param segment: The segment associated with the origin endpoint.
         :param startover_window_seconds: The size of the window (in seconds) to specify a window of the live stream that's available for on-demand viewing. Viewers can start-over or catch-up on content that falls within the window.
         :param tags: The tags associated with the origin endpoint.
@@ -759,10 +762,25 @@ class CfnOriginEndpointProps:
                     url="url",
                     url_encode_child_manifest=False
                 )],
+                mss_manifests=[mediapackagev2.CfnOriginEndpoint.MssManifestConfigurationProperty(
+                    manifest_name="manifestName",
+            
+                    # the properties below are optional
+                    filter_configuration=mediapackagev2.CfnOriginEndpoint.FilterConfigurationProperty(
+                        clip_start_time="clipStartTime",
+                        end="end",
+                        manifest_filter="manifestFilter",
+                        start="start",
+                        time_delay_seconds=123
+                    ),
+                    manifest_layout="manifestLayout",
+                    manifest_window_seconds=123
+                )],
                 segment=mediapackagev2.CfnOriginEndpoint.SegmentProperty(
                     encryption=mediapackagev2.CfnOriginEndpoint.EncryptionProperty(
                         encryption_method=mediapackagev2.CfnOriginEndpoint.EncryptionMethodProperty(
                             cmaf_encryption_method="cmafEncryptionMethod",
+                            ism_encryption_method="ismEncryptionMethod",
                             ts_encryption_method="tsEncryptionMethod"
                         ),
                         speke_key_provider=mediapackagev2.CfnOriginEndpoint.SpekeKeyProviderProperty(
@@ -808,6 +826,7 @@ class CfnOriginEndpointProps:
             check_type(argname="argument force_endpoint_error_configuration", value=force_endpoint_error_configuration, expected_type=type_hints["force_endpoint_error_configuration"])
             check_type(argname="argument hls_manifests", value=hls_manifests, expected_type=type_hints["hls_manifests"])
             check_type(argname="argument low_latency_hls_manifests", value=low_latency_hls_manifests, expected_type=type_hints["low_latency_hls_manifests"])
+            check_type(argname="argument mss_manifests", value=mss_manifests, expected_type=type_hints["mss_manifests"])
             check_type(argname="argument segment", value=segment, expected_type=type_hints["segment"])
             check_type(argname="argument startover_window_seconds", value=startover_window_seconds, expected_type=type_hints["startover_window_seconds"])
             check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
@@ -827,6 +846,8 @@ class CfnOriginEndpointProps:
             self._values["hls_manifests"] = hls_manifests
         if low_latency_hls_manifests is not None:
             self._values["low_latency_hls_manifests"] = low_latency_hls_manifests
+        if mss_manifests is not None:
+            self._values["mss_manifests"] = mss_manifests
         if segment is not None:
             self._values["segment"] = segment
         if startover_window_seconds is not None:
@@ -926,6 +947,19 @@ class CfnOriginEndpointProps:
         '''
         result = self._values.get("low_latency_hls_manifests")
         return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnOriginEndpoint.LowLatencyHlsManifestConfigurationProperty"]]]], result)
+
+    @builtins.property
+    def mss_manifests(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnOriginEndpoint.MssManifestConfigurationProperty"]]]]:
+        '''A list of Microsoft Smooth Streaming (MSS) manifest configurations associated with the origin endpoint.
+
+        Each configuration represents a different MSS streaming option available from this endpoint.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-mediapackagev2-originendpoint.html#cfn-mediapackagev2-originendpoint-mssmanifests
+        '''
+        result = self._values.get("mss_manifests")
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnOriginEndpoint.MssManifestConfigurationProperty"]]]], result)
 
     @builtins.property
     def segment(
@@ -2430,10 +2464,25 @@ class CfnOriginEndpoint(
                 url="url",
                 url_encode_child_manifest=False
             )],
+            mss_manifests=[mediapackagev2.CfnOriginEndpoint.MssManifestConfigurationProperty(
+                manifest_name="manifestName",
+        
+                # the properties below are optional
+                filter_configuration=mediapackagev2.CfnOriginEndpoint.FilterConfigurationProperty(
+                    clip_start_time="clipStartTime",
+                    end="end",
+                    manifest_filter="manifestFilter",
+                    start="start",
+                    time_delay_seconds=123
+                ),
+                manifest_layout="manifestLayout",
+                manifest_window_seconds=123
+            )],
             segment=mediapackagev2.CfnOriginEndpoint.SegmentProperty(
                 encryption=mediapackagev2.CfnOriginEndpoint.EncryptionProperty(
                     encryption_method=mediapackagev2.CfnOriginEndpoint.EncryptionMethodProperty(
                         cmaf_encryption_method="cmafEncryptionMethod",
+                        ism_encryption_method="ismEncryptionMethod",
                         ts_encryption_method="tsEncryptionMethod"
                     ),
                     speke_key_provider=mediapackagev2.CfnOriginEndpoint.SpekeKeyProviderProperty(
@@ -2483,6 +2532,7 @@ class CfnOriginEndpoint(
         force_endpoint_error_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnOriginEndpoint.ForceEndpointErrorConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         hls_manifests: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnOriginEndpoint.HlsManifestConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         low_latency_hls_manifests: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnOriginEndpoint.LowLatencyHlsManifestConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        mss_manifests: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnOriginEndpoint.MssManifestConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         segment: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnOriginEndpoint.SegmentProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         startover_window_seconds: typing.Optional[jsii.Number] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -2499,6 +2549,7 @@ class CfnOriginEndpoint(
         :param force_endpoint_error_configuration: The failover settings for the endpoint.
         :param hls_manifests: The HLS manifests associated with the origin endpoint configuration.
         :param low_latency_hls_manifests: The low-latency HLS (LL-HLS) manifests associated with the origin endpoint.
+        :param mss_manifests: A list of Microsoft Smooth Streaming (MSS) manifest configurations associated with the origin endpoint. Each configuration represents a different MSS streaming option available from this endpoint.
         :param segment: The segment associated with the origin endpoint.
         :param startover_window_seconds: The size of the window (in seconds) to specify a window of the live stream that's available for on-demand viewing. Viewers can start-over or catch-up on content that falls within the window.
         :param tags: The tags associated with the origin endpoint.
@@ -2517,6 +2568,7 @@ class CfnOriginEndpoint(
             force_endpoint_error_configuration=force_endpoint_error_configuration,
             hls_manifests=hls_manifests,
             low_latency_hls_manifests=low_latency_hls_manifests,
+            mss_manifests=mss_manifests,
             segment=segment,
             startover_window_seconds=startover_window_seconds,
             tags=tags,
@@ -2607,6 +2659,14 @@ class CfnOriginEndpoint(
         :cloudformationAttribute: ModifiedAt
         '''
         return typing.cast(builtins.str, jsii.get(self, "attrModifiedAt"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrMssManifestUrls")
+    def attr_mss_manifest_urls(self) -> typing.List[builtins.str]:
+        '''
+        :cloudformationAttribute: MssManifestUrls
+        '''
+        return typing.cast(typing.List[builtins.str], jsii.get(self, "attrMssManifestUrls"))
 
     @builtins.property
     @jsii.member(jsii_name="cdkTagManager")
@@ -2761,6 +2821,24 @@ class CfnOriginEndpoint(
             type_hints = typing.get_type_hints(_typecheckingstub__0ab0da83ecaf5e8b2eb477e1a7bb2f955c99813829faeb44ce46e408a3739304)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
         jsii.set(self, "lowLatencyHlsManifests", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="mssManifests")
+    def mss_manifests(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnOriginEndpoint.MssManifestConfigurationProperty"]]]]:
+        '''A list of Microsoft Smooth Streaming (MSS) manifest configurations associated with the origin endpoint.'''
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnOriginEndpoint.MssManifestConfigurationProperty"]]]], jsii.get(self, "mssManifests"))
+
+    @mss_manifests.setter
+    def mss_manifests(
+        self,
+        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnOriginEndpoint.MssManifestConfigurationProperty"]]]],
+    ) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__05c39e22a8fee804960ccb55c9ca3411dc4e96823b582c9162b38b1ea0f78253)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "mssManifests", value) # pyright: ignore[reportArgumentType]
 
     @builtins.property
     @jsii.member(jsii_name="segment")
@@ -3970,6 +4048,7 @@ class CfnOriginEndpoint(
         jsii_struct_bases=[],
         name_mapping={
             "cmaf_encryption_method": "cmafEncryptionMethod",
+            "ism_encryption_method": "ismEncryptionMethod",
             "ts_encryption_method": "tsEncryptionMethod",
         },
     )
@@ -3978,11 +4057,13 @@ class CfnOriginEndpoint(
             self,
             *,
             cmaf_encryption_method: typing.Optional[builtins.str] = None,
+            ism_encryption_method: typing.Optional[builtins.str] = None,
             ts_encryption_method: typing.Optional[builtins.str] = None,
         ) -> None:
             '''The encryption method associated with the origin endpoint.
 
             :param cmaf_encryption_method: The encryption method to use.
+            :param ism_encryption_method: The encryption method used for Microsoft Smooth Streaming (MSS) content. This specifies how the MSS segments are encrypted to protect the content during delivery to client players.
             :param ts_encryption_method: The encryption method to use.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediapackagev2-originendpoint-encryptionmethod.html
@@ -3996,16 +4077,20 @@ class CfnOriginEndpoint(
                 
                 encryption_method_property = mediapackagev2.CfnOriginEndpoint.EncryptionMethodProperty(
                     cmaf_encryption_method="cmafEncryptionMethod",
+                    ism_encryption_method="ismEncryptionMethod",
                     ts_encryption_method="tsEncryptionMethod"
                 )
             '''
             if __debug__:
                 type_hints = typing.get_type_hints(_typecheckingstub__abdd735051ce598919313a259e3efc1aa635283b073d78fb9c4e876eef4ca8b8)
                 check_type(argname="argument cmaf_encryption_method", value=cmaf_encryption_method, expected_type=type_hints["cmaf_encryption_method"])
+                check_type(argname="argument ism_encryption_method", value=ism_encryption_method, expected_type=type_hints["ism_encryption_method"])
                 check_type(argname="argument ts_encryption_method", value=ts_encryption_method, expected_type=type_hints["ts_encryption_method"])
             self._values: typing.Dict[builtins.str, typing.Any] = {}
             if cmaf_encryption_method is not None:
                 self._values["cmaf_encryption_method"] = cmaf_encryption_method
+            if ism_encryption_method is not None:
+                self._values["ism_encryption_method"] = ism_encryption_method
             if ts_encryption_method is not None:
                 self._values["ts_encryption_method"] = ts_encryption_method
 
@@ -4016,6 +4101,17 @@ class CfnOriginEndpoint(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediapackagev2-originendpoint-encryptionmethod.html#cfn-mediapackagev2-originendpoint-encryptionmethod-cmafencryptionmethod
             '''
             result = self._values.get("cmaf_encryption_method")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        @builtins.property
+        def ism_encryption_method(self) -> typing.Optional[builtins.str]:
+            '''The encryption method used for Microsoft Smooth Streaming (MSS) content.
+
+            This specifies how the MSS segments are encrypted to protect the content during delivery to client players.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediapackagev2-originendpoint-encryptionmethod.html#cfn-mediapackagev2-originendpoint-encryptionmethod-ismencryptionmethod
+            '''
+            result = self._values.get("ism_encryption_method")
             return typing.cast(typing.Optional[builtins.str], result)
 
         @builtins.property
@@ -4079,6 +4175,7 @@ class CfnOriginEndpoint(
                 encryption_property = mediapackagev2.CfnOriginEndpoint.EncryptionProperty(
                     encryption_method=mediapackagev2.CfnOriginEndpoint.EncryptionMethodProperty(
                         cmaf_encryption_method="cmafEncryptionMethod",
+                        ism_encryption_method="ismEncryptionMethod",
                         ts_encryption_method="tsEncryptionMethod"
                     ),
                     speke_key_provider=mediapackagev2.CfnOriginEndpoint.SpekeKeyProviderProperty(
@@ -4821,6 +4918,124 @@ class CfnOriginEndpoint(
             )
 
     @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_mediapackagev2.CfnOriginEndpoint.MssManifestConfigurationProperty",
+        jsii_struct_bases=[],
+        name_mapping={
+            "manifest_name": "manifestName",
+            "filter_configuration": "filterConfiguration",
+            "manifest_layout": "manifestLayout",
+            "manifest_window_seconds": "manifestWindowSeconds",
+        },
+    )
+    class MssManifestConfigurationProperty:
+        def __init__(
+            self,
+            *,
+            manifest_name: builtins.str,
+            filter_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnOriginEndpoint.FilterConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            manifest_layout: typing.Optional[builtins.str] = None,
+            manifest_window_seconds: typing.Optional[jsii.Number] = None,
+        ) -> None:
+            '''
+            This includes all the settings and properties that define how the MSS content is packaged and delivered.
+
+            :param manifest_name:  This name is appended to the origin endpoint URL to create the unique path for accessing this specific MSS manifest.
+            :param filter_configuration:  
+            :param manifest_layout: 
+            :param manifest_window_seconds:  This represents the total amount of content available in the manifest at any given time.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediapackagev2-originendpoint-mssmanifestconfiguration.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_mediapackagev2 as mediapackagev2
+                
+                mss_manifest_configuration_property = mediapackagev2.CfnOriginEndpoint.MssManifestConfigurationProperty(
+                    manifest_name="manifestName",
+                
+                    # the properties below are optional
+                    filter_configuration=mediapackagev2.CfnOriginEndpoint.FilterConfigurationProperty(
+                        clip_start_time="clipStartTime",
+                        end="end",
+                        manifest_filter="manifestFilter",
+                        start="start",
+                        time_delay_seconds=123
+                    ),
+                    manifest_layout="manifestLayout",
+                    manifest_window_seconds=123
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__5eb842c2ab9f37a97b78623838b99a1722e0398b4d9b44ac0a32ee5e11a89b1c)
+                check_type(argname="argument manifest_name", value=manifest_name, expected_type=type_hints["manifest_name"])
+                check_type(argname="argument filter_configuration", value=filter_configuration, expected_type=type_hints["filter_configuration"])
+                check_type(argname="argument manifest_layout", value=manifest_layout, expected_type=type_hints["manifest_layout"])
+                check_type(argname="argument manifest_window_seconds", value=manifest_window_seconds, expected_type=type_hints["manifest_window_seconds"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "manifest_name": manifest_name,
+            }
+            if filter_configuration is not None:
+                self._values["filter_configuration"] = filter_configuration
+            if manifest_layout is not None:
+                self._values["manifest_layout"] = manifest_layout
+            if manifest_window_seconds is not None:
+                self._values["manifest_window_seconds"] = manifest_window_seconds
+
+        @builtins.property
+        def manifest_name(self) -> builtins.str:
+            '''
+            This name is appended to the origin endpoint URL to create the unique path for accessing this specific MSS manifest.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediapackagev2-originendpoint-mssmanifestconfiguration.html#cfn-mediapackagev2-originendpoint-mssmanifestconfiguration-manifestname
+            '''
+            result = self._values.get("manifest_name")
+            assert result is not None, "Required property 'manifest_name' is missing"
+            return typing.cast(builtins.str, result)
+
+        @builtins.property
+        def filter_configuration(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnOriginEndpoint.FilterConfigurationProperty"]]:
+            '''
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediapackagev2-originendpoint-mssmanifestconfiguration.html#cfn-mediapackagev2-originendpoint-mssmanifestconfiguration-filterconfiguration
+            '''
+            result = self._values.get("filter_configuration")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnOriginEndpoint.FilterConfigurationProperty"]], result)
+
+        @builtins.property
+        def manifest_layout(self) -> typing.Optional[builtins.str]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediapackagev2-originendpoint-mssmanifestconfiguration.html#cfn-mediapackagev2-originendpoint-mssmanifestconfiguration-manifestlayout
+            '''
+            result = self._values.get("manifest_layout")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        @builtins.property
+        def manifest_window_seconds(self) -> typing.Optional[jsii.Number]:
+            '''
+            This represents the total amount of content available in the manifest at any given time.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediapackagev2-originendpoint-mssmanifestconfiguration.html#cfn-mediapackagev2-originendpoint-mssmanifestconfiguration-manifestwindowseconds
+            '''
+            result = self._values.get("manifest_window_seconds")
+            return typing.cast(typing.Optional[jsii.Number], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "MssManifestConfigurationProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
         jsii_type="aws-cdk-lib.aws_mediapackagev2.CfnOriginEndpoint.ScteDashProperty",
         jsii_struct_bases=[],
         name_mapping={"ad_marker_dash": "adMarkerDash"},
@@ -5040,6 +5255,7 @@ class CfnOriginEndpoint(
                     encryption=mediapackagev2.CfnOriginEndpoint.EncryptionProperty(
                         encryption_method=mediapackagev2.CfnOriginEndpoint.EncryptionMethodProperty(
                             cmaf_encryption_method="cmafEncryptionMethod",
+                            ism_encryption_method="ismEncryptionMethod",
                             ts_encryption_method="tsEncryptionMethod"
                         ),
                         speke_key_provider=mediapackagev2.CfnOriginEndpoint.SpekeKeyProviderProperty(
@@ -5726,6 +5942,7 @@ def _typecheckingstub__d261c9ffb32b381ea679962b9a614498343af1f15dd4bdfdbf788de76
     force_endpoint_error_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnOriginEndpoint.ForceEndpointErrorConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     hls_manifests: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnOriginEndpoint.HlsManifestConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     low_latency_hls_manifests: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnOriginEndpoint.LowLatencyHlsManifestConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+    mss_manifests: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnOriginEndpoint.MssManifestConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     segment: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnOriginEndpoint.SegmentProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     startover_window_seconds: typing.Optional[jsii.Number] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -5958,6 +6175,7 @@ def _typecheckingstub__7dba3dfc2892c78e53aee7675a7a24aa25c0b29481aca92446e31a0d8
     force_endpoint_error_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnOriginEndpoint.ForceEndpointErrorConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     hls_manifests: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnOriginEndpoint.HlsManifestConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     low_latency_hls_manifests: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnOriginEndpoint.LowLatencyHlsManifestConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+    mss_manifests: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnOriginEndpoint.MssManifestConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     segment: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnOriginEndpoint.SegmentProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     startover_window_seconds: typing.Optional[jsii.Number] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -6027,6 +6245,12 @@ def _typecheckingstub__de310c90fc64be46bd788fedd55681eba63f450cc4f6537fe91890137
 
 def _typecheckingstub__0ab0da83ecaf5e8b2eb477e1a7bb2f955c99813829faeb44ce46e408a3739304(
     value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnOriginEndpoint.LowLatencyHlsManifestConfigurationProperty]]]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__05c39e22a8fee804960ccb55c9ca3411dc4e96823b582c9162b38b1ea0f78253(
+    value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnOriginEndpoint.MssManifestConfigurationProperty]]]],
 ) -> None:
     """Type checking stubs"""
     pass
@@ -6151,6 +6375,7 @@ def _typecheckingstub__5bec1eea406d4bb796486d5773d483a771df06a4cb391f44e1755e988
 def _typecheckingstub__abdd735051ce598919313a259e3efc1aa635283b073d78fb9c4e876eef4ca8b8(
     *,
     cmaf_encryption_method: typing.Optional[builtins.str] = None,
+    ism_encryption_method: typing.Optional[builtins.str] = None,
     ts_encryption_method: typing.Optional[builtins.str] = None,
 ) -> None:
     """Type checking stubs"""
@@ -6211,6 +6436,16 @@ def _typecheckingstub__7ba3db62514b88b8da1b21ec0b9459116f857508c0670adb698a120b3
     start_tag: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnOriginEndpoint.StartTagProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     url: typing.Optional[builtins.str] = None,
     url_encode_child_manifest: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__5eb842c2ab9f37a97b78623838b99a1722e0398b4d9b44ac0a32ee5e11a89b1c(
+    *,
+    manifest_name: builtins.str,
+    filter_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnOriginEndpoint.FilterConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    manifest_layout: typing.Optional[builtins.str] = None,
+    manifest_window_seconds: typing.Optional[jsii.Number] = None,
 ) -> None:
     """Type checking stubs"""
     pass

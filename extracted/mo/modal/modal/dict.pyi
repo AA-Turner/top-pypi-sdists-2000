@@ -448,6 +448,7 @@ class _Dict(modal._object._Object):
         namespace=None,
         environment_name: typing.Optional[str] = None,
         create_if_missing: bool = False,
+        client: typing.Optional[modal.client._Client] = None,
     ) -> _Dict:
         """Reference a named Dict, creating if necessary.
 
@@ -666,6 +667,7 @@ class Dict(modal.object.Object):
         namespace=None,
         environment_name: typing.Optional[str] = None,
         create_if_missing: bool = False,
+        client: typing.Optional[modal.client.Client] = None,
     ) -> Dict:
         """Reference a named Dict, creating if necessary.
 

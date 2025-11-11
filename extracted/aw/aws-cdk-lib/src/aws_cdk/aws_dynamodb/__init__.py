@@ -1584,8 +1584,6 @@ class CapacityMode(enum.Enum):
         "replicas": "replicas",
         "billing_mode": "billingMode",
         "global_secondary_indexes": "globalSecondaryIndexes",
-        "global_table_settings_replication_mode": "globalTableSettingsReplicationMode",
-        "global_table_source_arn": "globalTableSourceArn",
         "global_table_witnesses": "globalTableWitnesses",
         "local_secondary_indexes": "localSecondaryIndexes",
         "multi_region_consistency": "multiRegionConsistency",
@@ -1607,8 +1605,6 @@ class CfnGlobalTableProps:
         replicas: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnGlobalTable.ReplicaSpecificationProperty", typing.Dict[builtins.str, typing.Any]]]]],
         billing_mode: typing.Optional[builtins.str] = None,
         global_secondary_indexes: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnGlobalTable.GlobalSecondaryIndexProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        global_table_settings_replication_mode: typing.Optional[builtins.str] = None,
-        global_table_source_arn: typing.Optional[builtins.str] = None,
         global_table_witnesses: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnGlobalTable.GlobalTableWitnessProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         local_secondary_indexes: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnGlobalTable.LocalSecondaryIndexProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         multi_region_consistency: typing.Optional[builtins.str] = None,
@@ -1627,8 +1623,6 @@ class CfnGlobalTableProps:
         :param replicas: Specifies the list of replicas for your global table. The list must contain at least one element, the region where the stack defining the global table is deployed. For example, if you define your table in a stack deployed to us-east-1, you must have an entry in ``Replicas`` with the region us-east-1. You cannot remove the replica in the stack region. .. epigraph:: Adding a replica might take a few minutes for an empty table, or up to several hours for large tables. If you want to add or remove a replica, we recommend submitting an ``UpdateStack`` operation containing only that change. If you add or delete a replica during an update, we recommend that you don't update any other resources. If your stack fails to update and is rolled back while adding a new replica, you might need to manually delete the replica. You can create a new global table with as many replicas as needed. You can add or remove replicas after table creation, but you can only add or remove a single replica in each update. For Multi-Region Strong Consistency (MRSC), you can add or remove up to 3 replicas, or 2 replicas plus a witness Region.
         :param billing_mode: Specifies how you are charged for read and write throughput and how you manage capacity. Valid values are:. - ``PAY_PER_REQUEST`` - ``PROVISIONED`` All replicas in your global table will have the same billing mode. If you use ``PROVISIONED`` billing mode, you must provide an auto scaling configuration via the ``WriteProvisionedThroughputSettings`` property. The default value of this property is ``PROVISIONED`` .
         :param global_secondary_indexes: Global secondary indexes to be created on the global table. You can create up to 20 global secondary indexes. Each replica in your global table will have the same global secondary index settings. You can only create or delete one global secondary index in a single stack operation. Since the backfilling of an index could take a long time, CloudFormation does not wait for the index to become active. If a stack operation rolls back, CloudFormation might not delete an index that has been added. In that case, you will need to delete the index manually.
-        :param global_table_settings_replication_mode: 
-        :param global_table_source_arn: 
         :param global_table_witnesses: The list of witnesses of the MRSC global table. Only one witness Region can be configured per MRSC global table.
         :param local_secondary_indexes: Local secondary indexes to be created on the table. You can create up to five local secondary indexes. Each index is scoped to a given hash key value. The size of each hash key can be up to 10 gigabytes. Each replica in your global table will have the same local secondary index settings.
         :param multi_region_consistency: Specifies the consistency mode for a new global table. You can specify one of the following consistency modes: - ``EVENTUAL`` : Configures a new global table for multi-Region eventual consistency (MREC). - ``STRONG`` : Configures a new global table for multi-Region strong consistency (MRSC). If you don't specify this field, the global table consistency mode defaults to ``EVENTUAL`` . For more information about global tables consistency modes, see `Consistency modes <https://docs.aws.amazon.com/V2globaltables_HowItWorks.html#V2globaltables_HowItWorks.consistency-modes>`_ in DynamoDB developer guide.
@@ -1791,8 +1785,6 @@ class CfnGlobalTableProps:
                         )
                     )
                 )],
-                global_table_settings_replication_mode="globalTableSettingsReplicationMode",
-                global_table_source_arn="globalTableSourceArn",
                 global_table_witnesses=[dynamodb.CfnGlobalTable.GlobalTableWitnessProperty(
                     region="region"
                 )],
@@ -1857,8 +1849,6 @@ class CfnGlobalTableProps:
             check_type(argname="argument replicas", value=replicas, expected_type=type_hints["replicas"])
             check_type(argname="argument billing_mode", value=billing_mode, expected_type=type_hints["billing_mode"])
             check_type(argname="argument global_secondary_indexes", value=global_secondary_indexes, expected_type=type_hints["global_secondary_indexes"])
-            check_type(argname="argument global_table_settings_replication_mode", value=global_table_settings_replication_mode, expected_type=type_hints["global_table_settings_replication_mode"])
-            check_type(argname="argument global_table_source_arn", value=global_table_source_arn, expected_type=type_hints["global_table_source_arn"])
             check_type(argname="argument global_table_witnesses", value=global_table_witnesses, expected_type=type_hints["global_table_witnesses"])
             check_type(argname="argument local_secondary_indexes", value=local_secondary_indexes, expected_type=type_hints["local_secondary_indexes"])
             check_type(argname="argument multi_region_consistency", value=multi_region_consistency, expected_type=type_hints["multi_region_consistency"])
@@ -1878,10 +1868,6 @@ class CfnGlobalTableProps:
             self._values["billing_mode"] = billing_mode
         if global_secondary_indexes is not None:
             self._values["global_secondary_indexes"] = global_secondary_indexes
-        if global_table_settings_replication_mode is not None:
-            self._values["global_table_settings_replication_mode"] = global_table_settings_replication_mode
-        if global_table_source_arn is not None:
-            self._values["global_table_source_arn"] = global_table_source_arn
         if global_table_witnesses is not None:
             self._values["global_table_witnesses"] = global_table_witnesses
         if local_secondary_indexes is not None:
@@ -1978,22 +1964,6 @@ class CfnGlobalTableProps:
         '''
         result = self._values.get("global_secondary_indexes")
         return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnGlobalTable.GlobalSecondaryIndexProperty"]]]], result)
-
-    @builtins.property
-    def global_table_settings_replication_mode(self) -> typing.Optional[builtins.str]:
-        '''
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-dynamodb-globaltable.html#cfn-dynamodb-globaltable-globaltablesettingsreplicationmode
-        '''
-        result = self._values.get("global_table_settings_replication_mode")
-        return typing.cast(typing.Optional[builtins.str], result)
-
-    @builtins.property
-    def global_table_source_arn(self) -> typing.Optional[builtins.str]:
-        '''
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-dynamodb-globaltable.html#cfn-dynamodb-globaltable-globaltablesourcearn
-        '''
-        result = self._values.get("global_table_source_arn")
-        return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
     def global_table_witnesses(
@@ -2151,7 +2121,6 @@ class CfnGlobalTableProps:
         "contributor_insights_specification": "contributorInsightsSpecification",
         "deletion_protection_enabled": "deletionProtectionEnabled",
         "global_secondary_indexes": "globalSecondaryIndexes",
-        "global_table_settings_replication_mode": "globalTableSettingsReplicationMode",
         "import_source_specification": "importSourceSpecification",
         "kinesis_stream_specification": "kinesisStreamSpecification",
         "local_secondary_indexes": "localSecondaryIndexes",
@@ -2178,7 +2147,6 @@ class CfnTableProps:
         contributor_insights_specification: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTable.ContributorInsightsSpecificationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         deletion_protection_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
         global_secondary_indexes: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTable.GlobalSecondaryIndexProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        global_table_settings_replication_mode: typing.Optional[builtins.str] = None,
         import_source_specification: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTable.ImportSourceSpecificationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         kinesis_stream_specification: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTable.KinesisStreamSpecificationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         local_secondary_indexes: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTable.LocalSecondaryIndexProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
@@ -2202,7 +2170,6 @@ class CfnTableProps:
         :param contributor_insights_specification: The settings used to specify whether to enable CloudWatch Contributor Insights for the table and define which events to monitor.
         :param deletion_protection_enabled: Determines if a table is protected from deletion. When enabled, the table cannot be deleted by any user or process. This setting is disabled by default. For more information, see `Using deletion protection <https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/WorkingWithTables.Basics.html#WorkingWithTables.Basics.DeletionProtection>`_ in the *Amazon DynamoDB Developer Guide* .
         :param global_secondary_indexes: Global secondary indexes to be created on the table. You can create up to 20 global secondary indexes. .. epigraph:: If you update a table to include a new global secondary index, AWS CloudFormation initiates the index creation and then proceeds with the stack update. AWS CloudFormation doesn't wait for the index to complete creation because the backfilling phase can take a long time, depending on the size of the table. You can't use the index or update the table until the index's status is ``ACTIVE`` . You can track its status by using the DynamoDB `DescribeTable <https://docs.aws.amazon.com/cli/latest/reference/dynamodb/describe-table.html>`_ command. If you add or delete an index during an update, we recommend that you don't update any other resources. If your stack fails to update and is rolled back while adding a new index, you must manually delete the index. Updates are not supported. The following are exceptions: - If you update either the contributor insights specification or the provisioned throughput values of global secondary indexes, you can update the table without interruption. - You can delete or add one global secondary index without interruption. If you do both in the same update (for example, by changing the index's logical ID), the update fails.
-        :param global_table_settings_replication_mode: 
         :param import_source_specification: Specifies the properties of data being imported from the S3 bucket source to the" table. .. epigraph:: If you specify the ``ImportSourceSpecification`` property, and also specify either the ``StreamSpecification`` , the ``TableClass`` property, the ``DeletionProtectionEnabled`` property, or the ``WarmThroughput`` property, the IAM entity creating/updating stack must have ``UpdateTable`` permission.
         :param kinesis_stream_specification: The Kinesis Data Streams configuration for the specified table.
         :param local_secondary_indexes: Local secondary indexes to be created on the table. You can create up to 5 local secondary indexes. Each index is scoped to a given hash key value. The size of each hash key can be up to 10 gigabytes.
@@ -2279,7 +2246,6 @@ class CfnTableProps:
                         write_units_per_second=123
                     )
                 )],
-                global_table_settings_replication_mode="globalTableSettingsReplicationMode",
                 import_source_specification=dynamodb.CfnTable.ImportSourceSpecificationProperty(
                     input_format="inputFormat",
                     s3_bucket_source=dynamodb.CfnTable.S3BucketSourceProperty(
@@ -2372,7 +2338,6 @@ class CfnTableProps:
             check_type(argname="argument contributor_insights_specification", value=contributor_insights_specification, expected_type=type_hints["contributor_insights_specification"])
             check_type(argname="argument deletion_protection_enabled", value=deletion_protection_enabled, expected_type=type_hints["deletion_protection_enabled"])
             check_type(argname="argument global_secondary_indexes", value=global_secondary_indexes, expected_type=type_hints["global_secondary_indexes"])
-            check_type(argname="argument global_table_settings_replication_mode", value=global_table_settings_replication_mode, expected_type=type_hints["global_table_settings_replication_mode"])
             check_type(argname="argument import_source_specification", value=import_source_specification, expected_type=type_hints["import_source_specification"])
             check_type(argname="argument kinesis_stream_specification", value=kinesis_stream_specification, expected_type=type_hints["kinesis_stream_specification"])
             check_type(argname="argument local_secondary_indexes", value=local_secondary_indexes, expected_type=type_hints["local_secondary_indexes"])
@@ -2400,8 +2365,6 @@ class CfnTableProps:
             self._values["deletion_protection_enabled"] = deletion_protection_enabled
         if global_secondary_indexes is not None:
             self._values["global_secondary_indexes"] = global_secondary_indexes
-        if global_table_settings_replication_mode is not None:
-            self._values["global_table_settings_replication_mode"] = global_table_settings_replication_mode
         if import_source_specification is not None:
             self._values["import_source_specification"] = import_source_specification
         if kinesis_stream_specification is not None:
@@ -2521,14 +2484,6 @@ class CfnTableProps:
         '''
         result = self._values.get("global_secondary_indexes")
         return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnTable.GlobalSecondaryIndexProperty"]]]], result)
-
-    @builtins.property
-    def global_table_settings_replication_mode(self) -> typing.Optional[builtins.str]:
-        '''
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-dynamodb-table.html#cfn-dynamodb-table-globaltablesettingsreplicationmode
-        '''
-        result = self._values.get("global_table_settings_replication_mode")
-        return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
     def import_source_specification(
@@ -10665,8 +10620,6 @@ class CfnGlobalTable(
                     )
                 )
             )],
-            global_table_settings_replication_mode="globalTableSettingsReplicationMode",
-            global_table_source_arn="globalTableSourceArn",
             global_table_witnesses=[dynamodb.CfnGlobalTable.GlobalTableWitnessProperty(
                 region="region"
             )],
@@ -10735,8 +10688,6 @@ class CfnGlobalTable(
         replicas: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnGlobalTable.ReplicaSpecificationProperty", typing.Dict[builtins.str, typing.Any]]]]],
         billing_mode: typing.Optional[builtins.str] = None,
         global_secondary_indexes: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnGlobalTable.GlobalSecondaryIndexProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        global_table_settings_replication_mode: typing.Optional[builtins.str] = None,
-        global_table_source_arn: typing.Optional[builtins.str] = None,
         global_table_witnesses: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnGlobalTable.GlobalTableWitnessProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         local_secondary_indexes: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnGlobalTable.LocalSecondaryIndexProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         multi_region_consistency: typing.Optional[builtins.str] = None,
@@ -10756,8 +10707,6 @@ class CfnGlobalTable(
         :param replicas: Specifies the list of replicas for your global table. The list must contain at least one element, the region where the stack defining the global table is deployed. For example, if you define your table in a stack deployed to us-east-1, you must have an entry in ``Replicas`` with the region us-east-1. You cannot remove the replica in the stack region. .. epigraph:: Adding a replica might take a few minutes for an empty table, or up to several hours for large tables. If you want to add or remove a replica, we recommend submitting an ``UpdateStack`` operation containing only that change. If you add or delete a replica during an update, we recommend that you don't update any other resources. If your stack fails to update and is rolled back while adding a new replica, you might need to manually delete the replica. You can create a new global table with as many replicas as needed. You can add or remove replicas after table creation, but you can only add or remove a single replica in each update. For Multi-Region Strong Consistency (MRSC), you can add or remove up to 3 replicas, or 2 replicas plus a witness Region.
         :param billing_mode: Specifies how you are charged for read and write throughput and how you manage capacity. Valid values are:. - ``PAY_PER_REQUEST`` - ``PROVISIONED`` All replicas in your global table will have the same billing mode. If you use ``PROVISIONED`` billing mode, you must provide an auto scaling configuration via the ``WriteProvisionedThroughputSettings`` property. The default value of this property is ``PROVISIONED`` .
         :param global_secondary_indexes: Global secondary indexes to be created on the global table. You can create up to 20 global secondary indexes. Each replica in your global table will have the same global secondary index settings. You can only create or delete one global secondary index in a single stack operation. Since the backfilling of an index could take a long time, CloudFormation does not wait for the index to become active. If a stack operation rolls back, CloudFormation might not delete an index that has been added. In that case, you will need to delete the index manually.
-        :param global_table_settings_replication_mode: 
-        :param global_table_source_arn: 
         :param global_table_witnesses: The list of witnesses of the MRSC global table. Only one witness Region can be configured per MRSC global table.
         :param local_secondary_indexes: Local secondary indexes to be created on the table. You can create up to five local secondary indexes. Each index is scoped to a given hash key value. The size of each hash key can be up to 10 gigabytes. Each replica in your global table will have the same local secondary index settings.
         :param multi_region_consistency: Specifies the consistency mode for a new global table. You can specify one of the following consistency modes: - ``EVENTUAL`` : Configures a new global table for multi-Region eventual consistency (MREC). - ``STRONG`` : Configures a new global table for multi-Region strong consistency (MRSC). If you don't specify this field, the global table consistency mode defaults to ``EVENTUAL`` . For more information about global tables consistency modes, see `Consistency modes <https://docs.aws.amazon.com/V2globaltables_HowItWorks.html#V2globaltables_HowItWorks.consistency-modes>`_ in DynamoDB developer guide.
@@ -10779,8 +10728,6 @@ class CfnGlobalTable(
             replicas=replicas,
             billing_mode=billing_mode,
             global_secondary_indexes=global_secondary_indexes,
-            global_table_settings_replication_mode=global_table_settings_replication_mode,
-            global_table_source_arn=global_table_source_arn,
             global_table_witnesses=global_table_witnesses,
             local_secondary_indexes=local_secondary_indexes,
             multi_region_consistency=multi_region_consistency,
@@ -10958,33 +10905,6 @@ class CfnGlobalTable(
             type_hints = typing.get_type_hints(_typecheckingstub__484436e7e1867a9d477f3fa0bdee0dfdfb2646ba7497c71d398076d9872d332b)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
         jsii.set(self, "globalSecondaryIndexes", value) # pyright: ignore[reportArgumentType]
-
-    @builtins.property
-    @jsii.member(jsii_name="globalTableSettingsReplicationMode")
-    def global_table_settings_replication_mode(self) -> typing.Optional[builtins.str]:
-        return typing.cast(typing.Optional[builtins.str], jsii.get(self, "globalTableSettingsReplicationMode"))
-
-    @global_table_settings_replication_mode.setter
-    def global_table_settings_replication_mode(
-        self,
-        value: typing.Optional[builtins.str],
-    ) -> None:
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__7075d72ca27b36654b7a5e5c93fa5400bb9ed8ec640703134ddb5bd29f15b566)
-            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
-        jsii.set(self, "globalTableSettingsReplicationMode", value) # pyright: ignore[reportArgumentType]
-
-    @builtins.property
-    @jsii.member(jsii_name="globalTableSourceArn")
-    def global_table_source_arn(self) -> typing.Optional[builtins.str]:
-        return typing.cast(typing.Optional[builtins.str], jsii.get(self, "globalTableSourceArn"))
-
-    @global_table_source_arn.setter
-    def global_table_source_arn(self, value: typing.Optional[builtins.str]) -> None:
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__b7289daf8c207efd37cb3d7fa1fd9c044421e2990cb9ec991503208d45d34503)
-            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
-        jsii.set(self, "globalTableSourceArn", value) # pyright: ignore[reportArgumentType]
 
     @builtins.property
     @jsii.member(jsii_name="globalTableWitnesses")
@@ -13588,7 +13508,6 @@ class CfnTable(
                     write_units_per_second=123
                 )
             )],
-            global_table_settings_replication_mode="globalTableSettingsReplicationMode",
             import_source_specification=dynamodb.CfnTable.ImportSourceSpecificationProperty(
                 input_format="inputFormat",
                 s3_bucket_source=dynamodb.CfnTable.S3BucketSourceProperty(
@@ -13685,7 +13604,6 @@ class CfnTable(
         contributor_insights_specification: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTable.ContributorInsightsSpecificationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         deletion_protection_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
         global_secondary_indexes: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTable.GlobalSecondaryIndexProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        global_table_settings_replication_mode: typing.Optional[builtins.str] = None,
         import_source_specification: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTable.ImportSourceSpecificationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         kinesis_stream_specification: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTable.KinesisStreamSpecificationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         local_secondary_indexes: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTable.LocalSecondaryIndexProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
@@ -13710,7 +13628,6 @@ class CfnTable(
         :param contributor_insights_specification: The settings used to specify whether to enable CloudWatch Contributor Insights for the table and define which events to monitor.
         :param deletion_protection_enabled: Determines if a table is protected from deletion. When enabled, the table cannot be deleted by any user or process. This setting is disabled by default. For more information, see `Using deletion protection <https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/WorkingWithTables.Basics.html#WorkingWithTables.Basics.DeletionProtection>`_ in the *Amazon DynamoDB Developer Guide* .
         :param global_secondary_indexes: Global secondary indexes to be created on the table. You can create up to 20 global secondary indexes. .. epigraph:: If you update a table to include a new global secondary index, AWS CloudFormation initiates the index creation and then proceeds with the stack update. AWS CloudFormation doesn't wait for the index to complete creation because the backfilling phase can take a long time, depending on the size of the table. You can't use the index or update the table until the index's status is ``ACTIVE`` . You can track its status by using the DynamoDB `DescribeTable <https://docs.aws.amazon.com/cli/latest/reference/dynamodb/describe-table.html>`_ command. If you add or delete an index during an update, we recommend that you don't update any other resources. If your stack fails to update and is rolled back while adding a new index, you must manually delete the index. Updates are not supported. The following are exceptions: - If you update either the contributor insights specification or the provisioned throughput values of global secondary indexes, you can update the table without interruption. - You can delete or add one global secondary index without interruption. If you do both in the same update (for example, by changing the index's logical ID), the update fails.
-        :param global_table_settings_replication_mode: 
         :param import_source_specification: Specifies the properties of data being imported from the S3 bucket source to the" table. .. epigraph:: If you specify the ``ImportSourceSpecification`` property, and also specify either the ``StreamSpecification`` , the ``TableClass`` property, the ``DeletionProtectionEnabled`` property, or the ``WarmThroughput`` property, the IAM entity creating/updating stack must have ``UpdateTable`` permission.
         :param kinesis_stream_specification: The Kinesis Data Streams configuration for the specified table.
         :param local_secondary_indexes: Local secondary indexes to be created on the table. You can create up to 5 local secondary indexes. Each index is scoped to a given hash key value. The size of each hash key can be up to 10 gigabytes.
@@ -13737,7 +13654,6 @@ class CfnTable(
             contributor_insights_specification=contributor_insights_specification,
             deletion_protection_enabled=deletion_protection_enabled,
             global_secondary_indexes=global_secondary_indexes,
-            global_table_settings_replication_mode=global_table_settings_replication_mode,
             import_source_specification=import_source_specification,
             kinesis_stream_specification=kinesis_stream_specification,
             local_secondary_indexes=local_secondary_indexes,
@@ -13972,21 +13888,6 @@ class CfnTable(
             type_hints = typing.get_type_hints(_typecheckingstub__97df696d6ba063acb98f58f09adb6516d0fc1d41d4d4a37c39f7ffac09e0d5cd)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
         jsii.set(self, "globalSecondaryIndexes", value) # pyright: ignore[reportArgumentType]
-
-    @builtins.property
-    @jsii.member(jsii_name="globalTableSettingsReplicationMode")
-    def global_table_settings_replication_mode(self) -> typing.Optional[builtins.str]:
-        return typing.cast(typing.Optional[builtins.str], jsii.get(self, "globalTableSettingsReplicationMode"))
-
-    @global_table_settings_replication_mode.setter
-    def global_table_settings_replication_mode(
-        self,
-        value: typing.Optional[builtins.str],
-    ) -> None:
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__1d34e371f6d71983fa9056340ded9469b96339ea1a61a0d683e413cdadd07542)
-            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
-        jsii.set(self, "globalTableSettingsReplicationMode", value) # pyright: ignore[reportArgumentType]
 
     @builtins.property
     @jsii.member(jsii_name="importSourceSpecification")
@@ -17657,8 +17558,6 @@ def _typecheckingstub__ca0383ad91536c26961e85e52a3e6a3d2d74db3c4d430cbbe3d9f42e2
     replicas: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnGlobalTable.ReplicaSpecificationProperty, typing.Dict[builtins.str, typing.Any]]]]],
     billing_mode: typing.Optional[builtins.str] = None,
     global_secondary_indexes: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnGlobalTable.GlobalSecondaryIndexProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
-    global_table_settings_replication_mode: typing.Optional[builtins.str] = None,
-    global_table_source_arn: typing.Optional[builtins.str] = None,
     global_table_witnesses: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnGlobalTable.GlobalTableWitnessProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     local_secondary_indexes: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnGlobalTable.LocalSecondaryIndexProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     multi_region_consistency: typing.Optional[builtins.str] = None,
@@ -17681,7 +17580,6 @@ def _typecheckingstub__0b7f8e29621d526383ce725f2daafbe00b52cfe2381995edac86b72a6
     contributor_insights_specification: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTable.ContributorInsightsSpecificationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     deletion_protection_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     global_secondary_indexes: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTable.GlobalSecondaryIndexProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
-    global_table_settings_replication_mode: typing.Optional[builtins.str] = None,
     import_source_specification: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTable.ImportSourceSpecificationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     kinesis_stream_specification: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTable.KinesisStreamSpecificationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     local_secondary_indexes: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTable.LocalSecondaryIndexProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
@@ -18380,8 +18278,6 @@ def _typecheckingstub__751414def1994180982879a700bdaa6afcf528def91a672904946db1b
     replicas: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnGlobalTable.ReplicaSpecificationProperty, typing.Dict[builtins.str, typing.Any]]]]],
     billing_mode: typing.Optional[builtins.str] = None,
     global_secondary_indexes: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnGlobalTable.GlobalSecondaryIndexProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
-    global_table_settings_replication_mode: typing.Optional[builtins.str] = None,
-    global_table_source_arn: typing.Optional[builtins.str] = None,
     global_table_witnesses: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnGlobalTable.GlobalTableWitnessProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     local_secondary_indexes: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnGlobalTable.LocalSecondaryIndexProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     multi_region_consistency: typing.Optional[builtins.str] = None,
@@ -18434,18 +18330,6 @@ def _typecheckingstub__b7a91e461bd5e49ff4dc2350ae1ceae8597a286d7e21db96c7ec976ba
 
 def _typecheckingstub__484436e7e1867a9d477f3fa0bdee0dfdfb2646ba7497c71d398076d9872d332b(
     value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnGlobalTable.GlobalSecondaryIndexProperty]]]],
-) -> None:
-    """Type checking stubs"""
-    pass
-
-def _typecheckingstub__7075d72ca27b36654b7a5e5c93fa5400bb9ed8ec640703134ddb5bd29f15b566(
-    value: typing.Optional[builtins.str],
-) -> None:
-    """Type checking stubs"""
-    pass
-
-def _typecheckingstub__b7289daf8c207efd37cb3d7fa1fd9c044421e2990cb9ec991503208d45d34503(
-    value: typing.Optional[builtins.str],
 ) -> None:
     """Type checking stubs"""
     pass
@@ -18726,7 +18610,6 @@ def _typecheckingstub__9c4a83992df200bfde2ccfe129994eeacab105432a2509473861feb73
     contributor_insights_specification: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTable.ContributorInsightsSpecificationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     deletion_protection_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     global_secondary_indexes: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTable.GlobalSecondaryIndexProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
-    global_table_settings_replication_mode: typing.Optional[builtins.str] = None,
     import_source_specification: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTable.ImportSourceSpecificationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     kinesis_stream_specification: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTable.KinesisStreamSpecificationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     local_secondary_indexes: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTable.LocalSecondaryIndexProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
@@ -18805,12 +18688,6 @@ def _typecheckingstub__d91900a3abfeb455a4849c52c7f1d034e09b1b0ceb4a50b598d8c938f
 
 def _typecheckingstub__97df696d6ba063acb98f58f09adb6516d0fc1d41d4d4a37c39f7ffac09e0d5cd(
     value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnTable.GlobalSecondaryIndexProperty]]]],
-) -> None:
-    """Type checking stubs"""
-    pass
-
-def _typecheckingstub__1d34e371f6d71983fa9056340ded9469b96339ea1a61a0d683e413cdadd07542(
-    value: typing.Optional[builtins.str],
 ) -> None:
     """Type checking stubs"""
     pass

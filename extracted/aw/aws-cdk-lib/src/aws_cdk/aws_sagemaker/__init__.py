@@ -7028,7 +7028,7 @@ class CfnNotebookInstanceProps:
         :param kms_key_id: The Amazon Resource Name (ARN) of a AWS Key Management Service key that SageMaker AI uses to encrypt data on the storage volume attached to your notebook instance. The KMS key you provide must be enabled. For information, see `Enabling and Disabling Keys <https://docs.aws.amazon.com/kms/latest/developerguide/enabling-keys.html>`_ in the *AWS Key Management Service Developer Guide* .
         :param lifecycle_config_name: The name of a lifecycle configuration to associate with the notebook instance. For information about lifecycle configurations, see `Customize a Notebook Instance <https://docs.aws.amazon.com/sagemaker/latest/dg/notebook-lifecycle-config.html>`_ in the *Amazon SageMaker Developer Guide* .
         :param notebook_instance_name: The name of the new notebook instance.
-        :param platform_identifier: The platform identifier of the notebook instance runtime environment.
+        :param platform_identifier: The platform identifier of the notebook instance runtime environment. The default value is ``notebook-al2-v2`` .
         :param root_access: Whether root access is enabled or disabled for users of the notebook instance. The default value is ``Enabled`` . .. epigraph:: Lifecycle configurations need root access to be able to set up a notebook instance. Because of this, lifecycle configurations associated with a notebook instance always run with root access even if you disable root access for users.
         :param security_group_ids: The VPC security group IDs, in the form sg-xxxxxxxx. The security groups must be for the same VPC as specified in the subnet.
         :param subnet_id: The ID of the subnet in a VPC to which you would like to have a connectivity from your ML compute instance.
@@ -7245,6 +7245,8 @@ class CfnNotebookInstanceProps:
     @builtins.property
     def platform_identifier(self) -> typing.Optional[builtins.str]:
         '''The platform identifier of the notebook instance runtime environment.
+
+        The default value is ``notebook-al2-v2`` .
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-sagemaker-notebookinstance.html#cfn-sagemaker-notebookinstance-platformidentifier
         '''
@@ -49159,7 +49161,7 @@ class CfnNotebookInstance(
         :param kms_key_id: The Amazon Resource Name (ARN) of a AWS Key Management Service key that SageMaker AI uses to encrypt data on the storage volume attached to your notebook instance. The KMS key you provide must be enabled. For information, see `Enabling and Disabling Keys <https://docs.aws.amazon.com/kms/latest/developerguide/enabling-keys.html>`_ in the *AWS Key Management Service Developer Guide* .
         :param lifecycle_config_name: The name of a lifecycle configuration to associate with the notebook instance. For information about lifecycle configurations, see `Customize a Notebook Instance <https://docs.aws.amazon.com/sagemaker/latest/dg/notebook-lifecycle-config.html>`_ in the *Amazon SageMaker Developer Guide* .
         :param notebook_instance_name: The name of the new notebook instance.
-        :param platform_identifier: The platform identifier of the notebook instance runtime environment.
+        :param platform_identifier: The platform identifier of the notebook instance runtime environment. The default value is ``notebook-al2-v2`` .
         :param root_access: Whether root access is enabled or disabled for users of the notebook instance. The default value is ``Enabled`` . .. epigraph:: Lifecycle configurations need root access to be able to set up a notebook instance. Because of this, lifecycle configurations associated with a notebook instance always run with root access even if you disable root access for users.
         :param security_group_ids: The VPC security group IDs, in the form sg-xxxxxxxx. The security groups must be for the same VPC as specified in the subnet.
         :param subnet_id: The ID of the subnet in a VPC to which you would like to have a connectivity from your ML compute instance.
@@ -52708,7 +52710,7 @@ class CfnProcessingJob(
             :param s3_uri: The URI of the Amazon S3 prefix Amazon SageMaker downloads data required to run a processing job.
             :param local_path: The local path in your container where you want Amazon SageMaker to write input data to. ``LocalPath`` is an absolute path to the input data and must begin with ``/opt/ml/processing/`` . ``LocalPath`` is a required parameter when ``AppManaged`` is ``False`` (default).
             :param s3_compression_type: Whether to GZIP-decompress the data in Amazon S3 as it is streamed into the processing container. ``Gzip`` can only be used when ``Pipe`` mode is specified as the ``S3InputMode`` . In ``Pipe`` mode, Amazon SageMaker streams input data from the source directly to your container without using the EBS volume.
-            :param s3_data_distribution_type: Whether to distribute the data from Amazon S3 to all processing instances with ``FullyReplicated`` , or whether the data from Amazon S3 is shared by Amazon S3 key, downloading one shard of data to each processing instance.
+            :param s3_data_distribution_type: Whether to distribute the data from Amazon S3 to all processing instances with ``FullyReplicated`` , or whether the data from Amazon S3 is sharded by Amazon S3 key, downloading one shard of data to each processing instance.
             :param s3_input_mode: Whether to use ``File`` or ``Pipe`` input mode. In File mode, Amazon SageMaker copies the data from the input source onto the local ML storage volume before starting your processing container. This is the most commonly used input mode. In ``Pipe`` mode, Amazon SageMaker streams input data from the source directly to your processing container into named pipes without using the ML storage volume.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-sagemaker-processingjob-s3input.html
@@ -52798,7 +52800,7 @@ class CfnProcessingJob(
 
         @builtins.property
         def s3_data_distribution_type(self) -> typing.Optional[builtins.str]:
-            '''Whether to distribute the data from Amazon S3 to all processing instances with ``FullyReplicated`` , or whether the data from Amazon S3 is shared by Amazon S3 key, downloading one shard of data to each processing instance.
+            '''Whether to distribute the data from Amazon S3 to all processing instances with ``FullyReplicated`` , or whether the data from Amazon S3 is sharded by Amazon S3 key, downloading one shard of data to each processing instance.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-sagemaker-processingjob-s3input.html#cfn-sagemaker-processingjob-s3input-s3datadistributiontype
             '''

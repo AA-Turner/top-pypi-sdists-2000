@@ -182,26 +182,26 @@ class CfnBrokerProps:
     ) -> None:
         '''Properties for defining a ``CfnBroker``.
 
-        :param broker_name: The name of the broker. This value must be unique in your AWS account , 1-50 characters long, must contain only letters, numbers, dashes, and underscores, and must not contain white spaces, brackets, wildcard characters, or special characters. .. epigraph:: Do not add personally identifiable information (PII) or other confidential or sensitive information in broker names. Broker names are accessible to other AWS services, including C CloudWatch Logs . Broker names are not intended to be used for private or sensitive data.
-        :param deployment_mode: The deployment mode of the broker. Available values:. - ``SINGLE_INSTANCE`` - ``ACTIVE_STANDBY_MULTI_AZ`` - ``CLUSTER_MULTI_AZ``
-        :param engine_type: The type of broker engine. Currently, Amazon MQ supports ``ACTIVEMQ`` and ``RABBITMQ`` .
-        :param host_instance_type: The broker's instance type.
-        :param publicly_accessible: Enables connections from applications outside of the VPC that hosts the broker's subnets.
+        :param broker_name: Required. The broker's name. This value must be unique in your AWS account , 1-50 characters long, must contain only letters, numbers, dashes, and underscores, and must not contain white spaces, brackets, wildcard characters, or special characters. .. epigraph:: Do not add personally identifiable information (PII) or other confidential or sensitive information in broker names. Broker names are accessible to other AWS services, including CloudWatch Logs . Broker names are not intended to be used for private or sensitive data.
+        :param deployment_mode: Required. The broker's deployment mode.
+        :param engine_type: Required. The type of broker engine. Currently, Amazon MQ supports ``ACTIVEMQ`` and ``RABBITMQ`` .
+        :param host_instance_type: Required. The broker's instance type.
+        :param publicly_accessible: Enables connections from applications outside of the VPC that hosts the broker's subnets. Set to ``false`` by default, if no value is provided.
         :param authentication_strategy: Optional. The authentication strategy used to secure the broker. The default is ``SIMPLE`` .
-        :param auto_minor_version_upgrade: Enables automatic upgrades to new minor versions for brokers, as new broker engine versions are released and supported by Amazon MQ. Automatic upgrades occur during the scheduled maintenance window of the broker or after a manual broker reboot.
-        :param configuration: A list of information about the configuration. Does not apply to RabbitMQ brokers.
+        :param auto_minor_version_upgrade: Enables automatic upgrades to new patch versions for brokers as new versions are released and supported by Amazon MQ. Automatic upgrades occur during the scheduled maintenance window or after a manual broker reboot. Set to ``true`` by default, if no value is specified. .. epigraph:: Must be set to ``true`` for ActiveMQ brokers version 5.18 and above and for RabbitMQ brokers version 3.13 and above.
+        :param configuration: A list of information about the configuration.
         :param data_replication_mode: Defines whether this broker is a part of a data replication pair.
         :param data_replication_primary_broker_arn: The Amazon Resource Name (ARN) of the primary broker that is used to replicate data from in a data replication pair, and is applied to the replica broker. Must be set when dataReplicationMode is set to CRDR.
-        :param encryption_options: Encryption options for the broker. Does not apply to RabbitMQ brokers.
-        :param engine_version: The version of the broker engine. For a list of supported engine versions, see `Engine <https://docs.aws.amazon.com/amazon-mq/latest/developer-guide/broker-engine.html>`_ in the *Amazon MQ Developer Guide* .
+        :param encryption_options: Encryption options for the broker.
+        :param engine_version: The broker engine version. Defaults to the latest available version for the specified broker engine type. For more information, see the `ActiveMQ version management <https://docs.aws.amazon.com//amazon-mq/latest/developer-guide/activemq-version-management.html>`_ and the `RabbitMQ version management <https://docs.aws.amazon.com//amazon-mq/latest/developer-guide/rabbitmq-version-management.html>`_ sections in the Amazon MQ Developer Guide.
         :param ldap_server_metadata: Optional. The metadata of the LDAP server used to authenticate and authorize connections to the broker. Does not apply to RabbitMQ brokers.
         :param logs: Enables Amazon CloudWatch logging for brokers.
-        :param maintenance_window_start_time: The scheduled time period relative to UTC during which Amazon MQ begins to apply pending updates or patches to the broker.
+        :param maintenance_window_start_time: The parameters that determine the WeeklyStartTime.
         :param security_groups: The list of rules (1 minimum, 125 maximum) that authorize connections to brokers.
         :param storage_type: The broker's storage type.
-        :param subnet_ids: The list of groups that define which subnets and IP ranges the broker can use from different Availability Zones. If you specify more than one subnet, the subnets must be in different Availability Zones. Amazon MQ will not be able to create VPC endpoints for your broker with multiple subnets in the same Availability Zone. A SINGLE_INSTANCE deployment requires one subnet (for example, the default subnet). An ACTIVE_STANDBY_MULTI_AZ deployment (ACTIVEMQ) requires two subnets. A CLUSTER_MULTI_AZ deployment (RABBITMQ) has no subnet requirements when deployed with public accessibility, deployment without public accessibility requires at least one subnet. .. epigraph:: If you specify subnets in a shared VPC for a RabbitMQ broker, the associated VPC to which the specified subnets belong must be owned by your AWS account . Amazon MQ will not be able to create VPC enpoints in VPCs that are not owned by your AWS account .
-        :param tags: An array of key-value pairs. For more information, see `Using Cost Allocation Tags <https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/cost-alloc-tags.html>`_ in the *Billing and Cost Management User Guide* .
-        :param users: The list of broker users (persons or applications) who can access queues and topics. For Amazon MQ for RabbitMQ brokers, one and only one administrative user is accepted and created when a broker is first provisioned. All subsequent RabbitMQ users are created by via the RabbitMQ web console or by using the RabbitMQ management API.
+        :param subnet_ids: The list of groups that define which subnets and IP ranges the broker can use from different Availability Zones. If you specify more than one subnet, the subnets must be in different Availability Zones. Amazon MQ will not be able to create VPC endpoints for your broker with multiple subnets in the same Availability Zone. A SINGLE_INSTANCE deployment requires one subnet (for example, the default subnet). An ACTIVE_STANDBY_MULTI_AZ Amazon MQ for ActiveMQ deployment requires two subnets. A CLUSTER_MULTI_AZ Amazon MQ for RabbitMQ deployment has no subnet requirements when deployed with public accessibility. Deployment without public accessibility requires at least one subnet. .. epigraph:: If you specify subnets in a `shared VPC <https://docs.aws.amazon.com/vpc/latest/userguide/vpc-sharing.html>`_ for a RabbitMQ broker, the associated VPC to which the specified subnets belong must be owned by your AWS account . Amazon MQ will not be able to create VPC endpoints in VPCs that are not owned by your AWS account .
+        :param tags: Create tags when creating the broker.
+        :param users: The list of broker users (persons or applications) who can access queues and topics. For Amazon MQ for RabbitMQ brokers, one and only one administrative user is accepted and created when a broker is first provisioned. All subsequent broker users are created by making RabbitMQ API calls directly to brokers or via the RabbitMQ web console. When OAuth 2.0 is enabled, the broker accepts one or no users.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-amazonmq-broker.html
         :exampleMetadata: fixture=_generated
@@ -339,12 +339,12 @@ class CfnBrokerProps:
 
     @builtins.property
     def broker_name(self) -> builtins.str:
-        '''The name of the broker.
+        '''Required.
 
-        This value must be unique in your AWS account , 1-50 characters long, must contain only letters, numbers, dashes, and underscores, and must not contain white spaces, brackets, wildcard characters, or special characters.
+        The broker's name. This value must be unique in your AWS account , 1-50 characters long, must contain only letters, numbers, dashes, and underscores, and must not contain white spaces, brackets, wildcard characters, or special characters.
         .. epigraph::
 
-           Do not add personally identifiable information (PII) or other confidential or sensitive information in broker names. Broker names are accessible to other AWS services, including C CloudWatch Logs . Broker names are not intended to be used for private or sensitive data.
+           Do not add personally identifiable information (PII) or other confidential or sensitive information in broker names. Broker names are accessible to other AWS services, including CloudWatch Logs . Broker names are not intended to be used for private or sensitive data.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-amazonmq-broker.html#cfn-amazonmq-broker-brokername
         '''
@@ -354,11 +354,9 @@ class CfnBrokerProps:
 
     @builtins.property
     def deployment_mode(self) -> builtins.str:
-        '''The deployment mode of the broker. Available values:.
+        '''Required.
 
-        - ``SINGLE_INSTANCE``
-        - ``ACTIVE_STANDBY_MULTI_AZ``
-        - ``CLUSTER_MULTI_AZ``
+        The broker's deployment mode.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-amazonmq-broker.html#cfn-amazonmq-broker-deploymentmode
         '''
@@ -368,9 +366,9 @@ class CfnBrokerProps:
 
     @builtins.property
     def engine_type(self) -> builtins.str:
-        '''The type of broker engine.
+        '''Required.
 
-        Currently, Amazon MQ supports ``ACTIVEMQ`` and ``RABBITMQ`` .
+        The type of broker engine. Currently, Amazon MQ supports ``ACTIVEMQ`` and ``RABBITMQ`` .
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-amazonmq-broker.html#cfn-amazonmq-broker-enginetype
         '''
@@ -380,7 +378,9 @@ class CfnBrokerProps:
 
     @builtins.property
     def host_instance_type(self) -> builtins.str:
-        '''The broker's instance type.
+        '''Required.
+
+        The broker's instance type.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-amazonmq-broker.html#cfn-amazonmq-broker-hostinstancetype
         '''
@@ -391,6 +391,8 @@ class CfnBrokerProps:
     @builtins.property
     def publicly_accessible(self) -> typing.Union[builtins.bool, _IResolvable_da3f097b]:
         '''Enables connections from applications outside of the VPC that hosts the broker's subnets.
+
+        Set to ``false`` by default, if no value is provided.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-amazonmq-broker.html#cfn-amazonmq-broker-publiclyaccessible
         '''
@@ -413,9 +415,12 @@ class CfnBrokerProps:
     def auto_minor_version_upgrade(
         self,
     ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
-        '''Enables automatic upgrades to new minor versions for brokers, as new broker engine versions are released and supported by Amazon MQ.
+        '''Enables automatic upgrades to new patch versions for brokers as new versions are released and supported by Amazon MQ.
 
-        Automatic upgrades occur during the scheduled maintenance window of the broker or after a manual broker reboot.
+        Automatic upgrades occur during the scheduled maintenance window or after a manual broker reboot. Set to ``true`` by default, if no value is specified.
+        .. epigraph::
+
+           Must be set to ``true`` for ActiveMQ brokers version 5.18 and above and for RabbitMQ brokers version 3.13 and above.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-amazonmq-broker.html#cfn-amazonmq-broker-autominorversionupgrade
         '''
@@ -427,8 +432,6 @@ class CfnBrokerProps:
         self,
     ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnBroker.ConfigurationIdProperty"]]:
         '''A list of information about the configuration.
-
-        Does not apply to RabbitMQ brokers.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-amazonmq-broker.html#cfn-amazonmq-broker-configuration
         '''
@@ -461,8 +464,6 @@ class CfnBrokerProps:
     ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnBroker.EncryptionOptionsProperty"]]:
         '''Encryption options for the broker.
 
-        Does not apply to RabbitMQ brokers.
-
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-amazonmq-broker.html#cfn-amazonmq-broker-encryptionoptions
         '''
         result = self._values.get("encryption_options")
@@ -470,9 +471,9 @@ class CfnBrokerProps:
 
     @builtins.property
     def engine_version(self) -> typing.Optional[builtins.str]:
-        '''The version of the broker engine.
+        '''The broker engine version.
 
-        For a list of supported engine versions, see `Engine <https://docs.aws.amazon.com/amazon-mq/latest/developer-guide/broker-engine.html>`_ in the *Amazon MQ Developer Guide* .
+        Defaults to the latest available version for the specified broker engine type. For more information, see the `ActiveMQ version management <https://docs.aws.amazon.com//amazon-mq/latest/developer-guide/activemq-version-management.html>`_ and the `RabbitMQ version management <https://docs.aws.amazon.com//amazon-mq/latest/developer-guide/rabbitmq-version-management.html>`_ sections in the Amazon MQ Developer Guide.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-amazonmq-broker.html#cfn-amazonmq-broker-engineversion
         '''
@@ -507,7 +508,7 @@ class CfnBrokerProps:
     def maintenance_window_start_time(
         self,
     ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnBroker.MaintenanceWindowProperty"]]:
-        '''The scheduled time period relative to UTC during which Amazon MQ begins to apply pending updates or patches to the broker.
+        '''The parameters that determine the WeeklyStartTime.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-amazonmq-broker.html#cfn-amazonmq-broker-maintenancewindowstarttime
         '''
@@ -536,10 +537,10 @@ class CfnBrokerProps:
     def subnet_ids(self) -> typing.Optional[typing.List[builtins.str]]:
         '''The list of groups that define which subnets and IP ranges the broker can use from different Availability Zones.
 
-        If you specify more than one subnet, the subnets must be in different Availability Zones. Amazon MQ will not be able to create VPC endpoints for your broker with multiple subnets in the same Availability Zone. A SINGLE_INSTANCE deployment requires one subnet (for example, the default subnet). An ACTIVE_STANDBY_MULTI_AZ deployment (ACTIVEMQ) requires two subnets. A CLUSTER_MULTI_AZ deployment (RABBITMQ) has no subnet requirements when deployed with public accessibility, deployment without public accessibility requires at least one subnet.
+        If you specify more than one subnet, the subnets must be in different Availability Zones. Amazon MQ will not be able to create VPC endpoints for your broker with multiple subnets in the same Availability Zone. A SINGLE_INSTANCE deployment requires one subnet (for example, the default subnet). An ACTIVE_STANDBY_MULTI_AZ Amazon MQ for ActiveMQ deployment requires two subnets. A CLUSTER_MULTI_AZ Amazon MQ for RabbitMQ deployment has no subnet requirements when deployed with public accessibility. Deployment without public accessibility requires at least one subnet.
         .. epigraph::
 
-           If you specify subnets in a shared VPC for a RabbitMQ broker, the associated VPC to which the specified subnets belong must be owned by your AWS account . Amazon MQ will not be able to create VPC enpoints in VPCs that are not owned by your AWS account .
+           If you specify subnets in a `shared VPC <https://docs.aws.amazon.com/vpc/latest/userguide/vpc-sharing.html>`_ for a RabbitMQ broker, the associated VPC to which the specified subnets belong must be owned by your AWS account . Amazon MQ will not be able to create VPC endpoints in VPCs that are not owned by your AWS account .
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-amazonmq-broker.html#cfn-amazonmq-broker-subnetids
         '''
@@ -548,9 +549,7 @@ class CfnBrokerProps:
 
     @builtins.property
     def tags(self) -> typing.Optional[typing.List["CfnBroker.TagsEntryProperty"]]:
-        '''An array of key-value pairs.
-
-        For more information, see `Using Cost Allocation Tags <https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/cost-alloc-tags.html>`_ in the *Billing and Cost Management User Guide* .
+        '''Create tags when creating the broker.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-amazonmq-broker.html#cfn-amazonmq-broker-tags
         '''
@@ -563,7 +562,9 @@ class CfnBrokerProps:
     ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnBroker.UserProperty"]]]]:
         '''The list of broker users (persons or applications) who can access queues and topics.
 
-        For Amazon MQ for RabbitMQ brokers, one and only one administrative user is accepted and created when a broker is first provisioned. All subsequent RabbitMQ users are created by via the RabbitMQ web console or by using the RabbitMQ management API.
+        For Amazon MQ for RabbitMQ brokers, one and only one administrative user is accepted and created when a broker is first provisioned. All subsequent broker users are created by making RabbitMQ API calls directly to brokers or via the RabbitMQ web console.
+
+        When OAuth 2.0 is enabled, the broker accepts one or no users.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-amazonmq-broker.html#cfn-amazonmq-broker-users
         '''
@@ -596,8 +597,8 @@ class CfnConfigurationAssociationProps:
     ) -> None:
         '''Properties for defining a ``CfnConfigurationAssociation``.
 
-        :param broker: The broker to associate with a configuration.
-        :param configuration: The configuration to associate with a broker.
+        :param broker: ID of the Broker that the configuration should be applied to.
+        :param configuration: Returns information about all configurations.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-amazonmq-configurationassociation.html
         :exampleMetadata: fixture=_generated
@@ -627,7 +628,7 @@ class CfnConfigurationAssociationProps:
 
     @builtins.property
     def broker(self) -> builtins.str:
-        '''The broker to associate with a configuration.
+        '''ID of the Broker that the configuration should be applied to.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-amazonmq-configurationassociation.html#cfn-amazonmq-configurationassociation-broker
         '''
@@ -639,7 +640,7 @@ class CfnConfigurationAssociationProps:
     def configuration(
         self,
     ) -> typing.Union[_IResolvable_da3f097b, "CfnConfigurationAssociation.ConfigurationIdProperty"]:
-        '''The configuration to associate with a broker.
+        '''Returns information about all configurations.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-amazonmq-configurationassociation.html#cfn-amazonmq-configurationassociation-configuration
         '''
@@ -686,12 +687,12 @@ class CfnConfigurationProps:
     ) -> None:
         '''Properties for defining a ``CfnConfiguration``.
 
-        :param engine_type: The type of broker engine. Note: Currently, Amazon MQ only supports ACTIVEMQ for creating and editing broker configurations.
-        :param name: The name of the configuration. This value can contain only alphanumeric characters, dashes, periods, underscores, and tildes (- . _ ~). This value must be 1-150 characters long.
+        :param engine_type: Required. The type of broker engine. Currently, Amazon MQ supports ``ACTIVEMQ`` and ``RABBITMQ`` .
+        :param name: Required. The name of the configuration. This value can contain only alphanumeric characters, dashes, periods, underscores, and tildes (- . _ ~). This value must be 1-150 characters long.
         :param authentication_strategy: Optional. The authentication strategy associated with the configuration. The default is ``SIMPLE`` .
-        :param data: The base64-encoded XML configuration.
+        :param data: Amazon MQ for Active MQ: The base64-encoded XML configuration. Amazon MQ for RabbitMQ: the base64-encoded Cuttlefish configuration.
         :param description: The description of the configuration.
-        :param engine_version: The version of the broker engine. For a list of supported engine versions, see ` <https://docs.aws.amazon.com/amazon-mq/latest/developer-guide/broker-engine.html>`_
+        :param engine_version: The broker engine version. Defaults to the latest available version for the specified broker engine type. For more information, see the `ActiveMQ version management <https://docs.aws.amazon.com//amazon-mq/latest/developer-guide/activemq-version-management.html>`_ and the `RabbitMQ version management <https://docs.aws.amazon.com//amazon-mq/latest/developer-guide/rabbitmq-version-management.html>`_ sections in the Amazon MQ Developer Guide.
         :param tags: Create tags when creating the configuration.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-amazonmq-configuration.html
@@ -744,9 +745,9 @@ class CfnConfigurationProps:
 
     @builtins.property
     def engine_type(self) -> builtins.str:
-        '''The type of broker engine.
+        '''Required.
 
-        Note: Currently, Amazon MQ only supports ACTIVEMQ for creating and editing broker configurations.
+        The type of broker engine. Currently, Amazon MQ supports ``ACTIVEMQ`` and ``RABBITMQ`` .
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-amazonmq-configuration.html#cfn-amazonmq-configuration-enginetype
         '''
@@ -756,9 +757,9 @@ class CfnConfigurationProps:
 
     @builtins.property
     def name(self) -> builtins.str:
-        '''The name of the configuration.
+        '''Required.
 
-        This value can contain only alphanumeric characters, dashes, periods, underscores, and tildes (- . _ ~). This value must be 1-150 characters long.
+        The name of the configuration. This value can contain only alphanumeric characters, dashes, periods, underscores, and tildes (- . _ ~). This value must be 1-150 characters long.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-amazonmq-configuration.html#cfn-amazonmq-configuration-name
         '''
@@ -779,7 +780,9 @@ class CfnConfigurationProps:
 
     @builtins.property
     def data(self) -> typing.Optional[builtins.str]:
-        '''The base64-encoded XML configuration.
+        '''Amazon MQ for Active MQ: The base64-encoded XML configuration.
+
+        Amazon MQ for RabbitMQ: the base64-encoded Cuttlefish configuration.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-amazonmq-configuration.html#cfn-amazonmq-configuration-data
         '''
@@ -797,9 +800,9 @@ class CfnConfigurationProps:
 
     @builtins.property
     def engine_version(self) -> typing.Optional[builtins.str]:
-        '''The version of the broker engine.
+        '''The broker engine version.
 
-        For a list of supported engine versions, see ` <https://docs.aws.amazon.com/amazon-mq/latest/developer-guide/broker-engine.html>`_
+        Defaults to the latest available version for the specified broker engine type. For more information, see the `ActiveMQ version management <https://docs.aws.amazon.com//amazon-mq/latest/developer-guide/activemq-version-management.html>`_ and the `RabbitMQ version management <https://docs.aws.amazon.com//amazon-mq/latest/developer-guide/rabbitmq-version-management.html>`_ sections in the Amazon MQ Developer Guide.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-amazonmq-configuration.html#cfn-amazonmq-configuration-engineversion
         '''
@@ -1087,11 +1090,9 @@ class CfnBroker(
     metaclass=jsii.JSIIMeta,
     jsii_type="aws-cdk-lib.aws_amazonmq.CfnBroker",
 ):
-    '''A *broker* is a message broker environment running on Amazon MQ .
+    '''Creates a broker. Note: This API is asynchronous.
 
-    It is the basic building block of Amazon MQ .
-
-    The ``AWS::AmazonMQ::Broker`` resource lets you create Amazon MQ for ActiveMQ and Amazon MQ for RabbitMQ brokers, add configuration changes or modify users for a speified ActiveMQ broker, return information about the specified broker, and delete the broker. For more information, see `How Amazon MQ works <https://docs.aws.amazon.com//amazon-mq/latest/developer-guide/amazon-mq-how-it-works.html>`_ in the *Amazon MQ Developer Guide* .
+    To create a broker, you must either use the ``AmazonMQFullAccess`` IAM policy or include the following EC2 permissions in your IAM policy.
 
     - ``ec2:CreateNetworkInterface``
 
@@ -1111,6 +1112,8 @@ class CfnBroker(
     - ``ec2:DescribeSecurityGroups``
     - ``ec2:DescribeSubnets``
     - ``ec2:DescribeVpcs``
+
+    For more information, see `Create an IAM User and Get Your AWS Credentials <https://docs.aws.amazon.com//amazon-mq/latest/developer-guide/amazon-mq-setting-up.html#create-iam-user>`_ and `Never Modify or Delete the Amazon MQ Elastic Network Interface <https://docs.aws.amazon.com//amazon-mq/latest/developer-guide/connecting-to-amazon-mq.html#never-modify-delete-elastic-network-interface>`_ in the *Amazon MQ Developer Guide* .
 
     :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-amazonmq-broker.html
     :cloudformationResource: AWS::AmazonMQ::Broker
@@ -1217,26 +1220,26 @@ class CfnBroker(
         '''
         :param scope: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
-        :param broker_name: The name of the broker. This value must be unique in your AWS account , 1-50 characters long, must contain only letters, numbers, dashes, and underscores, and must not contain white spaces, brackets, wildcard characters, or special characters. .. epigraph:: Do not add personally identifiable information (PII) or other confidential or sensitive information in broker names. Broker names are accessible to other AWS services, including C CloudWatch Logs . Broker names are not intended to be used for private or sensitive data.
-        :param deployment_mode: The deployment mode of the broker. Available values:. - ``SINGLE_INSTANCE`` - ``ACTIVE_STANDBY_MULTI_AZ`` - ``CLUSTER_MULTI_AZ``
-        :param engine_type: The type of broker engine. Currently, Amazon MQ supports ``ACTIVEMQ`` and ``RABBITMQ`` .
-        :param host_instance_type: The broker's instance type.
-        :param publicly_accessible: Enables connections from applications outside of the VPC that hosts the broker's subnets.
+        :param broker_name: Required. The broker's name. This value must be unique in your AWS account , 1-50 characters long, must contain only letters, numbers, dashes, and underscores, and must not contain white spaces, brackets, wildcard characters, or special characters. .. epigraph:: Do not add personally identifiable information (PII) or other confidential or sensitive information in broker names. Broker names are accessible to other AWS services, including CloudWatch Logs . Broker names are not intended to be used for private or sensitive data.
+        :param deployment_mode: Required. The broker's deployment mode.
+        :param engine_type: Required. The type of broker engine. Currently, Amazon MQ supports ``ACTIVEMQ`` and ``RABBITMQ`` .
+        :param host_instance_type: Required. The broker's instance type.
+        :param publicly_accessible: Enables connections from applications outside of the VPC that hosts the broker's subnets. Set to ``false`` by default, if no value is provided.
         :param authentication_strategy: Optional. The authentication strategy used to secure the broker. The default is ``SIMPLE`` .
-        :param auto_minor_version_upgrade: Enables automatic upgrades to new minor versions for brokers, as new broker engine versions are released and supported by Amazon MQ. Automatic upgrades occur during the scheduled maintenance window of the broker or after a manual broker reboot.
-        :param configuration: A list of information about the configuration. Does not apply to RabbitMQ brokers.
+        :param auto_minor_version_upgrade: Enables automatic upgrades to new patch versions for brokers as new versions are released and supported by Amazon MQ. Automatic upgrades occur during the scheduled maintenance window or after a manual broker reboot. Set to ``true`` by default, if no value is specified. .. epigraph:: Must be set to ``true`` for ActiveMQ brokers version 5.18 and above and for RabbitMQ brokers version 3.13 and above.
+        :param configuration: A list of information about the configuration.
         :param data_replication_mode: Defines whether this broker is a part of a data replication pair.
         :param data_replication_primary_broker_arn: The Amazon Resource Name (ARN) of the primary broker that is used to replicate data from in a data replication pair, and is applied to the replica broker. Must be set when dataReplicationMode is set to CRDR.
-        :param encryption_options: Encryption options for the broker. Does not apply to RabbitMQ brokers.
-        :param engine_version: The version of the broker engine. For a list of supported engine versions, see `Engine <https://docs.aws.amazon.com/amazon-mq/latest/developer-guide/broker-engine.html>`_ in the *Amazon MQ Developer Guide* .
+        :param encryption_options: Encryption options for the broker.
+        :param engine_version: The broker engine version. Defaults to the latest available version for the specified broker engine type. For more information, see the `ActiveMQ version management <https://docs.aws.amazon.com//amazon-mq/latest/developer-guide/activemq-version-management.html>`_ and the `RabbitMQ version management <https://docs.aws.amazon.com//amazon-mq/latest/developer-guide/rabbitmq-version-management.html>`_ sections in the Amazon MQ Developer Guide.
         :param ldap_server_metadata: Optional. The metadata of the LDAP server used to authenticate and authorize connections to the broker. Does not apply to RabbitMQ brokers.
         :param logs: Enables Amazon CloudWatch logging for brokers.
-        :param maintenance_window_start_time: The scheduled time period relative to UTC during which Amazon MQ begins to apply pending updates or patches to the broker.
+        :param maintenance_window_start_time: The parameters that determine the WeeklyStartTime.
         :param security_groups: The list of rules (1 minimum, 125 maximum) that authorize connections to brokers.
         :param storage_type: The broker's storage type.
-        :param subnet_ids: The list of groups that define which subnets and IP ranges the broker can use from different Availability Zones. If you specify more than one subnet, the subnets must be in different Availability Zones. Amazon MQ will not be able to create VPC endpoints for your broker with multiple subnets in the same Availability Zone. A SINGLE_INSTANCE deployment requires one subnet (for example, the default subnet). An ACTIVE_STANDBY_MULTI_AZ deployment (ACTIVEMQ) requires two subnets. A CLUSTER_MULTI_AZ deployment (RABBITMQ) has no subnet requirements when deployed with public accessibility, deployment without public accessibility requires at least one subnet. .. epigraph:: If you specify subnets in a shared VPC for a RabbitMQ broker, the associated VPC to which the specified subnets belong must be owned by your AWS account . Amazon MQ will not be able to create VPC enpoints in VPCs that are not owned by your AWS account .
-        :param tags: An array of key-value pairs. For more information, see `Using Cost Allocation Tags <https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/cost-alloc-tags.html>`_ in the *Billing and Cost Management User Guide* .
-        :param users: The list of broker users (persons or applications) who can access queues and topics. For Amazon MQ for RabbitMQ brokers, one and only one administrative user is accepted and created when a broker is first provisioned. All subsequent RabbitMQ users are created by via the RabbitMQ web console or by using the RabbitMQ management API.
+        :param subnet_ids: The list of groups that define which subnets and IP ranges the broker can use from different Availability Zones. If you specify more than one subnet, the subnets must be in different Availability Zones. Amazon MQ will not be able to create VPC endpoints for your broker with multiple subnets in the same Availability Zone. A SINGLE_INSTANCE deployment requires one subnet (for example, the default subnet). An ACTIVE_STANDBY_MULTI_AZ Amazon MQ for ActiveMQ deployment requires two subnets. A CLUSTER_MULTI_AZ Amazon MQ for RabbitMQ deployment has no subnet requirements when deployed with public accessibility. Deployment without public accessibility requires at least one subnet. .. epigraph:: If you specify subnets in a `shared VPC <https://docs.aws.amazon.com/vpc/latest/userguide/vpc-sharing.html>`_ for a RabbitMQ broker, the associated VPC to which the specified subnets belong must be owned by your AWS account . Amazon MQ will not be able to create VPC endpoints in VPCs that are not owned by your AWS account .
+        :param tags: Create tags when creating the broker.
+        :param users: The list of broker users (persons or applications) who can access queues and topics. For Amazon MQ for RabbitMQ brokers, one and only one administrative user is accepted and created when a broker is first provisioned. All subsequent broker users are created by making RabbitMQ API calls directly to brokers or via the RabbitMQ web console. When OAuth 2.0 is enabled, the broker accepts one or no users.
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__d16f84aeefdd69c636acf0c8b4d958b93ded39c1da5d5eecb39ce87535c69cb7)
@@ -1363,10 +1366,7 @@ class CfnBroker(
     @builtins.property
     @jsii.member(jsii_name="attrId")
     def attr_id(self) -> builtins.str:
-        '''Required.
-
-        The unique ID that Amazon MQ generates for the configuration.
-
+        '''
         :cloudformationAttribute: Id
         '''
         return typing.cast(builtins.str, jsii.get(self, "attrId"))
@@ -1446,7 +1446,7 @@ class CfnBroker(
     @builtins.property
     @jsii.member(jsii_name="brokerName")
     def broker_name(self) -> builtins.str:
-        '''The name of the broker.'''
+        '''Required.'''
         return typing.cast(builtins.str, jsii.get(self, "brokerName"))
 
     @broker_name.setter
@@ -1459,10 +1459,7 @@ class CfnBroker(
     @builtins.property
     @jsii.member(jsii_name="deploymentMode")
     def deployment_mode(self) -> builtins.str:
-        '''The deployment mode of the broker.
-
-        Available values:.
-        '''
+        '''Required.'''
         return typing.cast(builtins.str, jsii.get(self, "deploymentMode"))
 
     @deployment_mode.setter
@@ -1475,7 +1472,7 @@ class CfnBroker(
     @builtins.property
     @jsii.member(jsii_name="engineType")
     def engine_type(self) -> builtins.str:
-        '''The type of broker engine.'''
+        '''Required.'''
         return typing.cast(builtins.str, jsii.get(self, "engineType"))
 
     @engine_type.setter
@@ -1488,7 +1485,7 @@ class CfnBroker(
     @builtins.property
     @jsii.member(jsii_name="hostInstanceType")
     def host_instance_type(self) -> builtins.str:
-        '''The broker's instance type.'''
+        '''Required.'''
         return typing.cast(builtins.str, jsii.get(self, "hostInstanceType"))
 
     @host_instance_type.setter
@@ -1532,7 +1529,7 @@ class CfnBroker(
     def auto_minor_version_upgrade(
         self,
     ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
-        '''Enables automatic upgrades to new minor versions for brokers, as new broker engine versions are released and supported by Amazon MQ.'''
+        '''Enables automatic upgrades to new patch versions for brokers as new versions are released and supported by Amazon MQ.'''
         return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "autoMinorVersionUpgrade"))
 
     @auto_minor_version_upgrade.setter
@@ -1613,7 +1610,7 @@ class CfnBroker(
     @builtins.property
     @jsii.member(jsii_name="engineVersion")
     def engine_version(self) -> typing.Optional[builtins.str]:
-        '''The version of the broker engine.'''
+        '''The broker engine version.'''
         return typing.cast(typing.Optional[builtins.str], jsii.get(self, "engineVersion"))
 
     @engine_version.setter
@@ -1664,7 +1661,7 @@ class CfnBroker(
     def maintenance_window_start_time(
         self,
     ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnBroker.MaintenanceWindowProperty"]]:
-        '''The scheduled time period relative to UTC during which Amazon MQ begins to apply pending updates or patches to the broker.'''
+        '''The parameters that determine the WeeklyStartTime.'''
         return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnBroker.MaintenanceWindowProperty"]], jsii.get(self, "maintenanceWindowStartTime"))
 
     @maintenance_window_start_time.setter
@@ -1722,7 +1719,7 @@ class CfnBroker(
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
     def tags_raw(self) -> typing.Optional[typing.List["CfnBroker.TagsEntryProperty"]]:
-        '''An array of key-value pairs.'''
+        '''Create tags when creating the broker.'''
         return typing.cast(typing.Optional[typing.List["CfnBroker.TagsEntryProperty"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
@@ -1762,11 +1759,7 @@ class CfnBroker(
         def __init__(self, *, id: builtins.str, revision: jsii.Number) -> None:
             '''A list of information about the configuration.
 
-            .. epigraph::
-
-               Does not apply to RabbitMQ brokers.
-
-            :param id: The unique ID that Amazon MQ generates for the configuration.
+            :param id: Required. The unique ID that Amazon MQ generates for the configuration.
             :param revision: The revision number of the configuration.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-amazonmq-broker-configurationid.html
@@ -1794,7 +1787,9 @@ class CfnBroker(
 
         @builtins.property
         def id(self) -> builtins.str:
-            '''The unique ID that Amazon MQ generates for the configuration.
+            '''Required.
+
+            The unique ID that Amazon MQ generates for the configuration.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-amazonmq-broker-configurationid.html#cfn-amazonmq-broker-configurationid-id
             '''
@@ -1836,10 +1831,6 @@ class CfnBroker(
             kms_key_id: typing.Optional[builtins.str] = None,
         ) -> None:
             '''Encryption options for the broker.
-
-            .. epigraph::
-
-               Does not apply to RabbitMQ brokers.
 
             :param use_aws_owned_key: Enables the use of an AWS owned CMK using AWS KMS (KMS). Set to ``true`` by default, if no value is provided, for example, for RabbitMQ brokers.
             :param kms_key_id: The customer master key (CMK) to use for the A AWS KMS (KMS). This key is used to encrypt your data at rest. If not provided, Amazon MQ will use a default CMK to encrypt your data.
@@ -1939,23 +1930,21 @@ class CfnBroker(
             user_role_name: typing.Optional[builtins.str] = None,
             user_search_subtree: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
         ) -> None:
-            '''Optional. The metadata of the LDAP server used to authenticate and authorize connections to the broker.
+            '''Optional.
 
-            .. epigraph::
+            The metadata of the LDAP server used to authenticate and authorize connections to the broker. Does not apply to RabbitMQ brokers.
 
-               Does not apply to RabbitMQ brokers.
-
-            :param hosts: Specifies the location of the LDAP server such as AWS Directory Service for Microsoft Active Directory . Optional failover server.
-            :param role_base: The distinguished name of the node in the directory information tree (DIT) to search for roles or groups. For example, ``ou=group`` , ``ou=corp`` , ``dc=corp`` , ``dc=example`` , ``dc=com`` .
-            :param role_search_matching: The LDAP search filter used to find roles within the roleBase. The distinguished name of the user matched by userSearchMatching is substituted into the ``{0}`` placeholder in the search filter. The client's username is substituted into the ``{1}`` placeholder. For example, if you set this option to ``(member=uid={1})`` for the user janedoe, the search filter becomes ``(member=uid=janedoe)`` after string substitution. It matches all role entries that have a member attribute equal to ``uid=janedoe`` under the subtree selected by the ``RoleBases`` .
-            :param service_account_username: Service account username. A service account is an account in your LDAP server that has access to initiate a connection. For example, ``cn=admin`` , ``ou=corp`` , ``dc=corp`` , ``dc=example`` , ``dc=com`` .
-            :param user_base: Select a particular subtree of the directory information tree (DIT) to search for user entries. The subtree is specified by a DN, which specifies the base node of the subtree. For example, by setting this option to ``ou=Users`` , ``ou=corp`` , ``dc=corp`` , ``dc=example`` , ``dc=com`` , the search for user entries is restricted to the subtree beneath ``ou=Users`` , ``ou=corp`` , ``dc=corp`` , ``dc=example`` , ``dc=com`` .
-            :param user_search_matching: The LDAP search filter used to find users within the ``userBase`` . The client's username is substituted into the ``{0}`` placeholder in the search filter. For example, if this option is set to ``(uid={0})`` and the received username is ``janedoe`` , the search filter becomes ``(uid=janedoe)`` after string substitution. It will result in matching an entry like ``uid=janedoe`` , ``ou=Users`` , ``ou=corp`` , ``dc=corp`` , ``dc=example`` , ``dc=com`` .
-            :param role_name: The group name attribute in a role entry whose value is the name of that role. For example, you can specify ``cn`` for a group entry's common name. If authentication succeeds, then the user is assigned the the value of the ``cn`` attribute for each role entry that they are a member of.
-            :param role_search_subtree: The directory search scope for the role. If set to true, scope is to search the entire subtree.
-            :param service_account_password: Service account password. A service account is an account in your LDAP server that has access to initiate a connection. For example, ``cn=admin`` , ``dc=corp`` , ``dc=example`` , ``dc=com`` .
-            :param user_role_name: The name of the LDAP attribute in the user's directory entry for the user's group membership. In some cases, user roles may be identified by the value of an attribute in the user's directory entry. The ``UserRoleName`` option allows you to provide the name of this attribute.
-            :param user_search_subtree: The directory search scope for the user. If set to true, scope is to search the entire subtree.
+            :param hosts: 
+            :param role_base: 
+            :param role_search_matching: 
+            :param service_account_username: 
+            :param user_base: 
+            :param user_search_matching: 
+            :param role_name: 
+            :param role_search_subtree: 
+            :param service_account_password: 
+            :param user_role_name: 
+            :param user_search_subtree: 
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-amazonmq-broker-ldapservermetadata.html
             :exampleMetadata: fixture=_generated
@@ -2016,10 +2005,7 @@ class CfnBroker(
 
         @builtins.property
         def hosts(self) -> typing.List[builtins.str]:
-            '''Specifies the location of the LDAP server such as AWS Directory Service for Microsoft Active Directory .
-
-            Optional failover server.
-
+            '''
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-amazonmq-broker-ldapservermetadata.html#cfn-amazonmq-broker-ldapservermetadata-hosts
             '''
             result = self._values.get("hosts")
@@ -2028,10 +2014,7 @@ class CfnBroker(
 
         @builtins.property
         def role_base(self) -> builtins.str:
-            '''The distinguished name of the node in the directory information tree (DIT) to search for roles or groups.
-
-            For example, ``ou=group`` , ``ou=corp`` , ``dc=corp`` , ``dc=example`` , ``dc=com`` .
-
+            '''
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-amazonmq-broker-ldapservermetadata.html#cfn-amazonmq-broker-ldapservermetadata-rolebase
             '''
             result = self._values.get("role_base")
@@ -2040,10 +2023,7 @@ class CfnBroker(
 
         @builtins.property
         def role_search_matching(self) -> builtins.str:
-            '''The LDAP search filter used to find roles within the roleBase.
-
-            The distinguished name of the user matched by userSearchMatching is substituted into the ``{0}`` placeholder in the search filter. The client's username is substituted into the ``{1}`` placeholder. For example, if you set this option to ``(member=uid={1})`` for the user janedoe, the search filter becomes ``(member=uid=janedoe)`` after string substitution. It matches all role entries that have a member attribute equal to ``uid=janedoe`` under the subtree selected by the ``RoleBases`` .
-
+            '''
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-amazonmq-broker-ldapservermetadata.html#cfn-amazonmq-broker-ldapservermetadata-rolesearchmatching
             '''
             result = self._values.get("role_search_matching")
@@ -2052,10 +2032,7 @@ class CfnBroker(
 
         @builtins.property
         def service_account_username(self) -> builtins.str:
-            '''Service account username.
-
-            A service account is an account in your LDAP server that has access to initiate a connection. For example, ``cn=admin`` , ``ou=corp`` , ``dc=corp`` , ``dc=example`` , ``dc=com`` .
-
+            '''
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-amazonmq-broker-ldapservermetadata.html#cfn-amazonmq-broker-ldapservermetadata-serviceaccountusername
             '''
             result = self._values.get("service_account_username")
@@ -2064,10 +2041,7 @@ class CfnBroker(
 
         @builtins.property
         def user_base(self) -> builtins.str:
-            '''Select a particular subtree of the directory information tree (DIT) to search for user entries.
-
-            The subtree is specified by a DN, which specifies the base node of the subtree. For example, by setting this option to ``ou=Users`` , ``ou=corp`` , ``dc=corp`` , ``dc=example`` , ``dc=com`` , the search for user entries is restricted to the subtree beneath ``ou=Users`` , ``ou=corp`` , ``dc=corp`` , ``dc=example`` , ``dc=com`` .
-
+            '''
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-amazonmq-broker-ldapservermetadata.html#cfn-amazonmq-broker-ldapservermetadata-userbase
             '''
             result = self._values.get("user_base")
@@ -2076,10 +2050,7 @@ class CfnBroker(
 
         @builtins.property
         def user_search_matching(self) -> builtins.str:
-            '''The LDAP search filter used to find users within the ``userBase`` .
-
-            The client's username is substituted into the ``{0}`` placeholder in the search filter. For example, if this option is set to ``(uid={0})`` and the received username is ``janedoe`` , the search filter becomes ``(uid=janedoe)`` after string substitution. It will result in matching an entry like ``uid=janedoe`` , ``ou=Users`` , ``ou=corp`` , ``dc=corp`` , ``dc=example`` , ``dc=com`` .
-
+            '''
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-amazonmq-broker-ldapservermetadata.html#cfn-amazonmq-broker-ldapservermetadata-usersearchmatching
             '''
             result = self._values.get("user_search_matching")
@@ -2088,10 +2059,7 @@ class CfnBroker(
 
         @builtins.property
         def role_name(self) -> typing.Optional[builtins.str]:
-            '''The group name attribute in a role entry whose value is the name of that role.
-
-            For example, you can specify ``cn`` for a group entry's common name. If authentication succeeds, then the user is assigned the the value of the ``cn`` attribute for each role entry that they are a member of.
-
+            '''
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-amazonmq-broker-ldapservermetadata.html#cfn-amazonmq-broker-ldapservermetadata-rolename
             '''
             result = self._values.get("role_name")
@@ -2101,10 +2069,7 @@ class CfnBroker(
         def role_search_subtree(
             self,
         ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
-            '''The directory search scope for the role.
-
-            If set to true, scope is to search the entire subtree.
-
+            '''
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-amazonmq-broker-ldapservermetadata.html#cfn-amazonmq-broker-ldapservermetadata-rolesearchsubtree
             '''
             result = self._values.get("role_search_subtree")
@@ -2112,10 +2077,7 @@ class CfnBroker(
 
         @builtins.property
         def service_account_password(self) -> typing.Optional[builtins.str]:
-            '''Service account password.
-
-            A service account is an account in your LDAP server that has access to initiate a connection. For example, ``cn=admin`` , ``dc=corp`` , ``dc=example`` , ``dc=com`` .
-
+            '''
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-amazonmq-broker-ldapservermetadata.html#cfn-amazonmq-broker-ldapservermetadata-serviceaccountpassword
             '''
             result = self._values.get("service_account_password")
@@ -2123,10 +2085,7 @@ class CfnBroker(
 
         @builtins.property
         def user_role_name(self) -> typing.Optional[builtins.str]:
-            '''The name of the LDAP attribute in the user's directory entry for the user's group membership.
-
-            In some cases, user roles may be identified by the value of an attribute in the user's directory entry. The ``UserRoleName`` option allows you to provide the name of this attribute.
-
+            '''
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-amazonmq-broker-ldapservermetadata.html#cfn-amazonmq-broker-ldapservermetadata-userrolename
             '''
             result = self._values.get("user_role_name")
@@ -2136,10 +2095,7 @@ class CfnBroker(
         def user_search_subtree(
             self,
         ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
-            '''The directory search scope for the user.
-
-            If set to true, scope is to search the entire subtree.
-
+            '''
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-amazonmq-broker-ldapservermetadata.html#cfn-amazonmq-broker-ldapservermetadata-usersearchsubtree
             '''
             result = self._values.get("user_search_subtree")
@@ -2249,10 +2205,10 @@ class CfnBroker(
             time_of_day: builtins.str,
             time_zone: builtins.str,
         ) -> None:
-            '''The parameters that determine the ``WeeklyStartTime`` to apply pending updates or patches to the broker.
+            '''The parameters that determine the WeeklyStartTime.
 
-            :param day_of_week: The day of the week.
-            :param time_of_day: The time, in 24-hour format.
+            :param day_of_week: Required. The day of the week.
+            :param time_of_day: Required. The time, in 24-hour format.
             :param time_zone: The time zone, UTC by default, in either the Country/City format, or the UTC offset format.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-amazonmq-broker-maintenancewindow.html
@@ -2283,7 +2239,9 @@ class CfnBroker(
 
         @builtins.property
         def day_of_week(self) -> builtins.str:
-            '''The day of the week.
+            '''Required.
+
+            The day of the week.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-amazonmq-broker-maintenancewindow.html#cfn-amazonmq-broker-maintenancewindow-dayofweek
             '''
@@ -2293,7 +2251,9 @@ class CfnBroker(
 
         @builtins.property
         def time_of_day(self) -> builtins.str:
-            '''The time, in 24-hour format.
+            '''Required.
+
+            The time, in 24-hour format.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-amazonmq-broker-maintenancewindow.html#cfn-amazonmq-broker-maintenancewindow-timeofday
             '''
@@ -2329,10 +2289,10 @@ class CfnBroker(
     )
     class TagsEntryProperty:
         def __init__(self, *, key: builtins.str, value: builtins.str) -> None:
-            '''A key-value pair to associate with the broker.
+            '''Create tags when creating the broker.
 
-            :param key: The key in a key-value pair.
-            :param value: The value in a key-value pair.
+            :param key: 
+            :param value: 
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-amazonmq-broker-tagsentry.html
             :exampleMetadata: fixture=_generated
@@ -2359,8 +2319,7 @@ class CfnBroker(
 
         @builtins.property
         def key(self) -> builtins.str:
-            '''The key in a key-value pair.
-
+            '''
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-amazonmq-broker-tagsentry.html#cfn-amazonmq-broker-tagsentry-key
             '''
             result = self._values.get("key")
@@ -2369,8 +2328,7 @@ class CfnBroker(
 
         @builtins.property
         def value(self) -> builtins.str:
-            '''The value in a key-value pair.
-
+            '''
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-amazonmq-broker-tagsentry.html#cfn-amazonmq-broker-tagsentry-value
             '''
             result = self._values.get("value")
@@ -2411,11 +2369,13 @@ class CfnBroker(
         ) -> None:
             '''The list of broker users (persons or applications) who can access queues and topics.
 
-            For Amazon MQ for RabbitMQ brokers, one and only one administrative user is accepted and created when a broker is first provisioned. All subsequent broker users are created via the RabbitMQ web console or by using the RabbitMQ management API.
+            For Amazon MQ for RabbitMQ brokers, one and only one administrative user is accepted and created when a broker is first provisioned. All subsequent broker users are created by making RabbitMQ API calls directly to brokers or via the RabbitMQ web console.
 
-            :param password: The password of the user. This value must be at least 12 characters long, must contain at least 4 unique characters, and must not contain commas, colons, or equal signs (,:=).
-            :param username: The username of the broker user. For Amazon MQ for ActiveMQ brokers, this value can contain only alphanumeric characters, dashes, periods, underscores, and tildes (- . _ ~). For Amazon MQ for RabbitMQ brokers, this value can contain only alphanumeric characters, dashes, periods, underscores (- . _). This value must not contain a tilde (~) character. Amazon MQ prohibts using guest as a valid usename. This value must be 2-100 characters long. .. epigraph:: Do not add personally identifiable information (PII) or other confidential or sensitive information in broker usernames. Broker usernames are accessible to other AWS services, including CloudWatch Logs . Broker usernames are not intended to be used for private or sensitive data.
-            :param console_access: Enables access to the ActiveMQ web console for the ActiveMQ user. Does not apply to RabbitMQ brokers.
+            When OAuth 2.0 is enabled, the broker accepts one or no users.
+
+            :param password: Required. The password of the user. This value must be at least 12 characters long, must contain at least 4 unique characters, and must not contain commas, colons, or equal signs (,:=).
+            :param username: The username of the broker user. The following restrictions apply to broker usernames:. - For Amazon MQ for ActiveMQ brokers, this value can contain only alphanumeric characters, dashes, periods, underscores, and tildes (- . _ ~). This value must be 2-100 characters long. - For Amazon MQ for RabbitMQ brokers, this value can contain only alphanumeric characters, dashes, periods, underscores (- . _). This value must not contain a tilde (~) character. Amazon MQ prohibts using ``guest`` as a valid usename. This value must be 2-100 characters long. .. epigraph:: Do not add personally identifiable information (PII) or other confidential or sensitive information in broker usernames. Broker usernames are accessible to other AWS services, including CloudWatch Logs . Broker usernames are not intended to be used for private or sensitive data.
+            :param console_access: Enables access to the ActiveMQ Web Console for the ActiveMQ user. Does not apply to RabbitMQ brokers.
             :param groups: The list of groups (20 maximum) to which the ActiveMQ user belongs. This value can contain only alphanumeric characters, dashes, periods, underscores, and tildes (- . _ ~). This value must be 2-100 characters long. Does not apply to RabbitMQ brokers.
             :param replication_user: Defines if this user is intended for CRDR replication purposes.
 
@@ -2458,9 +2418,9 @@ class CfnBroker(
 
         @builtins.property
         def password(self) -> builtins.str:
-            '''The password of the user.
+            '''Required.
 
-            This value must be at least 12 characters long, must contain at least 4 unique characters, and must not contain commas, colons, or equal signs (,:=).
+            The password of the user. This value must be at least 12 characters long, must contain at least 4 unique characters, and must not contain commas, colons, or equal signs (,:=).
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-amazonmq-broker-user.html#cfn-amazonmq-broker-user-password
             '''
@@ -2470,9 +2430,11 @@ class CfnBroker(
 
         @builtins.property
         def username(self) -> builtins.str:
-            '''The username of the broker user.
+            '''The username of the broker user. The following restrictions apply to broker usernames:.
 
-            For Amazon MQ for ActiveMQ brokers, this value can contain only alphanumeric characters, dashes, periods, underscores, and tildes (- . _ ~). For Amazon MQ for RabbitMQ brokers, this value can contain only alphanumeric characters, dashes, periods, underscores (- . _). This value must not contain a tilde (~) character. Amazon MQ prohibts using guest as a valid usename. This value must be 2-100 characters long.
+            - For Amazon MQ for ActiveMQ brokers, this value can contain only alphanumeric characters, dashes, periods, underscores, and tildes (- . _ ~). This value must be 2-100 characters long.
+            - For Amazon MQ for RabbitMQ brokers, this value can contain only alphanumeric characters, dashes, periods, underscores (- . _). This value must not contain a tilde (~) character. Amazon MQ prohibts using ``guest`` as a valid usename. This value must be 2-100 characters long.
+
             .. epigraph::
 
                Do not add personally identifiable information (PII) or other confidential or sensitive information in broker usernames. Broker usernames are accessible to other AWS services, including CloudWatch Logs . Broker usernames are not intended to be used for private or sensitive data.
@@ -2487,7 +2449,7 @@ class CfnBroker(
         def console_access(
             self,
         ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
-            '''Enables access to the ActiveMQ web console for the ActiveMQ user.
+            '''Enables access to the ActiveMQ Web Console for the ActiveMQ user.
 
             Does not apply to RabbitMQ brokers.
 
@@ -2539,9 +2501,6 @@ class CfnConfiguration(
     '''Creates a new configuration for the specified configuration name.
 
     Amazon MQ uses the default configuration (the engine type and version).
-    .. epigraph::
-
-       Does not apply to RabbitMQ brokers.
 
     :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-amazonmq-configuration.html
     :cloudformationResource: AWS::AmazonMQ::Configuration
@@ -2585,12 +2544,12 @@ class CfnConfiguration(
         '''
         :param scope: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
-        :param engine_type: The type of broker engine. Note: Currently, Amazon MQ only supports ACTIVEMQ for creating and editing broker configurations.
-        :param name: The name of the configuration. This value can contain only alphanumeric characters, dashes, periods, underscores, and tildes (- . _ ~). This value must be 1-150 characters long.
+        :param engine_type: Required. The type of broker engine. Currently, Amazon MQ supports ``ACTIVEMQ`` and ``RABBITMQ`` .
+        :param name: Required. The name of the configuration. This value can contain only alphanumeric characters, dashes, periods, underscores, and tildes (- . _ ~). This value must be 1-150 characters long.
         :param authentication_strategy: Optional. The authentication strategy associated with the configuration. The default is ``SIMPLE`` .
-        :param data: The base64-encoded XML configuration.
+        :param data: Amazon MQ for Active MQ: The base64-encoded XML configuration. Amazon MQ for RabbitMQ: the base64-encoded Cuttlefish configuration.
         :param description: The description of the configuration.
-        :param engine_version: The version of the broker engine. For a list of supported engine versions, see ` <https://docs.aws.amazon.com/amazon-mq/latest/developer-guide/broker-engine.html>`_
+        :param engine_version: The broker engine version. Defaults to the latest available version for the specified broker engine type. For more information, see the `ActiveMQ version management <https://docs.aws.amazon.com//amazon-mq/latest/developer-guide/activemq-version-management.html>`_ and the `RabbitMQ version management <https://docs.aws.amazon.com//amazon-mq/latest/developer-guide/rabbitmq-version-management.html>`_ sections in the Amazon MQ Developer Guide.
         :param tags: Create tags when creating the configuration.
         '''
         if __debug__:
@@ -2734,7 +2693,7 @@ class CfnConfiguration(
     @builtins.property
     @jsii.member(jsii_name="engineType")
     def engine_type(self) -> builtins.str:
-        '''The type of broker engine.'''
+        '''Required.'''
         return typing.cast(builtins.str, jsii.get(self, "engineType"))
 
     @engine_type.setter
@@ -2747,7 +2706,7 @@ class CfnConfiguration(
     @builtins.property
     @jsii.member(jsii_name="name")
     def name(self) -> builtins.str:
-        '''The name of the configuration.'''
+        '''Required.'''
         return typing.cast(builtins.str, jsii.get(self, "name"))
 
     @name.setter
@@ -2773,7 +2732,7 @@ class CfnConfiguration(
     @builtins.property
     @jsii.member(jsii_name="data")
     def data(self) -> typing.Optional[builtins.str]:
-        '''The base64-encoded XML configuration.'''
+        '''Amazon MQ for Active MQ: The base64-encoded XML configuration.'''
         return typing.cast(typing.Optional[builtins.str], jsii.get(self, "data"))
 
     @data.setter
@@ -2799,7 +2758,7 @@ class CfnConfiguration(
     @builtins.property
     @jsii.member(jsii_name="engineVersion")
     def engine_version(self) -> typing.Optional[builtins.str]:
-        '''The version of the broker engine.'''
+        '''The broker engine version.'''
         return typing.cast(typing.Optional[builtins.str], jsii.get(self, "engineVersion"))
 
     @engine_version.setter
@@ -2834,10 +2793,10 @@ class CfnConfiguration(
     )
     class TagsEntryProperty:
         def __init__(self, *, key: builtins.str, value: builtins.str) -> None:
-            '''A key-value pair to associate with the configuration.
+            '''The list of all tags associated with this configuration.
 
-            :param key: The key in a key-value pair.
-            :param value: The value in a key-value pair.
+            :param key: 
+            :param value: 
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-amazonmq-configuration-tagsentry.html
             :exampleMetadata: fixture=_generated
@@ -2864,8 +2823,7 @@ class CfnConfiguration(
 
         @builtins.property
         def key(self) -> builtins.str:
-            '''The key in a key-value pair.
-
+            '''
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-amazonmq-configuration-tagsentry.html#cfn-amazonmq-configuration-tagsentry-key
             '''
             result = self._values.get("key")
@@ -2874,8 +2832,7 @@ class CfnConfiguration(
 
         @builtins.property
         def value(self) -> builtins.str:
-            '''The value in a key-value pair.
-
+            '''
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-amazonmq-configuration-tagsentry.html#cfn-amazonmq-configuration-tagsentry-value
             '''
             result = self._values.get("value")
@@ -2900,12 +2857,7 @@ class CfnConfigurationAssociation(
     metaclass=jsii.JSIIMeta,
     jsii_type="aws-cdk-lib.aws_amazonmq.CfnConfigurationAssociation",
 ):
-    '''Use the AWS CloudFormation ``AWS::AmazonMQ::ConfigurationAssociation`` resource to associate a configuration with a broker, or return information about the specified ConfigurationAssociation.
-
-    Only use one per broker, and don't use a configuration on the broker resource if you have associated a configuration with that broker.
-    .. epigraph::
-
-       Does not apply to RabbitMQ brokers.
+    '''http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-amazonmq-configurationassociation.html.
 
     :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-amazonmq-configurationassociation.html
     :cloudformationResource: AWS::AmazonMQ::ConfigurationAssociation
@@ -2937,8 +2889,8 @@ class CfnConfigurationAssociation(
         '''
         :param scope: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
-        :param broker: The broker to associate with a configuration.
-        :param configuration: The configuration to associate with a broker.
+        :param broker: ID of the Broker that the configuration should be applied to.
+        :param configuration: Returns information about all configurations.
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__7bc27c46ef5e7e06d6d69ca58cb1eeb529e57c3a1b1af3771750fe74a0e5a436)
@@ -3003,7 +2955,7 @@ class CfnConfigurationAssociation(
     @builtins.property
     @jsii.member(jsii_name="broker")
     def broker(self) -> builtins.str:
-        '''The broker to associate with a configuration.'''
+        '''ID of the Broker that the configuration should be applied to.'''
         return typing.cast(builtins.str, jsii.get(self, "broker"))
 
     @broker.setter
@@ -3018,7 +2970,7 @@ class CfnConfigurationAssociation(
     def configuration(
         self,
     ) -> typing.Union[_IResolvable_da3f097b, "CfnConfigurationAssociation.ConfigurationIdProperty"]:
-        '''The configuration to associate with a broker.'''
+        '''Returns information about all configurations.'''
         return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnConfigurationAssociation.ConfigurationIdProperty"], jsii.get(self, "configuration"))
 
     @configuration.setter
@@ -3038,9 +2990,9 @@ class CfnConfigurationAssociation(
     )
     class ConfigurationIdProperty:
         def __init__(self, *, id: builtins.str, revision: jsii.Number) -> None:
-            '''The ``ConfigurationId`` property type specifies a configuration Id and the revision of a configuration.
+            '''A list of information about the configuration.
 
-            :param id: The unique ID that Amazon MQ generates for the configuration.
+            :param id: Required. The unique ID that Amazon MQ generates for the configuration.
             :param revision: The revision number of the configuration.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-amazonmq-configurationassociation-configurationid.html
@@ -3068,7 +3020,9 @@ class CfnConfigurationAssociation(
 
         @builtins.property
         def id(self) -> builtins.str:
-            '''The unique ID that Amazon MQ generates for the configuration.
+            '''Required.
+
+            The unique ID that Amazon MQ generates for the configuration.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-amazonmq-configurationassociation-configurationid.html#cfn-amazonmq-configurationassociation-configurationid-id
             '''

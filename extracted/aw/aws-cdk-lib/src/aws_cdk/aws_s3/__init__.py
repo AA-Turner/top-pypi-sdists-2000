@@ -11439,7 +11439,7 @@ class CfnBucket(
 
                If you are using an earlier version of the replication configuration, Amazon S3 handles replication of delete markers differently. For more information, see `Backward Compatibility <https://docs.aws.amazon.com/AmazonS3/latest/dev/replication-add-config.html#replication-backward-compat-considerations>`_ .
 
-            :param status: Indicates whether to replicate delete markers. Disabled by default.
+            :param status: Indicates whether to replicate delete markers.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-s3-bucket-deletemarkerreplication.html
             :exampleMetadata: fixture=_generated
@@ -11464,8 +11464,6 @@ class CfnBucket(
         @builtins.property
         def status(self) -> typing.Optional[builtins.str]:
             '''Indicates whether to replicate delete markers.
-
-            Disabled by default.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-s3-bucket-deletemarkerreplication.html#cfn-s3-bucket-deletemarkerreplication-status
             '''
@@ -17067,9 +17065,12 @@ class CfnBucket(
             '''Describes the versioning state of an Amazon S3 bucket.
 
             For more information, see `PUT Bucket versioning <https://docs.aws.amazon.com/AmazonS3/latest/API/RESTBucketPUTVersioningStatus.html>`_ in the *Amazon S3 API Reference* .
-            .. epigraph::
 
-               When you enable versioning on a bucket for the first time, it might take a short amount of time for the change to be fully propagated. We recommend that you wait for 15 minutes after enabling versioning before issuing write operations ( ``PUT`` or ``DELETE`` ) on objects in the bucket.
+            Keep the following timing in mind when enabling, suspending, or transitioning between versioning states:
+
+            - *Enabling versioning* - Changes may take up to 15 minutes to propagate across all AWS regions for full consistency.
+            - *Suspending versioning* - Takes effect immediately with no propagation delay.
+            - *Transitioning between states* - Any change from Suspended to Enabled has a 15-minute delay.
 
             :param status: The versioning state of the bucket. Default: - "Suspended"
 

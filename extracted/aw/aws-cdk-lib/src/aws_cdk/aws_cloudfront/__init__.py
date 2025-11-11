@@ -4051,7 +4051,8 @@ class CfnDistributionProps:
             
                             # the properties below are optional
                             origin_keepalive_timeout=123,
-                            origin_read_timeout=123
+                            origin_read_timeout=123,
+                            owner_account_id="ownerAccountId"
                         )
                     )],
                     price_class="priceClass",
@@ -10165,7 +10166,8 @@ class OriginBindConfig:
             
                         # the properties below are optional
                         origin_keepalive_timeout=123,
-                        origin_read_timeout=123
+                        origin_read_timeout=123,
+                        owner_account_id="ownerAccountId"
                     )
                 ),
                 selection_criteria=cloudfront.OriginSelectionCriteria.DEFAULT
@@ -21232,7 +21234,8 @@ class CfnDistribution(
                 
                         # the properties below are optional
                         origin_keepalive_timeout=123,
-                        origin_read_timeout=123
+                        origin_read_timeout=123,
+                        owner_account_id="ownerAccountId"
                     )
                 )
             '''
@@ -22197,6 +22200,7 @@ class CfnDistribution(
             "vpc_origin_id": "vpcOriginId",
             "origin_keepalive_timeout": "originKeepaliveTimeout",
             "origin_read_timeout": "originReadTimeout",
+            "owner_account_id": "ownerAccountId",
         },
     )
     class VpcOriginConfigProperty:
@@ -22206,12 +22210,14 @@ class CfnDistribution(
             vpc_origin_id: builtins.str,
             origin_keepalive_timeout: typing.Optional[jsii.Number] = None,
             origin_read_timeout: typing.Optional[jsii.Number] = None,
+            owner_account_id: typing.Optional[builtins.str] = None,
         ) -> None:
             '''An Amazon CloudFront VPC origin configuration.
 
             :param vpc_origin_id: The VPC origin ID.
             :param origin_keepalive_timeout: Specifies how long, in seconds, CloudFront persists its connection to the origin. The minimum timeout is 1 second, the maximum is 120 seconds, and the default (if you don't specify otherwise) is 5 seconds. For more information, see `Keep-alive timeout (custom origins only) <https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/DownloadDistValuesOrigin.html#DownloadDistValuesOriginKeepaliveTimeout>`_ in the *Amazon CloudFront Developer Guide* . Default: - 5
             :param origin_read_timeout: Specifies how long, in seconds, CloudFront waits for a response from the origin. This is also known as the *origin response timeout* . The minimum timeout is 1 second, the maximum is 120 seconds, and the default (if you don't specify otherwise) is 30 seconds. For more information, see `Response timeout <https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/DownloadDistValuesOrigin.html#DownloadDistValuesOriginResponseTimeout>`_ in the *Amazon CloudFront Developer Guide* . Default: - 30
+            :param owner_account_id: 
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-distribution-vpcoriginconfig.html
             :exampleMetadata: fixture=_generated
@@ -22227,7 +22233,8 @@ class CfnDistribution(
                 
                     # the properties below are optional
                     origin_keepalive_timeout=123,
-                    origin_read_timeout=123
+                    origin_read_timeout=123,
+                    owner_account_id="ownerAccountId"
                 )
             '''
             if __debug__:
@@ -22235,6 +22242,7 @@ class CfnDistribution(
                 check_type(argname="argument vpc_origin_id", value=vpc_origin_id, expected_type=type_hints["vpc_origin_id"])
                 check_type(argname="argument origin_keepalive_timeout", value=origin_keepalive_timeout, expected_type=type_hints["origin_keepalive_timeout"])
                 check_type(argname="argument origin_read_timeout", value=origin_read_timeout, expected_type=type_hints["origin_read_timeout"])
+                check_type(argname="argument owner_account_id", value=owner_account_id, expected_type=type_hints["owner_account_id"])
             self._values: typing.Dict[builtins.str, typing.Any] = {
                 "vpc_origin_id": vpc_origin_id,
             }
@@ -22242,6 +22250,8 @@ class CfnDistribution(
                 self._values["origin_keepalive_timeout"] = origin_keepalive_timeout
             if origin_read_timeout is not None:
                 self._values["origin_read_timeout"] = origin_read_timeout
+            if owner_account_id is not None:
+                self._values["owner_account_id"] = owner_account_id
 
         @builtins.property
         def vpc_origin_id(self) -> builtins.str:
@@ -22282,6 +22292,14 @@ class CfnDistribution(
             '''
             result = self._values.get("origin_read_timeout")
             return typing.cast(typing.Optional[jsii.Number], result)
+
+        @builtins.property
+        def owner_account_id(self) -> typing.Optional[builtins.str]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-distribution-vpcoriginconfig.html#cfn-cloudfront-distribution-vpcoriginconfig-owneraccountid
+            '''
+            result = self._values.get("owner_account_id")
+            return typing.cast(typing.Optional[builtins.str], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -28386,6 +28404,14 @@ class CfnVpcOrigin(
         return typing.cast(builtins.str, jsii.sget(cls, "CFN_RESOURCE_TYPE_NAME"))
 
     @builtins.property
+    @jsii.member(jsii_name="attrAccountId")
+    def attr_account_id(self) -> builtins.str:
+        '''
+        :cloudformationAttribute: AccountId
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrAccountId"))
+
+    @builtins.property
     @jsii.member(jsii_name="attrArn")
     def attr_arn(self) -> builtins.str:
         '''The VPC origin ARN.
@@ -33933,6 +33959,7 @@ def _typecheckingstub__f7a2beaed61436754427d5794c11e2b8b3ecac452591d86453fc6b432
     vpc_origin_id: builtins.str,
     origin_keepalive_timeout: typing.Optional[jsii.Number] = None,
     origin_read_timeout: typing.Optional[jsii.Number] = None,
+    owner_account_id: typing.Optional[builtins.str] = None,
 ) -> None:
     """Type checking stubs"""
     pass

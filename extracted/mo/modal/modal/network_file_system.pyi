@@ -54,7 +54,12 @@ class _NetworkFileSystem(modal._object._Object):
     """
     @staticmethod
     def from_name(
-        name: str, *, namespace=None, environment_name: typing.Optional[str] = None, create_if_missing: bool = False
+        name: str,
+        *,
+        namespace=None,
+        environment_name: typing.Optional[str] = None,
+        create_if_missing: bool = False,
+        client: typing.Optional[modal.client._Client] = None,
     ) -> _NetworkFileSystem:
         """Reference a NetworkFileSystem by its name, creating if necessary.
 
@@ -210,7 +215,12 @@ class NetworkFileSystem(modal.object.Object):
 
     @staticmethod
     def from_name(
-        name: str, *, namespace=None, environment_name: typing.Optional[str] = None, create_if_missing: bool = False
+        name: str,
+        *,
+        namespace=None,
+        environment_name: typing.Optional[str] = None,
+        create_if_missing: bool = False,
+        client: typing.Optional[modal.client.Client] = None,
     ) -> NetworkFileSystem:
         """Reference a NetworkFileSystem by its name, creating if necessary.
 

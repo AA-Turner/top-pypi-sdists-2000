@@ -1,3 +1,4 @@
+import modal._load_context
 import modal.app
 import modal.client
 import modal.running_app
@@ -16,18 +17,18 @@ async def _init_local_app_existing(
 async def _init_local_app_new(
     client: modal.client._Client,
     description: str,
+    tags: dict[str, str],
     app_state: int,
     environment_name: str = "",
     interactive: bool = False,
 ) -> modal.running_app.RunningApp: ...
 async def _init_local_app_from_name(
-    client: modal.client._Client, name: str, environment_name: str = ""
+    client: modal.client._Client, name: str, tags: dict[str, str], environment_name: str = ""
 ) -> modal.running_app.RunningApp: ...
 async def _create_all_objects(
-    client: modal.client._Client,
     running_app: modal.running_app.RunningApp,
     local_app_state: modal.app._LocalAppState,
-    environment_name: str,
+    load_context: modal._load_context.LoadContext,
 ) -> None:
     """Create objects that have been defined but not created on the server."""
     ...

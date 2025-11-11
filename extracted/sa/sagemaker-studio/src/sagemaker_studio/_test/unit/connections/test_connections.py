@@ -13,12 +13,14 @@ class TestConnections(unittest.TestCase):
         self.mock_datazone_api = Mock()
         self.mock_glue_api = Mock()
         self.mock_secrets_manager_api = Mock()
+        self.mock_kms_api = Mock()
         self.connections = ConnectionService(
             project_id="test_project",
             domain_id="test_domain",
             datazone_api=self.mock_datazone_api,
             glue_api=self.mock_glue_api,
             secrets_manager_api=self.mock_secrets_manager_api,
+            kms_api=self.mock_kms_api,
             project_config=ClientConfig(),
         )
 
@@ -95,4 +97,27 @@ class TestConnections(unittest.TestCase):
         self.assertEqual(connections[1].name, "connection2")
         self.mock_datazone_api.list_connections.assert_any_call(
             domainIdentifier="test_domain", projectIdentifier="test_project"
+        )
+
+    def test_get_connection_by_id_success(self):
+        self.mock_datazone_api.get_connection.return_value = {
+            "connectionId": "12345",
+            "secret": "my_secret",
+            "name": "test_connection",
+        }
+        connection = self.connections.get_connection_by_id("12345")
+        self.assertIsInstance(connection, Connection)
+        self.mock_datazone_api.get_connection.assert_called_once_with(
+            domainIdentifier="test_domain", identifier="12345", withSecret=True
+        )
+
+    def test_get_connection_by_id_client_error(self):
+        self.mock_datazone_api.get_connection.side_effect = ClientError(
+            error_response={"Error": {"Code": "ResourceNotFoundException"}},
+            operation_name="GetConnection",
+        )
+        with self.assertRaises(ClientError):
+            self.connections.get_connection_by_id("nonexistent_id")
+        self.mock_datazone_api.get_connection.assert_called_once_with(
+            domainIdentifier="test_domain", identifier="nonexistent_id", withSecret=True
         )

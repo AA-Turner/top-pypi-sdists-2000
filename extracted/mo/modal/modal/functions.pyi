@@ -1,6 +1,7 @@
 import collections.abc
 import google.protobuf.message
 import modal._functions
+import modal._load_context
 import modal._utils.async_utils
 import modal._utils.function_utils
 import modal.app
@@ -66,7 +67,7 @@ class Function(
     @staticmethod
     def from_local(
         info: modal._utils.function_utils.FunctionInfo,
-        app,
+        app: typing.Optional[modal.app.App],
         image: modal.image.Image,
         env: typing.Optional[dict[str, typing.Optional[str]]] = None,
         secrets: typing.Optional[collections.abc.Collection[modal.secret.Secret]] = None,
@@ -245,10 +246,16 @@ class Function(
     keep_warm: __keep_warm_spec[typing_extensions.Self]
 
     @classmethod
-    def _from_name(cls, app_name: str, name: str, namespace=None, environment_name: typing.Optional[str] = None): ...
+    def _from_name(cls, app_name: str, name: str, *, load_context_overrides: modal._load_context.LoadContext): ...
     @classmethod
     def from_name(
-        cls: type[Function], app_name: str, name: str, *, namespace=None, environment_name: typing.Optional[str] = None
+        cls: type[Function],
+        app_name: str,
+        name: str,
+        *,
+        namespace=None,
+        environment_name: typing.Optional[str] = None,
+        client: typing.Optional[modal.client.Client] = None,
     ) -> Function:
         """Reference a Function from a deployed App by its name.
 
@@ -714,7 +721,6 @@ class FunctionCall(typing.Generic[modal._functions.ReturnType], modal.object.Obj
         ...
 
     def _invocation(self): ...
-    def _hydrate_metadata(self, metadata: typing.Optional[google.protobuf.message.Message]): ...
 
     class __num_inputs_spec(typing_extensions.Protocol[SUPERSELF]):
         def __call__(self, /) -> int:

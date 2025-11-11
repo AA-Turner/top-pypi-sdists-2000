@@ -23,7 +23,7 @@ const GET_INTERPRETER_METADATA: &str = include_str!("get_interpreter_metadata.py
 pub const MINIMUM_PYTHON_MINOR: usize = 7;
 pub const MINIMUM_PYPY_MINOR: usize = 8;
 /// Be liberal here to include preview versions
-pub const MAXIMUM_PYTHON_MINOR: usize = 13;
+pub const MAXIMUM_PYTHON_MINOR: usize = 14;
 pub const MAXIMUM_PYPY_MINOR: usize = 11;
 
 /// On windows regular Python installs are supported along with environments
@@ -292,6 +292,8 @@ fn fun_with_abiflags(
     if bridge != &BridgeModel::Cffi
         && target.get_python_os() != message.system
         && !target.cross_compiling()
+        && !(target.get_python_os() == "cygwin"
+            && message.system.to_lowercase().starts_with("cygwin"))
     {
         bail!(
             "platform.system() in python, {}, and the rust target, {:?}, don't match ಠ_ಠ",
@@ -407,7 +409,7 @@ impl PythonInterpreter {
                 }
                 InterpreterKind::PyPy => {
                     // pypy uses its version as part of the ABI, e.g.
-                    // pypy 3.7 7.3 => numpy-1.20.1-pp37-pypy37_pp73-manylinux2014_x86_64.whl
+                    // pypy 3.11 7.3 => numpy-1.20.1-pp311-pypy311_pp73-manylinux2014_x86_64.whl
                     format!(
                         "pp{major}{minor}-{abi_tag}-{platform}",
                         major = self.major,
@@ -976,6 +978,7 @@ mod tests {
                 "CPython 3.11",
                 "CPython 3.12",
                 "CPython 3.13",
+                "CPython 3.14",
                 "PyPy 3.8",
                 "PyPy 3.9",
                 "PyPy 3.10",
@@ -1007,7 +1010,9 @@ mod tests {
                 "CPython 3.11",
                 "CPython 3.12",
                 "CPython 3.13",
+                "CPython 3.14",
                 "CPython 3.13t",
+                "CPython 3.14t",
                 "PyPy 3.9",
                 "PyPy 3.10",
                 "PyPy 3.11",
@@ -1031,6 +1036,7 @@ mod tests {
                 "CPython 3.11",
                 "CPython 3.12",
                 "CPython 3.13",
+                "CPython 3.14",
                 "PyPy 3.8",
                 "PyPy 3.9",
                 "PyPy 3.10",
@@ -1053,6 +1059,7 @@ mod tests {
                 "CPython 3.11",
                 "CPython 3.12",
                 "CPython 3.13",
+                "CPython 3.14",
                 "PyPy 3.10",
                 "PyPy 3.11",
             ]
@@ -1081,7 +1088,9 @@ mod tests {
                 "CPython 3.11",
                 "CPython 3.12",
                 "CPython 3.13",
+                "CPython 3.14",
                 "CPython 3.13t",
+                "CPython 3.14t",
                 "PyPy 3.9",
                 "PyPy 3.10",
                 "PyPy 3.11",

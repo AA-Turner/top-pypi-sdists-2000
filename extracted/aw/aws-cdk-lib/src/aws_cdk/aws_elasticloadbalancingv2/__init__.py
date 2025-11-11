@@ -21737,9 +21737,12 @@ class CfnListenerRule(
     )
     class RewriteConfigProperty:
         def __init__(self, *, regex: builtins.str, replace: builtins.str) -> None:
-            '''
-            :param regex: 
-            :param replace: 
+            '''Information about a rewrite transform.
+
+            This transform matches a pattern and replaces it with the specified string.
+
+            :param regex: The regular expression to match in the input string. The maximum length of the string is 1,024 characters.
+            :param replace: The replacement string to use when rewriting the matched input. The maximum length of the string is 1,024 characters. You can specify capture groups in the regular expression (for example, $1 and $2).
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-elasticloadbalancingv2-listenerrule-rewriteconfig.html
             :exampleMetadata: fixture=_generated
@@ -21766,7 +21769,10 @@ class CfnListenerRule(
 
         @builtins.property
         def regex(self) -> builtins.str:
-            '''
+            '''The regular expression to match in the input string.
+
+            The maximum length of the string is 1,024 characters.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-elasticloadbalancingv2-listenerrule-rewriteconfig.html#cfn-elasticloadbalancingv2-listenerrule-rewriteconfig-regex
             '''
             result = self._values.get("regex")
@@ -21775,7 +21781,10 @@ class CfnListenerRule(
 
         @builtins.property
         def replace(self) -> builtins.str:
-            '''
+            '''The replacement string to use when rewriting the matched input.
+
+            The maximum length of the string is 1,024 characters. You can specify capture groups in the regular expression (for example, $1 and $2).
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-elasticloadbalancingv2-listenerrule-rewriteconfig.html#cfn-elasticloadbalancingv2-listenerrule-rewriteconfig-replace
             '''
             result = self._values.get("replace")
@@ -21830,7 +21839,7 @@ class CfnListenerRule(
             :param http_request_method_config: Information for an HTTP method condition. Specify only when ``Field`` is ``http-request-method`` .
             :param path_pattern_config: Information for a path pattern condition. Specify only when ``Field`` is ``path-pattern`` .
             :param query_string_config: Information for a query string condition. Specify only when ``Field`` is ``query-string`` .
-            :param regex_values: 
+            :param regex_values: The regular expressions to match against the condition field. The maximum length of each string is 128 characters. Specify only when ``Field`` is ``http-header`` , ``host-header`` , or ``path-pattern`` .
             :param source_ip_config: Information for a source IP condition. Specify only when ``Field`` is ``source-ip`` .
             :param values: The condition value. Specify only when ``Field`` is ``host-header`` or ``path-pattern`` . Alternatively, to specify multiple host names or multiple path patterns, use ``HostHeaderConfig`` or ``PathPatternConfig`` . If ``Field`` is ``host-header`` and you're not using ``HostHeaderConfig`` , you can specify a single host name (for example, my.example.com). A host name is case insensitive, can be up to 128 characters in length, and can contain any of the following characters. - A-Z, a-z, 0-9 - - . - - (matches 0 or more characters) - ? (matches exactly 1 character) If ``Field`` is ``path-pattern`` and you're not using ``PathPatternConfig`` , you can specify a single path pattern (for example, /img/*). A path pattern is case-sensitive, can be up to 128 characters in length, and can contain any of the following characters. - A-Z, a-z, 0-9 - _ - . $ / ~ " ' @ : + - & (using &) - - (matches 0 or more characters) - ? (matches exactly 1 character)
 
@@ -21988,7 +21997,10 @@ class CfnListenerRule(
 
         @builtins.property
         def regex_values(self) -> typing.Optional[typing.List[builtins.str]]:
-            '''
+            '''The regular expressions to match against the condition field.
+
+            The maximum length of each string is 128 characters. Specify only when ``Field`` is ``http-header`` , ``host-header`` , or ``path-pattern`` .
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-elasticloadbalancingv2-listenerrule-rulecondition.html#cfn-elasticloadbalancingv2-listenerrule-rulecondition-regexvalues
             '''
             result = self._values.get("regex_values")

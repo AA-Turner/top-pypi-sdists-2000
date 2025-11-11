@@ -5,6 +5,7 @@ import modal._functions
 import modal._object
 import modal._partial_function
 import modal.app
+import modal.client
 import modal.cloud_bucket_mount
 import modal.functions
 import modal.gpu
@@ -379,6 +380,7 @@ class _Cls(modal._object._Object):
         *,
         namespace: typing.Any = None,
         environment_name: typing.Optional[str] = None,
+        client: typing.Optional[modal.client._Client] = None,
     ) -> _Cls:
         """Reference a Cls from a deployed App by its name.
 
@@ -537,6 +539,7 @@ class Cls(modal.object.Object):
         *,
         namespace: typing.Any = None,
         environment_name: typing.Optional[str] = None,
+        client: typing.Optional[modal.client.Client] = None,
     ) -> Cls:
         """Reference a Cls from a deployed App by its name.
 

@@ -489,6 +489,7 @@ class _Volume(modal._object._Object):
         environment_name: typing.Optional[str] = None,
         create_if_missing: bool = False,
         version: typing.Optional[int] = None,
+        client: typing.Optional[modal.client._Client] = None,
     ) -> _Volume:
         """Reference a Volume by name, creating if necessary.
 
@@ -806,6 +807,7 @@ class Volume(modal.object.Object):
         environment_name: typing.Optional[str] = None,
         create_if_missing: bool = False,
         version: typing.Optional[int] = None,
+        client: typing.Optional[modal.client.Client] = None,
     ) -> Volume:
         """Reference a Volume by name, creating if necessary.
 

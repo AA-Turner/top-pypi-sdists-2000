@@ -112,6 +112,7 @@ class CfnFirewallPolicyProps:
                     stateless_fragment_default_actions=["statelessFragmentDefaultActions"],
             
                     # the properties below are optional
+                    enable_tls_session_holding=False,
                     policy_variables=networkfirewall.CfnFirewallPolicy.PolicyVariablesProperty(
                         rule_variables={
                             "rule_variables_key": {
@@ -1946,6 +1947,14 @@ class CfnFirewall(
         return typing.cast(builtins.str, jsii.get(self, "attrFirewallId"))
 
     @builtins.property
+    @jsii.member(jsii_name="attrTransitGatewayAttachmentId")
+    def attr_transit_gateway_attachment_id(self) -> builtins.str:
+        '''
+        :cloudformationAttribute: TransitGatewayAttachmentId
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrTransitGatewayAttachmentId"))
+
+    @builtins.property
     @jsii.member(jsii_name="cfnProperties")
     def _cfn_properties(self) -> typing.Mapping[builtins.str, typing.Any]:
         return typing.cast(typing.Mapping[builtins.str, typing.Any], jsii.get(self, "cfnProperties"))
@@ -2326,6 +2335,7 @@ class CfnFirewallPolicy(
                 stateless_fragment_default_actions=["statelessFragmentDefaultActions"],
         
                 # the properties below are optional
+                enable_tls_session_holding=False,
                 policy_variables=networkfirewall.CfnFirewallPolicy.PolicyVariablesProperty(
                     rule_variables={
                         "rule_variables_key": {
@@ -2753,6 +2763,7 @@ class CfnFirewallPolicy(
         name_mapping={
             "stateless_default_actions": "statelessDefaultActions",
             "stateless_fragment_default_actions": "statelessFragmentDefaultActions",
+            "enable_tls_session_holding": "enableTlsSessionHolding",
             "policy_variables": "policyVariables",
             "stateful_default_actions": "statefulDefaultActions",
             "stateful_engine_options": "statefulEngineOptions",
@@ -2768,6 +2779,7 @@ class CfnFirewallPolicy(
             *,
             stateless_default_actions: typing.Sequence[builtins.str],
             stateless_fragment_default_actions: typing.Sequence[builtins.str],
+            enable_tls_session_holding: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
             policy_variables: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnFirewallPolicy.PolicyVariablesProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             stateful_default_actions: typing.Optional[typing.Sequence[builtins.str]] = None,
             stateful_engine_options: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnFirewallPolicy.StatefulEngineOptionsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -2780,6 +2792,7 @@ class CfnFirewallPolicy(
 
             :param stateless_default_actions: The actions to take on a packet if it doesn't match any of the stateless rules in the policy. If you want non-matching packets to be forwarded for stateful inspection, specify ``aws:forward_to_sfe`` . You must specify one of the standard actions: ``aws:pass`` , ``aws:drop`` , or ``aws:forward_to_sfe`` . In addition, you can specify custom actions that are compatible with your standard section choice. For example, you could specify ``["aws:pass"]`` or you could specify ``["aws:pass", “customActionName”]`` . For information about compatibility, see the custom action descriptions.
             :param stateless_fragment_default_actions: The actions to take on a fragmented packet if it doesn't match any of the stateless rules in the policy. If you want non-matching fragmented packets to be forwarded for stateful inspection, specify ``aws:forward_to_sfe`` . You must specify one of the standard actions: ``aws:pass`` , ``aws:drop`` , or ``aws:forward_to_sfe`` . In addition, you can specify custom actions that are compatible with your standard section choice. For example, you could specify ``["aws:pass"]`` or you could specify ``["aws:pass", “customActionName”]`` . For information about compatibility, see the custom action descriptions.
+            :param enable_tls_session_holding: 
             :param policy_variables: Contains variables that you can use to override default Suricata settings in your firewall policy.
             :param stateful_default_actions: The default actions to take on a packet that doesn't match any stateful rules. The stateful default action is optional, and is only valid when using the strict rule order. Valid values of the stateful default action: - aws:drop_strict - aws:drop_established - aws:alert_strict - aws:alert_established For more information, see `Strict evaluation order <https://docs.aws.amazon.com/network-firewall/latest/developerguide/suricata-rule-evaluation-order.html#suricata-strict-rule-evaluation-order.html>`_ in the *AWS Network Firewall Developer Guide* .
             :param stateful_engine_options: Additional options governing how Network Firewall handles stateful rules. The stateful rule groups that you use in your policy must have stateful rule options settings that are compatible with these settings.
@@ -2802,6 +2815,7 @@ class CfnFirewallPolicy(
                     stateless_fragment_default_actions=["statelessFragmentDefaultActions"],
                 
                     # the properties below are optional
+                    enable_tls_session_holding=False,
                     policy_variables=networkfirewall.CfnFirewallPolicy.PolicyVariablesProperty(
                         rule_variables={
                             "rule_variables_key": {
@@ -2848,6 +2862,7 @@ class CfnFirewallPolicy(
                 type_hints = typing.get_type_hints(_typecheckingstub__1b6a6014864b81482e4c4a383921c58673d84e8e882dc4fb7cea71a2db29fc18)
                 check_type(argname="argument stateless_default_actions", value=stateless_default_actions, expected_type=type_hints["stateless_default_actions"])
                 check_type(argname="argument stateless_fragment_default_actions", value=stateless_fragment_default_actions, expected_type=type_hints["stateless_fragment_default_actions"])
+                check_type(argname="argument enable_tls_session_holding", value=enable_tls_session_holding, expected_type=type_hints["enable_tls_session_holding"])
                 check_type(argname="argument policy_variables", value=policy_variables, expected_type=type_hints["policy_variables"])
                 check_type(argname="argument stateful_default_actions", value=stateful_default_actions, expected_type=type_hints["stateful_default_actions"])
                 check_type(argname="argument stateful_engine_options", value=stateful_engine_options, expected_type=type_hints["stateful_engine_options"])
@@ -2859,6 +2874,8 @@ class CfnFirewallPolicy(
                 "stateless_default_actions": stateless_default_actions,
                 "stateless_fragment_default_actions": stateless_fragment_default_actions,
             }
+            if enable_tls_session_holding is not None:
+                self._values["enable_tls_session_holding"] = enable_tls_session_holding
             if policy_variables is not None:
                 self._values["policy_variables"] = policy_variables
             if stateful_default_actions is not None:
@@ -2905,6 +2922,16 @@ class CfnFirewallPolicy(
             result = self._values.get("stateless_fragment_default_actions")
             assert result is not None, "Required property 'stateless_fragment_default_actions' is missing"
             return typing.cast(typing.List[builtins.str], result)
+
+        @builtins.property
+        def enable_tls_session_holding(
+            self,
+        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-networkfirewall-firewallpolicy-firewallpolicy.html#cfn-networkfirewall-firewallpolicy-firewallpolicy-enabletlssessionholding
+            '''
+            result = self._values.get("enable_tls_session_holding")
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
 
         @builtins.property
         def policy_variables(
@@ -8174,6 +8201,7 @@ def _typecheckingstub__1b6a6014864b81482e4c4a383921c58673d84e8e882dc4fb7cea71a2d
     *,
     stateless_default_actions: typing.Sequence[builtins.str],
     stateless_fragment_default_actions: typing.Sequence[builtins.str],
+    enable_tls_session_holding: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     policy_variables: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnFirewallPolicy.PolicyVariablesProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     stateful_default_actions: typing.Optional[typing.Sequence[builtins.str]] = None,
     stateful_engine_options: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnFirewallPolicy.StatefulEngineOptionsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,

@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: modal
-Version: 1.2.1
+Version: 1.2.2
 Summary: Python client library for Modal
 Author-email: Modal Labs <support@modal.com>
 License: Apache-2.0
@@ -13,7 +13,7 @@ Classifier: Topic :: System :: Distributed Computing
 Classifier: Operating System :: OS Independent
 Classifier: License :: OSI Approved :: Apache Software License
 Classifier: Programming Language :: Python :: 3
-Requires-Python: >=3.9
+Requires-Python: <3.14,>=3.9
 Description-Content-Type: text/markdown
 License-File: LICENSE
 Requires-Dist: aiohttp

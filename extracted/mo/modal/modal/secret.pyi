@@ -1,5 +1,6 @@
 import datetime
 import google.protobuf.message
+import modal._load_context
 import modal._object
 import modal.client
 import modal.object
@@ -355,6 +356,12 @@ class SecretManager:
 
     delete: __delete_spec
 
+async def _load_from_env_dict(
+    instance: _Secret, load_context: modal._load_context.LoadContext, env_dict: dict[str, str]
+):
+    """helper method for loaders .from_dict and .from_dotenv etc."""
+    ...
+
 class _Secret(modal._object._Object):
     """Secrets provide a dictionary of environment variables for images.
 
@@ -392,7 +399,7 @@ class _Secret(modal._object._Object):
         ...
 
     @staticmethod
-    def from_dotenv(path=None, *, filename=".env") -> _Secret:
+    def from_dotenv(path=None, *, filename=".env", client: typing.Optional[modal.client._Client] = None) -> _Secret:
         """Create secrets from a .env file automatically.
 
         If no argument is provided, it will use the current working directory as the starting
@@ -423,7 +430,12 @@ class _Secret(modal._object._Object):
 
     @staticmethod
     def from_name(
-        name: str, *, namespace=None, environment_name: typing.Optional[str] = None, required_keys: list[str] = []
+        name: str,
+        *,
+        namespace=None,
+        environment_name: typing.Optional[str] = None,
+        required_keys: list[str] = [],
+        client: typing.Optional[modal.client._Client] = None,
     ) -> _Secret:
         """Reference a Secret by its name.
 
@@ -512,7 +524,7 @@ class Secret(modal.object.Object):
         ...
 
     @staticmethod
-    def from_dotenv(path=None, *, filename=".env") -> Secret:
+    def from_dotenv(path=None, *, filename=".env", client: typing.Optional[modal.client.Client] = None) -> Secret:
         """Create secrets from a .env file automatically.
 
         If no argument is provided, it will use the current working directory as the starting
@@ -543,7 +555,12 @@ class Secret(modal.object.Object):
 
     @staticmethod
     def from_name(
-        name: str, *, namespace=None, environment_name: typing.Optional[str] = None, required_keys: list[str] = []
+        name: str,
+        *,
+        namespace=None,
+        environment_name: typing.Optional[str] = None,
+        required_keys: list[str] = [],
+        client: typing.Optional[modal.client.Client] = None,
     ) -> Secret:
         """Reference a Secret by its name.
 

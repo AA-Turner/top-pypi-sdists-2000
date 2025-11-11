@@ -3602,7 +3602,7 @@ class CfnAggregatorV2(
 ):
     '''Enables aggregation across AWS Regions .
 
-    This API is in private preview and subject to change.
+    This API is in public preview and subject to change.
 
     :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-securityhub-aggregatorv2.html
     :cloudformationResource: AWS::SecurityHub::AggregatorV2
@@ -6213,7 +6213,7 @@ class CfnAutomationRuleV2(
 ):
     '''Creates a V2 automation rule.
 
-    This API is in private preview and subject to change.
+    This API is in public preview and subject to change.
 
     :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-securityhub-automationrulev2.html
     :cloudformationResource: AWS::SecurityHub::AutomationRuleV2
@@ -9479,7 +9479,7 @@ class CfnHubV2(
 ):
     '''Returns details about the service resource in your account.
 
-    This API is in private preview and subject to change.
+    This API is in public preview and subject to change.
 
     :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-securityhub-hubv2.html
     :cloudformationResource: AWS::SecurityHub::HubV2

@@ -85,10 +85,12 @@ from .. import (
     jsii_struct_bases=[],
     name_mapping={
         "domain_identifier": "domainIdentifier",
-        "environment_identifier": "environmentIdentifier",
         "name": "name",
         "aws_location": "awsLocation",
         "description": "description",
+        "enable_trusted_identity_propagation": "enableTrustedIdentityPropagation",
+        "environment_identifier": "environmentIdentifier",
+        "project_identifier": "projectIdentifier",
         "props": "props",
     },
 )
@@ -97,19 +99,23 @@ class CfnConnectionProps:
         self,
         *,
         domain_identifier: builtins.str,
-        environment_identifier: builtins.str,
         name: builtins.str,
         aws_location: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnConnection.AwsLocationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         description: typing.Optional[builtins.str] = None,
+        enable_trusted_identity_propagation: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        environment_identifier: typing.Optional[builtins.str] = None,
+        project_identifier: typing.Optional[builtins.str] = None,
         props: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnConnection.ConnectionPropertiesInputProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnConnection``.
 
         :param domain_identifier: The ID of the domain where the connection is created.
-        :param environment_identifier: The ID of the environment where the connection is created.
         :param name: The name of the connection.
         :param aws_location: The location where the connection is created.
         :param description: Connection description.
+        :param enable_trusted_identity_propagation: Specifies whether the trusted identity propagation is enabled.
+        :param environment_identifier: The ID of the environment where the connection is created.
+        :param project_identifier: The identifier of the project in which the connection should be created. If
         :param props: Connection props.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-datazone-connection.html
@@ -123,7 +129,6 @@ class CfnConnectionProps:
             
             cfn_connection_props = datazone.CfnConnectionProps(
                 domain_identifier="domainIdentifier",
-                environment_identifier="environmentIdentifier",
                 name="name",
             
                 # the properties below are optional
@@ -134,6 +139,9 @@ class CfnConnectionProps:
                     iam_connection_id="iamConnectionId"
                 ),
                 description="description",
+                enable_trusted_identity_propagation=False,
+                environment_identifier="environmentIdentifier",
+                project_identifier="projectIdentifier",
                 props=datazone.CfnConnection.ConnectionPropertiesInputProperty(
                     athena_properties=datazone.CfnConnection.AthenaPropertiesInputProperty(
                         workgroup_name="workgroupName"
@@ -227,6 +235,12 @@ class CfnConnectionProps:
                             workgroup_name="workgroupName"
                         )
                     ),
+                    s3_properties=datazone.CfnConnection.S3PropertiesInputProperty(
+                        s3_uri="s3Uri",
+            
+                        # the properties below are optional
+                        s3_access_grant_location_id="s3AccessGrantLocationId"
+                    ),
                     spark_emr_properties=datazone.CfnConnection.SparkEmrPropertiesInputProperty(
                         compute_arn="computeArn",
                         instance_profile_arn="instanceProfileArn",
@@ -254,20 +268,27 @@ class CfnConnectionProps:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__8797ba459ed68920849c7b460987b708539d45c9d479ab52091ec466aebc8432)
             check_type(argname="argument domain_identifier", value=domain_identifier, expected_type=type_hints["domain_identifier"])
-            check_type(argname="argument environment_identifier", value=environment_identifier, expected_type=type_hints["environment_identifier"])
             check_type(argname="argument name", value=name, expected_type=type_hints["name"])
             check_type(argname="argument aws_location", value=aws_location, expected_type=type_hints["aws_location"])
             check_type(argname="argument description", value=description, expected_type=type_hints["description"])
+            check_type(argname="argument enable_trusted_identity_propagation", value=enable_trusted_identity_propagation, expected_type=type_hints["enable_trusted_identity_propagation"])
+            check_type(argname="argument environment_identifier", value=environment_identifier, expected_type=type_hints["environment_identifier"])
+            check_type(argname="argument project_identifier", value=project_identifier, expected_type=type_hints["project_identifier"])
             check_type(argname="argument props", value=props, expected_type=type_hints["props"])
         self._values: typing.Dict[builtins.str, typing.Any] = {
             "domain_identifier": domain_identifier,
-            "environment_identifier": environment_identifier,
             "name": name,
         }
         if aws_location is not None:
             self._values["aws_location"] = aws_location
         if description is not None:
             self._values["description"] = description
+        if enable_trusted_identity_propagation is not None:
+            self._values["enable_trusted_identity_propagation"] = enable_trusted_identity_propagation
+        if environment_identifier is not None:
+            self._values["environment_identifier"] = environment_identifier
+        if project_identifier is not None:
+            self._values["project_identifier"] = project_identifier
         if props is not None:
             self._values["props"] = props
 
@@ -279,16 +300,6 @@ class CfnConnectionProps:
         '''
         result = self._values.get("domain_identifier")
         assert result is not None, "Required property 'domain_identifier' is missing"
-        return typing.cast(builtins.str, result)
-
-    @builtins.property
-    def environment_identifier(self) -> builtins.str:
-        '''The ID of the environment where the connection is created.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-datazone-connection.html#cfn-datazone-connection-environmentidentifier
-        '''
-        result = self._values.get("environment_identifier")
-        assert result is not None, "Required property 'environment_identifier' is missing"
         return typing.cast(builtins.str, result)
 
     @builtins.property
@@ -319,6 +330,37 @@ class CfnConnectionProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-datazone-connection.html#cfn-datazone-connection-description
         '''
         result = self._values.get("description")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def enable_trusted_identity_propagation(
+        self,
+    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        '''Specifies whether the trusted identity propagation is enabled.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-datazone-connection.html#cfn-datazone-connection-enabletrustedidentitypropagation
+        '''
+        result = self._values.get("enable_trusted_identity_propagation")
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+
+    @builtins.property
+    def environment_identifier(self) -> typing.Optional[builtins.str]:
+        '''The ID of the environment where the connection is created.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-datazone-connection.html#cfn-datazone-connection-environmentidentifier
+        '''
+        result = self._values.get("environment_identifier")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def project_identifier(self) -> typing.Optional[builtins.str]:
+        '''The identifier of the project in which the connection should be created.
+
+        If
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-datazone-connection.html#cfn-datazone-connection-projectidentifier
+        '''
+        result = self._values.get("project_identifier")
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
@@ -5057,7 +5099,6 @@ class CfnConnection(
         
         cfn_connection = datazone.CfnConnection(self, "MyCfnConnection",
             domain_identifier="domainIdentifier",
-            environment_identifier="environmentIdentifier",
             name="name",
         
             # the properties below are optional
@@ -5068,6 +5109,9 @@ class CfnConnection(
                 iam_connection_id="iamConnectionId"
             ),
             description="description",
+            enable_trusted_identity_propagation=False,
+            environment_identifier="environmentIdentifier",
+            project_identifier="projectIdentifier",
             props=datazone.CfnConnection.ConnectionPropertiesInputProperty(
                 athena_properties=datazone.CfnConnection.AthenaPropertiesInputProperty(
                     workgroup_name="workgroupName"
@@ -5161,6 +5205,12 @@ class CfnConnection(
                         workgroup_name="workgroupName"
                     )
                 ),
+                s3_properties=datazone.CfnConnection.S3PropertiesInputProperty(
+                    s3_uri="s3Uri",
+        
+                    # the properties below are optional
+                    s3_access_grant_location_id="s3AccessGrantLocationId"
+                ),
                 spark_emr_properties=datazone.CfnConnection.SparkEmrPropertiesInputProperty(
                     compute_arn="computeArn",
                     instance_profile_arn="instanceProfileArn",
@@ -5192,20 +5242,24 @@ class CfnConnection(
         id: builtins.str,
         *,
         domain_identifier: builtins.str,
-        environment_identifier: builtins.str,
         name: builtins.str,
         aws_location: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnConnection.AwsLocationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         description: typing.Optional[builtins.str] = None,
+        enable_trusted_identity_propagation: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        environment_identifier: typing.Optional[builtins.str] = None,
+        project_identifier: typing.Optional[builtins.str] = None,
         props: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnConnection.ConnectionPropertiesInputProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''
         :param scope: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
         :param domain_identifier: The ID of the domain where the connection is created.
-        :param environment_identifier: The ID of the environment where the connection is created.
         :param name: The name of the connection.
         :param aws_location: The location where the connection is created.
         :param description: Connection description.
+        :param enable_trusted_identity_propagation: Specifies whether the trusted identity propagation is enabled.
+        :param environment_identifier: The ID of the environment where the connection is created.
+        :param project_identifier: The identifier of the project in which the connection should be created. If
         :param props: Connection props.
         '''
         if __debug__:
@@ -5214,10 +5268,12 @@ class CfnConnection(
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
         props_ = CfnConnectionProps(
             domain_identifier=domain_identifier,
-            environment_identifier=environment_identifier,
             name=name,
             aws_location=aws_location,
             description=description,
+            enable_trusted_identity_propagation=enable_trusted_identity_propagation,
+            environment_identifier=environment_identifier,
+            project_identifier=project_identifier,
             props=props,
         )
 
@@ -5341,19 +5397,6 @@ class CfnConnection(
         jsii.set(self, "domainIdentifier", value) # pyright: ignore[reportArgumentType]
 
     @builtins.property
-    @jsii.member(jsii_name="environmentIdentifier")
-    def environment_identifier(self) -> builtins.str:
-        '''The ID of the environment where the connection is created.'''
-        return typing.cast(builtins.str, jsii.get(self, "environmentIdentifier"))
-
-    @environment_identifier.setter
-    def environment_identifier(self, value: builtins.str) -> None:
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__2b4cbfbd3c4ab850b86dca1cc1c0182806c09d658dbbad4aeefac22ff57e747f)
-            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
-        jsii.set(self, "environmentIdentifier", value) # pyright: ignore[reportArgumentType]
-
-    @builtins.property
     @jsii.member(jsii_name="name")
     def name(self) -> builtins.str:
         '''The name of the connection.'''
@@ -5396,6 +5439,50 @@ class CfnConnection(
             type_hints = typing.get_type_hints(_typecheckingstub__ab8e0823bbef4ec627d5b737de745882d73474d54729e96b788a912f2dfe521c)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
         jsii.set(self, "description", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="enableTrustedIdentityPropagation")
+    def enable_trusted_identity_propagation(
+        self,
+    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        '''Specifies whether the trusted identity propagation is enabled.'''
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "enableTrustedIdentityPropagation"))
+
+    @enable_trusted_identity_propagation.setter
+    def enable_trusted_identity_propagation(
+        self,
+        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+    ) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__5ab09f48b8b2b8da13fb2a69525c21854f9fbec26bc671037f6fb3bbf7a26b17)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "enableTrustedIdentityPropagation", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="environmentIdentifier")
+    def environment_identifier(self) -> typing.Optional[builtins.str]:
+        '''The ID of the environment where the connection is created.'''
+        return typing.cast(typing.Optional[builtins.str], jsii.get(self, "environmentIdentifier"))
+
+    @environment_identifier.setter
+    def environment_identifier(self, value: typing.Optional[builtins.str]) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__2b4cbfbd3c4ab850b86dca1cc1c0182806c09d658dbbad4aeefac22ff57e747f)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "environmentIdentifier", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="projectIdentifier")
+    def project_identifier(self) -> typing.Optional[builtins.str]:
+        '''The identifier of the project in which the connection should be created.'''
+        return typing.cast(typing.Optional[builtins.str], jsii.get(self, "projectIdentifier"))
+
+    @project_identifier.setter
+    def project_identifier(self, value: typing.Optional[builtins.str]) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__b3ba19f3bb544777785cab66ca6cafb390cecbee3e7fd68a92c9a2817d03c0bd)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "projectIdentifier", value) # pyright: ignore[reportArgumentType]
 
     @builtins.property
     @jsii.member(jsii_name="props")
@@ -5892,6 +5979,7 @@ class CfnConnection(
             "hyper_pod_properties": "hyperPodProperties",
             "iam_properties": "iamProperties",
             "redshift_properties": "redshiftProperties",
+            "s3_properties": "s3Properties",
             "spark_emr_properties": "sparkEmrProperties",
             "spark_glue_properties": "sparkGlueProperties",
         },
@@ -5905,6 +5993,7 @@ class CfnConnection(
             hyper_pod_properties: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnConnection.HyperPodPropertiesInputProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             iam_properties: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnConnection.IamPropertiesInputProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             redshift_properties: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnConnection.RedshiftPropertiesInputProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            s3_properties: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnConnection.S3PropertiesInputProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             spark_emr_properties: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnConnection.SparkEmrPropertiesInputProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             spark_glue_properties: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnConnection.SparkGluePropertiesInputProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
@@ -5915,6 +6004,7 @@ class CfnConnection(
             :param hyper_pod_properties: The hyper pod properties of a connection.
             :param iam_properties: The IAM properties of a connection.
             :param redshift_properties: The Amazon Redshift properties of a connection.
+            :param s3_properties: S3 Properties Input.
             :param spark_emr_properties: The Spark EMR properties of a connection.
             :param spark_glue_properties: The Spark AWS Glue properties of a connection.
 
@@ -6020,6 +6110,12 @@ class CfnConnection(
                             workgroup_name="workgroupName"
                         )
                     ),
+                    s3_properties=datazone.CfnConnection.S3PropertiesInputProperty(
+                        s3_uri="s3Uri",
+                
+                        # the properties below are optional
+                        s3_access_grant_location_id="s3AccessGrantLocationId"
+                    ),
                     spark_emr_properties=datazone.CfnConnection.SparkEmrPropertiesInputProperty(
                         compute_arn="computeArn",
                         instance_profile_arn="instanceProfileArn",
@@ -6050,6 +6146,7 @@ class CfnConnection(
                 check_type(argname="argument hyper_pod_properties", value=hyper_pod_properties, expected_type=type_hints["hyper_pod_properties"])
                 check_type(argname="argument iam_properties", value=iam_properties, expected_type=type_hints["iam_properties"])
                 check_type(argname="argument redshift_properties", value=redshift_properties, expected_type=type_hints["redshift_properties"])
+                check_type(argname="argument s3_properties", value=s3_properties, expected_type=type_hints["s3_properties"])
                 check_type(argname="argument spark_emr_properties", value=spark_emr_properties, expected_type=type_hints["spark_emr_properties"])
                 check_type(argname="argument spark_glue_properties", value=spark_glue_properties, expected_type=type_hints["spark_glue_properties"])
             self._values: typing.Dict[builtins.str, typing.Any] = {}
@@ -6063,6 +6160,8 @@ class CfnConnection(
                 self._values["iam_properties"] = iam_properties
             if redshift_properties is not None:
                 self._values["redshift_properties"] = redshift_properties
+            if s3_properties is not None:
+                self._values["s3_properties"] = s3_properties
             if spark_emr_properties is not None:
                 self._values["spark_emr_properties"] = spark_emr_properties
             if spark_glue_properties is not None:
@@ -6122,6 +6221,17 @@ class CfnConnection(
             '''
             result = self._values.get("redshift_properties")
             return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnConnection.RedshiftPropertiesInputProperty"]], result)
+
+        @builtins.property
+        def s3_properties(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnConnection.S3PropertiesInputProperty"]]:
+            '''S3 Properties Input.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-datazone-connection-connectionpropertiesinput.html#cfn-datazone-connection-connectionpropertiesinput-s3properties
+            '''
+            result = self._values.get("s3_properties")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnConnection.S3PropertiesInputProperty"]], result)
 
         @builtins.property
         def spark_emr_properties(
@@ -7553,6 +7663,82 @@ class CfnConnection(
 
         def __repr__(self) -> str:
             return "RedshiftStoragePropertiesProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_datazone.CfnConnection.S3PropertiesInputProperty",
+        jsii_struct_bases=[],
+        name_mapping={
+            "s3_uri": "s3Uri",
+            "s3_access_grant_location_id": "s3AccessGrantLocationId",
+        },
+    )
+    class S3PropertiesInputProperty:
+        def __init__(
+            self,
+            *,
+            s3_uri: builtins.str,
+            s3_access_grant_location_id: typing.Optional[builtins.str] = None,
+        ) -> None:
+            '''S3 Properties Input.
+
+            :param s3_uri: The Amazon S3 URI that's part of the Amazon S3 properties of a connection.
+            :param s3_access_grant_location_id: The Amazon S3 Access Grant location ID that's part of the Amazon S3 properties of a connection.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-datazone-connection-s3propertiesinput.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_datazone as datazone
+                
+                s3_properties_input_property = datazone.CfnConnection.S3PropertiesInputProperty(
+                    s3_uri="s3Uri",
+                
+                    # the properties below are optional
+                    s3_access_grant_location_id="s3AccessGrantLocationId"
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__9aeda32f359f0dd9d9edb5beb4b094057854f8692ab3130e54edb4eb707f2288)
+                check_type(argname="argument s3_uri", value=s3_uri, expected_type=type_hints["s3_uri"])
+                check_type(argname="argument s3_access_grant_location_id", value=s3_access_grant_location_id, expected_type=type_hints["s3_access_grant_location_id"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "s3_uri": s3_uri,
+            }
+            if s3_access_grant_location_id is not None:
+                self._values["s3_access_grant_location_id"] = s3_access_grant_location_id
+
+        @builtins.property
+        def s3_uri(self) -> builtins.str:
+            '''The Amazon S3 URI that's part of the Amazon S3 properties of a connection.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-datazone-connection-s3propertiesinput.html#cfn-datazone-connection-s3propertiesinput-s3uri
+            '''
+            result = self._values.get("s3_uri")
+            assert result is not None, "Required property 's3_uri' is missing"
+            return typing.cast(builtins.str, result)
+
+        @builtins.property
+        def s3_access_grant_location_id(self) -> typing.Optional[builtins.str]:
+            '''The Amazon S3 Access Grant location ID that's part of the Amazon S3 properties of a connection.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-datazone-connection-s3propertiesinput.html#cfn-datazone-connection-s3propertiesinput-s3accessgrantlocationid
+            '''
+            result = self._values.get("s3_access_grant_location_id")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "S3PropertiesInputProperty(%s)" % ", ".join(
                 k + "=" + repr(v) for k, v in self._values.items()
             )
 
@@ -16825,10 +17011,12 @@ publication.publish()
 def _typecheckingstub__8797ba459ed68920849c7b460987b708539d45c9d479ab52091ec466aebc8432(
     *,
     domain_identifier: builtins.str,
-    environment_identifier: builtins.str,
     name: builtins.str,
     aws_location: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnConnection.AwsLocationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     description: typing.Optional[builtins.str] = None,
+    enable_trusted_identity_propagation: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+    environment_identifier: typing.Optional[builtins.str] = None,
+    project_identifier: typing.Optional[builtins.str] = None,
     props: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnConnection.ConnectionPropertiesInputProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
 ) -> None:
     """Type checking stubs"""
@@ -17188,10 +17376,12 @@ def _typecheckingstub__68db6ef5de752113ca6cf32190e1173ded9b82274379374d5e16834f4
     id: builtins.str,
     *,
     domain_identifier: builtins.str,
-    environment_identifier: builtins.str,
     name: builtins.str,
     aws_location: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnConnection.AwsLocationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     description: typing.Optional[builtins.str] = None,
+    enable_trusted_identity_propagation: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+    environment_identifier: typing.Optional[builtins.str] = None,
+    project_identifier: typing.Optional[builtins.str] = None,
     props: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnConnection.ConnectionPropertiesInputProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
 ) -> None:
     """Type checking stubs"""
@@ -17215,12 +17405,6 @@ def _typecheckingstub__0f8e028075d374db4fd60d67eeb1b9ec1a7ba6de37d2ff5159166ef7a
     """Type checking stubs"""
     pass
 
-def _typecheckingstub__2b4cbfbd3c4ab850b86dca1cc1c0182806c09d658dbbad4aeefac22ff57e747f(
-    value: builtins.str,
-) -> None:
-    """Type checking stubs"""
-    pass
-
 def _typecheckingstub__0d602657575f2a77c389ea4e89f4d92dbe2bb3c30e0ccfc811aff15e122a98d3(
     value: builtins.str,
 ) -> None:
@@ -17234,6 +17418,24 @@ def _typecheckingstub__2e0849d8ebdd0fce1643c3904bce5fd806bb233f7ff27eddb627fac85
     pass
 
 def _typecheckingstub__ab8e0823bbef4ec627d5b737de745882d73474d54729e96b788a912f2dfe521c(
+    value: typing.Optional[builtins.str],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__5ab09f48b8b2b8da13fb2a69525c21854f9fbec26bc671037f6fb3bbf7a26b17(
+    value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__2b4cbfbd3c4ab850b86dca1cc1c0182806c09d658dbbad4aeefac22ff57e747f(
+    value: typing.Optional[builtins.str],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__b3ba19f3bb544777785cab66ca6cafb390cecbee3e7fd68a92c9a2817d03c0bd(
     value: typing.Optional[builtins.str],
 ) -> None:
     """Type checking stubs"""
@@ -17297,6 +17499,7 @@ def _typecheckingstub__afac89e500a9d5f348ce1c21e174ddef9825d543c744b00c3ff73a0c8
     hyper_pod_properties: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnConnection.HyperPodPropertiesInputProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     iam_properties: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnConnection.IamPropertiesInputProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     redshift_properties: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnConnection.RedshiftPropertiesInputProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    s3_properties: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnConnection.S3PropertiesInputProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     spark_emr_properties: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnConnection.SparkEmrPropertiesInputProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     spark_glue_properties: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnConnection.SparkGluePropertiesInputProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
 ) -> None:
@@ -17421,6 +17624,14 @@ def _typecheckingstub__b195696e44f8816ec97423896e5a52b6ee46aa7c4c9e0e33aa0ac4a92
     *,
     cluster_name: typing.Optional[builtins.str] = None,
     workgroup_name: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__9aeda32f359f0dd9d9edb5beb4b094057854f8692ab3130e54edb4eb707f2288(
+    *,
+    s3_uri: builtins.str,
+    s3_access_grant_location_id: typing.Optional[builtins.str] = None,
 ) -> None:
     """Type checking stubs"""
     pass

@@ -1,5 +1,6 @@
 import collections.abc
 import google.protobuf.message
+import modal._load_context
 import modal._object
 import modal._resolver
 import modal._utils.blob_utils
@@ -154,7 +155,6 @@ class _Mount(modal._object._Object):
     _entries: typing.Optional[list[_MountEntry]]
     _deployment_name: typing.Optional[str]
     _namespace: typing.Optional[int]
-    _environment_name: typing.Optional[str]
     _allow_overwrite: bool
     _content_checksum_sha256_hex: typing.Optional[str]
 
@@ -216,7 +216,10 @@ class _Mount(modal._object._Object):
         entries: list[_MountEntry],
     ) -> collections.abc.AsyncGenerator[modal._utils.blob_utils.FileUploadSpec, None]: ...
     async def _load_mount(
-        self: _Mount, resolver: modal._resolver.Resolver, existing_object_id: typing.Optional[str]
+        self: _Mount,
+        resolver: modal._resolver.Resolver,
+        load_context: modal._load_context.LoadContext,
+        existing_object_id: typing.Optional[str],
     ): ...
     @staticmethod
     def _from_local_python_packages(
@@ -226,7 +229,13 @@ class _Mount(modal._object._Object):
         ignore: typing.Union[typing.Sequence[str], collections.abc.Callable[[pathlib.Path], bool], None] = None,
     ) -> _Mount: ...
     @staticmethod
-    def from_name(name: str, *, namespace=1, environment_name: typing.Optional[str] = None) -> _Mount:
+    def from_name(
+        name: str,
+        *,
+        namespace=1,
+        environment_name: typing.Optional[str] = None,
+        client: typing.Optional[modal.client._Client] = None,
+    ) -> _Mount:
         """mdmd:hidden"""
         ...
 
@@ -269,7 +278,6 @@ class Mount(modal.object.Object):
     _entries: typing.Optional[list[_MountEntry]]
     _deployment_name: typing.Optional[str]
     _namespace: typing.Optional[int]
-    _environment_name: typing.Optional[str]
     _allow_overwrite: bool
     _content_checksum_sha256_hex: typing.Optional[str]
 
@@ -342,8 +350,20 @@ class Mount(modal.object.Object):
     _get_files: ___get_files_spec
 
     class ___load_mount_spec(typing_extensions.Protocol[SUPERSELF]):
-        def __call__(self, /, resolver: modal._resolver.Resolver, existing_object_id: typing.Optional[str]): ...
-        async def aio(self, /, resolver: modal._resolver.Resolver, existing_object_id: typing.Optional[str]): ...
+        def __call__(
+            self,
+            /,
+            resolver: modal._resolver.Resolver,
+            load_context: modal._load_context.LoadContext,
+            existing_object_id: typing.Optional[str],
+        ): ...
+        async def aio(
+            self,
+            /,
+            resolver: modal._resolver.Resolver,
+            load_context: modal._load_context.LoadContext,
+            existing_object_id: typing.Optional[str],
+        ): ...
 
     _load_mount: ___load_mount_spec[typing_extensions.Self]
 
@@ -355,7 +375,13 @@ class Mount(modal.object.Object):
         ignore: typing.Union[typing.Sequence[str], collections.abc.Callable[[pathlib.Path], bool], None] = None,
     ) -> Mount: ...
     @staticmethod
-    def from_name(name: str, *, namespace=1, environment_name: typing.Optional[str] = None) -> Mount:
+    def from_name(
+        name: str,
+        *,
+        namespace=1,
+        environment_name: typing.Optional[str] = None,
+        client: typing.Optional[modal.client.Client] = None,
+    ) -> Mount:
         """mdmd:hidden"""
         ...
 

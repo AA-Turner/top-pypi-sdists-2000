@@ -228,6 +228,15 @@ class CfnCampaignProps:
                             predictive_config=connectcampaignsv2.CfnCampaign.PredictiveConfigProperty(
                                 bandwidth_allocation=123
                             ),
+                            preview_config=connectcampaignsv2.CfnCampaign.PreviewConfigProperty(
+                                bandwidth_allocation=123,
+                                timeout_config=connectcampaignsv2.CfnCampaign.TimeoutConfigProperty(
+                                    duration_in_seconds=123
+                                ),
+            
+                                # the properties below are optional
+                                agent_actions=["agentActions"]
+                            ),
                             progressive_config=connectcampaignsv2.CfnCampaign.ProgressiveConfigProperty(
                                 bandwidth_allocation=123
                             )
@@ -601,6 +610,15 @@ class CfnCampaign(
                         agentless_config=agentless_config,
                         predictive_config=connectcampaignsv2.CfnCampaign.PredictiveConfigProperty(
                             bandwidth_allocation=123
+                        ),
+                        preview_config=connectcampaignsv2.CfnCampaign.PreviewConfigProperty(
+                            bandwidth_allocation=123,
+                            timeout_config=connectcampaignsv2.CfnCampaign.TimeoutConfigProperty(
+                                duration_in_seconds=123
+                            ),
+        
+                            # the properties below are optional
+                            agent_actions=["agentActions"]
                         ),
                         progressive_config=connectcampaignsv2.CfnCampaign.ProgressiveConfigProperty(
                             bandwidth_allocation=123
@@ -1120,6 +1138,15 @@ class CfnCampaign(
                             agentless_config=agentless_config,
                             predictive_config=connectcampaignsv2.CfnCampaign.PredictiveConfigProperty(
                                 bandwidth_allocation=123
+                            ),
+                            preview_config=connectcampaignsv2.CfnCampaign.PreviewConfigProperty(
+                                bandwidth_allocation=123,
+                                timeout_config=connectcampaignsv2.CfnCampaign.TimeoutConfigProperty(
+                                    duration_in_seconds=123
+                                ),
+                
+                                # the properties below are optional
+                                agent_actions=["agentActions"]
                             ),
                             progressive_config=connectcampaignsv2.CfnCampaign.ProgressiveConfigProperty(
                                 bandwidth_allocation=123
@@ -2176,6 +2203,102 @@ class CfnCampaign(
             )
 
     @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_connectcampaignsv2.CfnCampaign.PreviewConfigProperty",
+        jsii_struct_bases=[],
+        name_mapping={
+            "bandwidth_allocation": "bandwidthAllocation",
+            "timeout_config": "timeoutConfig",
+            "agent_actions": "agentActions",
+        },
+    )
+    class PreviewConfigProperty:
+        def __init__(
+            self,
+            *,
+            bandwidth_allocation: jsii.Number,
+            timeout_config: typing.Union[_IResolvable_da3f097b, typing.Union["CfnCampaign.TimeoutConfigProperty", typing.Dict[builtins.str, typing.Any]]],
+            agent_actions: typing.Optional[typing.Sequence[builtins.str]] = None,
+        ) -> None:
+            '''Contains preview outbound mode configuration.
+
+            :param bandwidth_allocation: Bandwidth allocation for the preview outbound mode.
+            :param timeout_config: Countdown timer configuration for preview outbound mode.
+            :param agent_actions: Agent actions for the preview outbound mode.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-connectcampaignsv2-campaign-previewconfig.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_connectcampaignsv2 as connectcampaignsv2
+                
+                preview_config_property = connectcampaignsv2.CfnCampaign.PreviewConfigProperty(
+                    bandwidth_allocation=123,
+                    timeout_config=connectcampaignsv2.CfnCampaign.TimeoutConfigProperty(
+                        duration_in_seconds=123
+                    ),
+                
+                    # the properties below are optional
+                    agent_actions=["agentActions"]
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__18b1e139a46a0f962696d8f0b9855ce9765fe26cd9d798683a7176550e0dc592)
+                check_type(argname="argument bandwidth_allocation", value=bandwidth_allocation, expected_type=type_hints["bandwidth_allocation"])
+                check_type(argname="argument timeout_config", value=timeout_config, expected_type=type_hints["timeout_config"])
+                check_type(argname="argument agent_actions", value=agent_actions, expected_type=type_hints["agent_actions"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "bandwidth_allocation": bandwidth_allocation,
+                "timeout_config": timeout_config,
+            }
+            if agent_actions is not None:
+                self._values["agent_actions"] = agent_actions
+
+        @builtins.property
+        def bandwidth_allocation(self) -> jsii.Number:
+            '''Bandwidth allocation for the preview outbound mode.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-connectcampaignsv2-campaign-previewconfig.html#cfn-connectcampaignsv2-campaign-previewconfig-bandwidthallocation
+            '''
+            result = self._values.get("bandwidth_allocation")
+            assert result is not None, "Required property 'bandwidth_allocation' is missing"
+            return typing.cast(jsii.Number, result)
+
+        @builtins.property
+        def timeout_config(
+            self,
+        ) -> typing.Union[_IResolvable_da3f097b, "CfnCampaign.TimeoutConfigProperty"]:
+            '''Countdown timer configuration for preview outbound mode.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-connectcampaignsv2-campaign-previewconfig.html#cfn-connectcampaignsv2-campaign-previewconfig-timeoutconfig
+            '''
+            result = self._values.get("timeout_config")
+            assert result is not None, "Required property 'timeout_config' is missing"
+            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnCampaign.TimeoutConfigProperty"], result)
+
+        @builtins.property
+        def agent_actions(self) -> typing.Optional[typing.List[builtins.str]]:
+            '''Agent actions for the preview outbound mode.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-connectcampaignsv2-campaign-previewconfig.html#cfn-connectcampaignsv2-campaign-previewconfig-agentactions
+            '''
+            result = self._values.get("agent_actions")
+            return typing.cast(typing.Optional[typing.List[builtins.str]], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "PreviewConfigProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
         jsii_type="aws-cdk-lib.aws_connectcampaignsv2.CfnCampaign.ProgressiveConfigProperty",
         jsii_struct_bases=[],
         name_mapping={"bandwidth_allocation": "bandwidthAllocation"},
@@ -2837,6 +2960,15 @@ class CfnCampaign(
                         predictive_config=connectcampaignsv2.CfnCampaign.PredictiveConfigProperty(
                             bandwidth_allocation=123
                         ),
+                        preview_config=connectcampaignsv2.CfnCampaign.PreviewConfigProperty(
+                            bandwidth_allocation=123,
+                            timeout_config=connectcampaignsv2.CfnCampaign.TimeoutConfigProperty(
+                                duration_in_seconds=123
+                            ),
+                
+                            # the properties below are optional
+                            agent_actions=["agentActions"]
+                        ),
                         progressive_config=connectcampaignsv2.CfnCampaign.ProgressiveConfigProperty(
                             bandwidth_allocation=123
                         )
@@ -3020,6 +3152,7 @@ class CfnCampaign(
         name_mapping={
             "agentless_config": "agentlessConfig",
             "predictive_config": "predictiveConfig",
+            "preview_config": "previewConfig",
             "progressive_config": "progressiveConfig",
         },
     )
@@ -3029,12 +3162,14 @@ class CfnCampaign(
             *,
             agentless_config: typing.Any = None,
             predictive_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCampaign.PredictiveConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            preview_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCampaign.PreviewConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             progressive_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCampaign.ProgressiveConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''Contains information about telephony outbound mode.
 
             :param agentless_config: The agentless outbound mode configuration for telephony.
             :param predictive_config: Contains predictive outbound mode configuration.
+            :param preview_config: Preview config.
             :param progressive_config: Contains progressive telephony outbound mode configuration.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-connectcampaignsv2-campaign-telephonyoutboundmode.html
@@ -3053,6 +3188,15 @@ class CfnCampaign(
                     predictive_config=connectcampaignsv2.CfnCampaign.PredictiveConfigProperty(
                         bandwidth_allocation=123
                     ),
+                    preview_config=connectcampaignsv2.CfnCampaign.PreviewConfigProperty(
+                        bandwidth_allocation=123,
+                        timeout_config=connectcampaignsv2.CfnCampaign.TimeoutConfigProperty(
+                            duration_in_seconds=123
+                        ),
+                
+                        # the properties below are optional
+                        agent_actions=["agentActions"]
+                    ),
                     progressive_config=connectcampaignsv2.CfnCampaign.ProgressiveConfigProperty(
                         bandwidth_allocation=123
                     )
@@ -3062,12 +3206,15 @@ class CfnCampaign(
                 type_hints = typing.get_type_hints(_typecheckingstub__7582ea451819f82369b8beb09bc8c872c5424040d69392d7bc3ab56ee8813053)
                 check_type(argname="argument agentless_config", value=agentless_config, expected_type=type_hints["agentless_config"])
                 check_type(argname="argument predictive_config", value=predictive_config, expected_type=type_hints["predictive_config"])
+                check_type(argname="argument preview_config", value=preview_config, expected_type=type_hints["preview_config"])
                 check_type(argname="argument progressive_config", value=progressive_config, expected_type=type_hints["progressive_config"])
             self._values: typing.Dict[builtins.str, typing.Any] = {}
             if agentless_config is not None:
                 self._values["agentless_config"] = agentless_config
             if predictive_config is not None:
                 self._values["predictive_config"] = predictive_config
+            if preview_config is not None:
+                self._values["preview_config"] = preview_config
             if progressive_config is not None:
                 self._values["progressive_config"] = progressive_config
 
@@ -3090,6 +3237,17 @@ class CfnCampaign(
             '''
             result = self._values.get("predictive_config")
             return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCampaign.PredictiveConfigProperty"]], result)
+
+        @builtins.property
+        def preview_config(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCampaign.PreviewConfigProperty"]]:
+            '''Preview config.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-connectcampaignsv2-campaign-telephonyoutboundmode.html#cfn-connectcampaignsv2-campaign-telephonyoutboundmode-previewconfig
+            '''
+            result = self._values.get("preview_config")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCampaign.PreviewConfigProperty"]], result)
 
         @builtins.property
         def progressive_config(
@@ -3272,6 +3430,61 @@ class CfnCampaign(
 
         def __repr__(self) -> str:
             return "TimeWindowProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_connectcampaignsv2.CfnCampaign.TimeoutConfigProperty",
+        jsii_struct_bases=[],
+        name_mapping={"duration_in_seconds": "durationInSeconds"},
+    )
+    class TimeoutConfigProperty:
+        def __init__(
+            self,
+            *,
+            duration_in_seconds: typing.Optional[jsii.Number] = None,
+        ) -> None:
+            '''Contains preview outbound mode timeout configuration.
+
+            :param duration_in_seconds: Duration in seconds for the countdown timer.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-connectcampaignsv2-campaign-timeoutconfig.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_connectcampaignsv2 as connectcampaignsv2
+                
+                timeout_config_property = connectcampaignsv2.CfnCampaign.TimeoutConfigProperty(
+                    duration_in_seconds=123
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__50c6d60934a17c910bf659882748981ec00bd3f91d69165aff0db47e10820afd)
+                check_type(argname="argument duration_in_seconds", value=duration_in_seconds, expected_type=type_hints["duration_in_seconds"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if duration_in_seconds is not None:
+                self._values["duration_in_seconds"] = duration_in_seconds
+
+        @builtins.property
+        def duration_in_seconds(self) -> typing.Optional[jsii.Number]:
+            '''Duration in seconds for the countdown timer.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-connectcampaignsv2-campaign-timeoutconfig.html#cfn-connectcampaignsv2-campaign-timeoutconfig-durationinseconds
+            '''
+            result = self._values.get("duration_in_seconds")
+            return typing.cast(typing.Optional[jsii.Number], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "TimeoutConfigProperty(%s)" % ", ".join(
                 k + "=" + repr(v) for k, v in self._values.items()
             )
 
@@ -3503,6 +3716,15 @@ def _typecheckingstub__a27014c548ec13c6446b07f461be7ed43556a2cb77433713ef38f272a
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__18b1e139a46a0f962696d8f0b9855ce9765fe26cd9d798683a7176550e0dc592(
+    *,
+    bandwidth_allocation: jsii.Number,
+    timeout_config: typing.Union[_IResolvable_da3f097b, typing.Union[CfnCampaign.TimeoutConfigProperty, typing.Dict[builtins.str, typing.Any]]],
+    agent_actions: typing.Optional[typing.Sequence[builtins.str]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__6504302e8d20b62038efca8c5dfe9bbddfc485cc88de44f995d599a39017ddbe(
     *,
     bandwidth_allocation: jsii.Number,
@@ -3590,6 +3812,7 @@ def _typecheckingstub__7582ea451819f82369b8beb09bc8c872c5424040d69392d7bc3ab56ee
     *,
     agentless_config: typing.Any = None,
     predictive_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCampaign.PredictiveConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    preview_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCampaign.PreviewConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     progressive_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCampaign.ProgressiveConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
 ) -> None:
     """Type checking stubs"""
@@ -3607,6 +3830,13 @@ def _typecheckingstub__738a8f46b804533de9d82348af38a0b7f7c37f641c9240bef005d4c22
     *,
     open_hours: typing.Union[_IResolvable_da3f097b, typing.Union[CfnCampaign.OpenHoursProperty, typing.Dict[builtins.str, typing.Any]]],
     restricted_periods: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCampaign.RestrictedPeriodsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__50c6d60934a17c910bf659882748981ec00bd3f91d69165aff0db47e10820afd(
+    *,
+    duration_in_seconds: typing.Optional[jsii.Number] = None,
 ) -> None:
     """Type checking stubs"""
     pass

@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: strawberry-graphql
-Version: 0.284.2
+Version: 0.285.0
 Summary: A library for creating GraphQL APIs
 License: MIT
 License-File: LICENSE
@@ -63,8 +63,8 @@ Requires-Dist: sanic (>=20.12.2) ; extra == "sanic"
 Requires-Dist: starlette (>=0.18.0) ; extra == "asgi"
 Requires-Dist: starlette (>=0.18.0) ; extra == "cli"
 Requires-Dist: starlette (>=0.18.0) ; extra == "debug-server"
-Requires-Dist: typer (>=0.7.0) ; extra == "cli"
-Requires-Dist: typer (>=0.7.0) ; extra == "debug-server"
+Requires-Dist: typer (>=0.12.4) ; extra == "cli"
+Requires-Dist: typer (>=0.12.4) ; extra == "debug-server"
 Requires-Dist: typing-extensions (>=4.5.0)
 Requires-Dist: uvicorn (>=0.11.6) ; extra == "cli"
 Requires-Dist: uvicorn (>=0.11.6) ; extra == "debug-server"

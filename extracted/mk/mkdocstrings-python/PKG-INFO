@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: mkdocstrings-python
-Version: 1.18.2
+Version: 1.19.0
 Summary: A Python handler for mkdocstrings.
 Author-Email: =?utf-8?q?Timoth=C3=A9e_Mazzucotelli?= <dev@pawamoy.fr>
 License-Expression: ISC
@@ -10,7 +10,6 @@ Classifier: Intended Audience :: Developers
 Classifier: Programming Language :: Python
 Classifier: Programming Language :: Python :: 3
 Classifier: Programming Language :: Python :: 3 :: Only
-Classifier: Programming Language :: Python :: 3.9
 Classifier: Programming Language :: Python :: 3.10
 Classifier: Programming Language :: Python :: 3.11
 Classifier: Programming Language :: Python :: 3.12
@@ -29,7 +28,7 @@ Project-URL: Issues, https://github.com/mkdocstrings/python/issues
 Project-URL: Discussions, https://github.com/mkdocstrings/python/discussions
 Project-URL: Gitter, https://gitter.im/mkdocstrings/python
 Project-URL: Funding, https://github.com/sponsors/pawamoy
-Requires-Python: >=3.9
+Requires-Python: >=3.10
 Requires-Dist: mkdocstrings>=0.30
 Requires-Dist: mkdocs-autorefs>=1.4
 Requires-Dist: griffe>=1.13
@@ -43,7 +42,7 @@ Description-Content-Type: text/markdown
 [![ci](https://github.com/mkdocstrings/python/workflows/ci/badge.svg)](https://github.com/mkdocstrings/python/actions?query=workflow%3Aci)
 [![documentation](https://img.shields.io/badge/docs-mkdocs-708FCC.svg?style=flat)](https://mkdocstrings.github.io/python/)
 [![pypi version](https://img.shields.io/pypi/v/mkdocstrings-python.svg)](https://pypi.org/project/mkdocstrings-python/)
-[![gitter](https://badges.gitter.im/join%20chat.svg)](https://app.gitter.im/#/room/#python:gitter.im)
+[![gitter](https://img.shields.io/badge/matrix-chat-4DB798.svg?style=flat)](https://app.gitter.im/#/room/#mkdocstrings_python:gitter.im)
 
 ---
 
@@ -115,3 +114,8 @@ dependencies = [
 
 - **Source code display:** *mkdocstrings* can add a collapsible div containing the highlighted source code
   of the Python object.
+
+## Sponsors
+
+<!-- sponsors-start -->
+<!-- sponsors-end -->

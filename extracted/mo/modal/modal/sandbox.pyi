@@ -27,7 +27,6 @@ import typing
 import typing_extensions
 
 def _validate_exec_args(args: collections.abc.Sequence[str]) -> None: ...
-def _warn_if_invalid_name(name: str) -> None: ...
 
 class DefaultSandboxNameOverride(str):
     """A singleton class that represents the default sandbox name override.

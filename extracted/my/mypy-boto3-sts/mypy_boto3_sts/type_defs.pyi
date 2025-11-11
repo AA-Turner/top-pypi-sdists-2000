@@ -17,13 +17,9 @@ Usage::
 from __future__ import annotations
 
 import sys
+from collections.abc import Sequence
 from datetime import datetime
 
-if sys.version_info >= (3, 9):
-    from builtins import dict as Dict
-    from collections.abc import Sequence
-else:
-    from typing import Dict, Sequence
 if sys.version_info >= (3, 12):
     from typing import NotRequired, TypedDict
 else:
@@ -46,6 +42,8 @@ __all__ = (
     "GetAccessKeyInfoRequestTypeDef",
     "GetAccessKeyInfoResponseTypeDef",
     "GetCallerIdentityResponseTypeDef",
+    "GetDelegatedAccessTokenRequestTypeDef",
+    "GetDelegatedAccessTokenResponseTypeDef",
     "GetFederationTokenRequestTypeDef",
     "GetFederationTokenResponseTypeDef",
     "GetSessionTokenRequestTypeDef",
@@ -80,7 +78,7 @@ class CredentialsTypeDef(TypedDict):
 class ResponseMetadataTypeDef(TypedDict):
     RequestId: str
     HTTPStatusCode: int
-    HTTPHeaders: Dict[str, str]
+    HTTPHeaders: dict[str, str]
     RetryAttempts: int
     HostId: NotRequired[str]
 
@@ -93,6 +91,9 @@ class FederatedUserTypeDef(TypedDict):
 
 class GetAccessKeyInfoRequestTypeDef(TypedDict):
     AccessKeyId: str
+
+class GetDelegatedAccessTokenRequestTypeDef(TypedDict):
+    TradeInToken: str
 
 class GetSessionTokenRequestTypeDef(TypedDict):
     DurationSeconds: NotRequired[int]
@@ -188,6 +189,12 @@ class GetCallerIdentityResponseTypeDef(TypedDict):
     UserId: str
     Account: str
     Arn: str
+    ResponseMetadata: ResponseMetadataTypeDef
+
+class GetDelegatedAccessTokenResponseTypeDef(TypedDict):
+    Credentials: CredentialsTypeDef
+    PackedPolicySize: int
+    AssumedPrincipal: str
     ResponseMetadata: ResponseMetadataTypeDef
 
 class GetSessionTokenResponseTypeDef(TypedDict):

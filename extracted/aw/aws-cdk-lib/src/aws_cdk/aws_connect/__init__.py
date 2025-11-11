@@ -825,6 +825,7 @@ class CfnContactFlowVersionProps:
     name_mapping={
         "email_address": "emailAddress",
         "instance_arn": "instanceArn",
+        "alias_configurations": "aliasConfigurations",
         "description": "description",
         "display_name": "displayName",
         "tags": "tags",
@@ -836,6 +837,7 @@ class CfnEmailAddressProps:
         *,
         email_address: builtins.str,
         instance_arn: builtins.str,
+        alias_configurations: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnEmailAddress.AliasConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         description: typing.Optional[builtins.str] = None,
         display_name: typing.Optional[builtins.str] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -844,6 +846,7 @@ class CfnEmailAddressProps:
 
         :param email_address: The email address, including the domain.
         :param instance_arn: The Amazon Resource Name (ARN) of the instance.
+        :param alias_configurations: A list of alias configurations for this email address, showing which email addresses forward to this primary address. Each configuration contains the email address ID of an alias that forwards emails to this address.
         :param description: The description of the email address.
         :param display_name: The display name of email address.
         :param tags: An array of key-value pairs to apply to this resource.
@@ -862,6 +865,9 @@ class CfnEmailAddressProps:
                 instance_arn="instanceArn",
             
                 # the properties below are optional
+                alias_configurations=[connect.CfnEmailAddress.AliasConfigurationProperty(
+                    email_address_arn="emailAddressArn"
+                )],
                 description="description",
                 display_name="displayName",
                 tags=[CfnTag(
@@ -874,6 +880,7 @@ class CfnEmailAddressProps:
             type_hints = typing.get_type_hints(_typecheckingstub__925fc69049d4896dd3262cfb6f2706a7c9f3ca052fe3aac9c63f99ad79e7def4)
             check_type(argname="argument email_address", value=email_address, expected_type=type_hints["email_address"])
             check_type(argname="argument instance_arn", value=instance_arn, expected_type=type_hints["instance_arn"])
+            check_type(argname="argument alias_configurations", value=alias_configurations, expected_type=type_hints["alias_configurations"])
             check_type(argname="argument description", value=description, expected_type=type_hints["description"])
             check_type(argname="argument display_name", value=display_name, expected_type=type_hints["display_name"])
             check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
@@ -881,6 +888,8 @@ class CfnEmailAddressProps:
             "email_address": email_address,
             "instance_arn": instance_arn,
         }
+        if alias_configurations is not None:
+            self._values["alias_configurations"] = alias_configurations
         if description is not None:
             self._values["description"] = description
         if display_name is not None:
@@ -907,6 +916,19 @@ class CfnEmailAddressProps:
         result = self._values.get("instance_arn")
         assert result is not None, "Required property 'instance_arn' is missing"
         return typing.cast(builtins.str, result)
+
+    @builtins.property
+    def alias_configurations(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnEmailAddress.AliasConfigurationProperty"]]]]:
+        '''A list of alias configurations for this email address, showing which email addresses forward to this primary address.
+
+        Each configuration contains the email address ID of an alias that forwards emails to this address.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-connect-emailaddress.html#cfn-connect-emailaddress-aliasconfigurations
+        '''
+        result = self._values.get("alias_configurations")
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnEmailAddress.AliasConfigurationProperty"]]]], result)
 
     @builtins.property
     def description(self) -> typing.Optional[builtins.str]:
@@ -8057,6 +8079,9 @@ class CfnEmailAddress(
             instance_arn="instanceArn",
         
             # the properties below are optional
+            alias_configurations=[connect.CfnEmailAddress.AliasConfigurationProperty(
+                email_address_arn="emailAddressArn"
+            )],
             description="description",
             display_name="displayName",
             tags=[CfnTag(
@@ -8073,6 +8098,7 @@ class CfnEmailAddress(
         *,
         email_address: builtins.str,
         instance_arn: builtins.str,
+        alias_configurations: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnEmailAddress.AliasConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         description: typing.Optional[builtins.str] = None,
         display_name: typing.Optional[builtins.str] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -8082,6 +8108,7 @@ class CfnEmailAddress(
         :param id: Construct identifier for this resource (unique in its scope).
         :param email_address: The email address, including the domain.
         :param instance_arn: The Amazon Resource Name (ARN) of the instance.
+        :param alias_configurations: A list of alias configurations for this email address, showing which email addresses forward to this primary address. Each configuration contains the email address ID of an alias that forwards emails to this address.
         :param description: The description of the email address.
         :param display_name: The display name of email address.
         :param tags: An array of key-value pairs to apply to this resource.
@@ -8093,6 +8120,7 @@ class CfnEmailAddress(
         props = CfnEmailAddressProps(
             email_address=email_address,
             instance_arn=instance_arn,
+            alias_configurations=alias_configurations,
             description=description,
             display_name=display_name,
             tags=tags,
@@ -8183,6 +8211,24 @@ class CfnEmailAddress(
         jsii.set(self, "instanceArn", value) # pyright: ignore[reportArgumentType]
 
     @builtins.property
+    @jsii.member(jsii_name="aliasConfigurations")
+    def alias_configurations(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnEmailAddress.AliasConfigurationProperty"]]]]:
+        '''A list of alias configurations for this email address, showing which email addresses forward to this primary address.'''
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnEmailAddress.AliasConfigurationProperty"]]]], jsii.get(self, "aliasConfigurations"))
+
+    @alias_configurations.setter
+    def alias_configurations(
+        self,
+        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnEmailAddress.AliasConfigurationProperty"]]]],
+    ) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__8c1a2ef05e1d1de0a954d7cace4b6c2093574172af958f256ddd0bc21ed5d8b3)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "aliasConfigurations", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
     @jsii.member(jsii_name="description")
     def description(self) -> typing.Optional[builtins.str]:
         '''The description of the email address.'''
@@ -8220,6 +8266,58 @@ class CfnEmailAddress(
             type_hints = typing.get_type_hints(_typecheckingstub__0842a9bd625bd6676921b5b4d09d963f3c01dd351f002f2878919bed280da0c1)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
         jsii.set(self, "tags", value) # pyright: ignore[reportArgumentType]
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_connect.CfnEmailAddress.AliasConfigurationProperty",
+        jsii_struct_bases=[],
+        name_mapping={"email_address_arn": "emailAddressArn"},
+    )
+    class AliasConfigurationProperty:
+        def __init__(self, *, email_address_arn: builtins.str) -> None:
+            '''Configuration information of an email alias.
+
+            :param email_address_arn: The identifier of the email address alias.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-connect-emailaddress-aliasconfiguration.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_connect as connect
+                
+                alias_configuration_property = connect.CfnEmailAddress.AliasConfigurationProperty(
+                    email_address_arn="emailAddressArn"
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__bf9b8acf2a843be0d8080feeade7c8d52aa761ad11e66f9bba9f6102ebd186b8)
+                check_type(argname="argument email_address_arn", value=email_address_arn, expected_type=type_hints["email_address_arn"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "email_address_arn": email_address_arn,
+            }
+
+        @builtins.property
+        def email_address_arn(self) -> builtins.str:
+            '''The identifier of the email address alias.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-connect-emailaddress-aliasconfiguration.html#cfn-connect-emailaddress-aliasconfiguration-emailaddressarn
+            '''
+            result = self._values.get("email_address_arn")
+            assert result is not None, "Required property 'email_address_arn' is missing"
+            return typing.cast(builtins.str, result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "AliasConfigurationProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
 
 
 @jsii.implements(_IInspectable_c2943556, IEvaluationFormRef, _ITaggable_36806126)
@@ -21121,6 +21219,7 @@ def _typecheckingstub__925fc69049d4896dd3262cfb6f2706a7c9f3ca052fe3aac9c63f99ad7
     *,
     email_address: builtins.str,
     instance_arn: builtins.str,
+    alias_configurations: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnEmailAddress.AliasConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     description: typing.Optional[builtins.str] = None,
     display_name: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -21847,6 +21946,7 @@ def _typecheckingstub__82663491f0adb2dbe44ce9a95c4b21bf5d7529ba2b8adcceab5da9bed
     *,
     email_address: builtins.str,
     instance_arn: builtins.str,
+    alias_configurations: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnEmailAddress.AliasConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     description: typing.Optional[builtins.str] = None,
     display_name: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -21878,6 +21978,12 @@ def _typecheckingstub__4897e979b60cf9112f8c5f689498588562efda825c4b629f911babccf
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__8c1a2ef05e1d1de0a954d7cace4b6c2093574172af958f256ddd0bc21ed5d8b3(
+    value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnEmailAddress.AliasConfigurationProperty]]]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__9ecb3e2768e9a204b64d2a27ff4d4239810f03f60c999f10faf989234a4aa95f(
     value: typing.Optional[builtins.str],
 ) -> None:
@@ -21892,6 +21998,13 @@ def _typecheckingstub__ea8987f3e91ef810959c56c99b1cff317c190bc87329ffea9f144b19a
 
 def _typecheckingstub__0842a9bd625bd6676921b5b4d09d963f3c01dd351f002f2878919bed280da0c1(
     value: typing.Optional[typing.List[_CfnTag_f6864754]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__bf9b8acf2a843be0d8080feeade7c8d52aa761ad11e66f9bba9f6102ebd186b8(
+    *,
+    email_address_arn: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass

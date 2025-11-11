@@ -1,6 +1,6 @@
 import datetime
 from collections.abc import Generator
-from typing import Annotated, Any, Optional, Union
+from typing import Annotated, Any, Literal
 from unittest.mock import MagicMock, patch
 
 import google.ai.generativelanguage as glm
@@ -12,7 +12,6 @@ from langchain_core.utils.function_calling import (
     convert_to_openai_tool,
 )
 from pydantic import BaseModel, Field
-from typing_extensions import Literal
 
 from langchain_google_genai._function_utils import (
     _convert_pydantic_to_genai_function,
@@ -23,7 +22,6 @@ from langchain_google_genai._function_utils import (
     _tool_choice_to_tool_config,
     _ToolConfigDict,
     convert_to_genai_function_declarations,
-    replace_defs_in_schema,
     tool_to_dict,
 )
 
@@ -37,7 +35,7 @@ def test_tool_with_anyof_nullable_param() -> None:
 
     @tool(parse_docstring=True)
     def possibly_none(
-        a: Optional[str] = None,
+        a: str | None = None,
     ) -> str:
         """A test function whose argument can be a string or None.
 
@@ -83,7 +81,7 @@ def test_tool_with_array_anyof_nullable_param() -> None:
 
     @tool(parse_docstring=True)
     def possibly_none_list(
-        items: Optional[list[str]] = None,
+        items: list[str] | None = None,
     ) -> str:
         """A test function whose argument can be a list of strings or None.
 
@@ -137,7 +135,7 @@ def test_tool_with_nested_object_anyof_nullable_param() -> None:
 
     @tool(parse_docstring=True)
     def possibly_none_dict(
-        data: Optional[dict] = None,
+        data: dict | None = None,
     ) -> str:
         """A test function whose argument can be an object (dict) or None.
 
@@ -185,7 +183,7 @@ def test_tool_with_enum_anyof_nullable_param() -> None:
 
     @tool(parse_docstring=True)
     def possibly_none_enum(
-        status: Optional[str] = None,
+        status: str | None = None,
     ) -> str:
         """A test function whose argument can be an enum string or None.
 
@@ -409,9 +407,9 @@ def test_tool_with_annotated_optional_args() -> None:
     @tool(parse_docstring=True)
     def split_documents(
         chunk_size: int,
-        knowledge_base: Annotated[Union[list[Document], Document], InjectedToolArg],
-        chunk_overlap: Optional[int] = None,
-        tokenizer_name: Annotated[Optional[str], InjectedToolArg] = "model",
+        knowledge_base: Annotated[list[Document] | Document, InjectedToolArg],
+        chunk_overlap: int | None = None,
+        tokenizer_name: Annotated[str | None, InjectedToolArg] = "model",
     ) -> list[Document]:
         """Tool.
 
@@ -428,7 +426,7 @@ def test_tool_with_annotated_optional_args() -> None:
         query: str,
         engine: str = "Google",
         num_results: int = 5,
-        truncate_threshold: Optional[int] = None,
+        truncate_threshold: int | None = None,
     ) -> list[Document]:
         """Tool.
 
@@ -899,61 +897,6 @@ def test_tool_with_doubly_nested_list_param() -> None:
     assert "description" in items_level2
 
 
-def test_schema_no_defs() -> None:
-    schema = {"type": "integer"}
-    expected_schema = {"type": "integer"}
-    assert replace_defs_in_schema(schema) == expected_schema
-
-
-def test_schema_empty_defs() -> None:
-    schema = {"$defs": {}, "type": "integer"}
-    expected_schema = {"type": "integer"}
-    assert replace_defs_in_schema(schema) == expected_schema
-
-
-def test_schema_simple_ref_replacement() -> None:
-    schema = {
-        "$defs": {"MyDefinition": {"type": "string"}},
-        "property": {"$ref": "#/$defs/MyDefinition"},
-    }
-    expected_schema = {"property": {"type": "string"}}
-    assert replace_defs_in_schema(schema) == expected_schema
-
-
-def test_schema_nested_ref_replacement() -> None:
-    schema = {
-        "$defs": {
-            "MyDefinition": {
-                "type": "object",
-                "properties": {"name": {"$ref": "#/$defs/NameDefinition"}},
-            },
-            "NameDefinition": {"type": "string"},
-        },
-        "property": {"$ref": "#/$defs/MyDefinition"},
-    }
-    expected_schema = {
-        "property": {"type": "object", "properties": {"name": {"type": "string"}}}
-    }
-    assert replace_defs_in_schema(schema) == expected_schema
-
-
-def test_schema_recursive_error_self_reference() -> None:
-    schema = {
-        "$defs": {
-            "Node": {
-                "type": "object",
-                "properties": {
-                    "name": {"type": "string"},
-                    "children": {"type": "array", "items": {"$ref": "#/$defs/Node"}},
-                },
-            }
-        },
-        "root": {"$ref": "#/$defs/Node"},
-    }
-    with pytest.raises(RecursionError):
-        _ = replace_defs_in_schema(schema)
-
-
 def test_tool_with_union_types() -> None:
     """Test union types with tools.
 
@@ -975,7 +918,7 @@ def test_tool_with_union_types() -> None:
         """Get weather information."""
 
         location: str = "New York, USA"
-        date: Union[Helper1, Helper2] = Helper1()
+        date: Helper1 | Helper2 = Helper1()
 
     # Convert to OpenAI, then to GenAI, then to dict
     oai_tool = convert_to_openai_tool(GetWeather)
@@ -1041,7 +984,7 @@ def test_tool_with_union_primitive_types() -> None:
         """Search query model with a union parameter."""
 
         query: str = "default query"
-        filter: Union[str, Helper] = "default filter"
+        filter: str | Helper = "default filter"
 
     # Convert to OpenAI, then to GenAI, then to dict
     oai_tool = convert_to_openai_tool(SearchQuery)
@@ -1109,14 +1052,14 @@ def test_tool_with_nested_union_types() -> None:
         """Contact model."""
 
         email: str = "user@example.com"
-        phone: Optional[str] = None
+        phone: str | None = None
 
     class Person(BaseModel):
         """Person model with complex nested unions."""
 
         name: str
-        location: Union[str, Address] = "Unknown"
-        contacts: list[Union[str, Contact]] = []
+        location: str | Address = "Unknown"
+        contacts: list[str | Contact] = []
 
     # Convert to OpenAI, then to GenAI, then to dict
     oai_tool = convert_to_openai_tool(Person)
@@ -1171,7 +1114,7 @@ def test_tool_invocation_with_union_types() -> None:
         settings: dict[str, str] = {}
 
     @tool
-    def configure_service(service_name: str, config: Union[str, Configuration]) -> str:
+    def configure_service(service_name: str, config: str | Configuration) -> str:
         """Configure a service with either a configuration string or object.
 
         Args:
@@ -1253,7 +1196,7 @@ def test_tool_field_union_types() -> None:
         location: str = Field(
             ..., description="The city and country, e.g. New York, USA"
         )
-        date: Union[Helper1, Helper2] = Field(description="Test field")
+        date: Helper1 | Helper2 = Field(description="Test field")
 
     # Convert to OpenAI tool
     oai_tool = convert_to_openai_tool(GetWeather)
@@ -1330,7 +1273,7 @@ def test_union_type_schema_validation() -> None:
     class Act(BaseModel):
         """Action to perform."""
 
-        action: Union[Response, Plan] = Field(description="Action to perform.")
+        action: Response | Plan = Field(description="Action to perform.")
 
     # Convert to GenAI function declaration
     openai_func = convert_to_openai_function(Act)
@@ -1349,7 +1292,7 @@ def test_optional_dict_schema_validation() -> None:
 
     class RequestsGetToolInput(BaseModel):
         url: str = Field(description="The URL to send the GET request to")
-        params: Optional[dict[str, str]] = Field(
+        params: dict[str, str] | None = Field(
             default={}, description="Query parameters for the GET request"
         )
         output_instructions: str = Field(

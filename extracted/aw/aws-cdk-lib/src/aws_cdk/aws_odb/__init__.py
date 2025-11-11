@@ -4871,7 +4871,7 @@ class CfnOdbNetwork(
             '''The configuration for managed Amazon S3 backup access from the ODB network.
 
             :param ipv4_addresses: The IPv4 addresses for the managed Amazon S3 backup access.
-            :param status: The status of the managed Amazon S3 backup access. Valid Values: ``enabled | disabled``
+            :param status: The status of the managed Amazon S3 backup access.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-odb-odbnetwork-manageds3backupaccess.html
             :exampleMetadata: fixture=_generated
@@ -4909,8 +4909,6 @@ class CfnOdbNetwork(
         @builtins.property
         def status(self) -> typing.Optional[builtins.str]:
             '''The status of the managed Amazon S3 backup access.
-
-            Valid Values: ``enabled | disabled``
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-odb-odbnetwork-manageds3backupaccess.html#cfn-odb-odbnetwork-manageds3backupaccess-status
             '''
@@ -5129,7 +5127,7 @@ class CfnOdbNetwork(
             :param domain_name: The domain name for the Amazon S3 access.
             :param ipv4_addresses: The IPv4 addresses for the Amazon S3 access.
             :param s3_policy_document: The endpoint policy for the Amazon S3 access.
-            :param status: The status of the Amazon S3 access. Valid Values: ``enabled | disabled``
+            :param status: The status of the Amazon S3 access.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-odb-odbnetwork-s3access.html
             :exampleMetadata: fixture=_generated
@@ -5194,8 +5192,6 @@ class CfnOdbNetwork(
         def status(self) -> typing.Optional[builtins.str]:
             '''The status of the Amazon S3 access.
 
-            Valid Values: ``enabled | disabled``
-
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-odb-odbnetwork-s3access.html#cfn-odb-odbnetwork-s3access-status
             '''
             result = self._values.get("status")
@@ -5230,7 +5226,7 @@ class CfnOdbNetwork(
             '''The configuration for a service network endpoint.
 
             :param vpc_endpoint_id: The identifier of the VPC endpoint.
-            :param vpc_endpoint_type: The type of the VPC endpoint. Valid Values: ``Interface | Gateway``
+            :param vpc_endpoint_type: The type of the VPC endpoint.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-odb-odbnetwork-servicenetworkendpoint.html
             :exampleMetadata: fixture=_generated
@@ -5269,8 +5265,6 @@ class CfnOdbNetwork(
         def vpc_endpoint_type(self) -> typing.Optional[builtins.str]:
             '''The type of the VPC endpoint.
 
-            Valid Values: ``Interface | Gateway``
-
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-odb-odbnetwork-servicenetworkendpoint.html#cfn-odb-odbnetwork-servicenetworkendpoint-vpcendpointtype
             '''
             result = self._values.get("vpc_endpoint_type")
@@ -5302,7 +5296,7 @@ class CfnOdbNetwork(
             '''The configuration for Zero-ETL access from the ODB network.
 
             :param cidr: The CIDR block for the Zero-ETL access.
-            :param status: The status of the Zero-ETL access. Valid Values: ``enabled | disabled``
+            :param status: The status of the Zero-ETL access.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-odb-odbnetwork-zeroetlaccess.html
             :exampleMetadata: fixture=_generated
@@ -5340,8 +5334,6 @@ class CfnOdbNetwork(
         @builtins.property
         def status(self) -> typing.Optional[builtins.str]:
             '''The status of the Zero-ETL access.
-
-            Valid Values: ``enabled | disabled``
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-odb-odbnetwork-zeroetlaccess.html#cfn-odb-odbnetwork-zeroetlaccess-status
             '''

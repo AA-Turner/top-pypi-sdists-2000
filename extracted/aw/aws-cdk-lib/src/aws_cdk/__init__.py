@@ -40361,6 +40361,7 @@ __all__ = [
     "aws_route53recoverycontrol",
     "aws_route53recoveryreadiness",
     "aws_route53resolver",
+    "aws_rtbfabric",
     "aws_rum",
     "aws_s3",
     "aws_s3_assets",
@@ -40370,6 +40371,7 @@ __all__ = [
     "aws_s3objectlambda",
     "aws_s3outposts",
     "aws_s3tables",
+    "aws_s3vectors",
     "aws_sagemaker",
     "aws_sam",
     "aws_scheduler",
@@ -40668,6 +40670,7 @@ from . import aws_route53profiles
 from . import aws_route53recoverycontrol
 from . import aws_route53recoveryreadiness
 from . import aws_route53resolver
+from . import aws_rtbfabric
 from . import aws_rum
 from . import aws_s3
 from . import aws_s3_assets
@@ -40677,6 +40680,7 @@ from . import aws_s3express
 from . import aws_s3objectlambda
 from . import aws_s3outposts
 from . import aws_s3tables
+from . import aws_s3vectors
 from . import aws_sagemaker
 from . import aws_sam
 from . import aws_scheduler

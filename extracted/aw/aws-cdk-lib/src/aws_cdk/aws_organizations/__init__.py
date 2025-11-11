@@ -1395,6 +1395,19 @@ class CfnAccount(
         return typing.cast(builtins.str, jsii.get(self, "attrJoinedTimestamp"))
 
     @builtins.property
+    @jsii.member(jsii_name="attrState")
+    def attr_state(self) -> builtins.str:
+        '''Each state represents a specific phase in the account lifecycle.
+
+        Use this information to manage account access, automate workflows, or trigger actions based on account state changes.
+
+        For more information about account states and their implications, see `Monitor the state of your AWS accounts <https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_accounts_account_state.html>`_ in the *AWS Organizations User Guide* .
+
+        :cloudformationAttribute: State
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrState"))
+
+    @builtins.property
     @jsii.member(jsii_name="attrStatus")
     def attr_status(self) -> builtins.str:
         '''Returns the status of the account in the organization.

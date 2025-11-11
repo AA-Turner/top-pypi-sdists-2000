@@ -176,6 +176,7 @@ class _Image(modal._object._Object):
         ] = None,
         force_build: bool = False,
         build_args: dict[str, str] = {},
+        validated_volumes: typing.Optional[collections.abc.Sequence[tuple[str, modal.volume._Volume]]] = None,
         _namespace: int = 1,
         _do_assert_no_mount_layers: bool = True,
     ): ...
@@ -329,8 +330,8 @@ class _Image(modal._object._Object):
         ```python
         image = modal.Image.debian_slim().uv_pip_install("scipy", "numpy")
 
-        app = modal.App("build-image")
-        with modal.enable_output(), app.run():
+        app = modal.App.lookup("build-image", create_if_missing=True)
+        with modal.enable_output():  # To see logs in your local terminal
             image.build(app)
 
         # Save the image id
@@ -343,7 +344,7 @@ class _Image(modal._object._Object):
         Alternatively, you can pre-build a image and use it in a sandbox.
 
         ```python notest
-        app = modal.App.lookup("sandbox-example")
+        app = modal.App.lookup("sandbox-example", create_if_missing=True)
 
         with modal.enable_output():
             image = modal.Image.debian_slim().uv_pip_install("scipy")
@@ -668,6 +669,7 @@ class _Image(modal._object._Object):
         *commands: typing.Union[str, list[str]],
         env: typing.Optional[dict[str, typing.Optional[str]]] = None,
         secrets: typing.Optional[collections.abc.Collection[modal.secret._Secret]] = None,
+        volumes: typing.Optional[dict[typing.Union[str, pathlib.PurePosixPath], modal.volume._Volume]] = None,
         gpu: typing.Union[None, str, modal.gpu._GPUConfig] = None,
         force_build: bool = False,
     ) -> _Image:
@@ -1091,6 +1093,7 @@ class Image(modal.object.Object):
         ] = None,
         force_build: bool = False,
         build_args: dict[str, str] = {},
+        validated_volumes: typing.Optional[collections.abc.Sequence[tuple[str, modal.volume.Volume]]] = None,
         _namespace: int = 1,
         _do_assert_no_mount_layers: bool = True,
     ): ...
@@ -1254,8 +1257,8 @@ class Image(modal.object.Object):
             ```python
             image = modal.Image.debian_slim().uv_pip_install("scipy", "numpy")
 
-            app = modal.App("build-image")
-            with modal.enable_output(), app.run():
+            app = modal.App.lookup("build-image", create_if_missing=True)
+            with modal.enable_output():  # To see logs in your local terminal
                 image.build(app)
 
             # Save the image id
@@ -1268,7 +1271,7 @@ class Image(modal.object.Object):
             Alternatively, you can pre-build a image and use it in a sandbox.
 
             ```python notest
-            app = modal.App.lookup("sandbox-example")
+            app = modal.App.lookup("sandbox-example", create_if_missing=True)
 
             with modal.enable_output():
                 image = modal.Image.debian_slim().uv_pip_install("scipy")
@@ -1307,8 +1310,8 @@ class Image(modal.object.Object):
             ```python
             image = modal.Image.debian_slim().uv_pip_install("scipy", "numpy")
 
-            app = modal.App("build-image")
-            with modal.enable_output(), app.run():
+            app = modal.App.lookup("build-image", create_if_missing=True)
+            with modal.enable_output():  # To see logs in your local terminal
                 image.build(app)
 
             # Save the image id
@@ -1321,7 +1324,7 @@ class Image(modal.object.Object):
             Alternatively, you can pre-build a image and use it in a sandbox.
 
             ```python notest
-            app = modal.App.lookup("sandbox-example")
+            app = modal.App.lookup("sandbox-example", create_if_missing=True)
 
             with modal.enable_output():
                 image = modal.Image.debian_slim().uv_pip_install("scipy")
@@ -1648,6 +1651,7 @@ class Image(modal.object.Object):
         *commands: typing.Union[str, list[str]],
         env: typing.Optional[dict[str, typing.Optional[str]]] = None,
         secrets: typing.Optional[collections.abc.Collection[modal.secret.Secret]] = None,
+        volumes: typing.Optional[dict[typing.Union[str, pathlib.PurePosixPath], modal.volume.Volume]] = None,
         gpu: typing.Union[None, str, modal.gpu._GPUConfig] = None,
         force_build: bool = False,
     ) -> Image:

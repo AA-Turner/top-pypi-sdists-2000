@@ -62,8 +62,15 @@ def _sort_key_source(item: CollectorItem) -> float:
     return item.lineno if item.lineno is not None else float("inf")
 
 
-def _sort__all__(item: CollectorItem) -> float:  # noqa: ARG001
-    raise ValueError("Not implemented in public version of mkdocstrings-python")
+def _sort__all__(item: CollectorItem) -> float:
+    if item.parent.exports is not None:
+        try:
+            return item.parent.exports.index(item.name)
+        except ValueError:
+            # If the item is not in `__all__`, it will go to the end of the list.
+            return float("inf")
+    # No exports declared, refuse to sort (try other methods or return members as they are).
+    raise ValueError(f"Parent object {item.parent.path} doesn't declare exports")
 
 
 Order = Literal["__all__", "alphabetical", "source"]
@@ -856,6 +863,33 @@ class AutorefsHook(AutorefsHookInterface):
         Returns:
             The expanded identifier.
         """
+        # Handle leading dots in the identifier:
+        # - `.name` is a reference to the current object's `name` member.
+        # - `..name` is a reference to the parent object's `name` member.
+        # - etc.
+        # TODO: We should update the protocol to allow modifying the title too.
+        # In this case it would likely be better to strip dots from the title,
+        # when it's not explicitly specified.
+        if self.config.relative_crossrefs and identifier.startswith("."):  # type: ignore[attr-defined]
+            identifier = identifier[1:]
+            obj = self.current_object
+            while identifier and identifier[0] == ".":
+                identifier = identifier[1:]
+                obj = obj.parent  # type: ignore[assignment]
+            identifier = f"{obj.path}.{identifier}" if identifier else obj.path
+
+        # We resolve the identifier to its full path.
+        # For this we take out the first name, resolve it, and then append the rest.
+        if self.config.scoped_crossrefs:  # type: ignore[attr-defined]
+            if "." in identifier:
+                identifier, remaining = identifier.split(".", 1)
+            else:
+                remaining = ""
+            with suppress(Exception):
+                identifier = self.current_object.resolve(identifier)
+            if remaining:
+                identifier = f"{identifier}.{remaining}"
+
         return identifier
 
     def get_context(self) -> AutorefsHookInterface.Context:

@@ -658,8 +658,6 @@ project = codebuild.Project(self, "MyProject",
 )
 ```
 
-> > > > > > > 39ec36ec6a (feat(codebuild): add custom instance type and VPC to Fleets)
-
 ## Logs
 
 CodeBuild lets you specify an S3 Bucket, CloudWatch Log Group or both to receive logs from your projects.
@@ -4704,6 +4702,20 @@ class DockerServerComputeType(enum.Enum):
     '''BUILD_GENERAL1_XLARGE.'''
     X2_LARGE = "X2_LARGE"
     '''BUILD_GENERAL1_2XLARGE.'''
+    ATTRIBUTE_BASED_COMPUTE = "ATTRIBUTE_BASED_COMPUTE"
+    '''ATTRIBUTE_BASED_COMPUTE.'''
+    BUILD_LAMBDA_10GB = "BUILD_LAMBDA_10GB"
+    '''BUILD_LAMBDA_10GB.'''
+    BUILD_LAMBDA_1GB = "BUILD_LAMBDA_1GB"
+    '''BUILD_LAMBDA_1GB.'''
+    BUILD_LAMBDA_2GB = "BUILD_LAMBDA_2GB"
+    '''BUILD_LAMBDA_2GB.'''
+    BUILD_LAMBDA_4GB = "BUILD_LAMBDA_4GB"
+    '''BUILD_LAMBDA_4GB.'''
+    BUILD_LAMBDA_8GB = "BUILD_LAMBDA_8GB"
+    '''BUILD_LAMBDA_8GB.'''
+    CUSTOM_INSTANCE_TYPE = "CUSTOM_INSTANCE_TYPE"
+    '''CUSTOM_INSTANCE_TYPE.'''
 
 
 @jsii.data_type(

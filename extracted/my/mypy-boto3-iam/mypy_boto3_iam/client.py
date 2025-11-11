@@ -19,6 +19,7 @@ Usage::
 from __future__ import annotations
 
 import sys
+from collections.abc import Mapping
 from typing import Any, overload
 
 from botocore.client import BaseClient, ClientMeta
@@ -72,6 +73,8 @@ from .type_defs import (
     CreateAccessKeyRequestTypeDef,
     CreateAccessKeyResponseTypeDef,
     CreateAccountAliasRequestTypeDef,
+    CreateDelegationRequestRequestTypeDef,
+    CreateDelegationRequestResponseTypeDef,
     CreateGroupRequestTypeDef,
     CreateGroupResponseTypeDef,
     CreateInstanceProfileRequestTypeDef,
@@ -311,12 +314,6 @@ from .waiter import (
     UserExistsWaiter,
 )
 
-if sys.version_info >= (3, 9):
-    from builtins import dict as Dict
-    from builtins import type as Type
-    from collections.abc import Mapping
-else:
-    from typing import Dict, Mapping, Type
 if sys.version_info >= (3, 12):
     from typing import Literal, Unpack
 else:
@@ -327,40 +324,40 @@ __all__ = ("IAMClient",)
 
 
 class Exceptions(BaseClientExceptions):
-    AccountNotManagementOrDelegatedAdministratorException: Type[BotocoreClientError]
-    CallerIsNotManagementAccountException: Type[BotocoreClientError]
-    ClientError: Type[BotocoreClientError]
-    ConcurrentModificationException: Type[BotocoreClientError]
-    CredentialReportExpiredException: Type[BotocoreClientError]
-    CredentialReportNotPresentException: Type[BotocoreClientError]
-    CredentialReportNotReadyException: Type[BotocoreClientError]
-    DeleteConflictException: Type[BotocoreClientError]
-    DuplicateCertificateException: Type[BotocoreClientError]
-    DuplicateSSHPublicKeyException: Type[BotocoreClientError]
-    EntityAlreadyExistsException: Type[BotocoreClientError]
-    EntityTemporarilyUnmodifiableException: Type[BotocoreClientError]
-    InvalidAuthenticationCodeException: Type[BotocoreClientError]
-    InvalidCertificateException: Type[BotocoreClientError]
-    InvalidInputException: Type[BotocoreClientError]
-    InvalidPublicKeyException: Type[BotocoreClientError]
-    InvalidUserTypeException: Type[BotocoreClientError]
-    KeyPairMismatchException: Type[BotocoreClientError]
-    LimitExceededException: Type[BotocoreClientError]
-    MalformedCertificateException: Type[BotocoreClientError]
-    MalformedPolicyDocumentException: Type[BotocoreClientError]
-    NoSuchEntityException: Type[BotocoreClientError]
-    OpenIdIdpCommunicationErrorException: Type[BotocoreClientError]
-    OrganizationNotFoundException: Type[BotocoreClientError]
-    OrganizationNotInAllFeaturesModeException: Type[BotocoreClientError]
-    PasswordPolicyViolationException: Type[BotocoreClientError]
-    PolicyEvaluationException: Type[BotocoreClientError]
-    PolicyNotAttachableException: Type[BotocoreClientError]
-    ReportGenerationLimitExceededException: Type[BotocoreClientError]
-    ServiceAccessNotEnabledException: Type[BotocoreClientError]
-    ServiceFailureException: Type[BotocoreClientError]
-    ServiceNotSupportedException: Type[BotocoreClientError]
-    UnmodifiableEntityException: Type[BotocoreClientError]
-    UnrecognizedPublicKeyEncodingException: Type[BotocoreClientError]
+    AccountNotManagementOrDelegatedAdministratorException: type[BotocoreClientError]
+    CallerIsNotManagementAccountException: type[BotocoreClientError]
+    ClientError: type[BotocoreClientError]
+    ConcurrentModificationException: type[BotocoreClientError]
+    CredentialReportExpiredException: type[BotocoreClientError]
+    CredentialReportNotPresentException: type[BotocoreClientError]
+    CredentialReportNotReadyException: type[BotocoreClientError]
+    DeleteConflictException: type[BotocoreClientError]
+    DuplicateCertificateException: type[BotocoreClientError]
+    DuplicateSSHPublicKeyException: type[BotocoreClientError]
+    EntityAlreadyExistsException: type[BotocoreClientError]
+    EntityTemporarilyUnmodifiableException: type[BotocoreClientError]
+    InvalidAuthenticationCodeException: type[BotocoreClientError]
+    InvalidCertificateException: type[BotocoreClientError]
+    InvalidInputException: type[BotocoreClientError]
+    InvalidPublicKeyException: type[BotocoreClientError]
+    InvalidUserTypeException: type[BotocoreClientError]
+    KeyPairMismatchException: type[BotocoreClientError]
+    LimitExceededException: type[BotocoreClientError]
+    MalformedCertificateException: type[BotocoreClientError]
+    MalformedPolicyDocumentException: type[BotocoreClientError]
+    NoSuchEntityException: type[BotocoreClientError]
+    OpenIdIdpCommunicationErrorException: type[BotocoreClientError]
+    OrganizationNotFoundException: type[BotocoreClientError]
+    OrganizationNotInAllFeaturesModeException: type[BotocoreClientError]
+    PasswordPolicyViolationException: type[BotocoreClientError]
+    PolicyEvaluationException: type[BotocoreClientError]
+    PolicyNotAttachableException: type[BotocoreClientError]
+    ReportGenerationLimitExceededException: type[BotocoreClientError]
+    ServiceAccessNotEnabledException: type[BotocoreClientError]
+    ServiceFailureException: type[BotocoreClientError]
+    ServiceNotSupportedException: type[BotocoreClientError]
+    UnmodifiableEntityException: type[BotocoreClientError]
+    UnrecognizedPublicKeyEncodingException: type[BotocoreClientError]
 
 
 class IAMClient(BaseClient):
@@ -488,6 +485,16 @@ class IAMClient(BaseClient):
 
         [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/iam/client/create_account_alias.html)
         [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_iam/client/#create_account_alias)
+        """
+
+    def create_delegation_request(
+        self, **kwargs: Unpack[CreateDelegationRequestRequestTypeDef]
+    ) -> CreateDelegationRequestResponseTypeDef:
+        """
+        This API is currently unavailable for general use.
+
+        [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/iam/client/create_delegation_request.html)
+        [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_iam/client/#create_delegation_request)
         """
 
     def create_group(
@@ -1959,7 +1966,7 @@ class IAMClient(BaseClient):
         [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_iam/client/#update_open_id_connect_provider_thumbprint)
         """
 
-    def update_role(self, **kwargs: Unpack[UpdateRoleRequestTypeDef]) -> Dict[str, Any]:
+    def update_role(self, **kwargs: Unpack[UpdateRoleRequestTypeDef]) -> dict[str, Any]:
         """
         Updates the description or maximum session duration setting of a role.
 

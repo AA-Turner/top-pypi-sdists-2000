@@ -284,8 +284,10 @@ class CfnBillingGroupProps:
         "name": "name",
         "account_id": "accountId",
         "billing_period_range": "billingPeriodRange",
+        "computation_rule": "computationRule",
         "custom_line_item_charge_details": "customLineItemChargeDetails",
         "description": "description",
+        "presentation_details": "presentationDetails",
         "tags": "tags",
     },
 )
@@ -297,8 +299,10 @@ class CfnCustomLineItemProps:
         name: builtins.str,
         account_id: typing.Optional[builtins.str] = None,
         billing_period_range: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCustomLineItem.BillingPeriodRangeProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        computation_rule: typing.Optional[builtins.str] = None,
         custom_line_item_charge_details: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCustomLineItem.CustomLineItemChargeDetailsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         description: typing.Optional[builtins.str] = None,
+        presentation_details: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCustomLineItem.PresentationDetailsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnCustomLineItem``.
@@ -307,8 +311,10 @@ class CfnCustomLineItemProps:
         :param name: The custom line item's name.
         :param account_id: The AWS account in which this custom line item will be applied to.
         :param billing_period_range: A time range for which the custom line item is effective.
+        :param computation_rule: The display settings of the Custom Line Item.
         :param custom_line_item_charge_details: The charge details of a custom line item. It should contain only one of ``Flat`` or ``Percentage`` .
         :param description: The custom line item's description. This is shown on the Bills page in association with the charge value.
+        :param presentation_details: 
         :param tags: A map that contains tag keys and tag values that are attached to a custom line item.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-billingconductor-customlineitem.html
@@ -330,6 +336,7 @@ class CfnCustomLineItemProps:
                     exclusive_end_billing_period="exclusiveEndBillingPeriod",
                     inclusive_start_billing_period="inclusiveStartBillingPeriod"
                 ),
+                computation_rule="computationRule",
                 custom_line_item_charge_details=billingconductor.CfnCustomLineItem.CustomLineItemChargeDetailsProperty(
                     type="type",
             
@@ -350,6 +357,9 @@ class CfnCustomLineItemProps:
                     )
                 ),
                 description="description",
+                presentation_details=billingconductor.CfnCustomLineItem.PresentationDetailsProperty(
+                    service="service"
+                ),
                 tags=[CfnTag(
                     key="key",
                     value="value"
@@ -362,8 +372,10 @@ class CfnCustomLineItemProps:
             check_type(argname="argument name", value=name, expected_type=type_hints["name"])
             check_type(argname="argument account_id", value=account_id, expected_type=type_hints["account_id"])
             check_type(argname="argument billing_period_range", value=billing_period_range, expected_type=type_hints["billing_period_range"])
+            check_type(argname="argument computation_rule", value=computation_rule, expected_type=type_hints["computation_rule"])
             check_type(argname="argument custom_line_item_charge_details", value=custom_line_item_charge_details, expected_type=type_hints["custom_line_item_charge_details"])
             check_type(argname="argument description", value=description, expected_type=type_hints["description"])
+            check_type(argname="argument presentation_details", value=presentation_details, expected_type=type_hints["presentation_details"])
             check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
         self._values: typing.Dict[builtins.str, typing.Any] = {
             "billing_group_arn": billing_group_arn,
@@ -373,10 +385,14 @@ class CfnCustomLineItemProps:
             self._values["account_id"] = account_id
         if billing_period_range is not None:
             self._values["billing_period_range"] = billing_period_range
+        if computation_rule is not None:
+            self._values["computation_rule"] = computation_rule
         if custom_line_item_charge_details is not None:
             self._values["custom_line_item_charge_details"] = custom_line_item_charge_details
         if description is not None:
             self._values["description"] = description
+        if presentation_details is not None:
+            self._values["presentation_details"] = presentation_details
         if tags is not None:
             self._values["tags"] = tags
 
@@ -421,6 +437,15 @@ class CfnCustomLineItemProps:
         return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCustomLineItem.BillingPeriodRangeProperty"]], result)
 
     @builtins.property
+    def computation_rule(self) -> typing.Optional[builtins.str]:
+        '''The display settings of the Custom Line Item.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-billingconductor-customlineitem.html#cfn-billingconductor-customlineitem-computationrule
+        '''
+        result = self._values.get("computation_rule")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
     def custom_line_item_charge_details(
         self,
     ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCustomLineItem.CustomLineItemChargeDetailsProperty"]]:
@@ -443,6 +468,16 @@ class CfnCustomLineItemProps:
         '''
         result = self._values.get("description")
         return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def presentation_details(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCustomLineItem.PresentationDetailsProperty"]]:
+        '''
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-billingconductor-customlineitem.html#cfn-billingconductor-customlineitem-presentationdetails
+        '''
+        result = self._values.get("presentation_details")
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCustomLineItem.PresentationDetailsProperty"]], result)
 
     @builtins.property
     def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
@@ -1571,6 +1606,7 @@ class CfnCustomLineItem(
                 exclusive_end_billing_period="exclusiveEndBillingPeriod",
                 inclusive_start_billing_period="inclusiveStartBillingPeriod"
             ),
+            computation_rule="computationRule",
             custom_line_item_charge_details=billingconductor.CfnCustomLineItem.CustomLineItemChargeDetailsProperty(
                 type="type",
         
@@ -1591,6 +1627,9 @@ class CfnCustomLineItem(
                 )
             ),
             description="description",
+            presentation_details=billingconductor.CfnCustomLineItem.PresentationDetailsProperty(
+                service="service"
+            ),
             tags=[CfnTag(
                 key="key",
                 value="value"
@@ -1607,8 +1646,10 @@ class CfnCustomLineItem(
         name: builtins.str,
         account_id: typing.Optional[builtins.str] = None,
         billing_period_range: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCustomLineItem.BillingPeriodRangeProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        computation_rule: typing.Optional[builtins.str] = None,
         custom_line_item_charge_details: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCustomLineItem.CustomLineItemChargeDetailsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         description: typing.Optional[builtins.str] = None,
+        presentation_details: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCustomLineItem.PresentationDetailsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''
@@ -1618,8 +1659,10 @@ class CfnCustomLineItem(
         :param name: The custom line item's name.
         :param account_id: The AWS account in which this custom line item will be applied to.
         :param billing_period_range: A time range for which the custom line item is effective.
+        :param computation_rule: The display settings of the Custom Line Item.
         :param custom_line_item_charge_details: The charge details of a custom line item. It should contain only one of ``Flat`` or ``Percentage`` .
         :param description: The custom line item's description. This is shown on the Bills page in association with the charge value.
+        :param presentation_details: 
         :param tags: A map that contains tag keys and tag values that are attached to a custom line item.
         '''
         if __debug__:
@@ -1631,8 +1674,10 @@ class CfnCustomLineItem(
             name=name,
             account_id=account_id,
             billing_period_range=billing_period_range,
+            computation_rule=computation_rule,
             custom_line_item_charge_details=custom_line_item_charge_details,
             description=description,
+            presentation_details=presentation_details,
             tags=tags,
         )
 
@@ -1799,6 +1844,19 @@ class CfnCustomLineItem(
         jsii.set(self, "billingPeriodRange", value) # pyright: ignore[reportArgumentType]
 
     @builtins.property
+    @jsii.member(jsii_name="computationRule")
+    def computation_rule(self) -> typing.Optional[builtins.str]:
+        '''The display settings of the Custom Line Item.'''
+        return typing.cast(typing.Optional[builtins.str], jsii.get(self, "computationRule"))
+
+    @computation_rule.setter
+    def computation_rule(self, value: typing.Optional[builtins.str]) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__13b75a88355dc2c0a8bde97a22b3e5bb4f018e052e20c1055729260d2c397260)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "computationRule", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
     @jsii.member(jsii_name="customLineItemChargeDetails")
     def custom_line_item_charge_details(
         self,
@@ -1828,6 +1886,23 @@ class CfnCustomLineItem(
             type_hints = typing.get_type_hints(_typecheckingstub__66dd00cf48245d48f64a76715433404bd203befdf24fdeac8e43d67e3528c1b5)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
         jsii.set(self, "description", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="presentationDetails")
+    def presentation_details(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCustomLineItem.PresentationDetailsProperty"]]:
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCustomLineItem.PresentationDetailsProperty"]], jsii.get(self, "presentationDetails"))
+
+    @presentation_details.setter
+    def presentation_details(
+        self,
+        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCustomLineItem.PresentationDetailsProperty"]],
+    ) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__2cded875a02d3fb7f6d21e8a3d9c516c5ea7cdbc3aa87ed23d8ef0f632686e7f)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "presentationDetails", value) # pyright: ignore[reportArgumentType]
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
@@ -2271,6 +2346,56 @@ class CfnCustomLineItem(
 
         def __repr__(self) -> str:
             return "LineItemFilterProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_billingconductor.CfnCustomLineItem.PresentationDetailsProperty",
+        jsii_struct_bases=[],
+        name_mapping={"service": "service"},
+    )
+    class PresentationDetailsProperty:
+        def __init__(self, *, service: builtins.str) -> None:
+            '''
+            :param service: 
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-billingconductor-customlineitem-presentationdetails.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_billingconductor as billingconductor
+                
+                presentation_details_property = billingconductor.CfnCustomLineItem.PresentationDetailsProperty(
+                    service="service"
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__2ba29381d2283bc913a24cd00170137131664b9f254c665e0617e5ad779efbd2)
+                check_type(argname="argument service", value=service, expected_type=type_hints["service"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "service": service,
+            }
+
+        @builtins.property
+        def service(self) -> builtins.str:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-billingconductor-customlineitem-presentationdetails.html#cfn-billingconductor-customlineitem-presentationdetails-service
+            '''
+            result = self._values.get("service")
+            assert result is not None, "Required property 'service' is missing"
+            return typing.cast(builtins.str, result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "PresentationDetailsProperty(%s)" % ", ".join(
                 k + "=" + repr(v) for k, v in self._values.items()
             )
 
@@ -2963,8 +3088,10 @@ def _typecheckingstub__7a7b2e875d39abe8a3c0b572bc75c4dac4bd0fc7005579ba31e1612f8
     name: builtins.str,
     account_id: typing.Optional[builtins.str] = None,
     billing_period_range: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCustomLineItem.BillingPeriodRangeProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    computation_rule: typing.Optional[builtins.str] = None,
     custom_line_item_charge_details: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCustomLineItem.CustomLineItemChargeDetailsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     description: typing.Optional[builtins.str] = None,
+    presentation_details: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCustomLineItem.PresentationDetailsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
 ) -> None:
     """Type checking stubs"""
@@ -3103,8 +3230,10 @@ def _typecheckingstub__6c43da03f91fab487cb7b12443aac4a35ef34bfe36c0ce02a150eca1a
     name: builtins.str,
     account_id: typing.Optional[builtins.str] = None,
     billing_period_range: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCustomLineItem.BillingPeriodRangeProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    computation_rule: typing.Optional[builtins.str] = None,
     custom_line_item_charge_details: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCustomLineItem.CustomLineItemChargeDetailsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     description: typing.Optional[builtins.str] = None,
+    presentation_details: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCustomLineItem.PresentationDetailsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
 ) -> None:
     """Type checking stubs"""
@@ -3146,6 +3275,12 @@ def _typecheckingstub__4c5735856393235c9af0411ca8b7a8879608ebdefed633e1a33f50f45
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__13b75a88355dc2c0a8bde97a22b3e5bb4f018e052e20c1055729260d2c397260(
+    value: typing.Optional[builtins.str],
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__d9dcde3b5032942c5c0db649ffe03d9f28478316ee33c4e6c60e10f14100a1f9(
     value: typing.Optional[typing.Union[_IResolvable_da3f097b, CfnCustomLineItem.CustomLineItemChargeDetailsProperty]],
 ) -> None:
@@ -3154,6 +3289,12 @@ def _typecheckingstub__d9dcde3b5032942c5c0db649ffe03d9f28478316ee33c4e6c60e10f14
 
 def _typecheckingstub__66dd00cf48245d48f64a76715433404bd203befdf24fdeac8e43d67e3528c1b5(
     value: typing.Optional[builtins.str],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__2cded875a02d3fb7f6d21e8a3d9c516c5ea7cdbc3aa87ed23d8ef0f632686e7f(
+    value: typing.Optional[typing.Union[_IResolvable_da3f097b, CfnCustomLineItem.PresentationDetailsProperty]],
 ) -> None:
     """Type checking stubs"""
     pass
@@ -3202,6 +3343,13 @@ def _typecheckingstub__b18020b11e9da0d6827e72c5f07b3b822dfc78578e5de5d6bb554c27c
     attribute: builtins.str,
     match_option: builtins.str,
     values: typing.Sequence[builtins.str],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__2ba29381d2283bc913a24cd00170137131664b9f254c665e0617e5ad779efbd2(
+    *,
+    service: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass

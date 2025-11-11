@@ -669,12 +669,14 @@ class CfnCertificateProps:
     jsii_struct_bases=[],
     name_mapping={
         "access_role": "accessRole",
-        "url": "url",
         "as2_config": "as2Config",
+        "egress_config": "egressConfig",
+        "egress_type": "egressType",
         "logging_role": "loggingRole",
         "security_policy_name": "securityPolicyName",
         "sftp_config": "sftpConfig",
         "tags": "tags",
+        "url": "url",
     },
 )
 class CfnConnectorProps:
@@ -682,22 +684,26 @@ class CfnConnectorProps:
         self,
         *,
         access_role: builtins.str,
-        url: builtins.str,
         as2_config: typing.Any = None,
+        egress_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnConnector.ConnectorEgressConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        egress_type: typing.Optional[builtins.str] = None,
         logging_role: typing.Optional[builtins.str] = None,
         security_policy_name: typing.Optional[builtins.str] = None,
         sftp_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnConnector.SftpConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        url: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Properties for defining a ``CfnConnector``.
 
         :param access_role: Connectors are used to send files using either the AS2 or SFTP protocol. For the access role, provide the Amazon Resource Name (ARN) of the AWS Identity and Access Management role to use. *For AS2 connectors* With AS2, you can send files by calling ``StartFileTransfer`` and specifying the file paths in the request parameter, ``SendFilePaths`` . We use the file’s parent directory (for example, for ``--send-file-paths /bucket/dir/file.txt`` , parent directory is ``/bucket/dir/`` ) to temporarily store a processed AS2 message file, store the MDN when we receive them from the partner, and write a final JSON file containing relevant metadata of the transmission. So, the ``AccessRole`` needs to provide read and write access to the parent directory of the file location used in the ``StartFileTransfer`` request. Additionally, you need to provide read and write access to the parent directory of the files that you intend to send with ``StartFileTransfer`` . If you are using Basic authentication for your AS2 connector, the access role requires the ``secretsmanager:GetSecretValue`` permission for the secret. If the secret is encrypted using a customer-managed key instead of the AWS managed key in Secrets Manager, then the role also needs the ``kms:Decrypt`` permission for that key. *For SFTP connectors* Make sure that the access role provides read and write access to the parent directory of the file location that's used in the ``StartFileTransfer`` request. Additionally, make sure that the role provides ``secretsmanager:GetSecretValue`` permission to AWS Secrets Manager .
-        :param url: The URL of the partner's AS2 or SFTP endpoint. When creating AS2 connectors or service-managed SFTP connectors (connectors without egress configuration), you must provide a URL to specify the remote server endpoint. For VPC Lattice type connectors, the URL must be null.
         :param as2_config: A structure that contains the parameters for an AS2 connector object.
+        :param egress_config: Current egress configuration of the connector, showing how traffic is routed to the SFTP server. Contains VPC Lattice settings when using VPC_LATTICE egress type. When using the VPC_LATTICE egress type, AWS Transfer Family uses a managed Service Network to simplify the resource sharing process.
+        :param egress_type: Type of egress configuration for the connector. SERVICE_MANAGED uses Transfer Family managed NAT gateways, while VPC_LATTICE routes traffic through customer VPCs using VPC Lattice.
         :param logging_role: The Amazon Resource Name (ARN) of the AWS Identity and Access Management (IAM) role that allows a connector to turn on CloudWatch logging for Amazon S3 events. When set, you can view connector activity in your CloudWatch logs.
         :param security_policy_name: The text name of the security policy for the specified connector.
         :param sftp_config: A structure that contains the parameters for an SFTP connector object.
         :param tags: Key-value pairs that can be used to group and search for connectors.
+        :param url: The URL of the partner's AS2 or SFTP endpoint. When creating AS2 connectors or service-managed SFTP connectors (connectors without egress configuration), you must provide a URL to specify the remote server endpoint. For VPC Lattice type connectors, the URL must be null.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-transfer-connector.html
         :exampleMetadata: fixture=_generated
@@ -712,10 +718,18 @@ class CfnConnectorProps:
             
             cfn_connector_props = transfer.CfnConnectorProps(
                 access_role="accessRole",
-                url="url",
             
                 # the properties below are optional
                 as2_config=as2_config,
+                egress_config=transfer.CfnConnector.ConnectorEgressConfigProperty(
+                    vpc_lattice=transfer.CfnConnector.ConnectorVpcLatticeEgressConfigProperty(
+                        resource_configuration_arn="resourceConfigurationArn",
+            
+                        # the properties below are optional
+                        port_number=123
+                    )
+                ),
+                egress_type="egressType",
                 logging_role="loggingRole",
                 security_policy_name="securityPolicyName",
                 sftp_config=transfer.CfnConnector.SftpConfigProperty(
@@ -726,24 +740,30 @@ class CfnConnectorProps:
                 tags=[CfnTag(
                     key="key",
                     value="value"
-                )]
+                )],
+                url="url"
             )
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__7675f9dcded8f51977cf70f499821100319fe5d62996cb917457f772cfcc9a2e)
             check_type(argname="argument access_role", value=access_role, expected_type=type_hints["access_role"])
-            check_type(argname="argument url", value=url, expected_type=type_hints["url"])
             check_type(argname="argument as2_config", value=as2_config, expected_type=type_hints["as2_config"])
+            check_type(argname="argument egress_config", value=egress_config, expected_type=type_hints["egress_config"])
+            check_type(argname="argument egress_type", value=egress_type, expected_type=type_hints["egress_type"])
             check_type(argname="argument logging_role", value=logging_role, expected_type=type_hints["logging_role"])
             check_type(argname="argument security_policy_name", value=security_policy_name, expected_type=type_hints["security_policy_name"])
             check_type(argname="argument sftp_config", value=sftp_config, expected_type=type_hints["sftp_config"])
             check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
+            check_type(argname="argument url", value=url, expected_type=type_hints["url"])
         self._values: typing.Dict[builtins.str, typing.Any] = {
             "access_role": access_role,
-            "url": url,
         }
         if as2_config is not None:
             self._values["as2_config"] = as2_config
+        if egress_config is not None:
+            self._values["egress_config"] = egress_config
+        if egress_type is not None:
+            self._values["egress_type"] = egress_type
         if logging_role is not None:
             self._values["logging_role"] = logging_role
         if security_policy_name is not None:
@@ -752,6 +772,8 @@ class CfnConnectorProps:
             self._values["sftp_config"] = sftp_config
         if tags is not None:
             self._values["tags"] = tags
+        if url is not None:
+            self._values["url"] = url
 
     @builtins.property
     def access_role(self) -> builtins.str:
@@ -776,18 +798,6 @@ class CfnConnectorProps:
         return typing.cast(builtins.str, result)
 
     @builtins.property
-    def url(self) -> builtins.str:
-        '''The URL of the partner's AS2 or SFTP endpoint.
-
-        When creating AS2 connectors or service-managed SFTP connectors (connectors without egress configuration), you must provide a URL to specify the remote server endpoint. For VPC Lattice type connectors, the URL must be null.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-transfer-connector.html#cfn-transfer-connector-url
-        '''
-        result = self._values.get("url")
-        assert result is not None, "Required property 'url' is missing"
-        return typing.cast(builtins.str, result)
-
-    @builtins.property
     def as2_config(self) -> typing.Any:
         '''A structure that contains the parameters for an AS2 connector object.
 
@@ -795,6 +805,32 @@ class CfnConnectorProps:
         '''
         result = self._values.get("as2_config")
         return typing.cast(typing.Any, result)
+
+    @builtins.property
+    def egress_config(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnConnector.ConnectorEgressConfigProperty"]]:
+        '''Current egress configuration of the connector, showing how traffic is routed to the SFTP server.
+
+        Contains VPC Lattice settings when using VPC_LATTICE egress type.
+
+        When using the VPC_LATTICE egress type, AWS Transfer Family uses a managed Service Network to simplify the resource sharing process.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-transfer-connector.html#cfn-transfer-connector-egressconfig
+        '''
+        result = self._values.get("egress_config")
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnConnector.ConnectorEgressConfigProperty"]], result)
+
+    @builtins.property
+    def egress_type(self) -> typing.Optional[builtins.str]:
+        '''Type of egress configuration for the connector.
+
+        SERVICE_MANAGED uses Transfer Family managed NAT gateways, while VPC_LATTICE routes traffic through customer VPCs using VPC Lattice.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-transfer-connector.html#cfn-transfer-connector-egresstype
+        '''
+        result = self._values.get("egress_type")
+        return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
     def logging_role(self) -> typing.Optional[builtins.str]:
@@ -835,6 +871,17 @@ class CfnConnectorProps:
         '''
         result = self._values.get("tags")
         return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+
+    @builtins.property
+    def url(self) -> typing.Optional[builtins.str]:
+        '''The URL of the partner's AS2 or SFTP endpoint.
+
+        When creating AS2 connectors or service-managed SFTP connectors (connectors without egress configuration), you must provide a URL to specify the remote server endpoint. For VPC Lattice type connectors, the URL must be null.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-transfer-connector.html#cfn-transfer-connector-url
+        '''
+        result = self._values.get("url")
+        return typing.cast(typing.Optional[builtins.str], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -3560,10 +3607,18 @@ class CfnConnector(
         
         cfn_connector = transfer.CfnConnector(self, "MyCfnConnector",
             access_role="accessRole",
-            url="url",
         
             # the properties below are optional
             as2_config=as2_config,
+            egress_config=transfer.CfnConnector.ConnectorEgressConfigProperty(
+                vpc_lattice=transfer.CfnConnector.ConnectorVpcLatticeEgressConfigProperty(
+                    resource_configuration_arn="resourceConfigurationArn",
+        
+                    # the properties below are optional
+                    port_number=123
+                )
+            ),
+            egress_type="egressType",
             logging_role="loggingRole",
             security_policy_name="securityPolicyName",
             sftp_config=transfer.CfnConnector.SftpConfigProperty(
@@ -3574,7 +3629,8 @@ class CfnConnector(
             tags=[CfnTag(
                 key="key",
                 value="value"
-            )]
+            )],
+            url="url"
         )
     '''
 
@@ -3584,23 +3640,27 @@ class CfnConnector(
         id: builtins.str,
         *,
         access_role: builtins.str,
-        url: builtins.str,
         as2_config: typing.Any = None,
+        egress_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnConnector.ConnectorEgressConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        egress_type: typing.Optional[builtins.str] = None,
         logging_role: typing.Optional[builtins.str] = None,
         security_policy_name: typing.Optional[builtins.str] = None,
         sftp_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnConnector.SftpConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        url: typing.Optional[builtins.str] = None,
     ) -> None:
         '''
         :param scope: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
         :param access_role: Connectors are used to send files using either the AS2 or SFTP protocol. For the access role, provide the Amazon Resource Name (ARN) of the AWS Identity and Access Management role to use. *For AS2 connectors* With AS2, you can send files by calling ``StartFileTransfer`` and specifying the file paths in the request parameter, ``SendFilePaths`` . We use the file’s parent directory (for example, for ``--send-file-paths /bucket/dir/file.txt`` , parent directory is ``/bucket/dir/`` ) to temporarily store a processed AS2 message file, store the MDN when we receive them from the partner, and write a final JSON file containing relevant metadata of the transmission. So, the ``AccessRole`` needs to provide read and write access to the parent directory of the file location used in the ``StartFileTransfer`` request. Additionally, you need to provide read and write access to the parent directory of the files that you intend to send with ``StartFileTransfer`` . If you are using Basic authentication for your AS2 connector, the access role requires the ``secretsmanager:GetSecretValue`` permission for the secret. If the secret is encrypted using a customer-managed key instead of the AWS managed key in Secrets Manager, then the role also needs the ``kms:Decrypt`` permission for that key. *For SFTP connectors* Make sure that the access role provides read and write access to the parent directory of the file location that's used in the ``StartFileTransfer`` request. Additionally, make sure that the role provides ``secretsmanager:GetSecretValue`` permission to AWS Secrets Manager .
-        :param url: The URL of the partner's AS2 or SFTP endpoint. When creating AS2 connectors or service-managed SFTP connectors (connectors without egress configuration), you must provide a URL to specify the remote server endpoint. For VPC Lattice type connectors, the URL must be null.
         :param as2_config: A structure that contains the parameters for an AS2 connector object.
+        :param egress_config: Current egress configuration of the connector, showing how traffic is routed to the SFTP server. Contains VPC Lattice settings when using VPC_LATTICE egress type. When using the VPC_LATTICE egress type, AWS Transfer Family uses a managed Service Network to simplify the resource sharing process.
+        :param egress_type: Type of egress configuration for the connector. SERVICE_MANAGED uses Transfer Family managed NAT gateways, while VPC_LATTICE routes traffic through customer VPCs using VPC Lattice.
         :param logging_role: The Amazon Resource Name (ARN) of the AWS Identity and Access Management (IAM) role that allows a connector to turn on CloudWatch logging for Amazon S3 events. When set, you can view connector activity in your CloudWatch logs.
         :param security_policy_name: The text name of the security policy for the specified connector.
         :param sftp_config: A structure that contains the parameters for an SFTP connector object.
         :param tags: Key-value pairs that can be used to group and search for connectors.
+        :param url: The URL of the partner's AS2 or SFTP endpoint. When creating AS2 connectors or service-managed SFTP connectors (connectors without egress configuration), you must provide a URL to specify the remote server endpoint. For VPC Lattice type connectors, the URL must be null.
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__2a3d92be7ab611ebe6dbf531ad899c2a95b3655fb829aeffdf52fdb11aae9d07)
@@ -3608,12 +3668,14 @@ class CfnConnector(
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
         props = CfnConnectorProps(
             access_role=access_role,
-            url=url,
             as2_config=as2_config,
+            egress_config=egress_config,
+            egress_type=egress_type,
             logging_role=logging_role,
             security_policy_name=security_policy_name,
             sftp_config=sftp_config,
             tags=tags,
+            url=url,
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
@@ -3720,6 +3782,17 @@ class CfnConnector(
         return typing.cast(typing.List[builtins.str], jsii.get(self, "attrServiceManagedEgressIpAddresses"))
 
     @builtins.property
+    @jsii.member(jsii_name="attrStatus")
+    def attr_status(self) -> builtins.str:
+        '''Current status of the connector.
+
+        PENDING indicates creation/update in progress, ACTIVE means ready for operations, and ERRORED indicates a failure requiring attention.
+
+        :cloudformationAttribute: Status
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrStatus"))
+
+    @builtins.property
     @jsii.member(jsii_name="cfnProperties")
     def _cfn_properties(self) -> typing.Mapping[builtins.str, typing.Any]:
         return typing.cast(typing.Mapping[builtins.str, typing.Any], jsii.get(self, "cfnProperties"))
@@ -3750,19 +3823,6 @@ class CfnConnector(
         jsii.set(self, "accessRole", value) # pyright: ignore[reportArgumentType]
 
     @builtins.property
-    @jsii.member(jsii_name="url")
-    def url(self) -> builtins.str:
-        '''The URL of the partner's AS2 or SFTP endpoint.'''
-        return typing.cast(builtins.str, jsii.get(self, "url"))
-
-    @url.setter
-    def url(self, value: builtins.str) -> None:
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__7f2f8d48aab925fcdb11fb86f8b12aeae11aa8b85048a7ded27a817b5864536d)
-            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
-        jsii.set(self, "url", value) # pyright: ignore[reportArgumentType]
-
-    @builtins.property
     @jsii.member(jsii_name="as2Config")
     def as2_config(self) -> typing.Any:
         '''A structure that contains the parameters for an AS2 connector object.'''
@@ -3774,6 +3834,37 @@ class CfnConnector(
             type_hints = typing.get_type_hints(_typecheckingstub__b16726d88010ccba3b94afdf2e5c9f9c1e8e4dc3d9f7d56e2edf0140e687d75c)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
         jsii.set(self, "as2Config", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="egressConfig")
+    def egress_config(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnConnector.ConnectorEgressConfigProperty"]]:
+        '''Current egress configuration of the connector, showing how traffic is routed to the SFTP server.'''
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnConnector.ConnectorEgressConfigProperty"]], jsii.get(self, "egressConfig"))
+
+    @egress_config.setter
+    def egress_config(
+        self,
+        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnConnector.ConnectorEgressConfigProperty"]],
+    ) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__55aea3d9a7ecfbca3e7720afc14e3094de156e071c5256ed2311a1836a9c6b83)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "egressConfig", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="egressType")
+    def egress_type(self) -> typing.Optional[builtins.str]:
+        '''Type of egress configuration for the connector.'''
+        return typing.cast(typing.Optional[builtins.str], jsii.get(self, "egressType"))
+
+    @egress_type.setter
+    def egress_type(self, value: typing.Optional[builtins.str]) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__76cb18c9a86ea56efbf380e02f9b601550c701ceae1cc70d08ec7b3e6acf483f)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "egressType", value) # pyright: ignore[reportArgumentType]
 
     @builtins.property
     @jsii.member(jsii_name="loggingRole")
@@ -3831,6 +3922,19 @@ class CfnConnector(
             type_hints = typing.get_type_hints(_typecheckingstub__207f7abcb769a2e1717d82ad1c8c7df0c05b8d8d3d89a23127362727dcd65473)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
         jsii.set(self, "tagsRaw", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="url")
+    def url(self) -> typing.Optional[builtins.str]:
+        '''The URL of the partner's AS2 or SFTP endpoint.'''
+        return typing.cast(typing.Optional[builtins.str], jsii.get(self, "url"))
+
+    @url.setter
+    def url(self, value: typing.Optional[builtins.str]) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__7f2f8d48aab925fcdb11fb86f8b12aeae11aa8b85048a7ded27a817b5864536d)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "url", value) # pyright: ignore[reportArgumentType]
 
     @jsii.data_type(
         jsii_type="aws-cdk-lib.aws_transfer.CfnConnector.As2ConfigProperty",
@@ -4063,6 +4167,155 @@ class CfnConnector(
 
         def __repr__(self) -> str:
             return "As2ConfigProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_transfer.CfnConnector.ConnectorEgressConfigProperty",
+        jsii_struct_bases=[],
+        name_mapping={"vpc_lattice": "vpcLattice"},
+    )
+    class ConnectorEgressConfigProperty:
+        def __init__(
+            self,
+            *,
+            vpc_lattice: typing.Union[_IResolvable_da3f097b, typing.Union["CfnConnector.ConnectorVpcLatticeEgressConfigProperty", typing.Dict[builtins.str, typing.Any]]],
+        ) -> None:
+            '''Configuration structure that defines how traffic is routed from the connector to the SFTP server.
+
+            Contains VPC Lattice settings when using VPC_LATTICE egress type for private connectivity through customer VPCs.
+
+            :param vpc_lattice: VPC_LATTICE configuration for routing connector traffic through customer VPCs. Enables private connectivity to SFTP servers without requiring public internet access or complex network configurations.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-transfer-connector-connectoregressconfig.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_transfer as transfer
+                
+                connector_egress_config_property = transfer.CfnConnector.ConnectorEgressConfigProperty(
+                    vpc_lattice=transfer.CfnConnector.ConnectorVpcLatticeEgressConfigProperty(
+                        resource_configuration_arn="resourceConfigurationArn",
+                
+                        # the properties below are optional
+                        port_number=123
+                    )
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__3c92ac24e9baf6146c2fe287847ce0fba33a6a7c52ec7e38c13aebcf95a5687a)
+                check_type(argname="argument vpc_lattice", value=vpc_lattice, expected_type=type_hints["vpc_lattice"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "vpc_lattice": vpc_lattice,
+            }
+
+        @builtins.property
+        def vpc_lattice(
+            self,
+        ) -> typing.Union[_IResolvable_da3f097b, "CfnConnector.ConnectorVpcLatticeEgressConfigProperty"]:
+            '''VPC_LATTICE configuration for routing connector traffic through customer VPCs.
+
+            Enables private connectivity to SFTP servers without requiring public internet access or complex network configurations.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-transfer-connector-connectoregressconfig.html#cfn-transfer-connector-connectoregressconfig-vpclattice
+            '''
+            result = self._values.get("vpc_lattice")
+            assert result is not None, "Required property 'vpc_lattice' is missing"
+            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnConnector.ConnectorVpcLatticeEgressConfigProperty"], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "ConnectorEgressConfigProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_transfer.CfnConnector.ConnectorVpcLatticeEgressConfigProperty",
+        jsii_struct_bases=[],
+        name_mapping={
+            "resource_configuration_arn": "resourceConfigurationArn",
+            "port_number": "portNumber",
+        },
+    )
+    class ConnectorVpcLatticeEgressConfigProperty:
+        def __init__(
+            self,
+            *,
+            resource_configuration_arn: builtins.str,
+            port_number: typing.Optional[jsii.Number] = None,
+        ) -> None:
+            '''VPC_LATTICE egress configuration that specifies the Resource Configuration ARN and port for connecting to SFTP servers through customer VPCs.
+
+            Requires a valid Resource Configuration with appropriate network access.
+
+            :param resource_configuration_arn: ARN of the VPC_LATTICE Resource Configuration that defines the target SFTP server location. Must point to a valid Resource Configuration in the customer's VPC with appropriate network connectivity to the SFTP server.
+            :param port_number: Port number for connecting to the SFTP server through VPC_LATTICE. Defaults to 22 if not specified. Must match the port on which the target SFTP server is listening.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-transfer-connector-connectorvpclatticeegressconfig.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_transfer as transfer
+                
+                connector_vpc_lattice_egress_config_property = transfer.CfnConnector.ConnectorVpcLatticeEgressConfigProperty(
+                    resource_configuration_arn="resourceConfigurationArn",
+                
+                    # the properties below are optional
+                    port_number=123
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__53a48f28bdc82ead21fcc7f4a6cb2d63a8b7bb31c09769a4d8ab452c1da15927)
+                check_type(argname="argument resource_configuration_arn", value=resource_configuration_arn, expected_type=type_hints["resource_configuration_arn"])
+                check_type(argname="argument port_number", value=port_number, expected_type=type_hints["port_number"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "resource_configuration_arn": resource_configuration_arn,
+            }
+            if port_number is not None:
+                self._values["port_number"] = port_number
+
+        @builtins.property
+        def resource_configuration_arn(self) -> builtins.str:
+            '''ARN of the VPC_LATTICE Resource Configuration that defines the target SFTP server location.
+
+            Must point to a valid Resource Configuration in the customer's VPC with appropriate network connectivity to the SFTP server.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-transfer-connector-connectorvpclatticeegressconfig.html#cfn-transfer-connector-connectorvpclatticeegressconfig-resourceconfigurationarn
+            '''
+            result = self._values.get("resource_configuration_arn")
+            assert result is not None, "Required property 'resource_configuration_arn' is missing"
+            return typing.cast(builtins.str, result)
+
+        @builtins.property
+        def port_number(self) -> typing.Optional[jsii.Number]:
+            '''Port number for connecting to the SFTP server through VPC_LATTICE.
+
+            Defaults to 22 if not specified. Must match the port on which the target SFTP server is listening.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-transfer-connector-connectorvpclatticeegressconfig.html#cfn-transfer-connector-connectorvpclatticeegressconfig-portnumber
+            '''
+            result = self._values.get("port_number")
+            return typing.cast(typing.Optional[jsii.Number], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "ConnectorVpcLatticeEgressConfigProperty(%s)" % ", ".join(
                 k + "=" + repr(v) for k, v in self._values.items()
             )
 
@@ -8066,12 +8319,14 @@ def _typecheckingstub__e9b7c390d04a925160e4d0a39429a22ee9641e79a668a3dcae449e157
 def _typecheckingstub__7675f9dcded8f51977cf70f499821100319fe5d62996cb917457f772cfcc9a2e(
     *,
     access_role: builtins.str,
-    url: builtins.str,
     as2_config: typing.Any = None,
+    egress_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnConnector.ConnectorEgressConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    egress_type: typing.Optional[builtins.str] = None,
     logging_role: typing.Optional[builtins.str] = None,
     security_policy_name: typing.Optional[builtins.str] = None,
     sftp_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnConnector.SftpConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+    url: typing.Optional[builtins.str] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -8397,12 +8652,14 @@ def _typecheckingstub__2a3d92be7ab611ebe6dbf531ad899c2a95b3655fb829aeffdf52fdb11
     id: builtins.str,
     *,
     access_role: builtins.str,
-    url: builtins.str,
     as2_config: typing.Any = None,
+    egress_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnConnector.ConnectorEgressConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    egress_type: typing.Optional[builtins.str] = None,
     logging_role: typing.Optional[builtins.str] = None,
     security_policy_name: typing.Optional[builtins.str] = None,
     sftp_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnConnector.SftpConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+    url: typing.Optional[builtins.str] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -8441,14 +8698,20 @@ def _typecheckingstub__9f4bab9f1a3e47eaac0c429ed6125ef23e8b2d8f33fac6396c2ef4a60
     """Type checking stubs"""
     pass
 
-def _typecheckingstub__7f2f8d48aab925fcdb11fb86f8b12aeae11aa8b85048a7ded27a817b5864536d(
-    value: builtins.str,
+def _typecheckingstub__b16726d88010ccba3b94afdf2e5c9f9c1e8e4dc3d9f7d56e2edf0140e687d75c(
+    value: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass
 
-def _typecheckingstub__b16726d88010ccba3b94afdf2e5c9f9c1e8e4dc3d9f7d56e2edf0140e687d75c(
-    value: typing.Any,
+def _typecheckingstub__55aea3d9a7ecfbca3e7720afc14e3094de156e071c5256ed2311a1836a9c6b83(
+    value: typing.Optional[typing.Union[_IResolvable_da3f097b, CfnConnector.ConnectorEgressConfigProperty]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__76cb18c9a86ea56efbf380e02f9b601550c701ceae1cc70d08ec7b3e6acf483f(
+    value: typing.Optional[builtins.str],
 ) -> None:
     """Type checking stubs"""
     pass
@@ -8477,6 +8740,12 @@ def _typecheckingstub__207f7abcb769a2e1717d82ad1c8c7df0c05b8d8d3d89a23127362727d
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__7f2f8d48aab925fcdb11fb86f8b12aeae11aa8b85048a7ded27a817b5864536d(
+    value: typing.Optional[builtins.str],
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__328497a7bbb181a996e0747268f6105731221ad3f578e8a5ca68e405dcdd7e63(
     *,
     basic_auth_secret_id: typing.Optional[builtins.str] = None,
@@ -8489,6 +8758,21 @@ def _typecheckingstub__328497a7bbb181a996e0747268f6105731221ad3f578e8a5ca68e405d
     partner_profile_id: typing.Optional[builtins.str] = None,
     preserve_content_type: typing.Optional[builtins.str] = None,
     signing_algorithm: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__3c92ac24e9baf6146c2fe287847ce0fba33a6a7c52ec7e38c13aebcf95a5687a(
+    *,
+    vpc_lattice: typing.Union[_IResolvable_da3f097b, typing.Union[CfnConnector.ConnectorVpcLatticeEgressConfigProperty, typing.Dict[builtins.str, typing.Any]]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__53a48f28bdc82ead21fcc7f4a6cb2d63a8b7bb31c09769a4d8ab452c1da15927(
+    *,
+    resource_configuration_arn: builtins.str,
+    port_number: typing.Optional[jsii.Number] = None,
 ) -> None:
     """Type checking stubs"""
     pass

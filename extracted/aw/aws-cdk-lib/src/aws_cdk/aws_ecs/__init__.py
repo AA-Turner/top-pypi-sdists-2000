@@ -7645,6 +7645,10 @@ class CfnServiceProps:
                         rollback=False
                     ),
                     bake_time_in_minutes=123,
+                    canary_configuration=ecs.CfnService.CanaryConfigurationProperty(
+                        canary_bake_time_in_minutes=123,
+                        canary_percent=123
+                    ),
                     deployment_circuit_breaker=ecs.CfnService.DeploymentCircuitBreakerProperty(
                         enable=False,
                         rollback=False
@@ -7657,6 +7661,10 @@ class CfnServiceProps:
                         # the properties below are optional
                         hook_details=hook_details
                     )],
+                    linear_configuration=ecs.CfnService.LinearConfigurationProperty(
+                        step_bake_time_in_minutes=123,
+                        step_percent=123
+                    ),
                     maximum_percent=123,
                     minimum_healthy_percent=123,
                     strategy="strategy"
@@ -7716,6 +7724,12 @@ class CfnServiceProps:
                     enabled=False,
             
                     # the properties below are optional
+                    access_log_configuration=ecs.CfnService.ServiceConnectAccessLogConfigurationProperty(
+                        format="format",
+            
+                        # the properties below are optional
+                        include_query_parameters="includeQueryParameters"
+                    ),
                     log_configuration=ecs.CfnService.LogConfigurationProperty(
                         log_driver="logDriver",
                         options={
@@ -35213,6 +35227,10 @@ class CfnService(
                     rollback=False
                 ),
                 bake_time_in_minutes=123,
+                canary_configuration=ecs.CfnService.CanaryConfigurationProperty(
+                    canary_bake_time_in_minutes=123,
+                    canary_percent=123
+                ),
                 deployment_circuit_breaker=ecs.CfnService.DeploymentCircuitBreakerProperty(
                     enable=False,
                     rollback=False
@@ -35225,6 +35243,10 @@ class CfnService(
                     # the properties below are optional
                     hook_details=hook_details
                 )],
+                linear_configuration=ecs.CfnService.LinearConfigurationProperty(
+                    step_bake_time_in_minutes=123,
+                    step_percent=123
+                ),
                 maximum_percent=123,
                 minimum_healthy_percent=123,
                 strategy="strategy"
@@ -35284,6 +35306,12 @@ class CfnService(
                 enabled=False,
         
                 # the properties below are optional
+                access_log_configuration=ecs.CfnService.ServiceConnectAccessLogConfigurationProperty(
+                    format="format",
+        
+                    # the properties below are optional
+                    include_query_parameters="includeQueryParameters"
+                ),
                 log_configuration=ecs.CfnService.LogConfigurationProperty(
                     log_driver="logDriver",
                     options={
@@ -36182,6 +36210,76 @@ class CfnService(
             )
 
     @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_ecs.CfnService.CanaryConfigurationProperty",
+        jsii_struct_bases=[],
+        name_mapping={
+            "canary_bake_time_in_minutes": "canaryBakeTimeInMinutes",
+            "canary_percent": "canaryPercent",
+        },
+    )
+    class CanaryConfigurationProperty:
+        def __init__(
+            self,
+            *,
+            canary_bake_time_in_minutes: typing.Optional[jsii.Number] = None,
+            canary_percent: typing.Optional[jsii.Number] = None,
+        ) -> None:
+            '''
+            :param canary_bake_time_in_minutes: 
+            :param canary_percent: 
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-service-canaryconfiguration.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_ecs as ecs
+                
+                canary_configuration_property = ecs.CfnService.CanaryConfigurationProperty(
+                    canary_bake_time_in_minutes=123,
+                    canary_percent=123
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__0743200d49df46a7db16cbbe76bf0139b82db8b6291c29f86f8fd534739f7228)
+                check_type(argname="argument canary_bake_time_in_minutes", value=canary_bake_time_in_minutes, expected_type=type_hints["canary_bake_time_in_minutes"])
+                check_type(argname="argument canary_percent", value=canary_percent, expected_type=type_hints["canary_percent"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if canary_bake_time_in_minutes is not None:
+                self._values["canary_bake_time_in_minutes"] = canary_bake_time_in_minutes
+            if canary_percent is not None:
+                self._values["canary_percent"] = canary_percent
+
+        @builtins.property
+        def canary_bake_time_in_minutes(self) -> typing.Optional[jsii.Number]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-service-canaryconfiguration.html#cfn-ecs-service-canaryconfiguration-canarybaketimeinminutes
+            '''
+            result = self._values.get("canary_bake_time_in_minutes")
+            return typing.cast(typing.Optional[jsii.Number], result)
+
+        @builtins.property
+        def canary_percent(self) -> typing.Optional[jsii.Number]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-service-canaryconfiguration.html#cfn-ecs-service-canaryconfiguration-canarypercent
+            '''
+            result = self._values.get("canary_percent")
+            return typing.cast(typing.Optional[jsii.Number], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "CanaryConfigurationProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
         jsii_type="aws-cdk-lib.aws_ecs.CfnService.CapacityProviderStrategyItemProperty",
         jsii_struct_bases=[],
         name_mapping={
@@ -36495,8 +36593,10 @@ class CfnService(
         name_mapping={
             "alarms": "alarms",
             "bake_time_in_minutes": "bakeTimeInMinutes",
+            "canary_configuration": "canaryConfiguration",
             "deployment_circuit_breaker": "deploymentCircuitBreaker",
             "lifecycle_hooks": "lifecycleHooks",
+            "linear_configuration": "linearConfiguration",
             "maximum_percent": "maximumPercent",
             "minimum_healthy_percent": "minimumHealthyPercent",
             "strategy": "strategy",
@@ -36508,8 +36608,10 @@ class CfnService(
             *,
             alarms: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnService.DeploymentAlarmsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             bake_time_in_minutes: typing.Optional[jsii.Number] = None,
+            canary_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnService.CanaryConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             deployment_circuit_breaker: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnService.DeploymentCircuitBreakerProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             lifecycle_hooks: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnService.DeploymentLifecycleHookProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            linear_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnService.LinearConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             maximum_percent: typing.Optional[jsii.Number] = None,
             minimum_healthy_percent: typing.Optional[jsii.Number] = None,
             strategy: typing.Optional[builtins.str] = None,
@@ -36518,8 +36620,10 @@ class CfnService(
 
             :param alarms: Information about the CloudWatch alarms.
             :param bake_time_in_minutes: The duration when both blue and green service revisions are running simultaneously after the production traffic has shifted. The following rules apply when you don't specify a value: - For rolling deployments, the value is set to 3 hours (180 minutes). - When you use an external deployment controller ( ``EXTERNAL`` ), or the CodeDeploy blue/green deployment controller ( ``CODE_DEPLOY`` ), the value is set to 3 hours (180 minutes). - For all other cases, the value is set to 36 hours (2160 minutes).
+            :param canary_configuration: 
             :param deployment_circuit_breaker: .. epigraph:: The deployment circuit breaker can only be used for services using the rolling update ( ``ECS`` ) deployment type. The *deployment circuit breaker* determines whether a service deployment will fail if the service can't reach a steady state. If you use the deployment circuit breaker, a service deployment will transition to a failed state and stop launching new tasks. If you use the rollback option, when a service deployment fails, the service is rolled back to the last deployment that completed successfully. For more information, see `Rolling update <https://docs.aws.amazon.com/AmazonECS/latest/developerguide/deployment-type-ecs.html>`_ in the *Amazon Elastic Container Service Developer Guide*
             :param lifecycle_hooks: An array of deployment lifecycle hook objects to run custom logic at specific stages of the deployment lifecycle.
+            :param linear_configuration: 
             :param maximum_percent: If a service is using the rolling update ( ``ECS`` ) deployment type, the ``maximumPercent`` parameter represents an upper limit on the number of your service's tasks that are allowed in the ``RUNNING`` or ``PENDING`` state during a deployment, as a percentage of the ``desiredCount`` (rounded down to the nearest integer). This parameter enables you to define the deployment batch size. For example, if your service is using the ``REPLICA`` service scheduler and has a ``desiredCount`` of four tasks and a ``maximumPercent`` value of 200%, the scheduler may start four new tasks before stopping the four older tasks (provided that the cluster resources required to do this are available). The default ``maximumPercent`` value for a service using the ``REPLICA`` service scheduler is 200%. The Amazon ECS scheduler uses this parameter to replace unhealthy tasks by starting replacement tasks first and then stopping the unhealthy tasks, as long as cluster resources for starting replacement tasks are available. For more information about how the scheduler replaces unhealthy tasks, see `Amazon ECS services <https://docs.aws.amazon.com/AmazonECS/latest/developerguide/ecs_services.html>`_ . If a service is using either the blue/green ( ``CODE_DEPLOY`` ) or ``EXTERNAL`` deployment types, and tasks in the service use the EC2 launch type, the *maximum percent* value is set to the default value. The *maximum percent* value is used to define the upper limit on the number of the tasks in the service that remain in the ``RUNNING`` state while the container instances are in the ``DRAINING`` state. .. epigraph:: You can't specify a custom ``maximumPercent`` value for a service that uses either the blue/green ( ``CODE_DEPLOY`` ) or ``EXTERNAL`` deployment types and has tasks that use the EC2 launch type. If the service uses either the blue/green ( ``CODE_DEPLOY`` ) or ``EXTERNAL`` deployment types, and the tasks in the service use the Fargate launch type, the maximum percent value is not used. The value is still returned when describing your service.
             :param minimum_healthy_percent: If a service is using the rolling update ( ``ECS`` ) deployment type, the ``minimumHealthyPercent`` represents a lower limit on the number of your service's tasks that must remain in the ``RUNNING`` state during a deployment, as a percentage of the ``desiredCount`` (rounded up to the nearest integer). This parameter enables you to deploy without using additional cluster capacity. For example, if your service has a ``desiredCount`` of four tasks and a ``minimumHealthyPercent`` of 50%, the service scheduler may stop two existing tasks to free up cluster capacity before starting two new tasks. If any tasks are unhealthy and if ``maximumPercent`` doesn't allow the Amazon ECS scheduler to start replacement tasks, the scheduler stops the unhealthy tasks one-by-one — using the ``minimumHealthyPercent`` as a constraint — to clear up capacity to launch replacement tasks. For more information about how the scheduler replaces unhealthy tasks, see `Amazon ECS services <https://docs.aws.amazon.com/AmazonECS/latest/developerguide/ecs_services.html>`_ . For services that *do not* use a load balancer, the following should be noted: - A service is considered healthy if all essential containers within the tasks in the service pass their health checks. - If a task has no essential containers with a health check defined, the service scheduler will wait for 40 seconds after a task reaches a ``RUNNING`` state before the task is counted towards the minimum healthy percent total. - If a task has one or more essential containers with a health check defined, the service scheduler will wait for the task to reach a healthy status before counting it towards the minimum healthy percent total. A task is considered healthy when all essential containers within the task have passed their health checks. The amount of time the service scheduler can wait for is determined by the container health check settings. For services that *do* use a load balancer, the following should be noted: - If a task has no essential containers with a health check defined, the service scheduler will wait for the load balancer target group health check to return a healthy status before counting the task towards the minimum healthy percent total. - If a task has an essential container with a health check defined, the service scheduler will wait for both the task to reach a healthy status and the load balancer target group health check to return a healthy status before counting the task towards the minimum healthy percent total. The default value for a replica service for ``minimumHealthyPercent`` is 100%. The default ``minimumHealthyPercent`` value for a service using the ``DAEMON`` service schedule is 0% for the AWS CLI , the AWS SDKs, and the APIs and 50% for the AWS Management Console. The minimum number of healthy tasks during a deployment is the ``desiredCount`` multiplied by the ``minimumHealthyPercent`` /100, rounded up to the nearest integer value. If a service is using either the blue/green ( ``CODE_DEPLOY`` ) or ``EXTERNAL`` deployment types and is running tasks that use the EC2 launch type, the *minimum healthy percent* value is set to the default value. The *minimum healthy percent* value is used to define the lower limit on the number of the tasks in the service that remain in the ``RUNNING`` state while the container instances are in the ``DRAINING`` state. .. epigraph:: You can't specify a custom ``minimumHealthyPercent`` value for a service that uses either the blue/green ( ``CODE_DEPLOY`` ) or ``EXTERNAL`` deployment types and has tasks that use the EC2 launch type. If a service is using either the blue/green ( ``CODE_DEPLOY`` ) or ``EXTERNAL`` deployment types and is running tasks that use the Fargate launch type, the minimum healthy percent value is not used, although it is returned when describing your service.
             :param strategy: The deployment strategy for the service. Choose from these valid values:. - ``ROLLING`` - When you create a service which uses the rolling update ( ``ROLLING`` ) deployment strategy, the Amazon ECS service scheduler replaces the currently running tasks with new tasks. The number of tasks that Amazon ECS adds or removes from the service during a rolling update is controlled by the service deployment configuration. - ``BLUE_GREEN`` - A blue/green deployment strategy ( ``BLUE_GREEN`` ) is a release methodology that reduces downtime and risk by running two identical production environments called blue and green. With Amazon ECS blue/green deployments, you can validate new service revisions before directing production traffic to them. This approach provides a safer way to deploy changes with the ability to quickly roll back if needed.
@@ -36542,6 +36646,10 @@ class CfnService(
                         rollback=False
                     ),
                     bake_time_in_minutes=123,
+                    canary_configuration=ecs.CfnService.CanaryConfigurationProperty(
+                        canary_bake_time_in_minutes=123,
+                        canary_percent=123
+                    ),
                     deployment_circuit_breaker=ecs.CfnService.DeploymentCircuitBreakerProperty(
                         enable=False,
                         rollback=False
@@ -36554,6 +36662,10 @@ class CfnService(
                         # the properties below are optional
                         hook_details=hook_details
                     )],
+                    linear_configuration=ecs.CfnService.LinearConfigurationProperty(
+                        step_bake_time_in_minutes=123,
+                        step_percent=123
+                    ),
                     maximum_percent=123,
                     minimum_healthy_percent=123,
                     strategy="strategy"
@@ -36563,8 +36675,10 @@ class CfnService(
                 type_hints = typing.get_type_hints(_typecheckingstub__d809d14e704a11675cbface3b43579e5f8f2a29c9b48e27608c625a3f01cb3a6)
                 check_type(argname="argument alarms", value=alarms, expected_type=type_hints["alarms"])
                 check_type(argname="argument bake_time_in_minutes", value=bake_time_in_minutes, expected_type=type_hints["bake_time_in_minutes"])
+                check_type(argname="argument canary_configuration", value=canary_configuration, expected_type=type_hints["canary_configuration"])
                 check_type(argname="argument deployment_circuit_breaker", value=deployment_circuit_breaker, expected_type=type_hints["deployment_circuit_breaker"])
                 check_type(argname="argument lifecycle_hooks", value=lifecycle_hooks, expected_type=type_hints["lifecycle_hooks"])
+                check_type(argname="argument linear_configuration", value=linear_configuration, expected_type=type_hints["linear_configuration"])
                 check_type(argname="argument maximum_percent", value=maximum_percent, expected_type=type_hints["maximum_percent"])
                 check_type(argname="argument minimum_healthy_percent", value=minimum_healthy_percent, expected_type=type_hints["minimum_healthy_percent"])
                 check_type(argname="argument strategy", value=strategy, expected_type=type_hints["strategy"])
@@ -36573,10 +36687,14 @@ class CfnService(
                 self._values["alarms"] = alarms
             if bake_time_in_minutes is not None:
                 self._values["bake_time_in_minutes"] = bake_time_in_minutes
+            if canary_configuration is not None:
+                self._values["canary_configuration"] = canary_configuration
             if deployment_circuit_breaker is not None:
                 self._values["deployment_circuit_breaker"] = deployment_circuit_breaker
             if lifecycle_hooks is not None:
                 self._values["lifecycle_hooks"] = lifecycle_hooks
+            if linear_configuration is not None:
+                self._values["linear_configuration"] = linear_configuration
             if maximum_percent is not None:
                 self._values["maximum_percent"] = maximum_percent
             if minimum_healthy_percent is not None:
@@ -36611,6 +36729,16 @@ class CfnService(
             return typing.cast(typing.Optional[jsii.Number], result)
 
         @builtins.property
+        def canary_configuration(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnService.CanaryConfigurationProperty"]]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-service-deploymentconfiguration.html#cfn-ecs-service-deploymentconfiguration-canaryconfiguration
+            '''
+            result = self._values.get("canary_configuration")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnService.CanaryConfigurationProperty"]], result)
+
+        @builtins.property
         def deployment_circuit_breaker(
             self,
         ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnService.DeploymentCircuitBreakerProperty"]]:
@@ -36635,6 +36763,16 @@ class CfnService(
             '''
             result = self._values.get("lifecycle_hooks")
             return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnService.DeploymentLifecycleHookProperty"]]]], result)
+
+        @builtins.property
+        def linear_configuration(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnService.LinearConfigurationProperty"]]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-service-deploymentconfiguration.html#cfn-ecs-service-deploymentconfiguration-linearconfiguration
+            '''
+            result = self._values.get("linear_configuration")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnService.LinearConfigurationProperty"]], result)
 
         @builtins.property
         def maximum_percent(self) -> typing.Optional[jsii.Number]:
@@ -37155,6 +37293,76 @@ class CfnService(
 
         def __repr__(self) -> str:
             return "ForceNewDeploymentProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_ecs.CfnService.LinearConfigurationProperty",
+        jsii_struct_bases=[],
+        name_mapping={
+            "step_bake_time_in_minutes": "stepBakeTimeInMinutes",
+            "step_percent": "stepPercent",
+        },
+    )
+    class LinearConfigurationProperty:
+        def __init__(
+            self,
+            *,
+            step_bake_time_in_minutes: typing.Optional[jsii.Number] = None,
+            step_percent: typing.Optional[jsii.Number] = None,
+        ) -> None:
+            '''
+            :param step_bake_time_in_minutes: 
+            :param step_percent: 
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-service-linearconfiguration.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_ecs as ecs
+                
+                linear_configuration_property = ecs.CfnService.LinearConfigurationProperty(
+                    step_bake_time_in_minutes=123,
+                    step_percent=123
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__336c91aa72da2e8b4988269b6c4b860d96985d0101277db28e55076d0537f167)
+                check_type(argname="argument step_bake_time_in_minutes", value=step_bake_time_in_minutes, expected_type=type_hints["step_bake_time_in_minutes"])
+                check_type(argname="argument step_percent", value=step_percent, expected_type=type_hints["step_percent"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if step_bake_time_in_minutes is not None:
+                self._values["step_bake_time_in_minutes"] = step_bake_time_in_minutes
+            if step_percent is not None:
+                self._values["step_percent"] = step_percent
+
+        @builtins.property
+        def step_bake_time_in_minutes(self) -> typing.Optional[jsii.Number]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-service-linearconfiguration.html#cfn-ecs-service-linearconfiguration-stepbaketimeinminutes
+            '''
+            result = self._values.get("step_bake_time_in_minutes")
+            return typing.cast(typing.Optional[jsii.Number], result)
+
+        @builtins.property
+        def step_percent(self) -> typing.Optional[jsii.Number]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-service-linearconfiguration.html#cfn-ecs-service-linearconfiguration-steppercent
+            '''
+            result = self._values.get("step_percent")
+            return typing.cast(typing.Optional[jsii.Number], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "LinearConfigurationProperty(%s)" % ", ".join(
                 k + "=" + repr(v) for k, v in self._values.items()
             )
 
@@ -37836,6 +38044,79 @@ class CfnService(
             )
 
     @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_ecs.CfnService.ServiceConnectAccessLogConfigurationProperty",
+        jsii_struct_bases=[],
+        name_mapping={
+            "format": "format",
+            "include_query_parameters": "includeQueryParameters",
+        },
+    )
+    class ServiceConnectAccessLogConfigurationProperty:
+        def __init__(
+            self,
+            *,
+            format: builtins.str,
+            include_query_parameters: typing.Optional[builtins.str] = None,
+        ) -> None:
+            '''
+            :param format: 
+            :param include_query_parameters: 
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-service-serviceconnectaccesslogconfiguration.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_ecs as ecs
+                
+                service_connect_access_log_configuration_property = ecs.CfnService.ServiceConnectAccessLogConfigurationProperty(
+                    format="format",
+                
+                    # the properties below are optional
+                    include_query_parameters="includeQueryParameters"
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__aff5a92a4ed08411423651afb280dfa281626d07bd7ed8179d146fb14bf66d44)
+                check_type(argname="argument format", value=format, expected_type=type_hints["format"])
+                check_type(argname="argument include_query_parameters", value=include_query_parameters, expected_type=type_hints["include_query_parameters"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "format": format,
+            }
+            if include_query_parameters is not None:
+                self._values["include_query_parameters"] = include_query_parameters
+
+        @builtins.property
+        def format(self) -> builtins.str:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-service-serviceconnectaccesslogconfiguration.html#cfn-ecs-service-serviceconnectaccesslogconfiguration-format
+            '''
+            result = self._values.get("format")
+            assert result is not None, "Required property 'format' is missing"
+            return typing.cast(builtins.str, result)
+
+        @builtins.property
+        def include_query_parameters(self) -> typing.Optional[builtins.str]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-service-serviceconnectaccesslogconfiguration.html#cfn-ecs-service-serviceconnectaccesslogconfiguration-includequeryparameters
+            '''
+            result = self._values.get("include_query_parameters")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "ServiceConnectAccessLogConfigurationProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
         jsii_type="aws-cdk-lib.aws_ecs.CfnService.ServiceConnectClientAliasProperty",
         jsii_struct_bases=[],
         name_mapping={
@@ -37959,6 +38240,7 @@ class CfnService(
         jsii_struct_bases=[],
         name_mapping={
             "enabled": "enabled",
+            "access_log_configuration": "accessLogConfiguration",
             "log_configuration": "logConfiguration",
             "namespace": "namespace",
             "services": "services",
@@ -37969,6 +38251,7 @@ class CfnService(
             self,
             *,
             enabled: typing.Union[builtins.bool, _IResolvable_da3f097b],
+            access_log_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnService.ServiceConnectAccessLogConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             log_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnService.LogConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             namespace: typing.Optional[builtins.str] = None,
             services: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnService.ServiceConnectServiceProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
@@ -37980,6 +38263,7 @@ class CfnService(
             Tasks that run in a namespace can use short names to connect to services in the namespace. Tasks can connect to services across all of the clusters in the namespace. Tasks connect through a managed proxy container that collects logs and metrics for increased visibility. Only the tasks that Amazon ECS services create are supported with Service Connect. For more information, see `Service Connect <https://docs.aws.amazon.com/AmazonECS/latest/developerguide/service-connect.html>`_ in the *Amazon Elastic Container Service Developer Guide* .
 
             :param enabled: Specifies whether to use Service Connect with this service.
+            :param access_log_configuration: 
             :param log_configuration: The log configuration for the container. This parameter maps to ``LogConfig`` in the docker container create command and the ``--log-driver`` option to docker run. By default, containers use the same logging driver that the Docker daemon uses. However, the container might use a different logging driver than the Docker daemon by specifying a log driver configuration in the container definition. Understand the following when specifying a log configuration for your containers. - Amazon ECS currently supports a subset of the logging drivers available to the Docker daemon. Additional log drivers may be available in future releases of the Amazon ECS container agent. For tasks on AWS Fargate , the supported log drivers are ``awslogs`` , ``splunk`` , and ``awsfirelens`` . For tasks hosted on Amazon EC2 instances, the supported log drivers are ``awslogs`` , ``fluentd`` , ``gelf`` , ``json-file`` , ``journald`` , ``syslog`` , ``splunk`` , and ``awsfirelens`` . - This parameter requires version 1.18 of the Docker Remote API or greater on your container instance. - For tasks that are hosted on Amazon EC2 instances, the Amazon ECS container agent must register the available logging drivers with the ``ECS_AVAILABLE_LOGGING_DRIVERS`` environment variable before containers placed on that instance can use these log configuration options. For more information, see `Amazon ECS container agent configuration <https://docs.aws.amazon.com/AmazonECS/latest/developerguide/ecs-agent-config.html>`_ in the *Amazon Elastic Container Service Developer Guide* . - For tasks that are on AWS Fargate , because you don't have access to the underlying infrastructure your tasks are hosted on, any additional software needed must be installed outside of the task. For example, the Fluentd output aggregators or a remote host running Logstash to send Gelf logs to.
             :param namespace: The namespace name or full Amazon Resource Name (ARN) of the AWS Cloud Map namespace for use with Service Connect. The namespace must be in the same AWS Region as the Amazon ECS service and cluster. The type of namespace doesn't affect Service Connect. For more information about AWS Cloud Map , see `Working with Services <https://docs.aws.amazon.com/cloud-map/latest/dg/working-with-services.html>`_ in the *AWS Cloud Map Developer Guide* .
             :param services: The list of Service Connect service objects. These are names and aliases (also known as endpoints) that are used by other Amazon ECS services to connect to this service. This field is not required for a "client" Amazon ECS service that's a member of a namespace only to connect to other services within the namespace. An example of this would be a frontend application that accepts incoming requests from either a load balancer that's attached to the service or by other means. An object selects a port from the task definition, assigns a name for the AWS Cloud Map service, and a list of aliases (endpoints) and ports for client applications to refer to this service.
@@ -37997,6 +38281,12 @@ class CfnService(
                     enabled=False,
                 
                     # the properties below are optional
+                    access_log_configuration=ecs.CfnService.ServiceConnectAccessLogConfigurationProperty(
+                        format="format",
+                
+                        # the properties below are optional
+                        include_query_parameters="includeQueryParameters"
+                    ),
                     log_configuration=ecs.CfnService.LogConfigurationProperty(
                         log_driver="logDriver",
                         options={
@@ -38049,12 +38339,15 @@ class CfnService(
             if __debug__:
                 type_hints = typing.get_type_hints(_typecheckingstub__8da75c12a30b7fe7fd27e23d778d5a095611ed616a9d92b56881eb771db7ab84)
                 check_type(argname="argument enabled", value=enabled, expected_type=type_hints["enabled"])
+                check_type(argname="argument access_log_configuration", value=access_log_configuration, expected_type=type_hints["access_log_configuration"])
                 check_type(argname="argument log_configuration", value=log_configuration, expected_type=type_hints["log_configuration"])
                 check_type(argname="argument namespace", value=namespace, expected_type=type_hints["namespace"])
                 check_type(argname="argument services", value=services, expected_type=type_hints["services"])
             self._values: typing.Dict[builtins.str, typing.Any] = {
                 "enabled": enabled,
             }
+            if access_log_configuration is not None:
+                self._values["access_log_configuration"] = access_log_configuration
             if log_configuration is not None:
                 self._values["log_configuration"] = log_configuration
             if namespace is not None:
@@ -38071,6 +38364,16 @@ class CfnService(
             result = self._values.get("enabled")
             assert result is not None, "Required property 'enabled' is missing"
             return typing.cast(typing.Union[builtins.bool, _IResolvable_da3f097b], result)
+
+        @builtins.property
+        def access_log_configuration(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnService.ServiceConnectAccessLogConfigurationProperty"]]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-service-serviceconnectconfiguration.html#cfn-ecs-service-serviceconnectconfiguration-accesslogconfiguration
+            '''
+            result = self._values.get("access_log_configuration")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnService.ServiceConnectAccessLogConfigurationProperty"]], result)
 
         @builtins.property
         def log_configuration(
@@ -52573,6 +52876,14 @@ def _typecheckingstub__40010db1fb42b63f942b5b11b7277545c2a1bffc42369636da9c14f81
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__0743200d49df46a7db16cbbe76bf0139b82db8b6291c29f86f8fd534739f7228(
+    *,
+    canary_bake_time_in_minutes: typing.Optional[jsii.Number] = None,
+    canary_percent: typing.Optional[jsii.Number] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__6035027887a35659d2eefa7fe47b352231895c442c86f6d2efb07eee0ee27a0c(
     *,
     base: typing.Optional[jsii.Number] = None,
@@ -52603,8 +52914,10 @@ def _typecheckingstub__d809d14e704a11675cbface3b43579e5f8f2a29c9b48e27608c625a3f
     *,
     alarms: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnService.DeploymentAlarmsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     bake_time_in_minutes: typing.Optional[jsii.Number] = None,
+    canary_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnService.CanaryConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     deployment_circuit_breaker: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnService.DeploymentCircuitBreakerProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     lifecycle_hooks: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnService.DeploymentLifecycleHookProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+    linear_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnService.LinearConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     maximum_percent: typing.Optional[jsii.Number] = None,
     minimum_healthy_percent: typing.Optional[jsii.Number] = None,
     strategy: typing.Optional[builtins.str] = None,
@@ -52642,6 +52955,14 @@ def _typecheckingstub__61f79b8cfbfd89da452531f374d2c8ed25d98693945205dbbe670de81
     *,
     enable_force_new_deployment: typing.Union[builtins.bool, _IResolvable_da3f097b],
     force_new_deployment_nonce: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__336c91aa72da2e8b4988269b6c4b860d96985d0101277db28e55076d0537f167(
+    *,
+    step_bake_time_in_minutes: typing.Optional[jsii.Number] = None,
+    step_percent: typing.Optional[jsii.Number] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -52697,6 +53018,14 @@ def _typecheckingstub__f6ff8ad631f969096a18f72ba06774558b189607bf05e1f0d41fcf2e8
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__aff5a92a4ed08411423651afb280dfa281626d07bd7ed8179d146fb14bf66d44(
+    *,
+    format: builtins.str,
+    include_query_parameters: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__7552e3d2b970cfb26552bec096b0680acf8bc8c7b59096bbf5a210dd3266fd35(
     *,
     port: jsii.Number,
@@ -52709,6 +53038,7 @@ def _typecheckingstub__7552e3d2b970cfb26552bec096b0680acf8bc8c7b59096bbf5a210dd3
 def _typecheckingstub__8da75c12a30b7fe7fd27e23d778d5a095611ed616a9d92b56881eb771db7ab84(
     *,
     enabled: typing.Union[builtins.bool, _IResolvable_da3f097b],
+    access_log_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnService.ServiceConnectAccessLogConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     log_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnService.LogConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     namespace: typing.Optional[builtins.str] = None,
     services: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnService.ServiceConnectServiceProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,

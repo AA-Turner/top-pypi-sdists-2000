@@ -182,22 +182,15 @@ class _StreamReader(typing.Generic[T]):
 
     As an asynchronous iterable, the object supports the `for` and `async for`
     statements. Just loop over the object to read in chunks.
-
-    **Usage**
-
-    ```python fixture:running_app
-    from modal import Sandbox
-
-    sandbox = Sandbox.create(
-        "bash",
-        "-c",
-        "for i in $(seq 1 10); do echo foo; sleep 0.1; done",
-        app=running_app,
-    )
-    for message in sandbox.stdout:
-        print(f"Message: {message}")
-    ```
     """
+
+    _impl: typing.Union[
+        _StreamReaderThroughServer,
+        _DevnullStreamReader,
+        _TextStreamReaderThroughCommandRouter,
+        _BytesStreamReaderThroughCommandRouter,
+    ]
+
     def __init__(
         self,
         file_descriptor: int,
@@ -220,19 +213,7 @@ class _StreamReader(typing.Generic[T]):
         ...
 
     async def read(self) -> T:
-        """Fetch the entire contents of the stream until EOF.
-
-        **Usage**
-
-        ```python fixture:running_app
-        from modal import Sandbox
-
-        sandbox = Sandbox.create("echo", "hello", app=running_app)
-        sandbox.wait()
-
-        print(sandbox.stdout.read())
-        ```
-        """
+        """Fetch the entire contents of the stream until EOF."""
         ...
 
     def __aiter__(self) -> collections.abc.AsyncIterator[T]:
@@ -316,21 +297,16 @@ class _StreamWriter:
 
         **Usage**
 
-        ```python fixture:running_app
-        from modal import Sandbox
-
-        sandbox = Sandbox.create(
+        ```python fixture:sandbox
+        proc = sandbox.exec(
             "bash",
             "-c",
             "while read line; do echo $line; done",
-            app=running_app,
         )
-        sandbox.stdin.write(b"foo\n")
-        sandbox.stdin.write(b"bar\n")
-        sandbox.stdin.write_eof()
-
-        sandbox.stdin.drain()
-        sandbox.wait()
+        proc.stdin.write(b"foo\n")
+        proc.stdin.write(b"bar\n")
+        proc.stdin.write_eof()
+        proc.stdin.drain()
         ```
         """
         ...
@@ -374,22 +350,15 @@ class StreamReader(typing.Generic[T]):
 
     As an asynchronous iterable, the object supports the `for` and `async for`
     statements. Just loop over the object to read in chunks.
-
-    **Usage**
-
-    ```python fixture:running_app
-    from modal import Sandbox
-
-    sandbox = Sandbox.create(
-        "bash",
-        "-c",
-        "for i in $(seq 1 10); do echo foo; sleep 0.1; done",
-        app=running_app,
-    )
-    for message in sandbox.stdout:
-        print(f"Message: {message}")
-    ```
     """
+
+    _impl: typing.Union[
+        _StreamReaderThroughServer,
+        _DevnullStreamReader,
+        _TextStreamReaderThroughCommandRouter,
+        _BytesStreamReaderThroughCommandRouter,
+    ]
+
     def __init__(
         self,
         file_descriptor: int,
@@ -413,35 +382,11 @@ class StreamReader(typing.Generic[T]):
 
     class __read_spec(typing_extensions.Protocol[T_INNER, SUPERSELF]):
         def __call__(self, /) -> T_INNER:
-            """Fetch the entire contents of the stream until EOF.
-
-            **Usage**
-
-            ```python fixture:running_app
-            from modal import Sandbox
-
-            sandbox = Sandbox.create("echo", "hello", app=running_app)
-            sandbox.wait()
-
-            print(sandbox.stdout.read())
-            ```
-            """
+            """Fetch the entire contents of the stream until EOF."""
             ...
 
         async def aio(self, /) -> T_INNER:
-            """Fetch the entire contents of the stream until EOF.
-
-            **Usage**
-
-            ```python fixture:running_app
-            from modal import Sandbox
-
-            sandbox = Sandbox.create("echo", "hello", app=running_app)
-            sandbox.wait()
-
-            print(sandbox.stdout.read())
-            ```
-            """
+            """Fetch the entire contents of the stream until EOF."""
             ...
 
     read: __read_spec[T, typing_extensions.Self]
@@ -491,21 +436,16 @@ class StreamWriter:
 
         **Usage**
 
-        ```python fixture:running_app
-        from modal import Sandbox
-
-        sandbox = Sandbox.create(
+        ```python fixture:sandbox
+        proc = sandbox.exec(
             "bash",
             "-c",
             "while read line; do echo $line; done",
-            app=running_app,
         )
-        sandbox.stdin.write(b"foo\n")
-        sandbox.stdin.write(b"bar\n")
-        sandbox.stdin.write_eof()
-
-        sandbox.stdin.drain()
-        sandbox.wait()
+        proc.stdin.write(b"foo\n")
+        proc.stdin.write(b"bar\n")
+        proc.stdin.write_eof()
+        proc.stdin.drain()
         ```
         """
         ...
