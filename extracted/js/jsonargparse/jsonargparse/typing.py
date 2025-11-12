@@ -6,7 +6,7 @@ import os
 import pathlib
 import re
 import sys
-from typing import Any, Callable, Dict, List, Optional, Pattern, Tuple, Type, Union
+from typing import Any, Callable, Optional, Union
 
 if sys.version_info >= (3, 10):
     from typing import TypeAlias as _TypeAlias
@@ -15,7 +15,8 @@ else:
 
 from ._common import is_final_class, path_dump_preserve_relative
 from ._optionals import final, pydantic_support
-from ._util import Path, change_to_path_dir, get_import_path, get_private_kwargs, import_object
+from ._paths import Path, change_to_path_dir
+from ._util import get_import_path, get_private_kwargs, import_object
 
 __all__ = [
     "final",
@@ -33,6 +34,7 @@ __all__ = [
     "OpenUnitInterval",
     "NotEmptyStr",
     "Email",
+    "Path",
     "Path_fr",
     "Path_fc",
     "Path_dw",
@@ -52,9 +54,9 @@ _operators1 = {
 }
 _operators2 = {v: k for k, v in _operators1.items()}
 
-registered_types: Dict[tuple, type] = {}
-registered_type_handlers: Dict[type, "RegisteredType"] = {}
-registration_pending: Dict[str, Callable] = {}
+registered_types: dict[tuple, type] = {}
+registered_type_handlers: dict[type, "RegisteredType"] = {}
+registration_pending: dict[str, Callable] = {}
 
 
 def extend_base_type(
@@ -63,7 +65,7 @@ def extend_base_type(
     validation_fn: Callable,
     docstring: Optional[str] = None,
     extra_attrs: Optional[dict] = None,
-    register_key: Optional[Tuple] = None,
+    register_key: Optional[tuple] = None,
 ) -> _TypeAlias:
     """Creates and registers an extension of base type.
 
@@ -106,7 +108,7 @@ def extend_base_type(
 def restricted_number_type(
     name: Optional[str],
     base_type: type,
-    restrictions: Union[Tuple, List[Tuple]],
+    restrictions: Union[tuple, list[tuple]],
     join: str = "and",
     docstring: Optional[str] = None,
 ) -> _TypeAlias:
@@ -178,7 +180,7 @@ def restricted_number_type(
 
 def restricted_string_type(
     name: str,
-    regex: Union[str, Pattern],
+    regex: Union[str, re.Pattern],
     docstring: Optional[str] = None,
 ) -> _TypeAlias:
     """Creates or returns an already registered restricted string type class.
@@ -220,6 +222,8 @@ def _is_path_type(value, type_class):
 
 
 def _serialize_path(path: Path):
+    if not isinstance(path, Path):
+        raise ValueError("Expected a Path instance.")
     if path_dump_preserve_relative.get() and path.relative != path.absolute:
         return {
             "relative": path._relative,
@@ -279,7 +283,7 @@ class RegisteredType:
         type_class: Any,
         serializer: Callable,
         deserializer: Optional[Callable],
-        deserializer_exceptions: Union[Type[Exception], Tuple[Type[Exception], ...]],
+        deserializer_exceptions: Union[type[Exception], tuple[type[Exception], ...]],
         type_check: Callable,
     ):
         self.type_class = type_class
@@ -308,14 +312,14 @@ def register_type(
     type_class: Any,
     serializer: Callable = str,
     deserializer: Optional[Callable] = None,
-    deserializer_exceptions: Union[Type[Exception], Tuple[Type[Exception], ...]] = (
+    deserializer_exceptions: Union[type[Exception], tuple[type[Exception], ...]] = (
         ValueError,
         TypeError,
         AttributeError,
     ),
     type_check: Callable = lambda v, t: v.__class__ == t,
     fail_already_registered: bool = True,
-    uniqueness_key: Optional[Tuple] = None,
+    uniqueness_key: Optional[tuple] = None,
 ) -> None:
     """Registers a new type for use in jsonargparse parsers.
 
@@ -358,7 +362,7 @@ def get_registered_type(type_class) -> Optional[RegisteredType]:
     return registered_type_handlers.get(type_class)
 
 
-def add_type(type_class: Type, uniqueness_key: Optional[Tuple], type_check: Optional[Callable] = None):
+def add_type(type_class: type, uniqueness_key: Optional[tuple], type_check: Optional[Callable] = None):
     assert uniqueness_key not in registered_types
     if type_class.__name__ in globals():
         raise ValueError(f'Type name "{type_class.__name__}" clashes with name already defined in jsonargparse.typing.')
@@ -366,7 +370,7 @@ def add_type(type_class: Type, uniqueness_key: Optional[Tuple], type_check: Opti
     kwargs = {"uniqueness_key": uniqueness_key}
     if type_check is not None:
         kwargs["type_check"] = type_check  # type: ignore[assignment]
-    register_type(type_class, type_class._type, **kwargs)  # type: ignore[arg-type]
+    register_type(type_class, type_class._type, **kwargs)  # type: ignore[arg-type,attr-defined]
 
 
 _fail_already_registered = False

@@ -1664,7 +1664,7 @@ class Langfuse:
 
         current_otel_span = self._get_current_otel_span()
 
-        if current_otel_span is not None:
+        if current_otel_span is not None and current_otel_span.is_recording():
             existing_observation_type = current_otel_span.attributes.get(  # type: ignore[attr-defined]
                 LangfuseOtelSpanAttributes.OBSERVATION_TYPE, "span"
             )
@@ -2858,56 +2858,56 @@ class Langfuse:
                     metadata=final_observation_metadata,
                 )
 
-                # Run evaluators
-                evaluations = []
-
-                for evaluator in evaluators:
-                    try:
-                        eval_metadata: Optional[Dict[str, Any]] = None
-
-                        if isinstance(item, dict):
-                            eval_metadata = item.get("metadata")
-                        elif hasattr(item, "metadata"):
-                            eval_metadata = item.metadata
-
-                        eval_results = await _run_evaluator(
-                            evaluator,
-                            input=input_data,
-                            output=output,
-                            expected_output=expected_output,
-                            metadata=eval_metadata,
-                        )
-                        evaluations.extend(eval_results)
-
-                        # Store evaluations as scores
-                        for evaluation in eval_results:
-                            self.create_score(
-                                trace_id=trace_id,
-                                observation_id=span.id,
-                                name=evaluation.name,
-                                value=evaluation.value,  # type: ignore
-                                comment=evaluation.comment,
-                                metadata=evaluation.metadata,
-                                config_id=evaluation.config_id,
-                                data_type=evaluation.data_type,  # type: ignore
-                            )
-
-                    except Exception as e:
-                        langfuse_logger.error(f"Evaluator failed: {e}")
-
-                return ExperimentItemResult(
-                    item=item,
-                    output=output,
-                    evaluations=evaluations,
-                    trace_id=trace_id,
-                    dataset_run_id=dataset_run_id,
-                )
-
             except Exception as e:
                 span.update(
                     output=f"Error: {str(e)}", level="ERROR", status_message=str(e)
                 )
                 raise e
+
+            # Run evaluators
+            evaluations = []
+
+            for evaluator in evaluators:
+                try:
+                    eval_metadata: Optional[Dict[str, Any]] = None
+
+                    if isinstance(item, dict):
+                        eval_metadata = item.get("metadata")
+                    elif hasattr(item, "metadata"):
+                        eval_metadata = item.metadata
+
+                    eval_results = await _run_evaluator(
+                        evaluator,
+                        input=input_data,
+                        output=output,
+                        expected_output=expected_output,
+                        metadata=eval_metadata,
+                    )
+                    evaluations.extend(eval_results)
+
+                    # Store evaluations as scores
+                    for evaluation in eval_results:
+                        self.create_score(
+                            trace_id=trace_id,
+                            observation_id=span.id,
+                            name=evaluation.name,
+                            value=evaluation.value,  # type: ignore
+                            comment=evaluation.comment,
+                            metadata=evaluation.metadata,
+                            config_id=evaluation.config_id,
+                            data_type=evaluation.data_type,  # type: ignore
+                        )
+
+                except Exception as e:
+                    langfuse_logger.error(f"Evaluator failed: {e}")
+
+            return ExperimentItemResult(
+                item=item,
+                output=output,
+                evaluations=evaluations,
+                trace_id=trace_id,
+                dataset_run_id=dataset_run_id,
+            )
 
     def _create_experiment_run_name(
         self, *, name: Optional[str] = None, run_name: Optional[str] = None

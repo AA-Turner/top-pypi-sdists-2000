@@ -162,7 +162,7 @@ class OciCacheUserClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/redis/change_oci_cache_user_compartment.py.html>`__ to see an example of how to use change_oci_cache_user_compartment API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/redis/change_oci_cache_user_compartment.py.html>`__ to see an example of how to use change_oci_cache_user_compartment API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['ociCacheUserId']
@@ -272,7 +272,7 @@ class OciCacheUserClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/redis/create_oci_cache_user.py.html>`__ to see an example of how to use create_oci_cache_user API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/redis/create_oci_cache_user.py.html>`__ to see an example of how to use create_oci_cache_user API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -370,7 +370,7 @@ class OciCacheUserClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/redis/delete_oci_cache_user.py.html>`__ to see an example of how to use delete_oci_cache_user API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/redis/delete_oci_cache_user.py.html>`__ to see an example of how to use delete_oci_cache_user API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['ociCacheUserId']
@@ -468,7 +468,7 @@ class OciCacheUserClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/redis/get_oci_cache_user.py.html>`__ to see an example of how to use get_oci_cache_user API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/redis/get_oci_cache_user.py.html>`__ to see an example of how to use get_oci_cache_user API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['ociCacheUserId']
@@ -588,7 +588,7 @@ class OciCacheUserClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/redis/list_attached_redis_clusters.py.html>`__ to see an example of how to use list_attached_redis_clusters API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/redis/list_attached_redis_clusters.py.html>`__ to see an example of how to use list_attached_redis_clusters API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['ociCacheUserId']
@@ -742,7 +742,7 @@ class OciCacheUserClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/redis/list_oci_cache_users.py.html>`__ to see an example of how to use list_oci_cache_users API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/redis/list_oci_cache_users.py.html>`__ to see an example of how to use list_oci_cache_users API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -879,7 +879,7 @@ class OciCacheUserClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/redis/update_oci_cache_user.py.html>`__ to see an example of how to use update_oci_cache_user API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/redis/update_oci_cache_user.py.html>`__ to see an example of how to use update_oci_cache_user API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['ociCacheUserId']

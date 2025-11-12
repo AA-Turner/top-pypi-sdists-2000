@@ -640,6 +640,7 @@ __all__ = (
     "VpnProtocolType",
     "VpnStateType",
     "VpnStaticRouteSourceType",
+    "VpnTunnelBandwidthType",
     "VpnTunnelProvisioningStatusType",
     "WaiterName",
     "WeekDayType",
@@ -3152,6 +3153,7 @@ VpnEcmpSupportValueType = Literal["disable", "enable"]
 VpnProtocolType = Literal["openvpn"]
 VpnStateType = Literal["available", "deleted", "deleting", "pending"]
 VpnStaticRouteSourceType = Literal["Static"]
+VpnTunnelBandwidthType = Literal["large", "standard"]
 VpnTunnelProvisioningStatusType = Literal["available", "failed", "pending"]
 WeekDayType = Literal["friday", "monday", "saturday", "sunday", "thursday", "tuesday", "wednesday"]
 EC2ServiceName = Literal["ec2"]

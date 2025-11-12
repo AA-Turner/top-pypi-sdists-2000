@@ -1,6 +1,6 @@
-"""Definitions and utilities for client-side handling of "relay-style" GraphQL types for pagination.
+"""Utilities for client-side handling of "relay-style" GraphQL pagination.
 
-For formal specs and definitions, see: https://relay.dev/graphql/connections.htm
+For formal specs and definitions, see https://relay.dev/graphql/connections.htm.
 """
 
 from typing import Generic, Iterator, List, Literal, Optional, TypeVar
@@ -9,7 +9,8 @@ from pydantic import NonNegativeInt
 
 from .base import GQLResult
 
-NodeT = TypeVar("NodeT", bound=GQLResult)
+# NodeT = TypeVar("NodeT", bound=GQLResult)
+NodeT = TypeVar("NodeT")
 """A generic type variable for a GraphQL relay node."""
 
 
@@ -26,6 +27,7 @@ class Edge(GQLResult, Generic[NodeT]):
 class Connection(GQLResult, Generic[NodeT]):
     edges: List[Edge[NodeT]]
     page_info: PageInfo
+    total_count: Optional[NonNegativeInt] = None
 
     def nodes(self) -> Iterator[NodeT]:
         """Returns an iterator over the nodes in the connection."""

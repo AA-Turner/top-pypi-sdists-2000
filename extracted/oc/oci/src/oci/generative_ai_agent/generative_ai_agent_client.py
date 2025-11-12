@@ -164,7 +164,7 @@ class GenerativeAiAgentClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/generativeaiagent/cancel_work_request.py.html>`__ to see an example of how to use cancel_work_request API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/generativeaiagent/cancel_work_request.py.html>`__ to see an example of how to use cancel_work_request API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workRequestId']
@@ -286,7 +286,7 @@ class GenerativeAiAgentClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/generativeaiagent/change_agent_compartment.py.html>`__ to see an example of how to use change_agent_compartment API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/generativeaiagent/change_agent_compartment.py.html>`__ to see an example of how to use change_agent_compartment API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['agentId']
@@ -413,7 +413,7 @@ class GenerativeAiAgentClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/generativeaiagent/change_agent_endpoint_compartment.py.html>`__ to see an example of how to use change_agent_endpoint_compartment API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/generativeaiagent/change_agent_endpoint_compartment.py.html>`__ to see an example of how to use change_agent_endpoint_compartment API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['agentEndpointId']
@@ -540,7 +540,7 @@ class GenerativeAiAgentClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/generativeaiagent/change_knowledge_base_compartment.py.html>`__ to see an example of how to use change_knowledge_base_compartment API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/generativeaiagent/change_knowledge_base_compartment.py.html>`__ to see an example of how to use change_knowledge_base_compartment API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['knowledgeBaseId']
@@ -653,7 +653,7 @@ class GenerativeAiAgentClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/generativeaiagent/create_agent.py.html>`__ to see an example of how to use create_agent API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/generativeaiagent/create_agent.py.html>`__ to see an example of how to use create_agent API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -754,7 +754,7 @@ class GenerativeAiAgentClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/generativeaiagent/create_agent_endpoint.py.html>`__ to see an example of how to use create_agent_endpoint API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/generativeaiagent/create_agent_endpoint.py.html>`__ to see an example of how to use create_agent_endpoint API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -855,7 +855,7 @@ class GenerativeAiAgentClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/generativeaiagent/create_data_ingestion_job.py.html>`__ to see an example of how to use create_data_ingestion_job API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/generativeaiagent/create_data_ingestion_job.py.html>`__ to see an example of how to use create_data_ingestion_job API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -956,7 +956,7 @@ class GenerativeAiAgentClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/generativeaiagent/create_data_source.py.html>`__ to see an example of how to use create_data_source API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/generativeaiagent/create_data_source.py.html>`__ to see an example of how to use create_data_source API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -1057,7 +1057,7 @@ class GenerativeAiAgentClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/generativeaiagent/create_knowledge_base.py.html>`__ to see an example of how to use create_knowledge_base API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/generativeaiagent/create_knowledge_base.py.html>`__ to see an example of how to use create_knowledge_base API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -1158,7 +1158,7 @@ class GenerativeAiAgentClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/generativeaiagent/create_tool.py.html>`__ to see an example of how to use create_tool API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/generativeaiagent/create_tool.py.html>`__ to see an example of how to use create_tool API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -1260,7 +1260,7 @@ class GenerativeAiAgentClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/generativeaiagent/delete_agent.py.html>`__ to see an example of how to use delete_agent API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/generativeaiagent/delete_agent.py.html>`__ to see an example of how to use delete_agent API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['agentId']
@@ -1369,7 +1369,7 @@ class GenerativeAiAgentClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/generativeaiagent/delete_agent_endpoint.py.html>`__ to see an example of how to use delete_agent_endpoint API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/generativeaiagent/delete_agent_endpoint.py.html>`__ to see an example of how to use delete_agent_endpoint API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['agentEndpointId']
@@ -1478,7 +1478,7 @@ class GenerativeAiAgentClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/generativeaiagent/delete_data_ingestion_job.py.html>`__ to see an example of how to use delete_data_ingestion_job API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/generativeaiagent/delete_data_ingestion_job.py.html>`__ to see an example of how to use delete_data_ingestion_job API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['dataIngestionJobId']
@@ -1587,7 +1587,7 @@ class GenerativeAiAgentClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/generativeaiagent/delete_data_source.py.html>`__ to see an example of how to use delete_data_source API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/generativeaiagent/delete_data_source.py.html>`__ to see an example of how to use delete_data_source API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['dataSourceId']
@@ -1696,7 +1696,7 @@ class GenerativeAiAgentClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/generativeaiagent/delete_knowledge_base.py.html>`__ to see an example of how to use delete_knowledge_base API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/generativeaiagent/delete_knowledge_base.py.html>`__ to see an example of how to use delete_knowledge_base API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['knowledgeBaseId']
@@ -1805,7 +1805,7 @@ class GenerativeAiAgentClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/generativeaiagent/delete_tool.py.html>`__ to see an example of how to use delete_tool API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/generativeaiagent/delete_tool.py.html>`__ to see an example of how to use delete_tool API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['toolId']
@@ -1908,7 +1908,7 @@ class GenerativeAiAgentClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/generativeaiagent/get_agent.py.html>`__ to see an example of how to use get_agent API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/generativeaiagent/get_agent.py.html>`__ to see an example of how to use get_agent API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['agentId']
@@ -2011,7 +2011,7 @@ class GenerativeAiAgentClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/generativeaiagent/get_agent_endpoint.py.html>`__ to see an example of how to use get_agent_endpoint API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/generativeaiagent/get_agent_endpoint.py.html>`__ to see an example of how to use get_agent_endpoint API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['agentEndpointId']
@@ -2114,7 +2114,7 @@ class GenerativeAiAgentClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/generativeaiagent/get_data_ingestion_job.py.html>`__ to see an example of how to use get_data_ingestion_job API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/generativeaiagent/get_data_ingestion_job.py.html>`__ to see an example of how to use get_data_ingestion_job API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['dataIngestionJobId']
@@ -2217,7 +2217,7 @@ class GenerativeAiAgentClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/generativeaiagent/get_data_ingestion_job_log_content.py.html>`__ to see an example of how to use get_data_ingestion_job_log_content API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/generativeaiagent/get_data_ingestion_job_log_content.py.html>`__ to see an example of how to use get_data_ingestion_job_log_content API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['dataIngestionJobId']
@@ -2320,7 +2320,7 @@ class GenerativeAiAgentClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/generativeaiagent/get_data_source.py.html>`__ to see an example of how to use get_data_source API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/generativeaiagent/get_data_source.py.html>`__ to see an example of how to use get_data_source API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['dataSourceId']
@@ -2423,7 +2423,7 @@ class GenerativeAiAgentClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/generativeaiagent/get_knowledge_base.py.html>`__ to see an example of how to use get_knowledge_base API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/generativeaiagent/get_knowledge_base.py.html>`__ to see an example of how to use get_knowledge_base API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['knowledgeBaseId']
@@ -2526,7 +2526,7 @@ class GenerativeAiAgentClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/generativeaiagent/get_tool.py.html>`__ to see an example of how to use get_tool API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/generativeaiagent/get_tool.py.html>`__ to see an example of how to use get_tool API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['toolId']
@@ -2629,7 +2629,7 @@ class GenerativeAiAgentClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/generativeaiagent/get_work_request.py.html>`__ to see an example of how to use get_work_request API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/generativeaiagent/get_work_request.py.html>`__ to see an example of how to use get_work_request API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workRequestId']
@@ -2771,7 +2771,7 @@ class GenerativeAiAgentClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/generativeaiagent/list_agent_endpoints.py.html>`__ to see an example of how to use list_agent_endpoints API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/generativeaiagent/list_agent_endpoints.py.html>`__ to see an example of how to use list_agent_endpoints API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -2939,7 +2939,7 @@ class GenerativeAiAgentClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/generativeaiagent/list_agents.py.html>`__ to see an example of how to use list_agents API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/generativeaiagent/list_agents.py.html>`__ to see an example of how to use list_agents API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -3110,7 +3110,7 @@ class GenerativeAiAgentClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/generativeaiagent/list_data_ingestion_jobs.py.html>`__ to see an example of how to use list_data_ingestion_jobs API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/generativeaiagent/list_data_ingestion_jobs.py.html>`__ to see an example of how to use list_data_ingestion_jobs API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -3283,7 +3283,7 @@ class GenerativeAiAgentClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/generativeaiagent/list_data_sources.py.html>`__ to see an example of how to use list_data_sources API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/generativeaiagent/list_data_sources.py.html>`__ to see an example of how to use list_data_sources API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -3451,7 +3451,7 @@ class GenerativeAiAgentClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/generativeaiagent/list_knowledge_bases.py.html>`__ to see an example of how to use list_knowledge_bases API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/generativeaiagent/list_knowledge_bases.py.html>`__ to see an example of how to use list_knowledge_bases API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -3622,7 +3622,7 @@ class GenerativeAiAgentClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/generativeaiagent/list_tools.py.html>`__ to see an example of how to use list_tools API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/generativeaiagent/list_tools.py.html>`__ to see an example of how to use list_tools API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -3780,7 +3780,7 @@ class GenerativeAiAgentClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/generativeaiagent/list_work_request_errors.py.html>`__ to see an example of how to use list_work_request_errors API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/generativeaiagent/list_work_request_errors.py.html>`__ to see an example of how to use list_work_request_errors API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workRequestId']
@@ -3935,7 +3935,7 @@ class GenerativeAiAgentClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/generativeaiagent/list_work_request_logs.py.html>`__ to see an example of how to use list_work_request_logs API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/generativeaiagent/list_work_request_logs.py.html>`__ to see an example of how to use list_work_request_logs API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workRequestId']
@@ -4105,7 +4105,7 @@ class GenerativeAiAgentClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/generativeaiagent/list_work_requests.py.html>`__ to see an example of how to use list_work_requests API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/generativeaiagent/list_work_requests.py.html>`__ to see an example of how to use list_work_requests API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -4248,7 +4248,7 @@ class GenerativeAiAgentClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/generativeaiagent/update_agent.py.html>`__ to see an example of how to use update_agent API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/generativeaiagent/update_agent.py.html>`__ to see an example of how to use update_agent API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['agentId']
@@ -4362,7 +4362,7 @@ class GenerativeAiAgentClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/generativeaiagent/update_agent_endpoint.py.html>`__ to see an example of how to use update_agent_endpoint API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/generativeaiagent/update_agent_endpoint.py.html>`__ to see an example of how to use update_agent_endpoint API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['agentEndpointId']
@@ -4476,7 +4476,7 @@ class GenerativeAiAgentClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/generativeaiagent/update_data_source.py.html>`__ to see an example of how to use update_data_source API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/generativeaiagent/update_data_source.py.html>`__ to see an example of how to use update_data_source API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['dataSourceId']
@@ -4590,7 +4590,7 @@ class GenerativeAiAgentClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/generativeaiagent/update_knowledge_base.py.html>`__ to see an example of how to use update_knowledge_base API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/generativeaiagent/update_knowledge_base.py.html>`__ to see an example of how to use update_knowledge_base API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['knowledgeBaseId']
@@ -4704,7 +4704,7 @@ class GenerativeAiAgentClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/generativeaiagent/update_tool.py.html>`__ to see an example of how to use update_tool API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/generativeaiagent/update_tool.py.html>`__ to see an example of how to use update_tool API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['toolId']

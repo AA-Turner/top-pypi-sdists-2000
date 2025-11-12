@@ -9,7 +9,7 @@ from enum import Enum
 from importlib import import_module
 from pathlib import Path
 from types import ModuleType
-from typing import Any, Callable, Dict, Optional, Set
+from typing import Any, Callable, Dict, Optional, Set, Union, overload
 
 from ._common import Action, null_logger
 from ._common import LoggerProperty as InternalLoggerProperty
@@ -24,14 +24,18 @@ __all__ = [
     "ActionPathList",
     "HelpFormatterDeprecations",
     "LoggerProperty",
+    "PathDeprecations",
     "ParserDeprecations",
     "ParserError",
+    "compose_dataclasses",
     "get_config_read_mode",
+    "dict_to_namespace",
     "namespace_to_dict",
     "null_logger",
     "set_docstring_parse_options",
     "set_config_read_mode",
     "set_url_support",
+    "strip_meta",
     "usage_and_exit_error_handler",
 ]
 
@@ -120,8 +124,6 @@ def parse_as_dict_patch():
 
     ArgumentParser._unpatched_init = ArgumentParser.__init__
     ArgumentParser.__init__ = patched_init
-
-    from typing import Union
 
     # Patch parse methods
     def patch_parse_method(method_name):
@@ -439,6 +441,11 @@ path_immutable_attrs_message = """
     -> ``absolute``, ``cwd`` no name change, ``skip_check`` will be removed.
 """
 
+path_call_message = """
+    Calling Path objects is deprecated and will be removed in v5.0.0. Use the
+    ``absolute`` or ``relative`` properties instead.
+"""
+
 
 class PathDeprecations:
     """Deprecated methods for Path."""
@@ -492,6 +499,10 @@ class PathDeprecations:
     def skip_check(self, skip_check):
         deprecation_warning("Path attr set", path_immutable_attrs_message)
         self._skip_check = skip_check
+
+    @deprecated(path_call_message)
+    def __call__(self, absolute: bool = True) -> str:
+        return self._absolute if absolute else self._relative
 
 
 class DebugException(Exception):
@@ -696,6 +707,42 @@ def namespace_to_dict(namespace: Namespace) -> Dict[str, Any]:
     return namespace.clone().as_dict()
 
 
+@deprecated(
+    """
+    dict_to_namespace was deprecated in v4.43.0 and will be removed in v5.0.0.
+    No replacement is provided because blindly converting a dictionary to a
+    namespace may not yield the same results as using a parser, which could lead
+    to confusion.
+"""
+)
+def dict_to_namespace(cfg_dict: dict[str, Any]) -> Namespace:
+    """Converts a nested dictionary into a nested namespace."""
+    from ._namespace import dict_to_namespace as _dict_to_namespace
+
+    return _dict_to_namespace(cfg_dict)
+
+
+@overload
+def strip_meta(cfg: "Namespace") -> "Namespace": ...  # pragma: no cover
+
+
+@overload
+def strip_meta(cfg: Dict[str, Any]) -> Dict[str, Any]: ...  # pragma: no cover
+
+
+@deprecated(
+    """
+    strip_meta was deprecated in v4.43.0 and will be removed in v5.0.0.
+    Instead use ``.clone(with_meta=False)``.
+"""
+)
+def strip_meta(cfg):
+    """Removes all metadata keys from a configuration object."""
+    from ._namespace import remove_meta
+
+    return remove_meta(cfg)
+
+
 class HelpFormatterDeprecations:
     """Helper class for DefaultHelpFormatter deprecations. Will be removed in v5.0.0."""
 
@@ -743,3 +790,25 @@ class HelpFormatterDeprecations:
             depth: The nested level of the argument.
         """
         self._yaml_formatter.set_yaml_argument_comment(text, cfg, key, depth)
+
+
+@deprecated(
+    """
+    compose_dataclasses is deprecated and will be removed in v5.0.0. There is
+    no direct replacement, whoever is interested can copy the code from an old
+    release.
+"""
+)
+def compose_dataclasses(*args):
+    """Returns a dataclass inheriting all given dataclasses and properly handling __post_init__."""
+
+    import dataclasses
+
+    @dataclasses.dataclass
+    class ComposedDataclass(*args):
+        def __post_init__(self):
+            for arg in args:
+                if hasattr(arg, "__post_init__"):
+                    arg.__post_init__(self)
+
+    return ComposedDataclass

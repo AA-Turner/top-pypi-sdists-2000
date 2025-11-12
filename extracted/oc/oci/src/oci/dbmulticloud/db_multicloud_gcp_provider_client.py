@@ -192,7 +192,7 @@ class DbMulticloudGCPProviderClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/dbmulticloud/change_oracle_db_gcp_identity_connector_compartment.py.html>`__ to see an example of how to use change_oracle_db_gcp_identity_connector_compartment API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/dbmulticloud/change_oracle_db_gcp_identity_connector_compartment.py.html>`__ to see an example of how to use change_oracle_db_gcp_identity_connector_compartment API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['oracleDbGcpIdentityConnectorId']
@@ -314,7 +314,7 @@ class DbMulticloudGCPProviderClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/dbmulticloud/change_oracle_db_gcp_key_ring_compartment.py.html>`__ to see an example of how to use change_oracle_db_gcp_key_ring_compartment API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/dbmulticloud/change_oracle_db_gcp_key_ring_compartment.py.html>`__ to see an example of how to use change_oracle_db_gcp_key_ring_compartment API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['oracleDbGcpKeyRingId']
@@ -424,7 +424,7 @@ class DbMulticloudGCPProviderClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/dbmulticloud/create_oracle_db_gcp_identity_connector.py.html>`__ to see an example of how to use create_oracle_db_gcp_identity_connector API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/dbmulticloud/create_oracle_db_gcp_identity_connector.py.html>`__ to see an example of how to use create_oracle_db_gcp_identity_connector API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -529,7 +529,7 @@ class DbMulticloudGCPProviderClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/dbmulticloud/create_oracle_db_gcp_key_ring.py.html>`__ to see an example of how to use create_oracle_db_gcp_key_ring API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/dbmulticloud/create_oracle_db_gcp_key_ring.py.html>`__ to see an example of how to use create_oracle_db_gcp_key_ring API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -631,7 +631,7 @@ class DbMulticloudGCPProviderClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/dbmulticloud/delete_oracle_db_gcp_identity_connector.py.html>`__ to see an example of how to use delete_oracle_db_gcp_identity_connector API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/dbmulticloud/delete_oracle_db_gcp_identity_connector.py.html>`__ to see an example of how to use delete_oracle_db_gcp_identity_connector API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['oracleDbGcpIdentityConnectorId']
@@ -738,7 +738,7 @@ class DbMulticloudGCPProviderClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/dbmulticloud/delete_oracle_db_gcp_key_ring.py.html>`__ to see an example of how to use delete_oracle_db_gcp_key_ring API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/dbmulticloud/delete_oracle_db_gcp_key_ring.py.html>`__ to see an example of how to use delete_oracle_db_gcp_key_ring API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['oracleDbGcpKeyRingId']
@@ -840,7 +840,7 @@ class DbMulticloudGCPProviderClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/dbmulticloud/get_oracle_db_gcp_identity_connector.py.html>`__ to see an example of how to use get_oracle_db_gcp_identity_connector API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/dbmulticloud/get_oracle_db_gcp_identity_connector.py.html>`__ to see an example of how to use get_oracle_db_gcp_identity_connector API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['oracleDbGcpIdentityConnectorId']
@@ -942,7 +942,7 @@ class DbMulticloudGCPProviderClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/dbmulticloud/get_oracle_db_gcp_key.py.html>`__ to see an example of how to use get_oracle_db_gcp_key API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/dbmulticloud/get_oracle_db_gcp_key.py.html>`__ to see an example of how to use get_oracle_db_gcp_key API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['oracleDbGcpKeyId']
@@ -1055,7 +1055,7 @@ class DbMulticloudGCPProviderClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/dbmulticloud/get_oracle_db_gcp_key_ring.py.html>`__ to see an example of how to use get_oracle_db_gcp_key_ring API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/dbmulticloud/get_oracle_db_gcp_key_ring.py.html>`__ to see an example of how to use get_oracle_db_gcp_key_ring API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['oracleDbGcpKeyRingId']
@@ -1203,7 +1203,7 @@ class DbMulticloudGCPProviderClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/dbmulticloud/list_oracle_db_gcp_identity_connectors.py.html>`__ to see an example of how to use list_oracle_db_gcp_identity_connectors API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/dbmulticloud/list_oracle_db_gcp_identity_connectors.py.html>`__ to see an example of how to use list_oracle_db_gcp_identity_connectors API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['compartmentId']
@@ -1366,7 +1366,7 @@ class DbMulticloudGCPProviderClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/dbmulticloud/list_oracle_db_gcp_key_rings.py.html>`__ to see an example of how to use list_oracle_db_gcp_key_rings API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/dbmulticloud/list_oracle_db_gcp_key_rings.py.html>`__ to see an example of how to use list_oracle_db_gcp_key_rings API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['compartmentId']
@@ -1528,7 +1528,7 @@ class DbMulticloudGCPProviderClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/dbmulticloud/list_oracle_db_gcp_keys.py.html>`__ to see an example of how to use list_oracle_db_gcp_keys API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/dbmulticloud/list_oracle_db_gcp_keys.py.html>`__ to see an example of how to use list_oracle_db_gcp_keys API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['compartmentId']
@@ -1674,7 +1674,7 @@ class DbMulticloudGCPProviderClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/dbmulticloud/refresh_oracle_db_gcp_identity_connector.py.html>`__ to see an example of how to use refresh_oracle_db_gcp_identity_connector API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/dbmulticloud/refresh_oracle_db_gcp_identity_connector.py.html>`__ to see an example of how to use refresh_oracle_db_gcp_identity_connector API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['oracleDbGcpIdentityConnectorId']
@@ -1794,7 +1794,7 @@ class DbMulticloudGCPProviderClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/dbmulticloud/refresh_oracle_db_gcp_key_ring.py.html>`__ to see an example of how to use refresh_oracle_db_gcp_key_ring API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/dbmulticloud/refresh_oracle_db_gcp_key_ring.py.html>`__ to see an example of how to use refresh_oracle_db_gcp_key_ring API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['oracleDbGcpKeyRingId']
@@ -1911,7 +1911,7 @@ class DbMulticloudGCPProviderClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/dbmulticloud/update_oracle_db_gcp_identity_connector.py.html>`__ to see an example of how to use update_oracle_db_gcp_identity_connector API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/dbmulticloud/update_oracle_db_gcp_identity_connector.py.html>`__ to see an example of how to use update_oracle_db_gcp_identity_connector API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['oracleDbGcpIdentityConnectorId']
@@ -2025,7 +2025,7 @@ class DbMulticloudGCPProviderClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/dbmulticloud/update_oracle_db_gcp_key_ring.py.html>`__ to see an example of how to use update_oracle_db_gcp_key_ring API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/dbmulticloud/update_oracle_db_gcp_key_ring.py.html>`__ to see an example of how to use update_oracle_db_gcp_key_ring API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['oracleDbGcpKeyRingId']

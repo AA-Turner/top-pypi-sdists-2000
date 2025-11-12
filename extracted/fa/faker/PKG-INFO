@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: Faker
-Version: 37.12.0
+Version: 38.0.0
 Summary: Faker is a Python package that generates fake data for you.
 Home-page: https://github.com/joke2k/faker
 Author: joke2k
@@ -15,18 +15,18 @@ Platform: any
 Classifier: Development Status :: 5 - Production/Stable
 Classifier: Environment :: Console
 Classifier: Intended Audience :: Developers
-Classifier: Programming Language :: Python :: 3.9
 Classifier: Programming Language :: Python :: 3.10
 Classifier: Programming Language :: Python :: 3.11
 Classifier: Programming Language :: Python :: 3.12
 Classifier: Programming Language :: Python :: 3.13
+Classifier: Programming Language :: Python :: 3.14
 Classifier: Programming Language :: Python :: Implementation :: CPython
 Classifier: Programming Language :: Python :: Implementation :: PyPy
 Classifier: Topic :: Software Development :: Libraries :: Python Modules
 Classifier: Topic :: Software Development :: Testing
 Classifier: Topic :: Utilities
 Classifier: License :: OSI Approved :: MIT License
-Requires-Python: >=3.9
+Requires-Python: >=3.10
 License-File: LICENSE.txt
 Requires-Dist: tzdata
 Dynamic: author

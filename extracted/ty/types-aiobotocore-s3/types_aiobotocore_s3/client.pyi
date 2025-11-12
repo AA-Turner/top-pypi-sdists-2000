@@ -20,6 +20,7 @@ Usage::
 from __future__ import annotations
 
 import sys
+from collections.abc import Callable, Mapping
 from types import TracebackType
 from typing import Any, overload
 
@@ -227,13 +228,6 @@ try:
     from boto3.s3.transfer import TransferConfig
 except ImportError:
     from builtins import object as TransferConfig  # type: ignore[assignment]
-if sys.version_info >= (3, 9):
-    from builtins import dict as Dict
-    from builtins import list as List
-    from builtins import type as Type
-    from collections.abc import Callable, Mapping
-else:
-    from typing import Callable, Dict, List, Mapping, Type
 if sys.version_info >= (3, 12):
     from typing import Literal, Self, Unpack
 else:
@@ -242,20 +236,20 @@ else:
 __all__ = ("S3Client",)
 
 class Exceptions(BaseClientExceptions):
-    BucketAlreadyExists: Type[BotocoreClientError]
-    BucketAlreadyOwnedByYou: Type[BotocoreClientError]
-    ClientError: Type[BotocoreClientError]
-    EncryptionTypeMismatch: Type[BotocoreClientError]
-    IdempotencyParameterMismatch: Type[BotocoreClientError]
-    InvalidObjectState: Type[BotocoreClientError]
-    InvalidRequest: Type[BotocoreClientError]
-    InvalidWriteOffset: Type[BotocoreClientError]
-    NoSuchBucket: Type[BotocoreClientError]
-    NoSuchKey: Type[BotocoreClientError]
-    NoSuchUpload: Type[BotocoreClientError]
-    ObjectAlreadyInActiveTierError: Type[BotocoreClientError]
-    ObjectNotInActiveTierError: Type[BotocoreClientError]
-    TooManyParts: Type[BotocoreClientError]
+    BucketAlreadyExists: type[BotocoreClientError]
+    BucketAlreadyOwnedByYou: type[BotocoreClientError]
+    ClientError: type[BotocoreClientError]
+    EncryptionTypeMismatch: type[BotocoreClientError]
+    IdempotencyParameterMismatch: type[BotocoreClientError]
+    InvalidObjectState: type[BotocoreClientError]
+    InvalidRequest: type[BotocoreClientError]
+    InvalidWriteOffset: type[BotocoreClientError]
+    NoSuchBucket: type[BotocoreClientError]
+    NoSuchKey: type[BotocoreClientError]
+    NoSuchUpload: type[BotocoreClientError]
+    ObjectAlreadyInActiveTierError: type[BotocoreClientError]
+    ObjectNotInActiveTierError: type[BotocoreClientError]
+    TooManyParts: type[BotocoreClientError]
 
 class S3Client(AioBaseClient):
     """
@@ -1319,7 +1313,7 @@ class S3Client(AioBaseClient):
         [Show types-aiobotocore documentation](https://youtype.github.io/types_aiobotocore_docs/types_aiobotocore_s3/client/#put_public_access_block)
         """
 
-    async def rename_object(self, **kwargs: Unpack[RenameObjectRequestTypeDef]) -> Dict[str, Any]:
+    async def rename_object(self, **kwargs: Unpack[RenameObjectRequestTypeDef]) -> dict[str, Any]:
         """
         Renames an existing object in a directory bucket that uses the S3 Express One
         Zone storage class.
@@ -1405,7 +1399,7 @@ class S3Client(AioBaseClient):
         CopySource: CopySourceTypeDef,
         Bucket: str,
         Key: str,
-        ExtraArgs: Dict[str, Any] | None = ...,
+        ExtraArgs: dict[str, Any] | None = ...,
         Callback: Callable[..., Any] | None = ...,
         SourceClient: AioBaseClient | None = ...,
         Config: TransferConfig | None = ...,
@@ -1422,7 +1416,7 @@ class S3Client(AioBaseClient):
         Bucket: str,
         Key: str,
         Filename: str,
-        ExtraArgs: Dict[str, Any] | None = ...,
+        ExtraArgs: dict[str, Any] | None = ...,
         Callback: Callable[..., Any] | None = ...,
         Config: TransferConfig | None = ...,
     ) -> None:
@@ -1438,7 +1432,7 @@ class S3Client(AioBaseClient):
         Bucket: str,
         Key: str,
         Fileobj: FileobjTypeDef,
-        ExtraArgs: Dict[str, Any] | None = ...,
+        ExtraArgs: dict[str, Any] | None = ...,
         Callback: Callable[..., Any] | None = ...,
         Config: TransferConfig | None = ...,
     ) -> None:
@@ -1453,10 +1447,10 @@ class S3Client(AioBaseClient):
         self,
         Bucket: str,
         Key: str,
-        Fields: Dict[str, Any] | None = ...,
-        Conditions: List[Any] | Dict[str, Any] | None = ...,
+        Fields: dict[str, Any] | None = ...,
+        Conditions: list[Any] | dict[str, Any] | None = ...,
         ExpiresIn: int = 3600,
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """
         Generate a presigned URL for POST requests.
 
@@ -1469,7 +1463,7 @@ class S3Client(AioBaseClient):
         Filename: str,
         Bucket: str,
         Key: str,
-        ExtraArgs: Dict[str, Any] | None = ...,
+        ExtraArgs: dict[str, Any] | None = ...,
         Callback: Callable[..., Any] | None = ...,
         Config: TransferConfig | None = ...,
     ) -> None:
@@ -1485,7 +1479,7 @@ class S3Client(AioBaseClient):
         Fileobj: FileobjTypeDef,
         Bucket: str,
         Key: str,
-        ExtraArgs: Dict[str, Any] | None = ...,
+        ExtraArgs: dict[str, Any] | None = ...,
         Callback: Callable[..., Any] | None = ...,
         Config: TransferConfig | None = ...,
     ) -> None:
@@ -1625,7 +1619,7 @@ class S3Client(AioBaseClient):
 
     async def __aexit__(
         self,
-        exc_type: Type[BaseException] | None,
+        exc_type: type[BaseException] | None,
         exc_val: BaseException | None,
         exc_tb: TracebackType | None,
     ) -> None:

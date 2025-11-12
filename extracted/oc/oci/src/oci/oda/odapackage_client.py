@@ -159,7 +159,7 @@ class OdapackageClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/oda/create_imported_package.py.html>`__ to see an example of how to use create_imported_package API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/oda/create_imported_package.py.html>`__ to see an example of how to use create_imported_package API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['odaInstanceId']
@@ -284,7 +284,7 @@ class OdapackageClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/oda/delete_imported_package.py.html>`__ to see an example of how to use delete_imported_package API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/oda/delete_imported_package.py.html>`__ to see an example of how to use delete_imported_package API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['odaInstanceId', 'packageId']
@@ -389,7 +389,7 @@ class OdapackageClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/oda/get_imported_package.py.html>`__ to see an example of how to use get_imported_package API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/oda/get_imported_package.py.html>`__ to see an example of how to use get_imported_package API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['odaInstanceId', 'packageId']
@@ -491,7 +491,7 @@ class OdapackageClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/oda/get_package.py.html>`__ to see an example of how to use get_package API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/oda/get_package.py.html>`__ to see an example of how to use get_package API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['odaInstanceId', 'packageId']
@@ -618,7 +618,7 @@ class OdapackageClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/oda/list_imported_packages.py.html>`__ to see an example of how to use list_imported_packages API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/oda/list_imported_packages.py.html>`__ to see an example of how to use list_imported_packages API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['odaInstanceId']
@@ -801,7 +801,7 @@ class OdapackageClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/oda/list_packages.py.html>`__ to see an example of how to use list_packages API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/oda/list_packages.py.html>`__ to see an example of how to use list_packages API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -955,7 +955,7 @@ class OdapackageClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/oda/update_imported_package.py.html>`__ to see an example of how to use update_imported_package API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/oda/update_imported_package.py.html>`__ to see an example of how to use update_imported_package API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['odaInstanceId', 'packageId']

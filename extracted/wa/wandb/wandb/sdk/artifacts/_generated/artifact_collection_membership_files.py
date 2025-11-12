@@ -3,9 +3,10 @@
 
 from __future__ import annotations
 
-from typing import List, Literal, Optional
+from typing import List, Optional
 
 from pydantic import Field
+from typing_extensions import Literal
 
 from wandb._pydantic import GQLResult, Typename
 
@@ -46,6 +47,7 @@ class ArtifactCollectionMembershipFilesProjectArtifactCollectionArtifactMembersh
     edges: List[
         ArtifactCollectionMembershipFilesProjectArtifactCollectionArtifactMembershipFilesEdges
     ]
+    total_count: Optional[int] = Field(alias="totalCount", default=None)
 
 
 class ArtifactCollectionMembershipFilesProjectArtifactCollectionArtifactMembershipFilesEdges(

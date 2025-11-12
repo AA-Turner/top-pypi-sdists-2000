@@ -300,7 +300,9 @@ def extend_driver(
             if not use_uc and os.path.exists(os.path.realpath(ext_dir)):
                 with suppress(Exception):
                     driver.webextension.install(os.path.realpath(ext_dir))
+    driver._is_using_auth = False
     if proxy_auth:
+        driver._is_using_auth = True
         if not use_uc and os.path.exists(proxy_helper.PROXY_DIR_PATH):
             with suppress(Exception):
                 driver.webextension.install(proxy_helper.PROXY_DIR_PATH)
@@ -938,6 +940,14 @@ def uc_open_with_cdp_mode(driver, url=None, **kwargs):
     driver.solve_captcha = CDPM.solve_captcha
     driver.find_element_by_text = CDPM.find_element_by_text
     driver._is_using_cdp = True
+    if (
+        hasattr(sb_config, "_cdp_proxy")
+        and sb_config._cdp_proxy
+        and "@" in sb_config._cdp_proxy
+    ):
+        time.sleep(0.077)
+        loop.run_until_complete(page.wait(0.25))
+        time.sleep(0.022)
 
 
 def uc_activate_cdp_mode(driver, url=None, **kwargs):
@@ -2746,7 +2756,7 @@ def _set_chrome_options(
     d_f_string = ",".join(included_disabled_features)
     chrome_options.add_argument("--disable-features=%s" % d_f_string)
     chrome_options.add_argument("--enable-unsafe-extension-debugging")
-    if proxy_auth:
+    if proxy_string:
         chrome_options.add_argument("--test-type")
     if proxy_auth or sb_config._ext_dirs:
         if not is_using_uc(undetectable, browser_name):
@@ -2770,7 +2780,7 @@ def _set_chrome_options(
         chrome_options.add_argument("--disable-popup-blocking")
         # Skip remaining options that trigger anti-bot services
         return chrome_options
-    if not proxy_auth:
+    if not proxy_string:
         chrome_options.add_argument("--test-type")
     chrome_options.add_argument("--log-level=3")
     chrome_options.add_argument("--no-first-run")
@@ -5778,6 +5788,7 @@ def get_local_driver(
                         )
                 driver.default_get = driver.get  # Save copy of original
                 driver.cdp = None  # Set a placeholder
+                driver._is_using_uc = False
                 driver._is_using_cdp = False
                 driver._is_connected = True
                 if uc_activated:
@@ -5812,6 +5823,7 @@ def get_local_driver(
                             driver, *args, **kwargs
                         )
                     )
+                    driver.activate_cdp_mode = driver.uc_activate_cdp_mode
                     driver.uc_open_with_cdp_mode = (
                         lambda *args, **kwargs: uc_open_with_cdp_mode(
                             driver, *args, **kwargs

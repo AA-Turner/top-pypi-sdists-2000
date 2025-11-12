@@ -151,7 +151,7 @@ class AnnouncementsPreferencesClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/announcementsservice/create_announcements_preference.py.html>`__ to see an example of how to use create_announcements_preference API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/announcementsservice/create_announcements_preference.py.html>`__ to see an example of how to use create_announcements_preference API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -243,7 +243,7 @@ class AnnouncementsPreferencesClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/announcementsservice/get_announcements_preference.py.html>`__ to see an example of how to use get_announcements_preference API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/announcementsservice/get_announcements_preference.py.html>`__ to see an example of how to use get_announcements_preference API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['preferenceId']
@@ -348,7 +348,7 @@ class AnnouncementsPreferencesClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/announcementsservice/list_announcements_preferences.py.html>`__ to see an example of how to use list_announcements_preferences API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/announcementsservice/list_announcements_preferences.py.html>`__ to see an example of how to use list_announcements_preferences API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['compartmentId']
@@ -452,7 +452,7 @@ class AnnouncementsPreferencesClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/announcementsservice/update_announcements_preference.py.html>`__ to see an example of how to use update_announcements_preference API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/announcementsservice/update_announcements_preference.py.html>`__ to see an example of how to use update_announcements_preference API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['preferenceId']

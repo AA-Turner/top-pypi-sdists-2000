@@ -156,7 +156,7 @@ class OpensearchClusterPipelineClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/opensearch/create_opensearch_cluster_pipeline.py.html>`__ to see an example of how to use create_opensearch_cluster_pipeline API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/opensearch/create_opensearch_cluster_pipeline.py.html>`__ to see an example of how to use create_opensearch_cluster_pipeline API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -252,7 +252,7 @@ class OpensearchClusterPipelineClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/opensearch/delete_opensearch_cluster_pipeline.py.html>`__ to see an example of how to use delete_opensearch_cluster_pipeline API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/opensearch/delete_opensearch_cluster_pipeline.py.html>`__ to see an example of how to use delete_opensearch_cluster_pipeline API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['opensearchClusterPipelineId']
@@ -348,7 +348,7 @@ class OpensearchClusterPipelineClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/opensearch/get_opensearch_cluster_pipeline.py.html>`__ to see an example of how to use get_opensearch_cluster_pipeline API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/opensearch/get_opensearch_cluster_pipeline.py.html>`__ to see an example of how to use get_opensearch_cluster_pipeline API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['opensearchClusterPipelineId']
@@ -474,7 +474,7 @@ class OpensearchClusterPipelineClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/opensearch/list_opensearch_cluster_pipelines.py.html>`__ to see an example of how to use list_opensearch_cluster_pipelines API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/opensearch/list_opensearch_cluster_pipelines.py.html>`__ to see an example of how to use list_opensearch_cluster_pipelines API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['compartmentId']
@@ -616,7 +616,7 @@ class OpensearchClusterPipelineClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/opensearch/update_opensearch_cluster_pipeline.py.html>`__ to see an example of how to use update_opensearch_cluster_pipeline API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/opensearch/update_opensearch_cluster_pipeline.py.html>`__ to see an example of how to use update_opensearch_cluster_pipeline API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['opensearchClusterPipelineId']

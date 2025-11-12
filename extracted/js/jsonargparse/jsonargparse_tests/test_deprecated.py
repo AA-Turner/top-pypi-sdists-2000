@@ -18,7 +18,7 @@ from jsonargparse import (
     ArgumentError,
     ArgumentParser,
     Namespace,
-    Path,
+    compose_dataclasses,
     get_config_read_mode,
     set_config_read_mode,
     set_docstring_parse_options,
@@ -33,8 +33,10 @@ from jsonargparse._deprecated import (
     LoggerProperty,
     ParserError,
     deprecation_warning,
+    dict_to_namespace,
     namespace_to_dict,
     shown_deprecation_warnings,
+    strip_meta,
     usage_and_exit_error_handler,
 )
 from jsonargparse._formatters import DefaultHelpFormatter
@@ -48,6 +50,7 @@ from jsonargparse._optionals import (
     url_support,
 )
 from jsonargparse._util import argument_error
+from jsonargparse.typing import Path
 from jsonargparse_tests.conftest import (
     get_parser_help,
     is_posix,
@@ -57,6 +60,7 @@ from jsonargparse_tests.conftest import (
 )
 from jsonargparse_tests.test_dataclasses import DataClassA
 from jsonargparse_tests.test_jsonnet import example_2_jsonnet
+from jsonargparse_tests.test_paths import paths  # noqa: F401
 
 
 @pytest.fixture(autouse=True)
@@ -457,29 +461,29 @@ def test_ActionPath(tmp_cwd):
     parser.add_argument("--files", nargs="+", action=ActionPath(mode="fr"))
 
     cfg = parser.parse_args(["--cfg", abs_yaml_file])
-    assert str(tmp_cwd) == os.path.realpath(cfg.dir(absolute=True))
-    assert abs_yaml_file == os.path.realpath(cfg.cfg[0](absolute=False))
-    assert abs_yaml_file == os.path.realpath(cfg.cfg[0](absolute=True))
-    assert rel_yaml_file == cfg.file(absolute=False)
-    assert abs_yaml_file == os.path.realpath(cfg.file(absolute=True))
+    assert str(tmp_cwd) == os.path.realpath(cfg.dir.absolute)
+    assert abs_yaml_file == os.path.realpath(cfg.cfg[0].relative)
+    assert abs_yaml_file == os.path.realpath(cfg.cfg[0].absolute)
+    assert rel_yaml_file == cfg.file.relative
+    assert abs_yaml_file == os.path.realpath(cfg.file.absolute)
     pytest.raises(ArgumentError, lambda: parser.parse_args(["--cfg", abs_yaml_file + "~"]))
 
     cfg = parser.parse_args(["--cfg", "file: " + abs_yaml_file + "\ndir: " + str(tmp_cwd) + "\n"])
-    assert str(tmp_cwd) == os.path.realpath(cfg.dir(absolute=True))
+    assert str(tmp_cwd) == os.path.realpath(cfg.dir.absolute)
     assert cfg.cfg[0] is None
-    assert abs_yaml_file == os.path.realpath(cfg.file(absolute=True))
+    assert abs_yaml_file == os.path.realpath(cfg.file.absolute)
     pytest.raises(ArgumentError, lambda: parser.parse_args(["--cfg", '{"k":"v"}']))
 
     cfg = parser.parse_args(["--file", abs_yaml_file, "--dir", str(tmp_cwd)])
-    assert str(tmp_cwd) == os.path.realpath(cfg.dir(absolute=True))
-    assert abs_yaml_file == os.path.realpath(cfg.file(absolute=True))
+    assert str(tmp_cwd) == os.path.realpath(cfg.dir.absolute)
+    assert abs_yaml_file == os.path.realpath(cfg.file.absolute)
     pytest.raises(ArgumentError, lambda: parser.parse_args(["--dir", abs_yaml_file]))
     pytest.raises(ArgumentError, lambda: parser.parse_args(["--file", str(tmp_cwd)]))
 
     cfg = parser.parse_args(["--files", abs_yaml_file, abs_yaml_file])
     assert isinstance(cfg.files, list)
     assert 2 == len(cfg.files)
-    assert abs_yaml_file == os.path.realpath(cfg.files[-1](absolute=True))
+    assert abs_yaml_file == os.path.realpath(cfg.files[-1].absolute)
 
     pytest.raises(TypeError, lambda: parser.add_argument("--op1", action=ActionPath))
     pytest.raises(
@@ -543,6 +547,19 @@ def test_Path_attr_set(tmp_cwd):
         assert path.abs_path == os.path.join(tmp_cwd, "file")
         assert path.skip_check is False
         assert "Path objects are not meant to be mutable" in str(w[-1].message)
+
+
+def test_path_call(paths):  # noqa: F811
+    path = Path(paths.file_rw, "frw")
+    with catch_warnings(record=True) as w:
+        assert path(False) == str(paths.file_rw)
+    assert_deprecation_warn(
+        w,
+        message="Calling Path objects is deprecated",
+        code="assert path(False) == ",
+    )
+    assert path(True) == str(paths.tmp_path / paths.file_rw)
+    assert path() == str(paths.tmp_path / paths.file_rw)
 
 
 def test_ActionPathList(tmp_cwd):
@@ -666,7 +683,6 @@ def test_import_from_deprecated():
         ("link_arguments", "ArgumentLinking"),
         ("loaders_dumpers", "set_loader"),
         ("namespace", "Namespace"),
-        ("signatures", "compose_dataclasses"),
         ("typehints", "lazy_instance"),
         ("util", "Path"),
         ("parameter_resolvers", "ParamData"),
@@ -726,6 +742,19 @@ def test_add_dataclass_arguments(parser, subtests):
             assert "CustomA title:" in help_str
 
 
+def test_dict_to_namespace():
+    ns1 = Namespace(a=1, b=Namespace(c=2), d=[Namespace(e=3)])
+    dic = {"a": 1, "b": {"c": 2}, "d": [{"e": 3}]}
+    with catch_warnings(record=True) as w:
+        ns2 = dict_to_namespace(dic)
+    assert ns1 == ns2
+    assert_deprecation_warn(
+        w,
+        message="dict_to_namespace was deprecated",
+        code="ns2 = dict_to_namespace(dic)",
+    )
+
+
 def test_namespace_to_dict():
     ns = Namespace()
     ns["w"] = 1
@@ -741,6 +770,20 @@ def test_namespace_to_dict():
         message="namespace_to_dict was deprecated",
         code="dic1 = namespace_to_dict(ns)",
     )
+
+
+def test_strip_meta():
+    ns = Namespace(x=1, __path__="path")
+    with catch_warnings(record=True) as w:
+        result = strip_meta(ns)
+    assert result == Namespace(x=1)
+    assert_deprecation_warn(
+        w,
+        message="strip_meta was deprecated",
+        code="result = strip_meta(ns)",
+    )
+    result = strip_meta(ns.as_dict())
+    assert result == {"x": 1}
 
 
 @pytest.mark.skipif(not ruamel_support, reason="ruamel.yaml package is required")
@@ -773,3 +816,28 @@ def test_DefaultHelpFormatter_yaml_comments(parser):
         formatter.set_yaml_argument_comment("arg", cfg, "arg", 0)
     assert "set_yaml_argument_comment method is deprecated and will be removed in v5.0.0" in str(w[-1].message)
     assert "formatter.set_yaml_argument_comment(" in source[w[-1].lineno - 1]
+
+
+@dataclasses.dataclass
+class ComposeA:
+    a: int = 1
+
+    def __post_init__(self):
+        self.a += 1
+
+
+@dataclasses.dataclass
+class ComposeB:
+    b: str = "1"
+
+
+def test_compose_dataclasses():
+    with catch_warnings(record=True) as w:
+        ComposeAB = compose_dataclasses(ComposeA, ComposeB)
+    assert_deprecation_warn(
+        w,
+        message="compose_dataclasses is deprecated",
+        code="ComposeAB = compose_dataclasses(ComposeA, ComposeB)",
+    )
+    assert 2 == len(dataclasses.fields(ComposeAB))
+    assert {"a": 3, "b": "2"} == dataclasses.asdict(ComposeAB(a=2, b="2"))  # pylint: disable=unexpected-keyword-arg

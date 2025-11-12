@@ -165,7 +165,7 @@ class FleetAppsManagementOperationsClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/fleetappsmanagement/change_patch_compartment.py.html>`__ to see an example of how to use change_patch_compartment API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/fleetappsmanagement/change_patch_compartment.py.html>`__ to see an example of how to use change_patch_compartment API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['patchId']
@@ -275,7 +275,7 @@ class FleetAppsManagementOperationsClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/fleetappsmanagement/create_patch.py.html>`__ to see an example of how to use create_patch API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/fleetappsmanagement/create_patch.py.html>`__ to see an example of how to use create_patch API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -373,7 +373,7 @@ class FleetAppsManagementOperationsClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/fleetappsmanagement/create_scheduler_definition.py.html>`__ to see an example of how to use create_scheduler_definition API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/fleetappsmanagement/create_scheduler_definition.py.html>`__ to see an example of how to use create_scheduler_definition API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -471,7 +471,7 @@ class FleetAppsManagementOperationsClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/fleetappsmanagement/delete_patch.py.html>`__ to see an example of how to use delete_patch API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/fleetappsmanagement/delete_patch.py.html>`__ to see an example of how to use delete_patch API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['patchId']
@@ -576,7 +576,7 @@ class FleetAppsManagementOperationsClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/fleetappsmanagement/delete_scheduler_definition.py.html>`__ to see an example of how to use delete_scheduler_definition API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/fleetappsmanagement/delete_scheduler_definition.py.html>`__ to see an example of how to use delete_scheduler_definition API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['schedulerDefinitionId']
@@ -681,7 +681,7 @@ class FleetAppsManagementOperationsClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/fleetappsmanagement/delete_scheduler_job.py.html>`__ to see an example of how to use delete_scheduler_job API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/fleetappsmanagement/delete_scheduler_job.py.html>`__ to see an example of how to use delete_scheduler_job API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['schedulerJobId']
@@ -793,7 +793,7 @@ class FleetAppsManagementOperationsClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/fleetappsmanagement/export_compliance_report.py.html>`__ to see an example of how to use export_compliance_report API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/fleetappsmanagement/export_compliance_report.py.html>`__ to see an example of how to use export_compliance_report API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -895,7 +895,7 @@ class FleetAppsManagementOperationsClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/fleetappsmanagement/get_execution.py.html>`__ to see an example of how to use get_execution API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/fleetappsmanagement/get_execution.py.html>`__ to see an example of how to use get_execution API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['schedulerJobId', 'jobActivityId', 'resourceId', 'executionId']
@@ -980,6 +980,9 @@ class FleetAppsManagementOperationsClient(object):
         :param str job_activity_id: (required)
             unique jobActivity identifier
 
+        :param bool is_details_required: (optional)
+            If set to true, inventory details will be returned.
+
         :param str opc_request_id: (optional)
             The client request ID for tracing.
 
@@ -999,7 +1002,7 @@ class FleetAppsManagementOperationsClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/fleetappsmanagement/get_job_activity.py.html>`__ to see an example of how to use get_job_activity API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/fleetappsmanagement/get_job_activity.py.html>`__ to see an example of how to use get_job_activity API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['schedulerJobId', 'jobActivityId']
@@ -1012,6 +1015,7 @@ class FleetAppsManagementOperationsClient(object):
         expected_kwargs = [
             "allow_control_chars",
             "retry_strategy",
+            "is_details_required",
             "opc_request_id"
         ]
         extra_kwargs = [_key for _key in six.iterkeys(kwargs) if _key not in expected_kwargs]
@@ -1029,6 +1033,11 @@ class FleetAppsManagementOperationsClient(object):
         for (k, v) in six.iteritems(path_params):
             if v is None or (isinstance(v, six.string_types) and len(v.strip()) == 0):
                 raise ValueError(f'Parameter {k} cannot be None, whitespace or empty string')
+
+        query_params = {
+            "isDetailsRequired": kwargs.get("is_details_required", missing)
+        }
+        query_params = {k: v for (k, v) in six.iteritems(query_params) if v is not missing and v is not None}
 
         header_params = {
             "accept": "application/json",
@@ -1053,6 +1062,7 @@ class FleetAppsManagementOperationsClient(object):
                 resource_path=resource_path,
                 method=method,
                 path_params=path_params,
+                query_params=query_params,
                 header_params=header_params,
                 response_type="JobActivity",
                 allow_control_chars=kwargs.get('allow_control_chars'),
@@ -1064,6 +1074,7 @@ class FleetAppsManagementOperationsClient(object):
                 resource_path=resource_path,
                 method=method,
                 path_params=path_params,
+                query_params=query_params,
                 header_params=header_params,
                 response_type="JobActivity",
                 allow_control_chars=kwargs.get('allow_control_chars'),
@@ -1098,7 +1109,7 @@ class FleetAppsManagementOperationsClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/fleetappsmanagement/get_patch.py.html>`__ to see an example of how to use get_patch API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/fleetappsmanagement/get_patch.py.html>`__ to see an example of how to use get_patch API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['patchId']
@@ -1196,7 +1207,7 @@ class FleetAppsManagementOperationsClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/fleetappsmanagement/get_scheduler_definition.py.html>`__ to see an example of how to use get_scheduler_definition API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/fleetappsmanagement/get_scheduler_definition.py.html>`__ to see an example of how to use get_scheduler_definition API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['schedulerDefinitionId']
@@ -1294,7 +1305,7 @@ class FleetAppsManagementOperationsClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/fleetappsmanagement/get_scheduler_job.py.html>`__ to see an example of how to use get_scheduler_job API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/fleetappsmanagement/get_scheduler_job.py.html>`__ to see an example of how to use get_scheduler_job API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['schedulerJobId']
@@ -1430,7 +1441,7 @@ class FleetAppsManagementOperationsClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/fleetappsmanagement/list_compliance_records.py.html>`__ to see an example of how to use list_compliance_records API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/fleetappsmanagement/list_compliance_records.py.html>`__ to see an example of how to use list_compliance_records API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['compartmentId']
@@ -1593,7 +1604,7 @@ class FleetAppsManagementOperationsClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/fleetappsmanagement/list_executions.py.html>`__ to see an example of how to use list_executions API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/fleetappsmanagement/list_executions.py.html>`__ to see an example of how to use list_executions API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['schedulerJobId', 'jobActivityId', 'resourceId']
@@ -1702,6 +1713,172 @@ class FleetAppsManagementOperationsClient(object):
                 api_reference_link=api_reference_link,
                 required_arguments=required_arguments)
 
+    def list_installed_patches(self, compartment_id, **kwargs):
+        """
+        Gets a list of installed patches.
+        CompartmentId should be the compartmentId of resource(Containing the target).
+
+
+        :param str compartment_id: (required)
+            The ID of the compartment in which to list resources.
+
+        :param str target_id: (optional)
+            Target Id.
+
+        :param str target_name: (optional)
+            Target name.
+
+        :param str severity: (optional)
+            Patch severity.
+
+            Allowed values are: "CRITICAL", "HIGH", "MEDIUM", "LOW"
+
+        :param str patch_level: (optional)
+            Patch level.
+
+        :param str patch_type: (optional)
+            Patch Type.
+
+        :param int limit: (optional)
+            The maximum number of items to return.
+
+        :param str page: (optional)
+            A token representing the position at which to start retrieving results. This must come from the `opc-next-page` header field of a previous response.
+
+        :param str sort_order: (optional)
+            The sort order to use, either 'ASC' or 'DESC'.
+
+            Allowed values are: "ASC", "DESC"
+
+        :param str opc_request_id: (optional)
+            The client request ID for tracing.
+
+        :param str sort_by: (optional)
+            The field to sort by. Only one sort order may be provided.
+
+            Allowed values are: "patchName"
+
+        :param obj retry_strategy: (optional)
+            A retry strategy to apply to this specific operation/call. This will override any retry strategy set at the client-level.
+
+            This should be one of the strategies available in the :py:mod:`~oci.retry` module. This operation uses :py:data:`~oci.retry.DEFAULT_RETRY_STRATEGY` as default if no retry strategy is provided.
+            The specifics of the default retry strategy are described `here <https://docs.oracle.com/en-us/iaas/tools/python/latest/sdk_behaviors/retries.html>`__.
+
+            To have this operation explicitly not perform any retries, pass an instance of :py:class:`~oci.retry.NoneRetryStrategy`.
+
+        :param bool allow_control_chars: (optional)
+            allow_control_chars is a boolean to indicate whether or not this request should allow control characters in the response object.
+            By default, the response will not allow control characters in strings
+
+        :return: A :class:`~oci.response.Response` object with data of type :class:`~oci.fleet_apps_management.models.InstalledPatchCollection`
+        :rtype: :class:`~oci.response.Response`
+
+        :example:
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/fleetappsmanagement/list_installed_patches.py.html>`__ to see an example of how to use list_installed_patches API.
+        """
+        # Required path and query arguments. These are in camelCase to replace values in service endpoints.
+        required_arguments = ['compartmentId']
+        resource_path = "/installedPatches"
+        method = "GET"
+        operation_name = "list_installed_patches"
+        api_reference_link = "https://docs.oracle.com/iaas/api/#/en/fleet-management/20250228/InstalledPatchCollection/ListInstalledPatches"
+
+        # Don't accept unknown kwargs
+        expected_kwargs = [
+            "allow_control_chars",
+            "retry_strategy",
+            "target_id",
+            "target_name",
+            "severity",
+            "patch_level",
+            "patch_type",
+            "limit",
+            "page",
+            "sort_order",
+            "opc_request_id",
+            "sort_by"
+        ]
+        extra_kwargs = [_key for _key in six.iterkeys(kwargs) if _key not in expected_kwargs]
+        if extra_kwargs:
+            raise ValueError(
+                f"list_installed_patches got unknown kwargs: {extra_kwargs!r}")
+
+        if 'severity' in kwargs:
+            severity_allowed_values = ["CRITICAL", "HIGH", "MEDIUM", "LOW"]
+            if kwargs['severity'] not in severity_allowed_values:
+                raise ValueError(
+                    f"Invalid value for `severity`, must be one of { severity_allowed_values }"
+                )
+
+        if 'sort_order' in kwargs:
+            sort_order_allowed_values = ["ASC", "DESC"]
+            if kwargs['sort_order'] not in sort_order_allowed_values:
+                raise ValueError(
+                    f"Invalid value for `sort_order`, must be one of { sort_order_allowed_values }"
+                )
+
+        if 'sort_by' in kwargs:
+            sort_by_allowed_values = ["patchName"]
+            if kwargs['sort_by'] not in sort_by_allowed_values:
+                raise ValueError(
+                    f"Invalid value for `sort_by`, must be one of { sort_by_allowed_values }"
+                )
+
+        query_params = {
+            "compartmentId": compartment_id,
+            "targetId": kwargs.get("target_id", missing),
+            "targetName": kwargs.get("target_name", missing),
+            "severity": kwargs.get("severity", missing),
+            "patchLevel": kwargs.get("patch_level", missing),
+            "patchType": kwargs.get("patch_type", missing),
+            "limit": kwargs.get("limit", missing),
+            "page": kwargs.get("page", missing),
+            "sortOrder": kwargs.get("sort_order", missing),
+            "sortBy": kwargs.get("sort_by", missing)
+        }
+        query_params = {k: v for (k, v) in six.iteritems(query_params) if v is not missing and v is not None}
+
+        header_params = {
+            "accept": "application/json",
+            "content-type": "application/json",
+            "opc-request-id": kwargs.get("opc_request_id", missing)
+        }
+        header_params = {k: v for (k, v) in six.iteritems(header_params) if v is not missing and v is not None}
+
+        retry_strategy = self.base_client.get_preferred_retry_strategy(
+            operation_retry_strategy=kwargs.get('retry_strategy'),
+            client_retry_strategy=self.retry_strategy
+        )
+        if retry_strategy is None:
+            retry_strategy = retry.DEFAULT_RETRY_STRATEGY
+
+        if retry_strategy:
+            if not isinstance(retry_strategy, retry.NoneRetryStrategy):
+                self.base_client.add_opc_client_retries_header(header_params)
+                retry_strategy.add_circuit_breaker_callback(self.circuit_breaker_callback)
+            return retry_strategy.make_retrying_call(
+                self.base_client.call_api,
+                resource_path=resource_path,
+                method=method,
+                query_params=query_params,
+                header_params=header_params,
+                response_type="InstalledPatchCollection",
+                allow_control_chars=kwargs.get('allow_control_chars'),
+                operation_name=operation_name,
+                api_reference_link=api_reference_link,
+                required_arguments=required_arguments)
+        else:
+            return self.base_client.call_api(
+                resource_path=resource_path,
+                method=method,
+                query_params=query_params,
+                header_params=header_params,
+                response_type="InstalledPatchCollection",
+                allow_control_chars=kwargs.get('allow_control_chars'),
+                operation_name=operation_name,
+                api_reference_link=api_reference_link,
+                required_arguments=required_arguments)
+
     def list_inventory_records(self, compartment_id, **kwargs):
         """
         Gets a list of inventoryDetails.
@@ -1734,6 +1911,9 @@ class FleetAppsManagementOperationsClient(object):
         :param str opc_request_id: (optional)
             The client request ID for tracing.
 
+        :param bool is_details_required: (optional)
+            If set to true, inventory details will be returned.
+
         :param str sort_by: (optional)
             The field to sort by. Only one sort order may be provided.
 
@@ -1755,7 +1935,7 @@ class FleetAppsManagementOperationsClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/fleetappsmanagement/list_inventory_records.py.html>`__ to see an example of how to use list_inventory_records API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/fleetappsmanagement/list_inventory_records.py.html>`__ to see an example of how to use list_inventory_records API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['compartmentId']
@@ -1775,6 +1955,7 @@ class FleetAppsManagementOperationsClient(object):
             "page",
             "sort_order",
             "opc_request_id",
+            "is_details_required",
             "sort_by"
         ]
         extra_kwargs = [_key for _key in six.iterkeys(kwargs) if _key not in expected_kwargs]
@@ -1804,6 +1985,7 @@ class FleetAppsManagementOperationsClient(object):
             "limit": kwargs.get("limit", missing),
             "page": kwargs.get("page", missing),
             "sortOrder": kwargs.get("sort_order", missing),
+            "isDetailsRequired": kwargs.get("is_details_required", missing),
             "sortBy": kwargs.get("sort_by", missing)
         }
         query_params = {k: v for (k, v) in six.iteritems(query_params) if v is not missing and v is not None}
@@ -1929,7 +2111,7 @@ class FleetAppsManagementOperationsClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/fleetappsmanagement/list_patches.py.html>`__ to see an example of how to use list_patches API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/fleetappsmanagement/list_patches.py.html>`__ to see an example of how to use list_patches API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -2052,6 +2234,321 @@ class FleetAppsManagementOperationsClient(object):
                 api_reference_link=api_reference_link,
                 required_arguments=required_arguments)
 
+    def list_recommended_patches(self, compartment_id, **kwargs):
+        """
+        Gets a list of recommended patches.
+
+
+        :param str compartment_id: (required)
+            The ID of the compartment in which to list resources.
+
+        :param str target_id: (optional)
+            Target identifier.
+
+        :param str target_name: (optional)
+            Unique target name
+
+        :param str patch_level: (optional)
+            Patch level.
+
+            Allowed values are: "LATEST", "LATEST_MINUS_ONE", "LATEST_MINUS_TWO"
+
+        :param str severity: (optional)
+            Patch severity.
+
+            Allowed values are: "CRITICAL", "HIGH", "MEDIUM", "LOW"
+
+        :param str patch_type: (optional)
+            Patch Type.
+
+        :param str patch_id: (optional)
+            Patch identifier.
+
+        :param int limit: (optional)
+            The maximum number of items to return.
+
+        :param str page: (optional)
+            A token representing the position at which to start retrieving results. This must come from the `opc-next-page` header field of a previous response.
+
+        :param str sort_order: (optional)
+            The sort order to use, either 'ASC' or 'DESC'.
+
+            Allowed values are: "ASC", "DESC"
+
+        :param str opc_request_id: (optional)
+            The client request ID for tracing.
+
+        :param str sort_by: (optional)
+            The field to sort by. Only one sort order may be provided.
+
+            Allowed values are: "patchName"
+
+        :param obj retry_strategy: (optional)
+            A retry strategy to apply to this specific operation/call. This will override any retry strategy set at the client-level.
+
+            This should be one of the strategies available in the :py:mod:`~oci.retry` module. This operation uses :py:data:`~oci.retry.DEFAULT_RETRY_STRATEGY` as default if no retry strategy is provided.
+            The specifics of the default retry strategy are described `here <https://docs.oracle.com/en-us/iaas/tools/python/latest/sdk_behaviors/retries.html>`__.
+
+            To have this operation explicitly not perform any retries, pass an instance of :py:class:`~oci.retry.NoneRetryStrategy`.
+
+        :param bool allow_control_chars: (optional)
+            allow_control_chars is a boolean to indicate whether or not this request should allow control characters in the response object.
+            By default, the response will not allow control characters in strings
+
+        :return: A :class:`~oci.response.Response` object with data of type :class:`~oci.fleet_apps_management.models.RecommendedPatchCollection`
+        :rtype: :class:`~oci.response.Response`
+
+        :example:
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/fleetappsmanagement/list_recommended_patches.py.html>`__ to see an example of how to use list_recommended_patches API.
+        """
+        # Required path and query arguments. These are in camelCase to replace values in service endpoints.
+        required_arguments = ['compartmentId']
+        resource_path = "/recommendedPatches"
+        method = "GET"
+        operation_name = "list_recommended_patches"
+        api_reference_link = "https://docs.oracle.com/iaas/api/#/en/fleet-management/20250228/RecommendedPatchCollection/ListRecommendedPatches"
+
+        # Don't accept unknown kwargs
+        expected_kwargs = [
+            "allow_control_chars",
+            "retry_strategy",
+            "target_id",
+            "target_name",
+            "patch_level",
+            "severity",
+            "patch_type",
+            "patch_id",
+            "limit",
+            "page",
+            "sort_order",
+            "opc_request_id",
+            "sort_by"
+        ]
+        extra_kwargs = [_key for _key in six.iterkeys(kwargs) if _key not in expected_kwargs]
+        if extra_kwargs:
+            raise ValueError(
+                f"list_recommended_patches got unknown kwargs: {extra_kwargs!r}")
+
+        if 'patch_level' in kwargs:
+            patch_level_allowed_values = ["LATEST", "LATEST_MINUS_ONE", "LATEST_MINUS_TWO"]
+            if kwargs['patch_level'] not in patch_level_allowed_values:
+                raise ValueError(
+                    f"Invalid value for `patch_level`, must be one of { patch_level_allowed_values }"
+                )
+
+        if 'severity' in kwargs:
+            severity_allowed_values = ["CRITICAL", "HIGH", "MEDIUM", "LOW"]
+            if kwargs['severity'] not in severity_allowed_values:
+                raise ValueError(
+                    f"Invalid value for `severity`, must be one of { severity_allowed_values }"
+                )
+
+        if 'sort_order' in kwargs:
+            sort_order_allowed_values = ["ASC", "DESC"]
+            if kwargs['sort_order'] not in sort_order_allowed_values:
+                raise ValueError(
+                    f"Invalid value for `sort_order`, must be one of { sort_order_allowed_values }"
+                )
+
+        if 'sort_by' in kwargs:
+            sort_by_allowed_values = ["patchName"]
+            if kwargs['sort_by'] not in sort_by_allowed_values:
+                raise ValueError(
+                    f"Invalid value for `sort_by`, must be one of { sort_by_allowed_values }"
+                )
+
+        query_params = {
+            "compartmentId": compartment_id,
+            "targetId": kwargs.get("target_id", missing),
+            "targetName": kwargs.get("target_name", missing),
+            "patchLevel": kwargs.get("patch_level", missing),
+            "severity": kwargs.get("severity", missing),
+            "patchType": kwargs.get("patch_type", missing),
+            "patchId": kwargs.get("patch_id", missing),
+            "limit": kwargs.get("limit", missing),
+            "page": kwargs.get("page", missing),
+            "sortOrder": kwargs.get("sort_order", missing),
+            "sortBy": kwargs.get("sort_by", missing)
+        }
+        query_params = {k: v for (k, v) in six.iteritems(query_params) if v is not missing and v is not None}
+
+        header_params = {
+            "accept": "application/json",
+            "content-type": "application/json",
+            "opc-request-id": kwargs.get("opc_request_id", missing)
+        }
+        header_params = {k: v for (k, v) in six.iteritems(header_params) if v is not missing and v is not None}
+
+        retry_strategy = self.base_client.get_preferred_retry_strategy(
+            operation_retry_strategy=kwargs.get('retry_strategy'),
+            client_retry_strategy=self.retry_strategy
+        )
+        if retry_strategy is None:
+            retry_strategy = retry.DEFAULT_RETRY_STRATEGY
+
+        if retry_strategy:
+            if not isinstance(retry_strategy, retry.NoneRetryStrategy):
+                self.base_client.add_opc_client_retries_header(header_params)
+                retry_strategy.add_circuit_breaker_callback(self.circuit_breaker_callback)
+            return retry_strategy.make_retrying_call(
+                self.base_client.call_api,
+                resource_path=resource_path,
+                method=method,
+                query_params=query_params,
+                header_params=header_params,
+                response_type="RecommendedPatchCollection",
+                allow_control_chars=kwargs.get('allow_control_chars'),
+                operation_name=operation_name,
+                api_reference_link=api_reference_link,
+                required_arguments=required_arguments)
+        else:
+            return self.base_client.call_api(
+                resource_path=resource_path,
+                method=method,
+                query_params=query_params,
+                header_params=header_params,
+                response_type="RecommendedPatchCollection",
+                allow_control_chars=kwargs.get('allow_control_chars'),
+                operation_name=operation_name,
+                api_reference_link=api_reference_link,
+                required_arguments=required_arguments)
+
+    def list_report_metadata(self, compartment_id, **kwargs):
+        """
+        Returns a list of all the report metadata.
+
+
+        :param str compartment_id: (required)
+            The ID of the compartment in which to list resources.
+
+        :param str opc_request_id: (optional)
+            The client request ID for tracing.
+
+        :param str report_name: (optional)
+            A filter to return data for given report name.
+
+        :param int limit: (optional)
+            The maximum number of items to return.
+
+        :param str page: (optional)
+            A token representing the position at which to start retrieving results. This must come from the `opc-next-page` header field of a previous response.
+
+        :param str sort_order: (optional)
+            The sort order to use, either 'ASC' or 'DESC'.
+
+            Allowed values are: "ASC", "DESC"
+
+        :param str sort_by: (optional)
+            The field to sort by. Only one sort order may be provided. Default order for timeCreated is descending. Default order for displayName is ascending.
+
+            Allowed values are: "timeCreated", "displayName"
+
+        :param obj retry_strategy: (optional)
+            A retry strategy to apply to this specific operation/call. This will override any retry strategy set at the client-level.
+
+            This should be one of the strategies available in the :py:mod:`~oci.retry` module. This operation uses :py:data:`~oci.retry.DEFAULT_RETRY_STRATEGY` as default if no retry strategy is provided.
+            The specifics of the default retry strategy are described `here <https://docs.oracle.com/en-us/iaas/tools/python/latest/sdk_behaviors/retries.html>`__.
+
+            To have this operation explicitly not perform any retries, pass an instance of :py:class:`~oci.retry.NoneRetryStrategy`.
+
+        :param bool allow_control_chars: (optional)
+            allow_control_chars is a boolean to indicate whether or not this request should allow control characters in the response object.
+            By default, the response will not allow control characters in strings
+
+        :return: A :class:`~oci.response.Response` object with data of type :class:`~oci.fleet_apps_management.models.ReportMetadataCollection`
+        :rtype: :class:`~oci.response.Response`
+
+        :example:
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/fleetappsmanagement/list_report_metadata.py.html>`__ to see an example of how to use list_report_metadata API.
+        """
+        # Required path and query arguments. These are in camelCase to replace values in service endpoints.
+        required_arguments = ['compartmentId']
+        resource_path = "/reports/metadata"
+        method = "GET"
+        operation_name = "list_report_metadata"
+        api_reference_link = "https://docs.oracle.com/iaas/api/#/en/fleet-management/20250228/ReportMetadataCollection/ListReportMetadata"
+
+        # Don't accept unknown kwargs
+        expected_kwargs = [
+            "allow_control_chars",
+            "retry_strategy",
+            "opc_request_id",
+            "report_name",
+            "limit",
+            "page",
+            "sort_order",
+            "sort_by"
+        ]
+        extra_kwargs = [_key for _key in six.iterkeys(kwargs) if _key not in expected_kwargs]
+        if extra_kwargs:
+            raise ValueError(
+                f"list_report_metadata got unknown kwargs: {extra_kwargs!r}")
+
+        if 'sort_order' in kwargs:
+            sort_order_allowed_values = ["ASC", "DESC"]
+            if kwargs['sort_order'] not in sort_order_allowed_values:
+                raise ValueError(
+                    f"Invalid value for `sort_order`, must be one of { sort_order_allowed_values }"
+                )
+
+        if 'sort_by' in kwargs:
+            sort_by_allowed_values = ["timeCreated", "displayName"]
+            if kwargs['sort_by'] not in sort_by_allowed_values:
+                raise ValueError(
+                    f"Invalid value for `sort_by`, must be one of { sort_by_allowed_values }"
+                )
+
+        query_params = {
+            "compartmentId": compartment_id,
+            "reportName": kwargs.get("report_name", missing),
+            "limit": kwargs.get("limit", missing),
+            "page": kwargs.get("page", missing),
+            "sortOrder": kwargs.get("sort_order", missing),
+            "sortBy": kwargs.get("sort_by", missing)
+        }
+        query_params = {k: v for (k, v) in six.iteritems(query_params) if v is not missing and v is not None}
+
+        header_params = {
+            "accept": "application/json",
+            "content-type": "application/json",
+            "opc-request-id": kwargs.get("opc_request_id", missing)
+        }
+        header_params = {k: v for (k, v) in six.iteritems(header_params) if v is not missing and v is not None}
+
+        retry_strategy = self.base_client.get_preferred_retry_strategy(
+            operation_retry_strategy=kwargs.get('retry_strategy'),
+            client_retry_strategy=self.retry_strategy
+        )
+        if retry_strategy is None:
+            retry_strategy = retry.DEFAULT_RETRY_STRATEGY
+
+        if retry_strategy:
+            if not isinstance(retry_strategy, retry.NoneRetryStrategy):
+                self.base_client.add_opc_client_retries_header(header_params)
+                retry_strategy.add_circuit_breaker_callback(self.circuit_breaker_callback)
+            return retry_strategy.make_retrying_call(
+                self.base_client.call_api,
+                resource_path=resource_path,
+                method=method,
+                query_params=query_params,
+                header_params=header_params,
+                response_type="ReportMetadataCollection",
+                allow_control_chars=kwargs.get('allow_control_chars'),
+                operation_name=operation_name,
+                api_reference_link=api_reference_link,
+                required_arguments=required_arguments)
+        else:
+            return self.base_client.call_api(
+                resource_path=resource_path,
+                method=method,
+                query_params=query_params,
+                header_params=header_params,
+                response_type="ReportMetadataCollection",
+                allow_control_chars=kwargs.get('allow_control_chars'),
+                operation_name=operation_name,
+                api_reference_link=api_reference_link,
+                required_arguments=required_arguments)
+
     def list_resources(self, scheduler_job_id, job_activity_id, **kwargs):
         """
         Returns a list of resources for an Activity Execution.
@@ -2110,7 +2607,7 @@ class FleetAppsManagementOperationsClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/fleetappsmanagement/list_resources.py.html>`__ to see an example of how to use list_resources API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/fleetappsmanagement/list_resources.py.html>`__ to see an example of how to use list_resources API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['schedulerJobId', 'jobActivityId']
@@ -2264,7 +2761,7 @@ class FleetAppsManagementOperationsClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/fleetappsmanagement/list_scheduled_fleets.py.html>`__ to see an example of how to use list_scheduled_fleets API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/fleetappsmanagement/list_scheduled_fleets.py.html>`__ to see an example of how to use list_scheduled_fleets API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['schedulerDefinitionId']
@@ -2443,7 +2940,7 @@ class FleetAppsManagementOperationsClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/fleetappsmanagement/list_scheduler_definitions.py.html>`__ to see an example of how to use list_scheduler_definitions API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/fleetappsmanagement/list_scheduler_definitions.py.html>`__ to see an example of how to use list_scheduler_definitions API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -2561,7 +3058,7 @@ class FleetAppsManagementOperationsClient(object):
 
     def list_scheduler_executions(self, **kwargs):
         """
-        Returns a list of all Fleets that are scheduled.
+        Returns a list of all executions that are scheduled.
 
 
         :param str compartment_id: (optional)
@@ -2594,6 +3091,13 @@ class FleetAppsManagementOperationsClient(object):
 
         :param str substate: (optional)
             A filter to return only resources their subState matches the given subState.
+
+        :param str lifecycle_operation: (optional)
+            A filter to return only resources their lifecycleOperation matches the given lifecycleOperation.
+
+        :param bool compartment_id_in_subtree: (optional)
+            If set to true, resources will be returned for not only the provided compartment, but all compartments which
+            descend from it. Which resources are returned and their field contents depends on the value of accessLevel.
 
         :param int limit: (optional)
             The maximum number of items to return.
@@ -2630,7 +3134,7 @@ class FleetAppsManagementOperationsClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/fleetappsmanagement/list_scheduler_executions.py.html>`__ to see an example of how to use list_scheduler_executions API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/fleetappsmanagement/list_scheduler_executions.py.html>`__ to see an example of how to use list_scheduler_executions API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -2653,6 +3157,8 @@ class FleetAppsManagementOperationsClient(object):
             "runbook_id",
             "runbook_version_name",
             "substate",
+            "lifecycle_operation",
+            "compartment_id_in_subtree",
             "limit",
             "page",
             "sort_order",
@@ -2689,6 +3195,8 @@ class FleetAppsManagementOperationsClient(object):
             "runbookId": kwargs.get("runbook_id", missing),
             "runbookVersionName": kwargs.get("runbook_version_name", missing),
             "substate": kwargs.get("substate", missing),
+            "lifecycleOperation": kwargs.get("lifecycle_operation", missing),
+            "compartmentIdInSubtree": kwargs.get("compartment_id_in_subtree", missing),
             "limit": kwargs.get("limit", missing),
             "page": kwargs.get("page", missing),
             "sortOrder": kwargs.get("sort_order", missing),
@@ -2816,7 +3324,7 @@ class FleetAppsManagementOperationsClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/fleetappsmanagement/list_scheduler_jobs.py.html>`__ to see an example of how to use list_scheduler_jobs API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/fleetappsmanagement/list_scheduler_jobs.py.html>`__ to see an example of how to use list_scheduler_jobs API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -2990,7 +3498,7 @@ class FleetAppsManagementOperationsClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/fleetappsmanagement/list_steps.py.html>`__ to see an example of how to use list_steps API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/fleetappsmanagement/list_steps.py.html>`__ to see an example of how to use list_steps API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['schedulerJobId', 'jobActivityId']
@@ -3098,6 +3606,321 @@ class FleetAppsManagementOperationsClient(object):
                 api_reference_link=api_reference_link,
                 required_arguments=required_arguments)
 
+    def list_target_components(self, compartment_id, **kwargs):
+        """
+        Gets a list of target component.
+
+
+        :param str compartment_id: (required)
+            The ID of the compartment in which to list resources.
+
+        :param str target_id: (optional)
+            Target Id.
+
+        :param str target_name: (optional)
+            Target name.
+
+        :param str severity: (optional)
+            Patch severity.
+
+            Allowed values are: "CRITICAL", "HIGH", "MEDIUM", "LOW"
+
+        :param str name: (optional)
+            Target Component Name.
+
+        :param int limit: (optional)
+            The maximum number of items to return.
+
+        :param str page: (optional)
+            A token representing the position at which to start retrieving results. This must come from the `opc-next-page` header field of a previous response.
+
+        :param str sort_order: (optional)
+            The sort order to use, either 'ASC' or 'DESC'.
+
+            Allowed values are: "ASC", "DESC"
+
+        :param str opc_request_id: (optional)
+            The client request ID for tracing.
+
+        :param str sort_by: (optional)
+            The field to sort by. Only one sort order may be provided.
+
+            Allowed values are: "componentName"
+
+        :param obj retry_strategy: (optional)
+            A retry strategy to apply to this specific operation/call. This will override any retry strategy set at the client-level.
+
+            This should be one of the strategies available in the :py:mod:`~oci.retry` module. This operation uses :py:data:`~oci.retry.DEFAULT_RETRY_STRATEGY` as default if no retry strategy is provided.
+            The specifics of the default retry strategy are described `here <https://docs.oracle.com/en-us/iaas/tools/python/latest/sdk_behaviors/retries.html>`__.
+
+            To have this operation explicitly not perform any retries, pass an instance of :py:class:`~oci.retry.NoneRetryStrategy`.
+
+        :param bool allow_control_chars: (optional)
+            allow_control_chars is a boolean to indicate whether or not this request should allow control characters in the response object.
+            By default, the response will not allow control characters in strings
+
+        :return: A :class:`~oci.response.Response` object with data of type :class:`~oci.fleet_apps_management.models.TargetComponentCollection`
+        :rtype: :class:`~oci.response.Response`
+
+        :example:
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/fleetappsmanagement/list_target_components.py.html>`__ to see an example of how to use list_target_components API.
+        """
+        # Required path and query arguments. These are in camelCase to replace values in service endpoints.
+        required_arguments = ['compartmentId']
+        resource_path = "/targetComponents"
+        method = "GET"
+        operation_name = "list_target_components"
+        api_reference_link = "https://docs.oracle.com/iaas/api/#/en/fleet-management/20250228/TargetComponentCollection/ListTargetComponents"
+
+        # Don't accept unknown kwargs
+        expected_kwargs = [
+            "allow_control_chars",
+            "retry_strategy",
+            "target_id",
+            "target_name",
+            "severity",
+            "name",
+            "limit",
+            "page",
+            "sort_order",
+            "opc_request_id",
+            "sort_by"
+        ]
+        extra_kwargs = [_key for _key in six.iterkeys(kwargs) if _key not in expected_kwargs]
+        if extra_kwargs:
+            raise ValueError(
+                f"list_target_components got unknown kwargs: {extra_kwargs!r}")
+
+        if 'severity' in kwargs:
+            severity_allowed_values = ["CRITICAL", "HIGH", "MEDIUM", "LOW"]
+            if kwargs['severity'] not in severity_allowed_values:
+                raise ValueError(
+                    f"Invalid value for `severity`, must be one of { severity_allowed_values }"
+                )
+
+        if 'sort_order' in kwargs:
+            sort_order_allowed_values = ["ASC", "DESC"]
+            if kwargs['sort_order'] not in sort_order_allowed_values:
+                raise ValueError(
+                    f"Invalid value for `sort_order`, must be one of { sort_order_allowed_values }"
+                )
+
+        if 'sort_by' in kwargs:
+            sort_by_allowed_values = ["componentName"]
+            if kwargs['sort_by'] not in sort_by_allowed_values:
+                raise ValueError(
+                    f"Invalid value for `sort_by`, must be one of { sort_by_allowed_values }"
+                )
+
+        query_params = {
+            "compartmentId": compartment_id,
+            "targetId": kwargs.get("target_id", missing),
+            "targetName": kwargs.get("target_name", missing),
+            "severity": kwargs.get("severity", missing),
+            "name": kwargs.get("name", missing),
+            "limit": kwargs.get("limit", missing),
+            "page": kwargs.get("page", missing),
+            "sortOrder": kwargs.get("sort_order", missing),
+            "sortBy": kwargs.get("sort_by", missing)
+        }
+        query_params = {k: v for (k, v) in six.iteritems(query_params) if v is not missing and v is not None}
+
+        header_params = {
+            "accept": "application/json",
+            "content-type": "application/json",
+            "opc-request-id": kwargs.get("opc_request_id", missing)
+        }
+        header_params = {k: v for (k, v) in six.iteritems(header_params) if v is not missing and v is not None}
+
+        retry_strategy = self.base_client.get_preferred_retry_strategy(
+            operation_retry_strategy=kwargs.get('retry_strategy'),
+            client_retry_strategy=self.retry_strategy
+        )
+        if retry_strategy is None:
+            retry_strategy = retry.DEFAULT_RETRY_STRATEGY
+
+        if retry_strategy:
+            if not isinstance(retry_strategy, retry.NoneRetryStrategy):
+                self.base_client.add_opc_client_retries_header(header_params)
+                retry_strategy.add_circuit_breaker_callback(self.circuit_breaker_callback)
+            return retry_strategy.make_retrying_call(
+                self.base_client.call_api,
+                resource_path=resource_path,
+                method=method,
+                query_params=query_params,
+                header_params=header_params,
+                response_type="TargetComponentCollection",
+                allow_control_chars=kwargs.get('allow_control_chars'),
+                operation_name=operation_name,
+                api_reference_link=api_reference_link,
+                required_arguments=required_arguments)
+        else:
+            return self.base_client.call_api(
+                resource_path=resource_path,
+                method=method,
+                query_params=query_params,
+                header_params=header_params,
+                response_type="TargetComponentCollection",
+                allow_control_chars=kwargs.get('allow_control_chars'),
+                operation_name=operation_name,
+                api_reference_link=api_reference_link,
+                required_arguments=required_arguments)
+
+    def list_target_properties(self, compartment_id, **kwargs):
+        """
+        Gets a list of target properties.
+
+
+        :param str compartment_id: (required)
+            The ID of the compartment in which to list resources.
+
+        :param str target_id: (optional)
+            Target Id.
+
+        :param str target_name: (optional)
+            Target name.
+
+        :param str severity: (optional)
+            Patch severity.
+
+            Allowed values are: "CRITICAL", "HIGH", "MEDIUM", "LOW"
+
+        :param int limit: (optional)
+            The maximum number of items to return.
+
+        :param str page: (optional)
+            A token representing the position at which to start retrieving results. This must come from the `opc-next-page` header field of a previous response.
+
+        :param str sort_order: (optional)
+            The sort order to use, either 'ASC' or 'DESC'.
+
+            Allowed values are: "ASC", "DESC"
+
+        :param str opc_request_id: (optional)
+            The client request ID for tracing.
+
+        :param str sort_by: (optional)
+            The field to sort by. Only one sort order may be provided.
+
+            Allowed values are: "propertyName"
+
+        :param obj retry_strategy: (optional)
+            A retry strategy to apply to this specific operation/call. This will override any retry strategy set at the client-level.
+
+            This should be one of the strategies available in the :py:mod:`~oci.retry` module. This operation uses :py:data:`~oci.retry.DEFAULT_RETRY_STRATEGY` as default if no retry strategy is provided.
+            The specifics of the default retry strategy are described `here <https://docs.oracle.com/en-us/iaas/tools/python/latest/sdk_behaviors/retries.html>`__.
+
+            To have this operation explicitly not perform any retries, pass an instance of :py:class:`~oci.retry.NoneRetryStrategy`.
+
+        :param bool allow_control_chars: (optional)
+            allow_control_chars is a boolean to indicate whether or not this request should allow control characters in the response object.
+            By default, the response will not allow control characters in strings
+
+        :return: A :class:`~oci.response.Response` object with data of type :class:`~oci.fleet_apps_management.models.TargetPropertyCollection`
+        :rtype: :class:`~oci.response.Response`
+
+        :example:
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/fleetappsmanagement/list_target_properties.py.html>`__ to see an example of how to use list_target_properties API.
+        """
+        # Required path and query arguments. These are in camelCase to replace values in service endpoints.
+        required_arguments = ['compartmentId']
+        resource_path = "/targetProperties"
+        method = "GET"
+        operation_name = "list_target_properties"
+        api_reference_link = "https://docs.oracle.com/iaas/api/#/en/fleet-management/20250228/TargetPropertyCollection/ListTargetProperties"
+
+        # Don't accept unknown kwargs
+        expected_kwargs = [
+            "allow_control_chars",
+            "retry_strategy",
+            "target_id",
+            "target_name",
+            "severity",
+            "limit",
+            "page",
+            "sort_order",
+            "opc_request_id",
+            "sort_by"
+        ]
+        extra_kwargs = [_key for _key in six.iterkeys(kwargs) if _key not in expected_kwargs]
+        if extra_kwargs:
+            raise ValueError(
+                f"list_target_properties got unknown kwargs: {extra_kwargs!r}")
+
+        if 'severity' in kwargs:
+            severity_allowed_values = ["CRITICAL", "HIGH", "MEDIUM", "LOW"]
+            if kwargs['severity'] not in severity_allowed_values:
+                raise ValueError(
+                    f"Invalid value for `severity`, must be one of { severity_allowed_values }"
+                )
+
+        if 'sort_order' in kwargs:
+            sort_order_allowed_values = ["ASC", "DESC"]
+            if kwargs['sort_order'] not in sort_order_allowed_values:
+                raise ValueError(
+                    f"Invalid value for `sort_order`, must be one of { sort_order_allowed_values }"
+                )
+
+        if 'sort_by' in kwargs:
+            sort_by_allowed_values = ["propertyName"]
+            if kwargs['sort_by'] not in sort_by_allowed_values:
+                raise ValueError(
+                    f"Invalid value for `sort_by`, must be one of { sort_by_allowed_values }"
+                )
+
+        query_params = {
+            "compartmentId": compartment_id,
+            "targetId": kwargs.get("target_id", missing),
+            "targetName": kwargs.get("target_name", missing),
+            "severity": kwargs.get("severity", missing),
+            "limit": kwargs.get("limit", missing),
+            "page": kwargs.get("page", missing),
+            "sortOrder": kwargs.get("sort_order", missing),
+            "sortBy": kwargs.get("sort_by", missing)
+        }
+        query_params = {k: v for (k, v) in six.iteritems(query_params) if v is not missing and v is not None}
+
+        header_params = {
+            "accept": "application/json",
+            "content-type": "application/json",
+            "opc-request-id": kwargs.get("opc_request_id", missing)
+        }
+        header_params = {k: v for (k, v) in six.iteritems(header_params) if v is not missing and v is not None}
+
+        retry_strategy = self.base_client.get_preferred_retry_strategy(
+            operation_retry_strategy=kwargs.get('retry_strategy'),
+            client_retry_strategy=self.retry_strategy
+        )
+        if retry_strategy is None:
+            retry_strategy = retry.DEFAULT_RETRY_STRATEGY
+
+        if retry_strategy:
+            if not isinstance(retry_strategy, retry.NoneRetryStrategy):
+                self.base_client.add_opc_client_retries_header(header_params)
+                retry_strategy.add_circuit_breaker_callback(self.circuit_breaker_callback)
+            return retry_strategy.make_retrying_call(
+                self.base_client.call_api,
+                resource_path=resource_path,
+                method=method,
+                query_params=query_params,
+                header_params=header_params,
+                response_type="TargetPropertyCollection",
+                allow_control_chars=kwargs.get('allow_control_chars'),
+                operation_name=operation_name,
+                api_reference_link=api_reference_link,
+                required_arguments=required_arguments)
+        else:
+            return self.base_client.call_api(
+                resource_path=resource_path,
+                method=method,
+                query_params=query_params,
+                header_params=header_params,
+                response_type="TargetPropertyCollection",
+                allow_control_chars=kwargs.get('allow_control_chars'),
+                operation_name=operation_name,
+                api_reference_link=api_reference_link,
+                required_arguments=required_arguments)
+
     def manage_job_execution(self, manage_job_execution_details, scheduler_job_id, **kwargs):
         """
         Manage execution actions for a Job like retrying or pausing a task.
@@ -3142,7 +3965,7 @@ class FleetAppsManagementOperationsClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/fleetappsmanagement/manage_job_execution.py.html>`__ to see an example of how to use manage_job_execution API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/fleetappsmanagement/manage_job_execution.py.html>`__ to see an example of how to use manage_job_execution API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['schedulerJobId']
@@ -3218,6 +4041,139 @@ class FleetAppsManagementOperationsClient(object):
                 api_reference_link=api_reference_link,
                 required_arguments=required_arguments)
 
+    def report(self, report_details, compartment_id, **kwargs):
+        """
+        Report
+
+
+        :param oci.fleet_apps_management.models.ReportDetails report_details: (required)
+            Details for generating report
+
+        :param str compartment_id: (required)
+            The ID of the compartment in which to list resources.
+
+        :param str opc_retry_token: (optional)
+            A token that uniquely identifies a request so it can be retried in case of a timeout or
+            server error without risk of executing that same action again. Retry tokens expire after 24
+            hours, but can be invalidated before then due to conflicting operations. For example, if a resource
+            has been deleted and purged from the system, then a retry of the original creation request
+            might be rejected.
+
+        :param str if_match: (optional)
+            For optimistic concurrency control. In the PUT or DELETE call
+            for a resource, set the `if-match` parameter to the value of the
+            etag from a previous GET or POST response for that resource.
+            The resource will be updated or deleted only if the etag you
+            provide matches the resource's current etag value.
+
+        :param str opc_request_id: (optional)
+            The client request ID for tracing.
+
+        :param int limit: (optional)
+            The maximum number of items to return.
+
+        :param str page: (optional)
+            A token representing the position at which to start retrieving results. This must come from the `opc-next-page` header field of a previous response.
+
+        :param bool compartment_id_in_subtree: (optional)
+            If set to true, resources will be returned for not only the provided compartment, but all compartments which
+            descend from it. Which resources are returned and their field contents depends on the value of accessLevel.
+
+        :param obj retry_strategy: (optional)
+            A retry strategy to apply to this specific operation/call. This will override any retry strategy set at the client-level.
+
+            This should be one of the strategies available in the :py:mod:`~oci.retry` module. This operation uses :py:data:`~oci.retry.DEFAULT_RETRY_STRATEGY` as default if no retry strategy is provided.
+            The specifics of the default retry strategy are described `here <https://docs.oracle.com/en-us/iaas/tools/python/latest/sdk_behaviors/retries.html>`__.
+
+            To have this operation explicitly not perform any retries, pass an instance of :py:class:`~oci.retry.NoneRetryStrategy`.
+
+        :param bool allow_control_chars: (optional)
+            allow_control_chars is a boolean to indicate whether or not this request should allow control characters in the response object.
+            By default, the response will not allow control characters in strings
+
+        :return: A :class:`~oci.response.Response` object with data of type :class:`~oci.fleet_apps_management.models.ReportCollection`
+        :rtype: :class:`~oci.response.Response`
+
+        :example:
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/fleetappsmanagement/report.py.html>`__ to see an example of how to use report API.
+        """
+        # Required path and query arguments. These are in camelCase to replace values in service endpoints.
+        required_arguments = ['compartmentId']
+        resource_path = "/reports/actions/summarize"
+        method = "POST"
+        operation_name = "report"
+        api_reference_link = "https://docs.oracle.com/iaas/api/#/en/fleet-management/20250228/ReportCollection/Report"
+
+        # Don't accept unknown kwargs
+        expected_kwargs = [
+            "allow_control_chars",
+            "retry_strategy",
+            "opc_retry_token",
+            "if_match",
+            "opc_request_id",
+            "limit",
+            "page",
+            "compartment_id_in_subtree"
+        ]
+        extra_kwargs = [_key for _key in six.iterkeys(kwargs) if _key not in expected_kwargs]
+        if extra_kwargs:
+            raise ValueError(
+                f"report got unknown kwargs: {extra_kwargs!r}")
+
+        query_params = {
+            "compartmentId": compartment_id,
+            "limit": kwargs.get("limit", missing),
+            "page": kwargs.get("page", missing),
+            "compartmentIdInSubtree": kwargs.get("compartment_id_in_subtree", missing)
+        }
+        query_params = {k: v for (k, v) in six.iteritems(query_params) if v is not missing and v is not None}
+
+        header_params = {
+            "accept": "application/json",
+            "content-type": "application/json",
+            "opc-retry-token": kwargs.get("opc_retry_token", missing),
+            "if-match": kwargs.get("if_match", missing),
+            "opc-request-id": kwargs.get("opc_request_id", missing)
+        }
+        header_params = {k: v for (k, v) in six.iteritems(header_params) if v is not missing and v is not None}
+
+        retry_strategy = self.base_client.get_preferred_retry_strategy(
+            operation_retry_strategy=kwargs.get('retry_strategy'),
+            client_retry_strategy=self.retry_strategy
+        )
+        if retry_strategy is None:
+            retry_strategy = retry.DEFAULT_RETRY_STRATEGY
+
+        if retry_strategy:
+            if not isinstance(retry_strategy, retry.NoneRetryStrategy):
+                self.base_client.add_opc_retry_token_if_needed(header_params)
+                self.base_client.add_opc_client_retries_header(header_params)
+                retry_strategy.add_circuit_breaker_callback(self.circuit_breaker_callback)
+            return retry_strategy.make_retrying_call(
+                self.base_client.call_api,
+                resource_path=resource_path,
+                method=method,
+                query_params=query_params,
+                header_params=header_params,
+                body=report_details,
+                response_type="ReportCollection",
+                allow_control_chars=kwargs.get('allow_control_chars'),
+                operation_name=operation_name,
+                api_reference_link=api_reference_link,
+                required_arguments=required_arguments)
+        else:
+            return self.base_client.call_api(
+                resource_path=resource_path,
+                method=method,
+                query_params=query_params,
+                header_params=header_params,
+                body=report_details,
+                response_type="ReportCollection",
+                allow_control_chars=kwargs.get('allow_control_chars'),
+                operation_name=operation_name,
+                api_reference_link=api_reference_link,
+                required_arguments=required_arguments)
+
     def summarize_compliance_record_counts(self, **kwargs):
         """
         Retrieve  aggregated summary information of ComplianceRecords within a Compartment.
@@ -3261,7 +4217,7 @@ class FleetAppsManagementOperationsClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/fleetappsmanagement/summarize_compliance_record_counts.py.html>`__ to see an example of how to use summarize_compliance_record_counts API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/fleetappsmanagement/summarize_compliance_record_counts.py.html>`__ to see an example of how to use summarize_compliance_record_counts API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -3386,7 +4342,7 @@ class FleetAppsManagementOperationsClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/fleetappsmanagement/summarize_managed_entity_counts.py.html>`__ to see an example of how to use summarize_managed_entity_counts API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/fleetappsmanagement/summarize_managed_entity_counts.py.html>`__ to see an example of how to use summarize_managed_entity_counts API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -3511,7 +4467,7 @@ class FleetAppsManagementOperationsClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/fleetappsmanagement/summarize_scheduler_job_counts.py.html>`__ to see an example of how to use summarize_scheduler_job_counts API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/fleetappsmanagement/summarize_scheduler_job_counts.py.html>`__ to see an example of how to use summarize_scheduler_job_counts API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -3630,7 +4586,7 @@ class FleetAppsManagementOperationsClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/fleetappsmanagement/update_patch.py.html>`__ to see an example of how to use update_patch API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/fleetappsmanagement/update_patch.py.html>`__ to see an example of how to use update_patch API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['patchId']
@@ -3740,7 +4696,7 @@ class FleetAppsManagementOperationsClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/fleetappsmanagement/update_scheduler_definition.py.html>`__ to see an example of how to use update_scheduler_definition API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/fleetappsmanagement/update_scheduler_definition.py.html>`__ to see an example of how to use update_scheduler_definition API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['schedulerDefinitionId']
@@ -3850,7 +4806,7 @@ class FleetAppsManagementOperationsClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/fleetappsmanagement/update_scheduler_job.py.html>`__ to see an example of how to use update_scheduler_job API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/fleetappsmanagement/update_scheduler_job.py.html>`__ to see an example of how to use update_scheduler_job API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['schedulerJobId']

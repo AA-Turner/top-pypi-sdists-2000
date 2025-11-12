@@ -466,10 +466,6 @@ class AssistantModel:
         """
         if model is None:
             model = "gpt-4o"
-        elif model not in MODELS:
-            raise ValueError(
-                f"Invalid model. Valid options are {', '.join(f'`{m}`' for m in MODELS)}."
-            )
         messages = self._parse_messages(messages)
 
         if stream:
@@ -704,10 +700,6 @@ class AssistantModel:
         """
         if model is None:
             model = "gpt-4o"
-        elif model not in MODELS:
-            raise ValueError(
-                f"Invalid model. Valid options are {', '.join(f'`{m}`' for m in MODELS)}."
-            )
         if json_response and stream:
             raise ValueError("Cannot use json_response with streaming")
 

@@ -1,13 +1,15 @@
 Metadata-Version: 2.4
 Name: ffmpy
-Version: 0.6.4
+Version: 1.0.0
 Summary: A simple Python wrapper for FFmpeg
 Keywords: ffmpeg,ffprobe,ffplay,ffserver,wrapper,media,audio,video,transcoding
 Author: Andrii Yurchuk
 Author-email: Andrii Yurchuk < <ay@mntw.re>>
 License-Expression: MIT
+Classifier: Topic :: Multimedia
 Classifier: Topic :: Multimedia :: Sound/Audio
-Classifier: Development Status :: 4 - Beta
+Classifier: Topic :: Multimedia :: Video
+Classifier: Development Status :: 5 - Production/Stable
 Classifier: Intended Audience :: Developers
 Classifier: License :: OSI Approved :: MIT License
 Classifier: Natural Language :: English

@@ -3,13 +3,14 @@
 
 from __future__ import annotations
 
-from typing import Literal, Optional, Union
+from typing import Optional, Union
 
 from pydantic import Field
+from typing_extensions import Literal
 
 from wandb._pydantic import GQLResult, Typename
 
-from .fragments import GenericWebhookIntegrationFields
+from .fragments import WebhookIntegrationFields
 
 
 class CreateGenericWebhookIntegration(GQLResult):
@@ -21,7 +22,7 @@ class CreateGenericWebhookIntegration(GQLResult):
 class CreateGenericWebhookIntegrationCreateGenericWebhookIntegration(GQLResult):
     integration: Union[
         CreateGenericWebhookIntegrationCreateGenericWebhookIntegrationIntegrationIntegration,
-        GenericWebhookIntegrationFields,
+        WebhookIntegrationFields,
     ] = Field(discriminator="typename__")
 
 

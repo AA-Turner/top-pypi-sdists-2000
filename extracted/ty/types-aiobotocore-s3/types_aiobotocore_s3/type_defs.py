@@ -17,6 +17,7 @@ Usage::
 from __future__ import annotations
 
 import sys
+from collections.abc import Callable, Mapping, Sequence
 from datetime import datetime
 from typing import IO, Any, Union
 
@@ -88,12 +89,6 @@ try:
     from boto3.s3.transfer import TransferConfig
 except ImportError:
     from builtins import object as TransferConfig  # type: ignore[assignment]
-if sys.version_info >= (3, 9):
-    from builtins import dict as Dict
-    from builtins import list as List
-    from collections.abc import Callable, Mapping, Sequence
-else:
-    from typing import Callable, Dict, List, Mapping, Sequence
 if sys.version_info >= (3, 12):
     from typing import Literal, NotRequired, TypedDict
 else:
@@ -583,7 +578,7 @@ class AbortIncompleteMultipartUploadTypeDef(TypedDict):
 class ResponseMetadataTypeDef(TypedDict):
     RequestId: str
     HTTPStatusCode: int
-    HTTPHeaders: Dict[str, str]
+    HTTPHeaders: dict[str, str]
     RetryAttempts: int
     HostId: NotRequired[str]
 
@@ -628,7 +623,7 @@ class CopySourceTypeDef(TypedDict):
 class BucketDownloadFileRequestTypeDef(TypedDict):
     Key: str
     Filename: str
-    ExtraArgs: NotRequired[Dict[str, Any] | None]
+    ExtraArgs: NotRequired[dict[str, Any] | None]
     Callback: NotRequired[Callable[..., Any] | None]
     Config: NotRequired[TransferConfig | None]
 
@@ -653,17 +648,17 @@ class BucketTypeDef(TypedDict):
 class BucketUploadFileRequestTypeDef(TypedDict):
     Filename: str
     Key: str
-    ExtraArgs: NotRequired[Dict[str, Any] | None]
+    ExtraArgs: NotRequired[dict[str, Any] | None]
     Callback: NotRequired[Callable[..., Any] | None]
     Config: NotRequired[TransferConfig | None]
 
 
 class CORSRuleOutputTypeDef(TypedDict):
-    AllowedMethods: List[str]
-    AllowedOrigins: List[str]
+    AllowedMethods: list[str]
+    AllowedOrigins: list[str]
     ID: NotRequired[str]
-    AllowedHeaders: NotRequired[List[str]]
-    ExposeHeaders: NotRequired[List[str]]
+    AllowedHeaders: NotRequired[list[str]]
+    ExposeHeaders: NotRequired[list[str]]
     MaxAgeSeconds: NotRequired[int]
 
 
@@ -707,7 +702,7 @@ class ClientDownloadFileRequestTypeDef(TypedDict):
     Bucket: str
     Key: str
     Filename: str
-    ExtraArgs: NotRequired[Dict[str, Any] | None]
+    ExtraArgs: NotRequired[dict[str, Any] | None]
     Callback: NotRequired[Callable[..., Any] | None]
     Config: NotRequired[TransferConfig | None]
 
@@ -715,8 +710,8 @@ class ClientDownloadFileRequestTypeDef(TypedDict):
 class ClientGeneratePresignedPostRequestTypeDef(TypedDict):
     Bucket: str
     Key: str
-    Fields: NotRequired[Dict[str, Any] | None]
-    Conditions: NotRequired[List[Any] | Dict[str, Any] | None]
+    Fields: NotRequired[dict[str, Any] | None]
+    Conditions: NotRequired[list[Any] | dict[str, Any] | None]
     ExpiresIn: NotRequired[int]
 
 
@@ -724,7 +719,7 @@ class ClientUploadFileRequestTypeDef(TypedDict):
     Filename: str
     Bucket: str
     Key: str
-    ExtraArgs: NotRequired[Dict[str, Any] | None]
+    ExtraArgs: NotRequired[dict[str, Any] | None]
     Callback: NotRequired[Callable[..., Any] | None]
     Config: NotRequired[TransferConfig | None]
 
@@ -732,7 +727,7 @@ class ClientUploadFileRequestTypeDef(TypedDict):
 class CloudFunctionConfigurationOutputTypeDef(TypedDict):
     Id: NotRequired[str]
     Event: NotRequired[EventType]
-    Events: NotRequired[List[EventType]]
+    Events: NotRequired[list[EventType]]
     CloudFunction: NotRequired[str]
     InvocationRole: NotRequired[str]
 
@@ -1451,20 +1446,20 @@ class ReplicationTimeValueTypeDef(TypedDict):
 class QueueConfigurationDeprecatedOutputTypeDef(TypedDict):
     Id: NotRequired[str]
     Event: NotRequired[EventType]
-    Events: NotRequired[List[EventType]]
+    Events: NotRequired[list[EventType]]
     Queue: NotRequired[str]
 
 
 class TopicConfigurationDeprecatedOutputTypeDef(TypedDict):
     Id: NotRequired[str]
-    Events: NotRequired[List[EventType]]
+    Events: NotRequired[list[EventType]]
     Event: NotRequired[EventType]
     Topic: NotRequired[str]
 
 
 class ObjectDownloadFileRequestTypeDef(TypedDict):
     Filename: str
-    ExtraArgs: NotRequired[Dict[str, Any] | None]
+    ExtraArgs: NotRequired[dict[str, Any] | None]
     Callback: NotRequired[Callable[..., Any] | None]
     Config: NotRequired[TransferConfig | None]
 
@@ -1476,7 +1471,7 @@ class RestoreStatusTypeDef(TypedDict):
 
 class ObjectUploadFileRequestTypeDef(TypedDict):
     Filename: str
-    ExtraArgs: NotRequired[Dict[str, Any] | None]
+    ExtraArgs: NotRequired[dict[str, Any] | None]
     Callback: NotRequired[Callable[..., Any] | None]
     Config: NotRequired[TransferConfig | None]
 
@@ -1707,7 +1702,7 @@ class GetObjectOutputTypeDef(TypedDict):
     Expires: datetime
     WebsiteRedirectLocation: str
     ServerSideEncryption: ServerSideEncryptionType
-    Metadata: Dict[str, str]
+    Metadata: dict[str, str]
     SSECustomerAlgorithm: str
     SSECustomerKeyMD5: str
     SSEKMSKeyId: str
@@ -1764,7 +1759,7 @@ class HeadObjectOutputTypeDef(TypedDict):
     Expires: datetime
     WebsiteRedirectLocation: str
     ServerSideEncryption: ServerSideEncryptionType
-    Metadata: Dict[str, str]
+    Metadata: dict[str, str]
     SSECustomerAlgorithm: str
     SSECustomerKeyMD5: str
     SSEKMSKeyId: str
@@ -2193,7 +2188,7 @@ class DeleteMarkerEntryTypeDef(TypedDict):
 
 class AnalyticsAndOperatorOutputTypeDef(TypedDict):
     Prefix: NotRequired[str]
-    Tags: NotRequired[List[TagTypeDef]]
+    Tags: NotRequired[list[TagTypeDef]]
 
 
 class AnalyticsAndOperatorTypeDef(TypedDict):
@@ -2202,19 +2197,19 @@ class AnalyticsAndOperatorTypeDef(TypedDict):
 
 
 class GetBucketTaggingOutputTypeDef(TypedDict):
-    TagSet: List[TagTypeDef]
+    TagSet: list[TagTypeDef]
     ResponseMetadata: ResponseMetadataTypeDef
 
 
 class GetObjectTaggingOutputTypeDef(TypedDict):
     VersionId: str
-    TagSet: List[TagTypeDef]
+    TagSet: list[TagTypeDef]
     ResponseMetadata: ResponseMetadataTypeDef
 
 
 class IntelligentTieringAndOperatorOutputTypeDef(TypedDict):
     Prefix: NotRequired[str]
-    Tags: NotRequired[List[TagTypeDef]]
+    Tags: NotRequired[list[TagTypeDef]]
 
 
 class IntelligentTieringAndOperatorTypeDef(TypedDict):
@@ -2224,7 +2219,7 @@ class IntelligentTieringAndOperatorTypeDef(TypedDict):
 
 class LifecycleRuleAndOperatorOutputTypeDef(TypedDict):
     Prefix: NotRequired[str]
-    Tags: NotRequired[List[TagTypeDef]]
+    Tags: NotRequired[list[TagTypeDef]]
     ObjectSizeGreaterThan: NotRequired[int]
     ObjectSizeLessThan: NotRequired[int]
 
@@ -2238,7 +2233,7 @@ class LifecycleRuleAndOperatorTypeDef(TypedDict):
 
 class MetricsAndOperatorOutputTypeDef(TypedDict):
     Prefix: NotRequired[str]
-    Tags: NotRequired[List[TagTypeDef]]
+    Tags: NotRequired[list[TagTypeDef]]
     AccessPointArn: NotRequired[str]
 
 
@@ -2250,7 +2245,7 @@ class MetricsAndOperatorTypeDef(TypedDict):
 
 class ReplicationRuleAndOperatorOutputTypeDef(TypedDict):
     Prefix: NotRequired[str]
-    Tags: NotRequired[List[TagTypeDef]]
+    Tags: NotRequired[list[TagTypeDef]]
 
 
 class ReplicationRuleAndOperatorTypeDef(TypedDict):
@@ -2515,7 +2510,7 @@ class WriteGetObjectResponseRequestTypeDef(TypedDict):
 class BucketCopyRequestTypeDef(TypedDict):
     CopySource: CopySourceTypeDef
     Key: str
-    ExtraArgs: NotRequired[Dict[str, Any] | None]
+    ExtraArgs: NotRequired[dict[str, Any] | None]
     Callback: NotRequired[Callable[..., Any] | None]
     SourceClient: NotRequired[AioBaseClient | None]
     Config: NotRequired[TransferConfig | None]
@@ -2525,7 +2520,7 @@ class ClientCopyRequestTypeDef(TypedDict):
     CopySource: CopySourceTypeDef
     Bucket: str
     Key: str
-    ExtraArgs: NotRequired[Dict[str, Any] | None]
+    ExtraArgs: NotRequired[dict[str, Any] | None]
     Callback: NotRequired[Callable[..., Any] | None]
     SourceClient: NotRequired[AioBaseClient | None]
     Config: NotRequired[TransferConfig | None]
@@ -2536,7 +2531,7 @@ CopySourceOrStrTypeDef = Union[str, CopySourceTypeDef]
 
 class ObjectCopyRequestTypeDef(TypedDict):
     CopySource: CopySourceTypeDef
-    ExtraArgs: NotRequired[Dict[str, Any] | None]
+    ExtraArgs: NotRequired[dict[str, Any] | None]
     Callback: NotRequired[Callable[..., Any] | None]
     SourceClient: NotRequired[AioBaseClient | None]
     Config: NotRequired[TransferConfig | None]
@@ -2545,7 +2540,7 @@ class ObjectCopyRequestTypeDef(TypedDict):
 class BucketDownloadFileobjRequestTypeDef(TypedDict):
     Key: str
     Fileobj: FileobjTypeDef
-    ExtraArgs: NotRequired[Dict[str, Any] | None]
+    ExtraArgs: NotRequired[dict[str, Any] | None]
     Callback: NotRequired[Callable[..., Any] | None]
     Config: NotRequired[TransferConfig | None]
 
@@ -2553,7 +2548,7 @@ class BucketDownloadFileobjRequestTypeDef(TypedDict):
 class BucketUploadFileobjRequestTypeDef(TypedDict):
     Fileobj: FileobjTypeDef
     Key: str
-    ExtraArgs: NotRequired[Dict[str, Any] | None]
+    ExtraArgs: NotRequired[dict[str, Any] | None]
     Callback: NotRequired[Callable[..., Any] | None]
     Config: NotRequired[TransferConfig | None]
 
@@ -2562,7 +2557,7 @@ class ClientDownloadFileobjRequestTypeDef(TypedDict):
     Bucket: str
     Key: str
     Fileobj: FileobjTypeDef
-    ExtraArgs: NotRequired[Dict[str, Any] | None]
+    ExtraArgs: NotRequired[dict[str, Any] | None]
     Callback: NotRequired[Callable[..., Any] | None]
     Config: NotRequired[TransferConfig | None]
 
@@ -2571,27 +2566,27 @@ class ClientUploadFileobjRequestTypeDef(TypedDict):
     Fileobj: FileobjTypeDef
     Bucket: str
     Key: str
-    ExtraArgs: NotRequired[Dict[str, Any] | None]
+    ExtraArgs: NotRequired[dict[str, Any] | None]
     Callback: NotRequired[Callable[..., Any] | None]
     Config: NotRequired[TransferConfig | None]
 
 
 class ObjectDownloadFileobjRequestTypeDef(TypedDict):
     Fileobj: FileobjTypeDef
-    ExtraArgs: NotRequired[Dict[str, Any] | None]
+    ExtraArgs: NotRequired[dict[str, Any] | None]
     Callback: NotRequired[Callable[..., Any] | None]
     Config: NotRequired[TransferConfig | None]
 
 
 class ObjectUploadFileobjRequestTypeDef(TypedDict):
     Fileobj: FileobjTypeDef
-    ExtraArgs: NotRequired[Dict[str, Any] | None]
+    ExtraArgs: NotRequired[dict[str, Any] | None]
     Callback: NotRequired[Callable[..., Any] | None]
     Config: NotRequired[TransferConfig | None]
 
 
 class ListBucketsOutputTypeDef(TypedDict):
-    Buckets: List[BucketTypeDef]
+    Buckets: list[BucketTypeDef]
     Owner: OwnerTypeDef
     ContinuationToken: str
     Prefix: str
@@ -2599,13 +2594,13 @@ class ListBucketsOutputTypeDef(TypedDict):
 
 
 class ListDirectoryBucketsOutputTypeDef(TypedDict):
-    Buckets: List[BucketTypeDef]
+    Buckets: list[BucketTypeDef]
     ContinuationToken: str
     ResponseMetadata: ResponseMetadataTypeDef
 
 
 class GetBucketCorsOutputTypeDef(TypedDict):
-    CORSRules: List[CORSRuleOutputTypeDef]
+    CORSRules: list[CORSRuleOutputTypeDef]
     ResponseMetadata: ResponseMetadataTypeDef
 
 
@@ -2667,9 +2662,9 @@ class ObjectLockRuleTypeDef(TypedDict):
 
 
 class DeleteObjectsOutputTypeDef(TypedDict):
-    Deleted: List[DeletedObjectTypeDef]
+    Deleted: list[DeletedObjectTypeDef]
     RequestCharged: Literal["requester"]
-    Errors: List[ErrorTypeDef]
+    Errors: list[ErrorTypeDef]
     ResponseMetadata: ResponseMetadataTypeDef
 
 
@@ -2682,7 +2677,7 @@ class InventoryTableConfigurationResultTypeDef(TypedDict):
 
 
 class S3KeyFilterOutputTypeDef(TypedDict):
-    FilterRules: NotRequired[List[FilterRuleTypeDef]]
+    FilterRules: NotRequired[list[FilterRuleTypeDef]]
 
 
 class S3KeyFilterTypeDef(TypedDict):
@@ -2700,7 +2695,7 @@ class GetObjectAttributesPartsTypeDef(TypedDict):
     NextPartNumberMarker: NotRequired[int]
     MaxParts: NotRequired[int]
     IsTruncated: NotRequired[bool]
-    Parts: NotRequired[List[ObjectPartTypeDef]]
+    Parts: NotRequired[list[ObjectPartTypeDef]]
 
 
 class GetObjectLegalHoldOutputTypeDef(TypedDict):
@@ -2826,7 +2821,7 @@ class InputSerializationTypeDef(TypedDict):
 
 
 class InventoryEncryptionOutputTypeDef(TypedDict):
-    SSES3: NotRequired[Dict[str, Any]]
+    SSES3: NotRequired[dict[str, Any]]
     SSEKMS: NotRequired[SSEKMSTypeDef]
 
 
@@ -2954,7 +2949,7 @@ class ListPartsOutputTypeDef(TypedDict):
     NextPartNumberMarker: int
     MaxParts: int
     IsTruncated: bool
-    Parts: List[PartTypeDef]
+    Parts: list[PartTypeDef]
     Initiator: InitiatorTypeDef
     Owner: OwnerTypeDef
     StorageClass: StorageClassType
@@ -2993,7 +2988,7 @@ class ObjectTypeDef(TypedDict):
     Key: NotRequired[str]
     LastModified: NotRequired[datetime]
     ETag: NotRequired[str]
-    ChecksumAlgorithm: NotRequired[List[ChecksumAlgorithmType]]
+    ChecksumAlgorithm: NotRequired[list[ChecksumAlgorithmType]]
     ChecksumType: NotRequired[ChecksumTypeType]
     Size: NotRequired[int]
     StorageClass: NotRequired[ObjectStorageClassType]
@@ -3003,7 +2998,7 @@ class ObjectTypeDef(TypedDict):
 
 class ObjectVersionTypeDef(TypedDict):
     ETag: NotRequired[str]
-    ChecksumAlgorithm: NotRequired[List[ChecksumAlgorithmType]]
+    ChecksumAlgorithm: NotRequired[list[ChecksumAlgorithmType]]
     ChecksumType: NotRequired[ChecksumTypeType]
     Size: NotRequired[int]
     StorageClass: NotRequired[Literal["STANDARD"]]
@@ -3016,7 +3011,7 @@ class ObjectVersionTypeDef(TypedDict):
 
 
 class OwnershipControlsOutputTypeDef(TypedDict):
-    Rules: List[OwnershipControlsRuleTypeDef]
+    Rules: list[OwnershipControlsRuleTypeDef]
 
 
 class OwnershipControlsTypeDef(TypedDict):
@@ -3024,7 +3019,7 @@ class OwnershipControlsTypeDef(TypedDict):
 
 
 class TargetObjectKeyFormatOutputTypeDef(TypedDict):
-    SimplePrefix: NotRequired[Dict[str, Any]]
+    SimplePrefix: NotRequired[dict[str, Any]]
     PartitionedPrefix: NotRequired[PartitionedPrefixTypeDef]
 
 
@@ -3475,13 +3470,13 @@ class AccessControlPolicyTypeDef(TypedDict):
 
 class GetBucketAclOutputTypeDef(TypedDict):
     Owner: OwnerTypeDef
-    Grants: List[GrantTypeDef]
+    Grants: list[GrantTypeDef]
     ResponseMetadata: ResponseMetadataTypeDef
 
 
 class GetObjectAclOutputTypeDef(TypedDict):
     Owner: OwnerTypeDef
-    Grants: List[GrantTypeDef]
+    Grants: list[GrantTypeDef]
     RequestCharged: Literal["requester"]
     ResponseMetadata: ResponseMetadataTypeDef
 
@@ -3507,11 +3502,11 @@ class ListMultipartUploadsOutputTypeDef(TypedDict):
     NextUploadIdMarker: str
     MaxUploads: int
     IsTruncated: bool
-    Uploads: List[MultipartUploadTypeDef]
+    Uploads: list[MultipartUploadTypeDef]
     EncodingType: Literal["url"]
     RequestCharged: Literal["requester"]
     ResponseMetadata: ResponseMetadataTypeDef
-    CommonPrefixes: NotRequired[List[CommonPrefixTypeDef]]
+    CommonPrefixes: NotRequired[list[CommonPrefixTypeDef]]
 
 
 class InventoryS3BucketDestinationOutputTypeDef(TypedDict):
@@ -3579,7 +3574,7 @@ class UpdateBucketMetadataJournalTableConfigurationRequestTypeDef(TypedDict):
 
 
 class GetBucketLifecycleOutputTypeDef(TypedDict):
-    Rules: List[RuleOutputTypeDef]
+    Rules: list[RuleOutputTypeDef]
     ResponseMetadata: ResponseMetadataTypeDef
 
 
@@ -3618,8 +3613,8 @@ class ListObjectsOutputTypeDef(TypedDict):
     EncodingType: Literal["url"]
     RequestCharged: Literal["requester"]
     ResponseMetadata: ResponseMetadataTypeDef
-    Contents: NotRequired[List[ObjectTypeDef]]
-    CommonPrefixes: NotRequired[List[CommonPrefixTypeDef]]
+    Contents: NotRequired[list[ObjectTypeDef]]
+    CommonPrefixes: NotRequired[list[CommonPrefixTypeDef]]
 
 
 class ListObjectsV2OutputTypeDef(TypedDict):
@@ -3635,8 +3630,8 @@ class ListObjectsV2OutputTypeDef(TypedDict):
     StartAfter: str
     RequestCharged: Literal["requester"]
     ResponseMetadata: ResponseMetadataTypeDef
-    Contents: NotRequired[List[ObjectTypeDef]]
-    CommonPrefixes: NotRequired[List[CommonPrefixTypeDef]]
+    Contents: NotRequired[list[ObjectTypeDef]]
+    CommonPrefixes: NotRequired[list[CommonPrefixTypeDef]]
 
 
 class ListObjectVersionsOutputTypeDef(TypedDict):
@@ -3645,8 +3640,8 @@ class ListObjectVersionsOutputTypeDef(TypedDict):
     VersionIdMarker: str
     NextKeyMarker: str
     NextVersionIdMarker: str
-    Versions: List[ObjectVersionTypeDef]
-    DeleteMarkers: List[DeleteMarkerEntryTypeDef]
+    Versions: list[ObjectVersionTypeDef]
+    DeleteMarkers: list[DeleteMarkerEntryTypeDef]
     Name: str
     Prefix: str
     Delimiter: str
@@ -3654,7 +3649,7 @@ class ListObjectVersionsOutputTypeDef(TypedDict):
     EncodingType: Literal["url"]
     RequestCharged: Literal["requester"]
     ResponseMetadata: ResponseMetadataTypeDef
-    CommonPrefixes: NotRequired[List[CommonPrefixTypeDef]]
+    CommonPrefixes: NotRequired[list[CommonPrefixTypeDef]]
 
 
 class GetBucketOwnershipControlsOutputTypeDef(TypedDict):
@@ -3668,7 +3663,7 @@ OwnershipControlsUnionTypeDef = Union[OwnershipControlsTypeDef, OwnershipControl
 class LoggingEnabledOutputTypeDef(TypedDict):
     TargetBucket: str
     TargetPrefix: str
-    TargetGrants: NotRequired[List[TargetGrantTypeDef]]
+    TargetGrants: NotRequired[list[TargetGrantTypeDef]]
     TargetObjectKeyFormat: NotRequired[TargetObjectKeyFormatOutputTypeDef]
 
 
@@ -3681,7 +3676,7 @@ class GetBucketWebsiteOutputTypeDef(TypedDict):
     RedirectAllRequestsTo: RedirectAllRequestsToTypeDef
     IndexDocument: IndexDocumentTypeDef
     ErrorDocument: ErrorDocumentTypeDef
-    RoutingRules: List[RoutingRuleTypeDef]
+    RoutingRules: list[RoutingRuleTypeDef]
     ResponseMetadata: ResponseMetadataTypeDef
 
 
@@ -3693,7 +3688,7 @@ class WebsiteConfigurationTypeDef(TypedDict):
 
 
 class ServerSideEncryptionConfigurationOutputTypeDef(TypedDict):
-    Rules: List[ServerSideEncryptionRuleTypeDef]
+    Rules: list[ServerSideEncryptionRuleTypeDef]
 
 
 class ServerSideEncryptionConfigurationTypeDef(TypedDict):
@@ -3704,8 +3699,8 @@ class SelectObjectContentEventStreamTypeDef(TypedDict):
     Records: NotRequired[RecordsEventTypeDef]
     Stats: NotRequired[StatsEventTypeDef]
     Progress: NotRequired[ProgressEventTypeDef]
-    Cont: NotRequired[Dict[str, Any]]
-    End: NotRequired[Dict[str, Any]]
+    Cont: NotRequired[dict[str, Any]]
+    End: NotRequired[dict[str, Any]]
 
 
 class NotificationConfigurationDeprecatedTypeDef(TypedDict):
@@ -3759,7 +3754,7 @@ class RuleTypeDef(TypedDict):
 class IntelligentTieringConfigurationOutputTypeDef(TypedDict):
     Id: str
     Status: IntelligentTieringStatusType
-    Tierings: List[TieringTypeDef]
+    Tierings: list[TieringTypeDef]
     Filter: NotRequired[IntelligentTieringFilterOutputTypeDef]
 
 
@@ -3776,8 +3771,8 @@ class LifecycleRuleOutputTypeDef(TypedDict):
     ID: NotRequired[str]
     Prefix: NotRequired[str]
     Filter: NotRequired[LifecycleRuleFilterOutputTypeDef]
-    Transitions: NotRequired[List[TransitionOutputTypeDef]]
-    NoncurrentVersionTransitions: NotRequired[List[NoncurrentVersionTransitionTypeDef]]
+    Transitions: NotRequired[list[TransitionOutputTypeDef]]
+    NoncurrentVersionTransitions: NotRequired[list[NoncurrentVersionTransitionTypeDef]]
     NoncurrentVersionExpiration: NotRequired[NoncurrentVersionExpirationTypeDef]
     AbortIncompleteMultipartUpload: NotRequired[AbortIncompleteMultipartUploadTypeDef]
 
@@ -3834,21 +3829,21 @@ class PutObjectLockConfigurationRequestTypeDef(TypedDict):
 
 class LambdaFunctionConfigurationOutputTypeDef(TypedDict):
     LambdaFunctionArn: str
-    Events: List[EventType]
+    Events: list[EventType]
     Id: NotRequired[str]
     Filter: NotRequired[NotificationConfigurationFilterOutputTypeDef]
 
 
 class QueueConfigurationOutputTypeDef(TypedDict):
     QueueArn: str
-    Events: List[EventType]
+    Events: list[EventType]
     Id: NotRequired[str]
     Filter: NotRequired[NotificationConfigurationFilterOutputTypeDef]
 
 
 class TopicConfigurationOutputTypeDef(TypedDict):
     TopicArn: str
-    Events: List[EventType]
+    Events: list[EventType]
     Id: NotRequired[str]
     Filter: NotRequired[NotificationConfigurationFilterOutputTypeDef]
 
@@ -4033,7 +4028,7 @@ class ListBucketIntelligentTieringConfigurationsOutputTypeDef(TypedDict):
     IsTruncated: bool
     ContinuationToken: str
     NextContinuationToken: str
-    IntelligentTieringConfigurationList: List[IntelligentTieringConfigurationOutputTypeDef]
+    IntelligentTieringConfigurationList: list[IntelligentTieringConfigurationOutputTypeDef]
     ResponseMetadata: ResponseMetadataTypeDef
 
 
@@ -4043,7 +4038,7 @@ IntelligentTieringConfigurationUnionTypeDef = Union[
 
 
 class GetBucketLifecycleConfigurationOutputTypeDef(TypedDict):
-    Rules: List[LifecycleRuleOutputTypeDef]
+    Rules: list[LifecycleRuleOutputTypeDef]
     TransitionDefaultMinimumObjectSize: TransitionDefaultMinimumObjectSizeType
     ResponseMetadata: ResponseMetadataTypeDef
 
@@ -4062,7 +4057,7 @@ class ListBucketMetricsConfigurationsOutputTypeDef(TypedDict):
     IsTruncated: bool
     ContinuationToken: str
     NextContinuationToken: str
-    MetricsConfigurationList: List[MetricsConfigurationOutputTypeDef]
+    MetricsConfigurationList: list[MetricsConfigurationOutputTypeDef]
     ResponseMetadata: ResponseMetadataTypeDef
 
 
@@ -4084,10 +4079,10 @@ class AnalyticsConfigurationTypeDef(TypedDict):
 
 
 class NotificationConfigurationResponseTypeDef(TypedDict):
-    TopicConfigurations: List[TopicConfigurationOutputTypeDef]
-    QueueConfigurations: List[QueueConfigurationOutputTypeDef]
-    LambdaFunctionConfigurations: List[LambdaFunctionConfigurationOutputTypeDef]
-    EventBridgeConfiguration: Dict[str, Any]
+    TopicConfigurations: list[TopicConfigurationOutputTypeDef]
+    QueueConfigurations: list[QueueConfigurationOutputTypeDef]
+    LambdaFunctionConfigurations: list[LambdaFunctionConfigurationOutputTypeDef]
+    EventBridgeConfiguration: dict[str, Any]
     ResponseMetadata: ResponseMetadataTypeDef
 
 
@@ -4115,7 +4110,7 @@ class InventoryConfigurationOutputTypeDef(TypedDict):
     IncludedObjectVersions: InventoryIncludedObjectVersionsType
     Schedule: InventoryScheduleTypeDef
     Filter: NotRequired[InventoryFilterTypeDef]
-    OptionalFields: NotRequired[List[InventoryOptionalFieldType]]
+    OptionalFields: NotRequired[list[InventoryOptionalFieldType]]
 
 
 class InventoryConfigurationTypeDef(TypedDict):
@@ -4135,7 +4130,7 @@ class GetBucketMetadataConfigurationOutputTypeDef(TypedDict):
 
 class ReplicationConfigurationOutputTypeDef(TypedDict):
     Role: str
-    Rules: List[ReplicationRuleOutputTypeDef]
+    Rules: list[ReplicationRuleOutputTypeDef]
 
 
 class ReplicationConfigurationTypeDef(TypedDict):
@@ -4193,7 +4188,7 @@ class ListBucketAnalyticsConfigurationsOutputTypeDef(TypedDict):
     IsTruncated: bool
     ContinuationToken: str
     NextContinuationToken: str
-    AnalyticsConfigurationList: List[AnalyticsConfigurationOutputTypeDef]
+    AnalyticsConfigurationList: list[AnalyticsConfigurationOutputTypeDef]
     ResponseMetadata: ResponseMetadataTypeDef
 
 
@@ -4256,7 +4251,7 @@ class GetBucketInventoryConfigurationOutputTypeDef(TypedDict):
 
 class ListBucketInventoryConfigurationsOutputTypeDef(TypedDict):
     ContinuationToken: str
-    InventoryConfigurationList: List[InventoryConfigurationOutputTypeDef]
+    InventoryConfigurationList: list[InventoryConfigurationOutputTypeDef]
     IsTruncated: bool
     NextContinuationToken: str
     ResponseMetadata: ResponseMetadataTypeDef

@@ -396,6 +396,7 @@ from .literals import (
     VpcStateType,
     VpnEcmpSupportValueType,
     VpnStateType,
+    VpnTunnelBandwidthType,
     VpnTunnelProvisioningStatusType,
     WeekDayType,
 )
@@ -20767,6 +20768,7 @@ class VpnConnectionOptionsSpecificationTypeDef(TypedDict):
     RemoteIpv6NetworkCidr: NotRequired[str]
     OutsideIpAddressType: NotRequired[str]
     TransportTransitGatewayAttachmentId: NotRequired[str]
+    TunnelBandwidth: NotRequired[VpnTunnelBandwidthType]
     StaticRoutesOnly: NotRequired[bool]
 
 
@@ -20781,6 +20783,7 @@ class VpnConnectionOptionsTypeDef(TypedDict):
     TransportTransitGatewayAttachmentId: NotRequired[str]
     TunnelInsideIpVersion: NotRequired[TunnelInsideIpVersionType]
     TunnelOptions: NotRequired[list[TunnelOptionTypeDef]]
+    TunnelBandwidth: NotRequired[VpnTunnelBandwidthType]
 
 
 class InstanceRequirementsOutputTypeDef(TypedDict):

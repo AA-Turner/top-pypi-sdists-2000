@@ -3,29 +3,26 @@ from __future__ import annotations
 from typing import TYPE_CHECKING, Any, Literal
 
 from pydantic import PositiveInt
+from typing_extensions import Self, assert_never
 from wandb_gql import gql
 
 import wandb
 from wandb._analytics import tracked
+from wandb._strutils import nameof
+from wandb.apis.public.teams import Team
+from wandb.apis.public.users import User
 from wandb.proto import wandb_internal_pb2 as pb
-from wandb.sdk.artifacts._generated import (
-    DELETE_REGISTRY_GQL,
-    FETCH_REGISTRY_GQL,
-    RENAME_REGISTRY_GQL,
-    UPSERT_REGISTRY_GQL,
-    DeleteRegistry,
-    FetchRegistry,
-    RegistryFragment,
-    RenameProjectInput,
-    RenameRegistry,
-    UpsertModelInput,
-    UpsertRegistry,
-)
-from wandb.sdk.artifacts._gqlutils import server_supports
 from wandb.sdk.artifacts._models import RegistryData
-from wandb.sdk.artifacts._validators import REGISTRY_PREFIX, validate_project_name
 
 from ._freezable_list import AddOnlyArtifactTypesList
+from ._members import (
+    MemberId,
+    MemberKind,
+    MemberRole,
+    TeamMember,
+    UserMember,
+    parse_member_ids,
+)
 from ._utils import (
     Visibility,
     fetch_org_entity_from_organization,
@@ -35,6 +32,8 @@ from .registries_search import Collections, Versions
 
 if TYPE_CHECKING:
     from wandb_gql import Client
+
+    from wandb.sdk.artifacts._generated import RegistryFragment
 
 
 class Registry:
@@ -68,10 +67,15 @@ class Registry:
             self._update_attributes(attrs)
 
     def _update_attributes(self, fragment: RegistryFragment) -> None:
-        """Internal helper method to update instance attributes from GraphQL fragment data."""
+        """Update instance attributes from a GraphQL fragment."""
         saved = RegistryData.from_fragment(fragment)
         self._saved = saved
         self._current = saved.model_copy(deep=True)
+
+    @property
+    def id(self) -> str:
+        """The unique ID for this registry."""
+        return self._current.id
 
     @property
     def full_name(self) -> str:
@@ -109,10 +113,10 @@ class Registry:
 
     @property
     def allow_all_artifact_types(self) -> bool:
-        """Returns whether all artifact types are allowed in the registry.
+        """Return whether all artifact types are allowed in the registry.
 
-        If `True` then artifacts of any type can be added to this registry.
-        If `False` then artifacts are restricted to the types in `artifact_types` for this registry.
+        If `True`, artifacts of any type can be added. If `False`, artifacts are
+        restricted to the types listed in `artifact_types`.
         """
         return self._current.allow_all_artifact_types
 
@@ -225,7 +229,7 @@ class Registry:
         visibility: Literal["organization", "restricted"],
         description: str | None = None,
         artifact_types: list[str] | None = None,
-    ):
+    ) -> Self:
         """Create a new registry.
 
         The registry name must be unique within the organization.
@@ -246,6 +250,16 @@ class Registry:
             ValueError: If a registry with the same name already exists in the
                 organization or if the creation fails.
         """
+        from wandb.sdk.artifacts._generated import (
+            UPSERT_REGISTRY_GQL,
+            UpsertModelInput,
+            UpsertRegistry,
+        )
+        from wandb.sdk.artifacts._validators import (
+            REGISTRY_PREFIX,
+            validate_project_name,
+        )
+
         failed_msg = (
             f"Failed to create registry {name!r} in organization {organization!r}."
         )
@@ -270,7 +284,7 @@ class Registry:
         if not (result and result.inserted and (registry_project := result.project)):
             raise ValueError(failed_msg)
 
-        return Registry(
+        return cls(
             client,
             organization=organization,
             entity=org_entity,
@@ -281,10 +295,12 @@ class Registry:
     @tracked
     def delete(self) -> None:
         """Delete the registry. This is irreversible."""
+        from wandb.sdk.artifacts._generated import DELETE_REGISTRY_GQL, DeleteRegistry
+
         failed_msg = f"Failed to delete registry {self.name!r} in organization {self.organization!r}"
 
         gql_op = gql(DELETE_REGISTRY_GQL)
-        gql_vars = {"id": self._saved.id}
+        gql_vars = {"id": self.id}
         try:
             data = self.client.execute(gql_op, variable_values=gql_vars)
             result = DeleteRegistry.model_validate(data).delete_model
@@ -295,8 +311,13 @@ class Registry:
 
     @tracked
     def load(self) -> None:
-        """Load the registry attributes from the backend to reflect the latest saved state."""
-        failed_msg = f"Failed to load registry {self.name!r} in organization {self.organization!r}."
+        """Load registry attributes from the backend."""
+        from wandb.sdk.artifacts._generated import FETCH_REGISTRY_GQL, FetchRegistry
+
+        failed_msg = (
+            f"Failed to load registry {self.name!r} in organization"
+            f" {self.organization!r}."
+        )
 
         gql_op = gql(FETCH_REGISTRY_GQL)
         gql_vars = {"name": self.full_name, "entity": self.entity}
@@ -314,6 +335,17 @@ class Registry:
     @tracked
     def save(self) -> None:
         """Save registry attributes to the backend."""
+        from wandb.sdk.artifacts._generated import (
+            RENAME_REGISTRY_GQL,
+            UPSERT_REGISTRY_GQL,
+            RenameProjectInput,
+            RenameRegistry,
+            UpsertModelInput,
+            UpsertRegistry,
+        )
+        from wandb.sdk.artifacts._gqlutils import server_supports
+        from wandb.sdk.artifacts._validators import validate_project_name
+
         if not server_supports(
             self.client, pb.INCLUDE_ARTIFACT_TYPES_IN_REGISTRY_CREATION
         ):
@@ -322,7 +354,8 @@ class Registry:
                 "Please upgrade your server version or contact support at support@wandb.com."
             )
 
-        # If `artifact_types.draft` has items, it means the user has added artifact types that aren't saved yet.
+        # If `artifact_types.draft` has items, the user added types that are not
+        # yet saved.
         if (
             new_artifact_types := self.artifact_types.draft
         ) and self.allow_all_artifact_types:
@@ -352,7 +385,7 @@ class Registry:
             raise ValueError(failed_msg) from e
 
         if result and result.inserted:
-            # This is not suppose trigger unless the user has messed with the `_saved_name` variable
+            # This should only trigger if `_saved_name` was modified unexpectedly.
             wandb.termlog(
                 f"Created registry {self.name!r} in organization {self.organization!r} on save"
             )
@@ -377,11 +410,253 @@ class Registry:
                 raise ValueError(failed_msg)
 
             if result.inserted:
-                # This is not suppose trigger unless the user has messed with the `_saved_name` variable
+                # This should only trigger if `_saved_name` was modified unexpectedly.
                 wandb.termlog(f"Created new registry {self.name!r} on save")
 
             self._update_attributes(registry_project)
 
-    def _no_updating_registry_types(self) -> bool:
-        # artifact types draft means user assigned types to add that are not yet saved
-        return len(self.artifact_types.draft) > 0 and self.allow_all_artifact_types
+    def members(self) -> list[UserMember | TeamMember]:
+        """Returns the current members (users and teams) of this registry."""
+        return [*self.user_members(), *self.team_members()]
+
+    def user_members(self) -> list[UserMember]:
+        """Returns the current member users of this registry."""
+        from wandb.sdk.artifacts._generated import (
+            REGISTRY_USER_MEMBERS_GQL,
+            RegistryUserMembers,
+        )
+
+        gql_op = gql(REGISTRY_USER_MEMBERS_GQL)
+        gql_vars = {"project": self.full_name, "entity": self.entity}
+        data = self.client.execute(gql_op, variable_values=gql_vars)
+        result = RegistryUserMembers.model_validate(data)
+
+        if not (project := result.project):
+            raise ValueError(f"Failed to fetch user members for registry {self.name!r}")
+
+        return [
+            UserMember(
+                user=User(
+                    client=self.client,
+                    # The `User` class requires an unstructured attribute dict.
+                    # Exclude `.role`, which is specific to this registry membership.
+                    attrs=m.model_dump(exclude_none=True, exclude={"role"}),
+                ),
+                role=m.role.name,
+            )
+            for m in project.members
+        ]
+
+    def team_members(self) -> list[TeamMember]:
+        """Returns the current member teams of this registry."""
+        from wandb.sdk.artifacts._generated import (
+            REGISTRY_TEAM_MEMBERS_GQL,
+            RegistryTeamMembers,
+        )
+
+        gql_op = gql(REGISTRY_TEAM_MEMBERS_GQL)
+        gql_vars = {"project": self.full_name, "entity": self.entity}
+        data = self.client.execute(gql_op, variable_values=gql_vars)
+        result = RegistryTeamMembers.model_validate(data)
+
+        if not (project := result.project):
+            raise ValueError(f"Failed to fetch team members for registry {self.name!r}")
+
+        return [
+            TeamMember(
+                team=Team(
+                    client=self.client,
+                    name=m.team.name,
+                    # The `Team` class currently requires an unstructured attribute dict.
+                    attrs=m.team.model_dump(exclude_none=True),
+                ),
+                role=m.role.name,
+            )
+            for m in project.team_members
+        ]
+
+    def add_members(
+        self, *members: User | UserMember | Team | TeamMember | str
+    ) -> Self:
+        """Adds users or teams to this registry.
+
+        Args:
+            members: The users or teams to add to the registry. Accepts
+                `User` objects, `Team` objects, or their string IDs.
+
+        Returns:
+            This registry for further method chaining, if needed.
+
+        Raises:
+            TypeError: If no members are passed as arguments.
+            ValueError: If unable to infer or parse the user or team IDs.
+
+        Examples:
+        ```python
+        import wandb
+
+        api = wandb.Api()
+
+        # Fetch an existing registry
+        registry = api.registry(name="my-registry", organization="my-org")
+
+        user1 = api.user(username="some-user")
+        user2 = api.user(username="other-user")
+        registry.add_members(user1, user2)
+
+        my_team = api.team(name="my-team")
+        registry.add_members(my_team)
+        ```
+        """
+        from wandb.sdk.artifacts._generated import (
+            CREATE_REGISTRY_MEMBERS_GQL,
+            CreateProjectMembersInput,
+            CreateRegistryMembers,
+        )
+
+        if not members:
+            raise TypeError(
+                f"Must provide at least one member to {nameof(self.add_members)!r}."
+            )
+        user_ids, team_ids = parse_member_ids(members)
+
+        gql_op = gql(CREATE_REGISTRY_MEMBERS_GQL)
+        gql_input = CreateProjectMembersInput(
+            user_ids=user_ids, team_ids=team_ids, project_id=self.id
+        )
+        gql_vars = {"input": gql_input.model_dump()}
+        data = self.client.execute(gql_op, variable_values=gql_vars)
+        result = CreateRegistryMembers.model_validate(data).result
+
+        if not (result and result.success):
+            raise ValueError(f"Failed to add members to registry {self.name!r}")
+        return self
+
+    def remove_members(
+        self, *members: User | UserMember | Team | TeamMember | str
+    ) -> Self:
+        """Removes users or teams from this registry.
+
+        Args:
+            members: The users or teams to remove from the registry. Accepts
+                `User` objects, `Team` objects, or their string IDs.
+
+        Returns:
+            This registry for further method chaining, if needed.
+
+        Raises:
+            TypeError: If no members are passed as arguments.
+            ValueError: If unable to infer or parse the user or team IDs.
+
+        Examples:
+        ```python
+        import wandb
+
+        api = wandb.Api()
+
+        # Fetch an existing registry
+        registry = api.registry(name="my-registry", organization="my-org")
+
+        user1 = api.user(username="some-user")
+        user2 = api.user(username="other-user")
+        registry.remove_members(user1, user2)
+
+        old_team = api.team(name="old-team")
+        registry.remove_members(old_team)
+        ```
+        """
+        from wandb.sdk.artifacts._generated import (
+            DELETE_REGISTRY_MEMBERS_GQL,
+            DeleteProjectMembersInput,
+            DeleteRegistryMembers,
+        )
+
+        if not members:
+            raise TypeError(
+                f"Must provide at least one member to {nameof(self.add_members)!r}."
+            )
+        user_ids, team_ids = parse_member_ids(members)
+
+        gql_op = gql(DELETE_REGISTRY_MEMBERS_GQL)
+        gql_input = DeleteProjectMembersInput(
+            user_ids=user_ids, team_ids=team_ids, project_id=self.id
+        )
+        gql_vars = {"input": gql_input.model_dump()}
+        data = self.client.execute(gql_op, variable_values=gql_vars)
+        result = DeleteRegistryMembers.model_validate(data).result
+
+        if not (result and result.success):
+            raise ValueError(f"Failed to remove members from registry {self.name!r}")
+        return self
+
+    def update_member(
+        self,
+        member: User | UserMember | Team | TeamMember | str,
+        role: MemberRole | str,
+    ) -> Self:
+        """Updates the role of a member (user or team) within this registry.
+
+        Args:
+            member: The user or team to update the role of.
+                Accepts a `User` object, `Team` object, or their string ID.
+            role: The new role to assign to the member. May be one of:
+                - "admin"
+                - "member"
+                - "viewer"
+                - "restricted_viewer" (if supported by the W&B server)
+
+        Returns:
+            This registry for further method chaining, if needed.
+
+        Raises:
+            ValueError: If unable to infer the user or team ID.
+
+        Examples:
+        Make all users in the registry admins:
+        ```python
+        import wandb
+
+        api = wandb.Api()
+
+        # Fetch an existing registry
+        registry = api.registry(name="my-registry", organization="my-org")
+
+        for member in registry.user_members():
+            registry.update_member(member.user, role="admin")
+        ```
+        """
+        from wandb.sdk.artifacts._generated import (
+            UPDATE_TEAM_REGISTRY_ROLE_GQL,
+            UPDATE_USER_REGISTRY_ROLE_GQL,
+            UpdateProjectMemberInput,
+            UpdateProjectTeamMemberInput,
+            UpdateTeamRegistryRole,
+            UpdateUserRegistryRole,
+        )
+
+        id_ = MemberId.from_obj(member)
+
+        if id_.kind is MemberKind.USER:
+            gql_op = gql(UPDATE_USER_REGISTRY_ROLE_GQL)
+            gql_input = UpdateProjectMemberInput(
+                user_id=id_.encode(), project_id=self.id, user_project_role=role
+            )
+            result_cls = UpdateUserRegistryRole
+        elif id_.kind is MemberKind.ENTITY:
+            gql_op = gql(UPDATE_TEAM_REGISTRY_ROLE_GQL)
+            gql_input = UpdateProjectTeamMemberInput(
+                team_id=id_.encode(), project_id=self.id, team_project_role=role
+            )
+            result_cls = UpdateTeamRegistryRole
+        else:
+            assert_never(id_.kind)
+
+        gql_vars = {"input": gql_input.model_dump()}
+        data = self.client.execute(gql_op, variable_values=gql_vars)
+        result = result_cls.model_validate(data).result
+
+        if not (result and result.success):
+            raise ValueError(
+                f"Failed to update member {member!r} role to {role!r} in registry {self.name!r}"
+            )
+        return self

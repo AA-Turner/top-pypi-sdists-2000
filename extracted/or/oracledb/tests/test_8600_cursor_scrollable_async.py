@@ -226,3 +226,53 @@ async def test_8614(async_conn):
     (value,) = await cursor.fetchone()
     assert value == 6.25
     assert cursor.rowcount == 5
+
+
+async def test_8615(async_conn):
+    "8615 - test parse() on a scrollable cursor"
+    cursor = async_conn.cursor(scrollable=True)
+    statement = """
+        select 1 from dual
+        union all
+        select 2 from dual
+        union all
+        select 3 from dual
+        union all
+        select 4 from dual
+        union all
+        select 5 from dual
+    """
+    await cursor.parse(statement)
+    await cursor.execute(statement)
+    (fetched_value,) = await cursor.fetchone()
+    assert fetched_value == 1
+    await cursor.scroll(mode="last")
+    (fetched_value,) = await cursor.fetchone()
+    assert fetched_value == 5
+
+
+async def test_8616(async_conn):
+    "8616 - test scroll operation with bind values"
+    cursor = async_conn.cursor(scrollable=True)
+    base_value = 4215
+    await cursor.execute(
+        """
+        select :base_value + 1 from dual
+        union all
+        select :base_value + 2 from dual
+        union all
+        select :base_value + 3 from dual
+        """,
+        dict(base_value=base_value),
+    )
+    await cursor.scroll(mode="last")
+    (fetched_value,) = await cursor.fetchone()
+    assert fetched_value == base_value + 3
+
+
+async def test_8617(async_conn, test_env):
+    "8717 - test calling scroll() on a non-scrollable cursor"
+    cursor = async_conn.cursor()
+    await cursor.execute("select NumberCol from TestNumbers order by IntCol")
+    with test_env.assert_raises_full_code("DPY-2068"):
+        await cursor.scroll(mode="first")

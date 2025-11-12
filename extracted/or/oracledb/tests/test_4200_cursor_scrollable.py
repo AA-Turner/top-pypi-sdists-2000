@@ -223,3 +223,53 @@ def test_4214(conn):
     (value,) = cursor.fetchone()
     assert value == 6.25
     assert cursor.rowcount == 5
+
+
+def test_4215(conn):
+    "4215 - test parse() on a scrollable cursor"
+    cursor = conn.cursor(scrollable=True)
+    statement = """
+        select 1 from dual
+        union all
+        select 2 from dual
+        union all
+        select 3 from dual
+        union all
+        select 4 from dual
+        union all
+        select 5 from dual
+    """
+    cursor.parse(statement)
+    cursor.execute(statement)
+    (fetched_value,) = cursor.fetchone()
+    assert fetched_value == 1
+    cursor.scroll(mode="last")
+    (fetched_value,) = cursor.fetchone()
+    assert fetched_value == 5
+
+
+def test_4216(conn):
+    "4216 - test scroll operation with bind values"
+    cursor = conn.cursor(scrollable=True)
+    base_value = 4215
+    cursor.execute(
+        """
+        select :base_value + 1 from dual
+        union all
+        select :base_value + 2 from dual
+        union all
+        select :base_value + 3 from dual
+        """,
+        dict(base_value=base_value),
+    )
+    cursor.scroll(mode="last")
+    (fetched_value,) = cursor.fetchone()
+    assert fetched_value == base_value + 3
+
+
+def test_4217(conn, test_env):
+    "4217 - test calling scroll() on a non-scrollable cursor"
+    cursor = conn.cursor()
+    cursor.execute("select NumberCol from TestNumbers order by IntCol")
+    with test_env.assert_raises_full_code("DPY-2068"):
+        cursor.scroll(mode="first")

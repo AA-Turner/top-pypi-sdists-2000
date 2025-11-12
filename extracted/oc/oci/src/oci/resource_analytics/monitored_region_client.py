@@ -155,7 +155,7 @@ class MonitoredRegionClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/resourceanalytics/create_monitored_region.py.html>`__ to see an example of how to use create_monitored_region API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/resourceanalytics/create_monitored_region.py.html>`__ to see an example of how to use create_monitored_region API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -257,7 +257,7 @@ class MonitoredRegionClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/resourceanalytics/delete_monitored_region.py.html>`__ to see an example of how to use delete_monitored_region API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/resourceanalytics/delete_monitored_region.py.html>`__ to see an example of how to use delete_monitored_region API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['monitoredRegionId']
@@ -360,7 +360,7 @@ class MonitoredRegionClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/resourceanalytics/get_monitored_region.py.html>`__ to see an example of how to use get_monitored_region API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/resourceanalytics/get_monitored_region.py.html>`__ to see an example of how to use get_monitored_region API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['monitoredRegionId']
@@ -499,7 +499,7 @@ class MonitoredRegionClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/resourceanalytics/list_monitored_regions.py.html>`__ to see an example of how to use list_monitored_regions API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/resourceanalytics/list_monitored_regions.py.html>`__ to see an example of how to use list_monitored_regions API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []

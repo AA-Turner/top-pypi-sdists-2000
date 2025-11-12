@@ -25,6 +25,7 @@ import wandb.env
 import wandb.errors
 import wandb.sdk.verify.verify as wandb_verify
 from wandb import Config, Error, env, util, wandb_agent, wandb_sdk
+from wandb.analytics import get_sentry
 from wandb.apis import InternalApi, PublicApi
 from wandb.apis.public import RunQueue
 from wandb.errors.links import url_registry
@@ -1439,7 +1440,7 @@ def launch(
     from wandb.sdk.launch.utils import _is_git_uri
 
     api = _get_cling_api()
-    wandb._sentry.configure_scope(process_context="launch_cli")
+    get_sentry().configure_scope(process_context="launch_cli")
 
     if run_async and queue is not None:
         raise LaunchError(
@@ -1571,11 +1572,11 @@ def launch(
                 sys.exit(1)
         except LaunchError as e:
             logger.exception("An error occurred.")
-            wandb._sentry.exception(e)
+            get_sentry().exception(e)
             sys.exit(e)
         except ExecutionError as e:
             logger.exception("An error occurred.")
-            wandb._sentry.exception(e)
+            get_sentry().exception(e)
             sys.exit(e)
         except asyncio.CancelledError:
             sys.exit(0)
@@ -1603,7 +1604,7 @@ def launch(
             )
 
         except Exception as e:
-            wandb._sentry.exception(e)
+            get_sentry().exception(e)
             raise
 
 
@@ -1678,7 +1679,7 @@ def launch_agent(
         _launch.set_launch_logfile(log_file)
 
     api = _get_cling_api()
-    wandb._sentry.configure_scope(process_context="launch_agent")
+    get_sentry().configure_scope(process_context="launch_agent")
     agent_config, api = _launch.resolve_agent_config(
         entity, max_jobs, queues, config, verbose
     )
@@ -1694,7 +1695,7 @@ def launch_agent(
     try:
         _launch.create_and_run_agent(api, agent_config)
     except Exception as e:
-        wandb._sentry.exception(e)
+        get_sentry().exception(e)
         raise
 
 
@@ -1748,7 +1749,7 @@ def scheduler(
         ctx.invoke(login, no_offline=True)
         api = InternalApi(reset=True)
 
-    wandb._sentry.configure_scope(process_context="sweep_scheduler")
+    get_sentry().configure_scope(process_context="sweep_scheduler")
     wandb.termlog("Starting a Launch Scheduler 🚀")
     from wandb.sdk.launch.sweeps import load_scheduler
 
@@ -1772,7 +1773,7 @@ def scheduler(
         )
         _scheduler.start()
     except Exception as e:
-        wandb._sentry.exception(e)
+        get_sentry().exception(e)
         raise
 
 
@@ -1963,7 +1964,7 @@ def create(
     from wandb.sdk.launch.create_job import _create_job
 
     api = _get_cling_api()
-    wandb._sentry.configure_scope(process_context="job_create")
+    get_sentry().configure_scope(process_context="job_create")
 
     entity = entity or os.getenv("WANDB_ENTITY") or api.default_entity
     if not entity:
@@ -2595,6 +2596,7 @@ def pull(run, project, entity):
 @display_error
 def restore(ctx, run, no_git, branch, project, entity):
     from wandb.old.core import wandb_dir
+    from wandb.sdk.lib.gitlib import GitRepo
 
     api = _get_cling_api()
     if ":" in run:
@@ -2614,9 +2616,12 @@ def restore(ctx, run, no_git, branch, project, entity):
     image = metadata.get("docker")
     restore_message = f"""`wandb restore` needs to be run from the same git repository as the original run.
 Run `git clone {repo}` and restore from there or pass the --no-git flag."""
+
+    git = GitRepo(remote=api.settings("git_remote"))
+
     if no_git:
         commit = None
-    elif not api.git.enabled:
+    elif not git.enabled:
         if repo:
             raise ClickException(restore_message)
         elif image:
@@ -2624,11 +2629,11 @@ Run `git clone {repo}` and restore from there or pass the --no-git flag."""
                 "Original run has no git history.  Just restoring config and docker"
             )
 
-    if commit and api.git.enabled:
+    if commit and git.enabled:
         wandb.termlog(f"Fetching origin and finding commit: {commit}")
         subprocess.check_call(["git", "fetch", "--all"])
         try:
-            api.git.repo.commit(commit)
+            git.repo.commit(commit)
         except ValueError:
             wandb.termlog(f"Couldn't find original commit: {commit}")
             commit = None
@@ -2639,7 +2644,7 @@ Run `git clone {repo}` and restore from there or pass the --no-git flag."""
                 ):
                     commit = filename[len("upstream_diff_") : -len(".patch")]
                     try:
-                        api.git.repo.commit(commit)
+                        git.repo.commit(commit)
                     except ValueError:
                         commit = None
                     else:
@@ -2659,22 +2664,22 @@ Run `git clone {repo}` and restore from there or pass the --no-git flag."""
                 patch_path = None
 
         branch_name = f"wandb/{run}"
-        if branch and branch_name not in api.git.repo.branches:
-            api.git.repo.git.checkout(commit, b=branch_name)
+        if branch and branch_name not in git.repo.branches:
+            git.repo.git.checkout(commit, b=branch_name)
             wandb.termlog(f"Created branch {click.style(branch_name, bold=True)}")
         elif branch:
             wandb.termlog(
                 f"Using existing branch, run `git branch -D {branch_name}` from master for a clean checkout"
             )
-            api.git.repo.git.checkout(branch_name)
+            git.repo.git.checkout(branch_name)
         else:
             wandb.termlog(f"Checking out {commit} in detached mode")
-            api.git.repo.git.checkout(commit)
+            git.repo.git.checkout(commit)
 
         if patch_path:
             # we apply the patch from the repository root so git doesn't exclude
             # things outside the current directory
-            root = api.git.root
+            root = git.root
             patch_rel_path = os.path.relpath(patch_path, start=root)
             # --reject is necessary or else this fails any time a binary file
             # occurs in the diff

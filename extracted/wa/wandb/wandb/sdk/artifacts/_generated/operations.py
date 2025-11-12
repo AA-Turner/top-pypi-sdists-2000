@@ -14,12 +14,14 @@ __all__ = [
     "ARTIFACT_TYPE_GQL",
     "ARTIFACT_USED_BY_GQL",
     "ARTIFACT_VERSION_FILES_GQL",
+    "CREATE_REGISTRY_MEMBERS_GQL",
     "DELETE_ALIASES_GQL",
     "DELETE_ARTIFACT_COLLECTION_TAGS_GQL",
     "DELETE_ARTIFACT_GQL",
     "DELETE_ARTIFACT_PORTFOLIO_GQL",
     "DELETE_ARTIFACT_SEQUENCE_GQL",
     "DELETE_REGISTRY_GQL",
+    "DELETE_REGISTRY_MEMBERS_GQL",
     "FETCH_ARTIFACT_MANIFEST_GQL",
     "FETCH_LINKED_ARTIFACTS_GQL",
     "FETCH_ORG_INFO_FROM_ENTITY_GQL",
@@ -32,6 +34,8 @@ __all__ = [
     "PROJECT_ARTIFACT_TYPES_GQL",
     "PROJECT_ARTIFACT_TYPE_GQL",
     "REGISTRY_COLLECTIONS_GQL",
+    "REGISTRY_TEAM_MEMBERS_GQL",
+    "REGISTRY_USER_MEMBERS_GQL",
     "REGISTRY_VERSIONS_GQL",
     "RENAME_REGISTRY_GQL",
     "RUN_INPUT_ARTIFACTS_GQL",
@@ -42,6 +46,8 @@ __all__ = [
     "UPDATE_ARTIFACT_GQL",
     "UPDATE_ARTIFACT_PORTFOLIO_GQL",
     "UPDATE_ARTIFACT_SEQUENCE_GQL",
+    "UPDATE_TEAM_REGISTRY_ROLE_GQL",
+    "UPDATE_USER_REGISTRY_ROLE_GQL",
     "UPSERT_REGISTRY_GQL",
 ]
 
@@ -283,10 +289,10 @@ fragment TagFragment on Tag {
 """
 
 ARTIFACT_VERSION_FILES_GQL = """
-query ArtifactVersionFiles($entityName: String!, $projectName: String!, $artifactTypeName: String!, $artifactName: String!, $fileNames: [String!], $cursor: String, $perPage: Int = 50) {
-  project(name: $projectName, entityName: $entityName) {
-    artifactType(name: $artifactTypeName) {
-      artifact(name: $artifactName) {
+query ArtifactVersionFiles($entity: String!, $project: String!, $artifactType: String!, $name: String!, $fileNames: [String!], $cursor: String, $perPage: Int = 50) {
+  project(name: $project, entityName: $entity) {
+    artifactType(name: $artifactType) {
+      artifact(name: $name) {
         files(names: $fileNames, after: $cursor, first: $perPage) {
           pageInfo {
             ...PageInfoFragment
@@ -296,6 +302,7 @@ query ArtifactVersionFiles($entityName: String!, $projectName: String!, $artifac
               ...FileFragment
             }
           }
+          totalCount @include(if: true)
         }
       }
     }
@@ -324,11 +331,11 @@ fragment PageInfoFragment on PageInfo {
 """
 
 ARTIFACT_COLLECTION_MEMBERSHIP_FILES_GQL = """
-query ArtifactCollectionMembershipFiles($entityName: String!, $projectName: String!, $artifactName: String!, $artifactVersionIndex: String!, $fileNames: [String!], $cursor: String, $perPage: Int = 50) {
-  project(name: $projectName, entityName: $entityName) {
-    artifactCollection(name: $artifactName) {
+query ArtifactCollectionMembershipFiles($entity: String!, $project: String!, $collection: String!, $alias: String!, $fileNames: [String!], $cursor: String, $perPage: Int = 50) {
+  project(name: $project, entityName: $entity) {
+    artifactCollection(name: $collection) {
       __typename
-      artifactMembership(aliasName: $artifactVersionIndex) {
+      artifactMembership(aliasName: $alias) {
         files(names: $fileNames, after: $cursor, first: $perPage) {
           pageInfo {
             ...PageInfoFragment
@@ -338,6 +345,7 @@ query ArtifactCollectionMembershipFiles($entityName: String!, $projectName: Stri
               ...FileFragment
             }
           }
+          totalCount @include(if: true)
         }
       }
     }
@@ -366,11 +374,11 @@ fragment PageInfoFragment on PageInfo {
 """
 
 ARTIFACT_COLLECTION_MEMBERSHIP_FILE_URLS_GQL = """
-query ArtifactCollectionMembershipFileUrls($entityName: String!, $projectName: String!, $artifactName: String!, $artifactVersionIndex: String!, $cursor: String, $perPage: Int) {
-  project(name: $projectName, entityName: $entityName) {
-    artifactCollection(name: $artifactName) {
+query ArtifactCollectionMembershipFileUrls($entity: String!, $project: String!, $collection: String!, $alias: String!, $cursor: String, $perPage: Int) {
+  project(name: $project, entityName: $entity) {
+    artifactCollection(name: $collection) {
       __typename
-      artifactMembership(aliasName: $artifactVersionIndex) {
+      artifactMembership(aliasName: $alias) {
         files(after: $cursor, first: $perPage) {
           pageInfo {
             ...PageInfoFragment
@@ -1140,8 +1148,8 @@ fragment RunInfoFragment on Run {
 """
 
 ARTIFACT_TYPE_GQL = """
-query ArtifactType($entityName: String, $projectName: String, $name: String!) {
-  project(name: $projectName, entityName: $entityName) {
+query ArtifactType($entity: String, $project: String, $name: String!) {
+  project(name: $project, entityName: $entity) {
     artifact(name: $name) {
       artifactType {
         name
@@ -1153,7 +1161,7 @@ query ArtifactType($entityName: String, $projectName: String, $name: String!) {
 
 ADD_ALIASES_GQL = """
 mutation AddAliases($input: AddAliasesInput!) {
-  addAliases(input: $input) {
+  result: addAliases(input: $input) {
     success
   }
 }
@@ -1161,7 +1169,7 @@ mutation AddAliases($input: AddAliasesInput!) {
 
 DELETE_ALIASES_GQL = """
 mutation DeleteAliases($input: DeleteAliasesInput!) {
-  deleteAliases(input: $input) {
+  result: deleteAliases(input: $input) {
     success
   }
 }
@@ -1169,7 +1177,7 @@ mutation DeleteAliases($input: DeleteAliasesInput!) {
 
 UPDATE_ARTIFACT_GQL = """
 mutation UpdateArtifact($input: UpdateArtifactInput!, $includeAliases: Boolean = true) {
-  updateArtifact(input: $input) {
+  result: updateArtifact(input: $input) {
     artifact {
       ...ArtifactFragment
     }
@@ -1247,7 +1255,7 @@ fragment TagFragment on Tag {
 
 DELETE_ARTIFACT_GQL = """
 mutation DeleteArtifact($input: DeleteArtifactInput!) {
-  deleteArtifact(input: $input) {
+  result: deleteArtifact(input: $input) {
     artifact {
       id
     }
@@ -1257,7 +1265,7 @@ mutation DeleteArtifact($input: DeleteArtifactInput!) {
 
 LINK_ARTIFACT_GQL = """
 mutation LinkArtifact($input: LinkArtifactInput!, $includeAliases: Boolean = true) {
-  linkArtifact(input: $input) {
+  result: linkArtifact(input: $input) {
     versionIndex
     artifactMembership @include(if: true) {
       ...ArtifactMembershipFragment
@@ -1351,7 +1359,7 @@ fragment TagFragment on Tag {
 
 UNLINK_ARTIFACT_GQL = """
 mutation UnlinkArtifact($input: UnlinkArtifactInput!) {
-  unlinkArtifact(input: $input) {
+  result: unlinkArtifact(input: $input) {
     success
   }
 }
@@ -1752,6 +1760,117 @@ fragment RegistryFragment on Project {
 DELETE_REGISTRY_GQL = """
 mutation DeleteRegistry($id: String!) {
   deleteModel(input: {id: $id}) {
+    success
+  }
+}
+"""
+
+REGISTRY_USER_MEMBERS_GQL = """
+query RegistryUserMembers($project: String!, $entity: String!) {
+  project(name: $project, entityName: $entity) {
+    members {
+      ...UserRegistryMemberFragment
+    }
+  }
+}
+
+fragment RegistryRoleFragment on Role {
+  name
+}
+
+fragment UserRegistryMemberFragment on ProjectMember {
+  id
+  name
+  username
+  email
+  role {
+    ...RegistryRoleFragment
+  }
+}
+"""
+
+REGISTRY_TEAM_MEMBERS_GQL = """
+query RegistryTeamMembers($project: String!, $entity: String!) {
+  project(name: $project, entityName: $entity) {
+    teamMembers {
+      ...TeamRegistryMemberFragment
+    }
+  }
+}
+
+fragment RegistryRoleFragment on Role {
+  name
+}
+
+fragment TeamFragment on Entity {
+  __typename
+  id
+  name
+  available
+  photoUrl
+  readOnly
+  readOnlyAdmin
+  isTeam
+  privateOnly
+  storageBytes
+  codeSavingEnabled
+  defaultAccess
+  isPaid
+  members {
+    ...TeamMemberFragment
+  }
+}
+
+fragment TeamMemberFragment on Member {
+  __typename
+  id
+  role
+  pending
+  email
+  username
+  name
+  photoUrl
+  accountType
+  apiKey
+}
+
+fragment TeamRegistryMemberFragment on ProjectTeamMember {
+  team {
+    ...TeamFragment
+  }
+  role {
+    ...RegistryRoleFragment
+  }
+}
+"""
+
+CREATE_REGISTRY_MEMBERS_GQL = """
+mutation CreateRegistryMembers($input: CreateProjectMembersInput!) {
+  result: createProjectMembers(input: $input) {
+    success
+  }
+}
+"""
+
+DELETE_REGISTRY_MEMBERS_GQL = """
+mutation DeleteRegistryMembers($input: DeleteProjectMembersInput!) {
+  result: deleteProjectMembers(input: $input) {
+    success
+  }
+}
+"""
+
+UPDATE_USER_REGISTRY_ROLE_GQL = """
+mutation UpdateUserRegistryRole($input: UpdateProjectMemberInput!) {
+  result: updateProjectMember(input: $input) {
+    success
+  }
+}
+"""
+
+UPDATE_TEAM_REGISTRY_ROLE_GQL = """
+mutation UpdateTeamRegistryRole($input: UpdateProjectTeamMemberInput!) {
+  result: updateProjectTeamMember(input: $input) {
     success
   }
 }

@@ -35,8 +35,7 @@ from wandb._pydantic import (
 from wandb.errors import UsageError
 from wandb.proto import wandb_settings_pb2
 
-from .lib import apikey, credentials, ipython
-from .lib.gitlib import GitRepo
+from .lib import credentials, ipython
 from .lib.run_moment import RunMoment
 
 validate_url: Callable[[str], None]
@@ -2151,9 +2150,11 @@ class Settings(BaseModel, validate_assignment=True):
 
     def _get_url_query_string(self) -> str:
         """Construct the query string for project, run, and sweep URLs."""
-        # TODO: remove dependency on Api()
         if self.anonymous not in ["allow", "must"]:
             return ""
+
+        # TODO: remove dependency on Api()
+        from .lib import apikey
 
         api_key = apikey.api_key(settings=self)
 
@@ -2246,6 +2247,8 @@ class Settings(BaseModel, validate_assignment=True):
 
     def _infer_code_path_for_program(self, program: str):
         """Finds the program's absolute and relative paths."""
+        from .lib.gitlib import GitRepo
+
         try:
             root = (
                 GitRepo().root or os.getcwd() if not self.disable_git else os.getcwd()

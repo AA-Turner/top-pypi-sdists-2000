@@ -7,13 +7,9 @@ from contextlib import contextmanager
 from contextvars import ContextVar
 from typing import (  # type: ignore[attr-defined]
     Callable,
-    Dict,
     Generic,
-    List,
     Optional,
     Protocol,
-    Tuple,
-    Type,
     TypeVar,
     Union,
     _GenericAlias,
@@ -51,11 +47,11 @@ capture_typing_extension_shadows(_UnpackGenericAlias, "_UnpackGenericAlias", unp
 
 
 class InstantiatorCallable(Protocol):
-    def __call__(self, class_type: Type[ClassType], *args, **kwargs) -> ClassType:
+    def __call__(self, class_type: type[ClassType], *args, **kwargs) -> ClassType:
         pass  # pragma: no cover
 
 
-InstantiatorsDictType = Dict[Tuple[type, bool], InstantiatorCallable]
+InstantiatorsDictType = dict[tuple[type, bool], InstantiatorCallable]
 
 
 parent_parser: ContextVar[Optional[ArgumentParser]] = ContextVar("parent_parser", default=None)
@@ -64,7 +60,7 @@ defaults_cache: ContextVar[Optional[Namespace]] = ContextVar("defaults_cache", d
 lenient_check: ContextVar[Union[bool, str]] = ContextVar("lenient_check", default=False)
 load_value_mode: ContextVar[Optional[str]] = ContextVar("load_value_mode", default=None)
 class_instantiators: ContextVar[Optional[InstantiatorsDictType]] = ContextVar("class_instantiators", default=None)
-nested_links: ContextVar[List[dict]] = ContextVar("nested_links", default=[])
+nested_links: ContextVar[list[dict]] = ContextVar("nested_links", default=[])
 applied_instantiation_links: ContextVar[Optional[set]] = ContextVar("applied_instantiation_links", default=None)
 path_dump_preserve_relative: ContextVar[bool] = ContextVar("path_dump_preserve_relative", default=False)
 
@@ -130,12 +126,12 @@ def set_parsing_settings(
             DocstringStyle.AUTO.
         docstring_parse_attribute_docstrings: Whether to parse attribute
             docstrings (slower). Default is False.
-        parse_optionals_as_positionals: [EXPERIMENTAL] If True, the parser will
-            take extra positional command line arguments as values for optional
-            arguments. This means that optional arguments can be given by name
-            --key=value as usual, but also as positional. The extra positionals
-            are applied to optionals in the order that they were added to the
-            parser. By default, this is False.
+        parse_optionals_as_positionals: If True, the parser will take extra
+            positional command line arguments as values for optional arguments.
+            This means that optional arguments can be given by name --key=value
+            as usual, but also as positional. The extra positionals are applied
+            to optionals in the order that they were added to the parser. By
+            default, this is False.
         stubs_resolver_allow_py_files: Whether the stubs resolver should search
             in ``.py`` files in addition to ``.pyi`` files.
         omegaconf_absolute_to_relative_paths: If True, when loading configs
@@ -200,12 +196,12 @@ def validate_default(container: ActionsContainer, action: argparse.Action):
 
 
 def get_optionals_as_positionals_actions(parser, include_positionals=False):
-    from jsonargparse._actions import ActionConfigFile, _ActionConfigLoad, filter_default_actions
+    from jsonargparse._actions import ActionConfigFile, _ActionConfigLoad, filter_non_parsing_actions
     from jsonargparse._completions import ShtabAction
     from jsonargparse._typehints import ActionTypeHint
 
     actions = []
-    for action in filter_default_actions(parser._actions):
+    for action in filter_non_parsing_actions(parser._actions):
         if isinstance(action, (_ActionConfigLoad, ActionConfigFile, ShtabAction)):
             continue
         if ActionTypeHint.is_subclass_typehint(action, all_subtypes=False):
@@ -287,7 +283,7 @@ def is_pure_dataclass(cls) -> bool:
     return all(dataclasses.is_dataclass(c) for c in classes)
 
 
-not_subclass_type_selectors: Dict[str, Callable[[Type], Union[bool, int]]] = {
+not_subclass_type_selectors: dict[str, Callable[[type], Union[bool, int]]] = {
     "final": is_final_class,
     "dataclass": is_pure_dataclass,
     "pydantic": is_pydantic_model,
@@ -303,7 +299,7 @@ def is_not_subclass_type(cls) -> bool:
     return any(validator(cls) for validator in not_subclass_type_selectors.values())
 
 
-def default_class_instantiator(class_type: Type[ClassType], *args, **kwargs) -> ClassType:
+def default_class_instantiator(class_type: type[ClassType], *args, **kwargs) -> ClassType:
     return class_type(*args, **kwargs)
 
 
@@ -311,7 +307,7 @@ class ClassInstantiator:
     def __init__(self, instantiators: InstantiatorsDictType) -> None:
         self.instantiators = instantiators
 
-    def __call__(self, class_type: Type[ClassType], *args, **kwargs) -> ClassType:
+    def __call__(self, class_type: type[ClassType], *args, **kwargs) -> ClassType:
         for (cls, subclasses), instantiator in self.instantiators.items():
             if class_type is cls or (subclasses and is_subclass(class_type, cls)):
                 param_names = set(inspect.signature(instantiator).parameters)
@@ -431,3 +427,7 @@ class Action(LoggerProperty, argparse.Action):
             self._check_type_kwargs = set(inspect.signature(self._check_type).parameters)
         kwargs = {k: v for k, v in kwargs.items() if k in self._check_type_kwargs}
         return self._check_type(value, **kwargs)
+
+
+class NonParsingAction(Action):
+    """Base for jsonargparse utility Action classes."""

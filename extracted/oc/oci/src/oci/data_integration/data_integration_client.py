@@ -158,7 +158,7 @@ class DataIntegrationClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/dataintegration/change_compartment.py.html>`__ to see an example of how to use change_compartment API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/dataintegration/change_compartment.py.html>`__ to see an example of how to use change_compartment API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workspaceId']
@@ -275,7 +275,7 @@ class DataIntegrationClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/dataintegration/change_dis_application_compartment.py.html>`__ to see an example of how to use change_dis_application_compartment API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/dataintegration/change_dis_application_compartment.py.html>`__ to see an example of how to use change_dis_application_compartment API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workspaceId', 'disApplicationId']
@@ -385,7 +385,7 @@ class DataIntegrationClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/dataintegration/create_application.py.html>`__ to see an example of how to use create_application API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/dataintegration/create_application.py.html>`__ to see an example of how to use create_application API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workspaceId']
@@ -497,7 +497,7 @@ class DataIntegrationClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/dataintegration/create_application_detailed_description.py.html>`__ to see an example of how to use create_application_detailed_description API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/dataintegration/create_application_detailed_description.py.html>`__ to see an example of how to use create_application_detailed_description API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workspaceId', 'applicationKey']
@@ -607,7 +607,7 @@ class DataIntegrationClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/dataintegration/create_connection.py.html>`__ to see an example of how to use create_connection API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/dataintegration/create_connection.py.html>`__ to see an example of how to use create_connection API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workspaceId']
@@ -716,7 +716,7 @@ class DataIntegrationClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/dataintegration/create_connection_validation.py.html>`__ to see an example of how to use create_connection_validation API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/dataintegration/create_connection_validation.py.html>`__ to see an example of how to use create_connection_validation API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workspaceId']
@@ -825,7 +825,7 @@ class DataIntegrationClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/dataintegration/create_copy_object_request.py.html>`__ to see an example of how to use create_copy_object_request API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/dataintegration/create_copy_object_request.py.html>`__ to see an example of how to use create_copy_object_request API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workspaceId']
@@ -934,7 +934,7 @@ class DataIntegrationClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/dataintegration/create_data_asset.py.html>`__ to see an example of how to use create_data_asset API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/dataintegration/create_data_asset.py.html>`__ to see an example of how to use create_data_asset API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workspaceId']
@@ -1043,7 +1043,7 @@ class DataIntegrationClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/dataintegration/create_data_flow.py.html>`__ to see an example of how to use create_data_flow API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/dataintegration/create_data_flow.py.html>`__ to see an example of how to use create_data_flow API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workspaceId']
@@ -1152,7 +1152,7 @@ class DataIntegrationClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/dataintegration/create_data_flow_validation.py.html>`__ to see an example of how to use create_data_flow_validation API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/dataintegration/create_data_flow_validation.py.html>`__ to see an example of how to use create_data_flow_validation API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workspaceId']
@@ -1261,7 +1261,7 @@ class DataIntegrationClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/dataintegration/create_dis_application.py.html>`__ to see an example of how to use create_dis_application API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/dataintegration/create_dis_application.py.html>`__ to see an example of how to use create_dis_application API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workspaceId']
@@ -1373,7 +1373,7 @@ class DataIntegrationClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/dataintegration/create_dis_application_detailed_description.py.html>`__ to see an example of how to use create_dis_application_detailed_description API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/dataintegration/create_dis_application_detailed_description.py.html>`__ to see an example of how to use create_dis_application_detailed_description API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workspaceId', 'applicationKey']
@@ -1494,7 +1494,7 @@ class DataIntegrationClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/dataintegration/create_entity_shape.py.html>`__ to see an example of how to use create_entity_shape API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/dataintegration/create_entity_shape.py.html>`__ to see an example of how to use create_entity_shape API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workspaceId', 'connectionKey', 'schemaResourceName']
@@ -1607,7 +1607,7 @@ class DataIntegrationClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/dataintegration/create_export_request.py.html>`__ to see an example of how to use create_export_request API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/dataintegration/create_export_request.py.html>`__ to see an example of how to use create_export_request API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workspaceId']
@@ -1719,7 +1719,7 @@ class DataIntegrationClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/dataintegration/create_external_publication.py.html>`__ to see an example of how to use create_external_publication API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/dataintegration/create_external_publication.py.html>`__ to see an example of how to use create_external_publication API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workspaceId', 'taskKey']
@@ -1832,7 +1832,7 @@ class DataIntegrationClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/dataintegration/create_external_publication_validation.py.html>`__ to see an example of how to use create_external_publication_validation API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/dataintegration/create_external_publication_validation.py.html>`__ to see an example of how to use create_external_publication_validation API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workspaceId', 'taskKey']
@@ -1943,7 +1943,7 @@ class DataIntegrationClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/dataintegration/create_folder.py.html>`__ to see an example of how to use create_folder API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/dataintegration/create_folder.py.html>`__ to see an example of how to use create_folder API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workspaceId']
@@ -2053,7 +2053,7 @@ class DataIntegrationClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/dataintegration/create_function_library.py.html>`__ to see an example of how to use create_function_library API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/dataintegration/create_function_library.py.html>`__ to see an example of how to use create_function_library API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workspaceId']
@@ -2162,7 +2162,7 @@ class DataIntegrationClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/dataintegration/create_import_request.py.html>`__ to see an example of how to use create_import_request API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/dataintegration/create_import_request.py.html>`__ to see an example of how to use create_import_request API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workspaceId']
@@ -2274,7 +2274,7 @@ class DataIntegrationClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/dataintegration/create_patch.py.html>`__ to see an example of how to use create_patch API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/dataintegration/create_patch.py.html>`__ to see an example of how to use create_patch API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workspaceId', 'applicationKey']
@@ -2384,7 +2384,7 @@ class DataIntegrationClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/dataintegration/create_pipeline.py.html>`__ to see an example of how to use create_pipeline API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/dataintegration/create_pipeline.py.html>`__ to see an example of how to use create_pipeline API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workspaceId']
@@ -2493,7 +2493,7 @@ class DataIntegrationClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/dataintegration/create_pipeline_validation.py.html>`__ to see an example of how to use create_pipeline_validation API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/dataintegration/create_pipeline_validation.py.html>`__ to see an example of how to use create_pipeline_validation API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workspaceId']
@@ -2602,7 +2602,7 @@ class DataIntegrationClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/dataintegration/create_project.py.html>`__ to see an example of how to use create_project API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/dataintegration/create_project.py.html>`__ to see an example of how to use create_project API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workspaceId']
@@ -2714,7 +2714,7 @@ class DataIntegrationClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/dataintegration/create_schedule.py.html>`__ to see an example of how to use create_schedule API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/dataintegration/create_schedule.py.html>`__ to see an example of how to use create_schedule API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workspaceId', 'applicationKey']
@@ -2824,7 +2824,7 @@ class DataIntegrationClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/dataintegration/create_task.py.html>`__ to see an example of how to use create_task API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/dataintegration/create_task.py.html>`__ to see an example of how to use create_task API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workspaceId']
@@ -2936,7 +2936,7 @@ class DataIntegrationClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/dataintegration/create_task_run.py.html>`__ to see an example of how to use create_task_run API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/dataintegration/create_task_run.py.html>`__ to see an example of how to use create_task_run API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workspaceId', 'applicationKey']
@@ -3049,7 +3049,7 @@ class DataIntegrationClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/dataintegration/create_task_schedule.py.html>`__ to see an example of how to use create_task_schedule API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/dataintegration/create_task_schedule.py.html>`__ to see an example of how to use create_task_schedule API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workspaceId', 'applicationKey']
@@ -3159,7 +3159,7 @@ class DataIntegrationClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/dataintegration/create_task_validation.py.html>`__ to see an example of how to use create_task_validation API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/dataintegration/create_task_validation.py.html>`__ to see an example of how to use create_task_validation API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workspaceId']
@@ -3268,7 +3268,7 @@ class DataIntegrationClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/dataintegration/create_user_defined_function.py.html>`__ to see an example of how to use create_user_defined_function API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/dataintegration/create_user_defined_function.py.html>`__ to see an example of how to use create_user_defined_function API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workspaceId']
@@ -3377,7 +3377,7 @@ class DataIntegrationClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/dataintegration/create_user_defined_function_validation.py.html>`__ to see an example of how to use create_user_defined_function_validation API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/dataintegration/create_user_defined_function_validation.py.html>`__ to see an example of how to use create_user_defined_function_validation API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workspaceId']
@@ -3483,7 +3483,7 @@ class DataIntegrationClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/dataintegration/create_workspace.py.html>`__ to see an example of how to use create_workspace API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/dataintegration/create_workspace.py.html>`__ to see an example of how to use create_workspace API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -3580,7 +3580,7 @@ class DataIntegrationClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/dataintegration/delete_application.py.html>`__ to see an example of how to use delete_application API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/dataintegration/delete_application.py.html>`__ to see an example of how to use delete_application API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workspaceId', 'applicationKey']
@@ -3687,7 +3687,7 @@ class DataIntegrationClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/dataintegration/delete_application_detailed_description.py.html>`__ to see an example of how to use delete_application_detailed_description API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/dataintegration/delete_application_detailed_description.py.html>`__ to see an example of how to use delete_application_detailed_description API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workspaceId', 'applicationKey']
@@ -3794,7 +3794,7 @@ class DataIntegrationClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/dataintegration/delete_connection.py.html>`__ to see an example of how to use delete_connection API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/dataintegration/delete_connection.py.html>`__ to see an example of how to use delete_connection API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workspaceId', 'connectionKey']
@@ -3901,7 +3901,7 @@ class DataIntegrationClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/dataintegration/delete_connection_validation.py.html>`__ to see an example of how to use delete_connection_validation API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/dataintegration/delete_connection_validation.py.html>`__ to see an example of how to use delete_connection_validation API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workspaceId', 'connectionValidationKey']
@@ -4008,7 +4008,7 @@ class DataIntegrationClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/dataintegration/delete_copy_object_request.py.html>`__ to see an example of how to use delete_copy_object_request API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/dataintegration/delete_copy_object_request.py.html>`__ to see an example of how to use delete_copy_object_request API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workspaceId', 'copyObjectRequestKey']
@@ -4115,7 +4115,7 @@ class DataIntegrationClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/dataintegration/delete_data_asset.py.html>`__ to see an example of how to use delete_data_asset API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/dataintegration/delete_data_asset.py.html>`__ to see an example of how to use delete_data_asset API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workspaceId', 'dataAssetKey']
@@ -4222,7 +4222,7 @@ class DataIntegrationClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/dataintegration/delete_data_flow.py.html>`__ to see an example of how to use delete_data_flow API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/dataintegration/delete_data_flow.py.html>`__ to see an example of how to use delete_data_flow API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workspaceId', 'dataFlowKey']
@@ -4329,7 +4329,7 @@ class DataIntegrationClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/dataintegration/delete_data_flow_validation.py.html>`__ to see an example of how to use delete_data_flow_validation API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/dataintegration/delete_data_flow_validation.py.html>`__ to see an example of how to use delete_data_flow_validation API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workspaceId', 'dataFlowValidationKey']
@@ -4436,7 +4436,7 @@ class DataIntegrationClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/dataintegration/delete_dis_application.py.html>`__ to see an example of how to use delete_dis_application API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/dataintegration/delete_dis_application.py.html>`__ to see an example of how to use delete_dis_application API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workspaceId', 'disApplicationId']
@@ -4543,7 +4543,7 @@ class DataIntegrationClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/dataintegration/delete_dis_application_detailed_description.py.html>`__ to see an example of how to use delete_dis_application_detailed_description API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/dataintegration/delete_dis_application_detailed_description.py.html>`__ to see an example of how to use delete_dis_application_detailed_description API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workspaceId', 'applicationKey']
@@ -4650,7 +4650,7 @@ class DataIntegrationClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/dataintegration/delete_export_request.py.html>`__ to see an example of how to use delete_export_request API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/dataintegration/delete_export_request.py.html>`__ to see an example of how to use delete_export_request API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workspaceId', 'exportRequestKey']
@@ -4760,7 +4760,7 @@ class DataIntegrationClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/dataintegration/delete_external_publication.py.html>`__ to see an example of how to use delete_external_publication API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/dataintegration/delete_external_publication.py.html>`__ to see an example of how to use delete_external_publication API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workspaceId', 'taskKey', 'externalPublicationsKey']
@@ -4871,7 +4871,7 @@ class DataIntegrationClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/dataintegration/delete_external_publication_validation.py.html>`__ to see an example of how to use delete_external_publication_validation API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/dataintegration/delete_external_publication_validation.py.html>`__ to see an example of how to use delete_external_publication_validation API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workspaceId', 'taskKey', 'externalPublicationValidationKey']
@@ -4979,7 +4979,7 @@ class DataIntegrationClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/dataintegration/delete_folder.py.html>`__ to see an example of how to use delete_folder API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/dataintegration/delete_folder.py.html>`__ to see an example of how to use delete_folder API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workspaceId', 'folderKey']
@@ -5086,7 +5086,7 @@ class DataIntegrationClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/dataintegration/delete_function_library.py.html>`__ to see an example of how to use delete_function_library API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/dataintegration/delete_function_library.py.html>`__ to see an example of how to use delete_function_library API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workspaceId', 'functionLibraryKey']
@@ -5193,7 +5193,7 @@ class DataIntegrationClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/dataintegration/delete_import_request.py.html>`__ to see an example of how to use delete_import_request API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/dataintegration/delete_import_request.py.html>`__ to see an example of how to use delete_import_request API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['importRequestKey', 'workspaceId']
@@ -5303,7 +5303,7 @@ class DataIntegrationClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/dataintegration/delete_patch.py.html>`__ to see an example of how to use delete_patch API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/dataintegration/delete_patch.py.html>`__ to see an example of how to use delete_patch API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workspaceId', 'applicationKey', 'patchKey']
@@ -5411,7 +5411,7 @@ class DataIntegrationClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/dataintegration/delete_pipeline.py.html>`__ to see an example of how to use delete_pipeline API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/dataintegration/delete_pipeline.py.html>`__ to see an example of how to use delete_pipeline API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workspaceId', 'pipelineKey']
@@ -5518,7 +5518,7 @@ class DataIntegrationClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/dataintegration/delete_pipeline_validation.py.html>`__ to see an example of how to use delete_pipeline_validation API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/dataintegration/delete_pipeline_validation.py.html>`__ to see an example of how to use delete_pipeline_validation API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workspaceId', 'pipelineValidationKey']
@@ -5625,7 +5625,7 @@ class DataIntegrationClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/dataintegration/delete_project.py.html>`__ to see an example of how to use delete_project API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/dataintegration/delete_project.py.html>`__ to see an example of how to use delete_project API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workspaceId', 'projectKey']
@@ -5735,7 +5735,7 @@ class DataIntegrationClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/dataintegration/delete_schedule.py.html>`__ to see an example of how to use delete_schedule API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/dataintegration/delete_schedule.py.html>`__ to see an example of how to use delete_schedule API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workspaceId', 'applicationKey', 'scheduleKey']
@@ -5843,7 +5843,7 @@ class DataIntegrationClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/dataintegration/delete_task.py.html>`__ to see an example of how to use delete_task API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/dataintegration/delete_task.py.html>`__ to see an example of how to use delete_task API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workspaceId', 'taskKey']
@@ -5953,7 +5953,7 @@ class DataIntegrationClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/dataintegration/delete_task_run.py.html>`__ to see an example of how to use delete_task_run API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/dataintegration/delete_task_run.py.html>`__ to see an example of how to use delete_task_run API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workspaceId', 'applicationKey', 'taskRunKey']
@@ -6064,7 +6064,7 @@ class DataIntegrationClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/dataintegration/delete_task_schedule.py.html>`__ to see an example of how to use delete_task_schedule API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/dataintegration/delete_task_schedule.py.html>`__ to see an example of how to use delete_task_schedule API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workspaceId', 'applicationKey', 'taskScheduleKey']
@@ -6172,7 +6172,7 @@ class DataIntegrationClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/dataintegration/delete_task_validation.py.html>`__ to see an example of how to use delete_task_validation API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/dataintegration/delete_task_validation.py.html>`__ to see an example of how to use delete_task_validation API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workspaceId', 'taskValidationKey']
@@ -6279,7 +6279,7 @@ class DataIntegrationClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/dataintegration/delete_user_defined_function.py.html>`__ to see an example of how to use delete_user_defined_function API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/dataintegration/delete_user_defined_function.py.html>`__ to see an example of how to use delete_user_defined_function API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workspaceId', 'userDefinedFunctionKey']
@@ -6386,7 +6386,7 @@ class DataIntegrationClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/dataintegration/delete_user_defined_function_validation.py.html>`__ to see an example of how to use delete_user_defined_function_validation API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/dataintegration/delete_user_defined_function_validation.py.html>`__ to see an example of how to use delete_user_defined_function_validation API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workspaceId', 'userDefinedFunctionValidationKey']
@@ -6496,7 +6496,7 @@ class DataIntegrationClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/dataintegration/delete_workspace.py.html>`__ to see an example of how to use delete_workspace API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/dataintegration/delete_workspace.py.html>`__ to see an example of how to use delete_workspace API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workspaceId']
@@ -6607,7 +6607,7 @@ class DataIntegrationClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/dataintegration/get_application.py.html>`__ to see an example of how to use get_application API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/dataintegration/get_application.py.html>`__ to see an example of how to use get_application API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workspaceId', 'applicationKey']
@@ -6709,7 +6709,7 @@ class DataIntegrationClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/dataintegration/get_application_detailed_description.py.html>`__ to see an example of how to use get_application_detailed_description API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/dataintegration/get_application_detailed_description.py.html>`__ to see an example of how to use get_application_detailed_description API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workspaceId', 'applicationKey']
@@ -6814,7 +6814,7 @@ class DataIntegrationClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/dataintegration/get_composite_state.py.html>`__ to see an example of how to use get_composite_state API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/dataintegration/get_composite_state.py.html>`__ to see an example of how to use get_composite_state API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workspaceId', 'applicationKey', 'aggregatorKey']
@@ -6923,7 +6923,7 @@ class DataIntegrationClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/dataintegration/get_connection.py.html>`__ to see an example of how to use get_connection API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/dataintegration/get_connection.py.html>`__ to see an example of how to use get_connection API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workspaceId', 'connectionKey']
@@ -7025,7 +7025,7 @@ class DataIntegrationClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/dataintegration/get_connection_validation.py.html>`__ to see an example of how to use get_connection_validation API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/dataintegration/get_connection_validation.py.html>`__ to see an example of how to use get_connection_validation API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workspaceId', 'connectionValidationKey']
@@ -7127,7 +7127,7 @@ class DataIntegrationClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/dataintegration/get_copy_object_request.py.html>`__ to see an example of how to use get_copy_object_request API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/dataintegration/get_copy_object_request.py.html>`__ to see an example of how to use get_copy_object_request API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workspaceId', 'copyObjectRequestKey']
@@ -7230,7 +7230,7 @@ class DataIntegrationClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/dataintegration/get_count_statistic.py.html>`__ to see an example of how to use get_count_statistic API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/dataintegration/get_count_statistic.py.html>`__ to see an example of how to use get_count_statistic API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workspaceId', 'countStatisticKey']
@@ -7332,7 +7332,7 @@ class DataIntegrationClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/dataintegration/get_data_asset.py.html>`__ to see an example of how to use get_data_asset API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/dataintegration/get_data_asset.py.html>`__ to see an example of how to use get_data_asset API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workspaceId', 'dataAssetKey']
@@ -7440,7 +7440,7 @@ class DataIntegrationClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/dataintegration/get_data_entity.py.html>`__ to see an example of how to use get_data_entity API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/dataintegration/get_data_entity.py.html>`__ to see an example of how to use get_data_entity API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workspaceId', 'connectionKey', 'schemaResourceName', 'dataEntityKey']
@@ -7547,7 +7547,7 @@ class DataIntegrationClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/dataintegration/get_data_flow.py.html>`__ to see an example of how to use get_data_flow API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/dataintegration/get_data_flow.py.html>`__ to see an example of how to use get_data_flow API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workspaceId', 'dataFlowKey']
@@ -7657,7 +7657,7 @@ class DataIntegrationClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/dataintegration/get_data_flow_validation.py.html>`__ to see an example of how to use get_data_flow_validation API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/dataintegration/get_data_flow_validation.py.html>`__ to see an example of how to use get_data_flow_validation API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workspaceId', 'dataFlowValidationKey']
@@ -7762,7 +7762,7 @@ class DataIntegrationClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/dataintegration/get_dependent_object.py.html>`__ to see an example of how to use get_dependent_object API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/dataintegration/get_dependent_object.py.html>`__ to see an example of how to use get_dependent_object API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workspaceId', 'applicationKey', 'dependentObjectKey']
@@ -7865,7 +7865,7 @@ class DataIntegrationClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/dataintegration/get_dis_application.py.html>`__ to see an example of how to use get_dis_application API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/dataintegration/get_dis_application.py.html>`__ to see an example of how to use get_dis_application API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workspaceId', 'disApplicationId']
@@ -7967,7 +7967,7 @@ class DataIntegrationClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/dataintegration/get_dis_application_detailed_description.py.html>`__ to see an example of how to use get_dis_application_detailed_description API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/dataintegration/get_dis_application_detailed_description.py.html>`__ to see an example of how to use get_dis_application_detailed_description API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workspaceId', 'applicationKey']
@@ -8069,7 +8069,7 @@ class DataIntegrationClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/dataintegration/get_export_request.py.html>`__ to see an example of how to use get_export_request API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/dataintegration/get_export_request.py.html>`__ to see an example of how to use get_export_request API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workspaceId', 'exportRequestKey']
@@ -8174,7 +8174,7 @@ class DataIntegrationClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/dataintegration/get_external_publication.py.html>`__ to see an example of how to use get_external_publication API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/dataintegration/get_external_publication.py.html>`__ to see an example of how to use get_external_publication API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workspaceId', 'taskKey', 'externalPublicationsKey']
@@ -8280,7 +8280,7 @@ class DataIntegrationClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/dataintegration/get_external_publication_validation.py.html>`__ to see an example of how to use get_external_publication_validation API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/dataintegration/get_external_publication_validation.py.html>`__ to see an example of how to use get_external_publication_validation API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workspaceId', 'taskKey', 'externalPublicationValidationKey']
@@ -8388,7 +8388,7 @@ class DataIntegrationClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/dataintegration/get_folder.py.html>`__ to see an example of how to use get_folder API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/dataintegration/get_folder.py.html>`__ to see an example of how to use get_folder API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workspaceId', 'folderKey']
@@ -8511,7 +8511,7 @@ class DataIntegrationClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/dataintegration/get_function_library.py.html>`__ to see an example of how to use get_function_library API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/dataintegration/get_function_library.py.html>`__ to see an example of how to use get_function_library API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workspaceId', 'functionLibraryKey']
@@ -8639,7 +8639,7 @@ class DataIntegrationClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/dataintegration/get_import_request.py.html>`__ to see an example of how to use get_import_request API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/dataintegration/get_import_request.py.html>`__ to see an example of how to use get_import_request API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workspaceId', 'importRequestKey']
@@ -8754,7 +8754,7 @@ class DataIntegrationClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/dataintegration/get_patch.py.html>`__ to see an example of how to use get_patch API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/dataintegration/get_patch.py.html>`__ to see an example of how to use get_patch API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workspaceId', 'applicationKey', 'patchKey']
@@ -8860,7 +8860,7 @@ class DataIntegrationClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/dataintegration/get_pipeline.py.html>`__ to see an example of how to use get_pipeline API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/dataintegration/get_pipeline.py.html>`__ to see an example of how to use get_pipeline API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workspaceId', 'pipelineKey']
@@ -8970,7 +8970,7 @@ class DataIntegrationClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/dataintegration/get_pipeline_validation.py.html>`__ to see an example of how to use get_pipeline_validation API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/dataintegration/get_pipeline_validation.py.html>`__ to see an example of how to use get_pipeline_validation API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workspaceId', 'pipelineValidationKey']
@@ -9077,7 +9077,7 @@ class DataIntegrationClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/dataintegration/get_project.py.html>`__ to see an example of how to use get_project API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/dataintegration/get_project.py.html>`__ to see an example of how to use get_project API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workspaceId', 'projectKey']
@@ -9201,7 +9201,7 @@ class DataIntegrationClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/dataintegration/get_published_object.py.html>`__ to see an example of how to use get_published_object API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/dataintegration/get_published_object.py.html>`__ to see an example of how to use get_published_object API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workspaceId', 'applicationKey', 'publishedObjectKey']
@@ -9315,7 +9315,7 @@ class DataIntegrationClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/dataintegration/get_reference.py.html>`__ to see an example of how to use get_reference API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/dataintegration/get_reference.py.html>`__ to see an example of how to use get_reference API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workspaceId', 'applicationKey', 'referenceKey']
@@ -9424,7 +9424,7 @@ class DataIntegrationClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/dataintegration/get_runtime_operator.py.html>`__ to see an example of how to use get_runtime_operator API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/dataintegration/get_runtime_operator.py.html>`__ to see an example of how to use get_runtime_operator API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workspaceId', 'applicationKey', 'runtimePipelineKey', 'runtimeOperatorKey']
@@ -9534,7 +9534,7 @@ class DataIntegrationClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/dataintegration/get_runtime_pipeline.py.html>`__ to see an example of how to use get_runtime_pipeline API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/dataintegration/get_runtime_pipeline.py.html>`__ to see an example of how to use get_runtime_pipeline API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workspaceId', 'applicationKey', 'runtimePipelineKey']
@@ -9648,7 +9648,7 @@ class DataIntegrationClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/dataintegration/get_schedule.py.html>`__ to see an example of how to use get_schedule API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/dataintegration/get_schedule.py.html>`__ to see an example of how to use get_schedule API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workspaceId', 'applicationKey', 'scheduleKey']
@@ -9754,7 +9754,7 @@ class DataIntegrationClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/dataintegration/get_schema.py.html>`__ to see an example of how to use get_schema API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/dataintegration/get_schema.py.html>`__ to see an example of how to use get_schema API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workspaceId', 'connectionKey', 'schemaResourceName']
@@ -9860,7 +9860,7 @@ class DataIntegrationClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/dataintegration/get_task.py.html>`__ to see an example of how to use get_task API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/dataintegration/get_task.py.html>`__ to see an example of how to use get_task API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workspaceId', 'taskKey']
@@ -9973,7 +9973,7 @@ class DataIntegrationClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/dataintegration/get_task_run.py.html>`__ to see an example of how to use get_task_run API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/dataintegration/get_task_run.py.html>`__ to see an example of how to use get_task_run API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workspaceId', 'applicationKey', 'taskRunKey']
@@ -10079,7 +10079,7 @@ class DataIntegrationClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/dataintegration/get_task_schedule.py.html>`__ to see an example of how to use get_task_schedule API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/dataintegration/get_task_schedule.py.html>`__ to see an example of how to use get_task_schedule API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workspaceId', 'applicationKey', 'taskScheduleKey']
@@ -10182,7 +10182,7 @@ class DataIntegrationClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/dataintegration/get_task_validation.py.html>`__ to see an example of how to use get_task_validation API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/dataintegration/get_task_validation.py.html>`__ to see an example of how to use get_task_validation API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workspaceId', 'taskValidationKey']
@@ -10284,7 +10284,7 @@ class DataIntegrationClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/dataintegration/get_template.py.html>`__ to see an example of how to use get_template API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/dataintegration/get_template.py.html>`__ to see an example of how to use get_template API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workspaceId', 'templateId']
@@ -10386,7 +10386,7 @@ class DataIntegrationClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/dataintegration/get_user_defined_function.py.html>`__ to see an example of how to use get_user_defined_function API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/dataintegration/get_user_defined_function.py.html>`__ to see an example of how to use get_user_defined_function API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workspaceId', 'userDefinedFunctionKey']
@@ -10488,7 +10488,7 @@ class DataIntegrationClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/dataintegration/get_user_defined_function_validation.py.html>`__ to see an example of how to use get_user_defined_function_validation API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/dataintegration/get_user_defined_function_validation.py.html>`__ to see an example of how to use get_user_defined_function_validation API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workspaceId', 'userDefinedFunctionValidationKey']
@@ -10587,7 +10587,7 @@ class DataIntegrationClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/dataintegration/get_work_request.py.html>`__ to see an example of how to use get_work_request API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/dataintegration/get_work_request.py.html>`__ to see an example of how to use get_work_request API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workRequestId']
@@ -10685,7 +10685,7 @@ class DataIntegrationClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/dataintegration/get_workspace.py.html>`__ to see an example of how to use get_workspace API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/dataintegration/get_workspace.py.html>`__ to see an example of how to use get_workspace API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workspaceId']
@@ -10815,7 +10815,7 @@ class DataIntegrationClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/dataintegration/list_applications.py.html>`__ to see an example of how to use list_applications API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/dataintegration/list_applications.py.html>`__ to see an example of how to use list_applications API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workspaceId']
@@ -10981,7 +10981,7 @@ class DataIntegrationClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/dataintegration/list_connection_validations.py.html>`__ to see an example of how to use list_connection_validations API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/dataintegration/list_connection_validations.py.html>`__ to see an example of how to use list_connection_validations API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workspaceId']
@@ -11147,7 +11147,7 @@ class DataIntegrationClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/dataintegration/list_connections.py.html>`__ to see an example of how to use list_connections API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/dataintegration/list_connections.py.html>`__ to see an example of how to use list_connections API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workspaceId', 'dataAssetKey']
@@ -11319,7 +11319,7 @@ class DataIntegrationClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/dataintegration/list_copy_object_requests.py.html>`__ to see an example of how to use list_copy_object_requests API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/dataintegration/list_copy_object_requests.py.html>`__ to see an example of how to use list_copy_object_requests API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workspaceId']
@@ -11498,7 +11498,7 @@ class DataIntegrationClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/dataintegration/list_data_assets.py.html>`__ to see an example of how to use list_data_assets API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/dataintegration/list_data_assets.py.html>`__ to see an example of how to use list_data_assets API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workspaceId']
@@ -11674,7 +11674,7 @@ class DataIntegrationClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/dataintegration/list_data_entities.py.html>`__ to see an example of how to use list_data_entities API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/dataintegration/list_data_entities.py.html>`__ to see an example of how to use list_data_entities API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workspaceId', 'connectionKey', 'schemaResourceName']
@@ -11846,7 +11846,7 @@ class DataIntegrationClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/dataintegration/list_data_flow_validations.py.html>`__ to see an example of how to use list_data_flow_validations API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/dataintegration/list_data_flow_validations.py.html>`__ to see an example of how to use list_data_flow_validations API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workspaceId']
@@ -12012,7 +12012,7 @@ class DataIntegrationClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/dataintegration/list_data_flows.py.html>`__ to see an example of how to use list_data_flows API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/dataintegration/list_data_flows.py.html>`__ to see an example of how to use list_data_flows API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workspaceId']
@@ -12191,7 +12191,7 @@ class DataIntegrationClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/dataintegration/list_dependent_objects.py.html>`__ to see an example of how to use list_dependent_objects API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/dataintegration/list_dependent_objects.py.html>`__ to see an example of how to use list_dependent_objects API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workspaceId', 'applicationKey']
@@ -12371,7 +12371,7 @@ class DataIntegrationClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/dataintegration/list_dis_application_task_run_lineages.py.html>`__ to see an example of how to use list_dis_application_task_run_lineages API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/dataintegration/list_dis_application_task_run_lineages.py.html>`__ to see an example of how to use list_dis_application_task_run_lineages API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workspaceId', 'disApplicationId']
@@ -12545,7 +12545,7 @@ class DataIntegrationClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/dataintegration/list_dis_applications.py.html>`__ to see an example of how to use list_dis_applications API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/dataintegration/list_dis_applications.py.html>`__ to see an example of how to use list_dis_applications API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workspaceId', 'compartmentId']
@@ -12719,7 +12719,7 @@ class DataIntegrationClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/dataintegration/list_export_requests.py.html>`__ to see an example of how to use list_export_requests API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/dataintegration/list_export_requests.py.html>`__ to see an example of how to use list_export_requests API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workspaceId']
@@ -12901,7 +12901,7 @@ class DataIntegrationClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/dataintegration/list_external_publication_validations.py.html>`__ to see an example of how to use list_external_publication_validations API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/dataintegration/list_external_publication_validations.py.html>`__ to see an example of how to use list_external_publication_validations API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workspaceId', 'taskKey']
@@ -13063,7 +13063,7 @@ class DataIntegrationClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/dataintegration/list_external_publications.py.html>`__ to see an example of how to use list_external_publications API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/dataintegration/list_external_publications.py.html>`__ to see an example of how to use list_external_publications API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workspaceId', 'taskKey']
@@ -13229,7 +13229,7 @@ class DataIntegrationClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/dataintegration/list_folders.py.html>`__ to see an example of how to use list_folders API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/dataintegration/list_folders.py.html>`__ to see an example of how to use list_folders API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workspaceId']
@@ -13397,7 +13397,7 @@ class DataIntegrationClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/dataintegration/list_function_libraries.py.html>`__ to see an example of how to use list_function_libraries API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/dataintegration/list_function_libraries.py.html>`__ to see an example of how to use list_function_libraries API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workspaceId']
@@ -13570,7 +13570,7 @@ class DataIntegrationClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/dataintegration/list_import_requests.py.html>`__ to see an example of how to use list_import_requests API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/dataintegration/list_import_requests.py.html>`__ to see an example of how to use list_import_requests API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workspaceId']
@@ -13752,7 +13752,7 @@ class DataIntegrationClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/dataintegration/list_patch_changes.py.html>`__ to see an example of how to use list_patch_changes API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/dataintegration/list_patch_changes.py.html>`__ to see an example of how to use list_patch_changes API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workspaceId', 'applicationKey']
@@ -13917,7 +13917,7 @@ class DataIntegrationClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/dataintegration/list_patches.py.html>`__ to see an example of how to use list_patches API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/dataintegration/list_patches.py.html>`__ to see an example of how to use list_patches API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workspaceId', 'applicationKey']
@@ -14082,7 +14082,7 @@ class DataIntegrationClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/dataintegration/list_pipeline_validations.py.html>`__ to see an example of how to use list_pipeline_validations API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/dataintegration/list_pipeline_validations.py.html>`__ to see an example of how to use list_pipeline_validations API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workspaceId']
@@ -14248,7 +14248,7 @@ class DataIntegrationClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/dataintegration/list_pipelines.py.html>`__ to see an example of how to use list_pipelines API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/dataintegration/list_pipelines.py.html>`__ to see an example of how to use list_pipelines API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workspaceId']
@@ -14414,7 +14414,7 @@ class DataIntegrationClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/dataintegration/list_projects.py.html>`__ to see an example of how to use list_projects API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/dataintegration/list_projects.py.html>`__ to see an example of how to use list_projects API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workspaceId']
@@ -14596,7 +14596,7 @@ class DataIntegrationClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/dataintegration/list_published_objects.py.html>`__ to see an example of how to use list_published_objects API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/dataintegration/list_published_objects.py.html>`__ to see an example of how to use list_published_objects API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workspaceId', 'applicationKey']
@@ -14763,7 +14763,7 @@ class DataIntegrationClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/dataintegration/list_references.py.html>`__ to see an example of how to use list_references API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/dataintegration/list_references.py.html>`__ to see an example of how to use list_references API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workspaceId', 'applicationKey']
@@ -14933,7 +14933,7 @@ class DataIntegrationClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/dataintegration/list_runtime_operators.py.html>`__ to see an example of how to use list_runtime_operators API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/dataintegration/list_runtime_operators.py.html>`__ to see an example of how to use list_runtime_operators API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workspaceId', 'applicationKey', 'runtimePipelineKey']
@@ -15115,7 +15115,7 @@ class DataIntegrationClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/dataintegration/list_runtime_pipelines.py.html>`__ to see an example of how to use list_runtime_pipelines API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/dataintegration/list_runtime_pipelines.py.html>`__ to see an example of how to use list_runtime_pipelines API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workspaceId', 'applicationKey']
@@ -15291,7 +15291,7 @@ class DataIntegrationClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/dataintegration/list_schedules.py.html>`__ to see an example of how to use list_schedules API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/dataintegration/list_schedules.py.html>`__ to see an example of how to use list_schedules API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workspaceId', 'applicationKey']
@@ -15464,7 +15464,7 @@ class DataIntegrationClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/dataintegration/list_schemas.py.html>`__ to see an example of how to use list_schemas API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/dataintegration/list_schemas.py.html>`__ to see an example of how to use list_schemas API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workspaceId', 'connectionKey', 'schemaResourceName']
@@ -15641,7 +15641,7 @@ class DataIntegrationClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/dataintegration/list_task_run_lineages.py.html>`__ to see an example of how to use list_task_run_lineages API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/dataintegration/list_task_run_lineages.py.html>`__ to see an example of how to use list_task_run_lineages API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workspaceId', 'applicationKey']
@@ -15806,7 +15806,7 @@ class DataIntegrationClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/dataintegration/list_task_run_logs.py.html>`__ to see an example of how to use list_task_run_logs API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/dataintegration/list_task_run_logs.py.html>`__ to see an example of how to use list_task_run_logs API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workspaceId', 'applicationKey', 'taskRunKey']
@@ -15981,7 +15981,7 @@ class DataIntegrationClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/dataintegration/list_task_runs.py.html>`__ to see an example of how to use list_task_runs API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/dataintegration/list_task_runs.py.html>`__ to see an example of how to use list_task_runs API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workspaceId', 'applicationKey']
@@ -16162,7 +16162,7 @@ class DataIntegrationClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/dataintegration/list_task_schedules.py.html>`__ to see an example of how to use list_task_schedules API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/dataintegration/list_task_schedules.py.html>`__ to see an example of how to use list_task_schedules API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workspaceId', 'applicationKey']
@@ -16331,7 +16331,7 @@ class DataIntegrationClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/dataintegration/list_task_validations.py.html>`__ to see an example of how to use list_task_validations API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/dataintegration/list_task_validations.py.html>`__ to see an example of how to use list_task_validations API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workspaceId']
@@ -16503,7 +16503,7 @@ class DataIntegrationClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/dataintegration/list_tasks.py.html>`__ to see an example of how to use list_tasks API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/dataintegration/list_tasks.py.html>`__ to see an example of how to use list_tasks API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workspaceId']
@@ -16670,7 +16670,7 @@ class DataIntegrationClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/dataintegration/list_templates.py.html>`__ to see an example of how to use list_templates API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/dataintegration/list_templates.py.html>`__ to see an example of how to use list_templates API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workspaceId']
@@ -16834,7 +16834,7 @@ class DataIntegrationClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/dataintegration/list_user_defined_function_validations.py.html>`__ to see an example of how to use list_user_defined_function_validations API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/dataintegration/list_user_defined_function_validations.py.html>`__ to see an example of how to use list_user_defined_function_validations API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workspaceId']
@@ -17000,7 +17000,7 @@ class DataIntegrationClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/dataintegration/list_user_defined_functions.py.html>`__ to see an example of how to use list_user_defined_functions API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/dataintegration/list_user_defined_functions.py.html>`__ to see an example of how to use list_user_defined_functions API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workspaceId']
@@ -17154,7 +17154,7 @@ class DataIntegrationClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/dataintegration/list_work_request_errors.py.html>`__ to see an example of how to use list_work_request_errors API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/dataintegration/list_work_request_errors.py.html>`__ to see an example of how to use list_work_request_errors API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workRequestId']
@@ -17300,7 +17300,7 @@ class DataIntegrationClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/dataintegration/list_work_request_logs.py.html>`__ to see an example of how to use list_work_request_logs API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/dataintegration/list_work_request_logs.py.html>`__ to see an example of how to use list_work_request_logs API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workRequestId']
@@ -17454,7 +17454,7 @@ class DataIntegrationClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/dataintegration/list_work_requests.py.html>`__ to see an example of how to use list_work_requests API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/dataintegration/list_work_requests.py.html>`__ to see an example of how to use list_work_requests API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['compartmentId']
@@ -17608,7 +17608,7 @@ class DataIntegrationClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/dataintegration/list_workspaces.py.html>`__ to see an example of how to use list_workspaces API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/dataintegration/list_workspaces.py.html>`__ to see an example of how to use list_workspaces API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['compartmentId']
@@ -17742,7 +17742,7 @@ class DataIntegrationClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/dataintegration/start_workspace.py.html>`__ to see an example of how to use start_workspace API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/dataintegration/start_workspace.py.html>`__ to see an example of how to use start_workspace API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workspaceId']
@@ -17857,7 +17857,7 @@ class DataIntegrationClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/dataintegration/stop_workspace.py.html>`__ to see an example of how to use stop_workspace API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/dataintegration/stop_workspace.py.html>`__ to see an example of how to use stop_workspace API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workspaceId']
@@ -17979,7 +17979,7 @@ class DataIntegrationClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/dataintegration/update_application.py.html>`__ to see an example of how to use update_application API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/dataintegration/update_application.py.html>`__ to see an example of how to use update_application API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workspaceId', 'applicationKey']
@@ -18093,7 +18093,7 @@ class DataIntegrationClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/dataintegration/update_application_detailed_description.py.html>`__ to see an example of how to use update_application_detailed_description API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/dataintegration/update_application_detailed_description.py.html>`__ to see an example of how to use update_application_detailed_description API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workspaceId', 'applicationKey']
@@ -18207,7 +18207,7 @@ class DataIntegrationClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/dataintegration/update_connection.py.html>`__ to see an example of how to use update_connection API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/dataintegration/update_connection.py.html>`__ to see an example of how to use update_connection API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workspaceId', 'connectionKey']
@@ -18321,7 +18321,7 @@ class DataIntegrationClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/dataintegration/update_copy_object_request.py.html>`__ to see an example of how to use update_copy_object_request API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/dataintegration/update_copy_object_request.py.html>`__ to see an example of how to use update_copy_object_request API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workspaceId', 'copyObjectRequestKey']
@@ -18435,7 +18435,7 @@ class DataIntegrationClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/dataintegration/update_data_asset.py.html>`__ to see an example of how to use update_data_asset API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/dataintegration/update_data_asset.py.html>`__ to see an example of how to use update_data_asset API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workspaceId', 'dataAssetKey']
@@ -18549,7 +18549,7 @@ class DataIntegrationClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/dataintegration/update_data_flow.py.html>`__ to see an example of how to use update_data_flow API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/dataintegration/update_data_flow.py.html>`__ to see an example of how to use update_data_flow API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workspaceId', 'dataFlowKey']
@@ -18663,7 +18663,7 @@ class DataIntegrationClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/dataintegration/update_dis_application.py.html>`__ to see an example of how to use update_dis_application API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/dataintegration/update_dis_application.py.html>`__ to see an example of how to use update_dis_application API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workspaceId', 'disApplicationId']
@@ -18777,7 +18777,7 @@ class DataIntegrationClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/dataintegration/update_dis_application_detailed_description.py.html>`__ to see an example of how to use update_dis_application_detailed_description API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/dataintegration/update_dis_application_detailed_description.py.html>`__ to see an example of how to use update_dis_application_detailed_description API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workspaceId', 'applicationKey']
@@ -18891,7 +18891,7 @@ class DataIntegrationClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/dataintegration/update_export_request.py.html>`__ to see an example of how to use update_export_request API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/dataintegration/update_export_request.py.html>`__ to see an example of how to use update_export_request API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workspaceId', 'exportRequestKey']
@@ -19008,7 +19008,7 @@ class DataIntegrationClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/dataintegration/update_external_publication.py.html>`__ to see an example of how to use update_external_publication API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/dataintegration/update_external_publication.py.html>`__ to see an example of how to use update_external_publication API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workspaceId', 'taskKey', 'externalPublicationsKey']
@@ -19123,7 +19123,7 @@ class DataIntegrationClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/dataintegration/update_folder.py.html>`__ to see an example of how to use update_folder API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/dataintegration/update_folder.py.html>`__ to see an example of how to use update_folder API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workspaceId', 'folderKey']
@@ -19237,7 +19237,7 @@ class DataIntegrationClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/dataintegration/update_function_library.py.html>`__ to see an example of how to use update_function_library API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/dataintegration/update_function_library.py.html>`__ to see an example of how to use update_function_library API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workspaceId', 'functionLibraryKey']
@@ -19351,7 +19351,7 @@ class DataIntegrationClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/dataintegration/update_import_request.py.html>`__ to see an example of how to use update_import_request API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/dataintegration/update_import_request.py.html>`__ to see an example of how to use update_import_request API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workspaceId', 'importRequestKey']
@@ -19465,7 +19465,7 @@ class DataIntegrationClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/dataintegration/update_pipeline.py.html>`__ to see an example of how to use update_pipeline API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/dataintegration/update_pipeline.py.html>`__ to see an example of how to use update_pipeline API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workspaceId', 'pipelineKey']
@@ -19579,7 +19579,7 @@ class DataIntegrationClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/dataintegration/update_project.py.html>`__ to see an example of how to use update_project API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/dataintegration/update_project.py.html>`__ to see an example of how to use update_project API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workspaceId', 'projectKey']
@@ -19699,7 +19699,7 @@ class DataIntegrationClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/dataintegration/update_reference.py.html>`__ to see an example of how to use update_reference API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/dataintegration/update_reference.py.html>`__ to see an example of how to use update_reference API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workspaceId', 'applicationKey', 'referenceKey']
@@ -19820,7 +19820,7 @@ class DataIntegrationClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/dataintegration/update_schedule.py.html>`__ to see an example of how to use update_schedule API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/dataintegration/update_schedule.py.html>`__ to see an example of how to use update_schedule API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workspaceId', 'applicationKey', 'scheduleKey']
@@ -19935,7 +19935,7 @@ class DataIntegrationClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/dataintegration/update_task.py.html>`__ to see an example of how to use update_task API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/dataintegration/update_task.py.html>`__ to see an example of how to use update_task API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workspaceId', 'taskKey']
@@ -20052,7 +20052,7 @@ class DataIntegrationClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/dataintegration/update_task_run.py.html>`__ to see an example of how to use update_task_run API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/dataintegration/update_task_run.py.html>`__ to see an example of how to use update_task_run API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workspaceId', 'applicationKey', 'taskRunKey']
@@ -20170,7 +20170,7 @@ class DataIntegrationClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/dataintegration/update_task_schedule.py.html>`__ to see an example of how to use update_task_schedule API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/dataintegration/update_task_schedule.py.html>`__ to see an example of how to use update_task_schedule API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workspaceId', 'applicationKey', 'taskScheduleKey']
@@ -20285,7 +20285,7 @@ class DataIntegrationClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/dataintegration/update_user_defined_function.py.html>`__ to see an example of how to use update_user_defined_function API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/dataintegration/update_user_defined_function.py.html>`__ to see an example of how to use update_user_defined_function API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workspaceId', 'userDefinedFunctionKey']
@@ -20396,7 +20396,7 @@ class DataIntegrationClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.0/dataintegration/update_workspace.py.html>`__ to see an example of how to use update_workspace API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/dataintegration/update_workspace.py.html>`__ to see an example of how to use update_workspace API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workspaceId']
