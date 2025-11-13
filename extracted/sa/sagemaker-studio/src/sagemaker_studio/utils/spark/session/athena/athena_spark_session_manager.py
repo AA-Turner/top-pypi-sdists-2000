@@ -65,7 +65,10 @@ class AthenaSparkSessionManager(SparkSessionManager):
         self.sts_client = boto3.client("sts", region_name=region)
         self.project = Project()
 
-        connection = self.project.connection(self.connection_name)
+        if self.connection_name:
+            connection = self.project.connection(self.connection_name)
+        else:
+            connection = self.project.connection(type="SPARK_CONNECT")
         self.workgroup_name = connection.data.workgroup_name
         logger.debug("Successfully created Athena client")
 
@@ -146,16 +149,17 @@ class AthenaSparkSessionManager(SparkSessionManager):
         try:
             # 1. Start Athena session
             logger.debug(f"Creating Athena Spark session for workgroup: {athena_wg_name}")
+            user_id, account_id = self._get_user_id_account_id()
             start_session_response = self.athena_client.start_session(
                 WorkGroup=athena_wg_name,
                 EngineConfiguration={
                     "Classifications": [
-                        {"Name": "spark-defaults", "Properties": generate_spark_configs()}
+                        {"Name": "spark-defaults", "Properties": generate_spark_configs(account_id)}
                     ]
                 },
                 SessionIdleTimeoutInMinutes=180,
                 ClientRequestToken=client_token,
-                Tags=[{"Key": "AmazonDataZoneSessionOwner", "Value": self._get_user_id()}],
+                Tags=[{"Key": "AmazonDataZoneSessionOwner", "Value": user_id}],
             )
             session_id = start_session_response["SessionId"]
             logger.debug(f"Created Athena Spark session with id: {session_id}")
@@ -190,12 +194,13 @@ class AthenaSparkSessionManager(SparkSessionManager):
 
         return f"{endpoint_url}:443/;use_ssl=true;x-aws-proxy-port=15002;x-aws-force-h2=true;x-aws-proxy-auth={auth_token}"
 
-    def _get_user_id(self):
+    def _get_user_id_account_id(self):
         response = self.sts_client.get_caller_identity()
+        account_id = response["Account"]
         user_id = response["UserId"]
         tokens = user_id.split(":")
         if len(tokens) >= 2:
-            return tokens[1]
+            return tokens[1], account_id
         else:
             # this should never happen unless sts breaks!
             raise Exception("Invalid user id!")
@@ -215,7 +220,7 @@ class AthenaSparkSessionManager(SparkSessionManager):
 
                 logger.debug(f"Session {session_id} state: {state}, elapsed: {time_delta:.1f}s")
 
-                if state == "CREATED":
+                if state in ("CREATED", "IDLE", "BUSY"):
                     logger.debug(f"Session {session_id} is ready.")
                     return True
                 elif state in ("FAILED", "TERMINATED", "TERMINATING"):

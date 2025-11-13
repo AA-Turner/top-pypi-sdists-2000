@@ -31,7 +31,6 @@ from semgrep.mcp.models import CodeFile
 from semgrep.mcp.models import CodePath
 from semgrep.mcp.models import Finding
 from semgrep.mcp.models import SemgrepScanResult
-from semgrep.mcp.semgrep import is_tracing_disabled
 from semgrep.mcp.semgrep import mk_context
 from semgrep.mcp.semgrep import run_semgrep_output
 from semgrep.mcp.semgrep import run_semgrep_process_sync
@@ -226,8 +225,7 @@ def get_semgrep_scan_args(temp_dir: str, config: str | None = None) -> list[str]
     # if no config is provided to allow for either the default "auto"
     # or whatever the logged in config is
     args = ["scan", "--json", "--experimental"]  # avoid the extra exec
-    if not is_tracing_disabled():
-        args.extend(["--x-output-mcp-scan-results"])
+    args.extend(["--x-mcp"])
     if config:
         args.extend(["--config", config])
     args.append(temp_dir)
@@ -396,7 +394,7 @@ async def server_lifespan(_server: FastMCP) -> AsyncIterator[SemgrepContext]:
 # ---------------------------------------------------------------------------------
 
 
-@with_tool_span()
+@with_tool_span(is_semgrep_scan=False)
 async def semgrep_rule_schema(ctx: Context) -> str:
     """
     Get the schema for a Semgrep rule
@@ -426,7 +424,7 @@ async def semgrep_rule_schema(ctx: Context) -> str:
         ) from e
 
 
-@with_tool_span()
+@with_tool_span(is_semgrep_scan=False)
 async def get_supported_languages(ctx: Context) -> list[str]:
     """
     Returns a list of supported languages by Semgrep
@@ -509,10 +507,10 @@ async def get_deployment_slug() -> str:
         ) from e
 
 
-@with_tool_span()
+@with_tool_span(is_semgrep_scan=False)
 async def semgrep_findings(
     ctx: Context,
-    issue_type: list[str] = ["sast", "sca"],  # noqa: B006
+    issue_type: str = "sast",  # noqa: B006
     repos: list[str] | None = None,  # pyright: ignore  # noqa: RUF013
     status: str = "open",
     severities: list[str] | None = None,  # pyright: ignore  # noqa: RUF013
@@ -549,8 +547,8 @@ async def semgrep_findings(
     Semgrep. For new scans, use the appropriate scanning function.
 
     Args:
-        issue_type (Optional[List[str]]): Filter findings by type. Use 'sast' for code analysis
-            findings and 'sca' for supply chain analysis findings (e.g., ['sast'], ['sca']).
+        issue_type (str): Filter findings by type. Use 'sast' for code analysis
+            findings and 'sca' for supply chain analysis findings (e.g., 'sast', 'sca').
         status (Optional[str]): Filter findings by status (default: 'open').
         repos (Optional[List[str]]): List of repository names to filter results. By default, should
             include the current repository name to scope findings appropriately. Can be overridden
@@ -568,13 +566,11 @@ async def semgrep_findings(
         guidance if available.
     """
     allowed_issue_types = {"sast", "sca"}
-    if not set(issue_type).issubset(allowed_issue_types):
-        invalid_types = ", ".join(set(issue_type) - allowed_issue_types)
+    if issue_type not in allowed_issue_types:
         raise McpError(
             ErrorData(
                 code=INVALID_PARAMS,
-                message=f"Invalid issue_type(s): {invalid_types}. "
-                "Allowed values are 'sast' and 'sca'.",
+                message=f"Invalid issue_type: {issue_type}. Allowed values are 'sast' or 'sca'.",
             )
         )
 
@@ -729,7 +725,7 @@ async def semgrep_scan_with_custom_rule(
             shutil.rmtree(temp_dir, ignore_errors=True)
 
 
-@with_tool_span()
+@with_tool_span(is_semgrep_scan=False)
 async def get_abstract_syntax_tree(
     ctx: Context,
     code: str = CODE_FIELD,
@@ -803,7 +799,7 @@ async def semgrep_scan_sca(
 
     # Do this from the repo so we only scan stuff in there
     os.chdir(workspace_dir)
-    args = ["scan", "--config", "supply-chain", "--json"]
+    args = ["scan", "--config", "supply-chain", "--json", "--x-mcp"]
     output = await run_semgrep_process_sync(context.top_level_span, args)
     os.chdir(cwd)
 

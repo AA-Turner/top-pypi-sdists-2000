@@ -773,8 +773,12 @@ impl TestContext {
             "Activate with: source $1/[BIN]/activate".to_string(),
         ));
         filters.push((
-            r"Activate with: source (.*)/bin/activate(?:\.\w+)?".to_string(),
-            "Activate with: source $1/[BIN]/activate".to_string(),
+            r"Activate with: Scripts\\activate".to_string(),
+            "Activate with: source [BIN]/activate".to_string(),
+        ));
+        filters.push((
+            r"Activate with: source (.*/|)bin/activate(?:\.\w+)?".to_string(),
+            "Activate with: source $1[BIN]/activate".to_string(),
         ));
 
         // Filter non-deterministic temporary directory names
@@ -891,6 +895,12 @@ impl TestContext {
             env::split_paths(&env::var(EnvVars::PATH).unwrap_or_default()),
         ))
         .unwrap();
+
+        // Ensure the tests aren't sensitive to the running user's shell without forcing
+        // `bash` on Windows
+        if cfg!(not(windows)) {
+            command.env(EnvVars::SHELL, "bash");
+        }
 
         command
             // When running the tests in a venv, ignore that venv, otherwise we'll capture warnings.
@@ -1060,6 +1070,22 @@ impl TestContext {
     pub fn lock(&self) -> Command {
         let mut command = Self::new_command();
         command.arg("lock");
+        self.add_shared_options(&mut command, false);
+        command
+    }
+
+    /// Create a `uv workspace metadata` command with options shared across scenarios.
+    pub fn workspace_metadata(&self) -> Command {
+        let mut command = Self::new_command();
+        command.arg("workspace").arg("metadata");
+        self.add_shared_options(&mut command, false);
+        command
+    }
+
+    /// Create a `uv workspace dir` command with options shared across scenarios.
+    pub fn workspace_dir(&self) -> Command {
+        let mut command = Self::new_command();
+        command.arg("workspace").arg("dir");
         self.add_shared_options(&mut command, false);
         command
     }

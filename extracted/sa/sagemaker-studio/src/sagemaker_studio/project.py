@@ -138,7 +138,9 @@ class Project:
             project_id=self.id,
         )
 
-    def connection(self, name: Optional[str] = None, *, id: Optional[str] = None) -> Connection:
+    def connection(
+        self, name: Optional[str] = None, *, id: Optional[str] = None, type: Optional[str] = None
+    ) -> Connection:
         """
         Retrieves a specific connection associated with the project by its name or ID.
         If no name or id is provided, it gets the default IAM connection based on domain mode.
@@ -162,6 +164,8 @@ class Project:
             return self._connection_service.get_connection_by_id(connection_id=id)
         elif name is not None:
             return self._connection_service.get_connection_by_name(name=name)
+        elif type is not None:
+            return self._connection_service.get_connection_by_type(type=type)
         else:
             # No name or id provided, use domain-based selection
             connection_name = self._get_iam_connection_name()

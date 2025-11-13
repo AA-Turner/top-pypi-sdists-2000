@@ -1,10 +1,11 @@
 # Copyright (c) 2025, Jay Shah, Ganesh Bikshandi, Ying Zhang, Vijay Thakkar, Pradeep Ramani, Tri Dao.
 import math
+from typing import Optional
 
 import torch
 from einops import rearrange, repeat
 
-from padding import pad_input, unpad_input
+from flash_attn.bert_padding import pad_input, unpad_input
 
 
 def generate_random_padding_mask(max_seqlen, batch_size, device, mode="random", zero_lengths=False):
@@ -158,7 +159,7 @@ def generate_qkv(
 def construct_local_mask(
     seqlen_q,
     seqlen_k,
-    window_size=(-1, -1),  # -1 means infinite window size
+    window_size=(None, None),
     sink_token_length=0,
     query_padding_mask=None,
     key_padding_mask=None,
@@ -181,7 +182,7 @@ def construct_local_mask(
         if query_padding_mask is None
         else rearrange(query_padding_mask.sum(-1), "b -> b 1 1 1")
     )
-    if window_size[0] < 0:
+    if window_size[0] is None:
         return col_idx > row_idx + sk - sq + window_size[1]
     else:
         sk = torch.full_like(col_idx, seqlen_k) if key_padding_mask is None else sk
@@ -237,9 +238,10 @@ def attention_ref(
     causal=False,
     qv=None,
     q_descale=None, k_descale=None, v_descale=None,
-    window_size=(-1, -1),  # -1 means infinite window size
+    window_size=(None, None),
     attention_chunk=0,
     sink_token_length=0,
+    learnable_sink: Optional[torch.Tensor] = None,
     softcap=0.0,
     upcast=True,
     reorder_ops=False,
@@ -297,7 +299,7 @@ def attention_ref(
     if key_padding_mask is not None:
         scores.masked_fill_(rearrange(~key_padding_mask, "b s -> b 1 1 s"), float("-inf"))
     local_mask = None
-    if window_size[0] >= 0 or window_size[1] >= 0:
+    if window_size[0] is not None or window_size[1] is not None:
         local_mask = construct_local_mask(
             seqlen_q,
             seqlen_k,
@@ -323,7 +325,16 @@ def attention_ref(
         scores.masked_fill_(local_mask, float("-inf"))
     if attn_bias is not None:
         scores = scores + attn_bias
-    attention = torch.softmax(scores, dim=-1).to(v.dtype)
+    if learnable_sink is None:
+        attention = torch.softmax(scores, dim=-1).to(v.dtype)
+    else:
+        scores_fp32 = scores.to(torch.float32)
+        logits_max = torch.amax(scores_fp32, dim=-1, keepdim=True)
+        learnable_sink = rearrange(learnable_sink, "h -> h 1 1")
+        logits_or_sinks_max = torch.maximum(learnable_sink, logits_max)
+        unnormalized_scores = torch.exp(scores_fp32 - logits_or_sinks_max)
+        normalizer = unnormalized_scores.sum(dim=-1, keepdim=True) + torch.exp(learnable_sink - logits_or_sinks_max)
+        attention = (unnormalized_scores / normalizer).to(v.dtype)
     # We want to mask here so that the attention matrix doesn't have any NaNs
     # Otherwise we'll get NaN in dV
     if query_padding_mask is not None:

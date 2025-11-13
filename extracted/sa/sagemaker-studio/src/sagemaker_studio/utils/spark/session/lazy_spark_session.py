@@ -8,6 +8,7 @@ initialization until the first attribute access.
 import logging
 from concurrent.futures import ThreadPoolExecutor
 
+from pyspark.errors.exceptions.connect import SparkConnectGrpcException
 from pyspark.sql.connect.session import SparkSession as _SparkSession
 
 from sagemaker_studio.utils.spark.session.spark_session_manager import SparkSessionManager
@@ -72,6 +73,17 @@ class LazySparkSession:
 
     def __getattr__(self, name):
         """Delegate attribute access to the underlying SparkSession."""
+        # Handle Athena session termination by executing "spark.version" first.
+        # SparkConnectGrpcException thrown when the underlying Athena session is terminated.
+        # This exception is only thrown when accessing a property that uses the Athens session.
+        # Executing class methods (like "spark.range(5)") will not throw an exception here
+        # even if the Athena session is terminated, but an error will still be displayed.
+        try:
+            getattr(self._get_spark(), "version")
+        except SparkConnectGrpcException:
+            # Stop the Spark session to force the creation of a new Athena session
+            logger.warning("Spark session failed to connect, creating a new session.")
+            self.stop()
         return getattr(self._get_spark(), name)
 
     def __repr__(self):

@@ -29,6 +29,7 @@ from semgrep.mcp.models import CodeFile
 from semgrep.mcp.models import SemgrepScanResult
 from semgrep.mcp.utilities.utils import get_anonymous_user_id
 from semgrep.mcp.utilities.utils import get_deployment_id_from_token
+from semgrep.mcp.utilities.utils import get_deployment_name_from_token
 from semgrep.mcp.utilities.utils import get_git_info
 from semgrep.mcp.utilities.utils import get_semgrep_app_token
 from semgrep.mcp.utilities.utils import is_hosted
@@ -158,6 +159,10 @@ def start_tracing(name: str) -> Generator[trace.Span | None, None, None]:
             {
                 "metrics.is_hosted": is_hosted(),
                 "metrics.deployment_id": str(deployment_id) if deployment_id else "",
+                "metrics.deployment_name": get_deployment_name_from_token(
+                    get_semgrep_app_token()
+                )
+                or "",
                 "metrics.anonymous_user_id": get_anonymous_user_id(),
             },
         )
@@ -199,6 +204,7 @@ P = ParamSpec("P")
 def with_tool_span(
     span_name: str | None = None,
     send_metrics: bool = True,
+    is_semgrep_scan: bool = True,
 ) -> Callable[
     [Callable[Concatenate[Context, P], Awaitable[R]]],
     Callable[Concatenate[Context, P], Awaitable[R]],
@@ -226,6 +232,10 @@ def with_tool_span(
                 state.metrics.clear_mcp()
                 state.metrics.add_mcp(
                     deployment_id=get_deployment_id_from_token(get_semgrep_app_token()),
+                    deployment_name=get_deployment_name_from_token(
+                        get_semgrep_app_token()
+                    )
+                    or "",
                     session_id=context.session_id,
                     tool_name=name,
                 )
@@ -233,7 +243,10 @@ def with_tool_span(
             with with_span(context.top_level_span, name):
                 result = await func(ctx, *args, **kwargs)
                 if send_metrics:
+                    if not is_semgrep_scan:
+                        state.app_session.user_agent.tags.add("(non-scan-mcp-tool)")
                     state.metrics.send()
+                    state.app_session.user_agent.tags.discard("(non-scan-mcp-tool)")
                 return result
 
         return wrapper

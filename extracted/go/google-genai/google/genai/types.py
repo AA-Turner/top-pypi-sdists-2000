@@ -114,6 +114,8 @@ else:
     HttpxAsyncClient = None
 
 logger = logging.getLogger('google_genai.types')
+_from_json_schema_warning_logged = False
+_json_schema_warning_logged = False
 
 T = typing.TypeVar('T', bound='GenerateContentResponse')
 
@@ -2026,7 +2028,9 @@ class Schema(_common.BaseModel):
     Schema](https://json-schema.org/)
     """
 
-    info_message = """
+    global _json_schema_warning_logged
+    if not _json_schema_warning_logged:
+      info_message = """
 Note: Conversion of fields that are not included in the JSONSchema class are
 ignored.
 Json Schema is now supported natively by both Vertex AI and Gemini API. Users
@@ -2041,7 +2045,9 @@ are recommended to pass/receive Json Schema directly to/from the API. For exampl
    FunctionDeclaration.response_json_schema, which accepts [JSON
    Schema](https://json-schema.org/)
 """
-    logger.info(info_message)
+      logger.info(info_message)
+      _json_schema_warning_logged = True
+
     json_schema_field_names: set[str] = set(JSONSchema.model_fields.keys())
     schema_field_names: tuple[str] = (
         'items',
@@ -2148,7 +2154,9 @@ are recommended to pass/receive Json Schema directly to/from the API. For exampl
            raise_error_on_unsupported_field is set to True. Or if the JSONSchema
            is not compatible with the specified API option.
     """
-    info_message = """
+    global _from_json_schema_warning_logged
+    if not _from_json_schema_warning_logged:
+      info_message = """
 Note: Conversion of fields that are not included in the JSONSchema class are ignored.
 Json Schema is now supported natively by both Vertex AI and Gemini API. Users
 are recommended to pass/receive Json Schema directly to/from the API. For example:
@@ -2162,7 +2170,9 @@ are recommended to pass/receive Json Schema directly to/from the API. For exampl
    FunctionDeclaration.response_json_schema, which accepts [JSON
    Schema](https://json-schema.org/)
 """
-    logger.info(info_message)
+      logger.info(info_message)
+      _from_json_schema_warning_logged = True
+
     google_schema_field_names: set[str] = set(cls.model_fields.keys())
     schema_field_names: tuple[str, ...] = (
         'items',
@@ -6311,7 +6321,7 @@ class GenerateContentResponse(_common.BaseModel):
     non_text_parts = []
     for part in self.candidates[0].content.parts:
       for field_name, field_value in part.model_dump(
-          exclude={'text', 'thought'}
+          exclude={'text', 'thought', 'thought_signature'}
       ).items():
         if field_value is not None:
           non_text_parts.append(field_name)
@@ -8479,6 +8489,38 @@ class Model(_common.BaseModel):
   checkpoints: Optional[list[Checkpoint]] = Field(
       default=None, description="""The checkpoints of the model."""
   )
+  temperature: Optional[float] = Field(
+      default=None,
+      description="""Temperature value used for sampling set when the dataset was saved.
+      This value is used to tune the degree of randomness.""",
+  )
+  max_temperature: Optional[float] = Field(
+      default=None,
+      description="""The maximum temperature value used for sampling set when the
+      dataset was saved. This value is used to tune the degree of randomness.""",
+  )
+  top_p: Optional[float] = Field(
+      default=None,
+      description="""Optional. Specifies the nucleus sampling threshold. The model
+      considers only the smallest set of tokens whose cumulative probability is
+      at least `top_p`. This helps generate more diverse and less repetitive
+      responses. For example, a `top_p` of 0.9 means the model considers tokens
+      until the cumulative probability of the tokens to select from reaches 0.9.
+      It's recommended to adjust either temperature or `top_p`, but not both.""",
+  )
+  top_k: Optional[int] = Field(
+      default=None,
+      description="""Optional. Specifies the top-k sampling threshold. The model
+      considers only the top k most probable tokens for the next token. This can
+      be useful for generating more coherent and less random text. For example,
+      a `top_k` of 40 means the model will choose the next word from the 40 most
+      likely words.""",
+  )
+  thinking: Optional[bool] = Field(
+      default=None,
+      description="""Whether the model supports thinking features. If true, thoughts are
+      returned only if the model supports thought and thoughts are available.""",
+  )
 
 
 class ModelDict(TypedDict, total=False):
@@ -8524,6 +8566,33 @@ class ModelDict(TypedDict, total=False):
 
   checkpoints: Optional[list[CheckpointDict]]
   """The checkpoints of the model."""
+
+  temperature: Optional[float]
+  """Temperature value used for sampling set when the dataset was saved.
+      This value is used to tune the degree of randomness."""
+
+  max_temperature: Optional[float]
+  """The maximum temperature value used for sampling set when the
+      dataset was saved. This value is used to tune the degree of randomness."""
+
+  top_p: Optional[float]
+  """Optional. Specifies the nucleus sampling threshold. The model
+      considers only the smallest set of tokens whose cumulative probability is
+      at least `top_p`. This helps generate more diverse and less repetitive
+      responses. For example, a `top_p` of 0.9 means the model considers tokens
+      until the cumulative probability of the tokens to select from reaches 0.9.
+      It's recommended to adjust either temperature or `top_p`, but not both."""
+
+  top_k: Optional[int]
+  """Optional. Specifies the top-k sampling threshold. The model
+      considers only the top k most probable tokens for the next token. This can
+      be useful for generating more coherent and less random text. For example,
+      a `top_k` of 40 means the model will choose the next word from the 40 most
+      likely words."""
+
+  thinking: Optional[bool]
+  """Whether the model supports thinking features. If true, thoughts are
+      returned only if the model supports thought and thoughts are available."""
 
 
 ModelOrDict = Union[Model, ModelDict]
@@ -10126,7 +10195,7 @@ class AutoraterConfig(_common.BaseModel):
   endpoint to use.
 
   Publisher model format:
-  `projects/{project}/locations/{location}/publishers/*/models/*`
+  `projects/{project}/locations/{location}/publishers/{publisher}/models/{model}`
 
   Tuned model endpoint format:
   `projects/{project}/locations/{location}/endpoints/{endpoint}`""",
@@ -10158,7 +10227,7 @@ class AutoraterConfigDict(TypedDict, total=False):
   endpoint to use.
 
   Publisher model format:
-  `projects/{project}/locations/{location}/publishers/*/models/*`
+  `projects/{project}/locations/{location}/publishers/{publisher}/models/{model}`
 
   Tuned model endpoint format:
   `projects/{project}/locations/{location}/endpoints/{endpoint}`"""
@@ -11261,7 +11330,7 @@ class TuningJob(_common.BaseModel):
       description="""Tuning Spec for open sourced and third party Partner models.""",
   )
   evaluation_config: Optional[EvaluationConfig] = Field(
-      default=None, description=""""""
+      default=None, description="""Evaluation config for the tuning job."""
   )
   custom_base_model: Optional[str] = Field(
       default=None,
@@ -11361,7 +11430,7 @@ class TuningJobDict(TypedDict, total=False):
   """Tuning Spec for open sourced and third party Partner models."""
 
   evaluation_config: Optional[EvaluationConfigDict]
-  """"""
+  """Evaluation config for the tuning job."""
 
   custom_base_model: Optional[str]
   """Optional. The user-provided path to custom model weights. Set this field to tune a custom model. The path must be a Cloud Storage directory that contains the model weights in .safetensors format along with associated model metadata files. If this field is set, the base_model field must still be set to indicate which base model the custom model is derived from. This feature is only available for open source models."""

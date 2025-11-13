@@ -22,18 +22,19 @@ from mcp.types import INVALID_PARAMS
 
 from semgrep.app import auth
 from semgrep.git import git_check_output
+from semgrep.semgrep_interfaces.semgrep_output_v1 import DeploymentConfig
 from semgrep.state import get_state
 
 SETTINGS_FILENAME = "settings.yml"
 
-# A regex to match { "identity": "... roles=[<content>] ..." }
+# A regex to match { "identity": "... roles=(<content>) ..." }
 # We need this because the form of the response from the /agent/identity
 # endpoint looks like:
-# {"identity":"id=<id> deployment_id=<d_id> user_id=<u_id> created_at=<time> roles=[<roles>] ...}
+# {"identity":"id=<id> deployment_id=<d_id> user_id=<u_id> created_at=<time> roles=(<roles>) ...}
 # The string mapped to by `"identity"` is not an actual JSON, its a whitespace-separated
 # list of fields, so we have to manually extract the `roles` field.
-# We really just need to match "roles=[<stuff>]"
-re_identity_string = re.compile(r"roles=\[(.*)\]")
+# We really just need to match "roles=(<stuff>)"
+re_identity_string = re.compile(r"roles=\((.*)\)")
 
 
 def is_hosted() -> bool:
@@ -65,15 +66,29 @@ def get_anonymous_user_id() -> str:
     return "unknown"
 
 
+def get_deployment_from_token(token: str | None) -> DeploymentConfig | None:
+    """
+    Returns the deployment the token is for, if token is valid
+    """
+    if not token:
+        return None
+    return auth.get_deployment_from_token(token)
+
+
 def get_deployment_id_from_token(token: str | None) -> int | None:
     """
     Returns the deployment ID the token is for, if token is valid
     """
-    if not token:
-        return None
-
-    deployment = auth.get_deployment_from_token(token)
+    deployment = get_deployment_from_token(token)
     return deployment.id if deployment else None
+
+
+def get_deployment_name_from_token(token: str | None) -> str | None:
+    """
+    Returns the deployment name the token is for, if token is valid
+    """
+    deployment = get_deployment_from_token(token)
+    return deployment.name if deployment else None
 
 
 def run_git_command(workspace_dir: str | None, args: list[str]) -> str:

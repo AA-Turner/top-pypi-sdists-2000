@@ -51,12 +51,14 @@ from langchain_google_genai.chat_models import (
 
 MODEL_NAME = "gemini-flash-lite-latest"
 
+FAKE_API_KEY = "fake-api-key"
+
 
 def test_integration_initialization() -> None:
     """Test chat model initialization."""
     llm = ChatGoogleGenerativeAI(
         model=MODEL_NAME,
-        google_api_key=SecretStr("..."),
+        google_api_key=SecretStr(FAKE_API_KEY),
         top_k=2,
         top_p=1,
         temperature=0.7,
@@ -72,7 +74,7 @@ def test_integration_initialization() -> None:
 
     llm = ChatGoogleGenerativeAI(
         model=MODEL_NAME,
-        google_api_key=SecretStr("..."),
+        google_api_key=SecretStr(FAKE_API_KEY),
         max_output_tokens=10,
     )
     ls_params = llm._get_ls_params()
@@ -86,7 +88,7 @@ def test_integration_initialization() -> None:
 
     ChatGoogleGenerativeAI(
         model=MODEL_NAME,
-        api_key=SecretStr("..."),
+        api_key=SecretStr(FAKE_API_KEY),
         top_k=2,
         top_p=1,
         temperature=0.7,
@@ -98,7 +100,7 @@ def test_integration_initialization() -> None:
             warnings.simplefilter("ignore", UserWarning)
             llm = ChatGoogleGenerativeAI(
                 model=MODEL_NAME,
-                google_api_key=SecretStr("..."),
+                google_api_key=SecretStr(FAKE_API_KEY),
                 safety_setting={
                     "HARM_CATEGORY_DANGEROUS_CONTENT": "BLOCK_LOW_AND_ABOVE"
                 },  # Invalid arg
@@ -119,7 +121,7 @@ def test_safety_settings_initialization() -> None:
     # Test initialization with safety_settings
     llm = ChatGoogleGenerativeAI(
         model=MODEL_NAME,
-        google_api_key=SecretStr("test-key"),
+        google_api_key=SecretStr(FAKE_API_KEY),
         temperature=0.7,
         safety_settings=safety_settings,
     )
@@ -137,13 +139,13 @@ def test_initialization_inside_threadpool() -> None:
         executor.submit(
             ChatGoogleGenerativeAI,
             model=MODEL_NAME,
-            google_api_key=SecretStr("secret-api-key"),
+            google_api_key=SecretStr(FAKE_API_KEY),
         ).result()
 
 
 def test_client_transport() -> None:
     """Test client transport configuration."""
-    model = ChatGoogleGenerativeAI(model=MODEL_NAME, google_api_key="fake-key")
+    model = ChatGoogleGenerativeAI(model=MODEL_NAME, google_api_key=FAKE_API_KEY)
     assert model.client.transport.kind == "grpc"
 
     model = ChatGoogleGenerativeAI(
@@ -152,12 +154,12 @@ def test_client_transport() -> None:
     assert model.client.transport.kind == "rest"
 
     async def check_async_client() -> None:
-        model = ChatGoogleGenerativeAI(model=MODEL_NAME, google_api_key="fake-key")
+        model = ChatGoogleGenerativeAI(model=MODEL_NAME, google_api_key=FAKE_API_KEY)
         assert model.async_client.transport.kind == "grpc_asyncio"
 
         # Test auto conversion of transport to "grpc_asyncio" from "rest"
         model = ChatGoogleGenerativeAI(
-            model=MODEL_NAME, google_api_key="fake-key", transport="rest"
+            model=MODEL_NAME, google_api_key=FAKE_API_KEY, transport="rest"
         )
         assert model.async_client.transport.kind == "grpc_asyncio"
 
@@ -167,7 +169,7 @@ def test_client_transport() -> None:
 def test_initalization_without_async() -> None:
     chat = ChatGoogleGenerativeAI(
         model=MODEL_NAME,
-        google_api_key=SecretStr("secret-api-key"),
+        google_api_key=SecretStr(FAKE_API_KEY),
     )
     assert chat.async_client is None
 
@@ -176,7 +178,7 @@ def test_initialization_with_async() -> None:
     async def initialize_chat_with_async_client() -> ChatGoogleGenerativeAI:
         model = ChatGoogleGenerativeAI(
             model=MODEL_NAME,
-            google_api_key=SecretStr("secret-api-key"),
+            google_api_key=SecretStr(FAKE_API_KEY),
         )
         _ = model.async_client
         return model
@@ -188,7 +190,7 @@ def test_initialization_with_async() -> None:
 def test_api_key_is_string() -> None:
     chat = ChatGoogleGenerativeAI(
         model=MODEL_NAME,
-        google_api_key=SecretStr("secret-api-key"),
+        google_api_key=SecretStr(FAKE_API_KEY),
     )
     assert isinstance(chat.google_api_key, SecretStr)
 
@@ -198,7 +200,7 @@ def test_api_key_masked_when_passed_via_constructor(
 ) -> None:
     chat = ChatGoogleGenerativeAI(
         model=MODEL_NAME,
-        google_api_key=SecretStr("secret-api-key"),
+        google_api_key=SecretStr(FAKE_API_KEY),
     )
     print(chat.google_api_key, end="")  # noqa: T201
     captured = capsys.readouterr()
@@ -393,7 +395,7 @@ def test_additional_headers_support(headers: dict[str, str] | None) -> None:
     )
     mock_client.return_value.generate_content = mock_generate_content
     api_endpoint = "http://127.0.0.1:8000/ai"
-    param_api_key = "[secret]"
+    param_api_key = FAKE_API_KEY
     param_secret_api_key = SecretStr(param_api_key)
     param_client_options = {"api_endpoint": api_endpoint}
     param_transport = "rest"
@@ -444,7 +446,7 @@ def test_base_url_support() -> None:
     )
     mock_client.return_value.generate_content = mock_generate_content
     base_url = "https://example.com"
-    param_api_key = "[secret]"
+    param_api_key = FAKE_API_KEY
     param_secret_api_key = SecretStr(param_api_key)
     param_transport = "rest"
 
@@ -486,7 +488,7 @@ async def test_async_base_url_support() -> None:
     )
     mock_async_client.return_value.generate_content = mock_generate_content
     base_url = "https://async-example.com"
-    param_api_key = "[secret]"
+    param_api_key = FAKE_API_KEY
     param_secret_api_key = SecretStr(param_api_key)
 
     with patch(
@@ -524,7 +526,7 @@ def test_api_endpoint_via_client_options() -> None:
     )
     mock_client.return_value.generate_content = mock_generate_content
     api_endpoint = "https://custom-endpoint.com"
-    param_api_key = "[secret]"
+    param_api_key = FAKE_API_KEY
     param_secret_api_key = SecretStr(param_api_key)
     param_transport = "rest"
 
@@ -568,7 +570,7 @@ async def test_async_api_endpoint_via_client_options() -> None:
     )
     mock_async_client.return_value.generate_content = mock_generate_content
     api_endpoint = "https://async-custom-endpoint.com"
-    param_api_key = "[secret]"
+    param_api_key = FAKE_API_KEY
     param_secret_api_key = SecretStr(param_api_key)
 
     with patch(
@@ -594,7 +596,8 @@ async def test_async_api_endpoint_via_client_options() -> None:
             "client_options"
         ]
         assert call_client_options.api_key == param_api_key
-        assert call_client_options.api_endpoint == api_endpoint
+        # For gRPC async transport, URL is formatted to hostname:port
+        assert call_client_options.api_endpoint == "async-custom-endpoint.com:443"
 
 
 def test_base_url_preserves_existing_client_options() -> None:
@@ -607,7 +610,7 @@ def test_base_url_preserves_existing_client_options() -> None:
     mock_client.return_value.generate_content = mock_generate_content
     base_url = "https://base-url.com"
     api_endpoint = "https://client-options-endpoint.com"
-    param_api_key = "[secret]"
+    param_api_key = FAKE_API_KEY
     param_secret_api_key = SecretStr(param_api_key)
     param_transport = "rest"
 
@@ -654,7 +657,7 @@ async def test_async_base_url_preserves_existing_client_options() -> None:
     mock_async_client.return_value.generate_content = mock_generate_content
     base_url = "https://async-base-url.com"
     api_endpoint = "https://async-client-options-endpoint.com"
-    param_api_key = "[secret]"
+    param_api_key = FAKE_API_KEY
     param_secret_api_key = SecretStr(param_api_key)
 
     with patch(
@@ -682,7 +685,177 @@ async def test_async_base_url_preserves_existing_client_options() -> None:
         ]
         assert call_client_options.api_key == param_api_key
         # client_options.api_endpoint should take precedence over base_url
-        assert call_client_options.api_endpoint == api_endpoint
+        # For gRPC async transport, URL is formatted to hostname:port
+        expected_endpoint = "async-client-options-endpoint.com:443"
+        assert call_client_options.api_endpoint == expected_endpoint
+
+
+def test_grpc_base_url_valid_hostname() -> None:
+    """Test that valid `hostname:port` `base_url` works with `gRPC`."""
+    mock_client = Mock()
+    mock_generate_content = Mock()
+    mock_generate_content.return_value = GenerateContentResponse(
+        candidates=[Candidate(content=Content(parts=[Part(text="grpc test response")]))]
+    )
+    mock_client.return_value.generate_content = mock_generate_content
+    base_url = "example.com:443"
+    param_api_key = FAKE_API_KEY
+    param_secret_api_key = SecretStr(param_api_key)
+
+    with patch(
+        "langchain_google_genai._genai_extension.v1betaGenerativeServiceClient",
+        mock_client,
+    ):
+        chat = ChatGoogleGenerativeAI(
+            model=MODEL_NAME,
+            google_api_key=param_secret_api_key,
+            base_url=base_url,
+            transport="grpc",
+        )
+
+    response = chat.invoke("grpc test")
+    assert response.content == "grpc test response"
+
+    mock_client.assert_called_once_with(
+        transport="grpc",
+        client_options=ANY,
+        client_info=ANY,
+    )
+    call_client_options = mock_client.call_args_list[0].kwargs["client_options"]
+    assert call_client_options.api_endpoint == base_url
+
+
+async def test_async_grpc_base_url_valid_hostname() -> None:
+    """Test that valid `hostname:port` `base_url` works with `grpc_asyncio`."""
+    mock_async_client = Mock()
+    mock_generate_content = AsyncMock()
+    mock_generate_content.return_value = GenerateContentResponse(
+        candidates=[
+            Candidate(content=Content(parts=[Part(text="async grpc test response")]))
+        ]
+    )
+    mock_async_client.return_value.generate_content = mock_generate_content
+    base_url = "async.example.com:443"
+    param_api_key = FAKE_API_KEY
+    param_secret_api_key = SecretStr(param_api_key)
+
+    with patch(
+        "langchain_google_genai._genai_extension.v1betaGenerativeServiceAsyncClient",
+        mock_async_client,
+    ):
+        chat = ChatGoogleGenerativeAI(
+            model=MODEL_NAME,
+            google_api_key=param_secret_api_key,
+            base_url=base_url,
+            transport="grpc_asyncio",
+        )
+
+        response = await chat.ainvoke("async grpc test")
+        assert response.content == "async grpc test response"
+
+    mock_async_client.assert_called_once_with(
+        transport="grpc_asyncio",
+        client_options=ANY,
+        client_info=ANY,
+    )
+    call_client_options = mock_async_client.call_args_list[0].kwargs["client_options"]
+    assert call_client_options.api_endpoint == base_url
+
+
+def test_grpc_base_url_formats_https_without_path() -> None:
+    """Test that `https://` URLs without paths are formatted correctly for `gRPC`."""
+    mock_client = Mock()
+    mock_generate_content = Mock()
+    mock_generate_content.return_value = GenerateContentResponse(
+        candidates=[Candidate(content=Content(parts=[Part(text="formatted response")]))]
+    )
+    mock_client.return_value.generate_content = mock_generate_content
+    base_url = "https://custom.googleapis.com"
+    param_api_key = FAKE_API_KEY
+    param_secret_api_key = SecretStr(param_api_key)
+
+    with patch(
+        "langchain_google_genai._genai_extension.v1betaGenerativeServiceClient",
+        mock_client,
+    ):
+        chat = ChatGoogleGenerativeAI(
+            model=MODEL_NAME,
+            google_api_key=param_secret_api_key,
+            base_url=base_url,
+            transport="grpc",
+        )
+
+    response = chat.invoke("format test")
+    assert response.content == "formatted response"
+
+    call_client_options = mock_client.call_args_list[0].kwargs["client_options"]
+    # Should be formatted as hostname:port for gRPC
+    assert call_client_options.api_endpoint == "custom.googleapis.com:443"
+
+
+def test_grpc_base_url_with_path_raises_error() -> None:
+    """Test that `base_url` with path raises `ValueError` for `gRPC`."""
+    base_url = "https://webhook.site/path-not-allowed"
+    param_secret_api_key = SecretStr(FAKE_API_KEY)
+
+    with pytest.raises(
+        ValueError, match="gRPC transport 'grpc' does not support URL paths"
+    ):
+        ChatGoogleGenerativeAI(
+            model=MODEL_NAME,
+            google_api_key=param_secret_api_key,
+            base_url=base_url,
+            transport="grpc",
+        )
+
+
+def test_grpc_asyncio_base_url_with_path_raises_error() -> None:
+    """Test that `base_url` with path raises `ValueError` for `grpc_asyncio`."""
+    base_url = "example.com/api/v1"
+    param_secret_api_key = SecretStr(FAKE_API_KEY)
+
+    with pytest.raises(
+        ValueError, match="gRPC transport 'grpc_asyncio' does not support URL paths"
+    ):
+        ChatGoogleGenerativeAI(
+            model=MODEL_NAME,
+            google_api_key=param_secret_api_key,
+            base_url=base_url,
+            transport="grpc_asyncio",
+        )
+
+
+def test_grpc_base_url_adds_default_port() -> None:
+    """Test that hostname without port gets default port `443` for `gRPC`."""
+    mock_client = Mock()
+    mock_generate_content = Mock()
+    mock_generate_content.return_value = GenerateContentResponse(
+        candidates=[
+            Candidate(content=Content(parts=[Part(text="default port response")]))
+        ]
+    )
+    mock_client.return_value.generate_content = mock_generate_content
+    base_url = "custom.example.com"
+    param_api_key = FAKE_API_KEY
+    param_secret_api_key = SecretStr(param_api_key)
+
+    with patch(
+        "langchain_google_genai._genai_extension.v1betaGenerativeServiceClient",
+        mock_client,
+    ):
+        chat = ChatGoogleGenerativeAI(
+            model=MODEL_NAME,
+            google_api_key=param_secret_api_key,
+            base_url=base_url,
+            transport="grpc",
+        )
+
+    response = chat.invoke("default port test")
+    assert response.content == "default port response"
+
+    call_client_options = mock_client.call_args_list[0].kwargs["client_options"]
+    # Should add default port 443
+    assert call_client_options.api_endpoint == "custom.example.com:443"
 
 
 def test_default_metadata_field_alias() -> None:
@@ -692,7 +865,7 @@ def test_default_metadata_field_alias() -> None:
     # This is the main issue: LangSmith Playground passes None to default_metadata_input
     chat1 = ChatGoogleGenerativeAI(
         model=MODEL_NAME,
-        google_api_key=SecretStr("test-key"),
+        google_api_key=SecretStr(FAKE_API_KEY),
         default_metadata_input=None,
     )
     # When None is passed to alias, it should use the default factory and be overridden
@@ -703,7 +876,7 @@ def test_default_metadata_field_alias() -> None:
     # error)
     chat2 = ChatGoogleGenerativeAI(
         model=MODEL_NAME,
-        google_api_key=SecretStr("test-key"),
+        google_api_key=SecretStr(FAKE_API_KEY),
         default_metadata_input=[],
     )
     # Empty list should be accepted and overridden by validator
@@ -712,7 +885,7 @@ def test_default_metadata_field_alias() -> None:
     # Test with tuple for default_metadata_input (should not cause validation error)
     chat3 = ChatGoogleGenerativeAI(
         model=MODEL_NAME,
-        google_api_key=SecretStr("test-key"),
+        google_api_key=SecretStr(FAKE_API_KEY),
         default_metadata_input=[("X-Test", "test")],
     )
     # The validator will override this with additional_headers, so it should be empty
@@ -1113,7 +1286,7 @@ def test_temperature_range_pydantic_validation() -> None:
 
     llm = ChatGoogleGenerativeAI(
         model=MODEL_NAME,
-        google_api_key=SecretStr("..."),
+        google_api_key=SecretStr(FAKE_API_KEY),
         temperature=1.5,
     )
     ls_params = llm._get_ls_params()
@@ -1577,7 +1750,7 @@ async def test_timeout_parameter_handling(
         # Create LLM with optional instance-level timeout
         llm_kwargs = {
             "model": "gemini-2.5-flash",
-            "google_api_key": SecretStr("test-key"),
+            "google_api_key": SecretStr(FAKE_API_KEY),
         }
         if instance_timeout is not None:
             llm_kwargs["timeout"] = instance_timeout
@@ -1641,7 +1814,7 @@ def test_timeout_streaming_parameter_handling(
     # Create LLM with optional instance-level timeout
     llm_kwargs = {
         "model": "gemini-2.5-flash",
-        "google_api_key": SecretStr("test-key"),
+        "google_api_key": SecretStr(FAKE_API_KEY),
     }
     if instance_timeout is not None:
         llm_kwargs["timeout"] = instance_timeout
@@ -1703,7 +1876,7 @@ async def test_max_retries_parameter_handling(
         # Instance-level max_retries
         llm_kwargs = {
             "model": "gemini-2.5-flash",
-            "google_api_key": SecretStr("test-key"),
+            "google_api_key": SecretStr(FAKE_API_KEY),
             "max_retries": instance_max_retries,
         }
 
@@ -1761,7 +1934,7 @@ def test_thinking_config_merging_with_generation_config() -> None:
 
         llm = ChatGoogleGenerativeAI(
             model=MODEL_NAME,
-            google_api_key=SecretStr("test-key"),
+            google_api_key=SecretStr(FAKE_API_KEY),
         )
 
         result = llm.invoke(
@@ -1947,7 +2120,7 @@ def test_chat_google_genai_image_content_blocks() -> None:
 
     llm = ChatGoogleGenerativeAI(
         model=MODEL_NAME,
-        google_api_key=SecretStr("test-key"),
+        google_api_key=SecretStr(FAKE_API_KEY),
     )
 
     with patch.object(llm.client, "generate_content", return_value=mock_response):
@@ -2055,7 +2228,7 @@ def test_chat_google_genai_invoke_with_audio_mocked() -> None:
 
     llm = ChatGoogleGenerativeAI(
         model=MODEL_NAME,
-        google_api_key=SecretStr("test-key"),
+        google_api_key=SecretStr(FAKE_API_KEY),
         response_modalities=[Modality.AUDIO],
     )
 
@@ -2112,7 +2285,7 @@ def test_system_message_only_raises_error() -> None:
     """Test that invoking with only a SystemMessage raises a helpful error."""
     llm = ChatGoogleGenerativeAI(
         model=MODEL_NAME,
-        google_api_key=SecretStr("test-key"),
+        google_api_key=SecretStr(FAKE_API_KEY),
     )
 
     # Should raise ValueError when only SystemMessage is provided
@@ -2143,7 +2316,7 @@ def test_system_message_with_additional_message_works() -> None:
 
     llm = ChatGoogleGenerativeAI(
         model=MODEL_NAME,
-        google_api_key=SecretStr("test-key"),
+        google_api_key=SecretStr(FAKE_API_KEY),
     )
 
     with patch.object(llm.client, "generate_content", return_value=mock_response):
@@ -2184,7 +2357,9 @@ def test_response_json_schema_parameter() -> None:
         name: str
         age: int
 
-    llm = ChatGoogleGenerativeAI(model=MODEL_NAME, google_api_key=SecretStr("test-key"))
+    llm = ChatGoogleGenerativeAI(
+        model=MODEL_NAME, google_api_key=SecretStr(FAKE_API_KEY)
+    )
 
     schema_dict = {
         "type": "object",
@@ -2203,7 +2378,9 @@ def test_response_json_schema_parameter() -> None:
 def test_response_json_schema_param_mapping() -> None:
     """Test both `response_schema` and `response_json_schema` map correctly to
     `response_json_schema` in `GenerationConfig`."""
-    llm = ChatGoogleGenerativeAI(model=MODEL_NAME, google_api_key=SecretStr("test-key"))
+    llm = ChatGoogleGenerativeAI(
+        model=MODEL_NAME, google_api_key=SecretStr(FAKE_API_KEY)
+    )
 
     schema_dict = {
         "type": "object",
@@ -2245,7 +2422,9 @@ def test_response_json_schema_param_mapping() -> None:
 
 
 def test_with_struct_out() -> None:
-    llm = ChatGoogleGenerativeAI(model=MODEL_NAME, google_api_key=SecretStr("test-key"))
+    llm = ChatGoogleGenerativeAI(
+        model=MODEL_NAME, google_api_key=SecretStr(FAKE_API_KEY)
+    )
 
     schema = {
         "type": "object",
@@ -2261,7 +2440,9 @@ def test_with_struct_out() -> None:
 
 def test_json_schema_dict_support() -> None:
     """Test `json_schema` with dictionary schemas."""
-    llm = ChatGoogleGenerativeAI(model=MODEL_NAME, google_api_key=SecretStr("test-key"))
+    llm = ChatGoogleGenerativeAI(
+        model=MODEL_NAME, google_api_key=SecretStr(FAKE_API_KEY)
+    )
 
     dict_schema = {
         "type": "object",
@@ -2283,7 +2464,9 @@ def test_ref_preservation() -> None:
     # Get the raw schema with $defs
     raw_schema = RecursiveModel.model_json_schema()
 
-    llm = ChatGoogleGenerativeAI(model=MODEL_NAME, google_api_key=SecretStr("test-key"))
+    llm = ChatGoogleGenerativeAI(
+        model=MODEL_NAME, google_api_key=SecretStr(FAKE_API_KEY)
+    )
 
     structured = llm.with_structured_output(RecursiveModel, method="json_schema")
     llm = cast("Any", structured).first
@@ -2303,7 +2486,9 @@ def test_recursive_schema_support() -> None:
 
     TreeNode.model_rebuild()  # Rebuild to resolve forward references
 
-    llm = ChatGoogleGenerativeAI(model=MODEL_NAME, google_api_key=SecretStr("test-key"))
+    llm = ChatGoogleGenerativeAI(
+        model=MODEL_NAME, google_api_key=SecretStr(FAKE_API_KEY)
+    )
 
     structured_llm = llm.with_structured_output(TreeNode, method="json_schema")
     assert structured_llm is not None
@@ -2328,7 +2513,9 @@ def test_recursive_schema_support() -> None:
 
 def test_union_schema_with_anyof() -> None:
     """Test that `anyOf` schemas are properly handled."""
-    llm = ChatGoogleGenerativeAI(model=MODEL_NAME, google_api_key=SecretStr("test-key"))
+    llm = ChatGoogleGenerativeAI(
+        model=MODEL_NAME, google_api_key=SecretStr(FAKE_API_KEY)
+    )
 
     # Schema with anyOf for union support
     union_schema = {
@@ -2391,7 +2578,9 @@ def test_union_schema_support() -> None:
 
         decision: SpamDetails | NotSpamDetails
 
-    llm = ChatGoogleGenerativeAI(model=MODEL_NAME, google_api_key=SecretStr("test-key"))
+    llm = ChatGoogleGenerativeAI(
+        model=MODEL_NAME, google_api_key=SecretStr(FAKE_API_KEY)
+    )
 
     structured = llm.with_structured_output(ModerationResult, method="json_schema")
 
@@ -2402,7 +2591,9 @@ def test_union_schema_support() -> None:
 
 def test_response_schema_mime_type_validation() -> None:
     """Test that `response_schema` requires correct MIME type."""
-    llm = ChatGoogleGenerativeAI(model=MODEL_NAME, google_api_key=SecretStr("test-key"))
+    llm = ChatGoogleGenerativeAI(
+        model=MODEL_NAME, google_api_key=SecretStr(FAKE_API_KEY)
+    )
 
     schema = {"type": "object", "properties": {"field": {"type": "string"}}}
 

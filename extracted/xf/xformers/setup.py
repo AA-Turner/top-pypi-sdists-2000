@@ -176,7 +176,9 @@ def get_flash_attention2_nvcc_archs_flags(cuda_version: int):
         return []
     # Figure out default archs to target
     DEFAULT_ARCHS_LIST = ""
-    if cuda_version >= 1208:
+    if cuda_version >= 1300:
+        DEFAULT_ARCHS_LIST = "8.0;8.6;9.0;10.0;11.0;12.0"
+    elif cuda_version >= 1208:
         DEFAULT_ARCHS_LIST = "8.0;8.6;9.0;10.0;12.0"
     elif cuda_version >= 1108:
         DEFAULT_ARCHS_LIST = "8.0;8.6;9.0"
@@ -281,9 +283,16 @@ def get_flash_attention3_nvcc_archs_flags(cuda_version: int):
         return []
     if cuda_version < 1203:
         return []
+    if (
+        sys.platform == "win32" or platform.system() == "Windows"
+    ) and cuda_version >= 1300:
+        return []
     archs_list = os.environ.get("TORCH_CUDA_ARCH_LIST")
     if archs_list is None:
-        if torch.cuda.get_device_capability("cuda") != (9, 0):
+        if torch.cuda.get_device_capability("cuda") != (
+            9,
+            0,
+        ) and torch.cuda.get_device_capability("cuda") != (8, 0):
             return []
         archs_list = "8.0 9.0a"
     nvcc_archs_flags = []
@@ -321,12 +330,13 @@ def get_flash_attention3_extensions(cuda_version: int, extra_compile_args):
     sources = [
         str(Path(f).relative_to(flash_root))
         for f in glob.glob(os.path.join(flash_root, "hopper", "*.cu"))
-        + glob.glob(os.path.join(flash_root, "hopper", "*.cpp"))
         + glob.glob(os.path.join(flash_root, "hopper", "instantiations", "*.cu"))
     ]
     # hdimall and softcapall are .cu files which include all the other .cu files
     # for explicit values hence causing us to build these kernels twice.
     sources = [s for s in sources if ("hdimall" not in s and "softcapall" not in s)]
+    # use non-stable API for now
+    sources += [os.path.join("hopper", "flash_api.cpp")]
 
     # We don't care/expose softcap and fp8 and paged attention,
     # hence we disable them for faster builds.
@@ -396,6 +406,19 @@ def get_flash_attention3_extensions(cuda_version: int, extra_compile_args):
 def rename_cpp_cu(cpp_files):
     for entry in cpp_files:
         shutil.copy(entry, os.path.splitext(entry)[0] + ".cu")
+
+
+def should_use_pt_flash(xformers_pt_flash_attn: Optional[str]) -> bool:
+    if xformers_pt_flash_attn is None:
+        try:
+            attn_compat_module.ensure_pt_flash_ok()
+            return True
+        except ImportError:
+            return False
+    if xformers_pt_flash_attn == "1":
+        attn_compat_module.ensure_pt_flash_ok()
+        return True
+    return False
 
 
 def get_extensions():
@@ -491,6 +514,10 @@ def get_extensions():
         cuda_version = get_cuda_version(CUDA_HOME)
         extension = CUDAExtension
         sources += source_cuda
+        if cuda_version < 1205:
+            # swiglu_fairinternal.cu uses cuda::ptx::cp_async_bulk which requires
+            # CUDA 12.5
+            sources.remove(os.path.join(extensions_dir, "swiglu_fairinternal.cu"))
         include_dirs += [
             sputnik_dir,
             cutlass_dir,
@@ -539,12 +566,9 @@ def get_extensions():
         else:
             # By default, we try to link to torch internal flash attention implementation
             # and silently switch to local flash attention build if no compatibility
-            # If we force 'torch FA switch' then setup will fail when no compatibility
-            if (
-                xformers_pt_flash_attn is None or xformers_pt_flash_attn == "1"
-            ) and attn_compat_module.is_pt_flash_old(
-                force=xformers_pt_flash_attn == "1"
-            ) is not None:
+            # If XFORMERS_PT_FLASH_ATTN set to 1 then fail when no compatibility
+            # If XFORMERS_PT_FLASH_ATTN set to 0 then we will only try local build
+            if should_use_pt_flash(xformers_pt_flash_attn):
                 use_pt_flash = True
             else:
                 ext_modules += get_flash_attention2_extensions(

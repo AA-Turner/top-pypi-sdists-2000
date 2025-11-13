@@ -6,9 +6,17 @@ This module tests the lazy loading functionality for Spark sessions.
 
 import logging
 import sys
-from unittest.mock import Mock, patch
+from unittest.mock import Mock, PropertyMock, patch
 
 import pytest
+
+
+# Create a proper mock exception class that inherits from Exception
+class MockSparkConnectGrpcException(Exception):
+    """Mock SparkConnectGrpcException that properly inherits from Exception."""
+
+    pass
+
 
 # Mock PySpark and gRPC modules before importing our code
 pyspark_modules = [
@@ -19,6 +27,9 @@ pyspark_modules = [
     "pyspark.sql.connect.session",
     "pyspark.sql.connect.client",
     "grpc",
+    "pyspark.errors",
+    "pyspark.errors.exceptions",
+    "pyspark.errors.exceptions.connect",
 ]
 
 for module_name in pyspark_modules:
@@ -29,6 +40,8 @@ for module_name in pyspark_modules:
             mock_module.insecure_channel = Mock()
             mock_module.secure_channel = Mock()
             mock_module.UnaryUnaryClientInterceptor = Mock()
+        elif module_name == "pyspark.errors.exceptions.connect":
+            mock_module.SparkConnectGrpcException = MockSparkConnectGrpcException
         sys.modules[module_name] = mock_module
 
 from sagemaker_studio.utils.spark.session.lazy_spark_session import LazySparkSession  # noqa: E402
@@ -138,6 +151,39 @@ class TestLazySparkSession:
 
         with pytest.raises(Exception, match="Spark access failed"):
             _ = lazy_session.some_attribute
+
+    def test_getattr_handles_spark_connect_grpc_exception(self):
+        """Test that __getattr__ handles SparkConnectGrpcException by recreating the session."""
+        mock_manager = Mock(spec=SparkSessionManager)
+        mock_project = Mock()
+        mock_manager.project = mock_project
+        mock_connection = Mock()
+        mock_project.connection.return_value = mock_connection
+        mock_connection.catalogs = []
+
+        # First call to create returns a session that will raise a SparkConnectGrpcException
+        bad_spark_session = Mock(spec=LazySparkSession)
+        type(bad_spark_session).version = PropertyMock(side_effect=MockSparkConnectGrpcException)
+
+        # Second call to create returns a working session
+        working_spark_session = Mock()
+        working_spark_session.version = "3.0.0"
+        working_spark_session.sql = Mock(return_value="sql_result")
+
+        mock_manager.create.side_effect = [bad_spark_session, working_spark_session]
+
+        lazy_session = LazySparkSession(mock_manager)
+
+        # Access an attribute - should trigger SparkConnectGrpcException handling
+        result = lazy_session.sql
+
+        # Verify that:
+        # 1. Session manager was called twice (initial + after exception)
+        assert mock_manager.create.call_count == 2
+        # 2. Stop was called
+        mock_manager.stop.assert_called_once()
+        # 3. The final result comes from the working session
+        assert result is working_spark_session.sql
 
     def test_repr_returns_spark_session_repr(self, mock_spark_session):
         """Test that __repr__ returns the SparkSession representation."""

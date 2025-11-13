@@ -2759,6 +2759,21 @@ def _Model_from_mldev(
         getv(from_object, ['supportedGenerationMethods']),
     )
 
+  if getv(from_object, ['temperature']) is not None:
+    setv(to_object, ['temperature'], getv(from_object, ['temperature']))
+
+  if getv(from_object, ['maxTemperature']) is not None:
+    setv(to_object, ['max_temperature'], getv(from_object, ['maxTemperature']))
+
+  if getv(from_object, ['topP']) is not None:
+    setv(to_object, ['top_p'], getv(from_object, ['topP']))
+
+  if getv(from_object, ['topK']) is not None:
+    setv(to_object, ['top_k'], getv(from_object, ['topK']))
+
+  if getv(from_object, ['thinking']) is not None:
+    setv(to_object, ['thinking'], getv(from_object, ['thinking']))
+
   return to_object
 
 
@@ -2905,7 +2920,7 @@ def _RecontextImageConfig_to_vertex(
   if getv(from_object, ['base_steps']) is not None:
     setv(
         parent_object,
-        ['parameters', 'editConfig', 'baseSteps'],
+        ['parameters', 'baseSteps'],
         getv(from_object, ['base_steps']),
     )
 
@@ -4521,7 +4536,12 @@ class Models(_api_module.BaseModule):
       else:
         path = '{models_url}'
     query_params = request_dict.get('_query')
-    if query_params:
+    if query_params and query_params.get('filter'):
+      query_param_filter = query_params.pop('filter')
+      path = f'{path}?filter={query_param_filter}'
+      if query_params:
+        path += f'&{urlencode(query_params)}'
+    elif query_params:
       path = f'{path}?{urlencode(query_params)}'
     # TODO: remove the hack that pops config.
     request_dict.pop('config', None)
@@ -6361,7 +6381,12 @@ class AsyncModels(_api_module.BaseModule):
       else:
         path = '{models_url}'
     query_params = request_dict.get('_query')
-    if query_params:
+    if query_params and query_params.get('filter'):
+      query_param_filter = query_params.pop('filter')
+      path = f'{path}?filter={query_param_filter}'
+      if query_params:
+        path += f'&{urlencode(query_params)}'
+    elif query_params:
       path = f'{path}?{urlencode(query_params)}'
     # TODO: remove the hack that pops config.
     request_dict.pop('config', None)

@@ -1,11 +1,14 @@
 use std::ffi::OsString;
+use std::fmt::{self, Display, Formatter};
 use std::ops::{Deref, DerefMut};
 use std::path::PathBuf;
 use std::str::FromStr;
 
 use anyhow::{Result, anyhow};
-use clap::builder::Styles;
+use clap::ValueEnum;
 use clap::builder::styling::{AnsiColor, Effects, Style};
+use clap::builder::{PossibleValue, Styles, TypedValueParser, ValueParserFactory};
+use clap::error::ErrorKind;
 use clap::{Args, Parser, Subcommand};
 
 use uv_auth::Service;
@@ -517,6 +520,13 @@ pub enum Commands {
     Build(BuildArgs),
     /// Upload distributions to an index.
     Publish(PublishArgs),
+    /// Inspect uv workspaces.
+    #[command(
+        after_help = "Use `uv help workspace` for more details.",
+        after_long_help = "",
+        hide = true
+    )]
+    Workspace(WorkspaceNamespace),
     /// The implementation of the build backend.
     ///
     /// These commands are not directly exposed to the user, instead users invoke their build
@@ -580,8 +590,8 @@ pub struct VersionArgs {
     /// Update the project version using the given semantics
     ///
     /// This flag can be passed multiple times.
-    #[arg(group = "operation", long)]
-    pub bump: Vec<VersionBump>,
+    #[arg(group = "operation", long, value_name = "BUMP[=VALUE]")]
+    pub bump: Vec<VersionBumpSpec>,
 
     /// Don't write a new version to the `pyproject.toml`
     ///
@@ -691,8 +701,8 @@ pub enum VersionBump {
     Dev,
 }
 
-impl std::fmt::Display for VersionBump {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+impl Display for VersionBump {
+    fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
         let string = match self {
             Self::Major => "major",
             Self::Minor => "minor",
@@ -705,6 +715,110 @@ impl std::fmt::Display for VersionBump {
             Self::Dev => "dev",
         };
         string.fmt(f)
+    }
+}
+
+impl FromStr for VersionBump {
+    type Err = String;
+
+    fn from_str(value: &str) -> Result<Self, Self::Err> {
+        match value {
+            "major" => Ok(Self::Major),
+            "minor" => Ok(Self::Minor),
+            "patch" => Ok(Self::Patch),
+            "stable" => Ok(Self::Stable),
+            "alpha" => Ok(Self::Alpha),
+            "beta" => Ok(Self::Beta),
+            "rc" => Ok(Self::Rc),
+            "post" => Ok(Self::Post),
+            "dev" => Ok(Self::Dev),
+            _ => Err(format!("invalid bump component `{value}`")),
+        }
+    }
+}
+
+#[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord)]
+pub struct VersionBumpSpec {
+    pub bump: VersionBump,
+    pub value: Option<u64>,
+}
+
+impl Display for VersionBumpSpec {
+    fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
+        match self.value {
+            Some(value) => write!(f, "{}={value}", self.bump),
+            None => self.bump.fmt(f),
+        }
+    }
+}
+
+impl FromStr for VersionBumpSpec {
+    type Err = String;
+
+    fn from_str(input: &str) -> Result<Self, Self::Err> {
+        let (name, value) = match input.split_once('=') {
+            Some((name, value)) => (name, Some(value)),
+            None => (input, None),
+        };
+
+        let bump = name.parse::<VersionBump>()?;
+
+        if bump == VersionBump::Stable && value.is_some() {
+            return Err("`--bump stable` does not accept a value".to_string());
+        }
+
+        let value = match value {
+            Some("") => {
+                return Err("`--bump` values cannot be empty".to_string());
+            }
+            Some(raw) => Some(
+                raw.parse::<u64>()
+                    .map_err(|_| format!("invalid numeric value `{raw}` for `--bump {name}`"))?,
+            ),
+            None => None,
+        };
+
+        Ok(Self { bump, value })
+    }
+}
+
+impl ValueParserFactory for VersionBumpSpec {
+    type Parser = VersionBumpSpecValueParser;
+
+    fn value_parser() -> Self::Parser {
+        VersionBumpSpecValueParser
+    }
+}
+
+#[derive(Clone, Debug)]
+pub struct VersionBumpSpecValueParser;
+
+impl TypedValueParser for VersionBumpSpecValueParser {
+    type Value = VersionBumpSpec;
+
+    fn parse_ref(
+        &self,
+        _cmd: &clap::Command,
+        _arg: Option<&clap::Arg>,
+        value: &std::ffi::OsStr,
+    ) -> Result<Self::Value, clap::Error> {
+        let raw = value.to_str().ok_or_else(|| {
+            clap::Error::raw(
+                ErrorKind::InvalidUtf8,
+                "`--bump` values must be valid UTF-8",
+            )
+        })?;
+
+        VersionBumpSpec::from_str(raw)
+            .map_err(|message| clap::Error::raw(ErrorKind::InvalidValue, message))
+    }
+
+    fn possible_values(&self) -> Option<Box<dyn Iterator<Item = PossibleValue> + '_>> {
+        Some(Box::new(
+            VersionBump::value_variants()
+                .iter()
+                .filter_map(ValueEnum::to_possible_value),
+        ))
     }
 }
 
@@ -3211,7 +3325,7 @@ pub struct RunArgs {
     ///
     /// uv includes the groups defined in `tool.uv.default-groups` by default.
     /// This disables that option, however, specific groups can still be included with `--group`.
-    #[arg(long)]
+    #[arg(long, env = EnvVars::UV_NO_DEFAULT_GROUPS)]
     pub no_default_groups: bool,
 
     /// Only include dependencies from the specified dependency group.
@@ -3540,7 +3654,7 @@ pub struct SyncArgs {
     ///
     /// uv includes the groups defined in `tool.uv.default-groups` by default.
     /// This disables that option, however, specific groups can still be included with `--group`.
-    #[arg(long)]
+    #[arg(long, env = EnvVars::UV_NO_DEFAULT_GROUPS)]
     pub no_default_groups: bool,
 
     /// Only include dependencies from the specified dependency group.
@@ -3599,34 +3713,62 @@ pub struct SyncArgs {
     /// of its dependencies are still installed. This is particularly useful in situations like
     /// building Docker images where installing the project separately from its dependencies allows
     /// optimal layer caching.
-    #[arg(long)]
+    ///
+    /// The inverse `--only-install-project` can be used to install _only_ the project itself,
+    /// excluding all dependencies.
+    #[arg(long, conflicts_with = "only_install_project")]
     pub no_install_project: bool,
+
+    /// Only install the current project.
+    #[arg(long, conflicts_with = "no_install_project", hide = true)]
+    pub only_install_project: bool,
 
     /// Do not install any workspace members, including the root project.
     ///
-    /// By default, all of the workspace members and their dependencies are installed into the
+    /// By default, all workspace members and their dependencies are installed into the
     /// environment. The `--no-install-workspace` option allows exclusion of all the workspace
     /// members while retaining their dependencies. This is particularly useful in situations like
     /// building Docker images where installing the workspace separately from its dependencies
     /// allows optimal layer caching.
-    #[arg(long)]
+    ///
+    /// The inverse `--only-install-workspace` can be used to install _only_ workspace members,
+    /// excluding all other dependencies.
+    #[arg(long, conflicts_with = "only_install_workspace")]
     pub no_install_workspace: bool,
+
+    /// Only install workspace members, including the root project.
+    #[arg(long, conflicts_with = "no_install_workspace", hide = true)]
+    pub only_install_workspace: bool,
 
     /// Do not install local path dependencies
     ///
     /// Skips the current project, workspace members, and any other local (path or editable)
     /// packages. Only remote/indexed dependencies are installed. Useful in Docker builds to cache
     /// heavy third-party dependencies first and layer local packages separately.
-    #[arg(long)]
+    ///
+    /// The inverse `--only-install-local` can be used to install _only_ local packages, excluding
+    /// all remote dependencies.
+    #[arg(long, conflicts_with = "only_install_local")]
     pub no_install_local: bool,
+
+    /// Only install local path dependencies
+    #[arg(long, conflicts_with = "no_install_local", hide = true)]
+    pub only_install_local: bool,
 
     /// Do not install the given package(s).
     ///
     /// By default, all of the project's dependencies are installed into the environment. The
     /// `--no-install-package` option allows exclusion of specific packages. Note this can result
     /// in a broken environment, and should be used with caution.
-    #[arg(long)]
+    ///
+    /// The inverse `--only-install-package` can be used to install _only_ the specified packages,
+    /// excluding all others.
+    #[arg(long, conflicts_with = "only_install_package")]
     pub no_install_package: Vec<PackageName>,
+
+    /// Only install the given package(s).
+    #[arg(long, conflicts_with = "no_install_package", hide = true)]
+    pub only_install_package: Vec<PackageName>,
 
     /// Assert that the `uv.lock` will remain unchanged.
     ///
@@ -4044,26 +4186,106 @@ pub struct AddArgs {
     /// its dependencies are still installed. This is particularly useful in situations like building
     /// Docker images where installing the project separately from its dependencies allows optimal
     /// layer caching.
-    #[arg(long, conflicts_with = "frozen", conflicts_with = "no_sync")]
+    ///
+    /// The inverse `--only-install-project` can be used to install _only_ the project itself,
+    /// excluding all dependencies.
+    #[arg(
+        long,
+        conflicts_with = "frozen",
+        conflicts_with = "no_sync",
+        conflicts_with = "only_install_project"
+    )]
     pub no_install_project: bool,
+
+    /// Only install the current project.
+    #[arg(
+        long,
+        conflicts_with = "frozen",
+        conflicts_with = "no_sync",
+        conflicts_with = "no_install_project",
+        hide = true
+    )]
+    pub only_install_project: bool,
 
     /// Do not install any workspace members, including the current project.
     ///
-    /// By default, all of the workspace members and their dependencies are installed into the
+    /// By default, all workspace members and their dependencies are installed into the
     /// environment. The `--no-install-workspace` option allows exclusion of all the workspace
     /// members while retaining their dependencies. This is particularly useful in situations like
     /// building Docker images where installing the workspace separately from its dependencies
     /// allows optimal layer caching.
-    #[arg(long, conflicts_with = "frozen", conflicts_with = "no_sync")]
+    ///
+    /// The inverse `--only-install-workspace` can be used to install _only_ workspace members,
+    /// excluding all other dependencies.
+    #[arg(
+        long,
+        conflicts_with = "frozen",
+        conflicts_with = "no_sync",
+        conflicts_with = "only_install_workspace"
+    )]
     pub no_install_workspace: bool,
+
+    /// Only install workspace members, including the current project.
+    #[arg(
+        long,
+        conflicts_with = "frozen",
+        conflicts_with = "no_sync",
+        conflicts_with = "no_install_workspace",
+        hide = true
+    )]
+    pub only_install_workspace: bool,
 
     /// Do not install local path dependencies
     ///
     /// Skips the current project, workspace members, and any other local (path or editable)
     /// packages. Only remote/indexed dependencies are installed. Useful in Docker builds to cache
     /// heavy third-party dependencies first and layer local packages separately.
-    #[arg(long, conflicts_with = "frozen", conflicts_with = "no_sync")]
+    ///
+    /// The inverse `--only-install-local` can be used to install _only_ local packages, excluding
+    /// all remote dependencies.
+    #[arg(
+        long,
+        conflicts_with = "frozen",
+        conflicts_with = "no_sync",
+        conflicts_with = "only_install_local"
+    )]
     pub no_install_local: bool,
+
+    /// Only install local path dependencies
+    #[arg(
+        long,
+        conflicts_with = "frozen",
+        conflicts_with = "no_sync",
+        conflicts_with = "no_install_local",
+        hide = true
+    )]
+    pub only_install_local: bool,
+
+    /// Do not install the given package(s).
+    ///
+    /// By default, all project's dependencies are installed into the environment. The
+    /// `--no-install-package` option allows exclusion of specific packages. Note this can result
+    /// in a broken environment, and should be used with caution.
+    ///
+    /// The inverse `--only-install-package` can be used to install _only_ the specified packages,
+    /// excluding all others.
+    #[arg(
+        long,
+        conflicts_with = "frozen",
+        conflicts_with = "no_sync",
+        conflicts_with = "only_install_package"
+    )]
+    pub no_install_package: Vec<PackageName>,
+
+    /// Only install the given package(s).
+    #[arg(
+        long,
+        conflicts_with = "frozen",
+        conflicts_with = "no_sync",
+        conflicts_with = "no_install_package",
+        hide = true
+    )]
+    pub only_install_package: Vec<PackageName>,
 }
 
 #[derive(Args)]
@@ -4217,7 +4439,7 @@ pub struct TreeArgs {
     ///
     /// uv includes the groups defined in `tool.uv.default-groups` by default.
     /// This disables that option, however, specific groups can still be included with `--group`.
-    #[arg(long)]
+    #[arg(long, env = EnvVars::UV_NO_DEFAULT_GROUPS)]
     pub no_default_groups: bool,
 
     /// Only include dependencies from the specified dependency group.
@@ -4392,7 +4614,7 @@ pub struct ExportArgs {
     ///
     /// uv includes the groups defined in `tool.uv.default-groups` by default.
     /// This disables that option, however, specific groups can still be included with `--group`.
-    #[arg(long)]
+    #[arg(long, env = EnvVars::UV_NO_DEFAULT_GROUPS)]
     pub no_default_groups: bool,
 
     /// Only include dependencies from the specified dependency group.
@@ -4450,31 +4672,91 @@ pub struct ExportArgs {
     /// By default, the current project is included in the exported requirements file with all of
     /// its dependencies. The `--no-emit-project` option allows the project to be excluded, but all
     /// of its dependencies to remain included.
-    #[arg(long, alias = "no-install-project")]
+    ///
+    /// The inverse `--only-emit-project` can be used to emit _only_ the project itself, excluding
+    /// all dependencies.
+    #[arg(
+        long,
+        alias = "no-install-project",
+        conflicts_with = "only_emit_project"
+    )]
     pub no_emit_project: bool,
+
+    /// Only emit the current project.
+    #[arg(
+        long,
+        alias = "only-install-project",
+        conflicts_with = "no_emit_project",
+        hide = true
+    )]
+    pub only_emit_project: bool,
 
     /// Do not emit any workspace members, including the root project.
     ///
     /// By default, all workspace members and their dependencies are included in the exported
     /// requirements file, with all of their dependencies. The `--no-emit-workspace` option allows
     /// exclusion of all the workspace members while retaining their dependencies.
-    #[arg(long, alias = "no-install-workspace")]
+    ///
+    /// The inverse `--only-emit-workspace` can be used to emit _only_ workspace members, excluding
+    /// all other dependencies.
+    #[arg(
+        long,
+        alias = "no-install-workspace",
+        conflicts_with = "only_emit_workspace"
+    )]
     pub no_emit_workspace: bool,
+
+    /// Only emit workspace members, including the root project.
+    #[arg(
+        long,
+        alias = "only-install-workspace",
+        conflicts_with = "no_emit_workspace",
+        hide = true
+    )]
+    pub only_emit_workspace: bool,
 
     /// Do not include local path dependencies in the exported requirements.
     ///
     /// Omits the current project, workspace members, and any other local (path or editable)
     /// packages from the export. Only remote/indexed dependencies are written. Useful for Docker
     /// and CI flows that want to export and cache third-party dependencies first.
-    #[arg(long, alias = "no-install-local")]
+    ///
+    /// The inverse `--only-emit-local` can be used to emit _only_ local packages, excluding all
+    /// remote dependencies.
+    #[arg(long, alias = "no-install-local", conflicts_with = "only_emit_local")]
     pub no_emit_local: bool,
+
+    /// Only include local path dependencies in the exported requirements.
+    #[arg(
+        long,
+        alias = "only-install-local",
+        conflicts_with = "no_emit_local",
+        hide = true
+    )]
+    pub only_emit_local: bool,
 
     /// Do not emit the given package(s).
     ///
-    /// By default, all of the project's dependencies are included in the exported requirements
+    /// By default, all project's dependencies are included in the exported requirements
     /// file. The `--no-emit-package` option allows exclusion of specific packages.
-    #[arg(long, alias = "no-install-package")]
+    ///
+    /// The inverse `--only-emit-package` can be used to emit _only_ the specified packages,
+    /// excluding all others.
+    #[arg(
+        long,
+        alias = "no-install-package",
+        conflicts_with = "only_emit_package"
+    )]
     pub no_emit_package: Vec<PackageName>,
+
+    /// Only emit the given package(s).
+    #[arg(
+        long,
+        alias = "only-install-package",
+        conflicts_with = "no_emit_package",
+        hide = true
+    )]
+    pub only_emit_package: Vec<PackageName>,
 
     /// Assert that the `uv.lock` will remain unchanged.
     ///
@@ -6833,6 +7115,37 @@ pub struct PublishArgs {
     /// and will perform validation against the index if supported, but will not upload any files.
     #[arg(long)]
     pub dry_run: bool,
+}
+
+#[derive(Args)]
+pub struct WorkspaceNamespace {
+    #[command(subcommand)]
+    pub command: WorkspaceCommand,
+}
+
+#[derive(Subcommand)]
+pub enum WorkspaceCommand {
+    /// View metadata about the current workspace.
+    ///
+    /// The output of this command is not yet stable.
+    Metadata(MetadataArgs),
+    /// Display the path of a workspace member.
+    ///
+    /// By default, the path to the workspace root directory is displayed.
+    /// The `--package` option can be used to display the path to a workspace member instead.
+    ///
+    /// If used outside of a workspace, i.e., if a `pyproject.toml` cannot be found, uv will exit with an error.
+    Dir(WorkspaceDirArgs),
+}
+
+#[derive(Args, Debug)]
+pub struct MetadataArgs;
+
+#[derive(Args, Debug)]
+pub struct WorkspaceDirArgs {
+    /// Display the path to a specific package in the workspace.
+    #[arg(long)]
+    pub package: Option<PackageName>,
 }
 
 /// See [PEP 517](https://peps.python.org/pep-0517/) and

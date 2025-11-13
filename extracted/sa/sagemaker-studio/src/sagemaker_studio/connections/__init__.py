@@ -8,6 +8,8 @@ from sagemaker_studio.connections.connection import Connection
 from sagemaker_studio.data_models import ClientConfig
 from sagemaker_studio.exceptions import AWSClientException
 
+_DEFAULT_SPARK_CONNECT_CONNECTION_NAME = "default.athena.spark"
+
 
 @dataclass
 class ConnectionService:
@@ -123,6 +125,54 @@ class ConnectionService:
                 error_response={"Error": {"Code": error_code, "Message": error_message}},
                 operation_name=e.operation_name,
             ) from e
+
+    def get_connection_by_type(self, type: str) -> Connection:
+        """
+        Retrieves a connection by its name.
+
+        Args:
+            name (str): The name of the connection.
+
+        Returns:
+            Connection: The connection object.
+
+        Raises:
+            AttributeError: If no connection is found with the specified name.
+            RuntimeError: If the user does not have access to the connection.
+        """
+        connection_list_response = self.datazone_api.list_connections(  # type: ignore
+            domainIdentifier=self.domain_id, projectIdentifier=self.project_id, type=type
+        )
+        connections = connection_list_response.get("items", [])
+        if connections:
+            connection_id = connections[0].get("connectionId")
+            for connection in connections:
+                if (
+                    type == "SPARK_CONNECT"
+                    and connection.get("name") == _DEFAULT_SPARK_CONNECT_CONNECTION_NAME
+                ):
+                    connection_id = connection.get("connectionId")
+                    break
+            try:
+                connection_response = self.datazone_api.get_connection(  # type: ignore
+                    domainIdentifier=self.domain_id,
+                    identifier=connection_id,
+                    withSecret=True,
+                )
+                connection_instance = Connection(
+                    connection_data=connection_response,
+                    glue_api=self.glue_api,
+                    datazone_api=self.datazone_api,
+                    secrets_manager_api=self.secrets_manager_api,
+                    kms_api=self.kms_api,
+                    project_config=self.project_config,
+                )
+                return connection_instance
+            except ClientError as e:
+                raise RuntimeError(
+                    f"Unable to access connection '{connection_id}', {AWSClientException(e)}"
+                )
+        raise AttributeError(f"No connection found with type '{type}'")
 
     def list_connections(self) -> List[Connection]:
         """

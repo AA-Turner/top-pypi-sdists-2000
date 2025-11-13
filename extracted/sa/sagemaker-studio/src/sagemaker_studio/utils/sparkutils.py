@@ -19,9 +19,6 @@ def init(connection_name: str = None, config: ClientConfig = ClientConfig()):
     if not _SPARK_AVAILABLE:
         raise RuntimeError("PySpark is not available.")
 
-    connection_name = (
-        _DEFAULT_SPARK_CONNECT_CONNECTION_NAME if connection_name is None else connection_name
-    )
     _session_manager = AthenaSparkSessionManager(connection_name, config)
     return LazySparkSession(_session_manager)
 

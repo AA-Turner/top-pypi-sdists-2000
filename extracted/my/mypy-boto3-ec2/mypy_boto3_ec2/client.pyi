@@ -1182,6 +1182,8 @@ from .type_defs import (
     GetGroupsForCapacityReservationResultTypeDef,
     GetHostReservationPurchasePreviewRequestTypeDef,
     GetHostReservationPurchasePreviewResultTypeDef,
+    GetImageAncestryRequestTypeDef,
+    GetImageAncestryResultTypeDef,
     GetImageBlockPublicAccessStateRequestTypeDef,
     GetImageBlockPublicAccessStateResultTypeDef,
     GetInstanceMetadataDefaultsRequestTypeDef,
@@ -6938,6 +6940,17 @@ class EC2Client(BaseClient):
 
         [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/ec2/client/get_host_reservation_purchase_preview.html)
         [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_ec2/client/#get_host_reservation_purchase_preview)
+        """
+
+    def get_image_ancestry(
+        self, **kwargs: Unpack[GetImageAncestryRequestTypeDef]
+    ) -> GetImageAncestryResultTypeDef:
+        """
+        Retrieves the ancestry chain of the specified AMI, tracing its lineage back to
+        the root AMI.
+
+        [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/ec2/client/get_image_ancestry.html)
+        [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_ec2/client/#get_image_ancestry)
         """
 
     def get_image_block_public_access_state(

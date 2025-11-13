@@ -9,17 +9,33 @@ stage = _utils._get_datazone_stage()
 
 logger = logging.getLogger("SparkConnect")
 proj = Project()
+
 DEFAULT_SPARK_PROPS = {
     "hive.metastore.client.factory.class": "com.amazonaws.glue.catalog.metastore.AWSGlueDataCatalogHiveClientFactory",
-    "spark.sql.catalogImplementation": "hive",
     "spark.hadoop.fs.s3.credentialsResolverClass": "com.amazonaws.glue.accesscontrol.AWSLakeFormationCredentialResolver",
     "spark.hadoop.fs.s3.useDirectoryHeaderAsFolderObject": "true",
     "spark.hadoop.fs.s3.folderObject.autoAction.disabled": "true",
+    "spark.sql.catalogImplementation": "hive",
+    "spark.sql.extensions": "org.apache.iceberg.spark.extensions.IcebergSparkSessionExtensions",
+    "spark.sql.catalog.createDirectoryAfterTable.enabled": "true",
+    "spark.sql.catalog.dropDirectoryBeforeTable.enabled": "true",
+    "spark.sql.catalog.skipLocationValidationOnCreateTable.enabled": "true",
 }
 
 
 def _get_account_id_from_arn(arn):
     return arn.split(":")[4]
+
+
+def _generate_spark_catalog_spark_configs(account_id):
+    return {
+        "spark.sql.catalog.spark_catalog": "org.apache.iceberg.spark.SparkSessionCatalog",
+        "spark.sql.catalog.spark_catalog.catalog-impl": "org.apache.iceberg.aws.glue.GlueCatalog",
+        "spark.sql.catalog.spark_catalog.client.region": region,
+        "spark.sql.catalog.spark_catalog.glue.account-id": account_id,
+        "spark.sql.catalog.spark_catalog.glue.id": account_id,
+        "spark.sql.catalog.spark_catalog.glue.lakeformation-enabled": "true",
+    }
 
 
 def _generate_s3tables_spark_configs():
@@ -56,7 +72,8 @@ def _generate_s3tables_spark_configs():
     return conf
 
 
-def generate_spark_configs():
-    s3tables_props = _generate_s3tables_spark_configs()
-    s3tables_props.update(DEFAULT_SPARK_PROPS)
-    return s3tables_props
+def generate_spark_configs(account_id):
+    spark_props = DEFAULT_SPARK_PROPS.copy()
+    spark_props.update(_generate_spark_catalog_spark_configs(account_id))
+    spark_props.update(_generate_s3tables_spark_configs())
+    return spark_props

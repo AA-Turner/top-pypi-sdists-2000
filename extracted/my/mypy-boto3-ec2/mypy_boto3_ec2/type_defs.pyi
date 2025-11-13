@@ -1918,6 +1918,8 @@ __all__ = (
     "GetGroupsForCapacityReservationResultTypeDef",
     "GetHostReservationPurchasePreviewRequestTypeDef",
     "GetHostReservationPurchasePreviewResultTypeDef",
+    "GetImageAncestryRequestTypeDef",
+    "GetImageAncestryResultTypeDef",
     "GetImageBlockPublicAccessStateRequestTypeDef",
     "GetImageBlockPublicAccessStateResultTypeDef",
     "GetInstanceMetadataDefaultsRequestTypeDef",
@@ -2048,6 +2050,7 @@ __all__ = (
     "IamInstanceProfileTypeDef",
     "IcmpTypeCodeTypeDef",
     "IdFormatTypeDef",
+    "ImageAncestryEntryTypeDef",
     "ImageAttributeTypeDef",
     "ImageCreateTagsRequestTypeDef",
     "ImageCriterionRequestTypeDef",
@@ -5893,6 +5896,17 @@ class PurchaseTypeDef(TypedDict):
     InstanceFamily: NotRequired[str]
     PaymentOption: NotRequired[PaymentOptionType]
     UpfrontPrice: NotRequired[str]
+
+class GetImageAncestryRequestTypeDef(TypedDict):
+    ImageId: str
+    DryRun: NotRequired[bool]
+
+class ImageAncestryEntryTypeDef(TypedDict):
+    CreationDate: NotRequired[datetime]
+    ImageId: NotRequired[str]
+    ImageOwnerAlias: NotRequired[str]
+    SourceImageId: NotRequired[str]
+    SourceImageRegion: NotRequired[str]
 
 class GetImageBlockPublicAccessStateRequestTypeDef(TypedDict):
     DryRun: NotRequired[bool]
@@ -13313,6 +13327,10 @@ class PurchaseHostReservationResultTypeDef(TypedDict):
     Purchase: list[PurchaseTypeDef]
     TotalHourlyPrice: str
     TotalUpfrontPrice: str
+    ResponseMetadata: ResponseMetadataTypeDef
+
+class GetImageAncestryResultTypeDef(TypedDict):
+    ImageAncestryEntries: list[ImageAncestryEntryTypeDef]
     ResponseMetadata: ResponseMetadataTypeDef
 
 class GetInstanceMetadataDefaultsResultTypeDef(TypedDict):

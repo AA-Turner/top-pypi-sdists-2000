@@ -57,7 +57,6 @@ from semgrep import tracing
 from semgrep.autofix import apply_fixes
 from semgrep.config_resolver import Config
 from semgrep.config_resolver import ConfigLoader
-from semgrep.config_resolver import get_config
 from semgrep.console import console
 from semgrep.constants import DEFAULT_TIMEOUT
 from semgrep.constants import OutputFormat
@@ -390,7 +389,7 @@ def baseline_run(
     ptt_enabled: bool,
     dry_run: bool,
     fips_mode: bool,
-    x_eio: bool,
+    x_parmap: bool,
 ) -> RuleMatchMap:
     """
     Run baseline scan and return the updated rule_matches_by_rule with baseline matches removed.
@@ -507,7 +506,7 @@ def baseline_run(
                     ptt_enabled=ptt_enabled,
                     dry_run=dry_run,
                     fips_mode=fips_mode,
-                    x_eio=x_eio,
+                    x_parmap=x_parmap,
                 )
                 rule_matches_by_rule = remove_matches_in_baseline(
                     rule_matches_by_rule,
@@ -864,7 +863,7 @@ def run_rules(
     dry_run: bool = False,
     fips_mode: bool,
     x_tr: bool = False,
-    x_eio: bool = False,
+    x_parmap: bool = False,
 ) -> Tuple[
     RuleMatchMap,
     List[SemgrepError],
@@ -949,7 +948,7 @@ def run_rules(
         disable_secrets_validation,
         target_mode_config,
         all_subprojects,
-        x_eio,
+        x_parmap,
     )
     # ---------------------------------------
     # Step5: Adjusting rule_matches_by_rule
@@ -1015,7 +1014,8 @@ def run_scan(
     lang: Optional[str],
     # NOTE: Since the `ci` command reuses this function, we intentionally do
     # not set a default at this level.
-    configs: Sequence[str],
+    config_strs: Optional[Sequence[str]],
+    rules_string: Optional[str] = None,
     no_rewrite_rule_ids: bool = False,
     jobs: Optional[int] = None,
     include: Optional[Sequence[str]] = None,
@@ -1048,7 +1048,7 @@ def run_scan(
     x_ls: bool = False,
     x_ls_long: bool = False,
     x_tr: bool = False,
-    x_eio: bool = False,
+    x_parmap: bool = False,
     x_pro_naming: bool = False,
     x_no_python_schema_validation: bool = False,
     path_sensitive: bool = False,
@@ -1085,7 +1085,7 @@ def run_scan(
     # Step1: loading the rules
     # ----------------------------
     rule_start_time = time.time()
-    includes_remote_config = ConfigLoader.includes_remote_config(configs)
+    includes_remote_config = ConfigLoader.includes_remote_config(config_strs)
     progress_msg = (
         "Loading rules from registry..."
         if includes_remote_config
@@ -1099,15 +1099,30 @@ def run_scan(
         disable=(not sys.stderr.isatty()),
     ) as progress:
         task_id = progress.add_task(f"{progress_msg}", total=1)
-        configs_obj, config_errors = get_config(
-            pattern,
-            lang,
-            configs,
-            replacement=replacement,
-            project_url=project_url,
-            no_rewrite_rule_ids=no_rewrite_rule_ids,
-            no_python_schema_validation=x_no_python_schema_validation,
-        )
+        if pattern:
+            if not lang:
+                raise SemgrepError(
+                    "language must be specified when a pattern is passed"
+                )
+            configs_obj, config_errors = Config.from_pattern_lang(
+                pattern, lang, replacement
+            )
+        elif rules_string is not None:
+            configs_obj, config_errors = Config.from_rules_string(
+                rules_string,
+                no_python_schema_validation=x_no_python_schema_validation,
+            )
+        elif config_strs is not None:
+            if replacement:
+                raise SemgrepError(
+                    "command-line replacement flag can only be used with command-line pattern; when using a config file add the fix: key instead"
+                )
+            configs_obj, config_errors = Config.from_config_list(
+                config_strs or [],
+                project_url,
+                no_python_schema_validation=x_no_python_schema_validation,
+            )
+
         progress.remove_task(task_id)
     all_rules = configs_obj.get_rules(no_rewrite_rule_ids)
     profiler.save("config_time", rule_start_time)
@@ -1120,7 +1135,7 @@ def run_scan(
         metrics,
         project_url,
         engine_type,
-        configs,
+        config_strs or [],
         configs_obj,
         baseline_commit,
         run_secrets,
@@ -1267,7 +1282,7 @@ def run_scan(
         fips_mode=fips_mode,
         dry_run=dryrun,
         x_tr=x_tr,
-        x_eio=x_eio,
+        x_parmap=x_parmap,
     )
     profiler.save("core_time", core_start_time)
     semgrep_errors: List[SemgrepError] = config_errors + scan_errors
@@ -1308,7 +1323,7 @@ def run_scan(
             ptt_enabled=ptt_enabled,
             dry_run=dryrun,
             fips_mode=fips_mode,
-            x_eio=x_eio,
+            x_parmap=x_parmap,
         )
 
     # ---------------------------------
@@ -1408,7 +1423,7 @@ def run_scan_and_return_json(
         scanning_roots=[str(t) for t in scanning_roots],
         pattern="",
         lang="",
-        configs=[str(config)],
+        config_strs=[str(config)],
         **kwargs,
     )
 

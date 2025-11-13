@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: tblib
-Version: 3.2.1
+Version: 3.2.2
 Summary: Traceback serialization library.
 Author-email: Ionel Cristian Mărieș <contact@ionelmc.ro>
 License-Expression: BSD-2-Clause
@@ -706,6 +706,11 @@ Credits
 Changelog
 =========
 
+3.2.2 (2025-11-12)
+~~~~~~~~~~~~~~~~~~
+
+* Fixed regression occurring with ``TimeoutError`` exceptions. They should be represented now exactly as the original when unpickling.
+  Contributed by Jacob Tomlinson in `#85 <https://github.com/ionelmc/python-tblib/pull/85>`_.
 
 3.2.1 (2025-10-31)
 ~~~~~~~~~~~~~~~~~~

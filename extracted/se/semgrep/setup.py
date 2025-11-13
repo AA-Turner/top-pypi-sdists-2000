@@ -143,7 +143,7 @@ install_requires = [
 
 setuptools.setup(
     name="semgrep",
-    version="1.142.1",
+    version="1.143.0",
     author="Semgrep Inc.",
     author_email="support@semgrep.com",
     description="Lightweight static analysis for many languages. Find bug variants with patterns that look like source code.",
@@ -168,6 +168,7 @@ setuptools.setup(
         "Environment :: Console",
         "License :: OSI Approved :: GNU Lesser General Public License v2 (LGPLv2)",
         "Operating System :: MacOS",
+        "Operating System :: Microsoft :: Windows",
         "Operating System :: POSIX :: Linux",
         "Programming Language :: Python :: 3.10",
         "Programming Language :: Python :: 3.11",

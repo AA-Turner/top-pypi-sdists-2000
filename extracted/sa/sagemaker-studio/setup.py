@@ -79,7 +79,7 @@ setup(
         "pyathena >= 3.18.0",
         "sqlalchemy>=2.0.43",
         "pandas>=2.3.2",
-        "duckdb>=0.8.0,<1.0.0",
+        "duckdb>=1.4.0",
         "pymysql>=1.1.2",
         "snowflake-sqlalchemy>=1.7.7",
         "sqlalchemy-bigquery>=0.0.7",
@@ -88,8 +88,8 @@ setup(
         "pymssql>=2.3.8",
         "awswrangler>=3.5.0",
         "pyiceberg>=0.7.0",
-        "pyarrow>=14.0.0,<21.0.0",
-        "numpy>=1.19.0,<2.0.0"
+        "numpy>=1.26.4,<2.3.0",
+        "pyarrow>=19.0.0"
     ],
     tests_require=["pytest"],
     test_suite="src.sagemaker_studio._test",

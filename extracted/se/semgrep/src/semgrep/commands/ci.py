@@ -276,6 +276,7 @@ def ci(
     ],  # unused but needed to receive options from 'scan'
     verbose: bool,
     x_eio: bool,
+    x_parmap: bool,
     x_tr: bool,
     x_pro_naming: bool,
     x_semgrepignore_filename: Optional[str],
@@ -326,6 +327,17 @@ def ci(
             logger.info(
                 "WARNING: `semgrep ci` is meant to be run from the root of a git repo.\nWhen `semgrep ci` is not run from a git repo, it will not be able to perform all operations.\nWhen `semgrep ci` is run from a git repo, but not the root, links in the uploaded findings may be broken.\n\nTo run `semgrep ci` on only a subdirectory of a git repo, see `--subdir`."
             )
+
+        if x_eio:
+            if x_parmap:
+                logger.warning(
+                    "WARN: --x-eio and --x-parmap both set.  Choosing the latter."
+                )
+            else:
+                logger.warning(
+                    "WARN: --x-eio (Multicore Semgrep) now enabled by default.  "
+                    + "This flag will be removed in a future version of Semgrep."
+                )
 
         if config and partial_config:
             logger.info(
@@ -465,6 +477,7 @@ def ci(
 
         fix_head_if_github_action(metadata)
 
+        rules_string = None
         try:
             # Note this needs to happen within fix_head_if_github_action
             # so that metadata of current commit is correct
@@ -542,7 +555,7 @@ def ci(
                 if partial_config:
                     config = (str(partial_config),)
                 else:
-                    config = (scan_handler.rules,)
+                    rules_string = scan_handler.rules
 
         except Exception as e:
             import traceback
@@ -682,7 +695,8 @@ def ci(
             "scanning_roots": [scanning_root],
             "pattern": None,
             "lang": None,
-            "configs": config,
+            "rules_string": rules_string,
+            "config_strs": config,
             "no_rewrite_rule_ids": (not rewrite_rule_ids),
             "dump_command_for_core": dump_command_for_core,
             "jobs": jobs,
@@ -712,7 +726,7 @@ def ci(
             "baseline_commit_is_mergebase": True,
             "capture_core_stderr": capture_core_stderr,
             "allow_local_builds": allow_local_builds,
-            "x_eio": x_eio,
+            "x_parmap": x_parmap,
             "x_tr": (
                 scan_handler.transitive_reachability_enabled if scan_handler else x_tr
             ),
