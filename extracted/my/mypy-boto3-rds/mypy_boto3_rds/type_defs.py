@@ -17,6 +17,7 @@ Usage::
 from __future__ import annotations
 
 import sys
+from collections.abc import Mapping, Sequence
 from datetime import datetime
 from typing import Union
 
@@ -56,12 +57,6 @@ from .literals import (
     WriteForwardingStatusType,
 )
 
-if sys.version_info >= (3, 9):
-    from builtins import dict as Dict
-    from builtins import list as List
-    from collections.abc import Mapping, Sequence
-else:
-    from typing import Dict, List, Mapping, Sequence
 if sys.version_info >= (3, 12):
     from typing import Literal, NotRequired, TypedDict
 else:
@@ -565,7 +560,7 @@ class AccountQuotaTypeDef(TypedDict):
 class ResponseMetadataTypeDef(TypedDict):
     RequestId: str
     HTTPStatusCode: int
-    HTTPHeaders: Dict[str, str]
+    HTTPHeaders: dict[str, str]
     RetryAttempts: int
     HostId: NotRequired[str]
 
@@ -594,8 +589,8 @@ class EventSubscriptionTypeDef(TypedDict):
     Status: NotRequired[str]
     SubscriptionCreationTime: NotRequired[str]
     SourceType: NotRequired[str]
-    SourceIdsList: NotRequired[List[str]]
-    EventCategoriesList: NotRequired[List[str]]
+    SourceIdsList: NotRequired[list[str]]
+    EventCategoriesList: NotRequired[list[str]]
     Enabled: NotRequired[bool]
     EventSubscriptionArn: NotRequired[str]
 
@@ -681,8 +676,8 @@ class CloudwatchLogsExportConfigurationTypeDef(TypedDict):
 
 
 class PendingCloudwatchLogsExportsTypeDef(TypedDict):
-    LogTypesToEnable: NotRequired[List[str]]
-    LogTypesToDisable: NotRequired[List[str]]
+    LogTypesToEnable: NotRequired[list[str]]
+    LogTypesToDisable: NotRequired[list[str]]
 
 
 class RdsCustomClusterConfigurationTypeDef(TypedDict):
@@ -695,7 +690,7 @@ class ConnectionPoolConfigurationInfoTypeDef(TypedDict):
     MaxConnectionsPercent: NotRequired[int]
     MaxIdleConnectionsPercent: NotRequired[int]
     ConnectionBorrowTimeout: NotRequired[int]
-    SessionPinningFilters: NotRequired[List[str]]
+    SessionPinningFilters: NotRequired[list[str]]
     InitQuery: NotRequired[str]
 
 
@@ -752,8 +747,8 @@ class DBProxyEndpointTypeDef(TypedDict):
     DBProxyName: NotRequired[str]
     Status: NotRequired[DBProxyEndpointStatusType]
     VpcId: NotRequired[str]
-    VpcSecurityGroupIds: NotRequired[List[str]]
-    VpcSubnetIds: NotRequired[List[str]]
+    VpcSecurityGroupIds: NotRequired[list[str]]
+    VpcSubnetIds: NotRequired[list[str]]
     Endpoint: NotRequired[str]
     CreatedDate: NotRequired[datetime]
     TargetRole: NotRequired[DBProxyEndpointTargetRoleType]
@@ -797,8 +792,8 @@ class DBClusterEndpointTypeDef(TypedDict):
     Status: NotRequired[str]
     EndpointType: NotRequired[str]
     CustomEndpointType: NotRequired[str]
-    StaticMembers: NotRequired[List[str]]
-    ExcludedMembers: NotRequired[List[str]]
+    StaticMembers: NotRequired[list[str]]
+    ExcludedMembers: NotRequired[list[str]]
     DBClusterEndpointArn: NotRequired[str]
 
 
@@ -825,7 +820,7 @@ class ParameterOutputTypeDef(TypedDict):
     IsModifiable: NotRequired[bool]
     MinimumEngineVersion: NotRequired[str]
     ApplyMethod: NotRequired[ApplyMethodType]
-    SupportedEngineModes: NotRequired[List[str]]
+    SupportedEngineModes: NotRequired[list[str]]
 
 
 class DBClusterRoleTypeDef(TypedDict):
@@ -836,7 +831,7 @@ class DBClusterRoleTypeDef(TypedDict):
 
 class DBClusterSnapshotAttributeTypeDef(TypedDict):
     AttributeName: NotRequired[str]
-    AttributeValues: NotRequired[List[str]]
+    AttributeValues: NotRequired[list[str]]
 
 
 class DBClusterStatusInfoTypeDef(TypedDict):
@@ -853,7 +848,7 @@ class DomainMembershipTypeDef(TypedDict):
     IAMRoleName: NotRequired[str]
     OU: NotRequired[str]
     AuthSecretArn: NotRequired[str]
-    DnsIps: NotRequired[List[str]]
+    DnsIps: NotRequired[list[str]]
 
 
 class LimitlessDatabaseTypeDef(TypedDict):
@@ -902,7 +897,7 @@ class UpgradeTargetTypeDef(TypedDict):
     Description: NotRequired[str]
     AutoUpgrade: NotRequired[bool]
     IsMajorVersionUpgrade: NotRequired[bool]
-    SupportedEngineModes: NotRequired[List[str]]
+    SupportedEngineModes: NotRequired[list[str]]
     SupportsParallelQuery: NotRequired[bool]
     SupportsGlobalDatabases: NotRequired[bool]
     SupportsBabelfish: NotRequired[bool]
@@ -993,7 +988,7 @@ class IPRangeTypeDef(TypedDict):
 
 class DBSnapshotAttributeTypeDef(TypedDict):
     AttributeName: NotRequired[str]
-    AttributeValues: NotRequired[List[str]]
+    AttributeValues: NotRequired[list[str]]
 
 
 class DeleteBlueGreenDeploymentRequestTypeDef(TypedDict):
@@ -1162,14 +1157,14 @@ class EnableHttpEndpointRequestTypeDef(TypedDict):
 
 class EventCategoriesMapTypeDef(TypedDict):
     SourceType: NotRequired[str]
-    EventCategories: NotRequired[List[str]]
+    EventCategories: NotRequired[list[str]]
 
 
 class EventTypeDef(TypedDict):
     SourceIdentifier: NotRequired[str]
     SourceType: NotRequired[SourceTypeType]
     Message: NotRequired[str]
-    EventCategories: NotRequired[List[str]]
+    EventCategories: NotRequired[list[str]]
     Date: NotRequired[datetime]
     SourceArn: NotRequired[str]
 
@@ -1177,7 +1172,7 @@ class EventTypeDef(TypedDict):
 class ExportTaskTypeDef(TypedDict):
     ExportTaskIdentifier: NotRequired[str]
     SourceArn: NotRequired[str]
-    ExportOnly: NotRequired[List[str]]
+    ExportOnly: NotRequired[list[str]]
     SnapshotTime: NotRequired[datetime]
     TaskStartTime: NotRequired[datetime]
     TaskEndTime: NotRequired[datetime]
@@ -1214,7 +1209,7 @@ class FailoverStateTypeDef(TypedDict):
 
 class GlobalClusterMemberTypeDef(TypedDict):
     DBClusterArn: NotRequired[str]
-    Readers: NotRequired[List[str]]
+    Readers: NotRequired[list[str]]
     IsWriter: NotRequired[bool]
     GlobalWriteForwardingStatus: NotRequired[WriteForwardingStatusType]
     SynchronizationStatus: NotRequired[GlobalClusterMemberSynchronizationStatusType]
@@ -1383,7 +1378,7 @@ class PendingMaintenanceActionTypeDef(TypedDict):
 
 
 class PerformanceInsightsMetricDimensionGroupTypeDef(TypedDict):
-    Dimensions: NotRequired[List[str]]
+    Dimensions: NotRequired[list[str]]
     Group: NotRequired[str]
     Limit: NotRequired[int]
 
@@ -1556,7 +1551,7 @@ class TenantDatabasePendingModifiedValuesTypeDef(TypedDict):
 
 
 class AccountAttributesMessageTypeDef(TypedDict):
-    AccountQuotas: List[AccountQuotaTypeDef]
+    AccountQuotas: list[AccountQuotaTypeDef]
     ResponseMetadata: ResponseMetadataTypeDef
 
 
@@ -1587,8 +1582,8 @@ class DBClusterEndpointResponseTypeDef(TypedDict):
     Status: str
     EndpointType: str
     CustomEndpointType: str
-    StaticMembers: List[str]
-    ExcludedMembers: List[str]
+    StaticMembers: list[str]
+    ExcludedMembers: list[str]
     DBClusterEndpointArn: str
     ResponseMetadata: ResponseMetadataTypeDef
 
@@ -1629,7 +1624,7 @@ class EnableHttpEndpointResponseTypeDef(TypedDict):
 class ExportTaskResponseTypeDef(TypedDict):
     ExportTaskIdentifier: str
     SourceArn: str
-    ExportOnly: List[str]
+    ExportOnly: list[str]
     SnapshotTime: datetime
     TaskStartTime: datetime
     TaskEndTime: datetime
@@ -1690,7 +1685,7 @@ class DeleteEventSubscriptionResultTypeDef(TypedDict):
 
 class EventSubscriptionsMessageTypeDef(TypedDict):
     Marker: str
-    EventSubscriptionsList: List[EventSubscriptionTypeDef]
+    EventSubscriptionsList: list[EventSubscriptionTypeDef]
     ResponseMetadata: ResponseMetadataTypeDef
 
 
@@ -1906,7 +1901,7 @@ class CreateTenantDatabaseMessageTypeDef(TypedDict):
 
 
 class DBClusterSnapshotTypeDef(TypedDict):
-    AvailabilityZones: NotRequired[List[str]]
+    AvailabilityZones: NotRequired[list[str]]
     DBClusterSnapshotIdentifier: NotRequired[str]
     DBClusterIdentifier: NotRequired[str]
     SnapshotCreateTime: NotRequired[datetime]
@@ -1927,7 +1922,7 @@ class DBClusterSnapshotTypeDef(TypedDict):
     DBClusterSnapshotArn: NotRequired[str]
     SourceDBClusterSnapshotArn: NotRequired[str]
     IAMDatabaseAuthenticationEnabled: NotRequired[bool]
-    TagList: NotRequired[List[TagTypeDef]]
+    TagList: NotRequired[list[TagTypeDef]]
     StorageType: NotRequired[str]
     StorageThroughput: NotRequired[int]
     DbClusterResourceId: NotRequired[str]
@@ -1945,7 +1940,7 @@ class DBShardGroupResponseTypeDef(TypedDict):
     PubliclyAccessible: bool
     Endpoint: str
     DBShardGroupArn: str
-    TagList: List[TagTypeDef]
+    TagList: list[TagTypeDef]
     ResponseMetadata: ResponseMetadataTypeDef
 
 
@@ -1960,7 +1955,7 @@ class DBShardGroupTypeDef(TypedDict):
     PubliclyAccessible: NotRequired[bool]
     Endpoint: NotRequired[str]
     DBShardGroupArn: NotRequired[str]
-    TagList: NotRequired[List[TagTypeDef]]
+    TagList: NotRequired[list[TagTypeDef]]
 
 
 class DBSnapshotTenantDatabaseTypeDef(TypedDict):
@@ -1976,7 +1971,7 @@ class DBSnapshotTenantDatabaseTypeDef(TypedDict):
     CharacterSetName: NotRequired[str]
     DBSnapshotTenantDatabaseARN: NotRequired[str]
     NcharCharacterSetName: NotRequired[str]
-    TagList: NotRequired[List[TagTypeDef]]
+    TagList: NotRequired[list[TagTypeDef]]
 
 
 class PurchaseReservedDBInstancesOfferingMessageTypeDef(TypedDict):
@@ -1987,7 +1982,7 @@ class PurchaseReservedDBInstancesOfferingMessageTypeDef(TypedDict):
 
 
 class TagListMessageTypeDef(TypedDict):
-    TagList: List[TagTypeDef]
+    TagList: list[TagTypeDef]
     ResponseMetadata: ResponseMetadataTypeDef
 
 
@@ -1997,7 +1992,7 @@ class OrderableDBInstanceOptionTypeDef(TypedDict):
     DBInstanceClass: NotRequired[str]
     LicenseModel: NotRequired[str]
     AvailabilityZoneGroup: NotRequired[str]
-    AvailabilityZones: NotRequired[List[AvailabilityZoneTypeDef]]
+    AvailabilityZones: NotRequired[list[AvailabilityZoneTypeDef]]
     MultiAZCapable: NotRequired[bool]
     ReadReplicaCapable: NotRequired[bool]
     Vpc: NotRequired[bool]
@@ -2018,14 +2013,14 @@ class OrderableDBInstanceOptionTypeDef(TypedDict):
     MaxStorageThroughputPerDbInstance: NotRequired[int]
     MinStorageThroughputPerIops: NotRequired[float]
     MaxStorageThroughputPerIops: NotRequired[float]
-    AvailableProcessorFeatures: NotRequired[List[AvailableProcessorFeatureTypeDef]]
-    SupportedEngineModes: NotRequired[List[str]]
+    AvailableProcessorFeatures: NotRequired[list[AvailableProcessorFeatureTypeDef]]
+    SupportedEngineModes: NotRequired[list[str]]
     SupportsStorageAutoscaling: NotRequired[bool]
     SupportsKerberosAuthentication: NotRequired[bool]
     OutpostCapable: NotRequired[bool]
-    SupportedActivityStreamModes: NotRequired[List[str]]
+    SupportedActivityStreamModes: NotRequired[list[str]]
     SupportsGlobalDatabases: NotRequired[bool]
-    SupportedNetworkTypes: NotRequired[List[str]]
+    SupportedNetworkTypes: NotRequired[list[str]]
     SupportsClusters: NotRequired[bool]
     SupportsDedicatedLogVolume: NotRequired[bool]
     SupportsHttpEndpoint: NotRequired[bool]
@@ -2043,18 +2038,18 @@ class BlueGreenDeploymentTypeDef(TypedDict):
     BlueGreenDeploymentName: NotRequired[str]
     Source: NotRequired[str]
     Target: NotRequired[str]
-    SwitchoverDetails: NotRequired[List[SwitchoverDetailTypeDef]]
-    Tasks: NotRequired[List[BlueGreenDeploymentTaskTypeDef]]
+    SwitchoverDetails: NotRequired[list[SwitchoverDetailTypeDef]]
+    Tasks: NotRequired[list[BlueGreenDeploymentTaskTypeDef]]
     Status: NotRequired[str]
     StatusDetails: NotRequired[str]
     CreateTime: NotRequired[datetime]
     DeleteTime: NotRequired[datetime]
-    TagList: NotRequired[List[TagTypeDef]]
+    TagList: NotRequired[list[TagTypeDef]]
 
 
 class CertificateMessageTypeDef(TypedDict):
     DefaultCertificateForNewLaunches: str
-    Certificates: List[CertificateTypeDef]
+    Certificates: list[CertificateTypeDef]
     Marker: str
     ResponseMetadata: ResponseMetadataTypeDef
 
@@ -2108,7 +2103,7 @@ class CreateDBClusterParameterGroupResultTypeDef(TypedDict):
 
 class DBClusterParameterGroupsMessageTypeDef(TypedDict):
     Marker: str
-    DBClusterParameterGroups: List[DBClusterParameterGroupTypeDef]
+    DBClusterParameterGroups: list[DBClusterParameterGroupTypeDef]
     ResponseMetadata: ResponseMetadataTypeDef
 
 
@@ -2124,7 +2119,7 @@ class CreateDBParameterGroupResultTypeDef(TypedDict):
 
 class DBParameterGroupsMessageTypeDef(TypedDict):
     Marker: str
-    DBParameterGroups: List[DBParameterGroupTypeDef]
+    DBParameterGroups: list[DBParameterGroupTypeDef]
     ResponseMetadata: ResponseMetadataTypeDef
 
 
@@ -2502,9 +2497,9 @@ class DBSnapshotTypeDef(TypedDict):
     DBSnapshotArn: NotRequired[str]
     Timezone: NotRequired[str]
     IAMDatabaseAuthenticationEnabled: NotRequired[bool]
-    ProcessorFeatures: NotRequired[List[ProcessorFeatureTypeDef]]
+    ProcessorFeatures: NotRequired[list[ProcessorFeatureTypeDef]]
     DbiResourceId: NotRequired[str]
-    TagList: NotRequired[List[TagTypeDef]]
+    TagList: NotRequired[list[TagTypeDef]]
     SnapshotTarget: NotRequired[str]
     OriginalSnapshotCreateTime: NotRequired[datetime]
     SnapshotDatabaseTime: NotRequired[datetime]
@@ -2595,7 +2590,7 @@ class PendingModifiedValuesTypeDef(TypedDict):
     CACertificateIdentifier: NotRequired[str]
     DBSubnetGroupName: NotRequired[str]
     PendingCloudwatchLogsExports: NotRequired[PendingCloudwatchLogsExportsTypeDef]
-    ProcessorFeatures: NotRequired[List[ProcessorFeatureTypeDef]]
+    ProcessorFeatures: NotRequired[list[ProcessorFeatureTypeDef]]
     AutomationMode: NotRequired[AutomationModeType]
     ResumeFullAutomationModeTime: NotRequired[datetime]
     MultiTenant: NotRequired[bool]
@@ -2768,7 +2763,7 @@ class DeleteDBProxyEndpointResponseTypeDef(TypedDict):
 
 
 class DescribeDBProxyEndpointsResponseTypeDef(TypedDict):
-    DBProxyEndpoints: List[DBProxyEndpointTypeDef]
+    DBProxyEndpoints: list[DBProxyEndpointTypeDef]
     Marker: str
     ResponseMetadata: ResponseMetadataTypeDef
 
@@ -2825,7 +2820,7 @@ class DBClusterAutomatedBackupTypeDef(TypedDict):
     DBClusterArn: NotRequired[str]
     BackupRetentionPeriod: NotRequired[int]
     EngineMode: NotRequired[str]
-    AvailabilityZones: NotRequired[List[str]]
+    AvailabilityZones: NotRequired[list[str]]
     Port: NotRequired[int]
     KmsKeyId: NotRequired[str]
     StorageType: NotRequired[str]
@@ -2836,24 +2831,24 @@ class DBClusterAutomatedBackupTypeDef(TypedDict):
 
 class DBClusterBacktrackMessageTypeDef(TypedDict):
     Marker: str
-    DBClusterBacktracks: List[DBClusterBacktrackTypeDef]
+    DBClusterBacktracks: list[DBClusterBacktrackTypeDef]
     ResponseMetadata: ResponseMetadataTypeDef
 
 
 class DBClusterEndpointMessageTypeDef(TypedDict):
     Marker: str
-    DBClusterEndpoints: List[DBClusterEndpointTypeDef]
+    DBClusterEndpoints: list[DBClusterEndpointTypeDef]
     ResponseMetadata: ResponseMetadataTypeDef
 
 
 class DBClusterParameterGroupDetailsTypeDef(TypedDict):
-    Parameters: List[ParameterOutputTypeDef]
+    Parameters: list[ParameterOutputTypeDef]
     Marker: str
     ResponseMetadata: ResponseMetadataTypeDef
 
 
 class DBParameterGroupDetailsTypeDef(TypedDict):
-    Parameters: List[ParameterOutputTypeDef]
+    Parameters: list[ParameterOutputTypeDef]
     Marker: str
     ResponseMetadata: ResponseMetadataTypeDef
 
@@ -2861,12 +2856,12 @@ class DBParameterGroupDetailsTypeDef(TypedDict):
 class EngineDefaultsTypeDef(TypedDict):
     DBParameterGroupFamily: NotRequired[str]
     Marker: NotRequired[str]
-    Parameters: NotRequired[List[ParameterOutputTypeDef]]
+    Parameters: NotRequired[list[ParameterOutputTypeDef]]
 
 
 class DBClusterSnapshotAttributesResultTypeDef(TypedDict):
     DBClusterSnapshotIdentifier: NotRequired[str]
-    DBClusterSnapshotAttributes: NotRequired[List[DBClusterSnapshotAttributeTypeDef]]
+    DBClusterSnapshotAttributes: NotRequired[list[DBClusterSnapshotAttributeTypeDef]]
 
 
 class DBEngineVersionResponseTypeDef(TypedDict):
@@ -2885,23 +2880,23 @@ class DBEngineVersionResponseTypeDef(TypedDict):
     DBEngineMediaType: str
     KMSKeyId: str
     CreateTime: datetime
-    SupportedCharacterSets: List[CharacterSetTypeDef]
-    SupportedNcharCharacterSets: List[CharacterSetTypeDef]
-    ValidUpgradeTarget: List[UpgradeTargetTypeDef]
-    SupportedTimezones: List[TimezoneTypeDef]
-    ExportableLogTypes: List[str]
+    SupportedCharacterSets: list[CharacterSetTypeDef]
+    SupportedNcharCharacterSets: list[CharacterSetTypeDef]
+    ValidUpgradeTarget: list[UpgradeTargetTypeDef]
+    SupportedTimezones: list[TimezoneTypeDef]
+    ExportableLogTypes: list[str]
     SupportsLogExportsToCloudwatchLogs: bool
     SupportsReadReplica: bool
-    SupportedEngineModes: List[str]
-    SupportedFeatureNames: List[str]
+    SupportedEngineModes: list[str]
+    SupportedFeatureNames: list[str]
     Status: str
     SupportsParallelQuery: bool
     SupportsGlobalDatabases: bool
-    TagList: List[TagTypeDef]
+    TagList: list[TagTypeDef]
     SupportsBabelfish: bool
     SupportsLimitlessDatabase: bool
     SupportsCertificateRotationWithoutRestart: bool
-    SupportedCACertificateIdentifiers: List[str]
+    SupportedCACertificateIdentifiers: list[str]
     SupportsLocalWriteForwarding: bool
     SupportsIntegrations: bool
     ServerlessV2FeaturesSupport: ServerlessV2FeaturesSupportTypeDef
@@ -2924,23 +2919,23 @@ class DBEngineVersionTypeDef(TypedDict):
     DBEngineMediaType: NotRequired[str]
     KMSKeyId: NotRequired[str]
     CreateTime: NotRequired[datetime]
-    SupportedCharacterSets: NotRequired[List[CharacterSetTypeDef]]
-    SupportedNcharCharacterSets: NotRequired[List[CharacterSetTypeDef]]
-    ValidUpgradeTarget: NotRequired[List[UpgradeTargetTypeDef]]
-    SupportedTimezones: NotRequired[List[TimezoneTypeDef]]
-    ExportableLogTypes: NotRequired[List[str]]
+    SupportedCharacterSets: NotRequired[list[CharacterSetTypeDef]]
+    SupportedNcharCharacterSets: NotRequired[list[CharacterSetTypeDef]]
+    ValidUpgradeTarget: NotRequired[list[UpgradeTargetTypeDef]]
+    SupportedTimezones: NotRequired[list[TimezoneTypeDef]]
+    ExportableLogTypes: NotRequired[list[str]]
     SupportsLogExportsToCloudwatchLogs: NotRequired[bool]
     SupportsReadReplica: NotRequired[bool]
-    SupportedEngineModes: NotRequired[List[str]]
-    SupportedFeatureNames: NotRequired[List[str]]
+    SupportedEngineModes: NotRequired[list[str]]
+    SupportedFeatureNames: NotRequired[list[str]]
     Status: NotRequired[str]
     SupportsParallelQuery: NotRequired[bool]
     SupportsGlobalDatabases: NotRequired[bool]
-    TagList: NotRequired[List[TagTypeDef]]
+    TagList: NotRequired[list[TagTypeDef]]
     SupportsBabelfish: NotRequired[bool]
     SupportsLimitlessDatabase: NotRequired[bool]
     SupportsCertificateRotationWithoutRestart: NotRequired[bool]
-    SupportedCACertificateIdentifiers: NotRequired[List[str]]
+    SupportedCACertificateIdentifiers: NotRequired[list[str]]
     SupportsLocalWriteForwarding: NotRequired[bool]
     SupportsIntegrations: NotRequired[bool]
     ServerlessV2FeaturesSupport: NotRequired[ServerlessV2FeaturesSupportTypeDef]
@@ -2974,7 +2969,7 @@ class DBInstanceAutomatedBackupTypeDef(TypedDict):
     BackupRetentionPeriod: NotRequired[int]
     DBInstanceAutomatedBackupsArn: NotRequired[str]
     DBInstanceAutomatedBackupsReplications: NotRequired[
-        List[DBInstanceAutomatedBackupsReplicationTypeDef]
+        list[DBInstanceAutomatedBackupsReplicationTypeDef]
     ]
     BackupTarget: NotRequired[str]
     MultiTenant: NotRequired[bool]
@@ -2985,7 +2980,7 @@ class DBInstanceAutomatedBackupTypeDef(TypedDict):
 class DBMajorEngineVersionTypeDef(TypedDict):
     Engine: NotRequired[str]
     MajorEngineVersion: NotRequired[str]
-    SupportedEngineLifecycles: NotRequired[List[SupportedEngineLifecycleTypeDef]]
+    SupportedEngineLifecycles: NotRequired[list[SupportedEngineLifecycleTypeDef]]
 
 
 DBProxyTargetTypeDef = TypedDict(
@@ -3009,10 +3004,10 @@ class DBProxyTypeDef(TypedDict):
     Status: NotRequired[DBProxyStatusType]
     EngineFamily: NotRequired[str]
     VpcId: NotRequired[str]
-    VpcSecurityGroupIds: NotRequired[List[str]]
-    VpcSubnetIds: NotRequired[List[str]]
+    VpcSecurityGroupIds: NotRequired[list[str]]
+    VpcSubnetIds: NotRequired[list[str]]
     DefaultAuthScheme: NotRequired[str]
-    Auth: NotRequired[List[UserAuthConfigInfoTypeDef]]
+    Auth: NotRequired[list[UserAuthConfigInfoTypeDef]]
     RoleArn: NotRequired[str]
     Endpoint: NotRequired[str]
     RequireTLS: NotRequired[bool]
@@ -3029,14 +3024,14 @@ class DBSecurityGroupTypeDef(TypedDict):
     DBSecurityGroupName: NotRequired[str]
     DBSecurityGroupDescription: NotRequired[str]
     VpcId: NotRequired[str]
-    EC2SecurityGroups: NotRequired[List[EC2SecurityGroupTypeDef]]
-    IPRanges: NotRequired[List[IPRangeTypeDef]]
+    EC2SecurityGroups: NotRequired[list[EC2SecurityGroupTypeDef]]
+    IPRanges: NotRequired[list[IPRangeTypeDef]]
     DBSecurityGroupArn: NotRequired[str]
 
 
 class DBSnapshotAttributesResultTypeDef(TypedDict):
     DBSnapshotIdentifier: NotRequired[str]
-    DBSnapshotAttributes: NotRequired[List[DBSnapshotAttributeTypeDef]]
+    DBSnapshotAttributes: NotRequired[list[DBSnapshotAttributeTypeDef]]
 
 
 class DescribeBlueGreenDeploymentsRequestTypeDef(TypedDict):
@@ -3827,25 +3822,25 @@ class DescribeTenantDatabasesMessageWaitTypeDef(TypedDict):
 
 
 class DescribeDBLogFilesResponseTypeDef(TypedDict):
-    DescribeDBLogFiles: List[DescribeDBLogFilesDetailsTypeDef]
+    DescribeDBLogFiles: list[DescribeDBLogFilesDetailsTypeDef]
     Marker: str
     ResponseMetadata: ResponseMetadataTypeDef
 
 
 class EventCategoriesMessageTypeDef(TypedDict):
-    EventCategoriesMapList: List[EventCategoriesMapTypeDef]
+    EventCategoriesMapList: list[EventCategoriesMapTypeDef]
     ResponseMetadata: ResponseMetadataTypeDef
 
 
 class EventsMessageTypeDef(TypedDict):
     Marker: str
-    Events: List[EventTypeDef]
+    Events: list[EventTypeDef]
     ResponseMetadata: ResponseMetadataTypeDef
 
 
 class ExportTasksMessageTypeDef(TypedDict):
     Marker: str
-    ExportTasks: List[ExportTaskTypeDef]
+    ExportTasks: list[ExportTaskTypeDef]
     ResponseMetadata: ResponseMetadataTypeDef
 
 
@@ -3860,10 +3855,10 @@ class GlobalClusterTypeDef(TypedDict):
     DatabaseName: NotRequired[str]
     StorageEncrypted: NotRequired[bool]
     DeletionProtection: NotRequired[bool]
-    GlobalClusterMembers: NotRequired[List[GlobalClusterMemberTypeDef]]
+    GlobalClusterMembers: NotRequired[list[GlobalClusterMemberTypeDef]]
     Endpoint: NotRequired[str]
     FailoverState: NotRequired[FailoverStateTypeDef]
-    TagList: NotRequired[List[TagTypeDef]]
+    TagList: NotRequired[list[TagTypeDef]]
 
 
 class IntegrationResponseTypeDef(TypedDict):
@@ -3872,13 +3867,13 @@ class IntegrationResponseTypeDef(TypedDict):
     IntegrationName: str
     IntegrationArn: str
     KMSKeyId: str
-    AdditionalEncryptionContext: Dict[str, str]
+    AdditionalEncryptionContext: dict[str, str]
     Status: IntegrationStatusType
-    Tags: List[TagTypeDef]
+    Tags: list[TagTypeDef]
     DataFilter: str
     Description: str
     CreateTime: datetime
-    Errors: List[IntegrationErrorTypeDef]
+    Errors: list[IntegrationErrorTypeDef]
     ResponseMetadata: ResponseMetadataTypeDef
 
 
@@ -3888,13 +3883,13 @@ class IntegrationTypeDef(TypedDict):
     IntegrationName: NotRequired[str]
     IntegrationArn: NotRequired[str]
     KMSKeyId: NotRequired[str]
-    AdditionalEncryptionContext: NotRequired[Dict[str, str]]
+    AdditionalEncryptionContext: NotRequired[dict[str, str]]
     Status: NotRequired[IntegrationStatusType]
-    Tags: NotRequired[List[TagTypeDef]]
+    Tags: NotRequired[list[TagTypeDef]]
     DataFilter: NotRequired[str]
     Description: NotRequired[str]
     CreateTime: NotRequired[datetime]
-    Errors: NotRequired[List[IntegrationErrorTypeDef]]
+    Errors: NotRequired[list[IntegrationErrorTypeDef]]
 
 
 class OptionGroupOptionSettingTypeDef(TypedDict):
@@ -3906,7 +3901,7 @@ class OptionGroupOptionSettingTypeDef(TypedDict):
     IsModifiable: NotRequired[bool]
     IsRequired: NotRequired[bool]
     MinimumEngineVersionPerAllowedValue: NotRequired[
-        List[MinimumEngineVersionPerAllowedValueTypeDef]
+        list[MinimumEngineVersionPerAllowedValueTypeDef]
     ]
 
 
@@ -3933,9 +3928,9 @@ class OptionTypeDef(TypedDict):
     Permanent: NotRequired[bool]
     Port: NotRequired[int]
     OptionVersion: NotRequired[str]
-    OptionSettings: NotRequired[List[OptionSettingTypeDef]]
-    DBSecurityGroupMemberships: NotRequired[List[DBSecurityGroupMembershipTypeDef]]
-    VpcSecurityGroupMemberships: NotRequired[List[VpcSecurityGroupMembershipTypeDef]]
+    OptionSettings: NotRequired[list[OptionSettingTypeDef]]
+    DBSecurityGroupMemberships: NotRequired[list[DBSecurityGroupMembershipTypeDef]]
+    VpcSecurityGroupMemberships: NotRequired[list[VpcSecurityGroupMembershipTypeDef]]
 
 
 class SubnetTypeDef(TypedDict):
@@ -3950,7 +3945,7 @@ ParameterUnionTypeDef = Union[ParameterTypeDef, ParameterOutputTypeDef]
 
 class ResourcePendingMaintenanceActionsTypeDef(TypedDict):
     ResourceIdentifier: NotRequired[str]
-    PendingMaintenanceActionDetails: NotRequired[List[PendingMaintenanceActionTypeDef]]
+    PendingMaintenanceActionDetails: NotRequired[list[PendingMaintenanceActionTypeDef]]
 
 
 class PerformanceInsightsMetricQueryTypeDef(TypedDict):
@@ -3960,11 +3955,11 @@ class PerformanceInsightsMetricQueryTypeDef(TypedDict):
 
 class ValidStorageOptionsTypeDef(TypedDict):
     StorageType: NotRequired[str]
-    StorageSize: NotRequired[List[RangeTypeDef]]
-    ProvisionedIops: NotRequired[List[RangeTypeDef]]
-    IopsToStorageRatio: NotRequired[List[DoubleRangeTypeDef]]
-    ProvisionedStorageThroughput: NotRequired[List[RangeTypeDef]]
-    StorageThroughputToIopsRatio: NotRequired[List[DoubleRangeTypeDef]]
+    StorageSize: NotRequired[list[RangeTypeDef]]
+    ProvisionedIops: NotRequired[list[RangeTypeDef]]
+    IopsToStorageRatio: NotRequired[list[DoubleRangeTypeDef]]
+    ProvisionedStorageThroughput: NotRequired[list[RangeTypeDef]]
+    StorageThroughputToIopsRatio: NotRequired[list[DoubleRangeTypeDef]]
     SupportsStorageAutoscaling: NotRequired[bool]
 
 
@@ -3982,7 +3977,7 @@ class ReservedDBInstanceTypeDef(TypedDict):
     OfferingType: NotRequired[str]
     MultiAZ: NotRequired[bool]
     State: NotRequired[str]
-    RecurringCharges: NotRequired[List[RecurringChargeTypeDef]]
+    RecurringCharges: NotRequired[list[RecurringChargeTypeDef]]
     ReservedDBInstanceArn: NotRequired[str]
     LeaseId: NotRequired[str]
 
@@ -3997,7 +3992,7 @@ class ReservedDBInstancesOfferingTypeDef(TypedDict):
     ProductDescription: NotRequired[str]
     OfferingType: NotRequired[str]
     MultiAZ: NotRequired[bool]
-    RecurringCharges: NotRequired[List[RecurringChargeTypeDef]]
+    RecurringCharges: NotRequired[list[RecurringChargeTypeDef]]
 
 
 class ReferenceDetailsTypeDef(TypedDict):
@@ -4006,7 +4001,7 @@ class ReferenceDetailsTypeDef(TypedDict):
 
 class SourceRegionMessageTypeDef(TypedDict):
     Marker: str
-    SourceRegions: List[SourceRegionTypeDef]
+    SourceRegions: list[SourceRegionTypeDef]
     ResponseMetadata: ResponseMetadataTypeDef
 
 
@@ -4024,7 +4019,7 @@ class TenantDatabaseTypeDef(TypedDict):
     DeletionProtection: NotRequired[bool]
     PendingModifiedValues: NotRequired[TenantDatabasePendingModifiedValuesTypeDef]
     MasterUserSecret: NotRequired[MasterUserSecretTypeDef]
-    TagList: NotRequired[List[TagTypeDef]]
+    TagList: NotRequired[list[TagTypeDef]]
 
 
 class CopyDBClusterSnapshotResultTypeDef(TypedDict):
@@ -4039,7 +4034,7 @@ class CreateDBClusterSnapshotResultTypeDef(TypedDict):
 
 class DBClusterSnapshotMessageTypeDef(TypedDict):
     Marker: str
-    DBClusterSnapshots: List[DBClusterSnapshotTypeDef]
+    DBClusterSnapshots: list[DBClusterSnapshotTypeDef]
     ResponseMetadata: ResponseMetadataTypeDef
 
 
@@ -4049,19 +4044,19 @@ class DeleteDBClusterSnapshotResultTypeDef(TypedDict):
 
 
 class DescribeDBShardGroupsResponseTypeDef(TypedDict):
-    DBShardGroups: List[DBShardGroupTypeDef]
+    DBShardGroups: list[DBShardGroupTypeDef]
     Marker: str
     ResponseMetadata: ResponseMetadataTypeDef
 
 
 class DBSnapshotTenantDatabasesMessageTypeDef(TypedDict):
     Marker: str
-    DBSnapshotTenantDatabases: List[DBSnapshotTenantDatabaseTypeDef]
+    DBSnapshotTenantDatabases: list[DBSnapshotTenantDatabaseTypeDef]
     ResponseMetadata: ResponseMetadataTypeDef
 
 
 class OrderableDBInstanceOptionsMessageTypeDef(TypedDict):
-    OrderableDBInstanceOptions: List[OrderableDBInstanceOptionTypeDef]
+    OrderableDBInstanceOptions: list[OrderableDBInstanceOptionTypeDef]
     Marker: str
     ResponseMetadata: ResponseMetadataTypeDef
 
@@ -4077,7 +4072,7 @@ class DeleteBlueGreenDeploymentResponseTypeDef(TypedDict):
 
 
 class DescribeBlueGreenDeploymentsResponseTypeDef(TypedDict):
-    BlueGreenDeployments: List[BlueGreenDeploymentTypeDef]
+    BlueGreenDeployments: list[BlueGreenDeploymentTypeDef]
     Marker: str
     ResponseMetadata: ResponseMetadataTypeDef
 
@@ -4089,7 +4084,7 @@ class SwitchoverBlueGreenDeploymentResponseTypeDef(TypedDict):
 
 class DBClusterTypeDef(TypedDict):
     AllocatedStorage: NotRequired[int]
-    AvailabilityZones: NotRequired[List[str]]
+    AvailabilityZones: NotRequired[list[str]]
     BackupRetentionPeriod: NotRequired[int]
     CharacterSetName: NotRequired[str]
     DatabaseName: NotRequired[str]
@@ -4101,34 +4096,34 @@ class DBClusterTypeDef(TypedDict):
     EarliestRestorableTime: NotRequired[datetime]
     Endpoint: NotRequired[str]
     ReaderEndpoint: NotRequired[str]
-    CustomEndpoints: NotRequired[List[str]]
+    CustomEndpoints: NotRequired[list[str]]
     MultiAZ: NotRequired[bool]
     Engine: NotRequired[str]
     EngineVersion: NotRequired[str]
     LatestRestorableTime: NotRequired[datetime]
     Port: NotRequired[int]
     MasterUsername: NotRequired[str]
-    DBClusterOptionGroupMemberships: NotRequired[List[DBClusterOptionGroupStatusTypeDef]]
+    DBClusterOptionGroupMemberships: NotRequired[list[DBClusterOptionGroupStatusTypeDef]]
     PreferredBackupWindow: NotRequired[str]
     PreferredMaintenanceWindow: NotRequired[str]
     ReplicationSourceIdentifier: NotRequired[str]
-    ReadReplicaIdentifiers: NotRequired[List[str]]
-    StatusInfos: NotRequired[List[DBClusterStatusInfoTypeDef]]
-    DBClusterMembers: NotRequired[List[DBClusterMemberTypeDef]]
-    VpcSecurityGroups: NotRequired[List[VpcSecurityGroupMembershipTypeDef]]
+    ReadReplicaIdentifiers: NotRequired[list[str]]
+    StatusInfos: NotRequired[list[DBClusterStatusInfoTypeDef]]
+    DBClusterMembers: NotRequired[list[DBClusterMemberTypeDef]]
+    VpcSecurityGroups: NotRequired[list[VpcSecurityGroupMembershipTypeDef]]
     HostedZoneId: NotRequired[str]
     StorageEncrypted: NotRequired[bool]
     KmsKeyId: NotRequired[str]
     DbClusterResourceId: NotRequired[str]
     DBClusterArn: NotRequired[str]
-    AssociatedRoles: NotRequired[List[DBClusterRoleTypeDef]]
+    AssociatedRoles: NotRequired[list[DBClusterRoleTypeDef]]
     IAMDatabaseAuthenticationEnabled: NotRequired[bool]
     CloneGroupId: NotRequired[str]
     ClusterCreateTime: NotRequired[datetime]
     EarliestBacktrackTime: NotRequired[datetime]
     BacktrackWindow: NotRequired[int]
     BacktrackConsumedChangeRecords: NotRequired[int]
-    EnabledCloudwatchLogsExports: NotRequired[List[str]]
+    EnabledCloudwatchLogsExports: NotRequired[list[str]]
     Capacity: NotRequired[int]
     PendingModifiedValues: NotRequired[ClusterPendingModifiedValuesTypeDef]
     EngineMode: NotRequired[str]
@@ -4149,8 +4144,8 @@ class DBClusterTypeDef(TypedDict):
     ActivityStreamKinesisStreamName: NotRequired[str]
     CopyTagsToSnapshot: NotRequired[bool]
     CrossAccountClone: NotRequired[bool]
-    DomainMemberships: NotRequired[List[DomainMembershipTypeDef]]
-    TagList: NotRequired[List[TagTypeDef]]
+    DomainMemberships: NotRequired[list[DomainMembershipTypeDef]]
+    TagList: NotRequired[list[TagTypeDef]]
     GlobalClusterIdentifier: NotRequired[str]
     GlobalWriteForwardingStatus: NotRequired[WriteForwardingStatusType]
     GlobalWriteForwardingRequested: NotRequired[bool]
@@ -4175,7 +4170,7 @@ class DBClusterTypeDef(TypedDict):
 
 
 class DescribeDBProxyTargetGroupsResponseTypeDef(TypedDict):
-    TargetGroups: List[DBProxyTargetGroupTypeDef]
+    TargetGroups: list[DBProxyTargetGroupTypeDef]
     Marker: str
     ResponseMetadata: ResponseMetadataTypeDef
 
@@ -4197,7 +4192,7 @@ class CreateDBSnapshotResultTypeDef(TypedDict):
 
 class DBSnapshotMessageTypeDef(TypedDict):
     Marker: str
-    DBSnapshots: List[DBSnapshotTypeDef]
+    DBSnapshots: list[DBSnapshotTypeDef]
     ResponseMetadata: ResponseMetadataTypeDef
 
 
@@ -4213,7 +4208,7 @@ class ModifyDBSnapshotResultTypeDef(TypedDict):
 
 class DBClusterAutomatedBackupMessageTypeDef(TypedDict):
     Marker: str
-    DBClusterAutomatedBackups: List[DBClusterAutomatedBackupTypeDef]
+    DBClusterAutomatedBackups: list[DBClusterAutomatedBackupTypeDef]
     ResponseMetadata: ResponseMetadataTypeDef
 
 
@@ -4244,13 +4239,13 @@ class ModifyDBClusterSnapshotAttributeResultTypeDef(TypedDict):
 
 class DBEngineVersionMessageTypeDef(TypedDict):
     Marker: str
-    DBEngineVersions: List[DBEngineVersionTypeDef]
+    DBEngineVersions: list[DBEngineVersionTypeDef]
     ResponseMetadata: ResponseMetadataTypeDef
 
 
 class DBInstanceAutomatedBackupMessageTypeDef(TypedDict):
     Marker: str
-    DBInstanceAutomatedBackups: List[DBInstanceAutomatedBackupTypeDef]
+    DBInstanceAutomatedBackups: list[DBInstanceAutomatedBackupTypeDef]
     ResponseMetadata: ResponseMetadataTypeDef
 
 
@@ -4270,19 +4265,19 @@ class StopDBInstanceAutomatedBackupsReplicationResultTypeDef(TypedDict):
 
 
 class DescribeDBMajorEngineVersionsResponseTypeDef(TypedDict):
-    DBMajorEngineVersions: List[DBMajorEngineVersionTypeDef]
+    DBMajorEngineVersions: list[DBMajorEngineVersionTypeDef]
     Marker: str
     ResponseMetadata: ResponseMetadataTypeDef
 
 
 class DescribeDBProxyTargetsResponseTypeDef(TypedDict):
-    Targets: List[DBProxyTargetTypeDef]
+    Targets: list[DBProxyTargetTypeDef]
     Marker: str
     ResponseMetadata: ResponseMetadataTypeDef
 
 
 class RegisterDBProxyTargetsResponseTypeDef(TypedDict):
-    DBProxyTargets: List[DBProxyTargetTypeDef]
+    DBProxyTargets: list[DBProxyTargetTypeDef]
     ResponseMetadata: ResponseMetadataTypeDef
 
 
@@ -4297,7 +4292,7 @@ class DeleteDBProxyResponseTypeDef(TypedDict):
 
 
 class DescribeDBProxiesResponseTypeDef(TypedDict):
-    DBProxies: List[DBProxyTypeDef]
+    DBProxies: list[DBProxyTypeDef]
     Marker: str
     ResponseMetadata: ResponseMetadataTypeDef
 
@@ -4319,7 +4314,7 @@ class CreateDBSecurityGroupResultTypeDef(TypedDict):
 
 class DBSecurityGroupMessageTypeDef(TypedDict):
     Marker: str
-    DBSecurityGroups: List[DBSecurityGroupTypeDef]
+    DBSecurityGroups: list[DBSecurityGroupTypeDef]
     ResponseMetadata: ResponseMetadataTypeDef
 
 
@@ -4355,7 +4350,7 @@ class FailoverGlobalClusterResultTypeDef(TypedDict):
 
 class GlobalClustersMessageTypeDef(TypedDict):
     Marker: str
-    GlobalClusters: List[GlobalClusterTypeDef]
+    GlobalClusters: list[GlobalClusterTypeDef]
     ResponseMetadata: ResponseMetadataTypeDef
 
 
@@ -4376,7 +4371,7 @@ class SwitchoverGlobalClusterResultTypeDef(TypedDict):
 
 class DescribeIntegrationsResponseTypeDef(TypedDict):
     Marker: str
-    Integrations: List[IntegrationTypeDef]
+    Integrations: list[IntegrationTypeDef]
     ResponseMetadata: ResponseMetadataTypeDef
 
 
@@ -4388,15 +4383,15 @@ class OptionGroupOptionTypeDef(TypedDict):
     MinimumRequiredMinorEngineVersion: NotRequired[str]
     PortRequired: NotRequired[bool]
     DefaultPort: NotRequired[int]
-    OptionsDependedOn: NotRequired[List[str]]
-    OptionsConflictsWith: NotRequired[List[str]]
+    OptionsDependedOn: NotRequired[list[str]]
+    OptionsConflictsWith: NotRequired[list[str]]
     Persistent: NotRequired[bool]
     Permanent: NotRequired[bool]
     RequiresAutoMinorEngineVersionUpgrade: NotRequired[bool]
     VpcOnly: NotRequired[bool]
     SupportsOptionVersionDowngrade: NotRequired[bool]
-    OptionGroupOptionSettings: NotRequired[List[OptionGroupOptionSettingTypeDef]]
-    OptionGroupOptionVersions: NotRequired[List[OptionVersionTypeDef]]
+    OptionGroupOptionSettings: NotRequired[list[OptionGroupOptionSettingTypeDef]]
+    OptionGroupOptionVersions: NotRequired[list[OptionVersionTypeDef]]
     CopyableCrossAccount: NotRequired[bool]
 
 
@@ -4412,7 +4407,7 @@ class OptionGroupTypeDef(TypedDict):
     OptionGroupDescription: NotRequired[str]
     EngineName: NotRequired[str]
     MajorEngineVersion: NotRequired[str]
-    Options: NotRequired[List[OptionTypeDef]]
+    Options: NotRequired[list[OptionTypeDef]]
     AllowsVpcAndNonVpcInstanceMemberships: NotRequired[bool]
     VpcId: NotRequired[str]
     OptionGroupArn: NotRequired[str]
@@ -4426,9 +4421,9 @@ class DBSubnetGroupTypeDef(TypedDict):
     DBSubnetGroupDescription: NotRequired[str]
     VpcId: NotRequired[str]
     SubnetGroupStatus: NotRequired[str]
-    Subnets: NotRequired[List[SubnetTypeDef]]
+    Subnets: NotRequired[list[SubnetTypeDef]]
     DBSubnetGroupArn: NotRequired[str]
-    SupportedNetworkTypes: NotRequired[List[str]]
+    SupportedNetworkTypes: NotRequired[list[str]]
 
 
 class ModifyDBClusterParameterGroupMessageTypeDef(TypedDict):
@@ -4459,7 +4454,7 @@ class ApplyPendingMaintenanceActionResultTypeDef(TypedDict):
 
 
 class PendingMaintenanceActionsMessageTypeDef(TypedDict):
-    PendingMaintenanceActions: List[ResourcePendingMaintenanceActionsTypeDef]
+    PendingMaintenanceActions: list[ResourcePendingMaintenanceActionsTypeDef]
     Marker: str
     ResponseMetadata: ResponseMetadataTypeDef
 
@@ -4469,8 +4464,8 @@ class MetricQueryTypeDef(TypedDict):
 
 
 class ValidDBInstanceModificationsMessageTypeDef(TypedDict):
-    Storage: NotRequired[List[ValidStorageOptionsTypeDef]]
-    ValidProcessorFeatures: NotRequired[List[AvailableProcessorFeatureTypeDef]]
+    Storage: NotRequired[list[ValidStorageOptionsTypeDef]]
+    ValidProcessorFeatures: NotRequired[list[AvailableProcessorFeatureTypeDef]]
     SupportsDedicatedLogVolume: NotRequired[bool]
 
 
@@ -4481,13 +4476,13 @@ class PurchaseReservedDBInstancesOfferingResultTypeDef(TypedDict):
 
 class ReservedDBInstanceMessageTypeDef(TypedDict):
     Marker: str
-    ReservedDBInstances: List[ReservedDBInstanceTypeDef]
+    ReservedDBInstances: list[ReservedDBInstanceTypeDef]
     ResponseMetadata: ResponseMetadataTypeDef
 
 
 class ReservedDBInstancesOfferingMessageTypeDef(TypedDict):
     Marker: str
-    ReservedDBInstancesOfferings: List[ReservedDBInstancesOfferingTypeDef]
+    ReservedDBInstancesOfferings: list[ReservedDBInstancesOfferingTypeDef]
     ResponseMetadata: ResponseMetadataTypeDef
 
 
@@ -4513,7 +4508,7 @@ class ModifyTenantDatabaseResultTypeDef(TypedDict):
 
 class TenantDatabasesMessageTypeDef(TypedDict):
     Marker: str
-    TenantDatabases: List[TenantDatabaseTypeDef]
+    TenantDatabases: list[TenantDatabaseTypeDef]
     ResponseMetadata: ResponseMetadataTypeDef
 
 
@@ -4524,7 +4519,7 @@ class CreateDBClusterResultTypeDef(TypedDict):
 
 class DBClusterMessageTypeDef(TypedDict):
     Marker: str
-    DBClusters: List[DBClusterTypeDef]
+    DBClusters: list[DBClusterTypeDef]
     ResponseMetadata: ResponseMetadataTypeDef
 
 
@@ -4579,7 +4574,7 @@ class StopDBClusterResultTypeDef(TypedDict):
 
 
 class OptionGroupOptionsMessageTypeDef(TypedDict):
-    OptionGroupOptions: List[OptionGroupOptionTypeDef]
+    OptionGroupOptions: list[OptionGroupOptionTypeDef]
     Marker: str
     ResponseMetadata: ResponseMetadataTypeDef
 
@@ -4600,7 +4595,7 @@ class ModifyOptionGroupResultTypeDef(TypedDict):
 
 
 class OptionGroupsTypeDef(TypedDict):
-    OptionGroupsList: List[OptionGroupTypeDef]
+    OptionGroupsList: list[OptionGroupTypeDef]
     Marker: str
     ResponseMetadata: ResponseMetadataTypeDef
 
@@ -4622,9 +4617,9 @@ class DBInstanceTypeDef(TypedDict):
     InstanceCreateTime: NotRequired[datetime]
     PreferredBackupWindow: NotRequired[str]
     BackupRetentionPeriod: NotRequired[int]
-    DBSecurityGroups: NotRequired[List[DBSecurityGroupMembershipTypeDef]]
-    VpcSecurityGroups: NotRequired[List[VpcSecurityGroupMembershipTypeDef]]
-    DBParameterGroups: NotRequired[List[DBParameterGroupStatusTypeDef]]
+    DBSecurityGroups: NotRequired[list[DBSecurityGroupMembershipTypeDef]]
+    VpcSecurityGroups: NotRequired[list[VpcSecurityGroupMembershipTypeDef]]
+    DBParameterGroups: NotRequired[list[DBParameterGroupStatusTypeDef]]
     AvailabilityZone: NotRequired[str]
     DBSubnetGroup: NotRequired[DBSubnetGroupTypeDef]
     PreferredMaintenanceWindow: NotRequired[str]
@@ -4634,18 +4629,18 @@ class DBInstanceTypeDef(TypedDict):
     EngineVersion: NotRequired[str]
     AutoMinorVersionUpgrade: NotRequired[bool]
     ReadReplicaSourceDBInstanceIdentifier: NotRequired[str]
-    ReadReplicaDBInstanceIdentifiers: NotRequired[List[str]]
-    ReadReplicaDBClusterIdentifiers: NotRequired[List[str]]
+    ReadReplicaDBInstanceIdentifiers: NotRequired[list[str]]
+    ReadReplicaDBClusterIdentifiers: NotRequired[list[str]]
     ReplicaMode: NotRequired[ReplicaModeType]
     LicenseModel: NotRequired[str]
     Iops: NotRequired[int]
     StorageThroughput: NotRequired[int]
-    OptionGroupMemberships: NotRequired[List[OptionGroupMembershipTypeDef]]
+    OptionGroupMemberships: NotRequired[list[OptionGroupMembershipTypeDef]]
     CharacterSetName: NotRequired[str]
     NcharCharacterSetName: NotRequired[str]
     SecondaryAvailabilityZone: NotRequired[str]
     PubliclyAccessible: NotRequired[bool]
-    StatusInfos: NotRequired[List[DBInstanceStatusInfoTypeDef]]
+    StatusInfos: NotRequired[list[DBInstanceStatusInfoTypeDef]]
     StorageType: NotRequired[str]
     TdeCredentialArn: NotRequired[str]
     DbInstancePort: NotRequired[int]
@@ -4654,7 +4649,7 @@ class DBInstanceTypeDef(TypedDict):
     KmsKeyId: NotRequired[str]
     DbiResourceId: NotRequired[str]
     CACertificateIdentifier: NotRequired[str]
-    DomainMemberships: NotRequired[List[DomainMembershipTypeDef]]
+    DomainMemberships: NotRequired[list[DomainMembershipTypeDef]]
     CopyTagsToSnapshot: NotRequired[bool]
     MonitoringInterval: NotRequired[int]
     EnhancedMonitoringResourceArn: NotRequired[str]
@@ -4667,13 +4662,13 @@ class DBInstanceTypeDef(TypedDict):
     PerformanceInsightsEnabled: NotRequired[bool]
     PerformanceInsightsKMSKeyId: NotRequired[str]
     PerformanceInsightsRetentionPeriod: NotRequired[int]
-    EnabledCloudwatchLogsExports: NotRequired[List[str]]
-    ProcessorFeatures: NotRequired[List[ProcessorFeatureTypeDef]]
+    EnabledCloudwatchLogsExports: NotRequired[list[str]]
+    ProcessorFeatures: NotRequired[list[ProcessorFeatureTypeDef]]
     DeletionProtection: NotRequired[bool]
-    AssociatedRoles: NotRequired[List[DBInstanceRoleTypeDef]]
+    AssociatedRoles: NotRequired[list[DBInstanceRoleTypeDef]]
     ListenerEndpoint: NotRequired[EndpointTypeDef]
     MaxAllocatedStorage: NotRequired[int]
-    TagList: NotRequired[List[TagTypeDef]]
+    TagList: NotRequired[list[TagTypeDef]]
     AutomationMode: NotRequired[AutomationModeType]
     ResumeFullAutomationModeTime: NotRequired[datetime]
     CustomerOwnedIpEnabled: NotRequired[bool]
@@ -4685,7 +4680,7 @@ class DBInstanceTypeDef(TypedDict):
     ActivityStreamEngineNativeAuditFieldsIncluded: NotRequired[bool]
     AwsBackupRecoveryPointArn: NotRequired[str]
     DBInstanceAutomatedBackupsReplications: NotRequired[
-        List[DBInstanceAutomatedBackupsReplicationTypeDef]
+        list[DBInstanceAutomatedBackupsReplicationTypeDef]
     ]
     BackupTarget: NotRequired[str]
     AutomaticRestartTime: NotRequired[datetime]
@@ -4704,7 +4699,7 @@ class DBInstanceTypeDef(TypedDict):
 
 class DBSubnetGroupMessageTypeDef(TypedDict):
     Marker: str
-    DBSubnetGroups: List[DBSubnetGroupTypeDef]
+    DBSubnetGroups: list[DBSubnetGroupTypeDef]
     ResponseMetadata: ResponseMetadataTypeDef
 
 
@@ -4720,7 +4715,7 @@ class DescribeValidDBInstanceModificationsResultTypeDef(TypedDict):
 
 class MetricTypeDef(TypedDict):
     Name: NotRequired[str]
-    References: NotRequired[List[MetricReferenceTypeDef]]
+    References: NotRequired[list[MetricReferenceTypeDef]]
     StatisticsDetails: NotRequired[str]
     MetricQuery: NotRequired[MetricQueryTypeDef]
 
@@ -4737,7 +4732,7 @@ class CreateDBInstanceResultTypeDef(TypedDict):
 
 class DBInstanceMessageTypeDef(TypedDict):
     Marker: str
-    DBInstances: List[DBInstanceTypeDef]
+    DBInstances: list[DBInstanceTypeDef]
     ResponseMetadata: ResponseMetadataTypeDef
 
 
@@ -4794,7 +4789,7 @@ class SwitchoverReadReplicaResultTypeDef(TypedDict):
 class PerformanceIssueDetailsTypeDef(TypedDict):
     StartTime: NotRequired[datetime]
     EndTime: NotRequired[datetime]
-    Metrics: NotRequired[List[MetricTypeDef]]
+    Metrics: NotRequired[list[MetricTypeDef]]
     Analysis: NotRequired[str]
 
 
@@ -4807,11 +4802,11 @@ class RecommendedActionTypeDef(TypedDict):
     Title: NotRequired[str]
     Description: NotRequired[str]
     Operation: NotRequired[str]
-    Parameters: NotRequired[List[RecommendedActionParameterTypeDef]]
-    ApplyModes: NotRequired[List[str]]
+    Parameters: NotRequired[list[RecommendedActionParameterTypeDef]]
+    ApplyModes: NotRequired[list[str]]
     Status: NotRequired[str]
     IssueDetails: NotRequired[IssueDetailsTypeDef]
-    ContextAttributes: NotRequired[List[ContextAttributeTypeDef]]
+    ContextAttributes: NotRequired[list[ContextAttributeTypeDef]]
 
 
 class DBRecommendationTypeDef(TypedDict):
@@ -4826,14 +4821,14 @@ class DBRecommendationTypeDef(TypedDict):
     Recommendation: NotRequired[str]
     Description: NotRequired[str]
     Reason: NotRequired[str]
-    RecommendedActions: NotRequired[List[RecommendedActionTypeDef]]
+    RecommendedActions: NotRequired[list[RecommendedActionTypeDef]]
     Category: NotRequired[str]
     Source: NotRequired[str]
     TypeDetection: NotRequired[str]
     TypeRecommendation: NotRequired[str]
     Impact: NotRequired[str]
     AdditionalInfo: NotRequired[str]
-    Links: NotRequired[List[DocLinkTypeDef]]
+    Links: NotRequired[list[DocLinkTypeDef]]
     IssueDetails: NotRequired[IssueDetailsTypeDef]
 
 
@@ -4843,6 +4838,6 @@ class DBRecommendationMessageTypeDef(TypedDict):
 
 
 class DBRecommendationsMessageTypeDef(TypedDict):
-    DBRecommendations: List[DBRecommendationTypeDef]
+    DBRecommendations: list[DBRecommendationTypeDef]
     Marker: str
     ResponseMetadata: ResponseMetadataTypeDef

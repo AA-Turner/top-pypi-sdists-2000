@@ -89,7 +89,8 @@ setup(
         "awswrangler>=3.5.0",
         "pyiceberg>=0.7.0",
         "numpy>=1.26.4,<2.3.0",
-        "pyarrow>=19.0.0"
+        "pyarrow>=19.0.0",
+        "aws-embedded-metrics>=3.3.0"
     ],
     tests_require=["pytest"],
     test_suite="src.sagemaker_studio._test",

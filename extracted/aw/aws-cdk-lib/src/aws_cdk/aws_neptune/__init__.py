@@ -66,7 +66,6 @@ import constructs as _constructs_77d1e7e8
 from .. import (
     CfnResource as _CfnResource_9df397a6,
     CfnTag as _CfnTag_f6864754,
-    IEnvironmentAware as _IEnvironmentAware_a408b00d,
     IInspectable as _IInspectable_c2943556,
     IResolvable as _IResolvable_da3f097b,
     ITaggable as _ITaggable_36806126,
@@ -74,1922 +73,23 @@ from .. import (
     TagManager as _TagManager_0a598cb3,
     TreeInspector as _TreeInspector_488e0dd5,
 )
-
-
-@jsii.data_type(
-    jsii_type="aws-cdk-lib.aws_neptune.CfnDBClusterParameterGroupProps",
-    jsii_struct_bases=[],
-    name_mapping={
-        "description": "description",
-        "family": "family",
-        "parameters": "parameters",
-        "name": "name",
-        "tags": "tags",
-    },
+from ..interfaces.aws_neptune import (
+    DBClusterParameterGroupReference as _DBClusterParameterGroupReference_da7b4f10,
+    DBClusterReference as _DBClusterReference_46880dce,
+    DBInstanceReference as _DBInstanceReference_84c4879a,
+    DBParameterGroupReference as _DBParameterGroupReference_9bb44206,
+    DBSubnetGroupReference as _DBSubnetGroupReference_27cd8411,
+    EventSubscriptionReference as _EventSubscriptionReference_8038a89c,
+    IDBClusterParameterGroupRef as _IDBClusterParameterGroupRef_be75ec22,
+    IDBClusterRef as _IDBClusterRef_14961392,
+    IDBInstanceRef as _IDBInstanceRef_5e0e3745,
+    IDBParameterGroupRef as _IDBParameterGroupRef_9e461d1a,
+    IDBSubnetGroupRef as _IDBSubnetGroupRef_b2b07796,
+    IEventSubscriptionRef as _IEventSubscriptionRef_21b725e3,
 )
-class CfnDBClusterParameterGroupProps:
-    def __init__(
-        self,
-        *,
-        description: builtins.str,
-        family: builtins.str,
-        parameters: typing.Any,
-        name: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-    ) -> None:
-        '''Properties for defining a ``CfnDBClusterParameterGroup``.
 
-        :param description: Provides the customer-specified description for this DB cluster parameter group.
-        :param family: Must be ``neptune1`` for engine versions prior to `1.2.0.0 <https://docs.aws.amazon.com/neptune/latest/userguide/engine-releases-1.2.0.0.html>`_ , or ``neptune1.2`` for engine version ``1.2.0.0`` and higher.
-        :param parameters: The parameters to set for this DB cluster parameter group. The parameters are expressed as a JSON object consisting of key-value pairs. If you update the parameters, some interruption may occur depending on which parameters you update.
-        :param name: Provides the name of the DB cluster parameter group.
-        :param tags: The tags that you want to attach to this parameter group.
 
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-neptune-dbclusterparametergroup.html
-        :exampleMetadata: fixture=_generated
-
-        Example::
-
-            # The code below shows an example of how to instantiate this type.
-            # The values are placeholders you should change.
-            from aws_cdk import aws_neptune as neptune
-            
-            # parameters: Any
-            
-            cfn_dBCluster_parameter_group_props = neptune.CfnDBClusterParameterGroupProps(
-                description="description",
-                family="family",
-                parameters=parameters,
-            
-                # the properties below are optional
-                name="name",
-                tags=[CfnTag(
-                    key="key",
-                    value="value"
-                )]
-            )
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__fc71d209d4a8e49edca84c75f5f3e453b94e1ceaf55ce979d9474afb156ed5da)
-            check_type(argname="argument description", value=description, expected_type=type_hints["description"])
-            check_type(argname="argument family", value=family, expected_type=type_hints["family"])
-            check_type(argname="argument parameters", value=parameters, expected_type=type_hints["parameters"])
-            check_type(argname="argument name", value=name, expected_type=type_hints["name"])
-            check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
-        self._values: typing.Dict[builtins.str, typing.Any] = {
-            "description": description,
-            "family": family,
-            "parameters": parameters,
-        }
-        if name is not None:
-            self._values["name"] = name
-        if tags is not None:
-            self._values["tags"] = tags
-
-    @builtins.property
-    def description(self) -> builtins.str:
-        '''Provides the customer-specified description for this DB cluster parameter group.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-neptune-dbclusterparametergroup.html#cfn-neptune-dbclusterparametergroup-description
-        '''
-        result = self._values.get("description")
-        assert result is not None, "Required property 'description' is missing"
-        return typing.cast(builtins.str, result)
-
-    @builtins.property
-    def family(self) -> builtins.str:
-        '''Must be ``neptune1`` for engine versions prior to `1.2.0.0 <https://docs.aws.amazon.com/neptune/latest/userguide/engine-releases-1.2.0.0.html>`_ , or ``neptune1.2`` for engine version ``1.2.0.0`` and higher.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-neptune-dbclusterparametergroup.html#cfn-neptune-dbclusterparametergroup-family
-        '''
-        result = self._values.get("family")
-        assert result is not None, "Required property 'family' is missing"
-        return typing.cast(builtins.str, result)
-
-    @builtins.property
-    def parameters(self) -> typing.Any:
-        '''The parameters to set for this DB cluster parameter group.
-
-        The parameters are expressed as a JSON object consisting of key-value pairs.
-
-        If you update the parameters, some interruption may occur depending on which parameters you update.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-neptune-dbclusterparametergroup.html#cfn-neptune-dbclusterparametergroup-parameters
-        '''
-        result = self._values.get("parameters")
-        assert result is not None, "Required property 'parameters' is missing"
-        return typing.cast(typing.Any, result)
-
-    @builtins.property
-    def name(self) -> typing.Optional[builtins.str]:
-        '''Provides the name of the DB cluster parameter group.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-neptune-dbclusterparametergroup.html#cfn-neptune-dbclusterparametergroup-name
-        '''
-        result = self._values.get("name")
-        return typing.cast(typing.Optional[builtins.str], result)
-
-    @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
-        '''The tags that you want to attach to this parameter group.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-neptune-dbclusterparametergroup.html#cfn-neptune-dbclusterparametergroup-tags
-        '''
-        result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
-
-    def __eq__(self, rhs: typing.Any) -> builtins.bool:
-        return isinstance(rhs, self.__class__) and rhs._values == self._values
-
-    def __ne__(self, rhs: typing.Any) -> builtins.bool:
-        return not (rhs == self)
-
-    def __repr__(self) -> str:
-        return "CfnDBClusterParameterGroupProps(%s)" % ", ".join(
-            k + "=" + repr(v) for k, v in self._values.items()
-        )
-
-
-@jsii.data_type(
-    jsii_type="aws-cdk-lib.aws_neptune.CfnDBClusterProps",
-    jsii_struct_bases=[],
-    name_mapping={
-        "associated_roles": "associatedRoles",
-        "availability_zones": "availabilityZones",
-        "backup_retention_period": "backupRetentionPeriod",
-        "copy_tags_to_snapshot": "copyTagsToSnapshot",
-        "db_cluster_identifier": "dbClusterIdentifier",
-        "db_cluster_parameter_group_name": "dbClusterParameterGroupName",
-        "db_instance_parameter_group_name": "dbInstanceParameterGroupName",
-        "db_port": "dbPort",
-        "db_subnet_group_name": "dbSubnetGroupName",
-        "deletion_protection": "deletionProtection",
-        "enable_cloudwatch_logs_exports": "enableCloudwatchLogsExports",
-        "engine_version": "engineVersion",
-        "iam_auth_enabled": "iamAuthEnabled",
-        "kms_key_id": "kmsKeyId",
-        "preferred_backup_window": "preferredBackupWindow",
-        "preferred_maintenance_window": "preferredMaintenanceWindow",
-        "restore_to_time": "restoreToTime",
-        "restore_type": "restoreType",
-        "serverless_scaling_configuration": "serverlessScalingConfiguration",
-        "snapshot_identifier": "snapshotIdentifier",
-        "source_db_cluster_identifier": "sourceDbClusterIdentifier",
-        "storage_encrypted": "storageEncrypted",
-        "tags": "tags",
-        "use_latest_restorable_time": "useLatestRestorableTime",
-        "vpc_security_group_ids": "vpcSecurityGroupIds",
-    },
-)
-class CfnDBClusterProps:
-    def __init__(
-        self,
-        *,
-        associated_roles: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDBCluster.DBClusterRoleProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        availability_zones: typing.Optional[typing.Sequence[builtins.str]] = None,
-        backup_retention_period: typing.Optional[jsii.Number] = None,
-        copy_tags_to_snapshot: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        db_cluster_identifier: typing.Optional[builtins.str] = None,
-        db_cluster_parameter_group_name: typing.Optional[builtins.str] = None,
-        db_instance_parameter_group_name: typing.Optional[builtins.str] = None,
-        db_port: typing.Optional[jsii.Number] = None,
-        db_subnet_group_name: typing.Optional[builtins.str] = None,
-        deletion_protection: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        enable_cloudwatch_logs_exports: typing.Optional[typing.Sequence[builtins.str]] = None,
-        engine_version: typing.Optional[builtins.str] = None,
-        iam_auth_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        kms_key_id: typing.Optional[builtins.str] = None,
-        preferred_backup_window: typing.Optional[builtins.str] = None,
-        preferred_maintenance_window: typing.Optional[builtins.str] = None,
-        restore_to_time: typing.Optional[builtins.str] = None,
-        restore_type: typing.Optional[builtins.str] = None,
-        serverless_scaling_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDBCluster.ServerlessScalingConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        snapshot_identifier: typing.Optional[builtins.str] = None,
-        source_db_cluster_identifier: typing.Optional[builtins.str] = None,
-        storage_encrypted: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-        use_latest_restorable_time: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        vpc_security_group_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
-    ) -> None:
-        '''Properties for defining a ``CfnDBCluster``.
-
-        :param associated_roles: Provides a list of the Amazon Identity and Access Management (IAM) roles that are associated with the DB cluster. IAM roles that are associated with a DB cluster grant permission for the DB cluster to access other Amazon services on your behalf.
-        :param availability_zones: Provides the list of EC2 Availability Zones that instances in the DB cluster can be created in.
-        :param backup_retention_period: Specifies the number of days for which automatic DB snapshots are retained. An update may require some interruption. See `ModifyDBInstance <https://docs.aws.amazon.com/neptune/latest/userguide/api-instances.html#ModifyDBInstance>`_ in the Amazon Neptune User Guide for more information. Default: - 1
-        :param copy_tags_to_snapshot: *If set to ``true`` , tags are copied to any snapshot of the DB cluster that is created.*.
-        :param db_cluster_identifier: Contains a user-supplied DB cluster identifier. This identifier is the unique key that identifies a DB cluster.
-        :param db_cluster_parameter_group_name: Provides the name of the DB cluster parameter group. An update may require some interruption. See `ModifyDBInstance <https://docs.aws.amazon.com/neptune/latest/userguide/api-instances.html#ModifyDBInstance>`_ in the Amazon Neptune User Guide for more information.
-        :param db_instance_parameter_group_name: The name of the DB parameter group to apply to all instances of the DB cluster. Used only in case of a major engine version upgrade request Note that when you apply a parameter group using ``DBInstanceParameterGroupName`` , parameter changes are applied immediately, not during the next maintenance window. **Constraints** - The DB parameter group must be in the same DB parameter group family as the target DB cluster version. - The ``DBInstanceParameterGroupName`` parameter is only valid for major engine version upgrades.
-        :param db_port: The port number on which the DB instances in the DB cluster accept connections. If not specified, the default port used is ``8182`` . .. epigraph:: The ``Port`` property will soon be deprecated. Please update existing templates to use the new ``DBPort`` property that has the same functionality.
-        :param db_subnet_group_name: Specifies information on the subnet group associated with the DB cluster, including the name, description, and subnets in the subnet group.
-        :param deletion_protection: Indicates whether or not the DB cluster has deletion protection enabled. The database can't be deleted when deletion protection is enabled.
-        :param enable_cloudwatch_logs_exports: Specifies a list of log types that are enabled for export to CloudWatch Logs.
-        :param engine_version: Indicates the database engine version.
-        :param iam_auth_enabled: True if mapping of Amazon Identity and Access Management (IAM) accounts to database accounts is enabled, and otherwise false.
-        :param kms_key_id: The Amazon Resource Name (ARN) of the KMS key that is used to encrypt the database instances in the DB cluster, such as ``arn:aws:kms:us-east-1:012345678910:key/abcd1234-a123-456a-a12b-a123b4cd56ef`` . If you enable the ``StorageEncrypted`` property but don't specify this property, the default KMS key is used. If you specify this property, you must set the ``StorageEncrypted`` property to ``true`` .
-        :param preferred_backup_window: Specifies the daily time range during which automated backups are created if automated backups are enabled, as determined by the ``BackupRetentionPeriod`` . An update may require some interruption.
-        :param preferred_maintenance_window: Specifies the weekly time range during which system maintenance can occur, in Universal Coordinated Time (UTC).
-        :param restore_to_time: Creates a new DB cluster from a DB snapshot or DB cluster snapshot. If a DB snapshot is specified, the target DB cluster is created from the source DB snapshot with a default configuration and default security group. If a DB cluster snapshot is specified, the target DB cluster is created from the source DB cluster restore point with the same configuration as the original source DB cluster, except that the new DB cluster is created with the default security group.
-        :param restore_type: Creates a new DB cluster from a DB snapshot or DB cluster snapshot. If a DB snapshot is specified, the target DB cluster is created from the source DB snapshot with a default configuration and default security group. If a DB cluster snapshot is specified, the target DB cluster is created from the source DB cluster restore point with the same configuration as the original source DB cluster, except that the new DB cluster is created with the default security group. Default: - "full-copy"
-        :param serverless_scaling_configuration: Contains the scaling configuration of an Neptune Serverless DB cluster.
-        :param snapshot_identifier: Specifies the identifier for a DB cluster snapshot. Must match the identifier of an existing snapshot. After you restore a DB cluster using a ``SnapshotIdentifier`` , you must specify the same ``SnapshotIdentifier`` for any future updates to the DB cluster. When you specify this property for an update, the DB cluster is not restored from the snapshot again, and the data in the database is not changed. However, if you don't specify the ``SnapshotIdentifier`` , an empty DB cluster is created, and the original DB cluster is deleted. If you specify a property that is different from the previous snapshot restore property, the DB cluster is restored from the snapshot specified by the ``SnapshotIdentifier`` , and the original DB cluster is deleted.
-        :param source_db_cluster_identifier: Creates a new DB cluster from a DB snapshot or DB cluster snapshot. If a DB snapshot is specified, the target DB cluster is created from the source DB snapshot with a default configuration and default security group. If a DB cluster snapshot is specified, the target DB cluster is created from the source DB cluster restore point with the same configuration as the original source DB cluster, except that the new DB cluster is created with the default security group.
-        :param storage_encrypted: Indicates whether the DB cluster is encrypted. If you specify the ``KmsKeyId`` property, then you must enable encryption and set this property to ``true`` . If you enable the ``StorageEncrypted`` property but don't specify the ``KmsKeyId`` property, then the default KMS key is used. If you specify the ``KmsKeyId`` property, then that KMS key is used to encrypt the database instances in the DB cluster. If you specify the ``SourceDBClusterIdentifier`` property, and don't specify this property or disable it, the value is inherited from the source DB cluster. If the source DB cluster is encrypted, the ``KmsKeyId`` property from the source cluster is used. If you specify the ``DBSnapshotIdentifier`` and don't specify this property or disable it, the value is inherited from the snapshot and the specified ``KmsKeyId`` property from the snapshot is used.
-        :param tags: The tags assigned to this cluster.
-        :param use_latest_restorable_time: Creates a new DB cluster from a DB snapshot or DB cluster snapshot. If a DB snapshot is specified, the target DB cluster is created from the source DB snapshot with a default configuration and default security group. If a DB cluster snapshot is specified, the target DB cluster is created from the source DB cluster restore point with the same configuration as the original source DB cluster, except that the new DB cluster is created with the default security group.
-        :param vpc_security_group_ids: Provides a list of VPC security groups that the DB cluster belongs to.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-neptune-dbcluster.html
-        :exampleMetadata: fixture=_generated
-
-        Example::
-
-            # The code below shows an example of how to instantiate this type.
-            # The values are placeholders you should change.
-            from aws_cdk import aws_neptune as neptune
-            
-            cfn_dBCluster_props = neptune.CfnDBClusterProps(
-                associated_roles=[neptune.CfnDBCluster.DBClusterRoleProperty(
-                    role_arn="roleArn",
-            
-                    # the properties below are optional
-                    feature_name="featureName"
-                )],
-                availability_zones=["availabilityZones"],
-                backup_retention_period=123,
-                copy_tags_to_snapshot=False,
-                db_cluster_identifier="dbClusterIdentifier",
-                db_cluster_parameter_group_name="dbClusterParameterGroupName",
-                db_instance_parameter_group_name="dbInstanceParameterGroupName",
-                db_port=123,
-                db_subnet_group_name="dbSubnetGroupName",
-                deletion_protection=False,
-                enable_cloudwatch_logs_exports=["enableCloudwatchLogsExports"],
-                engine_version="engineVersion",
-                iam_auth_enabled=False,
-                kms_key_id="kmsKeyId",
-                preferred_backup_window="preferredBackupWindow",
-                preferred_maintenance_window="preferredMaintenanceWindow",
-                restore_to_time="restoreToTime",
-                restore_type="restoreType",
-                serverless_scaling_configuration=neptune.CfnDBCluster.ServerlessScalingConfigurationProperty(
-                    max_capacity=123,
-                    min_capacity=123
-                ),
-                snapshot_identifier="snapshotIdentifier",
-                source_db_cluster_identifier="sourceDbClusterIdentifier",
-                storage_encrypted=False,
-                tags=[CfnTag(
-                    key="key",
-                    value="value"
-                )],
-                use_latest_restorable_time=False,
-                vpc_security_group_ids=["vpcSecurityGroupIds"]
-            )
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__88c4bf370341b0e8b113f0ee9d80be6e0b45183ba249011ead676b8c5334e65c)
-            check_type(argname="argument associated_roles", value=associated_roles, expected_type=type_hints["associated_roles"])
-            check_type(argname="argument availability_zones", value=availability_zones, expected_type=type_hints["availability_zones"])
-            check_type(argname="argument backup_retention_period", value=backup_retention_period, expected_type=type_hints["backup_retention_period"])
-            check_type(argname="argument copy_tags_to_snapshot", value=copy_tags_to_snapshot, expected_type=type_hints["copy_tags_to_snapshot"])
-            check_type(argname="argument db_cluster_identifier", value=db_cluster_identifier, expected_type=type_hints["db_cluster_identifier"])
-            check_type(argname="argument db_cluster_parameter_group_name", value=db_cluster_parameter_group_name, expected_type=type_hints["db_cluster_parameter_group_name"])
-            check_type(argname="argument db_instance_parameter_group_name", value=db_instance_parameter_group_name, expected_type=type_hints["db_instance_parameter_group_name"])
-            check_type(argname="argument db_port", value=db_port, expected_type=type_hints["db_port"])
-            check_type(argname="argument db_subnet_group_name", value=db_subnet_group_name, expected_type=type_hints["db_subnet_group_name"])
-            check_type(argname="argument deletion_protection", value=deletion_protection, expected_type=type_hints["deletion_protection"])
-            check_type(argname="argument enable_cloudwatch_logs_exports", value=enable_cloudwatch_logs_exports, expected_type=type_hints["enable_cloudwatch_logs_exports"])
-            check_type(argname="argument engine_version", value=engine_version, expected_type=type_hints["engine_version"])
-            check_type(argname="argument iam_auth_enabled", value=iam_auth_enabled, expected_type=type_hints["iam_auth_enabled"])
-            check_type(argname="argument kms_key_id", value=kms_key_id, expected_type=type_hints["kms_key_id"])
-            check_type(argname="argument preferred_backup_window", value=preferred_backup_window, expected_type=type_hints["preferred_backup_window"])
-            check_type(argname="argument preferred_maintenance_window", value=preferred_maintenance_window, expected_type=type_hints["preferred_maintenance_window"])
-            check_type(argname="argument restore_to_time", value=restore_to_time, expected_type=type_hints["restore_to_time"])
-            check_type(argname="argument restore_type", value=restore_type, expected_type=type_hints["restore_type"])
-            check_type(argname="argument serverless_scaling_configuration", value=serverless_scaling_configuration, expected_type=type_hints["serverless_scaling_configuration"])
-            check_type(argname="argument snapshot_identifier", value=snapshot_identifier, expected_type=type_hints["snapshot_identifier"])
-            check_type(argname="argument source_db_cluster_identifier", value=source_db_cluster_identifier, expected_type=type_hints["source_db_cluster_identifier"])
-            check_type(argname="argument storage_encrypted", value=storage_encrypted, expected_type=type_hints["storage_encrypted"])
-            check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
-            check_type(argname="argument use_latest_restorable_time", value=use_latest_restorable_time, expected_type=type_hints["use_latest_restorable_time"])
-            check_type(argname="argument vpc_security_group_ids", value=vpc_security_group_ids, expected_type=type_hints["vpc_security_group_ids"])
-        self._values: typing.Dict[builtins.str, typing.Any] = {}
-        if associated_roles is not None:
-            self._values["associated_roles"] = associated_roles
-        if availability_zones is not None:
-            self._values["availability_zones"] = availability_zones
-        if backup_retention_period is not None:
-            self._values["backup_retention_period"] = backup_retention_period
-        if copy_tags_to_snapshot is not None:
-            self._values["copy_tags_to_snapshot"] = copy_tags_to_snapshot
-        if db_cluster_identifier is not None:
-            self._values["db_cluster_identifier"] = db_cluster_identifier
-        if db_cluster_parameter_group_name is not None:
-            self._values["db_cluster_parameter_group_name"] = db_cluster_parameter_group_name
-        if db_instance_parameter_group_name is not None:
-            self._values["db_instance_parameter_group_name"] = db_instance_parameter_group_name
-        if db_port is not None:
-            self._values["db_port"] = db_port
-        if db_subnet_group_name is not None:
-            self._values["db_subnet_group_name"] = db_subnet_group_name
-        if deletion_protection is not None:
-            self._values["deletion_protection"] = deletion_protection
-        if enable_cloudwatch_logs_exports is not None:
-            self._values["enable_cloudwatch_logs_exports"] = enable_cloudwatch_logs_exports
-        if engine_version is not None:
-            self._values["engine_version"] = engine_version
-        if iam_auth_enabled is not None:
-            self._values["iam_auth_enabled"] = iam_auth_enabled
-        if kms_key_id is not None:
-            self._values["kms_key_id"] = kms_key_id
-        if preferred_backup_window is not None:
-            self._values["preferred_backup_window"] = preferred_backup_window
-        if preferred_maintenance_window is not None:
-            self._values["preferred_maintenance_window"] = preferred_maintenance_window
-        if restore_to_time is not None:
-            self._values["restore_to_time"] = restore_to_time
-        if restore_type is not None:
-            self._values["restore_type"] = restore_type
-        if serverless_scaling_configuration is not None:
-            self._values["serverless_scaling_configuration"] = serverless_scaling_configuration
-        if snapshot_identifier is not None:
-            self._values["snapshot_identifier"] = snapshot_identifier
-        if source_db_cluster_identifier is not None:
-            self._values["source_db_cluster_identifier"] = source_db_cluster_identifier
-        if storage_encrypted is not None:
-            self._values["storage_encrypted"] = storage_encrypted
-        if tags is not None:
-            self._values["tags"] = tags
-        if use_latest_restorable_time is not None:
-            self._values["use_latest_restorable_time"] = use_latest_restorable_time
-        if vpc_security_group_ids is not None:
-            self._values["vpc_security_group_ids"] = vpc_security_group_ids
-
-    @builtins.property
-    def associated_roles(
-        self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnDBCluster.DBClusterRoleProperty"]]]]:
-        '''Provides a list of the Amazon Identity and Access Management (IAM) roles that are associated with the DB cluster.
-
-        IAM roles that are associated with a DB cluster grant permission for the DB cluster to access other Amazon services on your behalf.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-neptune-dbcluster.html#cfn-neptune-dbcluster-associatedroles
-        '''
-        result = self._values.get("associated_roles")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnDBCluster.DBClusterRoleProperty"]]]], result)
-
-    @builtins.property
-    def availability_zones(self) -> typing.Optional[typing.List[builtins.str]]:
-        '''Provides the list of EC2 Availability Zones that instances in the DB cluster can be created in.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-neptune-dbcluster.html#cfn-neptune-dbcluster-availabilityzones
-        '''
-        result = self._values.get("availability_zones")
-        return typing.cast(typing.Optional[typing.List[builtins.str]], result)
-
-    @builtins.property
-    def backup_retention_period(self) -> typing.Optional[jsii.Number]:
-        '''Specifies the number of days for which automatic DB snapshots are retained.
-
-        An update may require some interruption. See `ModifyDBInstance <https://docs.aws.amazon.com/neptune/latest/userguide/api-instances.html#ModifyDBInstance>`_ in the Amazon Neptune User Guide for more information.
-
-        :default: - 1
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-neptune-dbcluster.html#cfn-neptune-dbcluster-backupretentionperiod
-        '''
-        result = self._values.get("backup_retention_period")
-        return typing.cast(typing.Optional[jsii.Number], result)
-
-    @builtins.property
-    def copy_tags_to_snapshot(
-        self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
-        '''*If set to ``true`` , tags are copied to any snapshot of the DB cluster that is created.*.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-neptune-dbcluster.html#cfn-neptune-dbcluster-copytagstosnapshot
-        '''
-        result = self._values.get("copy_tags_to_snapshot")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
-
-    @builtins.property
-    def db_cluster_identifier(self) -> typing.Optional[builtins.str]:
-        '''Contains a user-supplied DB cluster identifier.
-
-        This identifier is the unique key that identifies a DB cluster.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-neptune-dbcluster.html#cfn-neptune-dbcluster-dbclusteridentifier
-        '''
-        result = self._values.get("db_cluster_identifier")
-        return typing.cast(typing.Optional[builtins.str], result)
-
-    @builtins.property
-    def db_cluster_parameter_group_name(self) -> typing.Optional[builtins.str]:
-        '''Provides the name of the DB cluster parameter group.
-
-        An update may require some interruption. See `ModifyDBInstance <https://docs.aws.amazon.com/neptune/latest/userguide/api-instances.html#ModifyDBInstance>`_ in the Amazon Neptune User Guide for more information.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-neptune-dbcluster.html#cfn-neptune-dbcluster-dbclusterparametergroupname
-        '''
-        result = self._values.get("db_cluster_parameter_group_name")
-        return typing.cast(typing.Optional[builtins.str], result)
-
-    @builtins.property
-    def db_instance_parameter_group_name(self) -> typing.Optional[builtins.str]:
-        '''The name of the DB parameter group to apply to all instances of the DB cluster.
-
-        Used only in case of a major engine version upgrade request
-
-        Note that when you apply a parameter group using ``DBInstanceParameterGroupName`` , parameter changes are applied immediately, not during the next maintenance window.
-
-        **Constraints** - The DB parameter group must be in the same DB parameter group family as the target DB cluster version.
-
-        - The ``DBInstanceParameterGroupName`` parameter is only valid for major engine version upgrades.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-neptune-dbcluster.html#cfn-neptune-dbcluster-dbinstanceparametergroupname
-        '''
-        result = self._values.get("db_instance_parameter_group_name")
-        return typing.cast(typing.Optional[builtins.str], result)
-
-    @builtins.property
-    def db_port(self) -> typing.Optional[jsii.Number]:
-        '''The port number on which the DB instances in the DB cluster accept connections.
-
-        If not specified, the default port used is ``8182`` .
-        .. epigraph::
-
-           The ``Port`` property will soon be deprecated. Please update existing templates to use the new ``DBPort`` property that has the same functionality.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-neptune-dbcluster.html#cfn-neptune-dbcluster-dbport
-        '''
-        result = self._values.get("db_port")
-        return typing.cast(typing.Optional[jsii.Number], result)
-
-    @builtins.property
-    def db_subnet_group_name(self) -> typing.Optional[builtins.str]:
-        '''Specifies information on the subnet group associated with the DB cluster, including the name, description, and subnets in the subnet group.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-neptune-dbcluster.html#cfn-neptune-dbcluster-dbsubnetgroupname
-        '''
-        result = self._values.get("db_subnet_group_name")
-        return typing.cast(typing.Optional[builtins.str], result)
-
-    @builtins.property
-    def deletion_protection(
-        self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
-        '''Indicates whether or not the DB cluster has deletion protection enabled.
-
-        The database can't be deleted when deletion protection is enabled.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-neptune-dbcluster.html#cfn-neptune-dbcluster-deletionprotection
-        '''
-        result = self._values.get("deletion_protection")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
-
-    @builtins.property
-    def enable_cloudwatch_logs_exports(
-        self,
-    ) -> typing.Optional[typing.List[builtins.str]]:
-        '''Specifies a list of log types that are enabled for export to CloudWatch Logs.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-neptune-dbcluster.html#cfn-neptune-dbcluster-enablecloudwatchlogsexports
-        '''
-        result = self._values.get("enable_cloudwatch_logs_exports")
-        return typing.cast(typing.Optional[typing.List[builtins.str]], result)
-
-    @builtins.property
-    def engine_version(self) -> typing.Optional[builtins.str]:
-        '''Indicates the database engine version.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-neptune-dbcluster.html#cfn-neptune-dbcluster-engineversion
-        '''
-        result = self._values.get("engine_version")
-        return typing.cast(typing.Optional[builtins.str], result)
-
-    @builtins.property
-    def iam_auth_enabled(
-        self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
-        '''True if mapping of Amazon Identity and Access Management (IAM) accounts to database accounts is enabled, and otherwise false.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-neptune-dbcluster.html#cfn-neptune-dbcluster-iamauthenabled
-        '''
-        result = self._values.get("iam_auth_enabled")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
-
-    @builtins.property
-    def kms_key_id(self) -> typing.Optional[builtins.str]:
-        '''The Amazon Resource Name (ARN) of the KMS key that is used to encrypt the database instances in the DB cluster, such as ``arn:aws:kms:us-east-1:012345678910:key/abcd1234-a123-456a-a12b-a123b4cd56ef`` .
-
-        If you enable the ``StorageEncrypted`` property but don't specify this property, the default KMS key is used. If you specify this property, you must set the ``StorageEncrypted`` property to ``true`` .
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-neptune-dbcluster.html#cfn-neptune-dbcluster-kmskeyid
-        '''
-        result = self._values.get("kms_key_id")
-        return typing.cast(typing.Optional[builtins.str], result)
-
-    @builtins.property
-    def preferred_backup_window(self) -> typing.Optional[builtins.str]:
-        '''Specifies the daily time range during which automated backups are created if automated backups are enabled, as determined by the ``BackupRetentionPeriod`` .
-
-        An update may require some interruption.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-neptune-dbcluster.html#cfn-neptune-dbcluster-preferredbackupwindow
-        '''
-        result = self._values.get("preferred_backup_window")
-        return typing.cast(typing.Optional[builtins.str], result)
-
-    @builtins.property
-    def preferred_maintenance_window(self) -> typing.Optional[builtins.str]:
-        '''Specifies the weekly time range during which system maintenance can occur, in Universal Coordinated Time (UTC).
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-neptune-dbcluster.html#cfn-neptune-dbcluster-preferredmaintenancewindow
-        '''
-        result = self._values.get("preferred_maintenance_window")
-        return typing.cast(typing.Optional[builtins.str], result)
-
-    @builtins.property
-    def restore_to_time(self) -> typing.Optional[builtins.str]:
-        '''Creates a new DB cluster from a DB snapshot or DB cluster snapshot.
-
-        If a DB snapshot is specified, the target DB cluster is created from the source DB snapshot with a default configuration and default security group.
-
-        If a DB cluster snapshot is specified, the target DB cluster is created from the source DB cluster restore point with the same configuration as the original source DB cluster, except that the new DB cluster is created with the default security group.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-neptune-dbcluster.html#cfn-neptune-dbcluster-restoretotime
-        '''
-        result = self._values.get("restore_to_time")
-        return typing.cast(typing.Optional[builtins.str], result)
-
-    @builtins.property
-    def restore_type(self) -> typing.Optional[builtins.str]:
-        '''Creates a new DB cluster from a DB snapshot or DB cluster snapshot.
-
-        If a DB snapshot is specified, the target DB cluster is created from the source DB snapshot with a default configuration and default security group.
-
-        If a DB cluster snapshot is specified, the target DB cluster is created from the source DB cluster restore point with the same configuration as the original source DB cluster, except that the new DB cluster is created with the default security group.
-
-        :default: - "full-copy"
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-neptune-dbcluster.html#cfn-neptune-dbcluster-restoretype
-        '''
-        result = self._values.get("restore_type")
-        return typing.cast(typing.Optional[builtins.str], result)
-
-    @builtins.property
-    def serverless_scaling_configuration(
-        self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDBCluster.ServerlessScalingConfigurationProperty"]]:
-        '''Contains the scaling configuration of an Neptune Serverless DB cluster.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-neptune-dbcluster.html#cfn-neptune-dbcluster-serverlessscalingconfiguration
-        '''
-        result = self._values.get("serverless_scaling_configuration")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDBCluster.ServerlessScalingConfigurationProperty"]], result)
-
-    @builtins.property
-    def snapshot_identifier(self) -> typing.Optional[builtins.str]:
-        '''Specifies the identifier for a DB cluster snapshot. Must match the identifier of an existing snapshot.
-
-        After you restore a DB cluster using a ``SnapshotIdentifier`` , you must specify the same ``SnapshotIdentifier`` for any future updates to the DB cluster. When you specify this property for an update, the DB cluster is not restored from the snapshot again, and the data in the database is not changed.
-
-        However, if you don't specify the ``SnapshotIdentifier`` , an empty DB cluster is created, and the original DB cluster is deleted. If you specify a property that is different from the previous snapshot restore property, the DB cluster is restored from the snapshot specified by the ``SnapshotIdentifier`` , and the original DB cluster is deleted.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-neptune-dbcluster.html#cfn-neptune-dbcluster-snapshotidentifier
-        '''
-        result = self._values.get("snapshot_identifier")
-        return typing.cast(typing.Optional[builtins.str], result)
-
-    @builtins.property
-    def source_db_cluster_identifier(self) -> typing.Optional[builtins.str]:
-        '''Creates a new DB cluster from a DB snapshot or DB cluster snapshot.
-
-        If a DB snapshot is specified, the target DB cluster is created from the source DB snapshot with a default configuration and default security group.
-
-        If a DB cluster snapshot is specified, the target DB cluster is created from the source DB cluster restore point with the same configuration as the original source DB cluster, except that the new DB cluster is created with the default security group.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-neptune-dbcluster.html#cfn-neptune-dbcluster-sourcedbclusteridentifier
-        '''
-        result = self._values.get("source_db_cluster_identifier")
-        return typing.cast(typing.Optional[builtins.str], result)
-
-    @builtins.property
-    def storage_encrypted(
-        self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
-        '''Indicates whether the DB cluster is encrypted.
-
-        If you specify the ``KmsKeyId`` property, then you must enable encryption and set this property to ``true`` .
-
-        If you enable the ``StorageEncrypted`` property but don't specify the ``KmsKeyId`` property, then the default KMS key is used. If you specify the ``KmsKeyId`` property, then that KMS key is used to encrypt the database instances in the DB cluster.
-
-        If you specify the ``SourceDBClusterIdentifier`` property, and don't specify this property or disable it, the value is inherited from the source DB cluster. If the source DB cluster is encrypted, the ``KmsKeyId`` property from the source cluster is used.
-
-        If you specify the ``DBSnapshotIdentifier`` and don't specify this property or disable it, the value is inherited from the snapshot and the specified ``KmsKeyId`` property from the snapshot is used.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-neptune-dbcluster.html#cfn-neptune-dbcluster-storageencrypted
-        '''
-        result = self._values.get("storage_encrypted")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
-
-    @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
-        '''The tags assigned to this cluster.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-neptune-dbcluster.html#cfn-neptune-dbcluster-tags
-        '''
-        result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
-
-    @builtins.property
-    def use_latest_restorable_time(
-        self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
-        '''Creates a new DB cluster from a DB snapshot or DB cluster snapshot.
-
-        If a DB snapshot is specified, the target DB cluster is created from the source DB snapshot with a default configuration and default security group.
-
-        If a DB cluster snapshot is specified, the target DB cluster is created from the source DB cluster restore point with the same configuration as the original source DB cluster, except that the new DB cluster is created with the default security group.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-neptune-dbcluster.html#cfn-neptune-dbcluster-uselatestrestorabletime
-        '''
-        result = self._values.get("use_latest_restorable_time")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
-
-    @builtins.property
-    def vpc_security_group_ids(self) -> typing.Optional[typing.List[builtins.str]]:
-        '''Provides a list of VPC security groups that the DB cluster belongs to.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-neptune-dbcluster.html#cfn-neptune-dbcluster-vpcsecuritygroupids
-        '''
-        result = self._values.get("vpc_security_group_ids")
-        return typing.cast(typing.Optional[typing.List[builtins.str]], result)
-
-    def __eq__(self, rhs: typing.Any) -> builtins.bool:
-        return isinstance(rhs, self.__class__) and rhs._values == self._values
-
-    def __ne__(self, rhs: typing.Any) -> builtins.bool:
-        return not (rhs == self)
-
-    def __repr__(self) -> str:
-        return "CfnDBClusterProps(%s)" % ", ".join(
-            k + "=" + repr(v) for k, v in self._values.items()
-        )
-
-
-@jsii.data_type(
-    jsii_type="aws-cdk-lib.aws_neptune.CfnDBInstanceProps",
-    jsii_struct_bases=[],
-    name_mapping={
-        "db_instance_class": "dbInstanceClass",
-        "allow_major_version_upgrade": "allowMajorVersionUpgrade",
-        "auto_minor_version_upgrade": "autoMinorVersionUpgrade",
-        "availability_zone": "availabilityZone",
-        "db_cluster_identifier": "dbClusterIdentifier",
-        "db_instance_identifier": "dbInstanceIdentifier",
-        "db_parameter_group_name": "dbParameterGroupName",
-        "db_snapshot_identifier": "dbSnapshotIdentifier",
-        "db_subnet_group_name": "dbSubnetGroupName",
-        "preferred_maintenance_window": "preferredMaintenanceWindow",
-        "publicly_accessible": "publiclyAccessible",
-        "tags": "tags",
-    },
-)
-class CfnDBInstanceProps:
-    def __init__(
-        self,
-        *,
-        db_instance_class: builtins.str,
-        allow_major_version_upgrade: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        auto_minor_version_upgrade: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        availability_zone: typing.Optional[builtins.str] = None,
-        db_cluster_identifier: typing.Optional[builtins.str] = None,
-        db_instance_identifier: typing.Optional[builtins.str] = None,
-        db_parameter_group_name: typing.Optional[builtins.str] = None,
-        db_snapshot_identifier: typing.Optional[builtins.str] = None,
-        db_subnet_group_name: typing.Optional[builtins.str] = None,
-        preferred_maintenance_window: typing.Optional[builtins.str] = None,
-        publicly_accessible: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-    ) -> None:
-        '''Properties for defining a ``CfnDBInstance``.
-
-        :param db_instance_class: Contains the name of the compute and memory capacity class of the DB instance. If you update this property, some interruptions may occur.
-        :param allow_major_version_upgrade: Indicates that major version upgrades are allowed. Changing this parameter doesn't result in an outage and the change is asynchronously applied as soon as possible. This parameter must be set to true when specifying a value for the EngineVersion parameter that is a different major version than the DB instance's current version. When you change this parameter for an existing DB cluster, CloudFormation will replace your existing DB cluster with a new, empty one that uses the engine version you specified.
-        :param auto_minor_version_upgrade: Indicates that minor version patches are applied automatically. When updating this property, some interruptions may occur.
-        :param availability_zone: Specifies the name of the Availability Zone the DB instance is located in.
-        :param db_cluster_identifier: If the DB instance is a member of a DB cluster, contains the name of the DB cluster that the DB instance is a member of.
-        :param db_instance_identifier: Contains a user-supplied database identifier. This identifier is the unique key that identifies a DB instance.
-        :param db_parameter_group_name: The name of an existing DB parameter group or a reference to an AWS::Neptune::DBParameterGroup resource created in the template. If any of the data members of the referenced parameter group are changed during an update, the DB instance might need to be restarted, which causes some interruption. If the parameter group contains static parameters, whether they were changed or not, an update triggers a reboot.
-        :param db_snapshot_identifier: (deprecated) This parameter is not supported. ``AWS::Neptune::DBInstance`` does not support restoring from snapshots. ``AWS::Neptune::DBCluster`` does support restoring from snapshots.
-        :param db_subnet_group_name: A DB subnet group to associate with the DB instance. If you update this value, the new subnet group must be a subnet group in a new virtual private cloud (VPC).
-        :param preferred_maintenance_window: Specifies the weekly time range during which system maintenance can occur, in Universal Coordinated Time (UTC).
-        :param publicly_accessible: Indicates whether the DB instance is publicly accessible. When the DB instance is publicly accessible and you connect from outside of the DB instance's virtual private cloud (VPC), its Domain Name System (DNS) endpoint resolves to the public IP address. When you connect from within the same VPC as the DB instance, the endpoint resolves to the private IP address. Access to the DB instance is ultimately controlled by the security group it uses. That public access isn't permitted if the security group assigned to the DB cluster doesn't permit it. When the DB instance isn't publicly accessible, it is an internal DB instance with a DNS name that resolves to a private IP address.
-        :param tags: An arbitrary set of tags (key-value pairs) for this DB instance.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-neptune-dbinstance.html
-        :exampleMetadata: fixture=_generated
-
-        Example::
-
-            # The code below shows an example of how to instantiate this type.
-            # The values are placeholders you should change.
-            from aws_cdk import aws_neptune as neptune
-            
-            cfn_dBInstance_props = neptune.CfnDBInstanceProps(
-                db_instance_class="dbInstanceClass",
-            
-                # the properties below are optional
-                allow_major_version_upgrade=False,
-                auto_minor_version_upgrade=False,
-                availability_zone="availabilityZone",
-                db_cluster_identifier="dbClusterIdentifier",
-                db_instance_identifier="dbInstanceIdentifier",
-                db_parameter_group_name="dbParameterGroupName",
-                db_snapshot_identifier="dbSnapshotIdentifier",
-                db_subnet_group_name="dbSubnetGroupName",
-                preferred_maintenance_window="preferredMaintenanceWindow",
-                publicly_accessible=False,
-                tags=[CfnTag(
-                    key="key",
-                    value="value"
-                )]
-            )
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__f97fae676e40e6f9b786d435eb3f1534d54b6bfccf982c2ddf6802fc906bcceb)
-            check_type(argname="argument db_instance_class", value=db_instance_class, expected_type=type_hints["db_instance_class"])
-            check_type(argname="argument allow_major_version_upgrade", value=allow_major_version_upgrade, expected_type=type_hints["allow_major_version_upgrade"])
-            check_type(argname="argument auto_minor_version_upgrade", value=auto_minor_version_upgrade, expected_type=type_hints["auto_minor_version_upgrade"])
-            check_type(argname="argument availability_zone", value=availability_zone, expected_type=type_hints["availability_zone"])
-            check_type(argname="argument db_cluster_identifier", value=db_cluster_identifier, expected_type=type_hints["db_cluster_identifier"])
-            check_type(argname="argument db_instance_identifier", value=db_instance_identifier, expected_type=type_hints["db_instance_identifier"])
-            check_type(argname="argument db_parameter_group_name", value=db_parameter_group_name, expected_type=type_hints["db_parameter_group_name"])
-            check_type(argname="argument db_snapshot_identifier", value=db_snapshot_identifier, expected_type=type_hints["db_snapshot_identifier"])
-            check_type(argname="argument db_subnet_group_name", value=db_subnet_group_name, expected_type=type_hints["db_subnet_group_name"])
-            check_type(argname="argument preferred_maintenance_window", value=preferred_maintenance_window, expected_type=type_hints["preferred_maintenance_window"])
-            check_type(argname="argument publicly_accessible", value=publicly_accessible, expected_type=type_hints["publicly_accessible"])
-            check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
-        self._values: typing.Dict[builtins.str, typing.Any] = {
-            "db_instance_class": db_instance_class,
-        }
-        if allow_major_version_upgrade is not None:
-            self._values["allow_major_version_upgrade"] = allow_major_version_upgrade
-        if auto_minor_version_upgrade is not None:
-            self._values["auto_minor_version_upgrade"] = auto_minor_version_upgrade
-        if availability_zone is not None:
-            self._values["availability_zone"] = availability_zone
-        if db_cluster_identifier is not None:
-            self._values["db_cluster_identifier"] = db_cluster_identifier
-        if db_instance_identifier is not None:
-            self._values["db_instance_identifier"] = db_instance_identifier
-        if db_parameter_group_name is not None:
-            self._values["db_parameter_group_name"] = db_parameter_group_name
-        if db_snapshot_identifier is not None:
-            self._values["db_snapshot_identifier"] = db_snapshot_identifier
-        if db_subnet_group_name is not None:
-            self._values["db_subnet_group_name"] = db_subnet_group_name
-        if preferred_maintenance_window is not None:
-            self._values["preferred_maintenance_window"] = preferred_maintenance_window
-        if publicly_accessible is not None:
-            self._values["publicly_accessible"] = publicly_accessible
-        if tags is not None:
-            self._values["tags"] = tags
-
-    @builtins.property
-    def db_instance_class(self) -> builtins.str:
-        '''Contains the name of the compute and memory capacity class of the DB instance.
-
-        If you update this property, some interruptions may occur.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-neptune-dbinstance.html#cfn-neptune-dbinstance-dbinstanceclass
-        '''
-        result = self._values.get("db_instance_class")
-        assert result is not None, "Required property 'db_instance_class' is missing"
-        return typing.cast(builtins.str, result)
-
-    @builtins.property
-    def allow_major_version_upgrade(
-        self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
-        '''Indicates that major version upgrades are allowed.
-
-        Changing this parameter doesn't result in an outage and the change is asynchronously applied as soon as possible. This parameter must be set to true when specifying a value for the EngineVersion parameter that is a different major version than the DB instance's current version.
-
-        When you change this parameter for an existing DB cluster, CloudFormation will replace your existing DB cluster with a new, empty one that uses the engine version you specified.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-neptune-dbinstance.html#cfn-neptune-dbinstance-allowmajorversionupgrade
-        '''
-        result = self._values.get("allow_major_version_upgrade")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
-
-    @builtins.property
-    def auto_minor_version_upgrade(
-        self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
-        '''Indicates that minor version patches are applied automatically.
-
-        When updating this property, some interruptions may occur.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-neptune-dbinstance.html#cfn-neptune-dbinstance-autominorversionupgrade
-        '''
-        result = self._values.get("auto_minor_version_upgrade")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
-
-    @builtins.property
-    def availability_zone(self) -> typing.Optional[builtins.str]:
-        '''Specifies the name of the Availability Zone the DB instance is located in.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-neptune-dbinstance.html#cfn-neptune-dbinstance-availabilityzone
-        '''
-        result = self._values.get("availability_zone")
-        return typing.cast(typing.Optional[builtins.str], result)
-
-    @builtins.property
-    def db_cluster_identifier(self) -> typing.Optional[builtins.str]:
-        '''If the DB instance is a member of a DB cluster, contains the name of the DB cluster that the DB instance is a member of.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-neptune-dbinstance.html#cfn-neptune-dbinstance-dbclusteridentifier
-        '''
-        result = self._values.get("db_cluster_identifier")
-        return typing.cast(typing.Optional[builtins.str], result)
-
-    @builtins.property
-    def db_instance_identifier(self) -> typing.Optional[builtins.str]:
-        '''Contains a user-supplied database identifier.
-
-        This identifier is the unique key that identifies a DB instance.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-neptune-dbinstance.html#cfn-neptune-dbinstance-dbinstanceidentifier
-        '''
-        result = self._values.get("db_instance_identifier")
-        return typing.cast(typing.Optional[builtins.str], result)
-
-    @builtins.property
-    def db_parameter_group_name(self) -> typing.Optional[builtins.str]:
-        '''The name of an existing DB parameter group or a reference to an AWS::Neptune::DBParameterGroup resource created in the template.
-
-        If any of the data members of the referenced parameter group are changed during an update, the DB instance might need to be restarted, which causes some interruption. If the parameter group contains static parameters, whether they were changed or not, an update triggers a reboot.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-neptune-dbinstance.html#cfn-neptune-dbinstance-dbparametergroupname
-        '''
-        result = self._values.get("db_parameter_group_name")
-        return typing.cast(typing.Optional[builtins.str], result)
-
-    @builtins.property
-    def db_snapshot_identifier(self) -> typing.Optional[builtins.str]:
-        '''(deprecated) This parameter is not supported.
-
-        ``AWS::Neptune::DBInstance`` does not support restoring from snapshots.
-
-        ``AWS::Neptune::DBCluster`` does support restoring from snapshots.
-
-        :deprecated: this property has been deprecated
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-neptune-dbinstance.html#cfn-neptune-dbinstance-dbsnapshotidentifier
-        :stability: deprecated
-        '''
-        result = self._values.get("db_snapshot_identifier")
-        return typing.cast(typing.Optional[builtins.str], result)
-
-    @builtins.property
-    def db_subnet_group_name(self) -> typing.Optional[builtins.str]:
-        '''A DB subnet group to associate with the DB instance.
-
-        If you update this value, the new subnet group must be a subnet group in a new virtual private cloud (VPC).
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-neptune-dbinstance.html#cfn-neptune-dbinstance-dbsubnetgroupname
-        '''
-        result = self._values.get("db_subnet_group_name")
-        return typing.cast(typing.Optional[builtins.str], result)
-
-    @builtins.property
-    def preferred_maintenance_window(self) -> typing.Optional[builtins.str]:
-        '''Specifies the weekly time range during which system maintenance can occur, in Universal Coordinated Time (UTC).
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-neptune-dbinstance.html#cfn-neptune-dbinstance-preferredmaintenancewindow
-        '''
-        result = self._values.get("preferred_maintenance_window")
-        return typing.cast(typing.Optional[builtins.str], result)
-
-    @builtins.property
-    def publicly_accessible(
-        self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
-        '''Indicates whether the DB instance is publicly accessible.
-
-        When the DB instance is publicly accessible and you connect from outside of the DB instance's virtual private cloud (VPC), its Domain Name System (DNS) endpoint resolves to the public IP address. When you connect from within the same VPC as the DB instance, the endpoint resolves to the private IP address. Access to the DB instance is ultimately controlled by the security group it uses. That public access isn't permitted if the security group assigned to the DB cluster doesn't permit it.
-
-        When the DB instance isn't publicly accessible, it is an internal DB instance with a DNS name that resolves to a private IP address.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-neptune-dbinstance.html#cfn-neptune-dbinstance-publiclyaccessible
-        '''
-        result = self._values.get("publicly_accessible")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
-
-    @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
-        '''An arbitrary set of tags (key-value pairs) for this DB instance.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-neptune-dbinstance.html#cfn-neptune-dbinstance-tags
-        '''
-        result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
-
-    def __eq__(self, rhs: typing.Any) -> builtins.bool:
-        return isinstance(rhs, self.__class__) and rhs._values == self._values
-
-    def __ne__(self, rhs: typing.Any) -> builtins.bool:
-        return not (rhs == self)
-
-    def __repr__(self) -> str:
-        return "CfnDBInstanceProps(%s)" % ", ".join(
-            k + "=" + repr(v) for k, v in self._values.items()
-        )
-
-
-@jsii.data_type(
-    jsii_type="aws-cdk-lib.aws_neptune.CfnDBParameterGroupProps",
-    jsii_struct_bases=[],
-    name_mapping={
-        "description": "description",
-        "family": "family",
-        "parameters": "parameters",
-        "name": "name",
-        "tags": "tags",
-    },
-)
-class CfnDBParameterGroupProps:
-    def __init__(
-        self,
-        *,
-        description: builtins.str,
-        family: builtins.str,
-        parameters: typing.Any,
-        name: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-    ) -> None:
-        '''Properties for defining a ``CfnDBParameterGroup``.
-
-        :param description: Provides the customer-specified description for this DB parameter group.
-        :param family: Must be ``neptune1`` for engine versions prior to `1.2.0.0 <https://docs.aws.amazon.com/neptune/latest/userguide/engine-releases-1.2.0.0.html>`_ , or ``neptune1.2`` for engine version ``1.2.0.0`` and higher.
-        :param parameters: The parameters to set for this DB parameter group. The parameters are expressed as a JSON object consisting of key-value pairs. Changes to dynamic parameters are applied immediately. During an update, if you have static parameters (whether they were changed or not), it triggers AWS CloudFormation to reboot the associated DB instance without failover.
-        :param name: Provides the name of the DB parameter group.
-        :param tags: The tags that you want to attach to this parameter group.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-neptune-dbparametergroup.html
-        :exampleMetadata: fixture=_generated
-
-        Example::
-
-            # The code below shows an example of how to instantiate this type.
-            # The values are placeholders you should change.
-            from aws_cdk import aws_neptune as neptune
-            
-            # parameters: Any
-            
-            cfn_dBParameter_group_props = neptune.CfnDBParameterGroupProps(
-                description="description",
-                family="family",
-                parameters=parameters,
-            
-                # the properties below are optional
-                name="name",
-                tags=[CfnTag(
-                    key="key",
-                    value="value"
-                )]
-            )
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__4528e974fd8cb347cabbbf84fd7018f743e7e93d03828031d597ff5a1cf213f6)
-            check_type(argname="argument description", value=description, expected_type=type_hints["description"])
-            check_type(argname="argument family", value=family, expected_type=type_hints["family"])
-            check_type(argname="argument parameters", value=parameters, expected_type=type_hints["parameters"])
-            check_type(argname="argument name", value=name, expected_type=type_hints["name"])
-            check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
-        self._values: typing.Dict[builtins.str, typing.Any] = {
-            "description": description,
-            "family": family,
-            "parameters": parameters,
-        }
-        if name is not None:
-            self._values["name"] = name
-        if tags is not None:
-            self._values["tags"] = tags
-
-    @builtins.property
-    def description(self) -> builtins.str:
-        '''Provides the customer-specified description for this DB parameter group.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-neptune-dbparametergroup.html#cfn-neptune-dbparametergroup-description
-        '''
-        result = self._values.get("description")
-        assert result is not None, "Required property 'description' is missing"
-        return typing.cast(builtins.str, result)
-
-    @builtins.property
-    def family(self) -> builtins.str:
-        '''Must be ``neptune1`` for engine versions prior to `1.2.0.0 <https://docs.aws.amazon.com/neptune/latest/userguide/engine-releases-1.2.0.0.html>`_ , or ``neptune1.2`` for engine version ``1.2.0.0`` and higher.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-neptune-dbparametergroup.html#cfn-neptune-dbparametergroup-family
-        '''
-        result = self._values.get("family")
-        assert result is not None, "Required property 'family' is missing"
-        return typing.cast(builtins.str, result)
-
-    @builtins.property
-    def parameters(self) -> typing.Any:
-        '''The parameters to set for this DB parameter group.
-
-        The parameters are expressed as a JSON object consisting of key-value pairs.
-
-        Changes to dynamic parameters are applied immediately. During an update, if you have static parameters (whether they were changed or not), it triggers AWS CloudFormation to reboot the associated DB instance without failover.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-neptune-dbparametergroup.html#cfn-neptune-dbparametergroup-parameters
-        '''
-        result = self._values.get("parameters")
-        assert result is not None, "Required property 'parameters' is missing"
-        return typing.cast(typing.Any, result)
-
-    @builtins.property
-    def name(self) -> typing.Optional[builtins.str]:
-        '''Provides the name of the DB parameter group.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-neptune-dbparametergroup.html#cfn-neptune-dbparametergroup-name
-        '''
-        result = self._values.get("name")
-        return typing.cast(typing.Optional[builtins.str], result)
-
-    @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
-        '''The tags that you want to attach to this parameter group.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-neptune-dbparametergroup.html#cfn-neptune-dbparametergroup-tags
-        '''
-        result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
-
-    def __eq__(self, rhs: typing.Any) -> builtins.bool:
-        return isinstance(rhs, self.__class__) and rhs._values == self._values
-
-    def __ne__(self, rhs: typing.Any) -> builtins.bool:
-        return not (rhs == self)
-
-    def __repr__(self) -> str:
-        return "CfnDBParameterGroupProps(%s)" % ", ".join(
-            k + "=" + repr(v) for k, v in self._values.items()
-        )
-
-
-@jsii.data_type(
-    jsii_type="aws-cdk-lib.aws_neptune.CfnDBSubnetGroupProps",
-    jsii_struct_bases=[],
-    name_mapping={
-        "db_subnet_group_description": "dbSubnetGroupDescription",
-        "subnet_ids": "subnetIds",
-        "db_subnet_group_name": "dbSubnetGroupName",
-        "tags": "tags",
-    },
-)
-class CfnDBSubnetGroupProps:
-    def __init__(
-        self,
-        *,
-        db_subnet_group_description: builtins.str,
-        subnet_ids: typing.Sequence[builtins.str],
-        db_subnet_group_name: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-    ) -> None:
-        '''Properties for defining a ``CfnDBSubnetGroup``.
-
-        :param db_subnet_group_description: Provides the description of the DB subnet group.
-        :param subnet_ids: The Amazon EC2 subnet IDs for the DB subnet group.
-        :param db_subnet_group_name: The name of the DB subnet group.
-        :param tags: The tags that you want to attach to the DB subnet group.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-neptune-dbsubnetgroup.html
-        :exampleMetadata: fixture=_generated
-
-        Example::
-
-            # The code below shows an example of how to instantiate this type.
-            # The values are placeholders you should change.
-            from aws_cdk import aws_neptune as neptune
-            
-            cfn_dBSubnet_group_props = neptune.CfnDBSubnetGroupProps(
-                db_subnet_group_description="dbSubnetGroupDescription",
-                subnet_ids=["subnetIds"],
-            
-                # the properties below are optional
-                db_subnet_group_name="dbSubnetGroupName",
-                tags=[CfnTag(
-                    key="key",
-                    value="value"
-                )]
-            )
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__82ebea6599fb4b541844cf24f7d771410b52af442a682c2ccec51eabebc01fda)
-            check_type(argname="argument db_subnet_group_description", value=db_subnet_group_description, expected_type=type_hints["db_subnet_group_description"])
-            check_type(argname="argument subnet_ids", value=subnet_ids, expected_type=type_hints["subnet_ids"])
-            check_type(argname="argument db_subnet_group_name", value=db_subnet_group_name, expected_type=type_hints["db_subnet_group_name"])
-            check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
-        self._values: typing.Dict[builtins.str, typing.Any] = {
-            "db_subnet_group_description": db_subnet_group_description,
-            "subnet_ids": subnet_ids,
-        }
-        if db_subnet_group_name is not None:
-            self._values["db_subnet_group_name"] = db_subnet_group_name
-        if tags is not None:
-            self._values["tags"] = tags
-
-    @builtins.property
-    def db_subnet_group_description(self) -> builtins.str:
-        '''Provides the description of the DB subnet group.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-neptune-dbsubnetgroup.html#cfn-neptune-dbsubnetgroup-dbsubnetgroupdescription
-        '''
-        result = self._values.get("db_subnet_group_description")
-        assert result is not None, "Required property 'db_subnet_group_description' is missing"
-        return typing.cast(builtins.str, result)
-
-    @builtins.property
-    def subnet_ids(self) -> typing.List[builtins.str]:
-        '''The Amazon EC2 subnet IDs for the DB subnet group.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-neptune-dbsubnetgroup.html#cfn-neptune-dbsubnetgroup-subnetids
-        '''
-        result = self._values.get("subnet_ids")
-        assert result is not None, "Required property 'subnet_ids' is missing"
-        return typing.cast(typing.List[builtins.str], result)
-
-    @builtins.property
-    def db_subnet_group_name(self) -> typing.Optional[builtins.str]:
-        '''The name of the DB subnet group.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-neptune-dbsubnetgroup.html#cfn-neptune-dbsubnetgroup-dbsubnetgroupname
-        '''
-        result = self._values.get("db_subnet_group_name")
-        return typing.cast(typing.Optional[builtins.str], result)
-
-    @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
-        '''The tags that you want to attach to the DB subnet group.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-neptune-dbsubnetgroup.html#cfn-neptune-dbsubnetgroup-tags
-        '''
-        result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
-
-    def __eq__(self, rhs: typing.Any) -> builtins.bool:
-        return isinstance(rhs, self.__class__) and rhs._values == self._values
-
-    def __ne__(self, rhs: typing.Any) -> builtins.bool:
-        return not (rhs == self)
-
-    def __repr__(self) -> str:
-        return "CfnDBSubnetGroupProps(%s)" % ", ".join(
-            k + "=" + repr(v) for k, v in self._values.items()
-        )
-
-
-@jsii.data_type(
-    jsii_type="aws-cdk-lib.aws_neptune.CfnEventSubscriptionProps",
-    jsii_struct_bases=[],
-    name_mapping={
-        "sns_topic_arn": "snsTopicArn",
-        "enabled": "enabled",
-        "event_categories": "eventCategories",
-        "source_ids": "sourceIds",
-        "source_type": "sourceType",
-        "subscription_name": "subscriptionName",
-        "tags": "tags",
-    },
-)
-class CfnEventSubscriptionProps:
-    def __init__(
-        self,
-        *,
-        sns_topic_arn: builtins.str,
-        enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        event_categories: typing.Optional[typing.Sequence[builtins.str]] = None,
-        source_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
-        source_type: typing.Optional[builtins.str] = None,
-        subscription_name: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-    ) -> None:
-        '''Properties for defining a ``CfnEventSubscription``.
-
-        :param sns_topic_arn: The topic ARN of the event notification subscription.
-        :param enabled: A Boolean value indicating if the subscription is enabled. True indicates the subscription is enabled. Default: - true
-        :param event_categories: A list of event categories for a SourceType that you want to subscribe to. You can see a list of the categories for a given SourceType in the Events topic in the Amazon Neptune User Guide or by using the DescribeEventCategories action.
-        :param source_ids: The list of identifiers of the event sources for which events will be returned. If not specified, then all sources are included in the response. An identifier must begin with a letter and must contain only ASCII letters, digits, and hyphens; it cannot end with a hyphen or contain two consecutive hyphens.
-        :param source_type: The source type for the event notification subscription.
-        :param subscription_name: The name of the subscription.
-        :param tags: An array of key-value pairs to apply to this resource.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-neptune-eventsubscription.html
-        :exampleMetadata: fixture=_generated
-
-        Example::
-
-            # The code below shows an example of how to instantiate this type.
-            # The values are placeholders you should change.
-            from aws_cdk import aws_neptune as neptune
-            
-            cfn_event_subscription_props = neptune.CfnEventSubscriptionProps(
-                sns_topic_arn="snsTopicArn",
-            
-                # the properties below are optional
-                enabled=False,
-                event_categories=["eventCategories"],
-                source_ids=["sourceIds"],
-                source_type="sourceType",
-                subscription_name="subscriptionName",
-                tags=[CfnTag(
-                    key="key",
-                    value="value"
-                )]
-            )
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__be12afbc64d35614ba28986fc60eff385d7080e57aabefaff50d73a28f572237)
-            check_type(argname="argument sns_topic_arn", value=sns_topic_arn, expected_type=type_hints["sns_topic_arn"])
-            check_type(argname="argument enabled", value=enabled, expected_type=type_hints["enabled"])
-            check_type(argname="argument event_categories", value=event_categories, expected_type=type_hints["event_categories"])
-            check_type(argname="argument source_ids", value=source_ids, expected_type=type_hints["source_ids"])
-            check_type(argname="argument source_type", value=source_type, expected_type=type_hints["source_type"])
-            check_type(argname="argument subscription_name", value=subscription_name, expected_type=type_hints["subscription_name"])
-            check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
-        self._values: typing.Dict[builtins.str, typing.Any] = {
-            "sns_topic_arn": sns_topic_arn,
-        }
-        if enabled is not None:
-            self._values["enabled"] = enabled
-        if event_categories is not None:
-            self._values["event_categories"] = event_categories
-        if source_ids is not None:
-            self._values["source_ids"] = source_ids
-        if source_type is not None:
-            self._values["source_type"] = source_type
-        if subscription_name is not None:
-            self._values["subscription_name"] = subscription_name
-        if tags is not None:
-            self._values["tags"] = tags
-
-    @builtins.property
-    def sns_topic_arn(self) -> builtins.str:
-        '''The topic ARN of the event notification subscription.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-neptune-eventsubscription.html#cfn-neptune-eventsubscription-snstopicarn
-        '''
-        result = self._values.get("sns_topic_arn")
-        assert result is not None, "Required property 'sns_topic_arn' is missing"
-        return typing.cast(builtins.str, result)
-
-    @builtins.property
-    def enabled(
-        self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
-        '''A Boolean value indicating if the subscription is enabled.
-
-        True indicates the subscription is enabled.
-
-        :default: - true
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-neptune-eventsubscription.html#cfn-neptune-eventsubscription-enabled
-        '''
-        result = self._values.get("enabled")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
-
-    @builtins.property
-    def event_categories(self) -> typing.Optional[typing.List[builtins.str]]:
-        '''A list of event categories for a SourceType that you want to subscribe to.
-
-        You can see a list of the categories for a given SourceType in the Events topic in the Amazon Neptune User Guide or by using the DescribeEventCategories action.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-neptune-eventsubscription.html#cfn-neptune-eventsubscription-eventcategories
-        '''
-        result = self._values.get("event_categories")
-        return typing.cast(typing.Optional[typing.List[builtins.str]], result)
-
-    @builtins.property
-    def source_ids(self) -> typing.Optional[typing.List[builtins.str]]:
-        '''The list of identifiers of the event sources for which events will be returned.
-
-        If not specified, then all sources are included in the response. An identifier must begin with a letter and must contain only ASCII letters, digits, and hyphens; it cannot end with a hyphen or contain two consecutive hyphens.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-neptune-eventsubscription.html#cfn-neptune-eventsubscription-sourceids
-        '''
-        result = self._values.get("source_ids")
-        return typing.cast(typing.Optional[typing.List[builtins.str]], result)
-
-    @builtins.property
-    def source_type(self) -> typing.Optional[builtins.str]:
-        '''The source type for the event notification subscription.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-neptune-eventsubscription.html#cfn-neptune-eventsubscription-sourcetype
-        '''
-        result = self._values.get("source_type")
-        return typing.cast(typing.Optional[builtins.str], result)
-
-    @builtins.property
-    def subscription_name(self) -> typing.Optional[builtins.str]:
-        '''The name of the subscription.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-neptune-eventsubscription.html#cfn-neptune-eventsubscription-subscriptionname
-        '''
-        result = self._values.get("subscription_name")
-        return typing.cast(typing.Optional[builtins.str], result)
-
-    @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
-        '''An array of key-value pairs to apply to this resource.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-neptune-eventsubscription.html#cfn-neptune-eventsubscription-tags
-        '''
-        result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
-
-    def __eq__(self, rhs: typing.Any) -> builtins.bool:
-        return isinstance(rhs, self.__class__) and rhs._values == self._values
-
-    def __ne__(self, rhs: typing.Any) -> builtins.bool:
-        return not (rhs == self)
-
-    def __repr__(self) -> str:
-        return "CfnEventSubscriptionProps(%s)" % ", ".join(
-            k + "=" + repr(v) for k, v in self._values.items()
-        )
-
-
-@jsii.data_type(
-    jsii_type="aws-cdk-lib.aws_neptune.DBClusterParameterGroupReference",
-    jsii_struct_bases=[],
-    name_mapping={"db_cluster_parameter_group_name": "dbClusterParameterGroupName"},
-)
-class DBClusterParameterGroupReference:
-    def __init__(self, *, db_cluster_parameter_group_name: builtins.str) -> None:
-        '''A reference to a DBClusterParameterGroup resource.
-
-        :param db_cluster_parameter_group_name: The Name of the DBClusterParameterGroup resource.
-
-        :exampleMetadata: fixture=_generated
-
-        Example::
-
-            # The code below shows an example of how to instantiate this type.
-            # The values are placeholders you should change.
-            from aws_cdk import aws_neptune as neptune
-            
-            d_bCluster_parameter_group_reference = neptune.DBClusterParameterGroupReference(
-                db_cluster_parameter_group_name="dbClusterParameterGroupName"
-            )
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__8ebef78f31eb571af412eeb17e7ecfa58bfb7045b510da8ebb0e9bba788e138b)
-            check_type(argname="argument db_cluster_parameter_group_name", value=db_cluster_parameter_group_name, expected_type=type_hints["db_cluster_parameter_group_name"])
-        self._values: typing.Dict[builtins.str, typing.Any] = {
-            "db_cluster_parameter_group_name": db_cluster_parameter_group_name,
-        }
-
-    @builtins.property
-    def db_cluster_parameter_group_name(self) -> builtins.str:
-        '''The Name of the DBClusterParameterGroup resource.'''
-        result = self._values.get("db_cluster_parameter_group_name")
-        assert result is not None, "Required property 'db_cluster_parameter_group_name' is missing"
-        return typing.cast(builtins.str, result)
-
-    def __eq__(self, rhs: typing.Any) -> builtins.bool:
-        return isinstance(rhs, self.__class__) and rhs._values == self._values
-
-    def __ne__(self, rhs: typing.Any) -> builtins.bool:
-        return not (rhs == self)
-
-    def __repr__(self) -> str:
-        return "DBClusterParameterGroupReference(%s)" % ", ".join(
-            k + "=" + repr(v) for k, v in self._values.items()
-        )
-
-
-@jsii.data_type(
-    jsii_type="aws-cdk-lib.aws_neptune.DBClusterReference",
-    jsii_struct_bases=[],
-    name_mapping={"db_cluster_identifier": "dbClusterIdentifier"},
-)
-class DBClusterReference:
-    def __init__(self, *, db_cluster_identifier: builtins.str) -> None:
-        '''A reference to a DBCluster resource.
-
-        :param db_cluster_identifier: The DBClusterIdentifier of the DBCluster resource.
-
-        :exampleMetadata: fixture=_generated
-
-        Example::
-
-            # The code below shows an example of how to instantiate this type.
-            # The values are placeholders you should change.
-            from aws_cdk import aws_neptune as neptune
-            
-            d_bCluster_reference = neptune.DBClusterReference(
-                db_cluster_identifier="dbClusterIdentifier"
-            )
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__b066b2286796bb68c64809c91d1195a279283ea12f7ffc702c9fcef8e43a399b)
-            check_type(argname="argument db_cluster_identifier", value=db_cluster_identifier, expected_type=type_hints["db_cluster_identifier"])
-        self._values: typing.Dict[builtins.str, typing.Any] = {
-            "db_cluster_identifier": db_cluster_identifier,
-        }
-
-    @builtins.property
-    def db_cluster_identifier(self) -> builtins.str:
-        '''The DBClusterIdentifier of the DBCluster resource.'''
-        result = self._values.get("db_cluster_identifier")
-        assert result is not None, "Required property 'db_cluster_identifier' is missing"
-        return typing.cast(builtins.str, result)
-
-    def __eq__(self, rhs: typing.Any) -> builtins.bool:
-        return isinstance(rhs, self.__class__) and rhs._values == self._values
-
-    def __ne__(self, rhs: typing.Any) -> builtins.bool:
-        return not (rhs == self)
-
-    def __repr__(self) -> str:
-        return "DBClusterReference(%s)" % ", ".join(
-            k + "=" + repr(v) for k, v in self._values.items()
-        )
-
-
-@jsii.data_type(
-    jsii_type="aws-cdk-lib.aws_neptune.DBInstanceReference",
-    jsii_struct_bases=[],
-    name_mapping={"db_instance_identifier": "dbInstanceIdentifier"},
-)
-class DBInstanceReference:
-    def __init__(self, *, db_instance_identifier: builtins.str) -> None:
-        '''A reference to a DBInstance resource.
-
-        :param db_instance_identifier: The DBInstanceIdentifier of the DBInstance resource.
-
-        :exampleMetadata: fixture=_generated
-
-        Example::
-
-            # The code below shows an example of how to instantiate this type.
-            # The values are placeholders you should change.
-            from aws_cdk import aws_neptune as neptune
-            
-            d_bInstance_reference = neptune.DBInstanceReference(
-                db_instance_identifier="dbInstanceIdentifier"
-            )
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__c724bec4f6fab8784103eec712a063c32f117783bab6d830a4c2b1eb3032e207)
-            check_type(argname="argument db_instance_identifier", value=db_instance_identifier, expected_type=type_hints["db_instance_identifier"])
-        self._values: typing.Dict[builtins.str, typing.Any] = {
-            "db_instance_identifier": db_instance_identifier,
-        }
-
-    @builtins.property
-    def db_instance_identifier(self) -> builtins.str:
-        '''The DBInstanceIdentifier of the DBInstance resource.'''
-        result = self._values.get("db_instance_identifier")
-        assert result is not None, "Required property 'db_instance_identifier' is missing"
-        return typing.cast(builtins.str, result)
-
-    def __eq__(self, rhs: typing.Any) -> builtins.bool:
-        return isinstance(rhs, self.__class__) and rhs._values == self._values
-
-    def __ne__(self, rhs: typing.Any) -> builtins.bool:
-        return not (rhs == self)
-
-    def __repr__(self) -> str:
-        return "DBInstanceReference(%s)" % ", ".join(
-            k + "=" + repr(v) for k, v in self._values.items()
-        )
-
-
-@jsii.data_type(
-    jsii_type="aws-cdk-lib.aws_neptune.DBParameterGroupReference",
-    jsii_struct_bases=[],
-    name_mapping={"db_parameter_group_name": "dbParameterGroupName"},
-)
-class DBParameterGroupReference:
-    def __init__(self, *, db_parameter_group_name: builtins.str) -> None:
-        '''A reference to a DBParameterGroup resource.
-
-        :param db_parameter_group_name: The Name of the DBParameterGroup resource.
-
-        :exampleMetadata: fixture=_generated
-
-        Example::
-
-            # The code below shows an example of how to instantiate this type.
-            # The values are placeholders you should change.
-            from aws_cdk import aws_neptune as neptune
-            
-            d_bParameter_group_reference = neptune.DBParameterGroupReference(
-                db_parameter_group_name="dbParameterGroupName"
-            )
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__ca1f2b8cb9a0237e5a5c6e9eeb88f9404f9c27826ffc95008b4ec655f739ef22)
-            check_type(argname="argument db_parameter_group_name", value=db_parameter_group_name, expected_type=type_hints["db_parameter_group_name"])
-        self._values: typing.Dict[builtins.str, typing.Any] = {
-            "db_parameter_group_name": db_parameter_group_name,
-        }
-
-    @builtins.property
-    def db_parameter_group_name(self) -> builtins.str:
-        '''The Name of the DBParameterGroup resource.'''
-        result = self._values.get("db_parameter_group_name")
-        assert result is not None, "Required property 'db_parameter_group_name' is missing"
-        return typing.cast(builtins.str, result)
-
-    def __eq__(self, rhs: typing.Any) -> builtins.bool:
-        return isinstance(rhs, self.__class__) and rhs._values == self._values
-
-    def __ne__(self, rhs: typing.Any) -> builtins.bool:
-        return not (rhs == self)
-
-    def __repr__(self) -> str:
-        return "DBParameterGroupReference(%s)" % ", ".join(
-            k + "=" + repr(v) for k, v in self._values.items()
-        )
-
-
-@jsii.data_type(
-    jsii_type="aws-cdk-lib.aws_neptune.DBSubnetGroupReference",
-    jsii_struct_bases=[],
-    name_mapping={"db_subnet_group_name": "dbSubnetGroupName"},
-)
-class DBSubnetGroupReference:
-    def __init__(self, *, db_subnet_group_name: builtins.str) -> None:
-        '''A reference to a DBSubnetGroup resource.
-
-        :param db_subnet_group_name: The DBSubnetGroupName of the DBSubnetGroup resource.
-
-        :exampleMetadata: fixture=_generated
-
-        Example::
-
-            # The code below shows an example of how to instantiate this type.
-            # The values are placeholders you should change.
-            from aws_cdk import aws_neptune as neptune
-            
-            d_bSubnet_group_reference = neptune.DBSubnetGroupReference(
-                db_subnet_group_name="dbSubnetGroupName"
-            )
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__11cc2e22e338c9dcf751a93d0dfba7f8355a95ed3b014cdbdf09696ceabfdd7e)
-            check_type(argname="argument db_subnet_group_name", value=db_subnet_group_name, expected_type=type_hints["db_subnet_group_name"])
-        self._values: typing.Dict[builtins.str, typing.Any] = {
-            "db_subnet_group_name": db_subnet_group_name,
-        }
-
-    @builtins.property
-    def db_subnet_group_name(self) -> builtins.str:
-        '''The DBSubnetGroupName of the DBSubnetGroup resource.'''
-        result = self._values.get("db_subnet_group_name")
-        assert result is not None, "Required property 'db_subnet_group_name' is missing"
-        return typing.cast(builtins.str, result)
-
-    def __eq__(self, rhs: typing.Any) -> builtins.bool:
-        return isinstance(rhs, self.__class__) and rhs._values == self._values
-
-    def __ne__(self, rhs: typing.Any) -> builtins.bool:
-        return not (rhs == self)
-
-    def __repr__(self) -> str:
-        return "DBSubnetGroupReference(%s)" % ", ".join(
-            k + "=" + repr(v) for k, v in self._values.items()
-        )
-
-
-@jsii.data_type(
-    jsii_type="aws-cdk-lib.aws_neptune.EventSubscriptionReference",
-    jsii_struct_bases=[],
-    name_mapping={"subscription_name": "subscriptionName"},
-)
-class EventSubscriptionReference:
-    def __init__(self, *, subscription_name: builtins.str) -> None:
-        '''A reference to a EventSubscription resource.
-
-        :param subscription_name: The SubscriptionName of the EventSubscription resource.
-
-        :exampleMetadata: fixture=_generated
-
-        Example::
-
-            # The code below shows an example of how to instantiate this type.
-            # The values are placeholders you should change.
-            from aws_cdk import aws_neptune as neptune
-            
-            event_subscription_reference = neptune.EventSubscriptionReference(
-                subscription_name="subscriptionName"
-            )
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__82b5674c3fe56fb8b208f294a807c06b9f34ac1ed903e1591540674a53b02cdb)
-            check_type(argname="argument subscription_name", value=subscription_name, expected_type=type_hints["subscription_name"])
-        self._values: typing.Dict[builtins.str, typing.Any] = {
-            "subscription_name": subscription_name,
-        }
-
-    @builtins.property
-    def subscription_name(self) -> builtins.str:
-        '''The SubscriptionName of the EventSubscription resource.'''
-        result = self._values.get("subscription_name")
-        assert result is not None, "Required property 'subscription_name' is missing"
-        return typing.cast(builtins.str, result)
-
-    def __eq__(self, rhs: typing.Any) -> builtins.bool:
-        return isinstance(rhs, self.__class__) and rhs._values == self._values
-
-    def __ne__(self, rhs: typing.Any) -> builtins.bool:
-        return not (rhs == self)
-
-    def __repr__(self) -> str:
-        return "EventSubscriptionReference(%s)" % ", ".join(
-            k + "=" + repr(v) for k, v in self._values.items()
-        )
-
-
-@jsii.interface(jsii_type="aws-cdk-lib.aws_neptune.IDBClusterParameterGroupRef")
-class IDBClusterParameterGroupRef(
-    _constructs_77d1e7e8.IConstruct,
-    _IEnvironmentAware_a408b00d,
-    typing_extensions.Protocol,
-):
-    '''(experimental) Indicates that this resource can be referenced as a DBClusterParameterGroup.
-
-    :stability: experimental
-    '''
-
-    @builtins.property
-    @jsii.member(jsii_name="dbClusterParameterGroupRef")
-    def db_cluster_parameter_group_ref(self) -> DBClusterParameterGroupReference:
-        '''(experimental) A reference to a DBClusterParameterGroup resource.
-
-        :stability: experimental
-        '''
-        ...
-
-
-class _IDBClusterParameterGroupRefProxy(
-    jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
-    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
-):
-    '''(experimental) Indicates that this resource can be referenced as a DBClusterParameterGroup.
-
-    :stability: experimental
-    '''
-
-    __jsii_type__: typing.ClassVar[str] = "aws-cdk-lib.aws_neptune.IDBClusterParameterGroupRef"
-
-    @builtins.property
-    @jsii.member(jsii_name="dbClusterParameterGroupRef")
-    def db_cluster_parameter_group_ref(self) -> DBClusterParameterGroupReference:
-        '''(experimental) A reference to a DBClusterParameterGroup resource.
-
-        :stability: experimental
-        '''
-        return typing.cast(DBClusterParameterGroupReference, jsii.get(self, "dbClusterParameterGroupRef"))
-
-# Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
-typing.cast(typing.Any, IDBClusterParameterGroupRef).__jsii_proxy_class__ = lambda : _IDBClusterParameterGroupRefProxy
-
-
-@jsii.interface(jsii_type="aws-cdk-lib.aws_neptune.IDBClusterRef")
-class IDBClusterRef(
-    _constructs_77d1e7e8.IConstruct,
-    _IEnvironmentAware_a408b00d,
-    typing_extensions.Protocol,
-):
-    '''(experimental) Indicates that this resource can be referenced as a DBCluster.
-
-    :stability: experimental
-    '''
-
-    @builtins.property
-    @jsii.member(jsii_name="dbClusterRef")
-    def db_cluster_ref(self) -> DBClusterReference:
-        '''(experimental) A reference to a DBCluster resource.
-
-        :stability: experimental
-        '''
-        ...
-
-
-class _IDBClusterRefProxy(
-    jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
-    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
-):
-    '''(experimental) Indicates that this resource can be referenced as a DBCluster.
-
-    :stability: experimental
-    '''
-
-    __jsii_type__: typing.ClassVar[str] = "aws-cdk-lib.aws_neptune.IDBClusterRef"
-
-    @builtins.property
-    @jsii.member(jsii_name="dbClusterRef")
-    def db_cluster_ref(self) -> DBClusterReference:
-        '''(experimental) A reference to a DBCluster resource.
-
-        :stability: experimental
-        '''
-        return typing.cast(DBClusterReference, jsii.get(self, "dbClusterRef"))
-
-# Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
-typing.cast(typing.Any, IDBClusterRef).__jsii_proxy_class__ = lambda : _IDBClusterRefProxy
-
-
-@jsii.interface(jsii_type="aws-cdk-lib.aws_neptune.IDBInstanceRef")
-class IDBInstanceRef(
-    _constructs_77d1e7e8.IConstruct,
-    _IEnvironmentAware_a408b00d,
-    typing_extensions.Protocol,
-):
-    '''(experimental) Indicates that this resource can be referenced as a DBInstance.
-
-    :stability: experimental
-    '''
-
-    @builtins.property
-    @jsii.member(jsii_name="dbInstanceRef")
-    def db_instance_ref(self) -> DBInstanceReference:
-        '''(experimental) A reference to a DBInstance resource.
-
-        :stability: experimental
-        '''
-        ...
-
-
-class _IDBInstanceRefProxy(
-    jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
-    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
-):
-    '''(experimental) Indicates that this resource can be referenced as a DBInstance.
-
-    :stability: experimental
-    '''
-
-    __jsii_type__: typing.ClassVar[str] = "aws-cdk-lib.aws_neptune.IDBInstanceRef"
-
-    @builtins.property
-    @jsii.member(jsii_name="dbInstanceRef")
-    def db_instance_ref(self) -> DBInstanceReference:
-        '''(experimental) A reference to a DBInstance resource.
-
-        :stability: experimental
-        '''
-        return typing.cast(DBInstanceReference, jsii.get(self, "dbInstanceRef"))
-
-# Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
-typing.cast(typing.Any, IDBInstanceRef).__jsii_proxy_class__ = lambda : _IDBInstanceRefProxy
-
-
-@jsii.interface(jsii_type="aws-cdk-lib.aws_neptune.IDBParameterGroupRef")
-class IDBParameterGroupRef(
-    _constructs_77d1e7e8.IConstruct,
-    _IEnvironmentAware_a408b00d,
-    typing_extensions.Protocol,
-):
-    '''(experimental) Indicates that this resource can be referenced as a DBParameterGroup.
-
-    :stability: experimental
-    '''
-
-    @builtins.property
-    @jsii.member(jsii_name="dbParameterGroupRef")
-    def db_parameter_group_ref(self) -> DBParameterGroupReference:
-        '''(experimental) A reference to a DBParameterGroup resource.
-
-        :stability: experimental
-        '''
-        ...
-
-
-class _IDBParameterGroupRefProxy(
-    jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
-    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
-):
-    '''(experimental) Indicates that this resource can be referenced as a DBParameterGroup.
-
-    :stability: experimental
-    '''
-
-    __jsii_type__: typing.ClassVar[str] = "aws-cdk-lib.aws_neptune.IDBParameterGroupRef"
-
-    @builtins.property
-    @jsii.member(jsii_name="dbParameterGroupRef")
-    def db_parameter_group_ref(self) -> DBParameterGroupReference:
-        '''(experimental) A reference to a DBParameterGroup resource.
-
-        :stability: experimental
-        '''
-        return typing.cast(DBParameterGroupReference, jsii.get(self, "dbParameterGroupRef"))
-
-# Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
-typing.cast(typing.Any, IDBParameterGroupRef).__jsii_proxy_class__ = lambda : _IDBParameterGroupRefProxy
-
-
-@jsii.interface(jsii_type="aws-cdk-lib.aws_neptune.IDBSubnetGroupRef")
-class IDBSubnetGroupRef(
-    _constructs_77d1e7e8.IConstruct,
-    _IEnvironmentAware_a408b00d,
-    typing_extensions.Protocol,
-):
-    '''(experimental) Indicates that this resource can be referenced as a DBSubnetGroup.
-
-    :stability: experimental
-    '''
-
-    @builtins.property
-    @jsii.member(jsii_name="dbSubnetGroupRef")
-    def db_subnet_group_ref(self) -> DBSubnetGroupReference:
-        '''(experimental) A reference to a DBSubnetGroup resource.
-
-        :stability: experimental
-        '''
-        ...
-
-
-class _IDBSubnetGroupRefProxy(
-    jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
-    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
-):
-    '''(experimental) Indicates that this resource can be referenced as a DBSubnetGroup.
-
-    :stability: experimental
-    '''
-
-    __jsii_type__: typing.ClassVar[str] = "aws-cdk-lib.aws_neptune.IDBSubnetGroupRef"
-
-    @builtins.property
-    @jsii.member(jsii_name="dbSubnetGroupRef")
-    def db_subnet_group_ref(self) -> DBSubnetGroupReference:
-        '''(experimental) A reference to a DBSubnetGroup resource.
-
-        :stability: experimental
-        '''
-        return typing.cast(DBSubnetGroupReference, jsii.get(self, "dbSubnetGroupRef"))
-
-# Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
-typing.cast(typing.Any, IDBSubnetGroupRef).__jsii_proxy_class__ = lambda : _IDBSubnetGroupRefProxy
-
-
-@jsii.interface(jsii_type="aws-cdk-lib.aws_neptune.IEventSubscriptionRef")
-class IEventSubscriptionRef(
-    _constructs_77d1e7e8.IConstruct,
-    _IEnvironmentAware_a408b00d,
-    typing_extensions.Protocol,
-):
-    '''(experimental) Indicates that this resource can be referenced as a EventSubscription.
-
-    :stability: experimental
-    '''
-
-    @builtins.property
-    @jsii.member(jsii_name="eventSubscriptionRef")
-    def event_subscription_ref(self) -> EventSubscriptionReference:
-        '''(experimental) A reference to a EventSubscription resource.
-
-        :stability: experimental
-        '''
-        ...
-
-
-class _IEventSubscriptionRefProxy(
-    jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
-    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
-):
-    '''(experimental) Indicates that this resource can be referenced as a EventSubscription.
-
-    :stability: experimental
-    '''
-
-    __jsii_type__: typing.ClassVar[str] = "aws-cdk-lib.aws_neptune.IEventSubscriptionRef"
-
-    @builtins.property
-    @jsii.member(jsii_name="eventSubscriptionRef")
-    def event_subscription_ref(self) -> EventSubscriptionReference:
-        '''(experimental) A reference to a EventSubscription resource.
-
-        :stability: experimental
-        '''
-        return typing.cast(EventSubscriptionReference, jsii.get(self, "eventSubscriptionRef"))
-
-# Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
-typing.cast(typing.Any, IEventSubscriptionRef).__jsii_proxy_class__ = lambda : _IEventSubscriptionRefProxy
-
-
-@jsii.implements(_IInspectable_c2943556, IDBClusterRef, _ITaggable_36806126)
+@jsii.implements(_IInspectable_c2943556, _IDBClusterRef_14961392, _ITaggable_36806126)
 class CfnDBCluster(
     _CfnResource_9df397a6,
     metaclass=jsii.JSIIMeta,
@@ -2086,7 +186,8 @@ class CfnDBCluster(
         use_latest_restorable_time: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
         vpc_security_group_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
     ) -> None:
-        '''
+        '''Create a new ``AWS::Neptune::DBCluster``.
+
         :param scope: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
         :param associated_roles: Provides a list of the Amazon Identity and Access Management (IAM) roles that are associated with the DB cluster. IAM roles that are associated with a DB cluster grant permission for the DB cluster to access other Amazon services on your behalf.
@@ -2228,9 +329,9 @@ class CfnDBCluster(
 
     @builtins.property
     @jsii.member(jsii_name="dbClusterRef")
-    def db_cluster_ref(self) -> DBClusterReference:
+    def db_cluster_ref(self) -> _DBClusterReference_46880dce:
         '''A reference to a DBCluster resource.'''
-        return typing.cast(DBClusterReference, jsii.get(self, "dbClusterRef"))
+        return typing.cast(_DBClusterReference_46880dce, jsii.get(self, "dbClusterRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
@@ -2775,7 +876,7 @@ class CfnDBCluster(
             )
 
 
-@jsii.implements(_IInspectable_c2943556, IDBClusterParameterGroupRef, _ITaggable_36806126)
+@jsii.implements(_IInspectable_c2943556, _IDBClusterParameterGroupRef_be75ec22, _ITaggable_36806126)
 class CfnDBClusterParameterGroup(
     _CfnResource_9df397a6,
     metaclass=jsii.JSIIMeta,
@@ -2824,7 +925,8 @@ class CfnDBClusterParameterGroup(
         name: typing.Optional[builtins.str] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
-        '''
+        '''Create a new ``AWS::Neptune::DBClusterParameterGroup``.
+
         :param scope: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
         :param description: Provides the customer-specified description for this DB cluster parameter group.
@@ -2884,9 +986,11 @@ class CfnDBClusterParameterGroup(
 
     @builtins.property
     @jsii.member(jsii_name="dbClusterParameterGroupRef")
-    def db_cluster_parameter_group_ref(self) -> DBClusterParameterGroupReference:
+    def db_cluster_parameter_group_ref(
+        self,
+    ) -> _DBClusterParameterGroupReference_da7b4f10:
         '''A reference to a DBClusterParameterGroup resource.'''
-        return typing.cast(DBClusterParameterGroupReference, jsii.get(self, "dbClusterParameterGroupRef"))
+        return typing.cast(_DBClusterParameterGroupReference_da7b4f10, jsii.get(self, "dbClusterParameterGroupRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
@@ -2960,7 +1064,669 @@ class CfnDBClusterParameterGroup(
         jsii.set(self, "tagsRaw", value) # pyright: ignore[reportArgumentType]
 
 
-@jsii.implements(_IInspectable_c2943556, IDBInstanceRef, _ITaggable_36806126)
+@jsii.data_type(
+    jsii_type="aws-cdk-lib.aws_neptune.CfnDBClusterParameterGroupProps",
+    jsii_struct_bases=[],
+    name_mapping={
+        "description": "description",
+        "family": "family",
+        "parameters": "parameters",
+        "name": "name",
+        "tags": "tags",
+    },
+)
+class CfnDBClusterParameterGroupProps:
+    def __init__(
+        self,
+        *,
+        description: builtins.str,
+        family: builtins.str,
+        parameters: typing.Any,
+        name: typing.Optional[builtins.str] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+    ) -> None:
+        '''Properties for defining a ``CfnDBClusterParameterGroup``.
+
+        :param description: Provides the customer-specified description for this DB cluster parameter group.
+        :param family: Must be ``neptune1`` for engine versions prior to `1.2.0.0 <https://docs.aws.amazon.com/neptune/latest/userguide/engine-releases-1.2.0.0.html>`_ , or ``neptune1.2`` for engine version ``1.2.0.0`` and higher.
+        :param parameters: The parameters to set for this DB cluster parameter group. The parameters are expressed as a JSON object consisting of key-value pairs. If you update the parameters, some interruption may occur depending on which parameters you update.
+        :param name: Provides the name of the DB cluster parameter group.
+        :param tags: The tags that you want to attach to this parameter group.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-neptune-dbclusterparametergroup.html
+        :exampleMetadata: fixture=_generated
+
+        Example::
+
+            # The code below shows an example of how to instantiate this type.
+            # The values are placeholders you should change.
+            from aws_cdk import aws_neptune as neptune
+            
+            # parameters: Any
+            
+            cfn_dBCluster_parameter_group_props = neptune.CfnDBClusterParameterGroupProps(
+                description="description",
+                family="family",
+                parameters=parameters,
+            
+                # the properties below are optional
+                name="name",
+                tags=[CfnTag(
+                    key="key",
+                    value="value"
+                )]
+            )
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__fc71d209d4a8e49edca84c75f5f3e453b94e1ceaf55ce979d9474afb156ed5da)
+            check_type(argname="argument description", value=description, expected_type=type_hints["description"])
+            check_type(argname="argument family", value=family, expected_type=type_hints["family"])
+            check_type(argname="argument parameters", value=parameters, expected_type=type_hints["parameters"])
+            check_type(argname="argument name", value=name, expected_type=type_hints["name"])
+            check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
+        self._values: typing.Dict[builtins.str, typing.Any] = {
+            "description": description,
+            "family": family,
+            "parameters": parameters,
+        }
+        if name is not None:
+            self._values["name"] = name
+        if tags is not None:
+            self._values["tags"] = tags
+
+    @builtins.property
+    def description(self) -> builtins.str:
+        '''Provides the customer-specified description for this DB cluster parameter group.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-neptune-dbclusterparametergroup.html#cfn-neptune-dbclusterparametergroup-description
+        '''
+        result = self._values.get("description")
+        assert result is not None, "Required property 'description' is missing"
+        return typing.cast(builtins.str, result)
+
+    @builtins.property
+    def family(self) -> builtins.str:
+        '''Must be ``neptune1`` for engine versions prior to `1.2.0.0 <https://docs.aws.amazon.com/neptune/latest/userguide/engine-releases-1.2.0.0.html>`_ , or ``neptune1.2`` for engine version ``1.2.0.0`` and higher.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-neptune-dbclusterparametergroup.html#cfn-neptune-dbclusterparametergroup-family
+        '''
+        result = self._values.get("family")
+        assert result is not None, "Required property 'family' is missing"
+        return typing.cast(builtins.str, result)
+
+    @builtins.property
+    def parameters(self) -> typing.Any:
+        '''The parameters to set for this DB cluster parameter group.
+
+        The parameters are expressed as a JSON object consisting of key-value pairs.
+
+        If you update the parameters, some interruption may occur depending on which parameters you update.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-neptune-dbclusterparametergroup.html#cfn-neptune-dbclusterparametergroup-parameters
+        '''
+        result = self._values.get("parameters")
+        assert result is not None, "Required property 'parameters' is missing"
+        return typing.cast(typing.Any, result)
+
+    @builtins.property
+    def name(self) -> typing.Optional[builtins.str]:
+        '''Provides the name of the DB cluster parameter group.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-neptune-dbclusterparametergroup.html#cfn-neptune-dbclusterparametergroup-name
+        '''
+        result = self._values.get("name")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+        '''The tags that you want to attach to this parameter group.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-neptune-dbclusterparametergroup.html#cfn-neptune-dbclusterparametergroup-tags
+        '''
+        result = self._values.get("tags")
+        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+
+    def __eq__(self, rhs: typing.Any) -> builtins.bool:
+        return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+    def __ne__(self, rhs: typing.Any) -> builtins.bool:
+        return not (rhs == self)
+
+    def __repr__(self) -> str:
+        return "CfnDBClusterParameterGroupProps(%s)" % ", ".join(
+            k + "=" + repr(v) for k, v in self._values.items()
+        )
+
+
+@jsii.data_type(
+    jsii_type="aws-cdk-lib.aws_neptune.CfnDBClusterProps",
+    jsii_struct_bases=[],
+    name_mapping={
+        "associated_roles": "associatedRoles",
+        "availability_zones": "availabilityZones",
+        "backup_retention_period": "backupRetentionPeriod",
+        "copy_tags_to_snapshot": "copyTagsToSnapshot",
+        "db_cluster_identifier": "dbClusterIdentifier",
+        "db_cluster_parameter_group_name": "dbClusterParameterGroupName",
+        "db_instance_parameter_group_name": "dbInstanceParameterGroupName",
+        "db_port": "dbPort",
+        "db_subnet_group_name": "dbSubnetGroupName",
+        "deletion_protection": "deletionProtection",
+        "enable_cloudwatch_logs_exports": "enableCloudwatchLogsExports",
+        "engine_version": "engineVersion",
+        "iam_auth_enabled": "iamAuthEnabled",
+        "kms_key_id": "kmsKeyId",
+        "preferred_backup_window": "preferredBackupWindow",
+        "preferred_maintenance_window": "preferredMaintenanceWindow",
+        "restore_to_time": "restoreToTime",
+        "restore_type": "restoreType",
+        "serverless_scaling_configuration": "serverlessScalingConfiguration",
+        "snapshot_identifier": "snapshotIdentifier",
+        "source_db_cluster_identifier": "sourceDbClusterIdentifier",
+        "storage_encrypted": "storageEncrypted",
+        "tags": "tags",
+        "use_latest_restorable_time": "useLatestRestorableTime",
+        "vpc_security_group_ids": "vpcSecurityGroupIds",
+    },
+)
+class CfnDBClusterProps:
+    def __init__(
+        self,
+        *,
+        associated_roles: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDBCluster.DBClusterRoleProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        availability_zones: typing.Optional[typing.Sequence[builtins.str]] = None,
+        backup_retention_period: typing.Optional[jsii.Number] = None,
+        copy_tags_to_snapshot: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        db_cluster_identifier: typing.Optional[builtins.str] = None,
+        db_cluster_parameter_group_name: typing.Optional[builtins.str] = None,
+        db_instance_parameter_group_name: typing.Optional[builtins.str] = None,
+        db_port: typing.Optional[jsii.Number] = None,
+        db_subnet_group_name: typing.Optional[builtins.str] = None,
+        deletion_protection: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        enable_cloudwatch_logs_exports: typing.Optional[typing.Sequence[builtins.str]] = None,
+        engine_version: typing.Optional[builtins.str] = None,
+        iam_auth_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        kms_key_id: typing.Optional[builtins.str] = None,
+        preferred_backup_window: typing.Optional[builtins.str] = None,
+        preferred_maintenance_window: typing.Optional[builtins.str] = None,
+        restore_to_time: typing.Optional[builtins.str] = None,
+        restore_type: typing.Optional[builtins.str] = None,
+        serverless_scaling_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDBCluster.ServerlessScalingConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        snapshot_identifier: typing.Optional[builtins.str] = None,
+        source_db_cluster_identifier: typing.Optional[builtins.str] = None,
+        storage_encrypted: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        use_latest_restorable_time: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        vpc_security_group_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
+    ) -> None:
+        '''Properties for defining a ``CfnDBCluster``.
+
+        :param associated_roles: Provides a list of the Amazon Identity and Access Management (IAM) roles that are associated with the DB cluster. IAM roles that are associated with a DB cluster grant permission for the DB cluster to access other Amazon services on your behalf.
+        :param availability_zones: Provides the list of EC2 Availability Zones that instances in the DB cluster can be created in.
+        :param backup_retention_period: Specifies the number of days for which automatic DB snapshots are retained. An update may require some interruption. See `ModifyDBInstance <https://docs.aws.amazon.com/neptune/latest/userguide/api-instances.html#ModifyDBInstance>`_ in the Amazon Neptune User Guide for more information. Default: - 1
+        :param copy_tags_to_snapshot: *If set to ``true`` , tags are copied to any snapshot of the DB cluster that is created.*.
+        :param db_cluster_identifier: Contains a user-supplied DB cluster identifier. This identifier is the unique key that identifies a DB cluster.
+        :param db_cluster_parameter_group_name: Provides the name of the DB cluster parameter group. An update may require some interruption. See `ModifyDBInstance <https://docs.aws.amazon.com/neptune/latest/userguide/api-instances.html#ModifyDBInstance>`_ in the Amazon Neptune User Guide for more information.
+        :param db_instance_parameter_group_name: The name of the DB parameter group to apply to all instances of the DB cluster. Used only in case of a major engine version upgrade request Note that when you apply a parameter group using ``DBInstanceParameterGroupName`` , parameter changes are applied immediately, not during the next maintenance window. **Constraints** - The DB parameter group must be in the same DB parameter group family as the target DB cluster version. - The ``DBInstanceParameterGroupName`` parameter is only valid for major engine version upgrades.
+        :param db_port: The port number on which the DB instances in the DB cluster accept connections. If not specified, the default port used is ``8182`` . .. epigraph:: The ``Port`` property will soon be deprecated. Please update existing templates to use the new ``DBPort`` property that has the same functionality.
+        :param db_subnet_group_name: Specifies information on the subnet group associated with the DB cluster, including the name, description, and subnets in the subnet group.
+        :param deletion_protection: Indicates whether or not the DB cluster has deletion protection enabled. The database can't be deleted when deletion protection is enabled.
+        :param enable_cloudwatch_logs_exports: Specifies a list of log types that are enabled for export to CloudWatch Logs.
+        :param engine_version: Indicates the database engine version.
+        :param iam_auth_enabled: True if mapping of Amazon Identity and Access Management (IAM) accounts to database accounts is enabled, and otherwise false.
+        :param kms_key_id: The Amazon Resource Name (ARN) of the KMS key that is used to encrypt the database instances in the DB cluster, such as ``arn:aws:kms:us-east-1:012345678910:key/abcd1234-a123-456a-a12b-a123b4cd56ef`` . If you enable the ``StorageEncrypted`` property but don't specify this property, the default KMS key is used. If you specify this property, you must set the ``StorageEncrypted`` property to ``true`` .
+        :param preferred_backup_window: Specifies the daily time range during which automated backups are created if automated backups are enabled, as determined by the ``BackupRetentionPeriod`` . An update may require some interruption.
+        :param preferred_maintenance_window: Specifies the weekly time range during which system maintenance can occur, in Universal Coordinated Time (UTC).
+        :param restore_to_time: Creates a new DB cluster from a DB snapshot or DB cluster snapshot. If a DB snapshot is specified, the target DB cluster is created from the source DB snapshot with a default configuration and default security group. If a DB cluster snapshot is specified, the target DB cluster is created from the source DB cluster restore point with the same configuration as the original source DB cluster, except that the new DB cluster is created with the default security group.
+        :param restore_type: Creates a new DB cluster from a DB snapshot or DB cluster snapshot. If a DB snapshot is specified, the target DB cluster is created from the source DB snapshot with a default configuration and default security group. If a DB cluster snapshot is specified, the target DB cluster is created from the source DB cluster restore point with the same configuration as the original source DB cluster, except that the new DB cluster is created with the default security group. Default: - "full-copy"
+        :param serverless_scaling_configuration: Contains the scaling configuration of an Neptune Serverless DB cluster.
+        :param snapshot_identifier: Specifies the identifier for a DB cluster snapshot. Must match the identifier of an existing snapshot. After you restore a DB cluster using a ``SnapshotIdentifier`` , you must specify the same ``SnapshotIdentifier`` for any future updates to the DB cluster. When you specify this property for an update, the DB cluster is not restored from the snapshot again, and the data in the database is not changed. However, if you don't specify the ``SnapshotIdentifier`` , an empty DB cluster is created, and the original DB cluster is deleted. If you specify a property that is different from the previous snapshot restore property, the DB cluster is restored from the snapshot specified by the ``SnapshotIdentifier`` , and the original DB cluster is deleted.
+        :param source_db_cluster_identifier: Creates a new DB cluster from a DB snapshot or DB cluster snapshot. If a DB snapshot is specified, the target DB cluster is created from the source DB snapshot with a default configuration and default security group. If a DB cluster snapshot is specified, the target DB cluster is created from the source DB cluster restore point with the same configuration as the original source DB cluster, except that the new DB cluster is created with the default security group.
+        :param storage_encrypted: Indicates whether the DB cluster is encrypted. If you specify the ``KmsKeyId`` property, then you must enable encryption and set this property to ``true`` . If you enable the ``StorageEncrypted`` property but don't specify the ``KmsKeyId`` property, then the default KMS key is used. If you specify the ``KmsKeyId`` property, then that KMS key is used to encrypt the database instances in the DB cluster. If you specify the ``SourceDBClusterIdentifier`` property, and don't specify this property or disable it, the value is inherited from the source DB cluster. If the source DB cluster is encrypted, the ``KmsKeyId`` property from the source cluster is used. If you specify the ``DBSnapshotIdentifier`` and don't specify this property or disable it, the value is inherited from the snapshot and the specified ``KmsKeyId`` property from the snapshot is used.
+        :param tags: The tags assigned to this cluster.
+        :param use_latest_restorable_time: Creates a new DB cluster from a DB snapshot or DB cluster snapshot. If a DB snapshot is specified, the target DB cluster is created from the source DB snapshot with a default configuration and default security group. If a DB cluster snapshot is specified, the target DB cluster is created from the source DB cluster restore point with the same configuration as the original source DB cluster, except that the new DB cluster is created with the default security group.
+        :param vpc_security_group_ids: Provides a list of VPC security groups that the DB cluster belongs to.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-neptune-dbcluster.html
+        :exampleMetadata: fixture=_generated
+
+        Example::
+
+            # The code below shows an example of how to instantiate this type.
+            # The values are placeholders you should change.
+            from aws_cdk import aws_neptune as neptune
+            
+            cfn_dBCluster_props = neptune.CfnDBClusterProps(
+                associated_roles=[neptune.CfnDBCluster.DBClusterRoleProperty(
+                    role_arn="roleArn",
+            
+                    # the properties below are optional
+                    feature_name="featureName"
+                )],
+                availability_zones=["availabilityZones"],
+                backup_retention_period=123,
+                copy_tags_to_snapshot=False,
+                db_cluster_identifier="dbClusterIdentifier",
+                db_cluster_parameter_group_name="dbClusterParameterGroupName",
+                db_instance_parameter_group_name="dbInstanceParameterGroupName",
+                db_port=123,
+                db_subnet_group_name="dbSubnetGroupName",
+                deletion_protection=False,
+                enable_cloudwatch_logs_exports=["enableCloudwatchLogsExports"],
+                engine_version="engineVersion",
+                iam_auth_enabled=False,
+                kms_key_id="kmsKeyId",
+                preferred_backup_window="preferredBackupWindow",
+                preferred_maintenance_window="preferredMaintenanceWindow",
+                restore_to_time="restoreToTime",
+                restore_type="restoreType",
+                serverless_scaling_configuration=neptune.CfnDBCluster.ServerlessScalingConfigurationProperty(
+                    max_capacity=123,
+                    min_capacity=123
+                ),
+                snapshot_identifier="snapshotIdentifier",
+                source_db_cluster_identifier="sourceDbClusterIdentifier",
+                storage_encrypted=False,
+                tags=[CfnTag(
+                    key="key",
+                    value="value"
+                )],
+                use_latest_restorable_time=False,
+                vpc_security_group_ids=["vpcSecurityGroupIds"]
+            )
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__88c4bf370341b0e8b113f0ee9d80be6e0b45183ba249011ead676b8c5334e65c)
+            check_type(argname="argument associated_roles", value=associated_roles, expected_type=type_hints["associated_roles"])
+            check_type(argname="argument availability_zones", value=availability_zones, expected_type=type_hints["availability_zones"])
+            check_type(argname="argument backup_retention_period", value=backup_retention_period, expected_type=type_hints["backup_retention_period"])
+            check_type(argname="argument copy_tags_to_snapshot", value=copy_tags_to_snapshot, expected_type=type_hints["copy_tags_to_snapshot"])
+            check_type(argname="argument db_cluster_identifier", value=db_cluster_identifier, expected_type=type_hints["db_cluster_identifier"])
+            check_type(argname="argument db_cluster_parameter_group_name", value=db_cluster_parameter_group_name, expected_type=type_hints["db_cluster_parameter_group_name"])
+            check_type(argname="argument db_instance_parameter_group_name", value=db_instance_parameter_group_name, expected_type=type_hints["db_instance_parameter_group_name"])
+            check_type(argname="argument db_port", value=db_port, expected_type=type_hints["db_port"])
+            check_type(argname="argument db_subnet_group_name", value=db_subnet_group_name, expected_type=type_hints["db_subnet_group_name"])
+            check_type(argname="argument deletion_protection", value=deletion_protection, expected_type=type_hints["deletion_protection"])
+            check_type(argname="argument enable_cloudwatch_logs_exports", value=enable_cloudwatch_logs_exports, expected_type=type_hints["enable_cloudwatch_logs_exports"])
+            check_type(argname="argument engine_version", value=engine_version, expected_type=type_hints["engine_version"])
+            check_type(argname="argument iam_auth_enabled", value=iam_auth_enabled, expected_type=type_hints["iam_auth_enabled"])
+            check_type(argname="argument kms_key_id", value=kms_key_id, expected_type=type_hints["kms_key_id"])
+            check_type(argname="argument preferred_backup_window", value=preferred_backup_window, expected_type=type_hints["preferred_backup_window"])
+            check_type(argname="argument preferred_maintenance_window", value=preferred_maintenance_window, expected_type=type_hints["preferred_maintenance_window"])
+            check_type(argname="argument restore_to_time", value=restore_to_time, expected_type=type_hints["restore_to_time"])
+            check_type(argname="argument restore_type", value=restore_type, expected_type=type_hints["restore_type"])
+            check_type(argname="argument serverless_scaling_configuration", value=serverless_scaling_configuration, expected_type=type_hints["serverless_scaling_configuration"])
+            check_type(argname="argument snapshot_identifier", value=snapshot_identifier, expected_type=type_hints["snapshot_identifier"])
+            check_type(argname="argument source_db_cluster_identifier", value=source_db_cluster_identifier, expected_type=type_hints["source_db_cluster_identifier"])
+            check_type(argname="argument storage_encrypted", value=storage_encrypted, expected_type=type_hints["storage_encrypted"])
+            check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
+            check_type(argname="argument use_latest_restorable_time", value=use_latest_restorable_time, expected_type=type_hints["use_latest_restorable_time"])
+            check_type(argname="argument vpc_security_group_ids", value=vpc_security_group_ids, expected_type=type_hints["vpc_security_group_ids"])
+        self._values: typing.Dict[builtins.str, typing.Any] = {}
+        if associated_roles is not None:
+            self._values["associated_roles"] = associated_roles
+        if availability_zones is not None:
+            self._values["availability_zones"] = availability_zones
+        if backup_retention_period is not None:
+            self._values["backup_retention_period"] = backup_retention_period
+        if copy_tags_to_snapshot is not None:
+            self._values["copy_tags_to_snapshot"] = copy_tags_to_snapshot
+        if db_cluster_identifier is not None:
+            self._values["db_cluster_identifier"] = db_cluster_identifier
+        if db_cluster_parameter_group_name is not None:
+            self._values["db_cluster_parameter_group_name"] = db_cluster_parameter_group_name
+        if db_instance_parameter_group_name is not None:
+            self._values["db_instance_parameter_group_name"] = db_instance_parameter_group_name
+        if db_port is not None:
+            self._values["db_port"] = db_port
+        if db_subnet_group_name is not None:
+            self._values["db_subnet_group_name"] = db_subnet_group_name
+        if deletion_protection is not None:
+            self._values["deletion_protection"] = deletion_protection
+        if enable_cloudwatch_logs_exports is not None:
+            self._values["enable_cloudwatch_logs_exports"] = enable_cloudwatch_logs_exports
+        if engine_version is not None:
+            self._values["engine_version"] = engine_version
+        if iam_auth_enabled is not None:
+            self._values["iam_auth_enabled"] = iam_auth_enabled
+        if kms_key_id is not None:
+            self._values["kms_key_id"] = kms_key_id
+        if preferred_backup_window is not None:
+            self._values["preferred_backup_window"] = preferred_backup_window
+        if preferred_maintenance_window is not None:
+            self._values["preferred_maintenance_window"] = preferred_maintenance_window
+        if restore_to_time is not None:
+            self._values["restore_to_time"] = restore_to_time
+        if restore_type is not None:
+            self._values["restore_type"] = restore_type
+        if serverless_scaling_configuration is not None:
+            self._values["serverless_scaling_configuration"] = serverless_scaling_configuration
+        if snapshot_identifier is not None:
+            self._values["snapshot_identifier"] = snapshot_identifier
+        if source_db_cluster_identifier is not None:
+            self._values["source_db_cluster_identifier"] = source_db_cluster_identifier
+        if storage_encrypted is not None:
+            self._values["storage_encrypted"] = storage_encrypted
+        if tags is not None:
+            self._values["tags"] = tags
+        if use_latest_restorable_time is not None:
+            self._values["use_latest_restorable_time"] = use_latest_restorable_time
+        if vpc_security_group_ids is not None:
+            self._values["vpc_security_group_ids"] = vpc_security_group_ids
+
+    @builtins.property
+    def associated_roles(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnDBCluster.DBClusterRoleProperty]]]]:
+        '''Provides a list of the Amazon Identity and Access Management (IAM) roles that are associated with the DB cluster.
+
+        IAM roles that are associated with a DB cluster grant permission for the DB cluster to access other Amazon services on your behalf.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-neptune-dbcluster.html#cfn-neptune-dbcluster-associatedroles
+        '''
+        result = self._values.get("associated_roles")
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnDBCluster.DBClusterRoleProperty]]]], result)
+
+    @builtins.property
+    def availability_zones(self) -> typing.Optional[typing.List[builtins.str]]:
+        '''Provides the list of EC2 Availability Zones that instances in the DB cluster can be created in.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-neptune-dbcluster.html#cfn-neptune-dbcluster-availabilityzones
+        '''
+        result = self._values.get("availability_zones")
+        return typing.cast(typing.Optional[typing.List[builtins.str]], result)
+
+    @builtins.property
+    def backup_retention_period(self) -> typing.Optional[jsii.Number]:
+        '''Specifies the number of days for which automatic DB snapshots are retained.
+
+        An update may require some interruption. See `ModifyDBInstance <https://docs.aws.amazon.com/neptune/latest/userguide/api-instances.html#ModifyDBInstance>`_ in the Amazon Neptune User Guide for more information.
+
+        :default: - 1
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-neptune-dbcluster.html#cfn-neptune-dbcluster-backupretentionperiod
+        '''
+        result = self._values.get("backup_retention_period")
+        return typing.cast(typing.Optional[jsii.Number], result)
+
+    @builtins.property
+    def copy_tags_to_snapshot(
+        self,
+    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        '''*If set to ``true`` , tags are copied to any snapshot of the DB cluster that is created.*.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-neptune-dbcluster.html#cfn-neptune-dbcluster-copytagstosnapshot
+        '''
+        result = self._values.get("copy_tags_to_snapshot")
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+
+    @builtins.property
+    def db_cluster_identifier(self) -> typing.Optional[builtins.str]:
+        '''Contains a user-supplied DB cluster identifier.
+
+        This identifier is the unique key that identifies a DB cluster.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-neptune-dbcluster.html#cfn-neptune-dbcluster-dbclusteridentifier
+        '''
+        result = self._values.get("db_cluster_identifier")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def db_cluster_parameter_group_name(self) -> typing.Optional[builtins.str]:
+        '''Provides the name of the DB cluster parameter group.
+
+        An update may require some interruption. See `ModifyDBInstance <https://docs.aws.amazon.com/neptune/latest/userguide/api-instances.html#ModifyDBInstance>`_ in the Amazon Neptune User Guide for more information.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-neptune-dbcluster.html#cfn-neptune-dbcluster-dbclusterparametergroupname
+        '''
+        result = self._values.get("db_cluster_parameter_group_name")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def db_instance_parameter_group_name(self) -> typing.Optional[builtins.str]:
+        '''The name of the DB parameter group to apply to all instances of the DB cluster.
+
+        Used only in case of a major engine version upgrade request
+
+        Note that when you apply a parameter group using ``DBInstanceParameterGroupName`` , parameter changes are applied immediately, not during the next maintenance window.
+
+        **Constraints** - The DB parameter group must be in the same DB parameter group family as the target DB cluster version.
+
+        - The ``DBInstanceParameterGroupName`` parameter is only valid for major engine version upgrades.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-neptune-dbcluster.html#cfn-neptune-dbcluster-dbinstanceparametergroupname
+        '''
+        result = self._values.get("db_instance_parameter_group_name")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def db_port(self) -> typing.Optional[jsii.Number]:
+        '''The port number on which the DB instances in the DB cluster accept connections.
+
+        If not specified, the default port used is ``8182`` .
+        .. epigraph::
+
+           The ``Port`` property will soon be deprecated. Please update existing templates to use the new ``DBPort`` property that has the same functionality.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-neptune-dbcluster.html#cfn-neptune-dbcluster-dbport
+        '''
+        result = self._values.get("db_port")
+        return typing.cast(typing.Optional[jsii.Number], result)
+
+    @builtins.property
+    def db_subnet_group_name(self) -> typing.Optional[builtins.str]:
+        '''Specifies information on the subnet group associated with the DB cluster, including the name, description, and subnets in the subnet group.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-neptune-dbcluster.html#cfn-neptune-dbcluster-dbsubnetgroupname
+        '''
+        result = self._values.get("db_subnet_group_name")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def deletion_protection(
+        self,
+    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        '''Indicates whether or not the DB cluster has deletion protection enabled.
+
+        The database can't be deleted when deletion protection is enabled.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-neptune-dbcluster.html#cfn-neptune-dbcluster-deletionprotection
+        '''
+        result = self._values.get("deletion_protection")
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+
+    @builtins.property
+    def enable_cloudwatch_logs_exports(
+        self,
+    ) -> typing.Optional[typing.List[builtins.str]]:
+        '''Specifies a list of log types that are enabled for export to CloudWatch Logs.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-neptune-dbcluster.html#cfn-neptune-dbcluster-enablecloudwatchlogsexports
+        '''
+        result = self._values.get("enable_cloudwatch_logs_exports")
+        return typing.cast(typing.Optional[typing.List[builtins.str]], result)
+
+    @builtins.property
+    def engine_version(self) -> typing.Optional[builtins.str]:
+        '''Indicates the database engine version.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-neptune-dbcluster.html#cfn-neptune-dbcluster-engineversion
+        '''
+        result = self._values.get("engine_version")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def iam_auth_enabled(
+        self,
+    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        '''True if mapping of Amazon Identity and Access Management (IAM) accounts to database accounts is enabled, and otherwise false.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-neptune-dbcluster.html#cfn-neptune-dbcluster-iamauthenabled
+        '''
+        result = self._values.get("iam_auth_enabled")
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+
+    @builtins.property
+    def kms_key_id(self) -> typing.Optional[builtins.str]:
+        '''The Amazon Resource Name (ARN) of the KMS key that is used to encrypt the database instances in the DB cluster, such as ``arn:aws:kms:us-east-1:012345678910:key/abcd1234-a123-456a-a12b-a123b4cd56ef`` .
+
+        If you enable the ``StorageEncrypted`` property but don't specify this property, the default KMS key is used. If you specify this property, you must set the ``StorageEncrypted`` property to ``true`` .
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-neptune-dbcluster.html#cfn-neptune-dbcluster-kmskeyid
+        '''
+        result = self._values.get("kms_key_id")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def preferred_backup_window(self) -> typing.Optional[builtins.str]:
+        '''Specifies the daily time range during which automated backups are created if automated backups are enabled, as determined by the ``BackupRetentionPeriod`` .
+
+        An update may require some interruption.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-neptune-dbcluster.html#cfn-neptune-dbcluster-preferredbackupwindow
+        '''
+        result = self._values.get("preferred_backup_window")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def preferred_maintenance_window(self) -> typing.Optional[builtins.str]:
+        '''Specifies the weekly time range during which system maintenance can occur, in Universal Coordinated Time (UTC).
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-neptune-dbcluster.html#cfn-neptune-dbcluster-preferredmaintenancewindow
+        '''
+        result = self._values.get("preferred_maintenance_window")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def restore_to_time(self) -> typing.Optional[builtins.str]:
+        '''Creates a new DB cluster from a DB snapshot or DB cluster snapshot.
+
+        If a DB snapshot is specified, the target DB cluster is created from the source DB snapshot with a default configuration and default security group.
+
+        If a DB cluster snapshot is specified, the target DB cluster is created from the source DB cluster restore point with the same configuration as the original source DB cluster, except that the new DB cluster is created with the default security group.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-neptune-dbcluster.html#cfn-neptune-dbcluster-restoretotime
+        '''
+        result = self._values.get("restore_to_time")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def restore_type(self) -> typing.Optional[builtins.str]:
+        '''Creates a new DB cluster from a DB snapshot or DB cluster snapshot.
+
+        If a DB snapshot is specified, the target DB cluster is created from the source DB snapshot with a default configuration and default security group.
+
+        If a DB cluster snapshot is specified, the target DB cluster is created from the source DB cluster restore point with the same configuration as the original source DB cluster, except that the new DB cluster is created with the default security group.
+
+        :default: - "full-copy"
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-neptune-dbcluster.html#cfn-neptune-dbcluster-restoretype
+        '''
+        result = self._values.get("restore_type")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def serverless_scaling_configuration(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDBCluster.ServerlessScalingConfigurationProperty]]:
+        '''Contains the scaling configuration of an Neptune Serverless DB cluster.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-neptune-dbcluster.html#cfn-neptune-dbcluster-serverlessscalingconfiguration
+        '''
+        result = self._values.get("serverless_scaling_configuration")
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDBCluster.ServerlessScalingConfigurationProperty]], result)
+
+    @builtins.property
+    def snapshot_identifier(self) -> typing.Optional[builtins.str]:
+        '''Specifies the identifier for a DB cluster snapshot. Must match the identifier of an existing snapshot.
+
+        After you restore a DB cluster using a ``SnapshotIdentifier`` , you must specify the same ``SnapshotIdentifier`` for any future updates to the DB cluster. When you specify this property for an update, the DB cluster is not restored from the snapshot again, and the data in the database is not changed.
+
+        However, if you don't specify the ``SnapshotIdentifier`` , an empty DB cluster is created, and the original DB cluster is deleted. If you specify a property that is different from the previous snapshot restore property, the DB cluster is restored from the snapshot specified by the ``SnapshotIdentifier`` , and the original DB cluster is deleted.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-neptune-dbcluster.html#cfn-neptune-dbcluster-snapshotidentifier
+        '''
+        result = self._values.get("snapshot_identifier")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def source_db_cluster_identifier(self) -> typing.Optional[builtins.str]:
+        '''Creates a new DB cluster from a DB snapshot or DB cluster snapshot.
+
+        If a DB snapshot is specified, the target DB cluster is created from the source DB snapshot with a default configuration and default security group.
+
+        If a DB cluster snapshot is specified, the target DB cluster is created from the source DB cluster restore point with the same configuration as the original source DB cluster, except that the new DB cluster is created with the default security group.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-neptune-dbcluster.html#cfn-neptune-dbcluster-sourcedbclusteridentifier
+        '''
+        result = self._values.get("source_db_cluster_identifier")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def storage_encrypted(
+        self,
+    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        '''Indicates whether the DB cluster is encrypted.
+
+        If you specify the ``KmsKeyId`` property, then you must enable encryption and set this property to ``true`` .
+
+        If you enable the ``StorageEncrypted`` property but don't specify the ``KmsKeyId`` property, then the default KMS key is used. If you specify the ``KmsKeyId`` property, then that KMS key is used to encrypt the database instances in the DB cluster.
+
+        If you specify the ``SourceDBClusterIdentifier`` property, and don't specify this property or disable it, the value is inherited from the source DB cluster. If the source DB cluster is encrypted, the ``KmsKeyId`` property from the source cluster is used.
+
+        If you specify the ``DBSnapshotIdentifier`` and don't specify this property or disable it, the value is inherited from the snapshot and the specified ``KmsKeyId`` property from the snapshot is used.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-neptune-dbcluster.html#cfn-neptune-dbcluster-storageencrypted
+        '''
+        result = self._values.get("storage_encrypted")
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+
+    @builtins.property
+    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+        '''The tags assigned to this cluster.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-neptune-dbcluster.html#cfn-neptune-dbcluster-tags
+        '''
+        result = self._values.get("tags")
+        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+
+    @builtins.property
+    def use_latest_restorable_time(
+        self,
+    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        '''Creates a new DB cluster from a DB snapshot or DB cluster snapshot.
+
+        If a DB snapshot is specified, the target DB cluster is created from the source DB snapshot with a default configuration and default security group.
+
+        If a DB cluster snapshot is specified, the target DB cluster is created from the source DB cluster restore point with the same configuration as the original source DB cluster, except that the new DB cluster is created with the default security group.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-neptune-dbcluster.html#cfn-neptune-dbcluster-uselatestrestorabletime
+        '''
+        result = self._values.get("use_latest_restorable_time")
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+
+    @builtins.property
+    def vpc_security_group_ids(self) -> typing.Optional[typing.List[builtins.str]]:
+        '''Provides a list of VPC security groups that the DB cluster belongs to.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-neptune-dbcluster.html#cfn-neptune-dbcluster-vpcsecuritygroupids
+        '''
+        result = self._values.get("vpc_security_group_ids")
+        return typing.cast(typing.Optional[typing.List[builtins.str]], result)
+
+    def __eq__(self, rhs: typing.Any) -> builtins.bool:
+        return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+    def __ne__(self, rhs: typing.Any) -> builtins.bool:
+        return not (rhs == self)
+
+    def __repr__(self) -> str:
+        return "CfnDBClusterProps(%s)" % ", ".join(
+            k + "=" + repr(v) for k, v in self._values.items()
+        )
+
+
+@jsii.implements(_IInspectable_c2943556, _IDBInstanceRef_5e0e3745, _ITaggable_36806126)
 class CfnDBInstance(
     _CfnResource_9df397a6,
     metaclass=jsii.JSIIMeta,
@@ -3039,7 +1805,8 @@ class CfnDBInstance(
         publicly_accessible: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
-        '''
+        '''Create a new ``AWS::Neptune::DBInstance``.
+
         :param scope: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
         :param db_instance_class: Contains the name of the compute and memory capacity class of the DB instance. If you update this property, some interruptions may occur.
@@ -3135,9 +1902,9 @@ class CfnDBInstance(
 
     @builtins.property
     @jsii.member(jsii_name="dbInstanceRef")
-    def db_instance_ref(self) -> DBInstanceReference:
+    def db_instance_ref(self) -> _DBInstanceReference_84c4879a:
         '''A reference to a DBInstance resource.'''
-        return typing.cast(DBInstanceReference, jsii.get(self, "dbInstanceRef"))
+        return typing.cast(_DBInstanceReference_84c4879a, jsii.get(self, "dbInstanceRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
@@ -3325,7 +2092,278 @@ class CfnDBInstance(
         jsii.set(self, "tagsRaw", value) # pyright: ignore[reportArgumentType]
 
 
-@jsii.implements(_IInspectable_c2943556, IDBParameterGroupRef, _ITaggable_36806126)
+@jsii.data_type(
+    jsii_type="aws-cdk-lib.aws_neptune.CfnDBInstanceProps",
+    jsii_struct_bases=[],
+    name_mapping={
+        "db_instance_class": "dbInstanceClass",
+        "allow_major_version_upgrade": "allowMajorVersionUpgrade",
+        "auto_minor_version_upgrade": "autoMinorVersionUpgrade",
+        "availability_zone": "availabilityZone",
+        "db_cluster_identifier": "dbClusterIdentifier",
+        "db_instance_identifier": "dbInstanceIdentifier",
+        "db_parameter_group_name": "dbParameterGroupName",
+        "db_snapshot_identifier": "dbSnapshotIdentifier",
+        "db_subnet_group_name": "dbSubnetGroupName",
+        "preferred_maintenance_window": "preferredMaintenanceWindow",
+        "publicly_accessible": "publiclyAccessible",
+        "tags": "tags",
+    },
+)
+class CfnDBInstanceProps:
+    def __init__(
+        self,
+        *,
+        db_instance_class: builtins.str,
+        allow_major_version_upgrade: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        auto_minor_version_upgrade: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        availability_zone: typing.Optional[builtins.str] = None,
+        db_cluster_identifier: typing.Optional[builtins.str] = None,
+        db_instance_identifier: typing.Optional[builtins.str] = None,
+        db_parameter_group_name: typing.Optional[builtins.str] = None,
+        db_snapshot_identifier: typing.Optional[builtins.str] = None,
+        db_subnet_group_name: typing.Optional[builtins.str] = None,
+        preferred_maintenance_window: typing.Optional[builtins.str] = None,
+        publicly_accessible: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+    ) -> None:
+        '''Properties for defining a ``CfnDBInstance``.
+
+        :param db_instance_class: Contains the name of the compute and memory capacity class of the DB instance. If you update this property, some interruptions may occur.
+        :param allow_major_version_upgrade: Indicates that major version upgrades are allowed. Changing this parameter doesn't result in an outage and the change is asynchronously applied as soon as possible. This parameter must be set to true when specifying a value for the EngineVersion parameter that is a different major version than the DB instance's current version. When you change this parameter for an existing DB cluster, CloudFormation will replace your existing DB cluster with a new, empty one that uses the engine version you specified.
+        :param auto_minor_version_upgrade: Indicates that minor version patches are applied automatically. When updating this property, some interruptions may occur.
+        :param availability_zone: Specifies the name of the Availability Zone the DB instance is located in.
+        :param db_cluster_identifier: If the DB instance is a member of a DB cluster, contains the name of the DB cluster that the DB instance is a member of.
+        :param db_instance_identifier: Contains a user-supplied database identifier. This identifier is the unique key that identifies a DB instance.
+        :param db_parameter_group_name: The name of an existing DB parameter group or a reference to an AWS::Neptune::DBParameterGroup resource created in the template. If any of the data members of the referenced parameter group are changed during an update, the DB instance might need to be restarted, which causes some interruption. If the parameter group contains static parameters, whether they were changed or not, an update triggers a reboot.
+        :param db_snapshot_identifier: (deprecated) This parameter is not supported. ``AWS::Neptune::DBInstance`` does not support restoring from snapshots. ``AWS::Neptune::DBCluster`` does support restoring from snapshots.
+        :param db_subnet_group_name: A DB subnet group to associate with the DB instance. If you update this value, the new subnet group must be a subnet group in a new virtual private cloud (VPC).
+        :param preferred_maintenance_window: Specifies the weekly time range during which system maintenance can occur, in Universal Coordinated Time (UTC).
+        :param publicly_accessible: Indicates whether the DB instance is publicly accessible. When the DB instance is publicly accessible and you connect from outside of the DB instance's virtual private cloud (VPC), its Domain Name System (DNS) endpoint resolves to the public IP address. When you connect from within the same VPC as the DB instance, the endpoint resolves to the private IP address. Access to the DB instance is ultimately controlled by the security group it uses. That public access isn't permitted if the security group assigned to the DB cluster doesn't permit it. When the DB instance isn't publicly accessible, it is an internal DB instance with a DNS name that resolves to a private IP address.
+        :param tags: An arbitrary set of tags (key-value pairs) for this DB instance.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-neptune-dbinstance.html
+        :exampleMetadata: fixture=_generated
+
+        Example::
+
+            # The code below shows an example of how to instantiate this type.
+            # The values are placeholders you should change.
+            from aws_cdk import aws_neptune as neptune
+            
+            cfn_dBInstance_props = neptune.CfnDBInstanceProps(
+                db_instance_class="dbInstanceClass",
+            
+                # the properties below are optional
+                allow_major_version_upgrade=False,
+                auto_minor_version_upgrade=False,
+                availability_zone="availabilityZone",
+                db_cluster_identifier="dbClusterIdentifier",
+                db_instance_identifier="dbInstanceIdentifier",
+                db_parameter_group_name="dbParameterGroupName",
+                db_snapshot_identifier="dbSnapshotIdentifier",
+                db_subnet_group_name="dbSubnetGroupName",
+                preferred_maintenance_window="preferredMaintenanceWindow",
+                publicly_accessible=False,
+                tags=[CfnTag(
+                    key="key",
+                    value="value"
+                )]
+            )
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__f97fae676e40e6f9b786d435eb3f1534d54b6bfccf982c2ddf6802fc906bcceb)
+            check_type(argname="argument db_instance_class", value=db_instance_class, expected_type=type_hints["db_instance_class"])
+            check_type(argname="argument allow_major_version_upgrade", value=allow_major_version_upgrade, expected_type=type_hints["allow_major_version_upgrade"])
+            check_type(argname="argument auto_minor_version_upgrade", value=auto_minor_version_upgrade, expected_type=type_hints["auto_minor_version_upgrade"])
+            check_type(argname="argument availability_zone", value=availability_zone, expected_type=type_hints["availability_zone"])
+            check_type(argname="argument db_cluster_identifier", value=db_cluster_identifier, expected_type=type_hints["db_cluster_identifier"])
+            check_type(argname="argument db_instance_identifier", value=db_instance_identifier, expected_type=type_hints["db_instance_identifier"])
+            check_type(argname="argument db_parameter_group_name", value=db_parameter_group_name, expected_type=type_hints["db_parameter_group_name"])
+            check_type(argname="argument db_snapshot_identifier", value=db_snapshot_identifier, expected_type=type_hints["db_snapshot_identifier"])
+            check_type(argname="argument db_subnet_group_name", value=db_subnet_group_name, expected_type=type_hints["db_subnet_group_name"])
+            check_type(argname="argument preferred_maintenance_window", value=preferred_maintenance_window, expected_type=type_hints["preferred_maintenance_window"])
+            check_type(argname="argument publicly_accessible", value=publicly_accessible, expected_type=type_hints["publicly_accessible"])
+            check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
+        self._values: typing.Dict[builtins.str, typing.Any] = {
+            "db_instance_class": db_instance_class,
+        }
+        if allow_major_version_upgrade is not None:
+            self._values["allow_major_version_upgrade"] = allow_major_version_upgrade
+        if auto_minor_version_upgrade is not None:
+            self._values["auto_minor_version_upgrade"] = auto_minor_version_upgrade
+        if availability_zone is not None:
+            self._values["availability_zone"] = availability_zone
+        if db_cluster_identifier is not None:
+            self._values["db_cluster_identifier"] = db_cluster_identifier
+        if db_instance_identifier is not None:
+            self._values["db_instance_identifier"] = db_instance_identifier
+        if db_parameter_group_name is not None:
+            self._values["db_parameter_group_name"] = db_parameter_group_name
+        if db_snapshot_identifier is not None:
+            self._values["db_snapshot_identifier"] = db_snapshot_identifier
+        if db_subnet_group_name is not None:
+            self._values["db_subnet_group_name"] = db_subnet_group_name
+        if preferred_maintenance_window is not None:
+            self._values["preferred_maintenance_window"] = preferred_maintenance_window
+        if publicly_accessible is not None:
+            self._values["publicly_accessible"] = publicly_accessible
+        if tags is not None:
+            self._values["tags"] = tags
+
+    @builtins.property
+    def db_instance_class(self) -> builtins.str:
+        '''Contains the name of the compute and memory capacity class of the DB instance.
+
+        If you update this property, some interruptions may occur.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-neptune-dbinstance.html#cfn-neptune-dbinstance-dbinstanceclass
+        '''
+        result = self._values.get("db_instance_class")
+        assert result is not None, "Required property 'db_instance_class' is missing"
+        return typing.cast(builtins.str, result)
+
+    @builtins.property
+    def allow_major_version_upgrade(
+        self,
+    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        '''Indicates that major version upgrades are allowed.
+
+        Changing this parameter doesn't result in an outage and the change is asynchronously applied as soon as possible. This parameter must be set to true when specifying a value for the EngineVersion parameter that is a different major version than the DB instance's current version.
+
+        When you change this parameter for an existing DB cluster, CloudFormation will replace your existing DB cluster with a new, empty one that uses the engine version you specified.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-neptune-dbinstance.html#cfn-neptune-dbinstance-allowmajorversionupgrade
+        '''
+        result = self._values.get("allow_major_version_upgrade")
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+
+    @builtins.property
+    def auto_minor_version_upgrade(
+        self,
+    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        '''Indicates that minor version patches are applied automatically.
+
+        When updating this property, some interruptions may occur.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-neptune-dbinstance.html#cfn-neptune-dbinstance-autominorversionupgrade
+        '''
+        result = self._values.get("auto_minor_version_upgrade")
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+
+    @builtins.property
+    def availability_zone(self) -> typing.Optional[builtins.str]:
+        '''Specifies the name of the Availability Zone the DB instance is located in.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-neptune-dbinstance.html#cfn-neptune-dbinstance-availabilityzone
+        '''
+        result = self._values.get("availability_zone")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def db_cluster_identifier(self) -> typing.Optional[builtins.str]:
+        '''If the DB instance is a member of a DB cluster, contains the name of the DB cluster that the DB instance is a member of.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-neptune-dbinstance.html#cfn-neptune-dbinstance-dbclusteridentifier
+        '''
+        result = self._values.get("db_cluster_identifier")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def db_instance_identifier(self) -> typing.Optional[builtins.str]:
+        '''Contains a user-supplied database identifier.
+
+        This identifier is the unique key that identifies a DB instance.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-neptune-dbinstance.html#cfn-neptune-dbinstance-dbinstanceidentifier
+        '''
+        result = self._values.get("db_instance_identifier")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def db_parameter_group_name(self) -> typing.Optional[builtins.str]:
+        '''The name of an existing DB parameter group or a reference to an AWS::Neptune::DBParameterGroup resource created in the template.
+
+        If any of the data members of the referenced parameter group are changed during an update, the DB instance might need to be restarted, which causes some interruption. If the parameter group contains static parameters, whether they were changed or not, an update triggers a reboot.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-neptune-dbinstance.html#cfn-neptune-dbinstance-dbparametergroupname
+        '''
+        result = self._values.get("db_parameter_group_name")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def db_snapshot_identifier(self) -> typing.Optional[builtins.str]:
+        '''(deprecated) This parameter is not supported.
+
+        ``AWS::Neptune::DBInstance`` does not support restoring from snapshots.
+
+        ``AWS::Neptune::DBCluster`` does support restoring from snapshots.
+
+        :deprecated: this property has been deprecated
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-neptune-dbinstance.html#cfn-neptune-dbinstance-dbsnapshotidentifier
+        :stability: deprecated
+        '''
+        result = self._values.get("db_snapshot_identifier")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def db_subnet_group_name(self) -> typing.Optional[builtins.str]:
+        '''A DB subnet group to associate with the DB instance.
+
+        If you update this value, the new subnet group must be a subnet group in a new virtual private cloud (VPC).
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-neptune-dbinstance.html#cfn-neptune-dbinstance-dbsubnetgroupname
+        '''
+        result = self._values.get("db_subnet_group_name")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def preferred_maintenance_window(self) -> typing.Optional[builtins.str]:
+        '''Specifies the weekly time range during which system maintenance can occur, in Universal Coordinated Time (UTC).
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-neptune-dbinstance.html#cfn-neptune-dbinstance-preferredmaintenancewindow
+        '''
+        result = self._values.get("preferred_maintenance_window")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def publicly_accessible(
+        self,
+    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        '''Indicates whether the DB instance is publicly accessible.
+
+        When the DB instance is publicly accessible and you connect from outside of the DB instance's virtual private cloud (VPC), its Domain Name System (DNS) endpoint resolves to the public IP address. When you connect from within the same VPC as the DB instance, the endpoint resolves to the private IP address. Access to the DB instance is ultimately controlled by the security group it uses. That public access isn't permitted if the security group assigned to the DB cluster doesn't permit it.
+
+        When the DB instance isn't publicly accessible, it is an internal DB instance with a DNS name that resolves to a private IP address.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-neptune-dbinstance.html#cfn-neptune-dbinstance-publiclyaccessible
+        '''
+        result = self._values.get("publicly_accessible")
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+
+    @builtins.property
+    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+        '''An arbitrary set of tags (key-value pairs) for this DB instance.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-neptune-dbinstance.html#cfn-neptune-dbinstance-tags
+        '''
+        result = self._values.get("tags")
+        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+
+    def __eq__(self, rhs: typing.Any) -> builtins.bool:
+        return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+    def __ne__(self, rhs: typing.Any) -> builtins.bool:
+        return not (rhs == self)
+
+    def __repr__(self) -> str:
+        return "CfnDBInstanceProps(%s)" % ", ".join(
+            k + "=" + repr(v) for k, v in self._values.items()
+        )
+
+
+@jsii.implements(_IInspectable_c2943556, _IDBParameterGroupRef_9e461d1a, _ITaggable_36806126)
 class CfnDBParameterGroup(
     _CfnResource_9df397a6,
     metaclass=jsii.JSIIMeta,
@@ -3380,7 +2418,8 @@ class CfnDBParameterGroup(
         name: typing.Optional[builtins.str] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
-        '''
+        '''Create a new ``AWS::Neptune::DBParameterGroup``.
+
         :param scope: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
         :param description: Provides the customer-specified description for this DB parameter group.
@@ -3440,9 +2479,9 @@ class CfnDBParameterGroup(
 
     @builtins.property
     @jsii.member(jsii_name="dbParameterGroupRef")
-    def db_parameter_group_ref(self) -> DBParameterGroupReference:
+    def db_parameter_group_ref(self) -> _DBParameterGroupReference_9bb44206:
         '''A reference to a DBParameterGroup resource.'''
-        return typing.cast(DBParameterGroupReference, jsii.get(self, "dbParameterGroupRef"))
+        return typing.cast(_DBParameterGroupReference_9bb44206, jsii.get(self, "dbParameterGroupRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
@@ -3516,7 +2555,141 @@ class CfnDBParameterGroup(
         jsii.set(self, "tagsRaw", value) # pyright: ignore[reportArgumentType]
 
 
-@jsii.implements(_IInspectable_c2943556, IDBSubnetGroupRef, _ITaggable_36806126)
+@jsii.data_type(
+    jsii_type="aws-cdk-lib.aws_neptune.CfnDBParameterGroupProps",
+    jsii_struct_bases=[],
+    name_mapping={
+        "description": "description",
+        "family": "family",
+        "parameters": "parameters",
+        "name": "name",
+        "tags": "tags",
+    },
+)
+class CfnDBParameterGroupProps:
+    def __init__(
+        self,
+        *,
+        description: builtins.str,
+        family: builtins.str,
+        parameters: typing.Any,
+        name: typing.Optional[builtins.str] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+    ) -> None:
+        '''Properties for defining a ``CfnDBParameterGroup``.
+
+        :param description: Provides the customer-specified description for this DB parameter group.
+        :param family: Must be ``neptune1`` for engine versions prior to `1.2.0.0 <https://docs.aws.amazon.com/neptune/latest/userguide/engine-releases-1.2.0.0.html>`_ , or ``neptune1.2`` for engine version ``1.2.0.0`` and higher.
+        :param parameters: The parameters to set for this DB parameter group. The parameters are expressed as a JSON object consisting of key-value pairs. Changes to dynamic parameters are applied immediately. During an update, if you have static parameters (whether they were changed or not), it triggers AWS CloudFormation to reboot the associated DB instance without failover.
+        :param name: Provides the name of the DB parameter group.
+        :param tags: The tags that you want to attach to this parameter group.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-neptune-dbparametergroup.html
+        :exampleMetadata: fixture=_generated
+
+        Example::
+
+            # The code below shows an example of how to instantiate this type.
+            # The values are placeholders you should change.
+            from aws_cdk import aws_neptune as neptune
+            
+            # parameters: Any
+            
+            cfn_dBParameter_group_props = neptune.CfnDBParameterGroupProps(
+                description="description",
+                family="family",
+                parameters=parameters,
+            
+                # the properties below are optional
+                name="name",
+                tags=[CfnTag(
+                    key="key",
+                    value="value"
+                )]
+            )
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__4528e974fd8cb347cabbbf84fd7018f743e7e93d03828031d597ff5a1cf213f6)
+            check_type(argname="argument description", value=description, expected_type=type_hints["description"])
+            check_type(argname="argument family", value=family, expected_type=type_hints["family"])
+            check_type(argname="argument parameters", value=parameters, expected_type=type_hints["parameters"])
+            check_type(argname="argument name", value=name, expected_type=type_hints["name"])
+            check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
+        self._values: typing.Dict[builtins.str, typing.Any] = {
+            "description": description,
+            "family": family,
+            "parameters": parameters,
+        }
+        if name is not None:
+            self._values["name"] = name
+        if tags is not None:
+            self._values["tags"] = tags
+
+    @builtins.property
+    def description(self) -> builtins.str:
+        '''Provides the customer-specified description for this DB parameter group.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-neptune-dbparametergroup.html#cfn-neptune-dbparametergroup-description
+        '''
+        result = self._values.get("description")
+        assert result is not None, "Required property 'description' is missing"
+        return typing.cast(builtins.str, result)
+
+    @builtins.property
+    def family(self) -> builtins.str:
+        '''Must be ``neptune1`` for engine versions prior to `1.2.0.0 <https://docs.aws.amazon.com/neptune/latest/userguide/engine-releases-1.2.0.0.html>`_ , or ``neptune1.2`` for engine version ``1.2.0.0`` and higher.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-neptune-dbparametergroup.html#cfn-neptune-dbparametergroup-family
+        '''
+        result = self._values.get("family")
+        assert result is not None, "Required property 'family' is missing"
+        return typing.cast(builtins.str, result)
+
+    @builtins.property
+    def parameters(self) -> typing.Any:
+        '''The parameters to set for this DB parameter group.
+
+        The parameters are expressed as a JSON object consisting of key-value pairs.
+
+        Changes to dynamic parameters are applied immediately. During an update, if you have static parameters (whether they were changed or not), it triggers AWS CloudFormation to reboot the associated DB instance without failover.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-neptune-dbparametergroup.html#cfn-neptune-dbparametergroup-parameters
+        '''
+        result = self._values.get("parameters")
+        assert result is not None, "Required property 'parameters' is missing"
+        return typing.cast(typing.Any, result)
+
+    @builtins.property
+    def name(self) -> typing.Optional[builtins.str]:
+        '''Provides the name of the DB parameter group.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-neptune-dbparametergroup.html#cfn-neptune-dbparametergroup-name
+        '''
+        result = self._values.get("name")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+        '''The tags that you want to attach to this parameter group.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-neptune-dbparametergroup.html#cfn-neptune-dbparametergroup-tags
+        '''
+        result = self._values.get("tags")
+        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+
+    def __eq__(self, rhs: typing.Any) -> builtins.bool:
+        return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+    def __ne__(self, rhs: typing.Any) -> builtins.bool:
+        return not (rhs == self)
+
+    def __repr__(self) -> str:
+        return "CfnDBParameterGroupProps(%s)" % ", ".join(
+            k + "=" + repr(v) for k, v in self._values.items()
+        )
+
+
+@jsii.implements(_IInspectable_c2943556, _IDBSubnetGroupRef_b2b07796, _ITaggable_36806126)
 class CfnDBSubnetGroup(
     _CfnResource_9df397a6,
     metaclass=jsii.JSIIMeta,
@@ -3559,7 +2732,8 @@ class CfnDBSubnetGroup(
         db_subnet_group_name: typing.Optional[builtins.str] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
-        '''
+        '''Create a new ``AWS::Neptune::DBSubnetGroup``.
+
         :param scope: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
         :param db_subnet_group_description: Provides the description of the DB subnet group.
@@ -3617,9 +2791,9 @@ class CfnDBSubnetGroup(
 
     @builtins.property
     @jsii.member(jsii_name="dbSubnetGroupRef")
-    def db_subnet_group_ref(self) -> DBSubnetGroupReference:
+    def db_subnet_group_ref(self) -> _DBSubnetGroupReference_27cd8411:
         '''A reference to a DBSubnetGroup resource.'''
-        return typing.cast(DBSubnetGroupReference, jsii.get(self, "dbSubnetGroupRef"))
+        return typing.cast(_DBSubnetGroupReference_27cd8411, jsii.get(self, "dbSubnetGroupRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
@@ -3680,7 +2854,119 @@ class CfnDBSubnetGroup(
         jsii.set(self, "tagsRaw", value) # pyright: ignore[reportArgumentType]
 
 
-@jsii.implements(_IInspectable_c2943556, IEventSubscriptionRef, _ITaggableV2_4e6798f8)
+@jsii.data_type(
+    jsii_type="aws-cdk-lib.aws_neptune.CfnDBSubnetGroupProps",
+    jsii_struct_bases=[],
+    name_mapping={
+        "db_subnet_group_description": "dbSubnetGroupDescription",
+        "subnet_ids": "subnetIds",
+        "db_subnet_group_name": "dbSubnetGroupName",
+        "tags": "tags",
+    },
+)
+class CfnDBSubnetGroupProps:
+    def __init__(
+        self,
+        *,
+        db_subnet_group_description: builtins.str,
+        subnet_ids: typing.Sequence[builtins.str],
+        db_subnet_group_name: typing.Optional[builtins.str] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+    ) -> None:
+        '''Properties for defining a ``CfnDBSubnetGroup``.
+
+        :param db_subnet_group_description: Provides the description of the DB subnet group.
+        :param subnet_ids: The Amazon EC2 subnet IDs for the DB subnet group.
+        :param db_subnet_group_name: The name of the DB subnet group.
+        :param tags: The tags that you want to attach to the DB subnet group.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-neptune-dbsubnetgroup.html
+        :exampleMetadata: fixture=_generated
+
+        Example::
+
+            # The code below shows an example of how to instantiate this type.
+            # The values are placeholders you should change.
+            from aws_cdk import aws_neptune as neptune
+            
+            cfn_dBSubnet_group_props = neptune.CfnDBSubnetGroupProps(
+                db_subnet_group_description="dbSubnetGroupDescription",
+                subnet_ids=["subnetIds"],
+            
+                # the properties below are optional
+                db_subnet_group_name="dbSubnetGroupName",
+                tags=[CfnTag(
+                    key="key",
+                    value="value"
+                )]
+            )
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__82ebea6599fb4b541844cf24f7d771410b52af442a682c2ccec51eabebc01fda)
+            check_type(argname="argument db_subnet_group_description", value=db_subnet_group_description, expected_type=type_hints["db_subnet_group_description"])
+            check_type(argname="argument subnet_ids", value=subnet_ids, expected_type=type_hints["subnet_ids"])
+            check_type(argname="argument db_subnet_group_name", value=db_subnet_group_name, expected_type=type_hints["db_subnet_group_name"])
+            check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
+        self._values: typing.Dict[builtins.str, typing.Any] = {
+            "db_subnet_group_description": db_subnet_group_description,
+            "subnet_ids": subnet_ids,
+        }
+        if db_subnet_group_name is not None:
+            self._values["db_subnet_group_name"] = db_subnet_group_name
+        if tags is not None:
+            self._values["tags"] = tags
+
+    @builtins.property
+    def db_subnet_group_description(self) -> builtins.str:
+        '''Provides the description of the DB subnet group.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-neptune-dbsubnetgroup.html#cfn-neptune-dbsubnetgroup-dbsubnetgroupdescription
+        '''
+        result = self._values.get("db_subnet_group_description")
+        assert result is not None, "Required property 'db_subnet_group_description' is missing"
+        return typing.cast(builtins.str, result)
+
+    @builtins.property
+    def subnet_ids(self) -> typing.List[builtins.str]:
+        '''The Amazon EC2 subnet IDs for the DB subnet group.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-neptune-dbsubnetgroup.html#cfn-neptune-dbsubnetgroup-subnetids
+        '''
+        result = self._values.get("subnet_ids")
+        assert result is not None, "Required property 'subnet_ids' is missing"
+        return typing.cast(typing.List[builtins.str], result)
+
+    @builtins.property
+    def db_subnet_group_name(self) -> typing.Optional[builtins.str]:
+        '''The name of the DB subnet group.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-neptune-dbsubnetgroup.html#cfn-neptune-dbsubnetgroup-dbsubnetgroupname
+        '''
+        result = self._values.get("db_subnet_group_name")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+        '''The tags that you want to attach to the DB subnet group.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-neptune-dbsubnetgroup.html#cfn-neptune-dbsubnetgroup-tags
+        '''
+        result = self._values.get("tags")
+        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+
+    def __eq__(self, rhs: typing.Any) -> builtins.bool:
+        return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+    def __ne__(self, rhs: typing.Any) -> builtins.bool:
+        return not (rhs == self)
+
+    def __repr__(self) -> str:
+        return "CfnDBSubnetGroupProps(%s)" % ", ".join(
+            k + "=" + repr(v) for k, v in self._values.items()
+        )
+
+
+@jsii.implements(_IInspectable_c2943556, _IEventSubscriptionRef_21b725e3, _ITaggableV2_4e6798f8)
 class CfnEventSubscription(
     _CfnResource_9df397a6,
     metaclass=jsii.JSIIMeta,
@@ -3733,7 +3019,8 @@ class CfnEventSubscription(
         subscription_name: typing.Optional[builtins.str] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
-        '''
+        '''Create a new ``AWS::Neptune::EventSubscription``.
+
         :param scope: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
         :param sns_topic_arn: The topic ARN of the event notification subscription.
@@ -3803,9 +3090,9 @@ class CfnEventSubscription(
 
     @builtins.property
     @jsii.member(jsii_name="eventSubscriptionRef")
-    def event_subscription_ref(self) -> EventSubscriptionReference:
+    def event_subscription_ref(self) -> _EventSubscriptionReference_8038a89c:
         '''A reference to a EventSubscription resource.'''
-        return typing.cast(EventSubscriptionReference, jsii.get(self, "eventSubscriptionRef"))
+        return typing.cast(_EventSubscriptionReference_8038a89c, jsii.get(self, "eventSubscriptionRef"))
 
     @builtins.property
     @jsii.member(jsii_name="snsTopicArn")
@@ -3907,6 +3194,176 @@ class CfnEventSubscription(
         jsii.set(self, "tags", value) # pyright: ignore[reportArgumentType]
 
 
+@jsii.data_type(
+    jsii_type="aws-cdk-lib.aws_neptune.CfnEventSubscriptionProps",
+    jsii_struct_bases=[],
+    name_mapping={
+        "sns_topic_arn": "snsTopicArn",
+        "enabled": "enabled",
+        "event_categories": "eventCategories",
+        "source_ids": "sourceIds",
+        "source_type": "sourceType",
+        "subscription_name": "subscriptionName",
+        "tags": "tags",
+    },
+)
+class CfnEventSubscriptionProps:
+    def __init__(
+        self,
+        *,
+        sns_topic_arn: builtins.str,
+        enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        event_categories: typing.Optional[typing.Sequence[builtins.str]] = None,
+        source_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
+        source_type: typing.Optional[builtins.str] = None,
+        subscription_name: typing.Optional[builtins.str] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+    ) -> None:
+        '''Properties for defining a ``CfnEventSubscription``.
+
+        :param sns_topic_arn: The topic ARN of the event notification subscription.
+        :param enabled: A Boolean value indicating if the subscription is enabled. True indicates the subscription is enabled. Default: - true
+        :param event_categories: A list of event categories for a SourceType that you want to subscribe to. You can see a list of the categories for a given SourceType in the Events topic in the Amazon Neptune User Guide or by using the DescribeEventCategories action.
+        :param source_ids: The list of identifiers of the event sources for which events will be returned. If not specified, then all sources are included in the response. An identifier must begin with a letter and must contain only ASCII letters, digits, and hyphens; it cannot end with a hyphen or contain two consecutive hyphens.
+        :param source_type: The source type for the event notification subscription.
+        :param subscription_name: The name of the subscription.
+        :param tags: An array of key-value pairs to apply to this resource.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-neptune-eventsubscription.html
+        :exampleMetadata: fixture=_generated
+
+        Example::
+
+            # The code below shows an example of how to instantiate this type.
+            # The values are placeholders you should change.
+            from aws_cdk import aws_neptune as neptune
+            
+            cfn_event_subscription_props = neptune.CfnEventSubscriptionProps(
+                sns_topic_arn="snsTopicArn",
+            
+                # the properties below are optional
+                enabled=False,
+                event_categories=["eventCategories"],
+                source_ids=["sourceIds"],
+                source_type="sourceType",
+                subscription_name="subscriptionName",
+                tags=[CfnTag(
+                    key="key",
+                    value="value"
+                )]
+            )
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__be12afbc64d35614ba28986fc60eff385d7080e57aabefaff50d73a28f572237)
+            check_type(argname="argument sns_topic_arn", value=sns_topic_arn, expected_type=type_hints["sns_topic_arn"])
+            check_type(argname="argument enabled", value=enabled, expected_type=type_hints["enabled"])
+            check_type(argname="argument event_categories", value=event_categories, expected_type=type_hints["event_categories"])
+            check_type(argname="argument source_ids", value=source_ids, expected_type=type_hints["source_ids"])
+            check_type(argname="argument source_type", value=source_type, expected_type=type_hints["source_type"])
+            check_type(argname="argument subscription_name", value=subscription_name, expected_type=type_hints["subscription_name"])
+            check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
+        self._values: typing.Dict[builtins.str, typing.Any] = {
+            "sns_topic_arn": sns_topic_arn,
+        }
+        if enabled is not None:
+            self._values["enabled"] = enabled
+        if event_categories is not None:
+            self._values["event_categories"] = event_categories
+        if source_ids is not None:
+            self._values["source_ids"] = source_ids
+        if source_type is not None:
+            self._values["source_type"] = source_type
+        if subscription_name is not None:
+            self._values["subscription_name"] = subscription_name
+        if tags is not None:
+            self._values["tags"] = tags
+
+    @builtins.property
+    def sns_topic_arn(self) -> builtins.str:
+        '''The topic ARN of the event notification subscription.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-neptune-eventsubscription.html#cfn-neptune-eventsubscription-snstopicarn
+        '''
+        result = self._values.get("sns_topic_arn")
+        assert result is not None, "Required property 'sns_topic_arn' is missing"
+        return typing.cast(builtins.str, result)
+
+    @builtins.property
+    def enabled(
+        self,
+    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        '''A Boolean value indicating if the subscription is enabled.
+
+        True indicates the subscription is enabled.
+
+        :default: - true
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-neptune-eventsubscription.html#cfn-neptune-eventsubscription-enabled
+        '''
+        result = self._values.get("enabled")
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+
+    @builtins.property
+    def event_categories(self) -> typing.Optional[typing.List[builtins.str]]:
+        '''A list of event categories for a SourceType that you want to subscribe to.
+
+        You can see a list of the categories for a given SourceType in the Events topic in the Amazon Neptune User Guide or by using the DescribeEventCategories action.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-neptune-eventsubscription.html#cfn-neptune-eventsubscription-eventcategories
+        '''
+        result = self._values.get("event_categories")
+        return typing.cast(typing.Optional[typing.List[builtins.str]], result)
+
+    @builtins.property
+    def source_ids(self) -> typing.Optional[typing.List[builtins.str]]:
+        '''The list of identifiers of the event sources for which events will be returned.
+
+        If not specified, then all sources are included in the response. An identifier must begin with a letter and must contain only ASCII letters, digits, and hyphens; it cannot end with a hyphen or contain two consecutive hyphens.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-neptune-eventsubscription.html#cfn-neptune-eventsubscription-sourceids
+        '''
+        result = self._values.get("source_ids")
+        return typing.cast(typing.Optional[typing.List[builtins.str]], result)
+
+    @builtins.property
+    def source_type(self) -> typing.Optional[builtins.str]:
+        '''The source type for the event notification subscription.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-neptune-eventsubscription.html#cfn-neptune-eventsubscription-sourcetype
+        '''
+        result = self._values.get("source_type")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def subscription_name(self) -> typing.Optional[builtins.str]:
+        '''The name of the subscription.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-neptune-eventsubscription.html#cfn-neptune-eventsubscription-subscriptionname
+        '''
+        result = self._values.get("subscription_name")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+        '''An array of key-value pairs to apply to this resource.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-neptune-eventsubscription.html#cfn-neptune-eventsubscription-tags
+        '''
+        result = self._values.get("tags")
+        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+
+    def __eq__(self, rhs: typing.Any) -> builtins.bool:
+        return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+    def __ne__(self, rhs: typing.Any) -> builtins.bool:
+        return not (rhs == self)
+
+    def __repr__(self) -> str:
+        return "CfnEventSubscriptionProps(%s)" % ", ".join(
+            k + "=" + repr(v) for k, v in self._values.items()
+        )
+
+
 __all__ = [
     "CfnDBCluster",
     "CfnDBClusterParameterGroup",
@@ -3920,157 +3377,9 @@ __all__ = [
     "CfnDBSubnetGroupProps",
     "CfnEventSubscription",
     "CfnEventSubscriptionProps",
-    "DBClusterParameterGroupReference",
-    "DBClusterReference",
-    "DBInstanceReference",
-    "DBParameterGroupReference",
-    "DBSubnetGroupReference",
-    "EventSubscriptionReference",
-    "IDBClusterParameterGroupRef",
-    "IDBClusterRef",
-    "IDBInstanceRef",
-    "IDBParameterGroupRef",
-    "IDBSubnetGroupRef",
-    "IEventSubscriptionRef",
 ]
 
 publication.publish()
-
-def _typecheckingstub__fc71d209d4a8e49edca84c75f5f3e453b94e1ceaf55ce979d9474afb156ed5da(
-    *,
-    description: builtins.str,
-    family: builtins.str,
-    parameters: typing.Any,
-    name: typing.Optional[builtins.str] = None,
-    tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-) -> None:
-    """Type checking stubs"""
-    pass
-
-def _typecheckingstub__88c4bf370341b0e8b113f0ee9d80be6e0b45183ba249011ead676b8c5334e65c(
-    *,
-    associated_roles: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDBCluster.DBClusterRoleProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
-    availability_zones: typing.Optional[typing.Sequence[builtins.str]] = None,
-    backup_retention_period: typing.Optional[jsii.Number] = None,
-    copy_tags_to_snapshot: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-    db_cluster_identifier: typing.Optional[builtins.str] = None,
-    db_cluster_parameter_group_name: typing.Optional[builtins.str] = None,
-    db_instance_parameter_group_name: typing.Optional[builtins.str] = None,
-    db_port: typing.Optional[jsii.Number] = None,
-    db_subnet_group_name: typing.Optional[builtins.str] = None,
-    deletion_protection: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-    enable_cloudwatch_logs_exports: typing.Optional[typing.Sequence[builtins.str]] = None,
-    engine_version: typing.Optional[builtins.str] = None,
-    iam_auth_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-    kms_key_id: typing.Optional[builtins.str] = None,
-    preferred_backup_window: typing.Optional[builtins.str] = None,
-    preferred_maintenance_window: typing.Optional[builtins.str] = None,
-    restore_to_time: typing.Optional[builtins.str] = None,
-    restore_type: typing.Optional[builtins.str] = None,
-    serverless_scaling_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDBCluster.ServerlessScalingConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-    snapshot_identifier: typing.Optional[builtins.str] = None,
-    source_db_cluster_identifier: typing.Optional[builtins.str] = None,
-    storage_encrypted: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-    tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-    use_latest_restorable_time: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-    vpc_security_group_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
-) -> None:
-    """Type checking stubs"""
-    pass
-
-def _typecheckingstub__f97fae676e40e6f9b786d435eb3f1534d54b6bfccf982c2ddf6802fc906bcceb(
-    *,
-    db_instance_class: builtins.str,
-    allow_major_version_upgrade: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-    auto_minor_version_upgrade: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-    availability_zone: typing.Optional[builtins.str] = None,
-    db_cluster_identifier: typing.Optional[builtins.str] = None,
-    db_instance_identifier: typing.Optional[builtins.str] = None,
-    db_parameter_group_name: typing.Optional[builtins.str] = None,
-    db_snapshot_identifier: typing.Optional[builtins.str] = None,
-    db_subnet_group_name: typing.Optional[builtins.str] = None,
-    preferred_maintenance_window: typing.Optional[builtins.str] = None,
-    publicly_accessible: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-    tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-) -> None:
-    """Type checking stubs"""
-    pass
-
-def _typecheckingstub__4528e974fd8cb347cabbbf84fd7018f743e7e93d03828031d597ff5a1cf213f6(
-    *,
-    description: builtins.str,
-    family: builtins.str,
-    parameters: typing.Any,
-    name: typing.Optional[builtins.str] = None,
-    tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-) -> None:
-    """Type checking stubs"""
-    pass
-
-def _typecheckingstub__82ebea6599fb4b541844cf24f7d771410b52af442a682c2ccec51eabebc01fda(
-    *,
-    db_subnet_group_description: builtins.str,
-    subnet_ids: typing.Sequence[builtins.str],
-    db_subnet_group_name: typing.Optional[builtins.str] = None,
-    tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-) -> None:
-    """Type checking stubs"""
-    pass
-
-def _typecheckingstub__be12afbc64d35614ba28986fc60eff385d7080e57aabefaff50d73a28f572237(
-    *,
-    sns_topic_arn: builtins.str,
-    enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-    event_categories: typing.Optional[typing.Sequence[builtins.str]] = None,
-    source_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
-    source_type: typing.Optional[builtins.str] = None,
-    subscription_name: typing.Optional[builtins.str] = None,
-    tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-) -> None:
-    """Type checking stubs"""
-    pass
-
-def _typecheckingstub__8ebef78f31eb571af412eeb17e7ecfa58bfb7045b510da8ebb0e9bba788e138b(
-    *,
-    db_cluster_parameter_group_name: builtins.str,
-) -> None:
-    """Type checking stubs"""
-    pass
-
-def _typecheckingstub__b066b2286796bb68c64809c91d1195a279283ea12f7ffc702c9fcef8e43a399b(
-    *,
-    db_cluster_identifier: builtins.str,
-) -> None:
-    """Type checking stubs"""
-    pass
-
-def _typecheckingstub__c724bec4f6fab8784103eec712a063c32f117783bab6d830a4c2b1eb3032e207(
-    *,
-    db_instance_identifier: builtins.str,
-) -> None:
-    """Type checking stubs"""
-    pass
-
-def _typecheckingstub__ca1f2b8cb9a0237e5a5c6e9eeb88f9404f9c27826ffc95008b4ec655f739ef22(
-    *,
-    db_parameter_group_name: builtins.str,
-) -> None:
-    """Type checking stubs"""
-    pass
-
-def _typecheckingstub__11cc2e22e338c9dcf751a93d0dfba7f8355a95ed3b014cdbdf09696ceabfdd7e(
-    *,
-    db_subnet_group_name: builtins.str,
-) -> None:
-    """Type checking stubs"""
-    pass
-
-def _typecheckingstub__82b5674c3fe56fb8b208f294a807c06b9f34ac1ed903e1591540674a53b02cdb(
-    *,
-    subscription_name: builtins.str,
-) -> None:
-    """Type checking stubs"""
-    pass
 
 def _typecheckingstub__c02a97dc4524b23c97bacdafe22108ee784060ff42aa0df48684293836e87f79(
     scope: _constructs_77d1e7e8.Construct,
@@ -4338,6 +3647,48 @@ def _typecheckingstub__c29faf1f531f72a61ec9694e6feb38a23abca37795aed924c4b84c9c5
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__fc71d209d4a8e49edca84c75f5f3e453b94e1ceaf55ce979d9474afb156ed5da(
+    *,
+    description: builtins.str,
+    family: builtins.str,
+    parameters: typing.Any,
+    name: typing.Optional[builtins.str] = None,
+    tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__88c4bf370341b0e8b113f0ee9d80be6e0b45183ba249011ead676b8c5334e65c(
+    *,
+    associated_roles: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDBCluster.DBClusterRoleProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+    availability_zones: typing.Optional[typing.Sequence[builtins.str]] = None,
+    backup_retention_period: typing.Optional[jsii.Number] = None,
+    copy_tags_to_snapshot: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+    db_cluster_identifier: typing.Optional[builtins.str] = None,
+    db_cluster_parameter_group_name: typing.Optional[builtins.str] = None,
+    db_instance_parameter_group_name: typing.Optional[builtins.str] = None,
+    db_port: typing.Optional[jsii.Number] = None,
+    db_subnet_group_name: typing.Optional[builtins.str] = None,
+    deletion_protection: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+    enable_cloudwatch_logs_exports: typing.Optional[typing.Sequence[builtins.str]] = None,
+    engine_version: typing.Optional[builtins.str] = None,
+    iam_auth_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+    kms_key_id: typing.Optional[builtins.str] = None,
+    preferred_backup_window: typing.Optional[builtins.str] = None,
+    preferred_maintenance_window: typing.Optional[builtins.str] = None,
+    restore_to_time: typing.Optional[builtins.str] = None,
+    restore_type: typing.Optional[builtins.str] = None,
+    serverless_scaling_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDBCluster.ServerlessScalingConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    snapshot_identifier: typing.Optional[builtins.str] = None,
+    source_db_cluster_identifier: typing.Optional[builtins.str] = None,
+    storage_encrypted: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+    tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+    use_latest_restorable_time: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+    vpc_security_group_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__018494df8760995ee1cfd5d6678e28db8bf415a10efea4384de0e660a013e528(
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
@@ -4442,6 +3793,24 @@ def _typecheckingstub__804ae68d35a8f4acf9b250c8866d8f27b0ea5aaabf0c9991c5e12b4c5
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__f97fae676e40e6f9b786d435eb3f1534d54b6bfccf982c2ddf6802fc906bcceb(
+    *,
+    db_instance_class: builtins.str,
+    allow_major_version_upgrade: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+    auto_minor_version_upgrade: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+    availability_zone: typing.Optional[builtins.str] = None,
+    db_cluster_identifier: typing.Optional[builtins.str] = None,
+    db_instance_identifier: typing.Optional[builtins.str] = None,
+    db_parameter_group_name: typing.Optional[builtins.str] = None,
+    db_snapshot_identifier: typing.Optional[builtins.str] = None,
+    db_subnet_group_name: typing.Optional[builtins.str] = None,
+    preferred_maintenance_window: typing.Optional[builtins.str] = None,
+    publicly_accessible: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+    tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__08418417856fd89567d053856e9b74130ec7c80562c5be8987ca378a98f7eb62(
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
@@ -4497,6 +3866,17 @@ def _typecheckingstub__4565e9cd6c53cc12b47f6133e2edbd92122f0e138c69b79efef04ecdb
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__4528e974fd8cb347cabbbf84fd7018f743e7e93d03828031d597ff5a1cf213f6(
+    *,
+    description: builtins.str,
+    family: builtins.str,
+    parameters: typing.Any,
+    name: typing.Optional[builtins.str] = None,
+    tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__4de94ec08febbdf5429a4f954610793e1cf3af238fc669508af03dd121df91ce(
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
@@ -4541,6 +3921,16 @@ def _typecheckingstub__38ff104a8c675b3756624b7bf857facb64f11d8843555f0c34fdebfc3
 
 def _typecheckingstub__47e524d624c00c2dc0cd8a58308fa7a64cba3e3ed0a485d442c4bf7b4bed23cd(
     value: typing.Optional[typing.List[_CfnTag_f6864754]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__82ebea6599fb4b541844cf24f7d771410b52af442a682c2ccec51eabebc01fda(
+    *,
+    db_subnet_group_description: builtins.str,
+    subnet_ids: typing.Sequence[builtins.str],
+    db_subnet_group_name: typing.Optional[builtins.str] = None,
+    tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -4614,5 +4004,15 @@ def _typecheckingstub__1a2214e33715f7b8a810325132d1442eca1b2f768a72caf6834425035
     """Type checking stubs"""
     pass
 
-for cls in [IDBClusterParameterGroupRef, IDBClusterRef, IDBInstanceRef, IDBParameterGroupRef, IDBSubnetGroupRef, IEventSubscriptionRef]:
-    typing.cast(typing.Any, cls).__protocol_attrs__ = typing.cast(typing.Any, cls).__protocol_attrs__ - set(['__jsii_proxy_class__', '__jsii_type__'])
+def _typecheckingstub__be12afbc64d35614ba28986fc60eff385d7080e57aabefaff50d73a28f572237(
+    *,
+    sns_topic_arn: builtins.str,
+    enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+    event_categories: typing.Optional[typing.Sequence[builtins.str]] = None,
+    source_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
+    source_type: typing.Optional[builtins.str] = None,
+    subscription_name: typing.Optional[builtins.str] = None,
+    tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass

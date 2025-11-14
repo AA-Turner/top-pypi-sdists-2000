@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: slack_sdk
-Version: 3.37.0
+Version: 3.38.0
 Summary: The Slack API Platform SDK for Python
 Home-page: https://github.com/slackapi/python-slack-sdk
 Author: Slack Technologies, LLC
@@ -23,6 +23,7 @@ Classifier: Programming Language :: Python :: 3.10
 Classifier: Programming Language :: Python :: 3.11
 Classifier: Programming Language :: Python :: 3.12
 Classifier: Programming Language :: Python :: 3.13
+Classifier: Programming Language :: Python :: 3.14
 Classifier: Programming Language :: Python :: Implementation :: CPython
 Classifier: Programming Language :: Python :: Implementation :: PyPy
 Requires-Python: >=3.7
@@ -40,8 +41,8 @@ Dynamic: license-file
 <h1 align="center">Python Slack SDK</h1>
 
 <p align="center">
-    <a href="https://github.com/slackapi/python-slack-sdk/actions/workflows/ci-build.yml">
-        <img alt="CI Build" src="https://img.shields.io/github/actions/workflow/status/slackapi/python-slack-sdk/ci-build.yml"></a>
+    <a href="https://github.com/slackapi/python-slack-sdk/actions/workflows/tests.yml">
+        <img alt="Tests" src="https://img.shields.io/github/actions/workflow/status/slackapi/python-slack-sdk/tests.yml"></a>
     <a href="https://codecov.io/gh/slackapi/python-slack-sdk">
         <img alt="Codecov" src="https://img.shields.io/codecov/c/gh/slackapi/python-slack-sdk"></a>
     <a href="https://pepy.tech/project/slack-sdk">
@@ -341,3 +342,4 @@ helpful and collaborative way.
 [slack-community]: https://slackcommunity.com/
 [files_upload_v2]: https://github.com/slackapi/python-slack-sdk/releases/tag/v3.19.0
 [aiohttp]: https://aiohttp.readthedocs.io/
+

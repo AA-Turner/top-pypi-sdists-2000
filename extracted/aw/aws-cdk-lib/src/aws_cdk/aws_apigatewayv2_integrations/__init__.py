@@ -52,6 +52,42 @@ http_api.add_routes(
 )
 ```
 
+#### Lambda Integration Permissions
+
+By default, creating a `HttpLambdaIntegration` will add a permission for API Gateway to invoke your AWS Lambda function, scoped to the specific route which uses the integration.
+
+If you reuse the same AWS Lambda function for many integrations, the AWS Lambda permission policy size can be exceeded by adding a separate policy statement for each route which invokes the AWS Lambda function. To avoid this, you can opt to scope permissions to any route on the API by setting `scopePermissionToRoute` to `false`, and this will ensure only a single policy statement is added to the AWS Lambda permission policy.
+
+```python
+from aws_cdk.aws_apigatewayv2_integrations import HttpLambdaIntegration
+
+# books_default_fn: lambda.Function
+
+
+http_api = apigwv2.HttpApi(self, "HttpApi")
+
+get_books_integration = HttpLambdaIntegration("GetBooksIntegration", books_default_fn,
+    scope_permission_to_route=False
+)
+create_book_integration = HttpLambdaIntegration("CreateBookIntegration", books_default_fn,
+    scope_permission_to_route=False
+)
+
+http_api.add_routes(
+    path="/books",
+    methods=[apigwv2.HttpMethod.GET],
+    integration=get_books_integration
+)
+
+http_api.add_routes(
+    path="/books",
+    methods=[apigwv2.HttpMethod.POST],
+    integration=create_book_integration
+)
+```
+
+In the above example, a single permission is added, shared by both `getBookIntegration` and `createBookIntegration`.
+
 ### HTTP Proxy
 
 HTTP Proxy integrations enables connecting an HTTP API route to a publicly routable HTTP endpoint. When a client
@@ -656,18 +692,25 @@ class HttpLambdaIntegration(
 
     Example::
 
-        from aws_cdk.aws_apigatewayv2_integrations import HttpLambdaIntegration
+        from aws_cdk.aws_apigatewayv2_integrations import HttpUrlIntegration, HttpLambdaIntegration
         
-        # books_default_fn: lambda.Function
+        # book_store_default_fn: lambda.Function
         
-        books_integration = HttpLambdaIntegration("BooksIntegration", books_default_fn)
+        
+        get_books_integration = HttpUrlIntegration("GetBooksIntegration", "https://get-books-proxy.example.com")
+        book_store_default_integration = HttpLambdaIntegration("BooksIntegration", book_store_default_fn)
         
         http_api = apigwv2.HttpApi(self, "HttpApi")
         
         http_api.add_routes(
             path="/books",
             methods=[apigwv2.HttpMethod.GET],
-            integration=books_integration
+            integration=get_books_integration
+        )
+        http_api.add_routes(
+            path="/books",
+            methods=[apigwv2.HttpMethod.ANY],
+            integration=book_store_default_integration
         )
     '''
 
@@ -678,6 +721,7 @@ class HttpLambdaIntegration(
         *,
         parameter_mapping: typing.Optional[_ParameterMapping_c11a48e0] = None,
         payload_format_version: typing.Optional[_PayloadFormatVersion_a469cb03] = None,
+        scope_permission_to_route: typing.Optional[builtins.bool] = None,
         timeout: typing.Optional[_Duration_4839e8c3] = None,
     ) -> None:
         '''
@@ -685,6 +729,7 @@ class HttpLambdaIntegration(
         :param handler: the Lambda handler to integrate with.
         :param parameter_mapping: Specifies how to transform HTTP requests before sending them to the backend. Default: undefined requests are sent to the backend unmodified
         :param payload_format_version: Version of the payload sent to the lambda handler. Default: PayloadFormatVersion.VERSION_2_0
+        :param scope_permission_to_route: Scope the permission for invoking the AWS Lambda down to the specific route associated with this integration. If this is set to ``false``, the permission will allow invoking the AWS Lambda from any route. This is useful for reducing the AWS Lambda policy size for cases where the same AWS Lambda function is reused for many integrations. Default: true
         :param timeout: The maximum amount of time an integration will run before it returns without a response. Must be between 50 milliseconds and 29 seconds. Default: Duration.seconds(29)
         '''
         if __debug__:
@@ -694,6 +739,7 @@ class HttpLambdaIntegration(
         props = HttpLambdaIntegrationProps(
             parameter_mapping=parameter_mapping,
             payload_format_version=payload_format_version,
+            scope_permission_to_route=scope_permission_to_route,
             timeout=timeout,
         )
 
@@ -745,6 +791,7 @@ class HttpLambdaIntegration(
     name_mapping={
         "parameter_mapping": "parameterMapping",
         "payload_format_version": "payloadFormatVersion",
+        "scope_permission_to_route": "scopePermissionToRoute",
         "timeout": "timeout",
     },
 )
@@ -754,43 +801,59 @@ class HttpLambdaIntegrationProps:
         *,
         parameter_mapping: typing.Optional[_ParameterMapping_c11a48e0] = None,
         payload_format_version: typing.Optional[_PayloadFormatVersion_a469cb03] = None,
+        scope_permission_to_route: typing.Optional[builtins.bool] = None,
         timeout: typing.Optional[_Duration_4839e8c3] = None,
     ) -> None:
         '''Lambda Proxy integration properties.
 
         :param parameter_mapping: Specifies how to transform HTTP requests before sending them to the backend. Default: undefined requests are sent to the backend unmodified
         :param payload_format_version: Version of the payload sent to the lambda handler. Default: PayloadFormatVersion.VERSION_2_0
+        :param scope_permission_to_route: Scope the permission for invoking the AWS Lambda down to the specific route associated with this integration. If this is set to ``false``, the permission will allow invoking the AWS Lambda from any route. This is useful for reducing the AWS Lambda policy size for cases where the same AWS Lambda function is reused for many integrations. Default: true
         :param timeout: The maximum amount of time an integration will run before it returns without a response. Must be between 50 milliseconds and 29 seconds. Default: Duration.seconds(29)
 
-        :exampleMetadata: fixture=_generated
+        :exampleMetadata: infused
 
         Example::
 
-            # The code below shows an example of how to instantiate this type.
-            # The values are placeholders you should change.
-            import aws_cdk as cdk
-            from aws_cdk import aws_apigatewayv2 as apigatewayv2
-            from aws_cdk import aws_apigatewayv2_integrations as apigatewayv2_integrations
+            from aws_cdk.aws_apigatewayv2_integrations import HttpLambdaIntegration
             
-            # parameter_mapping: apigatewayv2.ParameterMapping
-            # payload_format_version: apigatewayv2.PayloadFormatVersion
+            # books_default_fn: lambda.Function
             
-            http_lambda_integration_props = apigatewayv2_integrations.HttpLambdaIntegrationProps(
-                parameter_mapping=parameter_mapping,
-                payload_format_version=payload_format_version,
-                timeout=cdk.Duration.minutes(30)
+            
+            http_api = apigwv2.HttpApi(self, "HttpApi")
+            
+            get_books_integration = HttpLambdaIntegration("GetBooksIntegration", books_default_fn,
+                scope_permission_to_route=False
+            )
+            create_book_integration = HttpLambdaIntegration("CreateBookIntegration", books_default_fn,
+                scope_permission_to_route=False
+            )
+            
+            http_api.add_routes(
+                path="/books",
+                methods=[apigwv2.HttpMethod.GET],
+                integration=get_books_integration
+            )
+            
+            http_api.add_routes(
+                path="/books",
+                methods=[apigwv2.HttpMethod.POST],
+                integration=create_book_integration
             )
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__7494501e4bf220385c831472b8042a561df79a565c497e77d41cfc10427bce41)
             check_type(argname="argument parameter_mapping", value=parameter_mapping, expected_type=type_hints["parameter_mapping"])
             check_type(argname="argument payload_format_version", value=payload_format_version, expected_type=type_hints["payload_format_version"])
+            check_type(argname="argument scope_permission_to_route", value=scope_permission_to_route, expected_type=type_hints["scope_permission_to_route"])
             check_type(argname="argument timeout", value=timeout, expected_type=type_hints["timeout"])
         self._values: typing.Dict[builtins.str, typing.Any] = {}
         if parameter_mapping is not None:
             self._values["parameter_mapping"] = parameter_mapping
         if payload_format_version is not None:
             self._values["payload_format_version"] = payload_format_version
+        if scope_permission_to_route is not None:
+            self._values["scope_permission_to_route"] = scope_permission_to_route
         if timeout is not None:
             self._values["timeout"] = timeout
 
@@ -815,6 +878,19 @@ class HttpLambdaIntegrationProps:
         '''
         result = self._values.get("payload_format_version")
         return typing.cast(typing.Optional[_PayloadFormatVersion_a469cb03], result)
+
+    @builtins.property
+    def scope_permission_to_route(self) -> typing.Optional[builtins.bool]:
+        '''Scope the permission for invoking the AWS Lambda down to the specific route associated with this integration.
+
+        If this is set to ``false``, the permission will allow invoking the AWS Lambda
+        from any route. This is useful for reducing the AWS Lambda policy size
+        for cases where the same AWS Lambda function is reused for many integrations.
+
+        :default: true
+        '''
+        result = self._values.get("scope_permission_to_route")
+        return typing.cast(typing.Optional[builtins.bool], result)
 
     @builtins.property
     def timeout(self) -> typing.Optional[_Duration_4839e8c3]:
@@ -2940,6 +3016,7 @@ def _typecheckingstub__186fcdf4e12ad29dbad06f4ae566e815dd0e4855b4b9ffd6626f945f2
     *,
     parameter_mapping: typing.Optional[_ParameterMapping_c11a48e0] = None,
     payload_format_version: typing.Optional[_PayloadFormatVersion_a469cb03] = None,
+    scope_permission_to_route: typing.Optional[builtins.bool] = None,
     timeout: typing.Optional[_Duration_4839e8c3] = None,
 ) -> None:
     """Type checking stubs"""
@@ -2949,6 +3026,7 @@ def _typecheckingstub__7494501e4bf220385c831472b8042a561df79a565c497e77d41cfc104
     *,
     parameter_mapping: typing.Optional[_ParameterMapping_c11a48e0] = None,
     payload_format_version: typing.Optional[_PayloadFormatVersion_a469cb03] = None,
+    scope_permission_to_route: typing.Optional[builtins.bool] = None,
     timeout: typing.Optional[_Duration_4839e8c3] = None,
 ) -> None:
     """Type checking stubs"""

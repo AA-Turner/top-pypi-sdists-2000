@@ -60,225 +60,16 @@ from .._jsii import *
 import constructs as _constructs_77d1e7e8
 from .. import (
     CfnResource as _CfnResource_9df397a6,
-    IEnvironmentAware as _IEnvironmentAware_a408b00d,
     IInspectable as _IInspectable_c2943556,
     IResolvable as _IResolvable_da3f097b,
     TreeInspector as _TreeInspector_488e0dd5,
 )
-
-
-@jsii.data_type(
-    jsii_type="aws-cdk-lib.alexa_ask.CfnSkillProps",
-    jsii_struct_bases=[],
-    name_mapping={
-        "authentication_configuration": "authenticationConfiguration",
-        "skill_package": "skillPackage",
-        "vendor_id": "vendorId",
-    },
+from ..interfaces.alexa_ask import (
+    ISkillRef as _ISkillRef_7086c21a, SkillReference as _SkillReference_eb5d54fa
 )
-class CfnSkillProps:
-    def __init__(
-        self,
-        *,
-        authentication_configuration: typing.Union[_IResolvable_da3f097b, typing.Union["CfnSkill.AuthenticationConfigurationProperty", typing.Dict[builtins.str, typing.Any]]],
-        skill_package: typing.Union[_IResolvable_da3f097b, typing.Union["CfnSkill.SkillPackageProperty", typing.Dict[builtins.str, typing.Any]]],
-        vendor_id: builtins.str,
-    ) -> None:
-        '''Properties for defining a ``CfnSkill``.
-
-        :param authentication_configuration: Login with Amazon (LWA) configuration used to authenticate with the Alexa service. Only Login with Amazon clients created through the are supported. The client ID, client secret, and refresh token are required.
-        :param skill_package: Configuration for the skill package that contains the components of the Alexa skill. Skill packages are retrieved from an Amazon S3 bucket and key and used to create and update the skill. For more information about the skill package format, see the .
-        :param vendor_id: The vendor ID associated with the Amazon developer account that will host the skill. Details for retrieving the vendor ID are in . The provided LWA credentials must be linked to the developer account associated with this vendor ID.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ask-skill.html
-        :exampleMetadata: fixture=_generated
-
-        Example::
-
-            # The code below shows an example of how to instantiate this type.
-            # The values are placeholders you should change.
-            from aws_cdk import alexa_ask
-            
-            # manifest: Any
-            
-            cfn_skill_props = alexa_ask.CfnSkillProps(
-                authentication_configuration=alexa_ask.CfnSkill.AuthenticationConfigurationProperty(
-                    client_id="clientId",
-                    client_secret="clientSecret",
-                    refresh_token="refreshToken"
-                ),
-                skill_package=alexa_ask.CfnSkill.SkillPackageProperty(
-                    s3_bucket="s3Bucket",
-                    s3_key="s3Key",
-            
-                    # the properties below are optional
-                    overrides=alexa_ask.CfnSkill.OverridesProperty(
-                        manifest=manifest
-                    ),
-                    s3_bucket_role="s3BucketRole",
-                    s3_object_version="s3ObjectVersion"
-                ),
-                vendor_id="vendorId"
-            )
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__18a03c0ba6c20d17a037e17f3d48ad3d5175e42d1b4d42294067c2c25cdf6e08)
-            check_type(argname="argument authentication_configuration", value=authentication_configuration, expected_type=type_hints["authentication_configuration"])
-            check_type(argname="argument skill_package", value=skill_package, expected_type=type_hints["skill_package"])
-            check_type(argname="argument vendor_id", value=vendor_id, expected_type=type_hints["vendor_id"])
-        self._values: typing.Dict[builtins.str, typing.Any] = {
-            "authentication_configuration": authentication_configuration,
-            "skill_package": skill_package,
-            "vendor_id": vendor_id,
-        }
-
-    @builtins.property
-    def authentication_configuration(
-        self,
-    ) -> typing.Union[_IResolvable_da3f097b, "CfnSkill.AuthenticationConfigurationProperty"]:
-        '''Login with Amazon (LWA) configuration used to authenticate with the Alexa service.
-
-        Only Login with Amazon clients created through the  are supported. The client ID, client secret, and refresh token are required.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ask-skill.html#cfn-ask-skill-authenticationconfiguration
-        '''
-        result = self._values.get("authentication_configuration")
-        assert result is not None, "Required property 'authentication_configuration' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnSkill.AuthenticationConfigurationProperty"], result)
-
-    @builtins.property
-    def skill_package(
-        self,
-    ) -> typing.Union[_IResolvable_da3f097b, "CfnSkill.SkillPackageProperty"]:
-        '''Configuration for the skill package that contains the components of the Alexa skill.
-
-        Skill packages are retrieved from an Amazon S3 bucket and key and used to create and update the skill. For more information about the skill package format, see the  .
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ask-skill.html#cfn-ask-skill-skillpackage
-        '''
-        result = self._values.get("skill_package")
-        assert result is not None, "Required property 'skill_package' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnSkill.SkillPackageProperty"], result)
-
-    @builtins.property
-    def vendor_id(self) -> builtins.str:
-        '''The vendor ID associated with the Amazon developer account that will host the skill.
-
-        Details for retrieving the vendor ID are in  . The provided LWA credentials must be linked to the developer account associated with this vendor ID.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ask-skill.html#cfn-ask-skill-vendorid
-        '''
-        result = self._values.get("vendor_id")
-        assert result is not None, "Required property 'vendor_id' is missing"
-        return typing.cast(builtins.str, result)
-
-    def __eq__(self, rhs: typing.Any) -> builtins.bool:
-        return isinstance(rhs, self.__class__) and rhs._values == self._values
-
-    def __ne__(self, rhs: typing.Any) -> builtins.bool:
-        return not (rhs == self)
-
-    def __repr__(self) -> str:
-        return "CfnSkillProps(%s)" % ", ".join(
-            k + "=" + repr(v) for k, v in self._values.items()
-        )
 
 
-@jsii.interface(jsii_type="aws-cdk-lib.alexa_ask.ISkillRef")
-class ISkillRef(
-    _constructs_77d1e7e8.IConstruct,
-    _IEnvironmentAware_a408b00d,
-    typing_extensions.Protocol,
-):
-    '''(experimental) Indicates that this resource can be referenced as a Skill.
-
-    :stability: experimental
-    '''
-
-    @builtins.property
-    @jsii.member(jsii_name="skillRef")
-    def skill_ref(self) -> "SkillReference":
-        '''(experimental) A reference to a Skill resource.
-
-        :stability: experimental
-        '''
-        ...
-
-
-class _ISkillRefProxy(
-    jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
-    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
-):
-    '''(experimental) Indicates that this resource can be referenced as a Skill.
-
-    :stability: experimental
-    '''
-
-    __jsii_type__: typing.ClassVar[str] = "aws-cdk-lib.alexa_ask.ISkillRef"
-
-    @builtins.property
-    @jsii.member(jsii_name="skillRef")
-    def skill_ref(self) -> "SkillReference":
-        '''(experimental) A reference to a Skill resource.
-
-        :stability: experimental
-        '''
-        return typing.cast("SkillReference", jsii.get(self, "skillRef"))
-
-# Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
-typing.cast(typing.Any, ISkillRef).__jsii_proxy_class__ = lambda : _ISkillRefProxy
-
-
-@jsii.data_type(
-    jsii_type="aws-cdk-lib.alexa_ask.SkillReference",
-    jsii_struct_bases=[],
-    name_mapping={"skill_id": "skillId"},
-)
-class SkillReference:
-    def __init__(self, *, skill_id: builtins.str) -> None:
-        '''A reference to a Skill resource.
-
-        :param skill_id: The Id of the Skill resource.
-
-        :exampleMetadata: fixture=_generated
-
-        Example::
-
-            # The code below shows an example of how to instantiate this type.
-            # The values are placeholders you should change.
-            from aws_cdk import alexa_ask
-            
-            skill_reference = alexa_ask.SkillReference(
-                skill_id="skillId"
-            )
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__dc2c2f43a92652a99883db7846c4eb3f2de1d265c2042c99d72ba2a9e42c243b)
-            check_type(argname="argument skill_id", value=skill_id, expected_type=type_hints["skill_id"])
-        self._values: typing.Dict[builtins.str, typing.Any] = {
-            "skill_id": skill_id,
-        }
-
-    @builtins.property
-    def skill_id(self) -> builtins.str:
-        '''The Id of the Skill resource.'''
-        result = self._values.get("skill_id")
-        assert result is not None, "Required property 'skill_id' is missing"
-        return typing.cast(builtins.str, result)
-
-    def __eq__(self, rhs: typing.Any) -> builtins.bool:
-        return isinstance(rhs, self.__class__) and rhs._values == self._values
-
-    def __ne__(self, rhs: typing.Any) -> builtins.bool:
-        return not (rhs == self)
-
-    def __repr__(self) -> str:
-        return "SkillReference(%s)" % ", ".join(
-            k + "=" + repr(v) for k, v in self._values.items()
-        )
-
-
-@jsii.implements(_IInspectable_c2943556, ISkillRef)
+@jsii.implements(_IInspectable_c2943556, _ISkillRef_7086c21a)
 class CfnSkill(
     _CfnResource_9df397a6,
     metaclass=jsii.JSIIMeta,
@@ -330,7 +121,8 @@ class CfnSkill(
         skill_package: typing.Union[_IResolvable_da3f097b, typing.Union["CfnSkill.SkillPackageProperty", typing.Dict[builtins.str, typing.Any]]],
         vendor_id: builtins.str,
     ) -> None:
-        '''
+        '''Create a new ``Alexa::ASK::Skill``.
+
         :param scope: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
         :param authentication_configuration: Login with Amazon (LWA) configuration used to authenticate with the Alexa service. Only Login with Amazon clients created through the are supported. The client ID, client secret, and refresh token are required.
@@ -394,9 +186,9 @@ class CfnSkill(
 
     @builtins.property
     @jsii.member(jsii_name="skillRef")
-    def skill_ref(self) -> SkillReference:
+    def skill_ref(self) -> _SkillReference_eb5d54fa:
         '''A reference to a Skill resource.'''
-        return typing.cast(SkillReference, jsii.get(self, "skillRef"))
+        return typing.cast(_SkillReference_eb5d54fa, jsii.get(self, "skillRef"))
 
     @builtins.property
     @jsii.member(jsii_name="authenticationConfiguration")
@@ -739,30 +531,129 @@ class CfnSkill(
             )
 
 
+@jsii.data_type(
+    jsii_type="aws-cdk-lib.alexa_ask.CfnSkillProps",
+    jsii_struct_bases=[],
+    name_mapping={
+        "authentication_configuration": "authenticationConfiguration",
+        "skill_package": "skillPackage",
+        "vendor_id": "vendorId",
+    },
+)
+class CfnSkillProps:
+    def __init__(
+        self,
+        *,
+        authentication_configuration: typing.Union[_IResolvable_da3f097b, typing.Union[CfnSkill.AuthenticationConfigurationProperty, typing.Dict[builtins.str, typing.Any]]],
+        skill_package: typing.Union[_IResolvable_da3f097b, typing.Union[CfnSkill.SkillPackageProperty, typing.Dict[builtins.str, typing.Any]]],
+        vendor_id: builtins.str,
+    ) -> None:
+        '''Properties for defining a ``CfnSkill``.
+
+        :param authentication_configuration: Login with Amazon (LWA) configuration used to authenticate with the Alexa service. Only Login with Amazon clients created through the are supported. The client ID, client secret, and refresh token are required.
+        :param skill_package: Configuration for the skill package that contains the components of the Alexa skill. Skill packages are retrieved from an Amazon S3 bucket and key and used to create and update the skill. For more information about the skill package format, see the .
+        :param vendor_id: The vendor ID associated with the Amazon developer account that will host the skill. Details for retrieving the vendor ID are in . The provided LWA credentials must be linked to the developer account associated with this vendor ID.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ask-skill.html
+        :exampleMetadata: fixture=_generated
+
+        Example::
+
+            # The code below shows an example of how to instantiate this type.
+            # The values are placeholders you should change.
+            from aws_cdk import alexa_ask
+            
+            # manifest: Any
+            
+            cfn_skill_props = alexa_ask.CfnSkillProps(
+                authentication_configuration=alexa_ask.CfnSkill.AuthenticationConfigurationProperty(
+                    client_id="clientId",
+                    client_secret="clientSecret",
+                    refresh_token="refreshToken"
+                ),
+                skill_package=alexa_ask.CfnSkill.SkillPackageProperty(
+                    s3_bucket="s3Bucket",
+                    s3_key="s3Key",
+            
+                    # the properties below are optional
+                    overrides=alexa_ask.CfnSkill.OverridesProperty(
+                        manifest=manifest
+                    ),
+                    s3_bucket_role="s3BucketRole",
+                    s3_object_version="s3ObjectVersion"
+                ),
+                vendor_id="vendorId"
+            )
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__18a03c0ba6c20d17a037e17f3d48ad3d5175e42d1b4d42294067c2c25cdf6e08)
+            check_type(argname="argument authentication_configuration", value=authentication_configuration, expected_type=type_hints["authentication_configuration"])
+            check_type(argname="argument skill_package", value=skill_package, expected_type=type_hints["skill_package"])
+            check_type(argname="argument vendor_id", value=vendor_id, expected_type=type_hints["vendor_id"])
+        self._values: typing.Dict[builtins.str, typing.Any] = {
+            "authentication_configuration": authentication_configuration,
+            "skill_package": skill_package,
+            "vendor_id": vendor_id,
+        }
+
+    @builtins.property
+    def authentication_configuration(
+        self,
+    ) -> typing.Union[_IResolvable_da3f097b, CfnSkill.AuthenticationConfigurationProperty]:
+        '''Login with Amazon (LWA) configuration used to authenticate with the Alexa service.
+
+        Only Login with Amazon clients created through the  are supported. The client ID, client secret, and refresh token are required.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ask-skill.html#cfn-ask-skill-authenticationconfiguration
+        '''
+        result = self._values.get("authentication_configuration")
+        assert result is not None, "Required property 'authentication_configuration' is missing"
+        return typing.cast(typing.Union[_IResolvable_da3f097b, CfnSkill.AuthenticationConfigurationProperty], result)
+
+    @builtins.property
+    def skill_package(
+        self,
+    ) -> typing.Union[_IResolvable_da3f097b, CfnSkill.SkillPackageProperty]:
+        '''Configuration for the skill package that contains the components of the Alexa skill.
+
+        Skill packages are retrieved from an Amazon S3 bucket and key and used to create and update the skill. For more information about the skill package format, see the  .
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ask-skill.html#cfn-ask-skill-skillpackage
+        '''
+        result = self._values.get("skill_package")
+        assert result is not None, "Required property 'skill_package' is missing"
+        return typing.cast(typing.Union[_IResolvable_da3f097b, CfnSkill.SkillPackageProperty], result)
+
+    @builtins.property
+    def vendor_id(self) -> builtins.str:
+        '''The vendor ID associated with the Amazon developer account that will host the skill.
+
+        Details for retrieving the vendor ID are in  . The provided LWA credentials must be linked to the developer account associated with this vendor ID.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ask-skill.html#cfn-ask-skill-vendorid
+        '''
+        result = self._values.get("vendor_id")
+        assert result is not None, "Required property 'vendor_id' is missing"
+        return typing.cast(builtins.str, result)
+
+    def __eq__(self, rhs: typing.Any) -> builtins.bool:
+        return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+    def __ne__(self, rhs: typing.Any) -> builtins.bool:
+        return not (rhs == self)
+
+    def __repr__(self) -> str:
+        return "CfnSkillProps(%s)" % ", ".join(
+            k + "=" + repr(v) for k, v in self._values.items()
+        )
+
+
 __all__ = [
     "CfnSkill",
     "CfnSkillProps",
-    "ISkillRef",
-    "SkillReference",
 ]
 
 publication.publish()
-
-def _typecheckingstub__18a03c0ba6c20d17a037e17f3d48ad3d5175e42d1b4d42294067c2c25cdf6e08(
-    *,
-    authentication_configuration: typing.Union[_IResolvable_da3f097b, typing.Union[CfnSkill.AuthenticationConfigurationProperty, typing.Dict[builtins.str, typing.Any]]],
-    skill_package: typing.Union[_IResolvable_da3f097b, typing.Union[CfnSkill.SkillPackageProperty, typing.Dict[builtins.str, typing.Any]]],
-    vendor_id: builtins.str,
-) -> None:
-    """Type checking stubs"""
-    pass
-
-def _typecheckingstub__dc2c2f43a92652a99883db7846c4eb3f2de1d265c2042c99d72ba2a9e42c243b(
-    *,
-    skill_id: builtins.str,
-) -> None:
-    """Type checking stubs"""
-    pass
 
 def _typecheckingstub__0d78aeecda8ab7b4c5c33f0fcee213f02875f3e3b528db0fdd0278c4f3e29d0c(
     scope: _constructs_77d1e7e8.Construct,
@@ -832,5 +723,11 @@ def _typecheckingstub__9bd0d7fb4b090c6708f33e9e5a779b9bd5c8080853d2ec8486346a494
     """Type checking stubs"""
     pass
 
-for cls in [ISkillRef]:
-    typing.cast(typing.Any, cls).__protocol_attrs__ = typing.cast(typing.Any, cls).__protocol_attrs__ - set(['__jsii_proxy_class__', '__jsii_type__'])
+def _typecheckingstub__18a03c0ba6c20d17a037e17f3d48ad3d5175e42d1b4d42294067c2c25cdf6e08(
+    *,
+    authentication_configuration: typing.Union[_IResolvable_da3f097b, typing.Union[CfnSkill.AuthenticationConfigurationProperty, typing.Dict[builtins.str, typing.Any]]],
+    skill_package: typing.Union[_IResolvable_da3f097b, typing.Union[CfnSkill.SkillPackageProperty, typing.Dict[builtins.str, typing.Any]]],
+    vendor_id: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass

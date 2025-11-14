@@ -1,4 +1,9 @@
+import logging
+
 from sagemaker_studio.project import ClientConfig, Project
+
+logger = logging.getLogger()
+logger.info("Importing sparkutils")
 
 # Check if PySpark is available
 try:
@@ -40,3 +45,6 @@ def _ensure_project():
     if _project is None:
         _project = Project()
     return _project
+
+
+logger.info("Finished importing sparkutils")

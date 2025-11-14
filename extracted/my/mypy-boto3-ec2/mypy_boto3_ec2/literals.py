@@ -652,18 +652,25 @@ AcceleratorManufacturerType = Literal["amazon-web-services", "amd", "habana", "n
 AcceleratorNameType = Literal[
     "a100",
     "a10g",
+    "gaudi-hl-205",
     "h100",
     "inferentia",
+    "inferentia2",
     "k520",
     "k80",
+    "l4",
+    "l40s",
     "m60",
     "radeon-pro-v520",
     "t4",
     "t4g",
+    "trainium",
+    "trainium2",
+    "u30",
     "v100",
     "vu9p",
 ]
-AcceleratorTypeType = Literal["fpga", "gpu", "inference"]
+AcceleratorTypeType = Literal["fpga", "gpu", "inference", "media"]
 AccountAttributeNameType = Literal["default-vpc", "supported-platforms"]
 ActivityStatusType = Literal["error", "fulfilled", "pending_fulfillment", "pending_termination"]
 AddressAttributeNameType = Literal["domain-name"]

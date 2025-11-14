@@ -57,7 +57,7 @@ from ...aws_iam import (
     IRole as _IRole_235f5d8e,
     PolicyStatement as _PolicyStatement_0fe33853,
 )
-from ...aws_kms import IKey as _IKey_5f11635f, IKeyRef as _IKeyRef_1e82344b
+from ...aws_kms import IKey as _IKey_5f11635f
 from ...aws_lambda import (
     AdotInstrumentationConfig as _AdotInstrumentationConfig_7c38d65d,
     Alias as _Alias_55be8873,
@@ -70,12 +70,10 @@ from ...aws_lambda import (
     EventSourceMappingOptions as _EventSourceMappingOptions_b3f2bb85,
     FileSystem as _FileSystem_a5fa005d,
     FunctionProps as _FunctionProps_a308e854,
-    FunctionReference as _FunctionReference_d7260b09,
     FunctionUrl as _FunctionUrl_aff26443,
     FunctionUrlAuthType as _FunctionUrlAuthType_9c7b2c86,
     FunctionUrlCorsOptions as _FunctionUrlCorsOptions_ca855cc0,
     FunctionUrlOptions as _FunctionUrlOptions_84d38c38,
-    ICodeSigningConfigRef as _ICodeSigningConfigRef_8e14ef1d,
     IDestination as _IDestination_40f19de4,
     IEventSource as _IEventSource_3686b3f8,
     IEventSourceDlq as _IEventSourceDlq_5e2c6ad9,
@@ -100,7 +98,6 @@ from ...aws_lambda import (
     SystemLogLevel as _SystemLogLevel_aea49dc2,
     Tracing as _Tracing_9fe8e2bb,
     VersionOptions as _VersionOptions_981bb3c0,
-    VersionReference as _VersionReference_2c6b53ff,
     VersionWeight as _VersionWeight_64df085b,
 )
 from ...aws_logs import (
@@ -108,6 +105,12 @@ from ...aws_logs import (
 )
 from ...aws_sns import ITopic as _ITopic_9eca4852
 from ...aws_sqs import IQueue as _IQueue_7ed6f679
+from ...interfaces.aws_kms import IKeyRef as _IKeyRef_d4fc6ef3
+from ...interfaces.aws_lambda import (
+    FunctionReference as _FunctionReference_82f2efe9,
+    ICodeSigningConfigRef as _ICodeSigningConfigRef_1d909622,
+    VersionReference as _VersionReference_91666182,
+)
 
 
 @jsii.implements(_IVersion_faf7234e)
@@ -165,14 +168,14 @@ class EdgeFunction(
         application_log_level: typing.Optional[builtins.str] = None,
         application_log_level_v2: typing.Optional[_ApplicationLogLevel_cd92660a] = None,
         architecture: typing.Optional[_Architecture_12d5a53f] = None,
-        code_signing_config: typing.Optional[_ICodeSigningConfigRef_8e14ef1d] = None,
+        code_signing_config: typing.Optional[_ICodeSigningConfigRef_1d909622] = None,
         current_version_options: typing.Optional[typing.Union[_VersionOptions_981bb3c0, typing.Dict[builtins.str, typing.Any]]] = None,
         dead_letter_queue: typing.Optional[_IQueue_7ed6f679] = None,
         dead_letter_queue_enabled: typing.Optional[builtins.bool] = None,
         dead_letter_topic: typing.Optional[_ITopic_9eca4852] = None,
         description: typing.Optional[builtins.str] = None,
         environment: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
-        environment_encryption: typing.Optional[_IKeyRef_1e82344b] = None,
+        environment_encryption: typing.Optional[_IKeyRef_d4fc6ef3] = None,
         ephemeral_storage_size: typing.Optional[_Size_7b441c34] = None,
         events: typing.Optional[typing.Sequence[_IEventSource_3686b3f8]] = None,
         filesystem: typing.Optional[_FileSystem_a5fa005d] = None,
@@ -943,9 +946,9 @@ class EdgeFunction(
 
     @builtins.property
     @jsii.member(jsii_name="functionRef")
-    def function_ref(self) -> _FunctionReference_d7260b09:
+    def function_ref(self) -> _FunctionReference_82f2efe9:
         '''A reference to a Function resource.'''
-        return typing.cast(_FunctionReference_d7260b09, jsii.get(self, "functionRef"))
+        return typing.cast(_FunctionReference_82f2efe9, jsii.get(self, "functionRef"))
 
     @builtins.property
     @jsii.member(jsii_name="grantPrincipal")
@@ -1006,9 +1009,9 @@ class EdgeFunction(
 
     @builtins.property
     @jsii.member(jsii_name="versionRef")
-    def version_ref(self) -> _VersionReference_2c6b53ff:
+    def version_ref(self) -> _VersionReference_91666182:
         '''A reference to a Version resource.'''
-        return typing.cast(_VersionReference_2c6b53ff, jsii.get(self, "versionRef"))
+        return typing.cast(_VersionReference_91666182, jsii.get(self, "versionRef"))
 
     @builtins.property
     @jsii.member(jsii_name="role")
@@ -1092,14 +1095,14 @@ class EdgeFunctionProps(_FunctionProps_a308e854):
         application_log_level: typing.Optional[builtins.str] = None,
         application_log_level_v2: typing.Optional[_ApplicationLogLevel_cd92660a] = None,
         architecture: typing.Optional[_Architecture_12d5a53f] = None,
-        code_signing_config: typing.Optional[_ICodeSigningConfigRef_8e14ef1d] = None,
+        code_signing_config: typing.Optional[_ICodeSigningConfigRef_1d909622] = None,
         current_version_options: typing.Optional[typing.Union[_VersionOptions_981bb3c0, typing.Dict[builtins.str, typing.Any]]] = None,
         dead_letter_queue: typing.Optional[_IQueue_7ed6f679] = None,
         dead_letter_queue_enabled: typing.Optional[builtins.bool] = None,
         dead_letter_topic: typing.Optional[_ITopic_9eca4852] = None,
         description: typing.Optional[builtins.str] = None,
         environment: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
-        environment_encryption: typing.Optional[_IKeyRef_1e82344b] = None,
+        environment_encryption: typing.Optional[_IKeyRef_d4fc6ef3] = None,
         ephemeral_storage_size: typing.Optional[_Size_7b441c34] = None,
         events: typing.Optional[typing.Sequence[_IEventSource_3686b3f8]] = None,
         filesystem: typing.Optional[_FileSystem_a5fa005d] = None,
@@ -1521,13 +1524,13 @@ class EdgeFunctionProps(_FunctionProps_a308e854):
         return typing.cast(typing.Optional[_Architecture_12d5a53f], result)
 
     @builtins.property
-    def code_signing_config(self) -> typing.Optional[_ICodeSigningConfigRef_8e14ef1d]:
+    def code_signing_config(self) -> typing.Optional[_ICodeSigningConfigRef_1d909622]:
         '''Code signing config associated with this function.
 
         :default: - Not Sign the Code
         '''
         result = self._values.get("code_signing_config")
-        return typing.cast(typing.Optional[_ICodeSigningConfigRef_8e14ef1d], result)
+        return typing.cast(typing.Optional[_ICodeSigningConfigRef_1d909622], result)
 
     @builtins.property
     def current_version_options(self) -> typing.Optional[_VersionOptions_981bb3c0]:
@@ -1598,13 +1601,13 @@ class EdgeFunctionProps(_FunctionProps_a308e854):
         return typing.cast(typing.Optional[typing.Mapping[builtins.str, builtins.str]], result)
 
     @builtins.property
-    def environment_encryption(self) -> typing.Optional[_IKeyRef_1e82344b]:
+    def environment_encryption(self) -> typing.Optional[_IKeyRef_d4fc6ef3]:
         '''The AWS KMS key that's used to encrypt your function's environment variables.
 
         :default: - AWS Lambda creates and uses an AWS managed customer master key (CMK).
         '''
         result = self._values.get("environment_encryption")
-        return typing.cast(typing.Optional[_IKeyRef_1e82344b], result)
+        return typing.cast(typing.Optional[_IKeyRef_d4fc6ef3], result)
 
     @builtins.property
     def ephemeral_storage_size(self) -> typing.Optional[_Size_7b441c34]:
@@ -2094,14 +2097,14 @@ def _typecheckingstub__b2f96e5632f259adb036f7aba2bbc7c19fd9840c647d67a10a8135cb3
     application_log_level: typing.Optional[builtins.str] = None,
     application_log_level_v2: typing.Optional[_ApplicationLogLevel_cd92660a] = None,
     architecture: typing.Optional[_Architecture_12d5a53f] = None,
-    code_signing_config: typing.Optional[_ICodeSigningConfigRef_8e14ef1d] = None,
+    code_signing_config: typing.Optional[_ICodeSigningConfigRef_1d909622] = None,
     current_version_options: typing.Optional[typing.Union[_VersionOptions_981bb3c0, typing.Dict[builtins.str, typing.Any]]] = None,
     dead_letter_queue: typing.Optional[_IQueue_7ed6f679] = None,
     dead_letter_queue_enabled: typing.Optional[builtins.bool] = None,
     dead_letter_topic: typing.Optional[_ITopic_9eca4852] = None,
     description: typing.Optional[builtins.str] = None,
     environment: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
-    environment_encryption: typing.Optional[_IKeyRef_1e82344b] = None,
+    environment_encryption: typing.Optional[_IKeyRef_d4fc6ef3] = None,
     ephemeral_storage_size: typing.Optional[_Size_7b441c34] = None,
     events: typing.Optional[typing.Sequence[_IEventSource_3686b3f8]] = None,
     filesystem: typing.Optional[_FileSystem_a5fa005d] = None,
@@ -2277,14 +2280,14 @@ def _typecheckingstub__709cdcb05c7a5fc7f7bcd1d72557097c39c5c534076a00b6b8db807bd
     application_log_level: typing.Optional[builtins.str] = None,
     application_log_level_v2: typing.Optional[_ApplicationLogLevel_cd92660a] = None,
     architecture: typing.Optional[_Architecture_12d5a53f] = None,
-    code_signing_config: typing.Optional[_ICodeSigningConfigRef_8e14ef1d] = None,
+    code_signing_config: typing.Optional[_ICodeSigningConfigRef_1d909622] = None,
     current_version_options: typing.Optional[typing.Union[_VersionOptions_981bb3c0, typing.Dict[builtins.str, typing.Any]]] = None,
     dead_letter_queue: typing.Optional[_IQueue_7ed6f679] = None,
     dead_letter_queue_enabled: typing.Optional[builtins.bool] = None,
     dead_letter_topic: typing.Optional[_ITopic_9eca4852] = None,
     description: typing.Optional[builtins.str] = None,
     environment: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
-    environment_encryption: typing.Optional[_IKeyRef_1e82344b] = None,
+    environment_encryption: typing.Optional[_IKeyRef_d4fc6ef3] = None,
     ephemeral_storage_size: typing.Optional[_Size_7b441c34] = None,
     events: typing.Optional[typing.Sequence[_IEventSource_3686b3f8]] = None,
     filesystem: typing.Optional[_FileSystem_a5fa005d] = None,

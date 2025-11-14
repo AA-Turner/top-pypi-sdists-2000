@@ -71,654 +71,23 @@ import constructs as _constructs_77d1e7e8
 from .. import (
     CfnResource as _CfnResource_9df397a6,
     CfnTag as _CfnTag_f6864754,
-    IEnvironmentAware as _IEnvironmentAware_a408b00d,
     IInspectable as _IInspectable_c2943556,
     IResolvable as _IResolvable_da3f097b,
     ITaggableV2 as _ITaggableV2_4e6798f8,
     TagManager as _TagManager_0a598cb3,
     TreeInspector as _TreeInspector_488e0dd5,
 )
-
-
-@jsii.data_type(
-    jsii_type="aws-cdk-lib.aws_observabilityadmin.CfnOrganizationCentralizationRuleProps",
-    jsii_struct_bases=[],
-    name_mapping={"rule": "rule", "rule_name": "ruleName", "tags": "tags"},
+from ..interfaces.aws_observabilityadmin import (
+    IOrganizationCentralizationRuleRef as _IOrganizationCentralizationRuleRef_c0e786ce,
+    IOrganizationTelemetryRuleRef as _IOrganizationTelemetryRuleRef_c536ab68,
+    ITelemetryRuleRef as _ITelemetryRuleRef_9918195f,
+    OrganizationCentralizationRuleReference as _OrganizationCentralizationRuleReference_e0f14dd2,
+    OrganizationTelemetryRuleReference as _OrganizationTelemetryRuleReference_447c11d2,
+    TelemetryRuleReference as _TelemetryRuleReference_35b2b664,
 )
-class CfnOrganizationCentralizationRuleProps:
-    def __init__(
-        self,
-        *,
-        rule: typing.Union[_IResolvable_da3f097b, typing.Union["CfnOrganizationCentralizationRule.CentralizationRuleProperty", typing.Dict[builtins.str, typing.Any]]],
-        rule_name: builtins.str,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-    ) -> None:
-        '''Properties for defining a ``CfnOrganizationCentralizationRule``.
 
-        :param rule: 
-        :param rule_name: The name of the organization centralization rule.
-        :param tags: A key-value pair to filter resources based on tags associated with the resource. For more information about tags, see `What are tags? <https://docs.aws.amazon.com/whitepapers/latest/tagging-best-practices/what-are-tags.html>`_
 
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-observabilityadmin-organizationcentralizationrule.html
-        :exampleMetadata: fixture=_generated
-
-        Example::
-
-            # The code below shows an example of how to instantiate this type.
-            # The values are placeholders you should change.
-            from aws_cdk import aws_observabilityadmin as observabilityadmin
-            
-            cfn_organization_centralization_rule_props = observabilityadmin.CfnOrganizationCentralizationRuleProps(
-                rule=observabilityadmin.CfnOrganizationCentralizationRule.CentralizationRuleProperty(
-                    destination=observabilityadmin.CfnOrganizationCentralizationRule.CentralizationRuleDestinationProperty(
-                        region="region",
-            
-                        # the properties below are optional
-                        account="account",
-                        destination_logs_configuration=observabilityadmin.CfnOrganizationCentralizationRule.DestinationLogsConfigurationProperty(
-                            backup_configuration=observabilityadmin.CfnOrganizationCentralizationRule.LogsBackupConfigurationProperty(
-                                region="region",
-            
-                                # the properties below are optional
-                                kms_key_arn="kmsKeyArn"
-                            ),
-                            logs_encryption_configuration=observabilityadmin.CfnOrganizationCentralizationRule.LogsEncryptionConfigurationProperty(
-                                encryption_strategy="encryptionStrategy",
-            
-                                # the properties below are optional
-                                encryption_conflict_resolution_strategy="encryptionConflictResolutionStrategy",
-                                kms_key_arn="kmsKeyArn"
-                            )
-                        )
-                    ),
-                    source=observabilityadmin.CfnOrganizationCentralizationRule.CentralizationRuleSourceProperty(
-                        regions=["regions"],
-            
-                        # the properties below are optional
-                        scope="scope",
-                        source_logs_configuration=observabilityadmin.CfnOrganizationCentralizationRule.SourceLogsConfigurationProperty(
-                            encrypted_log_group_strategy="encryptedLogGroupStrategy",
-                            log_group_selection_criteria="logGroupSelectionCriteria"
-                        )
-                    )
-                ),
-                rule_name="ruleName",
-            
-                # the properties below are optional
-                tags=[CfnTag(
-                    key="key",
-                    value="value"
-                )]
-            )
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__00d0ecee2cd9ac728ca3e321203ce2e611e56b0b2d415ba2673a50599e4512cd)
-            check_type(argname="argument rule", value=rule, expected_type=type_hints["rule"])
-            check_type(argname="argument rule_name", value=rule_name, expected_type=type_hints["rule_name"])
-            check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
-        self._values: typing.Dict[builtins.str, typing.Any] = {
-            "rule": rule,
-            "rule_name": rule_name,
-        }
-        if tags is not None:
-            self._values["tags"] = tags
-
-    @builtins.property
-    def rule(
-        self,
-    ) -> typing.Union[_IResolvable_da3f097b, "CfnOrganizationCentralizationRule.CentralizationRuleProperty"]:
-        '''
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-observabilityadmin-organizationcentralizationrule.html#cfn-observabilityadmin-organizationcentralizationrule-rule
-        '''
-        result = self._values.get("rule")
-        assert result is not None, "Required property 'rule' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnOrganizationCentralizationRule.CentralizationRuleProperty"], result)
-
-    @builtins.property
-    def rule_name(self) -> builtins.str:
-        '''The name of the organization centralization rule.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-observabilityadmin-organizationcentralizationrule.html#cfn-observabilityadmin-organizationcentralizationrule-rulename
-        '''
-        result = self._values.get("rule_name")
-        assert result is not None, "Required property 'rule_name' is missing"
-        return typing.cast(builtins.str, result)
-
-    @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
-        '''A key-value pair to filter resources based on tags associated with the resource.
-
-        For more information about tags, see `What are tags? <https://docs.aws.amazon.com/whitepapers/latest/tagging-best-practices/what-are-tags.html>`_
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-observabilityadmin-organizationcentralizationrule.html#cfn-observabilityadmin-organizationcentralizationrule-tags
-        '''
-        result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
-
-    def __eq__(self, rhs: typing.Any) -> builtins.bool:
-        return isinstance(rhs, self.__class__) and rhs._values == self._values
-
-    def __ne__(self, rhs: typing.Any) -> builtins.bool:
-        return not (rhs == self)
-
-    def __repr__(self) -> str:
-        return "CfnOrganizationCentralizationRuleProps(%s)" % ", ".join(
-            k + "=" + repr(v) for k, v in self._values.items()
-        )
-
-
-@jsii.data_type(
-    jsii_type="aws-cdk-lib.aws_observabilityadmin.CfnOrganizationTelemetryRuleProps",
-    jsii_struct_bases=[],
-    name_mapping={"rule": "rule", "rule_name": "ruleName", "tags": "tags"},
-)
-class CfnOrganizationTelemetryRuleProps:
-    def __init__(
-        self,
-        *,
-        rule: typing.Union[_IResolvable_da3f097b, typing.Union["CfnOrganizationTelemetryRule.TelemetryRuleProperty", typing.Dict[builtins.str, typing.Any]]],
-        rule_name: builtins.str,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-    ) -> None:
-        '''Properties for defining a ``CfnOrganizationTelemetryRule``.
-
-        :param rule: The name of the organization telemetry rule.
-        :param rule_name: The name of the organization centralization rule.
-        :param tags: Lists all tags attached to the specified telemetry rule resource.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-observabilityadmin-organizationtelemetryrule.html
-        :exampleMetadata: fixture=_generated
-
-        Example::
-
-            # The code below shows an example of how to instantiate this type.
-            # The values are placeholders you should change.
-            from aws_cdk import aws_observabilityadmin as observabilityadmin
-            
-            cfn_organization_telemetry_rule_props = observabilityadmin.CfnOrganizationTelemetryRuleProps(
-                rule=observabilityadmin.CfnOrganizationTelemetryRule.TelemetryRuleProperty(
-                    resource_type="resourceType",
-                    telemetry_type="telemetryType",
-            
-                    # the properties below are optional
-                    destination_configuration=observabilityadmin.CfnOrganizationTelemetryRule.TelemetryDestinationConfigurationProperty(
-                        destination_pattern="destinationPattern",
-                        destination_type="destinationType",
-                        retention_in_days=123,
-                        vpc_flow_log_parameters=observabilityadmin.CfnOrganizationTelemetryRule.VPCFlowLogParametersProperty(
-                            log_format="logFormat",
-                            max_aggregation_interval=123,
-                            traffic_type="trafficType"
-                        )
-                    ),
-                    scope="scope",
-                    selection_criteria="selectionCriteria"
-                ),
-                rule_name="ruleName",
-            
-                # the properties below are optional
-                tags=[CfnTag(
-                    key="key",
-                    value="value"
-                )]
-            )
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__45c94381428dd096d5bd5b31c1a78b0ec6c66b125c46a889f389e957dbf9f76b)
-            check_type(argname="argument rule", value=rule, expected_type=type_hints["rule"])
-            check_type(argname="argument rule_name", value=rule_name, expected_type=type_hints["rule_name"])
-            check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
-        self._values: typing.Dict[builtins.str, typing.Any] = {
-            "rule": rule,
-            "rule_name": rule_name,
-        }
-        if tags is not None:
-            self._values["tags"] = tags
-
-    @builtins.property
-    def rule(
-        self,
-    ) -> typing.Union[_IResolvable_da3f097b, "CfnOrganizationTelemetryRule.TelemetryRuleProperty"]:
-        '''The name of the organization telemetry rule.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-observabilityadmin-organizationtelemetryrule.html#cfn-observabilityadmin-organizationtelemetryrule-rule
-        '''
-        result = self._values.get("rule")
-        assert result is not None, "Required property 'rule' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnOrganizationTelemetryRule.TelemetryRuleProperty"], result)
-
-    @builtins.property
-    def rule_name(self) -> builtins.str:
-        '''The name of the organization centralization rule.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-observabilityadmin-organizationtelemetryrule.html#cfn-observabilityadmin-organizationtelemetryrule-rulename
-        '''
-        result = self._values.get("rule_name")
-        assert result is not None, "Required property 'rule_name' is missing"
-        return typing.cast(builtins.str, result)
-
-    @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
-        '''Lists all tags attached to the specified telemetry rule resource.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-observabilityadmin-organizationtelemetryrule.html#cfn-observabilityadmin-organizationtelemetryrule-tags
-        '''
-        result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
-
-    def __eq__(self, rhs: typing.Any) -> builtins.bool:
-        return isinstance(rhs, self.__class__) and rhs._values == self._values
-
-    def __ne__(self, rhs: typing.Any) -> builtins.bool:
-        return not (rhs == self)
-
-    def __repr__(self) -> str:
-        return "CfnOrganizationTelemetryRuleProps(%s)" % ", ".join(
-            k + "=" + repr(v) for k, v in self._values.items()
-        )
-
-
-@jsii.data_type(
-    jsii_type="aws-cdk-lib.aws_observabilityadmin.CfnTelemetryRuleProps",
-    jsii_struct_bases=[],
-    name_mapping={"rule": "rule", "rule_name": "ruleName", "tags": "tags"},
-)
-class CfnTelemetryRuleProps:
-    def __init__(
-        self,
-        *,
-        rule: typing.Union[_IResolvable_da3f097b, typing.Union["CfnTelemetryRule.TelemetryRuleProperty", typing.Dict[builtins.str, typing.Any]]],
-        rule_name: builtins.str,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-    ) -> None:
-        '''Properties for defining a ``CfnTelemetryRule``.
-
-        :param rule: Retrieves the details of a specific telemetry rule in your account.
-        :param rule_name: The name of the telemetry rule.
-        :param tags: Lists all tags attached to the specified telemetry rule resource.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-observabilityadmin-telemetryrule.html
-        :exampleMetadata: fixture=_generated
-
-        Example::
-
-            # The code below shows an example of how to instantiate this type.
-            # The values are placeholders you should change.
-            from aws_cdk import aws_observabilityadmin as observabilityadmin
-            
-            cfn_telemetry_rule_props = observabilityadmin.CfnTelemetryRuleProps(
-                rule=observabilityadmin.CfnTelemetryRule.TelemetryRuleProperty(
-                    resource_type="resourceType",
-                    telemetry_type="telemetryType",
-            
-                    # the properties below are optional
-                    destination_configuration=observabilityadmin.CfnTelemetryRule.TelemetryDestinationConfigurationProperty(
-                        destination_pattern="destinationPattern",
-                        destination_type="destinationType",
-                        retention_in_days=123,
-                        vpc_flow_log_parameters=observabilityadmin.CfnTelemetryRule.VPCFlowLogParametersProperty(
-                            log_format="logFormat",
-                            max_aggregation_interval=123,
-                            traffic_type="trafficType"
-                        )
-                    ),
-                    selection_criteria="selectionCriteria"
-                ),
-                rule_name="ruleName",
-            
-                # the properties below are optional
-                tags=[CfnTag(
-                    key="key",
-                    value="value"
-                )]
-            )
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__7455cb845b044ed569a8ec8407abf811920062f00d1e54ad191e90dc9b7e2811)
-            check_type(argname="argument rule", value=rule, expected_type=type_hints["rule"])
-            check_type(argname="argument rule_name", value=rule_name, expected_type=type_hints["rule_name"])
-            check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
-        self._values: typing.Dict[builtins.str, typing.Any] = {
-            "rule": rule,
-            "rule_name": rule_name,
-        }
-        if tags is not None:
-            self._values["tags"] = tags
-
-    @builtins.property
-    def rule(
-        self,
-    ) -> typing.Union[_IResolvable_da3f097b, "CfnTelemetryRule.TelemetryRuleProperty"]:
-        '''Retrieves the details of a specific telemetry rule in your account.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-observabilityadmin-telemetryrule.html#cfn-observabilityadmin-telemetryrule-rule
-        '''
-        result = self._values.get("rule")
-        assert result is not None, "Required property 'rule' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnTelemetryRule.TelemetryRuleProperty"], result)
-
-    @builtins.property
-    def rule_name(self) -> builtins.str:
-        '''The name of the telemetry rule.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-observabilityadmin-telemetryrule.html#cfn-observabilityadmin-telemetryrule-rulename
-        '''
-        result = self._values.get("rule_name")
-        assert result is not None, "Required property 'rule_name' is missing"
-        return typing.cast(builtins.str, result)
-
-    @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
-        '''Lists all tags attached to the specified telemetry rule resource.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-observabilityadmin-telemetryrule.html#cfn-observabilityadmin-telemetryrule-tags
-        '''
-        result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
-
-    def __eq__(self, rhs: typing.Any) -> builtins.bool:
-        return isinstance(rhs, self.__class__) and rhs._values == self._values
-
-    def __ne__(self, rhs: typing.Any) -> builtins.bool:
-        return not (rhs == self)
-
-    def __repr__(self) -> str:
-        return "CfnTelemetryRuleProps(%s)" % ", ".join(
-            k + "=" + repr(v) for k, v in self._values.items()
-        )
-
-
-@jsii.interface(
-    jsii_type="aws-cdk-lib.aws_observabilityadmin.IOrganizationCentralizationRuleRef"
-)
-class IOrganizationCentralizationRuleRef(
-    _constructs_77d1e7e8.IConstruct,
-    _IEnvironmentAware_a408b00d,
-    typing_extensions.Protocol,
-):
-    '''(experimental) Indicates that this resource can be referenced as a OrganizationCentralizationRule.
-
-    :stability: experimental
-    '''
-
-    @builtins.property
-    @jsii.member(jsii_name="organizationCentralizationRuleRef")
-    def organization_centralization_rule_ref(
-        self,
-    ) -> "OrganizationCentralizationRuleReference":
-        '''(experimental) A reference to a OrganizationCentralizationRule resource.
-
-        :stability: experimental
-        '''
-        ...
-
-
-class _IOrganizationCentralizationRuleRefProxy(
-    jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
-    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
-):
-    '''(experimental) Indicates that this resource can be referenced as a OrganizationCentralizationRule.
-
-    :stability: experimental
-    '''
-
-    __jsii_type__: typing.ClassVar[str] = "aws-cdk-lib.aws_observabilityadmin.IOrganizationCentralizationRuleRef"
-
-    @builtins.property
-    @jsii.member(jsii_name="organizationCentralizationRuleRef")
-    def organization_centralization_rule_ref(
-        self,
-    ) -> "OrganizationCentralizationRuleReference":
-        '''(experimental) A reference to a OrganizationCentralizationRule resource.
-
-        :stability: experimental
-        '''
-        return typing.cast("OrganizationCentralizationRuleReference", jsii.get(self, "organizationCentralizationRuleRef"))
-
-# Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
-typing.cast(typing.Any, IOrganizationCentralizationRuleRef).__jsii_proxy_class__ = lambda : _IOrganizationCentralizationRuleRefProxy
-
-
-@jsii.interface(
-    jsii_type="aws-cdk-lib.aws_observabilityadmin.IOrganizationTelemetryRuleRef"
-)
-class IOrganizationTelemetryRuleRef(
-    _constructs_77d1e7e8.IConstruct,
-    _IEnvironmentAware_a408b00d,
-    typing_extensions.Protocol,
-):
-    '''(experimental) Indicates that this resource can be referenced as a OrganizationTelemetryRule.
-
-    :stability: experimental
-    '''
-
-    @builtins.property
-    @jsii.member(jsii_name="organizationTelemetryRuleRef")
-    def organization_telemetry_rule_ref(self) -> "OrganizationTelemetryRuleReference":
-        '''(experimental) A reference to a OrganizationTelemetryRule resource.
-
-        :stability: experimental
-        '''
-        ...
-
-
-class _IOrganizationTelemetryRuleRefProxy(
-    jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
-    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
-):
-    '''(experimental) Indicates that this resource can be referenced as a OrganizationTelemetryRule.
-
-    :stability: experimental
-    '''
-
-    __jsii_type__: typing.ClassVar[str] = "aws-cdk-lib.aws_observabilityadmin.IOrganizationTelemetryRuleRef"
-
-    @builtins.property
-    @jsii.member(jsii_name="organizationTelemetryRuleRef")
-    def organization_telemetry_rule_ref(self) -> "OrganizationTelemetryRuleReference":
-        '''(experimental) A reference to a OrganizationTelemetryRule resource.
-
-        :stability: experimental
-        '''
-        return typing.cast("OrganizationTelemetryRuleReference", jsii.get(self, "organizationTelemetryRuleRef"))
-
-# Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
-typing.cast(typing.Any, IOrganizationTelemetryRuleRef).__jsii_proxy_class__ = lambda : _IOrganizationTelemetryRuleRefProxy
-
-
-@jsii.interface(jsii_type="aws-cdk-lib.aws_observabilityadmin.ITelemetryRuleRef")
-class ITelemetryRuleRef(
-    _constructs_77d1e7e8.IConstruct,
-    _IEnvironmentAware_a408b00d,
-    typing_extensions.Protocol,
-):
-    '''(experimental) Indicates that this resource can be referenced as a TelemetryRule.
-
-    :stability: experimental
-    '''
-
-    @builtins.property
-    @jsii.member(jsii_name="telemetryRuleRef")
-    def telemetry_rule_ref(self) -> "TelemetryRuleReference":
-        '''(experimental) A reference to a TelemetryRule resource.
-
-        :stability: experimental
-        '''
-        ...
-
-
-class _ITelemetryRuleRefProxy(
-    jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
-    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
-):
-    '''(experimental) Indicates that this resource can be referenced as a TelemetryRule.
-
-    :stability: experimental
-    '''
-
-    __jsii_type__: typing.ClassVar[str] = "aws-cdk-lib.aws_observabilityadmin.ITelemetryRuleRef"
-
-    @builtins.property
-    @jsii.member(jsii_name="telemetryRuleRef")
-    def telemetry_rule_ref(self) -> "TelemetryRuleReference":
-        '''(experimental) A reference to a TelemetryRule resource.
-
-        :stability: experimental
-        '''
-        return typing.cast("TelemetryRuleReference", jsii.get(self, "telemetryRuleRef"))
-
-# Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
-typing.cast(typing.Any, ITelemetryRuleRef).__jsii_proxy_class__ = lambda : _ITelemetryRuleRefProxy
-
-
-@jsii.data_type(
-    jsii_type="aws-cdk-lib.aws_observabilityadmin.OrganizationCentralizationRuleReference",
-    jsii_struct_bases=[],
-    name_mapping={"rule_arn": "ruleArn"},
-)
-class OrganizationCentralizationRuleReference:
-    def __init__(self, *, rule_arn: builtins.str) -> None:
-        '''A reference to a OrganizationCentralizationRule resource.
-
-        :param rule_arn: The RuleArn of the OrganizationCentralizationRule resource.
-
-        :exampleMetadata: fixture=_generated
-
-        Example::
-
-            # The code below shows an example of how to instantiate this type.
-            # The values are placeholders you should change.
-            from aws_cdk import aws_observabilityadmin as observabilityadmin
-            
-            organization_centralization_rule_reference = observabilityadmin.OrganizationCentralizationRuleReference(
-                rule_arn="ruleArn"
-            )
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__1b3ad11b09d25a384211da640f6a09bc1e0c17db4ccd5b1f32b27309ce4215f5)
-            check_type(argname="argument rule_arn", value=rule_arn, expected_type=type_hints["rule_arn"])
-        self._values: typing.Dict[builtins.str, typing.Any] = {
-            "rule_arn": rule_arn,
-        }
-
-    @builtins.property
-    def rule_arn(self) -> builtins.str:
-        '''The RuleArn of the OrganizationCentralizationRule resource.'''
-        result = self._values.get("rule_arn")
-        assert result is not None, "Required property 'rule_arn' is missing"
-        return typing.cast(builtins.str, result)
-
-    def __eq__(self, rhs: typing.Any) -> builtins.bool:
-        return isinstance(rhs, self.__class__) and rhs._values == self._values
-
-    def __ne__(self, rhs: typing.Any) -> builtins.bool:
-        return not (rhs == self)
-
-    def __repr__(self) -> str:
-        return "OrganizationCentralizationRuleReference(%s)" % ", ".join(
-            k + "=" + repr(v) for k, v in self._values.items()
-        )
-
-
-@jsii.data_type(
-    jsii_type="aws-cdk-lib.aws_observabilityadmin.OrganizationTelemetryRuleReference",
-    jsii_struct_bases=[],
-    name_mapping={"rule_arn": "ruleArn"},
-)
-class OrganizationTelemetryRuleReference:
-    def __init__(self, *, rule_arn: builtins.str) -> None:
-        '''A reference to a OrganizationTelemetryRule resource.
-
-        :param rule_arn: The RuleArn of the OrganizationTelemetryRule resource.
-
-        :exampleMetadata: fixture=_generated
-
-        Example::
-
-            # The code below shows an example of how to instantiate this type.
-            # The values are placeholders you should change.
-            from aws_cdk import aws_observabilityadmin as observabilityadmin
-            
-            organization_telemetry_rule_reference = observabilityadmin.OrganizationTelemetryRuleReference(
-                rule_arn="ruleArn"
-            )
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__546326e4a1c8218daecae9d95475d22bf60d95f4d5ec20cd304d51ba67eb92f4)
-            check_type(argname="argument rule_arn", value=rule_arn, expected_type=type_hints["rule_arn"])
-        self._values: typing.Dict[builtins.str, typing.Any] = {
-            "rule_arn": rule_arn,
-        }
-
-    @builtins.property
-    def rule_arn(self) -> builtins.str:
-        '''The RuleArn of the OrganizationTelemetryRule resource.'''
-        result = self._values.get("rule_arn")
-        assert result is not None, "Required property 'rule_arn' is missing"
-        return typing.cast(builtins.str, result)
-
-    def __eq__(self, rhs: typing.Any) -> builtins.bool:
-        return isinstance(rhs, self.__class__) and rhs._values == self._values
-
-    def __ne__(self, rhs: typing.Any) -> builtins.bool:
-        return not (rhs == self)
-
-    def __repr__(self) -> str:
-        return "OrganizationTelemetryRuleReference(%s)" % ", ".join(
-            k + "=" + repr(v) for k, v in self._values.items()
-        )
-
-
-@jsii.data_type(
-    jsii_type="aws-cdk-lib.aws_observabilityadmin.TelemetryRuleReference",
-    jsii_struct_bases=[],
-    name_mapping={"rule_arn": "ruleArn"},
-)
-class TelemetryRuleReference:
-    def __init__(self, *, rule_arn: builtins.str) -> None:
-        '''A reference to a TelemetryRule resource.
-
-        :param rule_arn: The RuleArn of the TelemetryRule resource.
-
-        :exampleMetadata: fixture=_generated
-
-        Example::
-
-            # The code below shows an example of how to instantiate this type.
-            # The values are placeholders you should change.
-            from aws_cdk import aws_observabilityadmin as observabilityadmin
-            
-            telemetry_rule_reference = observabilityadmin.TelemetryRuleReference(
-                rule_arn="ruleArn"
-            )
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__7e5c59e1cd03c9d8825ebf008d30354018de9d95b37c45267b93575de094bcfc)
-            check_type(argname="argument rule_arn", value=rule_arn, expected_type=type_hints["rule_arn"])
-        self._values: typing.Dict[builtins.str, typing.Any] = {
-            "rule_arn": rule_arn,
-        }
-
-    @builtins.property
-    def rule_arn(self) -> builtins.str:
-        '''The RuleArn of the TelemetryRule resource.'''
-        result = self._values.get("rule_arn")
-        assert result is not None, "Required property 'rule_arn' is missing"
-        return typing.cast(builtins.str, result)
-
-    def __eq__(self, rhs: typing.Any) -> builtins.bool:
-        return isinstance(rhs, self.__class__) and rhs._values == self._values
-
-    def __ne__(self, rhs: typing.Any) -> builtins.bool:
-        return not (rhs == self)
-
-    def __repr__(self) -> str:
-        return "TelemetryRuleReference(%s)" % ", ".join(
-            k + "=" + repr(v) for k, v in self._values.items()
-        )
-
-
-@jsii.implements(_IInspectable_c2943556, IOrganizationCentralizationRuleRef, _ITaggableV2_4e6798f8)
+@jsii.implements(_IInspectable_c2943556, _IOrganizationCentralizationRuleRef_c0e786ce, _ITaggableV2_4e6798f8)
 class CfnOrganizationCentralizationRule(
     _CfnResource_9df397a6,
     metaclass=jsii.JSIIMeta,
@@ -789,7 +158,8 @@ class CfnOrganizationCentralizationRule(
         rule_name: builtins.str,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
-        '''
+        '''Create a new ``AWS::ObservabilityAdmin::OrganizationCentralizationRule``.
+
         :param scope: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
         :param rule: 
@@ -860,9 +230,9 @@ class CfnOrganizationCentralizationRule(
     @jsii.member(jsii_name="organizationCentralizationRuleRef")
     def organization_centralization_rule_ref(
         self,
-    ) -> OrganizationCentralizationRuleReference:
+    ) -> _OrganizationCentralizationRuleReference_e0f14dd2:
         '''A reference to a OrganizationCentralizationRule resource.'''
-        return typing.cast(OrganizationCentralizationRuleReference, jsii.get(self, "organizationCentralizationRuleRef"))
+        return typing.cast(_OrganizationCentralizationRuleReference_e0f14dd2, jsii.get(self, "organizationCentralizationRuleRef"))
 
     @builtins.property
     @jsii.member(jsii_name="rule")
@@ -1556,7 +926,134 @@ class CfnOrganizationCentralizationRule(
             )
 
 
-@jsii.implements(_IInspectable_c2943556, IOrganizationTelemetryRuleRef, _ITaggableV2_4e6798f8)
+@jsii.data_type(
+    jsii_type="aws-cdk-lib.aws_observabilityadmin.CfnOrganizationCentralizationRuleProps",
+    jsii_struct_bases=[],
+    name_mapping={"rule": "rule", "rule_name": "ruleName", "tags": "tags"},
+)
+class CfnOrganizationCentralizationRuleProps:
+    def __init__(
+        self,
+        *,
+        rule: typing.Union[_IResolvable_da3f097b, typing.Union[CfnOrganizationCentralizationRule.CentralizationRuleProperty, typing.Dict[builtins.str, typing.Any]]],
+        rule_name: builtins.str,
+        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+    ) -> None:
+        '''Properties for defining a ``CfnOrganizationCentralizationRule``.
+
+        :param rule: 
+        :param rule_name: The name of the organization centralization rule.
+        :param tags: A key-value pair to filter resources based on tags associated with the resource. For more information about tags, see `What are tags? <https://docs.aws.amazon.com/whitepapers/latest/tagging-best-practices/what-are-tags.html>`_
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-observabilityadmin-organizationcentralizationrule.html
+        :exampleMetadata: fixture=_generated
+
+        Example::
+
+            # The code below shows an example of how to instantiate this type.
+            # The values are placeholders you should change.
+            from aws_cdk import aws_observabilityadmin as observabilityadmin
+            
+            cfn_organization_centralization_rule_props = observabilityadmin.CfnOrganizationCentralizationRuleProps(
+                rule=observabilityadmin.CfnOrganizationCentralizationRule.CentralizationRuleProperty(
+                    destination=observabilityadmin.CfnOrganizationCentralizationRule.CentralizationRuleDestinationProperty(
+                        region="region",
+            
+                        # the properties below are optional
+                        account="account",
+                        destination_logs_configuration=observabilityadmin.CfnOrganizationCentralizationRule.DestinationLogsConfigurationProperty(
+                            backup_configuration=observabilityadmin.CfnOrganizationCentralizationRule.LogsBackupConfigurationProperty(
+                                region="region",
+            
+                                # the properties below are optional
+                                kms_key_arn="kmsKeyArn"
+                            ),
+                            logs_encryption_configuration=observabilityadmin.CfnOrganizationCentralizationRule.LogsEncryptionConfigurationProperty(
+                                encryption_strategy="encryptionStrategy",
+            
+                                # the properties below are optional
+                                encryption_conflict_resolution_strategy="encryptionConflictResolutionStrategy",
+                                kms_key_arn="kmsKeyArn"
+                            )
+                        )
+                    ),
+                    source=observabilityadmin.CfnOrganizationCentralizationRule.CentralizationRuleSourceProperty(
+                        regions=["regions"],
+            
+                        # the properties below are optional
+                        scope="scope",
+                        source_logs_configuration=observabilityadmin.CfnOrganizationCentralizationRule.SourceLogsConfigurationProperty(
+                            encrypted_log_group_strategy="encryptedLogGroupStrategy",
+                            log_group_selection_criteria="logGroupSelectionCriteria"
+                        )
+                    )
+                ),
+                rule_name="ruleName",
+            
+                # the properties below are optional
+                tags=[CfnTag(
+                    key="key",
+                    value="value"
+                )]
+            )
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__00d0ecee2cd9ac728ca3e321203ce2e611e56b0b2d415ba2673a50599e4512cd)
+            check_type(argname="argument rule", value=rule, expected_type=type_hints["rule"])
+            check_type(argname="argument rule_name", value=rule_name, expected_type=type_hints["rule_name"])
+            check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
+        self._values: typing.Dict[builtins.str, typing.Any] = {
+            "rule": rule,
+            "rule_name": rule_name,
+        }
+        if tags is not None:
+            self._values["tags"] = tags
+
+    @builtins.property
+    def rule(
+        self,
+    ) -> typing.Union[_IResolvable_da3f097b, CfnOrganizationCentralizationRule.CentralizationRuleProperty]:
+        '''
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-observabilityadmin-organizationcentralizationrule.html#cfn-observabilityadmin-organizationcentralizationrule-rule
+        '''
+        result = self._values.get("rule")
+        assert result is not None, "Required property 'rule' is missing"
+        return typing.cast(typing.Union[_IResolvable_da3f097b, CfnOrganizationCentralizationRule.CentralizationRuleProperty], result)
+
+    @builtins.property
+    def rule_name(self) -> builtins.str:
+        '''The name of the organization centralization rule.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-observabilityadmin-organizationcentralizationrule.html#cfn-observabilityadmin-organizationcentralizationrule-rulename
+        '''
+        result = self._values.get("rule_name")
+        assert result is not None, "Required property 'rule_name' is missing"
+        return typing.cast(builtins.str, result)
+
+    @builtins.property
+    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+        '''A key-value pair to filter resources based on tags associated with the resource.
+
+        For more information about tags, see `What are tags? <https://docs.aws.amazon.com/whitepapers/latest/tagging-best-practices/what-are-tags.html>`_
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-observabilityadmin-organizationcentralizationrule.html#cfn-observabilityadmin-organizationcentralizationrule-tags
+        '''
+        result = self._values.get("tags")
+        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+
+    def __eq__(self, rhs: typing.Any) -> builtins.bool:
+        return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+    def __ne__(self, rhs: typing.Any) -> builtins.bool:
+        return not (rhs == self)
+
+    def __repr__(self) -> str:
+        return "CfnOrganizationCentralizationRuleProps(%s)" % ", ".join(
+            k + "=" + repr(v) for k, v in self._values.items()
+        )
+
+
+@jsii.implements(_IInspectable_c2943556, _IOrganizationTelemetryRuleRef_c536ab68, _ITaggableV2_4e6798f8)
 class CfnOrganizationTelemetryRule(
     _CfnResource_9df397a6,
     metaclass=jsii.JSIIMeta,
@@ -1614,7 +1111,8 @@ class CfnOrganizationTelemetryRule(
         rule_name: builtins.str,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
-        '''
+        '''Create a new ``AWS::ObservabilityAdmin::OrganizationTelemetryRule``.
+
         :param scope: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
         :param rule: The name of the organization telemetry rule.
@@ -1683,9 +1181,11 @@ class CfnOrganizationTelemetryRule(
 
     @builtins.property
     @jsii.member(jsii_name="organizationTelemetryRuleRef")
-    def organization_telemetry_rule_ref(self) -> OrganizationTelemetryRuleReference:
+    def organization_telemetry_rule_ref(
+        self,
+    ) -> _OrganizationTelemetryRuleReference_447c11d2:
         '''A reference to a OrganizationTelemetryRule resource.'''
-        return typing.cast(OrganizationTelemetryRuleReference, jsii.get(self, "organizationTelemetryRuleRef"))
+        return typing.cast(_OrganizationTelemetryRuleReference_447c11d2, jsii.get(self, "organizationTelemetryRuleRef"))
 
     @builtins.property
     @jsii.member(jsii_name="rule")
@@ -2067,7 +1567,118 @@ class CfnOrganizationTelemetryRule(
             )
 
 
-@jsii.implements(_IInspectable_c2943556, ITelemetryRuleRef, _ITaggableV2_4e6798f8)
+@jsii.data_type(
+    jsii_type="aws-cdk-lib.aws_observabilityadmin.CfnOrganizationTelemetryRuleProps",
+    jsii_struct_bases=[],
+    name_mapping={"rule": "rule", "rule_name": "ruleName", "tags": "tags"},
+)
+class CfnOrganizationTelemetryRuleProps:
+    def __init__(
+        self,
+        *,
+        rule: typing.Union[_IResolvable_da3f097b, typing.Union[CfnOrganizationTelemetryRule.TelemetryRuleProperty, typing.Dict[builtins.str, typing.Any]]],
+        rule_name: builtins.str,
+        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+    ) -> None:
+        '''Properties for defining a ``CfnOrganizationTelemetryRule``.
+
+        :param rule: The name of the organization telemetry rule.
+        :param rule_name: The name of the organization centralization rule.
+        :param tags: Lists all tags attached to the specified telemetry rule resource.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-observabilityadmin-organizationtelemetryrule.html
+        :exampleMetadata: fixture=_generated
+
+        Example::
+
+            # The code below shows an example of how to instantiate this type.
+            # The values are placeholders you should change.
+            from aws_cdk import aws_observabilityadmin as observabilityadmin
+            
+            cfn_organization_telemetry_rule_props = observabilityadmin.CfnOrganizationTelemetryRuleProps(
+                rule=observabilityadmin.CfnOrganizationTelemetryRule.TelemetryRuleProperty(
+                    resource_type="resourceType",
+                    telemetry_type="telemetryType",
+            
+                    # the properties below are optional
+                    destination_configuration=observabilityadmin.CfnOrganizationTelemetryRule.TelemetryDestinationConfigurationProperty(
+                        destination_pattern="destinationPattern",
+                        destination_type="destinationType",
+                        retention_in_days=123,
+                        vpc_flow_log_parameters=observabilityadmin.CfnOrganizationTelemetryRule.VPCFlowLogParametersProperty(
+                            log_format="logFormat",
+                            max_aggregation_interval=123,
+                            traffic_type="trafficType"
+                        )
+                    ),
+                    scope="scope",
+                    selection_criteria="selectionCriteria"
+                ),
+                rule_name="ruleName",
+            
+                # the properties below are optional
+                tags=[CfnTag(
+                    key="key",
+                    value="value"
+                )]
+            )
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__45c94381428dd096d5bd5b31c1a78b0ec6c66b125c46a889f389e957dbf9f76b)
+            check_type(argname="argument rule", value=rule, expected_type=type_hints["rule"])
+            check_type(argname="argument rule_name", value=rule_name, expected_type=type_hints["rule_name"])
+            check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
+        self._values: typing.Dict[builtins.str, typing.Any] = {
+            "rule": rule,
+            "rule_name": rule_name,
+        }
+        if tags is not None:
+            self._values["tags"] = tags
+
+    @builtins.property
+    def rule(
+        self,
+    ) -> typing.Union[_IResolvable_da3f097b, CfnOrganizationTelemetryRule.TelemetryRuleProperty]:
+        '''The name of the organization telemetry rule.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-observabilityadmin-organizationtelemetryrule.html#cfn-observabilityadmin-organizationtelemetryrule-rule
+        '''
+        result = self._values.get("rule")
+        assert result is not None, "Required property 'rule' is missing"
+        return typing.cast(typing.Union[_IResolvable_da3f097b, CfnOrganizationTelemetryRule.TelemetryRuleProperty], result)
+
+    @builtins.property
+    def rule_name(self) -> builtins.str:
+        '''The name of the organization centralization rule.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-observabilityadmin-organizationtelemetryrule.html#cfn-observabilityadmin-organizationtelemetryrule-rulename
+        '''
+        result = self._values.get("rule_name")
+        assert result is not None, "Required property 'rule_name' is missing"
+        return typing.cast(builtins.str, result)
+
+    @builtins.property
+    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+        '''Lists all tags attached to the specified telemetry rule resource.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-observabilityadmin-organizationtelemetryrule.html#cfn-observabilityadmin-organizationtelemetryrule-tags
+        '''
+        result = self._values.get("tags")
+        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+
+    def __eq__(self, rhs: typing.Any) -> builtins.bool:
+        return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+    def __ne__(self, rhs: typing.Any) -> builtins.bool:
+        return not (rhs == self)
+
+    def __repr__(self) -> str:
+        return "CfnOrganizationTelemetryRuleProps(%s)" % ", ".join(
+            k + "=" + repr(v) for k, v in self._values.items()
+        )
+
+
+@jsii.implements(_IInspectable_c2943556, _ITelemetryRuleRef_9918195f, _ITaggableV2_4e6798f8)
 class CfnTelemetryRule(
     _CfnResource_9df397a6,
     metaclass=jsii.JSIIMeta,
@@ -2124,7 +1735,8 @@ class CfnTelemetryRule(
         rule_name: builtins.str,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
-        '''
+        '''Create a new ``AWS::ObservabilityAdmin::TelemetryRule``.
+
         :param scope: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
         :param rule: Retrieves the details of a specific telemetry rule in your account.
@@ -2191,9 +1803,9 @@ class CfnTelemetryRule(
 
     @builtins.property
     @jsii.member(jsii_name="telemetryRuleRef")
-    def telemetry_rule_ref(self) -> TelemetryRuleReference:
+    def telemetry_rule_ref(self) -> _TelemetryRuleReference_35b2b664:
         '''A reference to a TelemetryRule resource.'''
-        return typing.cast(TelemetryRuleReference, jsii.get(self, "telemetryRuleRef"))
+        return typing.cast(_TelemetryRuleReference_35b2b664, jsii.get(self, "telemetryRuleRef"))
 
     @builtins.property
     @jsii.member(jsii_name="rule")
@@ -2559,6 +2171,116 @@ class CfnTelemetryRule(
             )
 
 
+@jsii.data_type(
+    jsii_type="aws-cdk-lib.aws_observabilityadmin.CfnTelemetryRuleProps",
+    jsii_struct_bases=[],
+    name_mapping={"rule": "rule", "rule_name": "ruleName", "tags": "tags"},
+)
+class CfnTelemetryRuleProps:
+    def __init__(
+        self,
+        *,
+        rule: typing.Union[_IResolvable_da3f097b, typing.Union[CfnTelemetryRule.TelemetryRuleProperty, typing.Dict[builtins.str, typing.Any]]],
+        rule_name: builtins.str,
+        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+    ) -> None:
+        '''Properties for defining a ``CfnTelemetryRule``.
+
+        :param rule: Retrieves the details of a specific telemetry rule in your account.
+        :param rule_name: The name of the telemetry rule.
+        :param tags: Lists all tags attached to the specified telemetry rule resource.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-observabilityadmin-telemetryrule.html
+        :exampleMetadata: fixture=_generated
+
+        Example::
+
+            # The code below shows an example of how to instantiate this type.
+            # The values are placeholders you should change.
+            from aws_cdk import aws_observabilityadmin as observabilityadmin
+            
+            cfn_telemetry_rule_props = observabilityadmin.CfnTelemetryRuleProps(
+                rule=observabilityadmin.CfnTelemetryRule.TelemetryRuleProperty(
+                    resource_type="resourceType",
+                    telemetry_type="telemetryType",
+            
+                    # the properties below are optional
+                    destination_configuration=observabilityadmin.CfnTelemetryRule.TelemetryDestinationConfigurationProperty(
+                        destination_pattern="destinationPattern",
+                        destination_type="destinationType",
+                        retention_in_days=123,
+                        vpc_flow_log_parameters=observabilityadmin.CfnTelemetryRule.VPCFlowLogParametersProperty(
+                            log_format="logFormat",
+                            max_aggregation_interval=123,
+                            traffic_type="trafficType"
+                        )
+                    ),
+                    selection_criteria="selectionCriteria"
+                ),
+                rule_name="ruleName",
+            
+                # the properties below are optional
+                tags=[CfnTag(
+                    key="key",
+                    value="value"
+                )]
+            )
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__7455cb845b044ed569a8ec8407abf811920062f00d1e54ad191e90dc9b7e2811)
+            check_type(argname="argument rule", value=rule, expected_type=type_hints["rule"])
+            check_type(argname="argument rule_name", value=rule_name, expected_type=type_hints["rule_name"])
+            check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
+        self._values: typing.Dict[builtins.str, typing.Any] = {
+            "rule": rule,
+            "rule_name": rule_name,
+        }
+        if tags is not None:
+            self._values["tags"] = tags
+
+    @builtins.property
+    def rule(
+        self,
+    ) -> typing.Union[_IResolvable_da3f097b, CfnTelemetryRule.TelemetryRuleProperty]:
+        '''Retrieves the details of a specific telemetry rule in your account.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-observabilityadmin-telemetryrule.html#cfn-observabilityadmin-telemetryrule-rule
+        '''
+        result = self._values.get("rule")
+        assert result is not None, "Required property 'rule' is missing"
+        return typing.cast(typing.Union[_IResolvable_da3f097b, CfnTelemetryRule.TelemetryRuleProperty], result)
+
+    @builtins.property
+    def rule_name(self) -> builtins.str:
+        '''The name of the telemetry rule.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-observabilityadmin-telemetryrule.html#cfn-observabilityadmin-telemetryrule-rulename
+        '''
+        result = self._values.get("rule_name")
+        assert result is not None, "Required property 'rule_name' is missing"
+        return typing.cast(builtins.str, result)
+
+    @builtins.property
+    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+        '''Lists all tags attached to the specified telemetry rule resource.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-observabilityadmin-telemetryrule.html#cfn-observabilityadmin-telemetryrule-tags
+        '''
+        result = self._values.get("tags")
+        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+
+    def __eq__(self, rhs: typing.Any) -> builtins.bool:
+        return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+    def __ne__(self, rhs: typing.Any) -> builtins.bool:
+        return not (rhs == self)
+
+    def __repr__(self) -> str:
+        return "CfnTelemetryRuleProps(%s)" % ", ".join(
+            k + "=" + repr(v) for k, v in self._values.items()
+        )
+
+
 __all__ = [
     "CfnOrganizationCentralizationRule",
     "CfnOrganizationCentralizationRuleProps",
@@ -2566,63 +2288,9 @@ __all__ = [
     "CfnOrganizationTelemetryRuleProps",
     "CfnTelemetryRule",
     "CfnTelemetryRuleProps",
-    "IOrganizationCentralizationRuleRef",
-    "IOrganizationTelemetryRuleRef",
-    "ITelemetryRuleRef",
-    "OrganizationCentralizationRuleReference",
-    "OrganizationTelemetryRuleReference",
-    "TelemetryRuleReference",
 ]
 
 publication.publish()
-
-def _typecheckingstub__00d0ecee2cd9ac728ca3e321203ce2e611e56b0b2d415ba2673a50599e4512cd(
-    *,
-    rule: typing.Union[_IResolvable_da3f097b, typing.Union[CfnOrganizationCentralizationRule.CentralizationRuleProperty, typing.Dict[builtins.str, typing.Any]]],
-    rule_name: builtins.str,
-    tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-) -> None:
-    """Type checking stubs"""
-    pass
-
-def _typecheckingstub__45c94381428dd096d5bd5b31c1a78b0ec6c66b125c46a889f389e957dbf9f76b(
-    *,
-    rule: typing.Union[_IResolvable_da3f097b, typing.Union[CfnOrganizationTelemetryRule.TelemetryRuleProperty, typing.Dict[builtins.str, typing.Any]]],
-    rule_name: builtins.str,
-    tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-) -> None:
-    """Type checking stubs"""
-    pass
-
-def _typecheckingstub__7455cb845b044ed569a8ec8407abf811920062f00d1e54ad191e90dc9b7e2811(
-    *,
-    rule: typing.Union[_IResolvable_da3f097b, typing.Union[CfnTelemetryRule.TelemetryRuleProperty, typing.Dict[builtins.str, typing.Any]]],
-    rule_name: builtins.str,
-    tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-) -> None:
-    """Type checking stubs"""
-    pass
-
-def _typecheckingstub__1b3ad11b09d25a384211da640f6a09bc1e0c17db4ccd5b1f32b27309ce4215f5(
-    *,
-    rule_arn: builtins.str,
-) -> None:
-    """Type checking stubs"""
-    pass
-
-def _typecheckingstub__546326e4a1c8218daecae9d95475d22bf60d95f4d5ec20cd304d51ba67eb92f4(
-    *,
-    rule_arn: builtins.str,
-) -> None:
-    """Type checking stubs"""
-    pass
-
-def _typecheckingstub__7e5c59e1cd03c9d8825ebf008d30354018de9d95b37c45267b93575de094bcfc(
-    *,
-    rule_arn: builtins.str,
-) -> None:
-    """Type checking stubs"""
-    pass
 
 def _typecheckingstub__18acbc8917f3c4cbc8bb06f5fae76010e41ab5f0e9b157f4c324c214a180ef2e(
     scope: _constructs_77d1e7e8.Construct,
@@ -2724,6 +2392,15 @@ def _typecheckingstub__20a12247cb1287e19ec3a764cc738d756d26c889450a5b771811f8378
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__00d0ecee2cd9ac728ca3e321203ce2e611e56b0b2d415ba2673a50599e4512cd(
+    *,
+    rule: typing.Union[_IResolvable_da3f097b, typing.Union[CfnOrganizationCentralizationRule.CentralizationRuleProperty, typing.Dict[builtins.str, typing.Any]]],
+    rule_name: builtins.str,
+    tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__a67d6a9dd82924a413b7d3435faeb8efa735048df0244b926e672def8c2d5f75(
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
@@ -2791,6 +2468,15 @@ def _typecheckingstub__945b01222f6573dfd9bd365335b34de4d056db844b2fe9ffa6c9d4037
     log_format: typing.Optional[builtins.str] = None,
     max_aggregation_interval: typing.Optional[jsii.Number] = None,
     traffic_type: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__45c94381428dd096d5bd5b31c1a78b0ec6c66b125c46a889f389e957dbf9f76b(
+    *,
+    rule: typing.Union[_IResolvable_da3f097b, typing.Union[CfnOrganizationTelemetryRule.TelemetryRuleProperty, typing.Dict[builtins.str, typing.Any]]],
+    rule_name: builtins.str,
+    tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -2865,5 +2551,11 @@ def _typecheckingstub__cb426e63d8ddff6bc9e58865c89c023dbf7b61ef2e21b2f9ff902df9d
     """Type checking stubs"""
     pass
 
-for cls in [IOrganizationCentralizationRuleRef, IOrganizationTelemetryRuleRef, ITelemetryRuleRef]:
-    typing.cast(typing.Any, cls).__protocol_attrs__ = typing.cast(typing.Any, cls).__protocol_attrs__ - set(['__jsii_proxy_class__', '__jsii_type__'])
+def _typecheckingstub__7455cb845b044ed569a8ec8407abf811920062f00d1e54ad191e90dc9b7e2811(
+    *,
+    rule: typing.Union[_IResolvable_da3f097b, typing.Union[CfnTelemetryRule.TelemetryRuleProperty, typing.Dict[builtins.str, typing.Any]]],
+    rule_name: builtins.str,
+    tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass

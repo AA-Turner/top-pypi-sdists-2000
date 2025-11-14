@@ -373,7 +373,9 @@ class NameChecker(_BasicChecker):
     def visit_classdef(self, node: nodes.ClassDef) -> None:
         self._check_name("class", node.name, node)
         for attr, anodes in node.instance_attrs.items():
-            if not any(node.instance_attr_ancestors(attr)):
+            if not any(
+                node.instance_attr_ancestors(attr)
+            ) and not utils.is_assign_name_annotated_with(anodes[0], "Final"):
                 self._check_name("attr", attr, anodes[0])
 
     @utils.only_required_for_messages("disallowed-name", "invalid-name")
@@ -488,17 +490,7 @@ class NameChecker(_BasicChecker):
                     return
 
                 # Check classes (TypeVar's are classes so they need to be excluded first)
-                elif isinstance(inferred_assign_type, nodes.ClassDef) or (
-                    isinstance(inferred_assign_type, bases.Instance)
-                    and {"EnumMeta", "TypedDict"}.intersection(
-                        {
-                            ancestor.name
-                            for ancestor in cast(
-                                InferenceResult, inferred_assign_type
-                            ).mro()
-                        }
-                    )
-                ):
+                elif self._should_check_class_regex(inferred_assign_type):
                     self._check_name("class", node.name, node)
 
                 # Don't emit if the name redefines an import in an ImportError except handler
@@ -575,6 +567,28 @@ class NameChecker(_BasicChecker):
             return False
         regexp = self._name_regexps["variable"]
         return regexp.match(name) is not None
+
+    def _should_check_class_regex(
+        self, inferred_assign_type: InferenceResult | None
+    ) -> bool:
+        if isinstance(inferred_assign_type, nodes.ClassDef):
+            return True
+        if isinstance(inferred_assign_type, bases.Instance) and {
+            "EnumMeta",
+            "TypedDict",
+        }.intersection(
+            {
+                ancestor.name
+                for ancestor in cast(InferenceResult, inferred_assign_type).mro()
+            }
+        ):
+            return True
+        if (
+            isinstance(inferred_assign_type, nodes.FunctionDef)
+            and inferred_assign_type.qname() == "typing.Annotated"
+        ):
+            return True
+        return False
 
     def _recursive_check_names(self, args: list[nodes.AssignName]) -> None:
         """Check names in a possibly recursive list <arg>."""

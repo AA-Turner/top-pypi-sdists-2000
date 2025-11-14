@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: mcp
-Version: 1.21.0
+Version: 1.21.1
 Summary: Model Context Protocol SDK
 Project-URL: Homepage, https://modelcontextprotocol.io
 Project-URL: Repository, https://github.com/modelcontextprotocol/python-sdk
@@ -30,6 +30,8 @@ Requires-Dist: python-multipart>=0.0.9
 Requires-Dist: pywin32>=310; sys_platform == 'win32'
 Requires-Dist: sse-starlette>=1.6.1
 Requires-Dist: starlette>=0.27
+Requires-Dist: typing-extensions>=4.9.0
+Requires-Dist: typing-inspection>=0.4.1
 Requires-Dist: uvicorn>=0.31.1; sys_platform != 'emscripten'
 Provides-Extra: cli
 Requires-Dist: python-dotenv>=1.0.0; extra == 'cli'

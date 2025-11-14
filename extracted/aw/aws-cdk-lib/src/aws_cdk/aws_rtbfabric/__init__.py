@@ -71,13 +71,1509 @@ import constructs as _constructs_77d1e7e8
 from .. import (
     CfnResource as _CfnResource_9df397a6,
     CfnTag as _CfnTag_f6864754,
-    IEnvironmentAware as _IEnvironmentAware_a408b00d,
     IInspectable as _IInspectable_c2943556,
     IResolvable as _IResolvable_da3f097b,
     ITaggableV2 as _ITaggableV2_4e6798f8,
     TagManager as _TagManager_0a598cb3,
     TreeInspector as _TreeInspector_488e0dd5,
 )
+from ..interfaces.aws_rtbfabric import (
+    ILinkRef as _ILinkRef_1c71e733,
+    IRequesterGatewayRef as _IRequesterGatewayRef_d92bcdf1,
+    IResponderGatewayRef as _IResponderGatewayRef_2bdaa070,
+    LinkReference as _LinkReference_a62a8bc7,
+    RequesterGatewayReference as _RequesterGatewayReference_37e2965b,
+    ResponderGatewayReference as _ResponderGatewayReference_a8195bef,
+)
+
+
+@jsii.implements(_IInspectable_c2943556, _ILinkRef_1c71e733, _ITaggableV2_4e6798f8)
+class CfnLink(
+    _CfnResource_9df397a6,
+    metaclass=jsii.JSIIMeta,
+    jsii_type="aws-cdk-lib.aws_rtbfabric.CfnLink",
+):
+    '''Creates a new link between gateways.
+
+    Establishes a connection that allows gateways to communicate and exchange bid requests and responses.
+
+    :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-rtbfabric-link.html
+    :cloudformationResource: AWS::RTBFabric::Link
+    :exampleMetadata: fixture=_generated
+
+    Example::
+
+        # The code below shows an example of how to instantiate this type.
+        # The values are placeholders you should change.
+        from aws_cdk import aws_rtbfabric as rtbfabric
+        
+        cfn_link = rtbfabric.CfnLink(self, "MyCfnLink",
+            gateway_id="gatewayId",
+            link_log_settings=rtbfabric.CfnLink.LinkLogSettingsProperty(
+                application_logs=rtbfabric.CfnLink.ApplicationLogsProperty(
+                    link_application_log_sampling=rtbfabric.CfnLink.LinkApplicationLogSamplingProperty(
+                        error_log=123,
+                        filter_log=123
+                    )
+                )
+            ),
+            peer_gateway_id="peerGatewayId",
+        
+            # the properties below are optional
+            http_responder_allowed=False,
+            link_attributes=rtbfabric.CfnLink.LinkAttributesProperty(
+                customer_provided_id="customerProvidedId",
+                responder_error_masking=[rtbfabric.CfnLink.ResponderErrorMaskingForHttpCodeProperty(
+                    action="action",
+                    http_code="httpCode",
+                    logging_types=["loggingTypes"],
+        
+                    # the properties below are optional
+                    response_logging_percentage=123
+                )]
+            ),
+            module_configuration_list=[rtbfabric.CfnLink.ModuleConfigurationProperty(
+                name="name",
+        
+                # the properties below are optional
+                depends_on=["dependsOn"],
+                module_parameters=rtbfabric.CfnLink.ModuleParametersProperty(
+                    no_bid=rtbfabric.CfnLink.NoBidModuleParametersProperty(
+                        pass_through_percentage=123,
+                        reason="reason",
+                        reason_code=123
+                    ),
+                    open_rtb_attribute=rtbfabric.CfnLink.OpenRtbAttributeModuleParametersProperty(
+                        action=rtbfabric.CfnLink.ActionProperty(
+                            header_tag=rtbfabric.CfnLink.HeaderTagActionProperty(
+                                name="name",
+                                value="value"
+                            ),
+                            no_bid=rtbfabric.CfnLink.NoBidActionProperty(
+                                no_bid_reason_code=123
+                            )
+                        ),
+                        filter_configuration=[rtbfabric.CfnLink.FilterProperty(
+                            criteria=[rtbfabric.CfnLink.FilterCriterionProperty(
+                                path="path",
+                                values=["values"]
+                            )]
+                        )],
+                        filter_type="filterType",
+                        holdback_percentage=123
+                    )
+                ),
+                version="version"
+            )],
+            tags=[CfnTag(
+                key="key",
+                value="value"
+            )]
+        )
+    '''
+
+    def __init__(
+        self,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        *,
+        gateway_id: builtins.str,
+        link_log_settings: typing.Union[_IResolvable_da3f097b, typing.Union["CfnLink.LinkLogSettingsProperty", typing.Dict[builtins.str, typing.Any]]],
+        peer_gateway_id: builtins.str,
+        http_responder_allowed: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        link_attributes: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnLink.LinkAttributesProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        module_configuration_list: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnLink.ModuleConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+    ) -> None:
+        '''Create a new ``AWS::RTBFabric::Link``.
+
+        :param scope: Scope in which this resource is defined.
+        :param id: Construct identifier for this resource (unique in its scope).
+        :param gateway_id: The unique identifier of the gateway.
+        :param link_log_settings: Settings for the application logs.
+        :param peer_gateway_id: The unique identifier of the peer gateway.
+        :param http_responder_allowed: Boolean to specify if an HTTP responder is allowed.
+        :param link_attributes: Attributes of the link.
+        :param module_configuration_list: 
+        :param tags: A map of the key-value pairs of the tag or tags to assign to the resource.
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__33e403b84fbb081fd16a0097272c1b774ceb7dfcf2ef00e8d7edb2e0fe7cec74)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+        props = CfnLinkProps(
+            gateway_id=gateway_id,
+            link_log_settings=link_log_settings,
+            peer_gateway_id=peer_gateway_id,
+            http_responder_allowed=http_responder_allowed,
+            link_attributes=link_attributes,
+            module_configuration_list=module_configuration_list,
+            tags=tags,
+        )
+
+        jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="inspect")
+    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+        '''Examines the CloudFormation resource and discloses attributes.
+
+        :param inspector: tree inspector to collect and process attributes.
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__cc9bc5027acac07a275a06b167f0f8790f36a2fef049c4c738abc9a498a67b72)
+            check_type(argname="argument inspector", value=inspector, expected_type=type_hints["inspector"])
+        return typing.cast(None, jsii.invoke(self, "inspect", [inspector]))
+
+    @jsii.member(jsii_name="renderProperties")
+    def _render_properties(
+        self,
+        props: typing.Mapping[builtins.str, typing.Any],
+    ) -> typing.Mapping[builtins.str, typing.Any]:
+        '''
+        :param props: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__d3d7d7182ae1421ce2250b4c41ee061920faaa9e8beb8ee36659bc44bfca4d7c)
+            check_type(argname="argument props", value=props, expected_type=type_hints["props"])
+        return typing.cast(typing.Mapping[builtins.str, typing.Any], jsii.invoke(self, "renderProperties", [props]))
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="CFN_RESOURCE_TYPE_NAME")
+    def CFN_RESOURCE_TYPE_NAME(cls) -> builtins.str:
+        '''The CloudFormation resource type name for this resource class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "CFN_RESOURCE_TYPE_NAME"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrArn")
+    def attr_arn(self) -> builtins.str:
+        '''
+        :cloudformationAttribute: Arn
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrArn"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrCreatedTimestamp")
+    def attr_created_timestamp(self) -> builtins.str:
+        '''
+        :cloudformationAttribute: CreatedTimestamp
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrCreatedTimestamp"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrLinkDirection")
+    def attr_link_direction(self) -> builtins.str:
+        '''
+        :cloudformationAttribute: LinkDirection
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrLinkDirection"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrLinkId")
+    def attr_link_id(self) -> builtins.str:
+        '''The unique identifier of the link.
+
+        :cloudformationAttribute: LinkId
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrLinkId"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrLinkStatus")
+    def attr_link_status(self) -> builtins.str:
+        '''
+        :cloudformationAttribute: LinkStatus
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrLinkStatus"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrUpdatedTimestamp")
+    def attr_updated_timestamp(self) -> builtins.str:
+        '''
+        :cloudformationAttribute: UpdatedTimestamp
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrUpdatedTimestamp"))
+
+    @builtins.property
+    @jsii.member(jsii_name="cdkTagManager")
+    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+        '''Tag Manager which manages the tags for this resource.'''
+        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+
+    @builtins.property
+    @jsii.member(jsii_name="cfnProperties")
+    def _cfn_properties(self) -> typing.Mapping[builtins.str, typing.Any]:
+        return typing.cast(typing.Mapping[builtins.str, typing.Any], jsii.get(self, "cfnProperties"))
+
+    @builtins.property
+    @jsii.member(jsii_name="linkRef")
+    def link_ref(self) -> _LinkReference_a62a8bc7:
+        '''A reference to a Link resource.'''
+        return typing.cast(_LinkReference_a62a8bc7, jsii.get(self, "linkRef"))
+
+    @builtins.property
+    @jsii.member(jsii_name="gatewayId")
+    def gateway_id(self) -> builtins.str:
+        '''The unique identifier of the gateway.'''
+        return typing.cast(builtins.str, jsii.get(self, "gatewayId"))
+
+    @gateway_id.setter
+    def gateway_id(self, value: builtins.str) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__bd77fe8e257ed257fd9cc2835f29e82e4e5c9092b9320846e746cb8385d83132)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "gatewayId", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="linkLogSettings")
+    def link_log_settings(
+        self,
+    ) -> typing.Union[_IResolvable_da3f097b, "CfnLink.LinkLogSettingsProperty"]:
+        '''Settings for the application logs.'''
+        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnLink.LinkLogSettingsProperty"], jsii.get(self, "linkLogSettings"))
+
+    @link_log_settings.setter
+    def link_log_settings(
+        self,
+        value: typing.Union[_IResolvable_da3f097b, "CfnLink.LinkLogSettingsProperty"],
+    ) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__ab7e556ca0c98de786d1067094aa52ffc4810802cdeabb970d57fd2e6e7032cc)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "linkLogSettings", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="peerGatewayId")
+    def peer_gateway_id(self) -> builtins.str:
+        '''The unique identifier of the peer gateway.'''
+        return typing.cast(builtins.str, jsii.get(self, "peerGatewayId"))
+
+    @peer_gateway_id.setter
+    def peer_gateway_id(self, value: builtins.str) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__d1e08aa7186c8b3f2bcce904bac17f4f0dffb3848b35af4cb2707c3ecf5fdc87)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "peerGatewayId", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="httpResponderAllowed")
+    def http_responder_allowed(
+        self,
+    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        '''Boolean to specify if an HTTP responder is allowed.'''
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "httpResponderAllowed"))
+
+    @http_responder_allowed.setter
+    def http_responder_allowed(
+        self,
+        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+    ) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__48b3206215bae9d2e48e79793f9ffd87062a4b1724e8972850cbacafec752632)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "httpResponderAllowed", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="linkAttributes")
+    def link_attributes(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnLink.LinkAttributesProperty"]]:
+        '''Attributes of the link.'''
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnLink.LinkAttributesProperty"]], jsii.get(self, "linkAttributes"))
+
+    @link_attributes.setter
+    def link_attributes(
+        self,
+        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnLink.LinkAttributesProperty"]],
+    ) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__a1ab4741f8f8f4356c5390e467941454f9741185b5834e0d5c912d2df062bb22)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "linkAttributes", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="moduleConfigurationList")
+    def module_configuration_list(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnLink.ModuleConfigurationProperty"]]]]:
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnLink.ModuleConfigurationProperty"]]]], jsii.get(self, "moduleConfigurationList"))
+
+    @module_configuration_list.setter
+    def module_configuration_list(
+        self,
+        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnLink.ModuleConfigurationProperty"]]]],
+    ) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__bfe068c99595620eaa7b9882ede77a4ac9cf63b8112fdeb95ec82ba2220f47c9)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "moduleConfigurationList", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="tags")
+    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+        '''A map of the key-value pairs of the tag or tags to assign to the resource.'''
+        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tags"))
+
+    @tags.setter
+    def tags(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__89f50ed2507493ec960d7f22a7f5e59b8cd846866c52a44638fb170da225c31a)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "tags", value) # pyright: ignore[reportArgumentType]
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_rtbfabric.CfnLink.ActionProperty",
+        jsii_struct_bases=[],
+        name_mapping={"header_tag": "headerTag", "no_bid": "noBid"},
+    )
+    class ActionProperty:
+        def __init__(
+            self,
+            *,
+            header_tag: typing.Union[_IResolvable_da3f097b, typing.Union["CfnLink.HeaderTagActionProperty", typing.Dict[builtins.str, typing.Any]]],
+            no_bid: typing.Union[_IResolvable_da3f097b, typing.Union["CfnLink.NoBidActionProperty", typing.Dict[builtins.str, typing.Any]]],
+        ) -> None:
+            '''Describes a bid action.
+
+            :param header_tag: Describes the header tag for a bid action.
+            :param no_bid: Describes the parameters of a no bid module.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-rtbfabric-link-action.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_rtbfabric as rtbfabric
+                
+                action_property = rtbfabric.CfnLink.ActionProperty(
+                    header_tag=rtbfabric.CfnLink.HeaderTagActionProperty(
+                        name="name",
+                        value="value"
+                    ),
+                    no_bid=rtbfabric.CfnLink.NoBidActionProperty(
+                        no_bid_reason_code=123
+                    )
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__d6894eb0ca15bfc1becb971f044daaafc323280b5c36040bf05b97a7db16c1c6)
+                check_type(argname="argument header_tag", value=header_tag, expected_type=type_hints["header_tag"])
+                check_type(argname="argument no_bid", value=no_bid, expected_type=type_hints["no_bid"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "header_tag": header_tag,
+                "no_bid": no_bid,
+            }
+
+        @builtins.property
+        def header_tag(
+            self,
+        ) -> typing.Union[_IResolvable_da3f097b, "CfnLink.HeaderTagActionProperty"]:
+            '''Describes the header tag for a bid action.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-rtbfabric-link-action.html#cfn-rtbfabric-link-action-headertag
+            '''
+            result = self._values.get("header_tag")
+            assert result is not None, "Required property 'header_tag' is missing"
+            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnLink.HeaderTagActionProperty"], result)
+
+        @builtins.property
+        def no_bid(
+            self,
+        ) -> typing.Union[_IResolvable_da3f097b, "CfnLink.NoBidActionProperty"]:
+            '''Describes the parameters of a no bid module.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-rtbfabric-link-action.html#cfn-rtbfabric-link-action-nobid
+            '''
+            result = self._values.get("no_bid")
+            assert result is not None, "Required property 'no_bid' is missing"
+            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnLink.NoBidActionProperty"], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "ActionProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_rtbfabric.CfnLink.ApplicationLogsProperty",
+        jsii_struct_bases=[],
+        name_mapping={"link_application_log_sampling": "linkApplicationLogSampling"},
+    )
+    class ApplicationLogsProperty:
+        def __init__(
+            self,
+            *,
+            link_application_log_sampling: typing.Union[_IResolvable_da3f097b, typing.Union["CfnLink.LinkApplicationLogSamplingProperty", typing.Dict[builtins.str, typing.Any]]],
+        ) -> None:
+            '''Describes the configuration of a link application log.
+
+            :param link_application_log_sampling: Describes a link application log sample.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-rtbfabric-link-applicationlogs.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_rtbfabric as rtbfabric
+                
+                application_logs_property = rtbfabric.CfnLink.ApplicationLogsProperty(
+                    link_application_log_sampling=rtbfabric.CfnLink.LinkApplicationLogSamplingProperty(
+                        error_log=123,
+                        filter_log=123
+                    )
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__386c1f58d2f3cd26972e49e1d069f69cd28a5e0106e1e75cdd6b149047a40486)
+                check_type(argname="argument link_application_log_sampling", value=link_application_log_sampling, expected_type=type_hints["link_application_log_sampling"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "link_application_log_sampling": link_application_log_sampling,
+            }
+
+        @builtins.property
+        def link_application_log_sampling(
+            self,
+        ) -> typing.Union[_IResolvable_da3f097b, "CfnLink.LinkApplicationLogSamplingProperty"]:
+            '''Describes a link application log sample.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-rtbfabric-link-applicationlogs.html#cfn-rtbfabric-link-applicationlogs-linkapplicationlogsampling
+            '''
+            result = self._values.get("link_application_log_sampling")
+            assert result is not None, "Required property 'link_application_log_sampling' is missing"
+            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnLink.LinkApplicationLogSamplingProperty"], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "ApplicationLogsProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_rtbfabric.CfnLink.FilterCriterionProperty",
+        jsii_struct_bases=[],
+        name_mapping={"path": "path", "values": "values"},
+    )
+    class FilterCriterionProperty:
+        def __init__(
+            self,
+            *,
+            path: builtins.str,
+            values: typing.Sequence[builtins.str],
+        ) -> None:
+            '''Describes the criteria for a filter.
+
+            :param path: The path to filter.
+            :param values: The value to filter.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-rtbfabric-link-filtercriterion.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_rtbfabric as rtbfabric
+                
+                filter_criterion_property = rtbfabric.CfnLink.FilterCriterionProperty(
+                    path="path",
+                    values=["values"]
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__976a810fd8399ef10076aa8ff21db3814228728d51cbe483206baf947e14d22a)
+                check_type(argname="argument path", value=path, expected_type=type_hints["path"])
+                check_type(argname="argument values", value=values, expected_type=type_hints["values"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "path": path,
+                "values": values,
+            }
+
+        @builtins.property
+        def path(self) -> builtins.str:
+            '''The path to filter.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-rtbfabric-link-filtercriterion.html#cfn-rtbfabric-link-filtercriterion-path
+            '''
+            result = self._values.get("path")
+            assert result is not None, "Required property 'path' is missing"
+            return typing.cast(builtins.str, result)
+
+        @builtins.property
+        def values(self) -> typing.List[builtins.str]:
+            '''The value to filter.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-rtbfabric-link-filtercriterion.html#cfn-rtbfabric-link-filtercriterion-values
+            '''
+            result = self._values.get("values")
+            assert result is not None, "Required property 'values' is missing"
+            return typing.cast(typing.List[builtins.str], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "FilterCriterionProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_rtbfabric.CfnLink.FilterProperty",
+        jsii_struct_bases=[],
+        name_mapping={"criteria": "criteria"},
+    )
+    class FilterProperty:
+        def __init__(
+            self,
+            *,
+            criteria: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnLink.FilterCriterionProperty", typing.Dict[builtins.str, typing.Any]]]]],
+        ) -> None:
+            '''Describes the configuration of a filter.
+
+            :param criteria: Describes the criteria for a filter.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-rtbfabric-link-filter.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_rtbfabric as rtbfabric
+                
+                filter_property = rtbfabric.CfnLink.FilterProperty(
+                    criteria=[rtbfabric.CfnLink.FilterCriterionProperty(
+                        path="path",
+                        values=["values"]
+                    )]
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__bcc0e2535e30885c51d63b7ca099b67d5c103991ad0d521226fd949185ecf18a)
+                check_type(argname="argument criteria", value=criteria, expected_type=type_hints["criteria"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "criteria": criteria,
+            }
+
+        @builtins.property
+        def criteria(
+            self,
+        ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnLink.FilterCriterionProperty"]]]:
+            '''Describes the criteria for a filter.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-rtbfabric-link-filter.html#cfn-rtbfabric-link-filter-criteria
+            '''
+            result = self._values.get("criteria")
+            assert result is not None, "Required property 'criteria' is missing"
+            return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnLink.FilterCriterionProperty"]]], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "FilterProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_rtbfabric.CfnLink.HeaderTagActionProperty",
+        jsii_struct_bases=[],
+        name_mapping={"name": "name", "value": "value"},
+    )
+    class HeaderTagActionProperty:
+        def __init__(self, *, name: builtins.str, value: builtins.str) -> None:
+            '''Describes the header tag for a bid action.
+
+            :param name: The name of the bid action.
+            :param value: The value of the bid action.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-rtbfabric-link-headertagaction.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_rtbfabric as rtbfabric
+                
+                header_tag_action_property = rtbfabric.CfnLink.HeaderTagActionProperty(
+                    name="name",
+                    value="value"
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__48d14abad5b3d72432a046c98d69a1dbaed71327059ccfad80adc96630cb3dd4)
+                check_type(argname="argument name", value=name, expected_type=type_hints["name"])
+                check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "name": name,
+                "value": value,
+            }
+
+        @builtins.property
+        def name(self) -> builtins.str:
+            '''The name of the bid action.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-rtbfabric-link-headertagaction.html#cfn-rtbfabric-link-headertagaction-name
+            '''
+            result = self._values.get("name")
+            assert result is not None, "Required property 'name' is missing"
+            return typing.cast(builtins.str, result)
+
+        @builtins.property
+        def value(self) -> builtins.str:
+            '''The value of the bid action.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-rtbfabric-link-headertagaction.html#cfn-rtbfabric-link-headertagaction-value
+            '''
+            result = self._values.get("value")
+            assert result is not None, "Required property 'value' is missing"
+            return typing.cast(builtins.str, result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "HeaderTagActionProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_rtbfabric.CfnLink.LinkApplicationLogSamplingProperty",
+        jsii_struct_bases=[],
+        name_mapping={"error_log": "errorLog", "filter_log": "filterLog"},
+    )
+    class LinkApplicationLogSamplingProperty:
+        def __init__(self, *, error_log: jsii.Number, filter_log: jsii.Number) -> None:
+            '''Describes a link application log sample.
+
+            :param error_log: An error log entry.
+            :param filter_log: A filter log entry.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-rtbfabric-link-linkapplicationlogsampling.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_rtbfabric as rtbfabric
+                
+                link_application_log_sampling_property = rtbfabric.CfnLink.LinkApplicationLogSamplingProperty(
+                    error_log=123,
+                    filter_log=123
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__cc1221d9bdb6ac10224d2e809d5a57a5e79c1624f9b25a6d8868856fb5441212)
+                check_type(argname="argument error_log", value=error_log, expected_type=type_hints["error_log"])
+                check_type(argname="argument filter_log", value=filter_log, expected_type=type_hints["filter_log"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "error_log": error_log,
+                "filter_log": filter_log,
+            }
+
+        @builtins.property
+        def error_log(self) -> jsii.Number:
+            '''An error log entry.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-rtbfabric-link-linkapplicationlogsampling.html#cfn-rtbfabric-link-linkapplicationlogsampling-errorlog
+            '''
+            result = self._values.get("error_log")
+            assert result is not None, "Required property 'error_log' is missing"
+            return typing.cast(jsii.Number, result)
+
+        @builtins.property
+        def filter_log(self) -> jsii.Number:
+            '''A filter log entry.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-rtbfabric-link-linkapplicationlogsampling.html#cfn-rtbfabric-link-linkapplicationlogsampling-filterlog
+            '''
+            result = self._values.get("filter_log")
+            assert result is not None, "Required property 'filter_log' is missing"
+            return typing.cast(jsii.Number, result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "LinkApplicationLogSamplingProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_rtbfabric.CfnLink.LinkAttributesProperty",
+        jsii_struct_bases=[],
+        name_mapping={
+            "customer_provided_id": "customerProvidedId",
+            "responder_error_masking": "responderErrorMasking",
+        },
+    )
+    class LinkAttributesProperty:
+        def __init__(
+            self,
+            *,
+            customer_provided_id: typing.Optional[builtins.str] = None,
+            responder_error_masking: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnLink.ResponderErrorMaskingForHttpCodeProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        ) -> None:
+            '''Describes the attributes of a link.
+
+            :param customer_provided_id: The customer-provided unique identifier of the link.
+            :param responder_error_masking: Describes the masking for HTTP error codes.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-rtbfabric-link-linkattributes.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_rtbfabric as rtbfabric
+                
+                link_attributes_property = rtbfabric.CfnLink.LinkAttributesProperty(
+                    customer_provided_id="customerProvidedId",
+                    responder_error_masking=[rtbfabric.CfnLink.ResponderErrorMaskingForHttpCodeProperty(
+                        action="action",
+                        http_code="httpCode",
+                        logging_types=["loggingTypes"],
+                
+                        # the properties below are optional
+                        response_logging_percentage=123
+                    )]
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__9d88f2ed7a2e18d0a7f048f2648cd6744718ec16fcf5c0c157a303ced0fe42a8)
+                check_type(argname="argument customer_provided_id", value=customer_provided_id, expected_type=type_hints["customer_provided_id"])
+                check_type(argname="argument responder_error_masking", value=responder_error_masking, expected_type=type_hints["responder_error_masking"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if customer_provided_id is not None:
+                self._values["customer_provided_id"] = customer_provided_id
+            if responder_error_masking is not None:
+                self._values["responder_error_masking"] = responder_error_masking
+
+        @builtins.property
+        def customer_provided_id(self) -> typing.Optional[builtins.str]:
+            '''The customer-provided unique identifier of the link.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-rtbfabric-link-linkattributes.html#cfn-rtbfabric-link-linkattributes-customerprovidedid
+            '''
+            result = self._values.get("customer_provided_id")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        @builtins.property
+        def responder_error_masking(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnLink.ResponderErrorMaskingForHttpCodeProperty"]]]]:
+            '''Describes the masking for HTTP error codes.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-rtbfabric-link-linkattributes.html#cfn-rtbfabric-link-linkattributes-respondererrormasking
+            '''
+            result = self._values.get("responder_error_masking")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnLink.ResponderErrorMaskingForHttpCodeProperty"]]]], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "LinkAttributesProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_rtbfabric.CfnLink.LinkLogSettingsProperty",
+        jsii_struct_bases=[],
+        name_mapping={"application_logs": "applicationLogs"},
+    )
+    class LinkLogSettingsProperty:
+        def __init__(
+            self,
+            *,
+            application_logs: typing.Union[_IResolvable_da3f097b, typing.Union["CfnLink.ApplicationLogsProperty", typing.Dict[builtins.str, typing.Any]]],
+        ) -> None:
+            '''Describes the settings for a link log.
+
+            :param application_logs: Describes the configuration of a link application log.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-rtbfabric-link-linklogsettings.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_rtbfabric as rtbfabric
+                
+                link_log_settings_property = rtbfabric.CfnLink.LinkLogSettingsProperty(
+                    application_logs=rtbfabric.CfnLink.ApplicationLogsProperty(
+                        link_application_log_sampling=rtbfabric.CfnLink.LinkApplicationLogSamplingProperty(
+                            error_log=123,
+                            filter_log=123
+                        )
+                    )
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__e62485742cc7a54f6e2603b3db9f4a68a14d224e255f6337f68e83e4464ec0de)
+                check_type(argname="argument application_logs", value=application_logs, expected_type=type_hints["application_logs"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "application_logs": application_logs,
+            }
+
+        @builtins.property
+        def application_logs(
+            self,
+        ) -> typing.Union[_IResolvable_da3f097b, "CfnLink.ApplicationLogsProperty"]:
+            '''Describes the configuration of a link application log.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-rtbfabric-link-linklogsettings.html#cfn-rtbfabric-link-linklogsettings-applicationlogs
+            '''
+            result = self._values.get("application_logs")
+            assert result is not None, "Required property 'application_logs' is missing"
+            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnLink.ApplicationLogsProperty"], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "LinkLogSettingsProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_rtbfabric.CfnLink.ModuleConfigurationProperty",
+        jsii_struct_bases=[],
+        name_mapping={
+            "name": "name",
+            "depends_on": "dependsOn",
+            "module_parameters": "moduleParameters",
+            "version": "version",
+        },
+    )
+    class ModuleConfigurationProperty:
+        def __init__(
+            self,
+            *,
+            name: builtins.str,
+            depends_on: typing.Optional[typing.Sequence[builtins.str]] = None,
+            module_parameters: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnLink.ModuleParametersProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            version: typing.Optional[builtins.str] = None,
+        ) -> None:
+            '''Describes the configuration of a module.
+
+            :param name: The name of the module.
+            :param depends_on: The dependencies of the module.
+            :param module_parameters: Describes the parameters of a module.
+            :param version: The version of the module.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-rtbfabric-link-moduleconfiguration.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_rtbfabric as rtbfabric
+                
+                module_configuration_property = rtbfabric.CfnLink.ModuleConfigurationProperty(
+                    name="name",
+                
+                    # the properties below are optional
+                    depends_on=["dependsOn"],
+                    module_parameters=rtbfabric.CfnLink.ModuleParametersProperty(
+                        no_bid=rtbfabric.CfnLink.NoBidModuleParametersProperty(
+                            pass_through_percentage=123,
+                            reason="reason",
+                            reason_code=123
+                        ),
+                        open_rtb_attribute=rtbfabric.CfnLink.OpenRtbAttributeModuleParametersProperty(
+                            action=rtbfabric.CfnLink.ActionProperty(
+                                header_tag=rtbfabric.CfnLink.HeaderTagActionProperty(
+                                    name="name",
+                                    value="value"
+                                ),
+                                no_bid=rtbfabric.CfnLink.NoBidActionProperty(
+                                    no_bid_reason_code=123
+                                )
+                            ),
+                            filter_configuration=[rtbfabric.CfnLink.FilterProperty(
+                                criteria=[rtbfabric.CfnLink.FilterCriterionProperty(
+                                    path="path",
+                                    values=["values"]
+                                )]
+                            )],
+                            filter_type="filterType",
+                            holdback_percentage=123
+                        )
+                    ),
+                    version="version"
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__82be0aba67824a4714ca848063dd6c387779b7a60080807fbc17ba6f58442821)
+                check_type(argname="argument name", value=name, expected_type=type_hints["name"])
+                check_type(argname="argument depends_on", value=depends_on, expected_type=type_hints["depends_on"])
+                check_type(argname="argument module_parameters", value=module_parameters, expected_type=type_hints["module_parameters"])
+                check_type(argname="argument version", value=version, expected_type=type_hints["version"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "name": name,
+            }
+            if depends_on is not None:
+                self._values["depends_on"] = depends_on
+            if module_parameters is not None:
+                self._values["module_parameters"] = module_parameters
+            if version is not None:
+                self._values["version"] = version
+
+        @builtins.property
+        def name(self) -> builtins.str:
+            '''The name of the module.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-rtbfabric-link-moduleconfiguration.html#cfn-rtbfabric-link-moduleconfiguration-name
+            '''
+            result = self._values.get("name")
+            assert result is not None, "Required property 'name' is missing"
+            return typing.cast(builtins.str, result)
+
+        @builtins.property
+        def depends_on(self) -> typing.Optional[typing.List[builtins.str]]:
+            '''The dependencies of the module.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-rtbfabric-link-moduleconfiguration.html#cfn-rtbfabric-link-moduleconfiguration-dependson
+            '''
+            result = self._values.get("depends_on")
+            return typing.cast(typing.Optional[typing.List[builtins.str]], result)
+
+        @builtins.property
+        def module_parameters(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnLink.ModuleParametersProperty"]]:
+            '''Describes the parameters of a module.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-rtbfabric-link-moduleconfiguration.html#cfn-rtbfabric-link-moduleconfiguration-moduleparameters
+            '''
+            result = self._values.get("module_parameters")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnLink.ModuleParametersProperty"]], result)
+
+        @builtins.property
+        def version(self) -> typing.Optional[builtins.str]:
+            '''The version of the module.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-rtbfabric-link-moduleconfiguration.html#cfn-rtbfabric-link-moduleconfiguration-version
+            '''
+            result = self._values.get("version")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "ModuleConfigurationProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_rtbfabric.CfnLink.ModuleParametersProperty",
+        jsii_struct_bases=[],
+        name_mapping={"no_bid": "noBid", "open_rtb_attribute": "openRtbAttribute"},
+    )
+    class ModuleParametersProperty:
+        def __init__(
+            self,
+            *,
+            no_bid: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnLink.NoBidModuleParametersProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            open_rtb_attribute: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnLink.OpenRtbAttributeModuleParametersProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        ) -> None:
+            '''Describes the parameters of a module.
+
+            :param no_bid: Describes the parameters of a no bid module.
+            :param open_rtb_attribute: Describes the parameters of an open RTB attribute module.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-rtbfabric-link-moduleparameters.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_rtbfabric as rtbfabric
+                
+                module_parameters_property = rtbfabric.CfnLink.ModuleParametersProperty(
+                    no_bid=rtbfabric.CfnLink.NoBidModuleParametersProperty(
+                        pass_through_percentage=123,
+                        reason="reason",
+                        reason_code=123
+                    ),
+                    open_rtb_attribute=rtbfabric.CfnLink.OpenRtbAttributeModuleParametersProperty(
+                        action=rtbfabric.CfnLink.ActionProperty(
+                            header_tag=rtbfabric.CfnLink.HeaderTagActionProperty(
+                                name="name",
+                                value="value"
+                            ),
+                            no_bid=rtbfabric.CfnLink.NoBidActionProperty(
+                                no_bid_reason_code=123
+                            )
+                        ),
+                        filter_configuration=[rtbfabric.CfnLink.FilterProperty(
+                            criteria=[rtbfabric.CfnLink.FilterCriterionProperty(
+                                path="path",
+                                values=["values"]
+                            )]
+                        )],
+                        filter_type="filterType",
+                        holdback_percentage=123
+                    )
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__910c77dbedb644758dff1f600f9a05ab181cc893c92bc153462d376122dba51d)
+                check_type(argname="argument no_bid", value=no_bid, expected_type=type_hints["no_bid"])
+                check_type(argname="argument open_rtb_attribute", value=open_rtb_attribute, expected_type=type_hints["open_rtb_attribute"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if no_bid is not None:
+                self._values["no_bid"] = no_bid
+            if open_rtb_attribute is not None:
+                self._values["open_rtb_attribute"] = open_rtb_attribute
+
+        @builtins.property
+        def no_bid(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnLink.NoBidModuleParametersProperty"]]:
+            '''Describes the parameters of a no bid module.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-rtbfabric-link-moduleparameters.html#cfn-rtbfabric-link-moduleparameters-nobid
+            '''
+            result = self._values.get("no_bid")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnLink.NoBidModuleParametersProperty"]], result)
+
+        @builtins.property
+        def open_rtb_attribute(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnLink.OpenRtbAttributeModuleParametersProperty"]]:
+            '''Describes the parameters of an open RTB attribute module.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-rtbfabric-link-moduleparameters.html#cfn-rtbfabric-link-moduleparameters-openrtbattribute
+            '''
+            result = self._values.get("open_rtb_attribute")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnLink.OpenRtbAttributeModuleParametersProperty"]], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "ModuleParametersProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_rtbfabric.CfnLink.NoBidActionProperty",
+        jsii_struct_bases=[],
+        name_mapping={"no_bid_reason_code": "noBidReasonCode"},
+    )
+    class NoBidActionProperty:
+        def __init__(
+            self,
+            *,
+            no_bid_reason_code: typing.Optional[jsii.Number] = None,
+        ) -> None:
+            '''Describes a no bid action.
+
+            :param no_bid_reason_code: The reason code for the no bid action.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-rtbfabric-link-nobidaction.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_rtbfabric as rtbfabric
+                
+                no_bid_action_property = rtbfabric.CfnLink.NoBidActionProperty(
+                    no_bid_reason_code=123
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__d808313ff4cbeeb74cf4ac496addde75cf42f9a64b0c9069d77342b5f26420c6)
+                check_type(argname="argument no_bid_reason_code", value=no_bid_reason_code, expected_type=type_hints["no_bid_reason_code"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if no_bid_reason_code is not None:
+                self._values["no_bid_reason_code"] = no_bid_reason_code
+
+        @builtins.property
+        def no_bid_reason_code(self) -> typing.Optional[jsii.Number]:
+            '''The reason code for the no bid action.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-rtbfabric-link-nobidaction.html#cfn-rtbfabric-link-nobidaction-nobidreasoncode
+            '''
+            result = self._values.get("no_bid_reason_code")
+            return typing.cast(typing.Optional[jsii.Number], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "NoBidActionProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_rtbfabric.CfnLink.NoBidModuleParametersProperty",
+        jsii_struct_bases=[],
+        name_mapping={
+            "pass_through_percentage": "passThroughPercentage",
+            "reason": "reason",
+            "reason_code": "reasonCode",
+        },
+    )
+    class NoBidModuleParametersProperty:
+        def __init__(
+            self,
+            *,
+            pass_through_percentage: typing.Optional[jsii.Number] = None,
+            reason: typing.Optional[builtins.str] = None,
+            reason_code: typing.Optional[jsii.Number] = None,
+        ) -> None:
+            '''Describes the parameters of a no bid module.
+
+            :param pass_through_percentage: The pass through percentage.
+            :param reason: The reason description.
+            :param reason_code: The reason code.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-rtbfabric-link-nobidmoduleparameters.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_rtbfabric as rtbfabric
+                
+                no_bid_module_parameters_property = rtbfabric.CfnLink.NoBidModuleParametersProperty(
+                    pass_through_percentage=123,
+                    reason="reason",
+                    reason_code=123
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__65534e5849f21132ce42911f7b88232db1b4cc75a5d56fc3c669b59b4d829b0c)
+                check_type(argname="argument pass_through_percentage", value=pass_through_percentage, expected_type=type_hints["pass_through_percentage"])
+                check_type(argname="argument reason", value=reason, expected_type=type_hints["reason"])
+                check_type(argname="argument reason_code", value=reason_code, expected_type=type_hints["reason_code"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if pass_through_percentage is not None:
+                self._values["pass_through_percentage"] = pass_through_percentage
+            if reason is not None:
+                self._values["reason"] = reason
+            if reason_code is not None:
+                self._values["reason_code"] = reason_code
+
+        @builtins.property
+        def pass_through_percentage(self) -> typing.Optional[jsii.Number]:
+            '''The pass through percentage.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-rtbfabric-link-nobidmoduleparameters.html#cfn-rtbfabric-link-nobidmoduleparameters-passthroughpercentage
+            '''
+            result = self._values.get("pass_through_percentage")
+            return typing.cast(typing.Optional[jsii.Number], result)
+
+        @builtins.property
+        def reason(self) -> typing.Optional[builtins.str]:
+            '''The reason description.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-rtbfabric-link-nobidmoduleparameters.html#cfn-rtbfabric-link-nobidmoduleparameters-reason
+            '''
+            result = self._values.get("reason")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        @builtins.property
+        def reason_code(self) -> typing.Optional[jsii.Number]:
+            '''The reason code.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-rtbfabric-link-nobidmoduleparameters.html#cfn-rtbfabric-link-nobidmoduleparameters-reasoncode
+            '''
+            result = self._values.get("reason_code")
+            return typing.cast(typing.Optional[jsii.Number], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "NoBidModuleParametersProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_rtbfabric.CfnLink.OpenRtbAttributeModuleParametersProperty",
+        jsii_struct_bases=[],
+        name_mapping={
+            "action": "action",
+            "filter_configuration": "filterConfiguration",
+            "filter_type": "filterType",
+            "holdback_percentage": "holdbackPercentage",
+        },
+    )
+    class OpenRtbAttributeModuleParametersProperty:
+        def __init__(
+            self,
+            *,
+            action: typing.Union[_IResolvable_da3f097b, typing.Union["CfnLink.ActionProperty", typing.Dict[builtins.str, typing.Any]]],
+            filter_configuration: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnLink.FilterProperty", typing.Dict[builtins.str, typing.Any]]]]],
+            filter_type: builtins.str,
+            holdback_percentage: jsii.Number,
+        ) -> None:
+            '''Describes the parameters of an open RTB attribute module.
+
+            :param action: Describes a bid action.
+            :param filter_configuration: Describes the configuration of a filter.
+            :param filter_type: The filter type.
+            :param holdback_percentage: The hold back percentage.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-rtbfabric-link-openrtbattributemoduleparameters.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_rtbfabric as rtbfabric
+                
+                open_rtb_attribute_module_parameters_property = rtbfabric.CfnLink.OpenRtbAttributeModuleParametersProperty(
+                    action=rtbfabric.CfnLink.ActionProperty(
+                        header_tag=rtbfabric.CfnLink.HeaderTagActionProperty(
+                            name="name",
+                            value="value"
+                        ),
+                        no_bid=rtbfabric.CfnLink.NoBidActionProperty(
+                            no_bid_reason_code=123
+                        )
+                    ),
+                    filter_configuration=[rtbfabric.CfnLink.FilterProperty(
+                        criteria=[rtbfabric.CfnLink.FilterCriterionProperty(
+                            path="path",
+                            values=["values"]
+                        )]
+                    )],
+                    filter_type="filterType",
+                    holdback_percentage=123
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__0027d94142f38aa037892e813fefe1e1f6b9ef3d7a8927dcb4fe8fe3340158c5)
+                check_type(argname="argument action", value=action, expected_type=type_hints["action"])
+                check_type(argname="argument filter_configuration", value=filter_configuration, expected_type=type_hints["filter_configuration"])
+                check_type(argname="argument filter_type", value=filter_type, expected_type=type_hints["filter_type"])
+                check_type(argname="argument holdback_percentage", value=holdback_percentage, expected_type=type_hints["holdback_percentage"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "action": action,
+                "filter_configuration": filter_configuration,
+                "filter_type": filter_type,
+                "holdback_percentage": holdback_percentage,
+            }
+
+        @builtins.property
+        def action(
+            self,
+        ) -> typing.Union[_IResolvable_da3f097b, "CfnLink.ActionProperty"]:
+            '''Describes a bid action.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-rtbfabric-link-openrtbattributemoduleparameters.html#cfn-rtbfabric-link-openrtbattributemoduleparameters-action
+            '''
+            result = self._values.get("action")
+            assert result is not None, "Required property 'action' is missing"
+            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnLink.ActionProperty"], result)
+
+        @builtins.property
+        def filter_configuration(
+            self,
+        ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnLink.FilterProperty"]]]:
+            '''Describes the configuration of a filter.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-rtbfabric-link-openrtbattributemoduleparameters.html#cfn-rtbfabric-link-openrtbattributemoduleparameters-filterconfiguration
+            '''
+            result = self._values.get("filter_configuration")
+            assert result is not None, "Required property 'filter_configuration' is missing"
+            return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnLink.FilterProperty"]]], result)
+
+        @builtins.property
+        def filter_type(self) -> builtins.str:
+            '''The filter type.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-rtbfabric-link-openrtbattributemoduleparameters.html#cfn-rtbfabric-link-openrtbattributemoduleparameters-filtertype
+            '''
+            result = self._values.get("filter_type")
+            assert result is not None, "Required property 'filter_type' is missing"
+            return typing.cast(builtins.str, result)
+
+        @builtins.property
+        def holdback_percentage(self) -> jsii.Number:
+            '''The hold back percentage.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-rtbfabric-link-openrtbattributemoduleparameters.html#cfn-rtbfabric-link-openrtbattributemoduleparameters-holdbackpercentage
+            '''
+            result = self._values.get("holdback_percentage")
+            assert result is not None, "Required property 'holdback_percentage' is missing"
+            return typing.cast(jsii.Number, result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "OpenRtbAttributeModuleParametersProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_rtbfabric.CfnLink.ResponderErrorMaskingForHttpCodeProperty",
+        jsii_struct_bases=[],
+        name_mapping={
+            "action": "action",
+            "http_code": "httpCode",
+            "logging_types": "loggingTypes",
+            "response_logging_percentage": "responseLoggingPercentage",
+        },
+    )
+    class ResponderErrorMaskingForHttpCodeProperty:
+        def __init__(
+            self,
+            *,
+            action: builtins.str,
+            http_code: builtins.str,
+            logging_types: typing.Sequence[builtins.str],
+            response_logging_percentage: typing.Optional[jsii.Number] = None,
+        ) -> None:
+            '''Describes the masking for HTTP error codes.
+
+            :param action: The action for the error..
+            :param http_code: The HTTP error code.
+            :param logging_types: The error log type.
+            :param response_logging_percentage: The percentage of response logging.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-rtbfabric-link-respondererrormaskingforhttpcode.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_rtbfabric as rtbfabric
+                
+                responder_error_masking_for_http_code_property = rtbfabric.CfnLink.ResponderErrorMaskingForHttpCodeProperty(
+                    action="action",
+                    http_code="httpCode",
+                    logging_types=["loggingTypes"],
+                
+                    # the properties below are optional
+                    response_logging_percentage=123
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__7a4d5a36bb204668cc9f3235d69b4d6dd33abe2f27737729656b5fd767fe6fcb)
+                check_type(argname="argument action", value=action, expected_type=type_hints["action"])
+                check_type(argname="argument http_code", value=http_code, expected_type=type_hints["http_code"])
+                check_type(argname="argument logging_types", value=logging_types, expected_type=type_hints["logging_types"])
+                check_type(argname="argument response_logging_percentage", value=response_logging_percentage, expected_type=type_hints["response_logging_percentage"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "action": action,
+                "http_code": http_code,
+                "logging_types": logging_types,
+            }
+            if response_logging_percentage is not None:
+                self._values["response_logging_percentage"] = response_logging_percentage
+
+        @builtins.property
+        def action(self) -> builtins.str:
+            '''The action for the error..
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-rtbfabric-link-respondererrormaskingforhttpcode.html#cfn-rtbfabric-link-respondererrormaskingforhttpcode-action
+            '''
+            result = self._values.get("action")
+            assert result is not None, "Required property 'action' is missing"
+            return typing.cast(builtins.str, result)
+
+        @builtins.property
+        def http_code(self) -> builtins.str:
+            '''The HTTP error code.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-rtbfabric-link-respondererrormaskingforhttpcode.html#cfn-rtbfabric-link-respondererrormaskingforhttpcode-httpcode
+            '''
+            result = self._values.get("http_code")
+            assert result is not None, "Required property 'http_code' is missing"
+            return typing.cast(builtins.str, result)
+
+        @builtins.property
+        def logging_types(self) -> typing.List[builtins.str]:
+            '''The error log type.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-rtbfabric-link-respondererrormaskingforhttpcode.html#cfn-rtbfabric-link-respondererrormaskingforhttpcode-loggingtypes
+            '''
+            result = self._values.get("logging_types")
+            assert result is not None, "Required property 'logging_types' is missing"
+            return typing.cast(typing.List[builtins.str], result)
+
+        @builtins.property
+        def response_logging_percentage(self) -> typing.Optional[jsii.Number]:
+            '''The percentage of response logging.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-rtbfabric-link-respondererrormaskingforhttpcode.html#cfn-rtbfabric-link-respondererrormaskingforhttpcode-responseloggingpercentage
+            '''
+            result = self._values.get("response_logging_percentage")
+            return typing.cast(typing.Optional[jsii.Number], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "ResponderErrorMaskingForHttpCodeProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
 
 
 @jsii.data_type(
@@ -98,22 +1594,22 @@ class CfnLinkProps:
         self,
         *,
         gateway_id: builtins.str,
-        link_log_settings: typing.Union[_IResolvable_da3f097b, typing.Union["CfnLink.LinkLogSettingsProperty", typing.Dict[builtins.str, typing.Any]]],
+        link_log_settings: typing.Union[_IResolvable_da3f097b, typing.Union[CfnLink.LinkLogSettingsProperty, typing.Dict[builtins.str, typing.Any]]],
         peer_gateway_id: builtins.str,
         http_responder_allowed: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        link_attributes: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnLink.LinkAttributesProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        module_configuration_list: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnLink.ModuleConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        link_attributes: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnLink.LinkAttributesProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        module_configuration_list: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnLink.ModuleConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnLink``.
 
-        :param gateway_id: 
-        :param link_log_settings: 
-        :param peer_gateway_id: 
-        :param http_responder_allowed: 
-        :param link_attributes: 
+        :param gateway_id: The unique identifier of the gateway.
+        :param link_log_settings: Settings for the application logs.
+        :param peer_gateway_id: The unique identifier of the peer gateway.
+        :param http_responder_allowed: Boolean to specify if an HTTP responder is allowed.
+        :param link_attributes: Attributes of the link.
         :param module_configuration_list: 
-        :param tags: Tags to assign to the Link.
+        :param tags: A map of the key-value pairs of the tag or tags to assign to the resource.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-rtbfabric-link.html
         :exampleMetadata: fixture=_generated
@@ -213,7 +1709,8 @@ class CfnLinkProps:
 
     @builtins.property
     def gateway_id(self) -> builtins.str:
-        '''
+        '''The unique identifier of the gateway.
+
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-rtbfabric-link.html#cfn-rtbfabric-link-gatewayid
         '''
         result = self._values.get("gateway_id")
@@ -223,17 +1720,19 @@ class CfnLinkProps:
     @builtins.property
     def link_log_settings(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, "CfnLink.LinkLogSettingsProperty"]:
-        '''
+    ) -> typing.Union[_IResolvable_da3f097b, CfnLink.LinkLogSettingsProperty]:
+        '''Settings for the application logs.
+
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-rtbfabric-link.html#cfn-rtbfabric-link-linklogsettings
         '''
         result = self._values.get("link_log_settings")
         assert result is not None, "Required property 'link_log_settings' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnLink.LinkLogSettingsProperty"], result)
+        return typing.cast(typing.Union[_IResolvable_da3f097b, CfnLink.LinkLogSettingsProperty], result)
 
     @builtins.property
     def peer_gateway_id(self) -> builtins.str:
-        '''
+        '''The unique identifier of the peer gateway.
+
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-rtbfabric-link.html#cfn-rtbfabric-link-peergatewayid
         '''
         result = self._values.get("peer_gateway_id")
@@ -244,7 +1743,8 @@ class CfnLinkProps:
     def http_responder_allowed(
         self,
     ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
-        '''
+        '''Boolean to specify if an HTTP responder is allowed.
+
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-rtbfabric-link.html#cfn-rtbfabric-link-httpresponderallowed
         '''
         result = self._values.get("http_responder_allowed")
@@ -253,26 +1753,27 @@ class CfnLinkProps:
     @builtins.property
     def link_attributes(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnLink.LinkAttributesProperty"]]:
-        '''
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnLink.LinkAttributesProperty]]:
+        '''Attributes of the link.
+
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-rtbfabric-link.html#cfn-rtbfabric-link-linkattributes
         '''
         result = self._values.get("link_attributes")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnLink.LinkAttributesProperty"]], result)
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnLink.LinkAttributesProperty]], result)
 
     @builtins.property
     def module_configuration_list(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnLink.ModuleConfigurationProperty"]]]]:
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnLink.ModuleConfigurationProperty]]]]:
         '''
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-rtbfabric-link.html#cfn-rtbfabric-link-moduleconfigurationlist
         '''
         result = self._values.get("module_configuration_list")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnLink.ModuleConfigurationProperty"]]]], result)
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnLink.ModuleConfigurationProperty]]]], result)
 
     @builtins.property
     def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
-        '''Tags to assign to the Link.
+        '''A map of the key-value pairs of the tag or tags to assign to the resource.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-rtbfabric-link.html#cfn-rtbfabric-link-tags
         '''
@@ -291,2076 +1792,13 @@ class CfnLinkProps:
         )
 
 
-@jsii.data_type(
-    jsii_type="aws-cdk-lib.aws_rtbfabric.CfnRequesterGatewayProps",
-    jsii_struct_bases=[],
-    name_mapping={
-        "security_group_ids": "securityGroupIds",
-        "subnet_ids": "subnetIds",
-        "vpc_id": "vpcId",
-        "description": "description",
-        "tags": "tags",
-    },
-)
-class CfnRequesterGatewayProps:
-    def __init__(
-        self,
-        *,
-        security_group_ids: typing.Sequence[builtins.str],
-        subnet_ids: typing.Sequence[builtins.str],
-        vpc_id: builtins.str,
-        description: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-    ) -> None:
-        '''Properties for defining a ``CfnRequesterGateway``.
-
-        :param security_group_ids: The ID of one or more security groups in order to create a requester gateway.
-        :param subnet_ids: The ID of one or more subnets in order to create a requester gateway.
-        :param vpc_id: 
-        :param description: 
-        :param tags: Tags to assign to the Requester Gateway.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-rtbfabric-requestergateway.html
-        :exampleMetadata: fixture=_generated
-
-        Example::
-
-            # The code below shows an example of how to instantiate this type.
-            # The values are placeholders you should change.
-            from aws_cdk import aws_rtbfabric as rtbfabric
-            
-            cfn_requester_gateway_props = rtbfabric.CfnRequesterGatewayProps(
-                security_group_ids=["securityGroupIds"],
-                subnet_ids=["subnetIds"],
-                vpc_id="vpcId",
-            
-                # the properties below are optional
-                description="description",
-                tags=[CfnTag(
-                    key="key",
-                    value="value"
-                )]
-            )
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__e861505bd65d62c115117db14bdc56cdccfb7c596f849bc81dadfc3f63484f16)
-            check_type(argname="argument security_group_ids", value=security_group_ids, expected_type=type_hints["security_group_ids"])
-            check_type(argname="argument subnet_ids", value=subnet_ids, expected_type=type_hints["subnet_ids"])
-            check_type(argname="argument vpc_id", value=vpc_id, expected_type=type_hints["vpc_id"])
-            check_type(argname="argument description", value=description, expected_type=type_hints["description"])
-            check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
-        self._values: typing.Dict[builtins.str, typing.Any] = {
-            "security_group_ids": security_group_ids,
-            "subnet_ids": subnet_ids,
-            "vpc_id": vpc_id,
-        }
-        if description is not None:
-            self._values["description"] = description
-        if tags is not None:
-            self._values["tags"] = tags
-
-    @builtins.property
-    def security_group_ids(self) -> typing.List[builtins.str]:
-        '''The ID of one or more security groups in order to create a requester gateway.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-rtbfabric-requestergateway.html#cfn-rtbfabric-requestergateway-securitygroupids
-        '''
-        result = self._values.get("security_group_ids")
-        assert result is not None, "Required property 'security_group_ids' is missing"
-        return typing.cast(typing.List[builtins.str], result)
-
-    @builtins.property
-    def subnet_ids(self) -> typing.List[builtins.str]:
-        '''The ID of one or more subnets in order to create a requester gateway.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-rtbfabric-requestergateway.html#cfn-rtbfabric-requestergateway-subnetids
-        '''
-        result = self._values.get("subnet_ids")
-        assert result is not None, "Required property 'subnet_ids' is missing"
-        return typing.cast(typing.List[builtins.str], result)
-
-    @builtins.property
-    def vpc_id(self) -> builtins.str:
-        '''
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-rtbfabric-requestergateway.html#cfn-rtbfabric-requestergateway-vpcid
-        '''
-        result = self._values.get("vpc_id")
-        assert result is not None, "Required property 'vpc_id' is missing"
-        return typing.cast(builtins.str, result)
-
-    @builtins.property
-    def description(self) -> typing.Optional[builtins.str]:
-        '''
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-rtbfabric-requestergateway.html#cfn-rtbfabric-requestergateway-description
-        '''
-        result = self._values.get("description")
-        return typing.cast(typing.Optional[builtins.str], result)
-
-    @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
-        '''Tags to assign to the Requester Gateway.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-rtbfabric-requestergateway.html#cfn-rtbfabric-requestergateway-tags
-        '''
-        result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
-
-    def __eq__(self, rhs: typing.Any) -> builtins.bool:
-        return isinstance(rhs, self.__class__) and rhs._values == self._values
-
-    def __ne__(self, rhs: typing.Any) -> builtins.bool:
-        return not (rhs == self)
-
-    def __repr__(self) -> str:
-        return "CfnRequesterGatewayProps(%s)" % ", ".join(
-            k + "=" + repr(v) for k, v in self._values.items()
-        )
-
-
-@jsii.data_type(
-    jsii_type="aws-cdk-lib.aws_rtbfabric.CfnResponderGatewayProps",
-    jsii_struct_bases=[],
-    name_mapping={
-        "port": "port",
-        "protocol": "protocol",
-        "security_group_ids": "securityGroupIds",
-        "subnet_ids": "subnetIds",
-        "vpc_id": "vpcId",
-        "description": "description",
-        "domain_name": "domainName",
-        "managed_endpoint_configuration": "managedEndpointConfiguration",
-        "tags": "tags",
-        "trust_store_configuration": "trustStoreConfiguration",
-    },
-)
-class CfnResponderGatewayProps:
-    def __init__(
-        self,
-        *,
-        port: jsii.Number,
-        protocol: builtins.str,
-        security_group_ids: typing.Sequence[builtins.str],
-        subnet_ids: typing.Sequence[builtins.str],
-        vpc_id: builtins.str,
-        description: typing.Optional[builtins.str] = None,
-        domain_name: typing.Optional[builtins.str] = None,
-        managed_endpoint_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnResponderGateway.ManagedEndpointConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-        trust_store_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnResponderGateway.TrustStoreConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-    ) -> None:
-        '''Properties for defining a ``CfnResponderGateway``.
-
-        :param port: 
-        :param protocol: 
-        :param security_group_ids: The ID of one or more security groups in order to create a gateway.
-        :param subnet_ids: The ID of one or more subnets in order to create a gateway.
-        :param vpc_id: 
-        :param description: 
-        :param domain_name: 
-        :param managed_endpoint_configuration: 
-        :param tags: Tags to assign to the Responder Gateway.
-        :param trust_store_configuration: 
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-rtbfabric-respondergateway.html
-        :exampleMetadata: fixture=_generated
-
-        Example::
-
-            # The code below shows an example of how to instantiate this type.
-            # The values are placeholders you should change.
-            from aws_cdk import aws_rtbfabric as rtbfabric
-            
-            cfn_responder_gateway_props = rtbfabric.CfnResponderGatewayProps(
-                port=123,
-                protocol="protocol",
-                security_group_ids=["securityGroupIds"],
-                subnet_ids=["subnetIds"],
-                vpc_id="vpcId",
-            
-                # the properties below are optional
-                description="description",
-                domain_name="domainName",
-                managed_endpoint_configuration=rtbfabric.CfnResponderGateway.ManagedEndpointConfigurationProperty(
-                    auto_scaling_groups_configuration=rtbfabric.CfnResponderGateway.AutoScalingGroupsConfigurationProperty(
-                        auto_scaling_group_name_list=["autoScalingGroupNameList"],
-                        role_arn="roleArn"
-                    ),
-                    eks_endpoints_configuration=rtbfabric.CfnResponderGateway.EksEndpointsConfigurationProperty(
-                        cluster_api_server_ca_certificate_chain="clusterApiServerCaCertificateChain",
-                        cluster_api_server_endpoint_uri="clusterApiServerEndpointUri",
-                        cluster_name="clusterName",
-                        endpoints_resource_name="endpointsResourceName",
-                        endpoints_resource_namespace="endpointsResourceNamespace",
-                        role_arn="roleArn"
-                    )
-                ),
-                tags=[CfnTag(
-                    key="key",
-                    value="value"
-                )],
-                trust_store_configuration=rtbfabric.CfnResponderGateway.TrustStoreConfigurationProperty(
-                    certificate_authority_certificates=["certificateAuthorityCertificates"]
-                )
-            )
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__c9eb5e991b472975a887a9142289f690ca12906379267bff2fae6a074009eacd)
-            check_type(argname="argument port", value=port, expected_type=type_hints["port"])
-            check_type(argname="argument protocol", value=protocol, expected_type=type_hints["protocol"])
-            check_type(argname="argument security_group_ids", value=security_group_ids, expected_type=type_hints["security_group_ids"])
-            check_type(argname="argument subnet_ids", value=subnet_ids, expected_type=type_hints["subnet_ids"])
-            check_type(argname="argument vpc_id", value=vpc_id, expected_type=type_hints["vpc_id"])
-            check_type(argname="argument description", value=description, expected_type=type_hints["description"])
-            check_type(argname="argument domain_name", value=domain_name, expected_type=type_hints["domain_name"])
-            check_type(argname="argument managed_endpoint_configuration", value=managed_endpoint_configuration, expected_type=type_hints["managed_endpoint_configuration"])
-            check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
-            check_type(argname="argument trust_store_configuration", value=trust_store_configuration, expected_type=type_hints["trust_store_configuration"])
-        self._values: typing.Dict[builtins.str, typing.Any] = {
-            "port": port,
-            "protocol": protocol,
-            "security_group_ids": security_group_ids,
-            "subnet_ids": subnet_ids,
-            "vpc_id": vpc_id,
-        }
-        if description is not None:
-            self._values["description"] = description
-        if domain_name is not None:
-            self._values["domain_name"] = domain_name
-        if managed_endpoint_configuration is not None:
-            self._values["managed_endpoint_configuration"] = managed_endpoint_configuration
-        if tags is not None:
-            self._values["tags"] = tags
-        if trust_store_configuration is not None:
-            self._values["trust_store_configuration"] = trust_store_configuration
-
-    @builtins.property
-    def port(self) -> jsii.Number:
-        '''
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-rtbfabric-respondergateway.html#cfn-rtbfabric-respondergateway-port
-        '''
-        result = self._values.get("port")
-        assert result is not None, "Required property 'port' is missing"
-        return typing.cast(jsii.Number, result)
-
-    @builtins.property
-    def protocol(self) -> builtins.str:
-        '''
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-rtbfabric-respondergateway.html#cfn-rtbfabric-respondergateway-protocol
-        '''
-        result = self._values.get("protocol")
-        assert result is not None, "Required property 'protocol' is missing"
-        return typing.cast(builtins.str, result)
-
-    @builtins.property
-    def security_group_ids(self) -> typing.List[builtins.str]:
-        '''The ID of one or more security groups in order to create a gateway.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-rtbfabric-respondergateway.html#cfn-rtbfabric-respondergateway-securitygroupids
-        '''
-        result = self._values.get("security_group_ids")
-        assert result is not None, "Required property 'security_group_ids' is missing"
-        return typing.cast(typing.List[builtins.str], result)
-
-    @builtins.property
-    def subnet_ids(self) -> typing.List[builtins.str]:
-        '''The ID of one or more subnets in order to create a gateway.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-rtbfabric-respondergateway.html#cfn-rtbfabric-respondergateway-subnetids
-        '''
-        result = self._values.get("subnet_ids")
-        assert result is not None, "Required property 'subnet_ids' is missing"
-        return typing.cast(typing.List[builtins.str], result)
-
-    @builtins.property
-    def vpc_id(self) -> builtins.str:
-        '''
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-rtbfabric-respondergateway.html#cfn-rtbfabric-respondergateway-vpcid
-        '''
-        result = self._values.get("vpc_id")
-        assert result is not None, "Required property 'vpc_id' is missing"
-        return typing.cast(builtins.str, result)
-
-    @builtins.property
-    def description(self) -> typing.Optional[builtins.str]:
-        '''
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-rtbfabric-respondergateway.html#cfn-rtbfabric-respondergateway-description
-        '''
-        result = self._values.get("description")
-        return typing.cast(typing.Optional[builtins.str], result)
-
-    @builtins.property
-    def domain_name(self) -> typing.Optional[builtins.str]:
-        '''
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-rtbfabric-respondergateway.html#cfn-rtbfabric-respondergateway-domainname
-        '''
-        result = self._values.get("domain_name")
-        return typing.cast(typing.Optional[builtins.str], result)
-
-    @builtins.property
-    def managed_endpoint_configuration(
-        self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnResponderGateway.ManagedEndpointConfigurationProperty"]]:
-        '''
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-rtbfabric-respondergateway.html#cfn-rtbfabric-respondergateway-managedendpointconfiguration
-        '''
-        result = self._values.get("managed_endpoint_configuration")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnResponderGateway.ManagedEndpointConfigurationProperty"]], result)
-
-    @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
-        '''Tags to assign to the Responder Gateway.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-rtbfabric-respondergateway.html#cfn-rtbfabric-respondergateway-tags
-        '''
-        result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
-
-    @builtins.property
-    def trust_store_configuration(
-        self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnResponderGateway.TrustStoreConfigurationProperty"]]:
-        '''
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-rtbfabric-respondergateway.html#cfn-rtbfabric-respondergateway-truststoreconfiguration
-        '''
-        result = self._values.get("trust_store_configuration")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnResponderGateway.TrustStoreConfigurationProperty"]], result)
-
-    def __eq__(self, rhs: typing.Any) -> builtins.bool:
-        return isinstance(rhs, self.__class__) and rhs._values == self._values
-
-    def __ne__(self, rhs: typing.Any) -> builtins.bool:
-        return not (rhs == self)
-
-    def __repr__(self) -> str:
-        return "CfnResponderGatewayProps(%s)" % ", ".join(
-            k + "=" + repr(v) for k, v in self._values.items()
-        )
-
-
-@jsii.interface(jsii_type="aws-cdk-lib.aws_rtbfabric.ILinkRef")
-class ILinkRef(
-    _constructs_77d1e7e8.IConstruct,
-    _IEnvironmentAware_a408b00d,
-    typing_extensions.Protocol,
-):
-    '''(experimental) Indicates that this resource can be referenced as a Link.
-
-    :stability: experimental
-    '''
-
-    @builtins.property
-    @jsii.member(jsii_name="linkRef")
-    def link_ref(self) -> "LinkReference":
-        '''(experimental) A reference to a Link resource.
-
-        :stability: experimental
-        '''
-        ...
-
-
-class _ILinkRefProxy(
-    jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
-    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
-):
-    '''(experimental) Indicates that this resource can be referenced as a Link.
-
-    :stability: experimental
-    '''
-
-    __jsii_type__: typing.ClassVar[str] = "aws-cdk-lib.aws_rtbfabric.ILinkRef"
-
-    @builtins.property
-    @jsii.member(jsii_name="linkRef")
-    def link_ref(self) -> "LinkReference":
-        '''(experimental) A reference to a Link resource.
-
-        :stability: experimental
-        '''
-        return typing.cast("LinkReference", jsii.get(self, "linkRef"))
-
-# Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
-typing.cast(typing.Any, ILinkRef).__jsii_proxy_class__ = lambda : _ILinkRefProxy
-
-
-@jsii.interface(jsii_type="aws-cdk-lib.aws_rtbfabric.IRequesterGatewayRef")
-class IRequesterGatewayRef(
-    _constructs_77d1e7e8.IConstruct,
-    _IEnvironmentAware_a408b00d,
-    typing_extensions.Protocol,
-):
-    '''(experimental) Indicates that this resource can be referenced as a RequesterGateway.
-
-    :stability: experimental
-    '''
-
-    @builtins.property
-    @jsii.member(jsii_name="requesterGatewayRef")
-    def requester_gateway_ref(self) -> "RequesterGatewayReference":
-        '''(experimental) A reference to a RequesterGateway resource.
-
-        :stability: experimental
-        '''
-        ...
-
-
-class _IRequesterGatewayRefProxy(
-    jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
-    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
-):
-    '''(experimental) Indicates that this resource can be referenced as a RequesterGateway.
-
-    :stability: experimental
-    '''
-
-    __jsii_type__: typing.ClassVar[str] = "aws-cdk-lib.aws_rtbfabric.IRequesterGatewayRef"
-
-    @builtins.property
-    @jsii.member(jsii_name="requesterGatewayRef")
-    def requester_gateway_ref(self) -> "RequesterGatewayReference":
-        '''(experimental) A reference to a RequesterGateway resource.
-
-        :stability: experimental
-        '''
-        return typing.cast("RequesterGatewayReference", jsii.get(self, "requesterGatewayRef"))
-
-# Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
-typing.cast(typing.Any, IRequesterGatewayRef).__jsii_proxy_class__ = lambda : _IRequesterGatewayRefProxy
-
-
-@jsii.interface(jsii_type="aws-cdk-lib.aws_rtbfabric.IResponderGatewayRef")
-class IResponderGatewayRef(
-    _constructs_77d1e7e8.IConstruct,
-    _IEnvironmentAware_a408b00d,
-    typing_extensions.Protocol,
-):
-    '''(experimental) Indicates that this resource can be referenced as a ResponderGateway.
-
-    :stability: experimental
-    '''
-
-    @builtins.property
-    @jsii.member(jsii_name="responderGatewayRef")
-    def responder_gateway_ref(self) -> "ResponderGatewayReference":
-        '''(experimental) A reference to a ResponderGateway resource.
-
-        :stability: experimental
-        '''
-        ...
-
-
-class _IResponderGatewayRefProxy(
-    jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
-    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
-):
-    '''(experimental) Indicates that this resource can be referenced as a ResponderGateway.
-
-    :stability: experimental
-    '''
-
-    __jsii_type__: typing.ClassVar[str] = "aws-cdk-lib.aws_rtbfabric.IResponderGatewayRef"
-
-    @builtins.property
-    @jsii.member(jsii_name="responderGatewayRef")
-    def responder_gateway_ref(self) -> "ResponderGatewayReference":
-        '''(experimental) A reference to a ResponderGateway resource.
-
-        :stability: experimental
-        '''
-        return typing.cast("ResponderGatewayReference", jsii.get(self, "responderGatewayRef"))
-
-# Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
-typing.cast(typing.Any, IResponderGatewayRef).__jsii_proxy_class__ = lambda : _IResponderGatewayRefProxy
-
-
-@jsii.data_type(
-    jsii_type="aws-cdk-lib.aws_rtbfabric.LinkReference",
-    jsii_struct_bases=[],
-    name_mapping={"link_arn": "linkArn"},
-)
-class LinkReference:
-    def __init__(self, *, link_arn: builtins.str) -> None:
-        '''A reference to a Link resource.
-
-        :param link_arn: The Arn of the Link resource.
-
-        :exampleMetadata: fixture=_generated
-
-        Example::
-
-            # The code below shows an example of how to instantiate this type.
-            # The values are placeholders you should change.
-            from aws_cdk import aws_rtbfabric as rtbfabric
-            
-            link_reference = rtbfabric.LinkReference(
-                link_arn="linkArn"
-            )
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__b8cfa7fc8596e5037663fc1614d35cd2dac29cce3907ee0c5a73b82d3d7f8681)
-            check_type(argname="argument link_arn", value=link_arn, expected_type=type_hints["link_arn"])
-        self._values: typing.Dict[builtins.str, typing.Any] = {
-            "link_arn": link_arn,
-        }
-
-    @builtins.property
-    def link_arn(self) -> builtins.str:
-        '''The Arn of the Link resource.'''
-        result = self._values.get("link_arn")
-        assert result is not None, "Required property 'link_arn' is missing"
-        return typing.cast(builtins.str, result)
-
-    def __eq__(self, rhs: typing.Any) -> builtins.bool:
-        return isinstance(rhs, self.__class__) and rhs._values == self._values
-
-    def __ne__(self, rhs: typing.Any) -> builtins.bool:
-        return not (rhs == self)
-
-    def __repr__(self) -> str:
-        return "LinkReference(%s)" % ", ".join(
-            k + "=" + repr(v) for k, v in self._values.items()
-        )
-
-
-@jsii.data_type(
-    jsii_type="aws-cdk-lib.aws_rtbfabric.RequesterGatewayReference",
-    jsii_struct_bases=[],
-    name_mapping={"requester_gateway_arn": "requesterGatewayArn"},
-)
-class RequesterGatewayReference:
-    def __init__(self, *, requester_gateway_arn: builtins.str) -> None:
-        '''A reference to a RequesterGateway resource.
-
-        :param requester_gateway_arn: The Arn of the RequesterGateway resource.
-
-        :exampleMetadata: fixture=_generated
-
-        Example::
-
-            # The code below shows an example of how to instantiate this type.
-            # The values are placeholders you should change.
-            from aws_cdk import aws_rtbfabric as rtbfabric
-            
-            requester_gateway_reference = rtbfabric.RequesterGatewayReference(
-                requester_gateway_arn="requesterGatewayArn"
-            )
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__473d5b02aaa1b449f47f7d29a7c5ff223a6dfc78b1c6ab12866aa3da8c72bd71)
-            check_type(argname="argument requester_gateway_arn", value=requester_gateway_arn, expected_type=type_hints["requester_gateway_arn"])
-        self._values: typing.Dict[builtins.str, typing.Any] = {
-            "requester_gateway_arn": requester_gateway_arn,
-        }
-
-    @builtins.property
-    def requester_gateway_arn(self) -> builtins.str:
-        '''The Arn of the RequesterGateway resource.'''
-        result = self._values.get("requester_gateway_arn")
-        assert result is not None, "Required property 'requester_gateway_arn' is missing"
-        return typing.cast(builtins.str, result)
-
-    def __eq__(self, rhs: typing.Any) -> builtins.bool:
-        return isinstance(rhs, self.__class__) and rhs._values == self._values
-
-    def __ne__(self, rhs: typing.Any) -> builtins.bool:
-        return not (rhs == self)
-
-    def __repr__(self) -> str:
-        return "RequesterGatewayReference(%s)" % ", ".join(
-            k + "=" + repr(v) for k, v in self._values.items()
-        )
-
-
-@jsii.data_type(
-    jsii_type="aws-cdk-lib.aws_rtbfabric.ResponderGatewayReference",
-    jsii_struct_bases=[],
-    name_mapping={"responder_gateway_arn": "responderGatewayArn"},
-)
-class ResponderGatewayReference:
-    def __init__(self, *, responder_gateway_arn: builtins.str) -> None:
-        '''A reference to a ResponderGateway resource.
-
-        :param responder_gateway_arn: The Arn of the ResponderGateway resource.
-
-        :exampleMetadata: fixture=_generated
-
-        Example::
-
-            # The code below shows an example of how to instantiate this type.
-            # The values are placeholders you should change.
-            from aws_cdk import aws_rtbfabric as rtbfabric
-            
-            responder_gateway_reference = rtbfabric.ResponderGatewayReference(
-                responder_gateway_arn="responderGatewayArn"
-            )
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__6faecaa1212874c425d9dc78ab07ad8e354f119bc167d71fbe0377af246b1612)
-            check_type(argname="argument responder_gateway_arn", value=responder_gateway_arn, expected_type=type_hints["responder_gateway_arn"])
-        self._values: typing.Dict[builtins.str, typing.Any] = {
-            "responder_gateway_arn": responder_gateway_arn,
-        }
-
-    @builtins.property
-    def responder_gateway_arn(self) -> builtins.str:
-        '''The Arn of the ResponderGateway resource.'''
-        result = self._values.get("responder_gateway_arn")
-        assert result is not None, "Required property 'responder_gateway_arn' is missing"
-        return typing.cast(builtins.str, result)
-
-    def __eq__(self, rhs: typing.Any) -> builtins.bool:
-        return isinstance(rhs, self.__class__) and rhs._values == self._values
-
-    def __ne__(self, rhs: typing.Any) -> builtins.bool:
-        return not (rhs == self)
-
-    def __repr__(self) -> str:
-        return "ResponderGatewayReference(%s)" % ", ".join(
-            k + "=" + repr(v) for k, v in self._values.items()
-        )
-
-
-@jsii.implements(_IInspectable_c2943556, ILinkRef, _ITaggableV2_4e6798f8)
-class CfnLink(
-    _CfnResource_9df397a6,
-    metaclass=jsii.JSIIMeta,
-    jsii_type="aws-cdk-lib.aws_rtbfabric.CfnLink",
-):
-    '''Resource Type definition for AWS::RTBFabric::Link Resource Type.
-
-    :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-rtbfabric-link.html
-    :cloudformationResource: AWS::RTBFabric::Link
-    :exampleMetadata: fixture=_generated
-
-    Example::
-
-        # The code below shows an example of how to instantiate this type.
-        # The values are placeholders you should change.
-        from aws_cdk import aws_rtbfabric as rtbfabric
-        
-        cfn_link = rtbfabric.CfnLink(self, "MyCfnLink",
-            gateway_id="gatewayId",
-            link_log_settings=rtbfabric.CfnLink.LinkLogSettingsProperty(
-                application_logs=rtbfabric.CfnLink.ApplicationLogsProperty(
-                    link_application_log_sampling=rtbfabric.CfnLink.LinkApplicationLogSamplingProperty(
-                        error_log=123,
-                        filter_log=123
-                    )
-                )
-            ),
-            peer_gateway_id="peerGatewayId",
-        
-            # the properties below are optional
-            http_responder_allowed=False,
-            link_attributes=rtbfabric.CfnLink.LinkAttributesProperty(
-                customer_provided_id="customerProvidedId",
-                responder_error_masking=[rtbfabric.CfnLink.ResponderErrorMaskingForHttpCodeProperty(
-                    action="action",
-                    http_code="httpCode",
-                    logging_types=["loggingTypes"],
-        
-                    # the properties below are optional
-                    response_logging_percentage=123
-                )]
-            ),
-            module_configuration_list=[rtbfabric.CfnLink.ModuleConfigurationProperty(
-                name="name",
-        
-                # the properties below are optional
-                depends_on=["dependsOn"],
-                module_parameters=rtbfabric.CfnLink.ModuleParametersProperty(
-                    no_bid=rtbfabric.CfnLink.NoBidModuleParametersProperty(
-                        pass_through_percentage=123,
-                        reason="reason",
-                        reason_code=123
-                    ),
-                    open_rtb_attribute=rtbfabric.CfnLink.OpenRtbAttributeModuleParametersProperty(
-                        action=rtbfabric.CfnLink.ActionProperty(
-                            header_tag=rtbfabric.CfnLink.HeaderTagActionProperty(
-                                name="name",
-                                value="value"
-                            ),
-                            no_bid=rtbfabric.CfnLink.NoBidActionProperty(
-                                no_bid_reason_code=123
-                            )
-                        ),
-                        filter_configuration=[rtbfabric.CfnLink.FilterProperty(
-                            criteria=[rtbfabric.CfnLink.FilterCriterionProperty(
-                                path="path",
-                                values=["values"]
-                            )]
-                        )],
-                        filter_type="filterType",
-                        holdback_percentage=123
-                    )
-                ),
-                version="version"
-            )],
-            tags=[CfnTag(
-                key="key",
-                value="value"
-            )]
-        )
-    '''
-
-    def __init__(
-        self,
-        scope: _constructs_77d1e7e8.Construct,
-        id: builtins.str,
-        *,
-        gateway_id: builtins.str,
-        link_log_settings: typing.Union[_IResolvable_da3f097b, typing.Union["CfnLink.LinkLogSettingsProperty", typing.Dict[builtins.str, typing.Any]]],
-        peer_gateway_id: builtins.str,
-        http_responder_allowed: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        link_attributes: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnLink.LinkAttributesProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        module_configuration_list: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnLink.ModuleConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-    ) -> None:
-        '''
-        :param scope: Scope in which this resource is defined.
-        :param id: Construct identifier for this resource (unique in its scope).
-        :param gateway_id: 
-        :param link_log_settings: 
-        :param peer_gateway_id: 
-        :param http_responder_allowed: 
-        :param link_attributes: 
-        :param module_configuration_list: 
-        :param tags: Tags to assign to the Link.
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__33e403b84fbb081fd16a0097272c1b774ceb7dfcf2ef00e8d7edb2e0fe7cec74)
-            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
-            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
-        props = CfnLinkProps(
-            gateway_id=gateway_id,
-            link_log_settings=link_log_settings,
-            peer_gateway_id=peer_gateway_id,
-            http_responder_allowed=http_responder_allowed,
-            link_attributes=link_attributes,
-            module_configuration_list=module_configuration_list,
-            tags=tags,
-        )
-
-        jsii.create(self.__class__, self, [scope, id, props])
-
-    @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
-        '''Examines the CloudFormation resource and discloses attributes.
-
-        :param inspector: tree inspector to collect and process attributes.
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__cc9bc5027acac07a275a06b167f0f8790f36a2fef049c4c738abc9a498a67b72)
-            check_type(argname="argument inspector", value=inspector, expected_type=type_hints["inspector"])
-        return typing.cast(None, jsii.invoke(self, "inspect", [inspector]))
-
-    @jsii.member(jsii_name="renderProperties")
-    def _render_properties(
-        self,
-        props: typing.Mapping[builtins.str, typing.Any],
-    ) -> typing.Mapping[builtins.str, typing.Any]:
-        '''
-        :param props: -
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__d3d7d7182ae1421ce2250b4c41ee061920faaa9e8beb8ee36659bc44bfca4d7c)
-            check_type(argname="argument props", value=props, expected_type=type_hints["props"])
-        return typing.cast(typing.Mapping[builtins.str, typing.Any], jsii.invoke(self, "renderProperties", [props]))
-
-    @jsii.python.classproperty
-    @jsii.member(jsii_name="CFN_RESOURCE_TYPE_NAME")
-    def CFN_RESOURCE_TYPE_NAME(cls) -> builtins.str:
-        '''The CloudFormation resource type name for this resource class.'''
-        return typing.cast(builtins.str, jsii.sget(cls, "CFN_RESOURCE_TYPE_NAME"))
-
-    @builtins.property
-    @jsii.member(jsii_name="attrArn")
-    def attr_arn(self) -> builtins.str:
-        '''
-        :cloudformationAttribute: Arn
-        '''
-        return typing.cast(builtins.str, jsii.get(self, "attrArn"))
-
-    @builtins.property
-    @jsii.member(jsii_name="attrCreatedTimestamp")
-    def attr_created_timestamp(self) -> builtins.str:
-        '''
-        :cloudformationAttribute: CreatedTimestamp
-        '''
-        return typing.cast(builtins.str, jsii.get(self, "attrCreatedTimestamp"))
-
-    @builtins.property
-    @jsii.member(jsii_name="attrLinkDirection")
-    def attr_link_direction(self) -> builtins.str:
-        '''
-        :cloudformationAttribute: LinkDirection
-        '''
-        return typing.cast(builtins.str, jsii.get(self, "attrLinkDirection"))
-
-    @builtins.property
-    @jsii.member(jsii_name="attrLinkId")
-    def attr_link_id(self) -> builtins.str:
-        '''
-        :cloudformationAttribute: LinkId
-        '''
-        return typing.cast(builtins.str, jsii.get(self, "attrLinkId"))
-
-    @builtins.property
-    @jsii.member(jsii_name="attrLinkStatus")
-    def attr_link_status(self) -> builtins.str:
-        '''
-        :cloudformationAttribute: LinkStatus
-        '''
-        return typing.cast(builtins.str, jsii.get(self, "attrLinkStatus"))
-
-    @builtins.property
-    @jsii.member(jsii_name="attrUpdatedTimestamp")
-    def attr_updated_timestamp(self) -> builtins.str:
-        '''
-        :cloudformationAttribute: UpdatedTimestamp
-        '''
-        return typing.cast(builtins.str, jsii.get(self, "attrUpdatedTimestamp"))
-
-    @builtins.property
-    @jsii.member(jsii_name="cdkTagManager")
-    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
-        '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
-
-    @builtins.property
-    @jsii.member(jsii_name="cfnProperties")
-    def _cfn_properties(self) -> typing.Mapping[builtins.str, typing.Any]:
-        return typing.cast(typing.Mapping[builtins.str, typing.Any], jsii.get(self, "cfnProperties"))
-
-    @builtins.property
-    @jsii.member(jsii_name="linkRef")
-    def link_ref(self) -> LinkReference:
-        '''A reference to a Link resource.'''
-        return typing.cast(LinkReference, jsii.get(self, "linkRef"))
-
-    @builtins.property
-    @jsii.member(jsii_name="gatewayId")
-    def gateway_id(self) -> builtins.str:
-        return typing.cast(builtins.str, jsii.get(self, "gatewayId"))
-
-    @gateway_id.setter
-    def gateway_id(self, value: builtins.str) -> None:
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__bd77fe8e257ed257fd9cc2835f29e82e4e5c9092b9320846e746cb8385d83132)
-            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
-        jsii.set(self, "gatewayId", value) # pyright: ignore[reportArgumentType]
-
-    @builtins.property
-    @jsii.member(jsii_name="linkLogSettings")
-    def link_log_settings(
-        self,
-    ) -> typing.Union[_IResolvable_da3f097b, "CfnLink.LinkLogSettingsProperty"]:
-        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnLink.LinkLogSettingsProperty"], jsii.get(self, "linkLogSettings"))
-
-    @link_log_settings.setter
-    def link_log_settings(
-        self,
-        value: typing.Union[_IResolvable_da3f097b, "CfnLink.LinkLogSettingsProperty"],
-    ) -> None:
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__ab7e556ca0c98de786d1067094aa52ffc4810802cdeabb970d57fd2e6e7032cc)
-            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
-        jsii.set(self, "linkLogSettings", value) # pyright: ignore[reportArgumentType]
-
-    @builtins.property
-    @jsii.member(jsii_name="peerGatewayId")
-    def peer_gateway_id(self) -> builtins.str:
-        return typing.cast(builtins.str, jsii.get(self, "peerGatewayId"))
-
-    @peer_gateway_id.setter
-    def peer_gateway_id(self, value: builtins.str) -> None:
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__d1e08aa7186c8b3f2bcce904bac17f4f0dffb3848b35af4cb2707c3ecf5fdc87)
-            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
-        jsii.set(self, "peerGatewayId", value) # pyright: ignore[reportArgumentType]
-
-    @builtins.property
-    @jsii.member(jsii_name="httpResponderAllowed")
-    def http_responder_allowed(
-        self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "httpResponderAllowed"))
-
-    @http_responder_allowed.setter
-    def http_responder_allowed(
-        self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
-    ) -> None:
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__48b3206215bae9d2e48e79793f9ffd87062a4b1724e8972850cbacafec752632)
-            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
-        jsii.set(self, "httpResponderAllowed", value) # pyright: ignore[reportArgumentType]
-
-    @builtins.property
-    @jsii.member(jsii_name="linkAttributes")
-    def link_attributes(
-        self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnLink.LinkAttributesProperty"]]:
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnLink.LinkAttributesProperty"]], jsii.get(self, "linkAttributes"))
-
-    @link_attributes.setter
-    def link_attributes(
-        self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnLink.LinkAttributesProperty"]],
-    ) -> None:
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__a1ab4741f8f8f4356c5390e467941454f9741185b5834e0d5c912d2df062bb22)
-            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
-        jsii.set(self, "linkAttributes", value) # pyright: ignore[reportArgumentType]
-
-    @builtins.property
-    @jsii.member(jsii_name="moduleConfigurationList")
-    def module_configuration_list(
-        self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnLink.ModuleConfigurationProperty"]]]]:
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnLink.ModuleConfigurationProperty"]]]], jsii.get(self, "moduleConfigurationList"))
-
-    @module_configuration_list.setter
-    def module_configuration_list(
-        self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnLink.ModuleConfigurationProperty"]]]],
-    ) -> None:
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__bfe068c99595620eaa7b9882ede77a4ac9cf63b8112fdeb95ec82ba2220f47c9)
-            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
-        jsii.set(self, "moduleConfigurationList", value) # pyright: ignore[reportArgumentType]
-
-    @builtins.property
-    @jsii.member(jsii_name="tags")
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
-        '''Tags to assign to the Link.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tags"))
-
-    @tags.setter
-    def tags(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__89f50ed2507493ec960d7f22a7f5e59b8cd846866c52a44638fb170da225c31a)
-            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
-        jsii.set(self, "tags", value) # pyright: ignore[reportArgumentType]
-
-    @jsii.data_type(
-        jsii_type="aws-cdk-lib.aws_rtbfabric.CfnLink.ActionProperty",
-        jsii_struct_bases=[],
-        name_mapping={"header_tag": "headerTag", "no_bid": "noBid"},
-    )
-    class ActionProperty:
-        def __init__(
-            self,
-            *,
-            header_tag: typing.Union[_IResolvable_da3f097b, typing.Union["CfnLink.HeaderTagActionProperty", typing.Dict[builtins.str, typing.Any]]],
-            no_bid: typing.Union[_IResolvable_da3f097b, typing.Union["CfnLink.NoBidActionProperty", typing.Dict[builtins.str, typing.Any]]],
-        ) -> None:
-            '''
-            :param header_tag: 
-            :param no_bid: 
-
-            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-rtbfabric-link-action.html
-            :exampleMetadata: fixture=_generated
-
-            Example::
-
-                # The code below shows an example of how to instantiate this type.
-                # The values are placeholders you should change.
-                from aws_cdk import aws_rtbfabric as rtbfabric
-                
-                action_property = rtbfabric.CfnLink.ActionProperty(
-                    header_tag=rtbfabric.CfnLink.HeaderTagActionProperty(
-                        name="name",
-                        value="value"
-                    ),
-                    no_bid=rtbfabric.CfnLink.NoBidActionProperty(
-                        no_bid_reason_code=123
-                    )
-                )
-            '''
-            if __debug__:
-                type_hints = typing.get_type_hints(_typecheckingstub__d6894eb0ca15bfc1becb971f044daaafc323280b5c36040bf05b97a7db16c1c6)
-                check_type(argname="argument header_tag", value=header_tag, expected_type=type_hints["header_tag"])
-                check_type(argname="argument no_bid", value=no_bid, expected_type=type_hints["no_bid"])
-            self._values: typing.Dict[builtins.str, typing.Any] = {
-                "header_tag": header_tag,
-                "no_bid": no_bid,
-            }
-
-        @builtins.property
-        def header_tag(
-            self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnLink.HeaderTagActionProperty"]:
-            '''
-            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-rtbfabric-link-action.html#cfn-rtbfabric-link-action-headertag
-            '''
-            result = self._values.get("header_tag")
-            assert result is not None, "Required property 'header_tag' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnLink.HeaderTagActionProperty"], result)
-
-        @builtins.property
-        def no_bid(
-            self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnLink.NoBidActionProperty"]:
-            '''
-            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-rtbfabric-link-action.html#cfn-rtbfabric-link-action-nobid
-            '''
-            result = self._values.get("no_bid")
-            assert result is not None, "Required property 'no_bid' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnLink.NoBidActionProperty"], result)
-
-        def __eq__(self, rhs: typing.Any) -> builtins.bool:
-            return isinstance(rhs, self.__class__) and rhs._values == self._values
-
-        def __ne__(self, rhs: typing.Any) -> builtins.bool:
-            return not (rhs == self)
-
-        def __repr__(self) -> str:
-            return "ActionProperty(%s)" % ", ".join(
-                k + "=" + repr(v) for k, v in self._values.items()
-            )
-
-    @jsii.data_type(
-        jsii_type="aws-cdk-lib.aws_rtbfabric.CfnLink.ApplicationLogsProperty",
-        jsii_struct_bases=[],
-        name_mapping={"link_application_log_sampling": "linkApplicationLogSampling"},
-    )
-    class ApplicationLogsProperty:
-        def __init__(
-            self,
-            *,
-            link_application_log_sampling: typing.Union[_IResolvable_da3f097b, typing.Union["CfnLink.LinkApplicationLogSamplingProperty", typing.Dict[builtins.str, typing.Any]]],
-        ) -> None:
-            '''
-            :param link_application_log_sampling: 
-
-            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-rtbfabric-link-applicationlogs.html
-            :exampleMetadata: fixture=_generated
-
-            Example::
-
-                # The code below shows an example of how to instantiate this type.
-                # The values are placeholders you should change.
-                from aws_cdk import aws_rtbfabric as rtbfabric
-                
-                application_logs_property = rtbfabric.CfnLink.ApplicationLogsProperty(
-                    link_application_log_sampling=rtbfabric.CfnLink.LinkApplicationLogSamplingProperty(
-                        error_log=123,
-                        filter_log=123
-                    )
-                )
-            '''
-            if __debug__:
-                type_hints = typing.get_type_hints(_typecheckingstub__386c1f58d2f3cd26972e49e1d069f69cd28a5e0106e1e75cdd6b149047a40486)
-                check_type(argname="argument link_application_log_sampling", value=link_application_log_sampling, expected_type=type_hints["link_application_log_sampling"])
-            self._values: typing.Dict[builtins.str, typing.Any] = {
-                "link_application_log_sampling": link_application_log_sampling,
-            }
-
-        @builtins.property
-        def link_application_log_sampling(
-            self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnLink.LinkApplicationLogSamplingProperty"]:
-            '''
-            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-rtbfabric-link-applicationlogs.html#cfn-rtbfabric-link-applicationlogs-linkapplicationlogsampling
-            '''
-            result = self._values.get("link_application_log_sampling")
-            assert result is not None, "Required property 'link_application_log_sampling' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnLink.LinkApplicationLogSamplingProperty"], result)
-
-        def __eq__(self, rhs: typing.Any) -> builtins.bool:
-            return isinstance(rhs, self.__class__) and rhs._values == self._values
-
-        def __ne__(self, rhs: typing.Any) -> builtins.bool:
-            return not (rhs == self)
-
-        def __repr__(self) -> str:
-            return "ApplicationLogsProperty(%s)" % ", ".join(
-                k + "=" + repr(v) for k, v in self._values.items()
-            )
-
-    @jsii.data_type(
-        jsii_type="aws-cdk-lib.aws_rtbfabric.CfnLink.FilterCriterionProperty",
-        jsii_struct_bases=[],
-        name_mapping={"path": "path", "values": "values"},
-    )
-    class FilterCriterionProperty:
-        def __init__(
-            self,
-            *,
-            path: builtins.str,
-            values: typing.Sequence[builtins.str],
-        ) -> None:
-            '''
-            :param path: 
-            :param values: 
-
-            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-rtbfabric-link-filtercriterion.html
-            :exampleMetadata: fixture=_generated
-
-            Example::
-
-                # The code below shows an example of how to instantiate this type.
-                # The values are placeholders you should change.
-                from aws_cdk import aws_rtbfabric as rtbfabric
-                
-                filter_criterion_property = rtbfabric.CfnLink.FilterCriterionProperty(
-                    path="path",
-                    values=["values"]
-                )
-            '''
-            if __debug__:
-                type_hints = typing.get_type_hints(_typecheckingstub__976a810fd8399ef10076aa8ff21db3814228728d51cbe483206baf947e14d22a)
-                check_type(argname="argument path", value=path, expected_type=type_hints["path"])
-                check_type(argname="argument values", value=values, expected_type=type_hints["values"])
-            self._values: typing.Dict[builtins.str, typing.Any] = {
-                "path": path,
-                "values": values,
-            }
-
-        @builtins.property
-        def path(self) -> builtins.str:
-            '''
-            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-rtbfabric-link-filtercriterion.html#cfn-rtbfabric-link-filtercriterion-path
-            '''
-            result = self._values.get("path")
-            assert result is not None, "Required property 'path' is missing"
-            return typing.cast(builtins.str, result)
-
-        @builtins.property
-        def values(self) -> typing.List[builtins.str]:
-            '''
-            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-rtbfabric-link-filtercriterion.html#cfn-rtbfabric-link-filtercriterion-values
-            '''
-            result = self._values.get("values")
-            assert result is not None, "Required property 'values' is missing"
-            return typing.cast(typing.List[builtins.str], result)
-
-        def __eq__(self, rhs: typing.Any) -> builtins.bool:
-            return isinstance(rhs, self.__class__) and rhs._values == self._values
-
-        def __ne__(self, rhs: typing.Any) -> builtins.bool:
-            return not (rhs == self)
-
-        def __repr__(self) -> str:
-            return "FilterCriterionProperty(%s)" % ", ".join(
-                k + "=" + repr(v) for k, v in self._values.items()
-            )
-
-    @jsii.data_type(
-        jsii_type="aws-cdk-lib.aws_rtbfabric.CfnLink.FilterProperty",
-        jsii_struct_bases=[],
-        name_mapping={"criteria": "criteria"},
-    )
-    class FilterProperty:
-        def __init__(
-            self,
-            *,
-            criteria: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnLink.FilterCriterionProperty", typing.Dict[builtins.str, typing.Any]]]]],
-        ) -> None:
-            '''
-            :param criteria: 
-
-            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-rtbfabric-link-filter.html
-            :exampleMetadata: fixture=_generated
-
-            Example::
-
-                # The code below shows an example of how to instantiate this type.
-                # The values are placeholders you should change.
-                from aws_cdk import aws_rtbfabric as rtbfabric
-                
-                filter_property = rtbfabric.CfnLink.FilterProperty(
-                    criteria=[rtbfabric.CfnLink.FilterCriterionProperty(
-                        path="path",
-                        values=["values"]
-                    )]
-                )
-            '''
-            if __debug__:
-                type_hints = typing.get_type_hints(_typecheckingstub__bcc0e2535e30885c51d63b7ca099b67d5c103991ad0d521226fd949185ecf18a)
-                check_type(argname="argument criteria", value=criteria, expected_type=type_hints["criteria"])
-            self._values: typing.Dict[builtins.str, typing.Any] = {
-                "criteria": criteria,
-            }
-
-        @builtins.property
-        def criteria(
-            self,
-        ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnLink.FilterCriterionProperty"]]]:
-            '''
-            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-rtbfabric-link-filter.html#cfn-rtbfabric-link-filter-criteria
-            '''
-            result = self._values.get("criteria")
-            assert result is not None, "Required property 'criteria' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnLink.FilterCriterionProperty"]]], result)
-
-        def __eq__(self, rhs: typing.Any) -> builtins.bool:
-            return isinstance(rhs, self.__class__) and rhs._values == self._values
-
-        def __ne__(self, rhs: typing.Any) -> builtins.bool:
-            return not (rhs == self)
-
-        def __repr__(self) -> str:
-            return "FilterProperty(%s)" % ", ".join(
-                k + "=" + repr(v) for k, v in self._values.items()
-            )
-
-    @jsii.data_type(
-        jsii_type="aws-cdk-lib.aws_rtbfabric.CfnLink.HeaderTagActionProperty",
-        jsii_struct_bases=[],
-        name_mapping={"name": "name", "value": "value"},
-    )
-    class HeaderTagActionProperty:
-        def __init__(self, *, name: builtins.str, value: builtins.str) -> None:
-            '''
-            :param name: 
-            :param value: 
-
-            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-rtbfabric-link-headertagaction.html
-            :exampleMetadata: fixture=_generated
-
-            Example::
-
-                # The code below shows an example of how to instantiate this type.
-                # The values are placeholders you should change.
-                from aws_cdk import aws_rtbfabric as rtbfabric
-                
-                header_tag_action_property = rtbfabric.CfnLink.HeaderTagActionProperty(
-                    name="name",
-                    value="value"
-                )
-            '''
-            if __debug__:
-                type_hints = typing.get_type_hints(_typecheckingstub__48d14abad5b3d72432a046c98d69a1dbaed71327059ccfad80adc96630cb3dd4)
-                check_type(argname="argument name", value=name, expected_type=type_hints["name"])
-                check_type(argname="argument value", value=value, expected_type=type_hints["value"])
-            self._values: typing.Dict[builtins.str, typing.Any] = {
-                "name": name,
-                "value": value,
-            }
-
-        @builtins.property
-        def name(self) -> builtins.str:
-            '''
-            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-rtbfabric-link-headertagaction.html#cfn-rtbfabric-link-headertagaction-name
-            '''
-            result = self._values.get("name")
-            assert result is not None, "Required property 'name' is missing"
-            return typing.cast(builtins.str, result)
-
-        @builtins.property
-        def value(self) -> builtins.str:
-            '''
-            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-rtbfabric-link-headertagaction.html#cfn-rtbfabric-link-headertagaction-value
-            '''
-            result = self._values.get("value")
-            assert result is not None, "Required property 'value' is missing"
-            return typing.cast(builtins.str, result)
-
-        def __eq__(self, rhs: typing.Any) -> builtins.bool:
-            return isinstance(rhs, self.__class__) and rhs._values == self._values
-
-        def __ne__(self, rhs: typing.Any) -> builtins.bool:
-            return not (rhs == self)
-
-        def __repr__(self) -> str:
-            return "HeaderTagActionProperty(%s)" % ", ".join(
-                k + "=" + repr(v) for k, v in self._values.items()
-            )
-
-    @jsii.data_type(
-        jsii_type="aws-cdk-lib.aws_rtbfabric.CfnLink.LinkApplicationLogSamplingProperty",
-        jsii_struct_bases=[],
-        name_mapping={"error_log": "errorLog", "filter_log": "filterLog"},
-    )
-    class LinkApplicationLogSamplingProperty:
-        def __init__(self, *, error_log: jsii.Number, filter_log: jsii.Number) -> None:
-            '''
-            :param error_log: 
-            :param filter_log: 
-
-            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-rtbfabric-link-linkapplicationlogsampling.html
-            :exampleMetadata: fixture=_generated
-
-            Example::
-
-                # The code below shows an example of how to instantiate this type.
-                # The values are placeholders you should change.
-                from aws_cdk import aws_rtbfabric as rtbfabric
-                
-                link_application_log_sampling_property = rtbfabric.CfnLink.LinkApplicationLogSamplingProperty(
-                    error_log=123,
-                    filter_log=123
-                )
-            '''
-            if __debug__:
-                type_hints = typing.get_type_hints(_typecheckingstub__cc1221d9bdb6ac10224d2e809d5a57a5e79c1624f9b25a6d8868856fb5441212)
-                check_type(argname="argument error_log", value=error_log, expected_type=type_hints["error_log"])
-                check_type(argname="argument filter_log", value=filter_log, expected_type=type_hints["filter_log"])
-            self._values: typing.Dict[builtins.str, typing.Any] = {
-                "error_log": error_log,
-                "filter_log": filter_log,
-            }
-
-        @builtins.property
-        def error_log(self) -> jsii.Number:
-            '''
-            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-rtbfabric-link-linkapplicationlogsampling.html#cfn-rtbfabric-link-linkapplicationlogsampling-errorlog
-            '''
-            result = self._values.get("error_log")
-            assert result is not None, "Required property 'error_log' is missing"
-            return typing.cast(jsii.Number, result)
-
-        @builtins.property
-        def filter_log(self) -> jsii.Number:
-            '''
-            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-rtbfabric-link-linkapplicationlogsampling.html#cfn-rtbfabric-link-linkapplicationlogsampling-filterlog
-            '''
-            result = self._values.get("filter_log")
-            assert result is not None, "Required property 'filter_log' is missing"
-            return typing.cast(jsii.Number, result)
-
-        def __eq__(self, rhs: typing.Any) -> builtins.bool:
-            return isinstance(rhs, self.__class__) and rhs._values == self._values
-
-        def __ne__(self, rhs: typing.Any) -> builtins.bool:
-            return not (rhs == self)
-
-        def __repr__(self) -> str:
-            return "LinkApplicationLogSamplingProperty(%s)" % ", ".join(
-                k + "=" + repr(v) for k, v in self._values.items()
-            )
-
-    @jsii.data_type(
-        jsii_type="aws-cdk-lib.aws_rtbfabric.CfnLink.LinkAttributesProperty",
-        jsii_struct_bases=[],
-        name_mapping={
-            "customer_provided_id": "customerProvidedId",
-            "responder_error_masking": "responderErrorMasking",
-        },
-    )
-    class LinkAttributesProperty:
-        def __init__(
-            self,
-            *,
-            customer_provided_id: typing.Optional[builtins.str] = None,
-            responder_error_masking: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnLink.ResponderErrorMaskingForHttpCodeProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        ) -> None:
-            '''
-            :param customer_provided_id: 
-            :param responder_error_masking: 
-
-            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-rtbfabric-link-linkattributes.html
-            :exampleMetadata: fixture=_generated
-
-            Example::
-
-                # The code below shows an example of how to instantiate this type.
-                # The values are placeholders you should change.
-                from aws_cdk import aws_rtbfabric as rtbfabric
-                
-                link_attributes_property = rtbfabric.CfnLink.LinkAttributesProperty(
-                    customer_provided_id="customerProvidedId",
-                    responder_error_masking=[rtbfabric.CfnLink.ResponderErrorMaskingForHttpCodeProperty(
-                        action="action",
-                        http_code="httpCode",
-                        logging_types=["loggingTypes"],
-                
-                        # the properties below are optional
-                        response_logging_percentage=123
-                    )]
-                )
-            '''
-            if __debug__:
-                type_hints = typing.get_type_hints(_typecheckingstub__9d88f2ed7a2e18d0a7f048f2648cd6744718ec16fcf5c0c157a303ced0fe42a8)
-                check_type(argname="argument customer_provided_id", value=customer_provided_id, expected_type=type_hints["customer_provided_id"])
-                check_type(argname="argument responder_error_masking", value=responder_error_masking, expected_type=type_hints["responder_error_masking"])
-            self._values: typing.Dict[builtins.str, typing.Any] = {}
-            if customer_provided_id is not None:
-                self._values["customer_provided_id"] = customer_provided_id
-            if responder_error_masking is not None:
-                self._values["responder_error_masking"] = responder_error_masking
-
-        @builtins.property
-        def customer_provided_id(self) -> typing.Optional[builtins.str]:
-            '''
-            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-rtbfabric-link-linkattributes.html#cfn-rtbfabric-link-linkattributes-customerprovidedid
-            '''
-            result = self._values.get("customer_provided_id")
-            return typing.cast(typing.Optional[builtins.str], result)
-
-        @builtins.property
-        def responder_error_masking(
-            self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnLink.ResponderErrorMaskingForHttpCodeProperty"]]]]:
-            '''
-            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-rtbfabric-link-linkattributes.html#cfn-rtbfabric-link-linkattributes-respondererrormasking
-            '''
-            result = self._values.get("responder_error_masking")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnLink.ResponderErrorMaskingForHttpCodeProperty"]]]], result)
-
-        def __eq__(self, rhs: typing.Any) -> builtins.bool:
-            return isinstance(rhs, self.__class__) and rhs._values == self._values
-
-        def __ne__(self, rhs: typing.Any) -> builtins.bool:
-            return not (rhs == self)
-
-        def __repr__(self) -> str:
-            return "LinkAttributesProperty(%s)" % ", ".join(
-                k + "=" + repr(v) for k, v in self._values.items()
-            )
-
-    @jsii.data_type(
-        jsii_type="aws-cdk-lib.aws_rtbfabric.CfnLink.LinkLogSettingsProperty",
-        jsii_struct_bases=[],
-        name_mapping={"application_logs": "applicationLogs"},
-    )
-    class LinkLogSettingsProperty:
-        def __init__(
-            self,
-            *,
-            application_logs: typing.Union[_IResolvable_da3f097b, typing.Union["CfnLink.ApplicationLogsProperty", typing.Dict[builtins.str, typing.Any]]],
-        ) -> None:
-            '''
-            :param application_logs: 
-
-            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-rtbfabric-link-linklogsettings.html
-            :exampleMetadata: fixture=_generated
-
-            Example::
-
-                # The code below shows an example of how to instantiate this type.
-                # The values are placeholders you should change.
-                from aws_cdk import aws_rtbfabric as rtbfabric
-                
-                link_log_settings_property = rtbfabric.CfnLink.LinkLogSettingsProperty(
-                    application_logs=rtbfabric.CfnLink.ApplicationLogsProperty(
-                        link_application_log_sampling=rtbfabric.CfnLink.LinkApplicationLogSamplingProperty(
-                            error_log=123,
-                            filter_log=123
-                        )
-                    )
-                )
-            '''
-            if __debug__:
-                type_hints = typing.get_type_hints(_typecheckingstub__e62485742cc7a54f6e2603b3db9f4a68a14d224e255f6337f68e83e4464ec0de)
-                check_type(argname="argument application_logs", value=application_logs, expected_type=type_hints["application_logs"])
-            self._values: typing.Dict[builtins.str, typing.Any] = {
-                "application_logs": application_logs,
-            }
-
-        @builtins.property
-        def application_logs(
-            self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnLink.ApplicationLogsProperty"]:
-            '''
-            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-rtbfabric-link-linklogsettings.html#cfn-rtbfabric-link-linklogsettings-applicationlogs
-            '''
-            result = self._values.get("application_logs")
-            assert result is not None, "Required property 'application_logs' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnLink.ApplicationLogsProperty"], result)
-
-        def __eq__(self, rhs: typing.Any) -> builtins.bool:
-            return isinstance(rhs, self.__class__) and rhs._values == self._values
-
-        def __ne__(self, rhs: typing.Any) -> builtins.bool:
-            return not (rhs == self)
-
-        def __repr__(self) -> str:
-            return "LinkLogSettingsProperty(%s)" % ", ".join(
-                k + "=" + repr(v) for k, v in self._values.items()
-            )
-
-    @jsii.data_type(
-        jsii_type="aws-cdk-lib.aws_rtbfabric.CfnLink.ModuleConfigurationProperty",
-        jsii_struct_bases=[],
-        name_mapping={
-            "name": "name",
-            "depends_on": "dependsOn",
-            "module_parameters": "moduleParameters",
-            "version": "version",
-        },
-    )
-    class ModuleConfigurationProperty:
-        def __init__(
-            self,
-            *,
-            name: builtins.str,
-            depends_on: typing.Optional[typing.Sequence[builtins.str]] = None,
-            module_parameters: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnLink.ModuleParametersProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            version: typing.Optional[builtins.str] = None,
-        ) -> None:
-            '''
-            :param name: 
-            :param depends_on: 
-            :param module_parameters: 
-            :param version: 
-
-            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-rtbfabric-link-moduleconfiguration.html
-            :exampleMetadata: fixture=_generated
-
-            Example::
-
-                # The code below shows an example of how to instantiate this type.
-                # The values are placeholders you should change.
-                from aws_cdk import aws_rtbfabric as rtbfabric
-                
-                module_configuration_property = rtbfabric.CfnLink.ModuleConfigurationProperty(
-                    name="name",
-                
-                    # the properties below are optional
-                    depends_on=["dependsOn"],
-                    module_parameters=rtbfabric.CfnLink.ModuleParametersProperty(
-                        no_bid=rtbfabric.CfnLink.NoBidModuleParametersProperty(
-                            pass_through_percentage=123,
-                            reason="reason",
-                            reason_code=123
-                        ),
-                        open_rtb_attribute=rtbfabric.CfnLink.OpenRtbAttributeModuleParametersProperty(
-                            action=rtbfabric.CfnLink.ActionProperty(
-                                header_tag=rtbfabric.CfnLink.HeaderTagActionProperty(
-                                    name="name",
-                                    value="value"
-                                ),
-                                no_bid=rtbfabric.CfnLink.NoBidActionProperty(
-                                    no_bid_reason_code=123
-                                )
-                            ),
-                            filter_configuration=[rtbfabric.CfnLink.FilterProperty(
-                                criteria=[rtbfabric.CfnLink.FilterCriterionProperty(
-                                    path="path",
-                                    values=["values"]
-                                )]
-                            )],
-                            filter_type="filterType",
-                            holdback_percentage=123
-                        )
-                    ),
-                    version="version"
-                )
-            '''
-            if __debug__:
-                type_hints = typing.get_type_hints(_typecheckingstub__82be0aba67824a4714ca848063dd6c387779b7a60080807fbc17ba6f58442821)
-                check_type(argname="argument name", value=name, expected_type=type_hints["name"])
-                check_type(argname="argument depends_on", value=depends_on, expected_type=type_hints["depends_on"])
-                check_type(argname="argument module_parameters", value=module_parameters, expected_type=type_hints["module_parameters"])
-                check_type(argname="argument version", value=version, expected_type=type_hints["version"])
-            self._values: typing.Dict[builtins.str, typing.Any] = {
-                "name": name,
-            }
-            if depends_on is not None:
-                self._values["depends_on"] = depends_on
-            if module_parameters is not None:
-                self._values["module_parameters"] = module_parameters
-            if version is not None:
-                self._values["version"] = version
-
-        @builtins.property
-        def name(self) -> builtins.str:
-            '''
-            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-rtbfabric-link-moduleconfiguration.html#cfn-rtbfabric-link-moduleconfiguration-name
-            '''
-            result = self._values.get("name")
-            assert result is not None, "Required property 'name' is missing"
-            return typing.cast(builtins.str, result)
-
-        @builtins.property
-        def depends_on(self) -> typing.Optional[typing.List[builtins.str]]:
-            '''
-            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-rtbfabric-link-moduleconfiguration.html#cfn-rtbfabric-link-moduleconfiguration-dependson
-            '''
-            result = self._values.get("depends_on")
-            return typing.cast(typing.Optional[typing.List[builtins.str]], result)
-
-        @builtins.property
-        def module_parameters(
-            self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnLink.ModuleParametersProperty"]]:
-            '''
-            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-rtbfabric-link-moduleconfiguration.html#cfn-rtbfabric-link-moduleconfiguration-moduleparameters
-            '''
-            result = self._values.get("module_parameters")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnLink.ModuleParametersProperty"]], result)
-
-        @builtins.property
-        def version(self) -> typing.Optional[builtins.str]:
-            '''
-            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-rtbfabric-link-moduleconfiguration.html#cfn-rtbfabric-link-moduleconfiguration-version
-            '''
-            result = self._values.get("version")
-            return typing.cast(typing.Optional[builtins.str], result)
-
-        def __eq__(self, rhs: typing.Any) -> builtins.bool:
-            return isinstance(rhs, self.__class__) and rhs._values == self._values
-
-        def __ne__(self, rhs: typing.Any) -> builtins.bool:
-            return not (rhs == self)
-
-        def __repr__(self) -> str:
-            return "ModuleConfigurationProperty(%s)" % ", ".join(
-                k + "=" + repr(v) for k, v in self._values.items()
-            )
-
-    @jsii.data_type(
-        jsii_type="aws-cdk-lib.aws_rtbfabric.CfnLink.ModuleParametersProperty",
-        jsii_struct_bases=[],
-        name_mapping={"no_bid": "noBid", "open_rtb_attribute": "openRtbAttribute"},
-    )
-    class ModuleParametersProperty:
-        def __init__(
-            self,
-            *,
-            no_bid: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnLink.NoBidModuleParametersProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            open_rtb_attribute: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnLink.OpenRtbAttributeModuleParametersProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        ) -> None:
-            '''
-            :param no_bid: 
-            :param open_rtb_attribute: 
-
-            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-rtbfabric-link-moduleparameters.html
-            :exampleMetadata: fixture=_generated
-
-            Example::
-
-                # The code below shows an example of how to instantiate this type.
-                # The values are placeholders you should change.
-                from aws_cdk import aws_rtbfabric as rtbfabric
-                
-                module_parameters_property = rtbfabric.CfnLink.ModuleParametersProperty(
-                    no_bid=rtbfabric.CfnLink.NoBidModuleParametersProperty(
-                        pass_through_percentage=123,
-                        reason="reason",
-                        reason_code=123
-                    ),
-                    open_rtb_attribute=rtbfabric.CfnLink.OpenRtbAttributeModuleParametersProperty(
-                        action=rtbfabric.CfnLink.ActionProperty(
-                            header_tag=rtbfabric.CfnLink.HeaderTagActionProperty(
-                                name="name",
-                                value="value"
-                            ),
-                            no_bid=rtbfabric.CfnLink.NoBidActionProperty(
-                                no_bid_reason_code=123
-                            )
-                        ),
-                        filter_configuration=[rtbfabric.CfnLink.FilterProperty(
-                            criteria=[rtbfabric.CfnLink.FilterCriterionProperty(
-                                path="path",
-                                values=["values"]
-                            )]
-                        )],
-                        filter_type="filterType",
-                        holdback_percentage=123
-                    )
-                )
-            '''
-            if __debug__:
-                type_hints = typing.get_type_hints(_typecheckingstub__910c77dbedb644758dff1f600f9a05ab181cc893c92bc153462d376122dba51d)
-                check_type(argname="argument no_bid", value=no_bid, expected_type=type_hints["no_bid"])
-                check_type(argname="argument open_rtb_attribute", value=open_rtb_attribute, expected_type=type_hints["open_rtb_attribute"])
-            self._values: typing.Dict[builtins.str, typing.Any] = {}
-            if no_bid is not None:
-                self._values["no_bid"] = no_bid
-            if open_rtb_attribute is not None:
-                self._values["open_rtb_attribute"] = open_rtb_attribute
-
-        @builtins.property
-        def no_bid(
-            self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnLink.NoBidModuleParametersProperty"]]:
-            '''
-            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-rtbfabric-link-moduleparameters.html#cfn-rtbfabric-link-moduleparameters-nobid
-            '''
-            result = self._values.get("no_bid")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnLink.NoBidModuleParametersProperty"]], result)
-
-        @builtins.property
-        def open_rtb_attribute(
-            self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnLink.OpenRtbAttributeModuleParametersProperty"]]:
-            '''
-            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-rtbfabric-link-moduleparameters.html#cfn-rtbfabric-link-moduleparameters-openrtbattribute
-            '''
-            result = self._values.get("open_rtb_attribute")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnLink.OpenRtbAttributeModuleParametersProperty"]], result)
-
-        def __eq__(self, rhs: typing.Any) -> builtins.bool:
-            return isinstance(rhs, self.__class__) and rhs._values == self._values
-
-        def __ne__(self, rhs: typing.Any) -> builtins.bool:
-            return not (rhs == self)
-
-        def __repr__(self) -> str:
-            return "ModuleParametersProperty(%s)" % ", ".join(
-                k + "=" + repr(v) for k, v in self._values.items()
-            )
-
-    @jsii.data_type(
-        jsii_type="aws-cdk-lib.aws_rtbfabric.CfnLink.NoBidActionProperty",
-        jsii_struct_bases=[],
-        name_mapping={"no_bid_reason_code": "noBidReasonCode"},
-    )
-    class NoBidActionProperty:
-        def __init__(
-            self,
-            *,
-            no_bid_reason_code: typing.Optional[jsii.Number] = None,
-        ) -> None:
-            '''
-            :param no_bid_reason_code: 
-
-            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-rtbfabric-link-nobidaction.html
-            :exampleMetadata: fixture=_generated
-
-            Example::
-
-                # The code below shows an example of how to instantiate this type.
-                # The values are placeholders you should change.
-                from aws_cdk import aws_rtbfabric as rtbfabric
-                
-                no_bid_action_property = rtbfabric.CfnLink.NoBidActionProperty(
-                    no_bid_reason_code=123
-                )
-            '''
-            if __debug__:
-                type_hints = typing.get_type_hints(_typecheckingstub__d808313ff4cbeeb74cf4ac496addde75cf42f9a64b0c9069d77342b5f26420c6)
-                check_type(argname="argument no_bid_reason_code", value=no_bid_reason_code, expected_type=type_hints["no_bid_reason_code"])
-            self._values: typing.Dict[builtins.str, typing.Any] = {}
-            if no_bid_reason_code is not None:
-                self._values["no_bid_reason_code"] = no_bid_reason_code
-
-        @builtins.property
-        def no_bid_reason_code(self) -> typing.Optional[jsii.Number]:
-            '''
-            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-rtbfabric-link-nobidaction.html#cfn-rtbfabric-link-nobidaction-nobidreasoncode
-            '''
-            result = self._values.get("no_bid_reason_code")
-            return typing.cast(typing.Optional[jsii.Number], result)
-
-        def __eq__(self, rhs: typing.Any) -> builtins.bool:
-            return isinstance(rhs, self.__class__) and rhs._values == self._values
-
-        def __ne__(self, rhs: typing.Any) -> builtins.bool:
-            return not (rhs == self)
-
-        def __repr__(self) -> str:
-            return "NoBidActionProperty(%s)" % ", ".join(
-                k + "=" + repr(v) for k, v in self._values.items()
-            )
-
-    @jsii.data_type(
-        jsii_type="aws-cdk-lib.aws_rtbfabric.CfnLink.NoBidModuleParametersProperty",
-        jsii_struct_bases=[],
-        name_mapping={
-            "pass_through_percentage": "passThroughPercentage",
-            "reason": "reason",
-            "reason_code": "reasonCode",
-        },
-    )
-    class NoBidModuleParametersProperty:
-        def __init__(
-            self,
-            *,
-            pass_through_percentage: typing.Optional[jsii.Number] = None,
-            reason: typing.Optional[builtins.str] = None,
-            reason_code: typing.Optional[jsii.Number] = None,
-        ) -> None:
-            '''
-            :param pass_through_percentage: 
-            :param reason: 
-            :param reason_code: 
-
-            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-rtbfabric-link-nobidmoduleparameters.html
-            :exampleMetadata: fixture=_generated
-
-            Example::
-
-                # The code below shows an example of how to instantiate this type.
-                # The values are placeholders you should change.
-                from aws_cdk import aws_rtbfabric as rtbfabric
-                
-                no_bid_module_parameters_property = rtbfabric.CfnLink.NoBidModuleParametersProperty(
-                    pass_through_percentage=123,
-                    reason="reason",
-                    reason_code=123
-                )
-            '''
-            if __debug__:
-                type_hints = typing.get_type_hints(_typecheckingstub__65534e5849f21132ce42911f7b88232db1b4cc75a5d56fc3c669b59b4d829b0c)
-                check_type(argname="argument pass_through_percentage", value=pass_through_percentage, expected_type=type_hints["pass_through_percentage"])
-                check_type(argname="argument reason", value=reason, expected_type=type_hints["reason"])
-                check_type(argname="argument reason_code", value=reason_code, expected_type=type_hints["reason_code"])
-            self._values: typing.Dict[builtins.str, typing.Any] = {}
-            if pass_through_percentage is not None:
-                self._values["pass_through_percentage"] = pass_through_percentage
-            if reason is not None:
-                self._values["reason"] = reason
-            if reason_code is not None:
-                self._values["reason_code"] = reason_code
-
-        @builtins.property
-        def pass_through_percentage(self) -> typing.Optional[jsii.Number]:
-            '''
-            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-rtbfabric-link-nobidmoduleparameters.html#cfn-rtbfabric-link-nobidmoduleparameters-passthroughpercentage
-            '''
-            result = self._values.get("pass_through_percentage")
-            return typing.cast(typing.Optional[jsii.Number], result)
-
-        @builtins.property
-        def reason(self) -> typing.Optional[builtins.str]:
-            '''
-            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-rtbfabric-link-nobidmoduleparameters.html#cfn-rtbfabric-link-nobidmoduleparameters-reason
-            '''
-            result = self._values.get("reason")
-            return typing.cast(typing.Optional[builtins.str], result)
-
-        @builtins.property
-        def reason_code(self) -> typing.Optional[jsii.Number]:
-            '''
-            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-rtbfabric-link-nobidmoduleparameters.html#cfn-rtbfabric-link-nobidmoduleparameters-reasoncode
-            '''
-            result = self._values.get("reason_code")
-            return typing.cast(typing.Optional[jsii.Number], result)
-
-        def __eq__(self, rhs: typing.Any) -> builtins.bool:
-            return isinstance(rhs, self.__class__) and rhs._values == self._values
-
-        def __ne__(self, rhs: typing.Any) -> builtins.bool:
-            return not (rhs == self)
-
-        def __repr__(self) -> str:
-            return "NoBidModuleParametersProperty(%s)" % ", ".join(
-                k + "=" + repr(v) for k, v in self._values.items()
-            )
-
-    @jsii.data_type(
-        jsii_type="aws-cdk-lib.aws_rtbfabric.CfnLink.OpenRtbAttributeModuleParametersProperty",
-        jsii_struct_bases=[],
-        name_mapping={
-            "action": "action",
-            "filter_configuration": "filterConfiguration",
-            "filter_type": "filterType",
-            "holdback_percentage": "holdbackPercentage",
-        },
-    )
-    class OpenRtbAttributeModuleParametersProperty:
-        def __init__(
-            self,
-            *,
-            action: typing.Union[_IResolvable_da3f097b, typing.Union["CfnLink.ActionProperty", typing.Dict[builtins.str, typing.Any]]],
-            filter_configuration: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnLink.FilterProperty", typing.Dict[builtins.str, typing.Any]]]]],
-            filter_type: builtins.str,
-            holdback_percentage: jsii.Number,
-        ) -> None:
-            '''
-            :param action: 
-            :param filter_configuration: 
-            :param filter_type: 
-            :param holdback_percentage: 
-
-            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-rtbfabric-link-openrtbattributemoduleparameters.html
-            :exampleMetadata: fixture=_generated
-
-            Example::
-
-                # The code below shows an example of how to instantiate this type.
-                # The values are placeholders you should change.
-                from aws_cdk import aws_rtbfabric as rtbfabric
-                
-                open_rtb_attribute_module_parameters_property = rtbfabric.CfnLink.OpenRtbAttributeModuleParametersProperty(
-                    action=rtbfabric.CfnLink.ActionProperty(
-                        header_tag=rtbfabric.CfnLink.HeaderTagActionProperty(
-                            name="name",
-                            value="value"
-                        ),
-                        no_bid=rtbfabric.CfnLink.NoBidActionProperty(
-                            no_bid_reason_code=123
-                        )
-                    ),
-                    filter_configuration=[rtbfabric.CfnLink.FilterProperty(
-                        criteria=[rtbfabric.CfnLink.FilterCriterionProperty(
-                            path="path",
-                            values=["values"]
-                        )]
-                    )],
-                    filter_type="filterType",
-                    holdback_percentage=123
-                )
-            '''
-            if __debug__:
-                type_hints = typing.get_type_hints(_typecheckingstub__0027d94142f38aa037892e813fefe1e1f6b9ef3d7a8927dcb4fe8fe3340158c5)
-                check_type(argname="argument action", value=action, expected_type=type_hints["action"])
-                check_type(argname="argument filter_configuration", value=filter_configuration, expected_type=type_hints["filter_configuration"])
-                check_type(argname="argument filter_type", value=filter_type, expected_type=type_hints["filter_type"])
-                check_type(argname="argument holdback_percentage", value=holdback_percentage, expected_type=type_hints["holdback_percentage"])
-            self._values: typing.Dict[builtins.str, typing.Any] = {
-                "action": action,
-                "filter_configuration": filter_configuration,
-                "filter_type": filter_type,
-                "holdback_percentage": holdback_percentage,
-            }
-
-        @builtins.property
-        def action(
-            self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnLink.ActionProperty"]:
-            '''
-            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-rtbfabric-link-openrtbattributemoduleparameters.html#cfn-rtbfabric-link-openrtbattributemoduleparameters-action
-            '''
-            result = self._values.get("action")
-            assert result is not None, "Required property 'action' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnLink.ActionProperty"], result)
-
-        @builtins.property
-        def filter_configuration(
-            self,
-        ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnLink.FilterProperty"]]]:
-            '''
-            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-rtbfabric-link-openrtbattributemoduleparameters.html#cfn-rtbfabric-link-openrtbattributemoduleparameters-filterconfiguration
-            '''
-            result = self._values.get("filter_configuration")
-            assert result is not None, "Required property 'filter_configuration' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnLink.FilterProperty"]]], result)
-
-        @builtins.property
-        def filter_type(self) -> builtins.str:
-            '''
-            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-rtbfabric-link-openrtbattributemoduleparameters.html#cfn-rtbfabric-link-openrtbattributemoduleparameters-filtertype
-            '''
-            result = self._values.get("filter_type")
-            assert result is not None, "Required property 'filter_type' is missing"
-            return typing.cast(builtins.str, result)
-
-        @builtins.property
-        def holdback_percentage(self) -> jsii.Number:
-            '''
-            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-rtbfabric-link-openrtbattributemoduleparameters.html#cfn-rtbfabric-link-openrtbattributemoduleparameters-holdbackpercentage
-            '''
-            result = self._values.get("holdback_percentage")
-            assert result is not None, "Required property 'holdback_percentage' is missing"
-            return typing.cast(jsii.Number, result)
-
-        def __eq__(self, rhs: typing.Any) -> builtins.bool:
-            return isinstance(rhs, self.__class__) and rhs._values == self._values
-
-        def __ne__(self, rhs: typing.Any) -> builtins.bool:
-            return not (rhs == self)
-
-        def __repr__(self) -> str:
-            return "OpenRtbAttributeModuleParametersProperty(%s)" % ", ".join(
-                k + "=" + repr(v) for k, v in self._values.items()
-            )
-
-    @jsii.data_type(
-        jsii_type="aws-cdk-lib.aws_rtbfabric.CfnLink.ResponderErrorMaskingForHttpCodeProperty",
-        jsii_struct_bases=[],
-        name_mapping={
-            "action": "action",
-            "http_code": "httpCode",
-            "logging_types": "loggingTypes",
-            "response_logging_percentage": "responseLoggingPercentage",
-        },
-    )
-    class ResponderErrorMaskingForHttpCodeProperty:
-        def __init__(
-            self,
-            *,
-            action: builtins.str,
-            http_code: builtins.str,
-            logging_types: typing.Sequence[builtins.str],
-            response_logging_percentage: typing.Optional[jsii.Number] = None,
-        ) -> None:
-            '''
-            :param action: 
-            :param http_code: 
-            :param logging_types: 
-            :param response_logging_percentage: 
-
-            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-rtbfabric-link-respondererrormaskingforhttpcode.html
-            :exampleMetadata: fixture=_generated
-
-            Example::
-
-                # The code below shows an example of how to instantiate this type.
-                # The values are placeholders you should change.
-                from aws_cdk import aws_rtbfabric as rtbfabric
-                
-                responder_error_masking_for_http_code_property = rtbfabric.CfnLink.ResponderErrorMaskingForHttpCodeProperty(
-                    action="action",
-                    http_code="httpCode",
-                    logging_types=["loggingTypes"],
-                
-                    # the properties below are optional
-                    response_logging_percentage=123
-                )
-            '''
-            if __debug__:
-                type_hints = typing.get_type_hints(_typecheckingstub__7a4d5a36bb204668cc9f3235d69b4d6dd33abe2f27737729656b5fd767fe6fcb)
-                check_type(argname="argument action", value=action, expected_type=type_hints["action"])
-                check_type(argname="argument http_code", value=http_code, expected_type=type_hints["http_code"])
-                check_type(argname="argument logging_types", value=logging_types, expected_type=type_hints["logging_types"])
-                check_type(argname="argument response_logging_percentage", value=response_logging_percentage, expected_type=type_hints["response_logging_percentage"])
-            self._values: typing.Dict[builtins.str, typing.Any] = {
-                "action": action,
-                "http_code": http_code,
-                "logging_types": logging_types,
-            }
-            if response_logging_percentage is not None:
-                self._values["response_logging_percentage"] = response_logging_percentage
-
-        @builtins.property
-        def action(self) -> builtins.str:
-            '''
-            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-rtbfabric-link-respondererrormaskingforhttpcode.html#cfn-rtbfabric-link-respondererrormaskingforhttpcode-action
-            '''
-            result = self._values.get("action")
-            assert result is not None, "Required property 'action' is missing"
-            return typing.cast(builtins.str, result)
-
-        @builtins.property
-        def http_code(self) -> builtins.str:
-            '''
-            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-rtbfabric-link-respondererrormaskingforhttpcode.html#cfn-rtbfabric-link-respondererrormaskingforhttpcode-httpcode
-            '''
-            result = self._values.get("http_code")
-            assert result is not None, "Required property 'http_code' is missing"
-            return typing.cast(builtins.str, result)
-
-        @builtins.property
-        def logging_types(self) -> typing.List[builtins.str]:
-            '''
-            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-rtbfabric-link-respondererrormaskingforhttpcode.html#cfn-rtbfabric-link-respondererrormaskingforhttpcode-loggingtypes
-            '''
-            result = self._values.get("logging_types")
-            assert result is not None, "Required property 'logging_types' is missing"
-            return typing.cast(typing.List[builtins.str], result)
-
-        @builtins.property
-        def response_logging_percentage(self) -> typing.Optional[jsii.Number]:
-            '''
-            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-rtbfabric-link-respondererrormaskingforhttpcode.html#cfn-rtbfabric-link-respondererrormaskingforhttpcode-responseloggingpercentage
-            '''
-            result = self._values.get("response_logging_percentage")
-            return typing.cast(typing.Optional[jsii.Number], result)
-
-        def __eq__(self, rhs: typing.Any) -> builtins.bool:
-            return isinstance(rhs, self.__class__) and rhs._values == self._values
-
-        def __ne__(self, rhs: typing.Any) -> builtins.bool:
-            return not (rhs == self)
-
-        def __repr__(self) -> str:
-            return "ResponderErrorMaskingForHttpCodeProperty(%s)" % ", ".join(
-                k + "=" + repr(v) for k, v in self._values.items()
-            )
-
-
-@jsii.implements(_IInspectable_c2943556, IRequesterGatewayRef, _ITaggableV2_4e6798f8)
+@jsii.implements(_IInspectable_c2943556, _IRequesterGatewayRef_d92bcdf1, _ITaggableV2_4e6798f8)
 class CfnRequesterGateway(
     _CfnResource_9df397a6,
     metaclass=jsii.JSIIMeta,
     jsii_type="aws-cdk-lib.aws_rtbfabric.CfnRequesterGateway",
 ):
-    '''Resource Type definition for AWS::RTBFabric::RequesterGateway Resource Type.
+    '''Creates a requester gateway.
 
     :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-rtbfabric-requestergateway.html
     :cloudformationResource: AWS::RTBFabric::RequesterGateway
@@ -2397,14 +1835,15 @@ class CfnRequesterGateway(
         description: typing.Optional[builtins.str] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
-        '''
+        '''Create a new ``AWS::RTBFabric::RequesterGateway``.
+
         :param scope: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
-        :param security_group_ids: The ID of one or more security groups in order to create a requester gateway.
-        :param subnet_ids: The ID of one or more subnets in order to create a requester gateway.
-        :param vpc_id: 
-        :param description: 
-        :param tags: Tags to assign to the Requester Gateway.
+        :param security_group_ids: The unique identifiers of the security groups.
+        :param subnet_ids: The unique identifiers of the subnets.
+        :param vpc_id: The unique identifier of the Virtual Private Cloud (VPC).
+        :param description: An optional description for the requester gateway.
+        :param tags: A map of the key-value pairs of the tag or tags to assign to the resource.
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__f422ad74a878dd27ca273fe5fdb545d09c78a5ac256926db3df20c37e5494bcb)
@@ -2527,14 +1966,14 @@ class CfnRequesterGateway(
 
     @builtins.property
     @jsii.member(jsii_name="requesterGatewayRef")
-    def requester_gateway_ref(self) -> RequesterGatewayReference:
+    def requester_gateway_ref(self) -> _RequesterGatewayReference_37e2965b:
         '''A reference to a RequesterGateway resource.'''
-        return typing.cast(RequesterGatewayReference, jsii.get(self, "requesterGatewayRef"))
+        return typing.cast(_RequesterGatewayReference_37e2965b, jsii.get(self, "requesterGatewayRef"))
 
     @builtins.property
     @jsii.member(jsii_name="securityGroupIds")
     def security_group_ids(self) -> typing.List[builtins.str]:
-        '''The ID of one or more security groups in order to create a requester gateway.'''
+        '''The unique identifiers of the security groups.'''
         return typing.cast(typing.List[builtins.str], jsii.get(self, "securityGroupIds"))
 
     @security_group_ids.setter
@@ -2547,7 +1986,7 @@ class CfnRequesterGateway(
     @builtins.property
     @jsii.member(jsii_name="subnetIds")
     def subnet_ids(self) -> typing.List[builtins.str]:
-        '''The ID of one or more subnets in order to create a requester gateway.'''
+        '''The unique identifiers of the subnets.'''
         return typing.cast(typing.List[builtins.str], jsii.get(self, "subnetIds"))
 
     @subnet_ids.setter
@@ -2560,6 +1999,7 @@ class CfnRequesterGateway(
     @builtins.property
     @jsii.member(jsii_name="vpcId")
     def vpc_id(self) -> builtins.str:
+        '''The unique identifier of the Virtual Private Cloud (VPC).'''
         return typing.cast(builtins.str, jsii.get(self, "vpcId"))
 
     @vpc_id.setter
@@ -2572,6 +2012,7 @@ class CfnRequesterGateway(
     @builtins.property
     @jsii.member(jsii_name="description")
     def description(self) -> typing.Optional[builtins.str]:
+        '''An optional description for the requester gateway.'''
         return typing.cast(typing.Optional[builtins.str], jsii.get(self, "description"))
 
     @description.setter
@@ -2584,7 +2025,7 @@ class CfnRequesterGateway(
     @builtins.property
     @jsii.member(jsii_name="tags")
     def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
-        '''Tags to assign to the Requester Gateway.'''
+        '''A map of the key-value pairs of the tag or tags to assign to the resource.'''
         return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tags"))
 
     @tags.setter
@@ -2595,13 +2036,145 @@ class CfnRequesterGateway(
         jsii.set(self, "tags", value) # pyright: ignore[reportArgumentType]
 
 
-@jsii.implements(_IInspectable_c2943556, IResponderGatewayRef, _ITaggableV2_4e6798f8)
+@jsii.data_type(
+    jsii_type="aws-cdk-lib.aws_rtbfabric.CfnRequesterGatewayProps",
+    jsii_struct_bases=[],
+    name_mapping={
+        "security_group_ids": "securityGroupIds",
+        "subnet_ids": "subnetIds",
+        "vpc_id": "vpcId",
+        "description": "description",
+        "tags": "tags",
+    },
+)
+class CfnRequesterGatewayProps:
+    def __init__(
+        self,
+        *,
+        security_group_ids: typing.Sequence[builtins.str],
+        subnet_ids: typing.Sequence[builtins.str],
+        vpc_id: builtins.str,
+        description: typing.Optional[builtins.str] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+    ) -> None:
+        '''Properties for defining a ``CfnRequesterGateway``.
+
+        :param security_group_ids: The unique identifiers of the security groups.
+        :param subnet_ids: The unique identifiers of the subnets.
+        :param vpc_id: The unique identifier of the Virtual Private Cloud (VPC).
+        :param description: An optional description for the requester gateway.
+        :param tags: A map of the key-value pairs of the tag or tags to assign to the resource.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-rtbfabric-requestergateway.html
+        :exampleMetadata: fixture=_generated
+
+        Example::
+
+            # The code below shows an example of how to instantiate this type.
+            # The values are placeholders you should change.
+            from aws_cdk import aws_rtbfabric as rtbfabric
+            
+            cfn_requester_gateway_props = rtbfabric.CfnRequesterGatewayProps(
+                security_group_ids=["securityGroupIds"],
+                subnet_ids=["subnetIds"],
+                vpc_id="vpcId",
+            
+                # the properties below are optional
+                description="description",
+                tags=[CfnTag(
+                    key="key",
+                    value="value"
+                )]
+            )
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__e861505bd65d62c115117db14bdc56cdccfb7c596f849bc81dadfc3f63484f16)
+            check_type(argname="argument security_group_ids", value=security_group_ids, expected_type=type_hints["security_group_ids"])
+            check_type(argname="argument subnet_ids", value=subnet_ids, expected_type=type_hints["subnet_ids"])
+            check_type(argname="argument vpc_id", value=vpc_id, expected_type=type_hints["vpc_id"])
+            check_type(argname="argument description", value=description, expected_type=type_hints["description"])
+            check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
+        self._values: typing.Dict[builtins.str, typing.Any] = {
+            "security_group_ids": security_group_ids,
+            "subnet_ids": subnet_ids,
+            "vpc_id": vpc_id,
+        }
+        if description is not None:
+            self._values["description"] = description
+        if tags is not None:
+            self._values["tags"] = tags
+
+    @builtins.property
+    def security_group_ids(self) -> typing.List[builtins.str]:
+        '''The unique identifiers of the security groups.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-rtbfabric-requestergateway.html#cfn-rtbfabric-requestergateway-securitygroupids
+        '''
+        result = self._values.get("security_group_ids")
+        assert result is not None, "Required property 'security_group_ids' is missing"
+        return typing.cast(typing.List[builtins.str], result)
+
+    @builtins.property
+    def subnet_ids(self) -> typing.List[builtins.str]:
+        '''The unique identifiers of the subnets.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-rtbfabric-requestergateway.html#cfn-rtbfabric-requestergateway-subnetids
+        '''
+        result = self._values.get("subnet_ids")
+        assert result is not None, "Required property 'subnet_ids' is missing"
+        return typing.cast(typing.List[builtins.str], result)
+
+    @builtins.property
+    def vpc_id(self) -> builtins.str:
+        '''The unique identifier of the Virtual Private Cloud (VPC).
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-rtbfabric-requestergateway.html#cfn-rtbfabric-requestergateway-vpcid
+        '''
+        result = self._values.get("vpc_id")
+        assert result is not None, "Required property 'vpc_id' is missing"
+        return typing.cast(builtins.str, result)
+
+    @builtins.property
+    def description(self) -> typing.Optional[builtins.str]:
+        '''An optional description for the requester gateway.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-rtbfabric-requestergateway.html#cfn-rtbfabric-requestergateway-description
+        '''
+        result = self._values.get("description")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+        '''A map of the key-value pairs of the tag or tags to assign to the resource.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-rtbfabric-requestergateway.html#cfn-rtbfabric-requestergateway-tags
+        '''
+        result = self._values.get("tags")
+        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+
+    def __eq__(self, rhs: typing.Any) -> builtins.bool:
+        return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+    def __ne__(self, rhs: typing.Any) -> builtins.bool:
+        return not (rhs == self)
+
+    def __repr__(self) -> str:
+        return "CfnRequesterGatewayProps(%s)" % ", ".join(
+            k + "=" + repr(v) for k, v in self._values.items()
+        )
+
+
+@jsii.implements(_IInspectable_c2943556, _IResponderGatewayRef_2bdaa070, _ITaggableV2_4e6798f8)
 class CfnResponderGateway(
     _CfnResource_9df397a6,
     metaclass=jsii.JSIIMeta,
     jsii_type="aws-cdk-lib.aws_rtbfabric.CfnResponderGateway",
 ):
-    '''Resource Type definition for AWS::RTBFabric::ResponderGateway Resource Type.
+    '''Creates a responder gateway.
+
+    .. epigraph::
+
+       A domain name or managed endpoint is required.
 
     :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-rtbfabric-respondergateway.html
     :cloudformationResource: AWS::RTBFabric::ResponderGateway
@@ -2663,19 +2236,20 @@ class CfnResponderGateway(
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
         trust_store_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnResponderGateway.TrustStoreConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
-        '''
+        '''Create a new ``AWS::RTBFabric::ResponderGateway``.
+
         :param scope: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
-        :param port: 
-        :param protocol: 
-        :param security_group_ids: The ID of one or more security groups in order to create a gateway.
-        :param subnet_ids: The ID of one or more subnets in order to create a gateway.
-        :param vpc_id: 
-        :param description: 
-        :param domain_name: 
-        :param managed_endpoint_configuration: 
-        :param tags: Tags to assign to the Responder Gateway.
-        :param trust_store_configuration: 
+        :param port: The networking port to use.
+        :param protocol: The networking protocol to use.
+        :param security_group_ids: The unique identifiers of the security groups.
+        :param subnet_ids: The unique identifiers of the subnets.
+        :param vpc_id: The unique identifier of the Virtual Private Cloud (VPC).
+        :param description: An optional description for the responder gateway.
+        :param domain_name: The domain name for the responder gateway.
+        :param managed_endpoint_configuration: The configuration for the managed endpoint.
+        :param tags: A map of the key-value pairs of the tag or tags to assign to the resource.
+        :param trust_store_configuration: The configuration of the trust store.
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__cb840846f651123d9a88e886198c38a19418b49d00a405569125e9b5fc712905)
@@ -2779,13 +2353,14 @@ class CfnResponderGateway(
 
     @builtins.property
     @jsii.member(jsii_name="responderGatewayRef")
-    def responder_gateway_ref(self) -> ResponderGatewayReference:
+    def responder_gateway_ref(self) -> _ResponderGatewayReference_a8195bef:
         '''A reference to a ResponderGateway resource.'''
-        return typing.cast(ResponderGatewayReference, jsii.get(self, "responderGatewayRef"))
+        return typing.cast(_ResponderGatewayReference_a8195bef, jsii.get(self, "responderGatewayRef"))
 
     @builtins.property
     @jsii.member(jsii_name="port")
     def port(self) -> jsii.Number:
+        '''The networking port to use.'''
         return typing.cast(jsii.Number, jsii.get(self, "port"))
 
     @port.setter
@@ -2798,6 +2373,7 @@ class CfnResponderGateway(
     @builtins.property
     @jsii.member(jsii_name="protocol")
     def protocol(self) -> builtins.str:
+        '''The networking protocol to use.'''
         return typing.cast(builtins.str, jsii.get(self, "protocol"))
 
     @protocol.setter
@@ -2810,7 +2386,7 @@ class CfnResponderGateway(
     @builtins.property
     @jsii.member(jsii_name="securityGroupIds")
     def security_group_ids(self) -> typing.List[builtins.str]:
-        '''The ID of one or more security groups in order to create a gateway.'''
+        '''The unique identifiers of the security groups.'''
         return typing.cast(typing.List[builtins.str], jsii.get(self, "securityGroupIds"))
 
     @security_group_ids.setter
@@ -2823,7 +2399,7 @@ class CfnResponderGateway(
     @builtins.property
     @jsii.member(jsii_name="subnetIds")
     def subnet_ids(self) -> typing.List[builtins.str]:
-        '''The ID of one or more subnets in order to create a gateway.'''
+        '''The unique identifiers of the subnets.'''
         return typing.cast(typing.List[builtins.str], jsii.get(self, "subnetIds"))
 
     @subnet_ids.setter
@@ -2836,6 +2412,7 @@ class CfnResponderGateway(
     @builtins.property
     @jsii.member(jsii_name="vpcId")
     def vpc_id(self) -> builtins.str:
+        '''The unique identifier of the Virtual Private Cloud (VPC).'''
         return typing.cast(builtins.str, jsii.get(self, "vpcId"))
 
     @vpc_id.setter
@@ -2848,6 +2425,7 @@ class CfnResponderGateway(
     @builtins.property
     @jsii.member(jsii_name="description")
     def description(self) -> typing.Optional[builtins.str]:
+        '''An optional description for the responder gateway.'''
         return typing.cast(typing.Optional[builtins.str], jsii.get(self, "description"))
 
     @description.setter
@@ -2860,6 +2438,7 @@ class CfnResponderGateway(
     @builtins.property
     @jsii.member(jsii_name="domainName")
     def domain_name(self) -> typing.Optional[builtins.str]:
+        '''The domain name for the responder gateway.'''
         return typing.cast(typing.Optional[builtins.str], jsii.get(self, "domainName"))
 
     @domain_name.setter
@@ -2874,6 +2453,7 @@ class CfnResponderGateway(
     def managed_endpoint_configuration(
         self,
     ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnResponderGateway.ManagedEndpointConfigurationProperty"]]:
+        '''The configuration for the managed endpoint.'''
         return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnResponderGateway.ManagedEndpointConfigurationProperty"]], jsii.get(self, "managedEndpointConfiguration"))
 
     @managed_endpoint_configuration.setter
@@ -2889,7 +2469,7 @@ class CfnResponderGateway(
     @builtins.property
     @jsii.member(jsii_name="tags")
     def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
-        '''Tags to assign to the Responder Gateway.'''
+        '''A map of the key-value pairs of the tag or tags to assign to the resource.'''
         return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tags"))
 
     @tags.setter
@@ -2904,6 +2484,7 @@ class CfnResponderGateway(
     def trust_store_configuration(
         self,
     ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnResponderGateway.TrustStoreConfigurationProperty"]]:
+        '''The configuration of the trust store.'''
         return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnResponderGateway.TrustStoreConfigurationProperty"]], jsii.get(self, "trustStoreConfiguration"))
 
     @trust_store_configuration.setter
@@ -2931,9 +2512,10 @@ class CfnResponderGateway(
             auto_scaling_group_name_list: typing.Sequence[builtins.str],
             role_arn: builtins.str,
         ) -> None:
-            '''
-            :param auto_scaling_group_name_list: 
-            :param role_arn: 
+            '''Describes the configuration of an auto scaling group.
+
+            :param auto_scaling_group_name_list: The names of the auto scaling group.
+            :param role_arn: The role ARN of the auto scaling group.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-rtbfabric-respondergateway-autoscalinggroupsconfiguration.html
             :exampleMetadata: fixture=_generated
@@ -2960,7 +2542,8 @@ class CfnResponderGateway(
 
         @builtins.property
         def auto_scaling_group_name_list(self) -> typing.List[builtins.str]:
-            '''
+            '''The names of the auto scaling group.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-rtbfabric-respondergateway-autoscalinggroupsconfiguration.html#cfn-rtbfabric-respondergateway-autoscalinggroupsconfiguration-autoscalinggroupnamelist
             '''
             result = self._values.get("auto_scaling_group_name_list")
@@ -2969,7 +2552,8 @@ class CfnResponderGateway(
 
         @builtins.property
         def role_arn(self) -> builtins.str:
-            '''
+            '''The role ARN of the auto scaling group.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-rtbfabric-respondergateway-autoscalinggroupsconfiguration.html#cfn-rtbfabric-respondergateway-autoscalinggroupsconfiguration-rolearn
             '''
             result = self._values.get("role_arn")
@@ -3010,13 +2594,14 @@ class CfnResponderGateway(
             endpoints_resource_namespace: builtins.str,
             role_arn: builtins.str,
         ) -> None:
-            '''
-            :param cluster_api_server_ca_certificate_chain: 
-            :param cluster_api_server_endpoint_uri: 
-            :param cluster_name: 
-            :param endpoints_resource_name: 
-            :param endpoints_resource_namespace: 
-            :param role_arn: 
+            '''Describes the configuration of an Amazon Elastic Kubernetes Service endpoint.
+
+            :param cluster_api_server_ca_certificate_chain: The CA certificate chain of the cluster API server.
+            :param cluster_api_server_endpoint_uri: The URI of the cluster API server endpoint.
+            :param cluster_name: The name of the cluster.
+            :param endpoints_resource_name: The name of the endpoint resource.
+            :param endpoints_resource_namespace: The namespace of the endpoint resource.
+            :param role_arn: The role ARN for the cluster.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-rtbfabric-respondergateway-eksendpointsconfiguration.html
             :exampleMetadata: fixture=_generated
@@ -3055,7 +2640,8 @@ class CfnResponderGateway(
 
         @builtins.property
         def cluster_api_server_ca_certificate_chain(self) -> builtins.str:
-            '''
+            '''The CA certificate chain of the cluster API server.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-rtbfabric-respondergateway-eksendpointsconfiguration.html#cfn-rtbfabric-respondergateway-eksendpointsconfiguration-clusterapiservercacertificatechain
             '''
             result = self._values.get("cluster_api_server_ca_certificate_chain")
@@ -3064,7 +2650,8 @@ class CfnResponderGateway(
 
         @builtins.property
         def cluster_api_server_endpoint_uri(self) -> builtins.str:
-            '''
+            '''The URI of the cluster API server endpoint.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-rtbfabric-respondergateway-eksendpointsconfiguration.html#cfn-rtbfabric-respondergateway-eksendpointsconfiguration-clusterapiserverendpointuri
             '''
             result = self._values.get("cluster_api_server_endpoint_uri")
@@ -3073,7 +2660,8 @@ class CfnResponderGateway(
 
         @builtins.property
         def cluster_name(self) -> builtins.str:
-            '''
+            '''The name of the cluster.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-rtbfabric-respondergateway-eksendpointsconfiguration.html#cfn-rtbfabric-respondergateway-eksendpointsconfiguration-clustername
             '''
             result = self._values.get("cluster_name")
@@ -3082,7 +2670,8 @@ class CfnResponderGateway(
 
         @builtins.property
         def endpoints_resource_name(self) -> builtins.str:
-            '''
+            '''The name of the endpoint resource.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-rtbfabric-respondergateway-eksendpointsconfiguration.html#cfn-rtbfabric-respondergateway-eksendpointsconfiguration-endpointsresourcename
             '''
             result = self._values.get("endpoints_resource_name")
@@ -3091,7 +2680,8 @@ class CfnResponderGateway(
 
         @builtins.property
         def endpoints_resource_namespace(self) -> builtins.str:
-            '''
+            '''The namespace of the endpoint resource.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-rtbfabric-respondergateway-eksendpointsconfiguration.html#cfn-rtbfabric-respondergateway-eksendpointsconfiguration-endpointsresourcenamespace
             '''
             result = self._values.get("endpoints_resource_namespace")
@@ -3100,7 +2690,8 @@ class CfnResponderGateway(
 
         @builtins.property
         def role_arn(self) -> builtins.str:
-            '''
+            '''The role ARN for the cluster.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-rtbfabric-respondergateway-eksendpointsconfiguration.html#cfn-rtbfabric-respondergateway-eksendpointsconfiguration-rolearn
             '''
             result = self._values.get("role_arn")
@@ -3133,9 +2724,10 @@ class CfnResponderGateway(
             auto_scaling_groups_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnResponderGateway.AutoScalingGroupsConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             eks_endpoints_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnResponderGateway.EksEndpointsConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
-            '''
-            :param auto_scaling_groups_configuration: 
-            :param eks_endpoints_configuration: 
+            '''Describes the configuration of a managed endpoint.
+
+            :param auto_scaling_groups_configuration: Describes the configuration of an auto scaling group.
+            :param eks_endpoints_configuration: Describes the configuration of an Amazon Elastic Kubernetes Service endpoint.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-rtbfabric-respondergateway-managedendpointconfiguration.html
             :exampleMetadata: fixture=_generated
@@ -3175,7 +2767,8 @@ class CfnResponderGateway(
         def auto_scaling_groups_configuration(
             self,
         ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnResponderGateway.AutoScalingGroupsConfigurationProperty"]]:
-            '''
+            '''Describes the configuration of an auto scaling group.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-rtbfabric-respondergateway-managedendpointconfiguration.html#cfn-rtbfabric-respondergateway-managedendpointconfiguration-autoscalinggroupsconfiguration
             '''
             result = self._values.get("auto_scaling_groups_configuration")
@@ -3185,7 +2778,8 @@ class CfnResponderGateway(
         def eks_endpoints_configuration(
             self,
         ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnResponderGateway.EksEndpointsConfigurationProperty"]]:
-            '''
+            '''Describes the configuration of an Amazon Elastic Kubernetes Service endpoint.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-rtbfabric-respondergateway-managedendpointconfiguration.html#cfn-rtbfabric-respondergateway-managedendpointconfiguration-eksendpointsconfiguration
             '''
             result = self._values.get("eks_endpoints_configuration")
@@ -3215,8 +2809,9 @@ class CfnResponderGateway(
             *,
             certificate_authority_certificates: typing.Sequence[builtins.str],
         ) -> None:
-            '''
-            :param certificate_authority_certificates: 
+            '''Describes the configuration of a trust store.
+
+            :param certificate_authority_certificates: The certificate authority certificate.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-rtbfabric-respondergateway-truststoreconfiguration.html
             :exampleMetadata: fixture=_generated
@@ -3240,7 +2835,8 @@ class CfnResponderGateway(
 
         @builtins.property
         def certificate_authority_certificates(self) -> typing.List[builtins.str]:
-            '''
+            '''The certificate authority certificate.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-rtbfabric-respondergateway-truststoreconfiguration.html#cfn-rtbfabric-respondergateway-truststoreconfiguration-certificateauthoritycertificates
             '''
             result = self._values.get("certificate_authority_certificates")
@@ -3259,6 +2855,233 @@ class CfnResponderGateway(
             )
 
 
+@jsii.data_type(
+    jsii_type="aws-cdk-lib.aws_rtbfabric.CfnResponderGatewayProps",
+    jsii_struct_bases=[],
+    name_mapping={
+        "port": "port",
+        "protocol": "protocol",
+        "security_group_ids": "securityGroupIds",
+        "subnet_ids": "subnetIds",
+        "vpc_id": "vpcId",
+        "description": "description",
+        "domain_name": "domainName",
+        "managed_endpoint_configuration": "managedEndpointConfiguration",
+        "tags": "tags",
+        "trust_store_configuration": "trustStoreConfiguration",
+    },
+)
+class CfnResponderGatewayProps:
+    def __init__(
+        self,
+        *,
+        port: jsii.Number,
+        protocol: builtins.str,
+        security_group_ids: typing.Sequence[builtins.str],
+        subnet_ids: typing.Sequence[builtins.str],
+        vpc_id: builtins.str,
+        description: typing.Optional[builtins.str] = None,
+        domain_name: typing.Optional[builtins.str] = None,
+        managed_endpoint_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnResponderGateway.ManagedEndpointConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        trust_store_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnResponderGateway.TrustStoreConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    ) -> None:
+        '''Properties for defining a ``CfnResponderGateway``.
+
+        :param port: The networking port to use.
+        :param protocol: The networking protocol to use.
+        :param security_group_ids: The unique identifiers of the security groups.
+        :param subnet_ids: The unique identifiers of the subnets.
+        :param vpc_id: The unique identifier of the Virtual Private Cloud (VPC).
+        :param description: An optional description for the responder gateway.
+        :param domain_name: The domain name for the responder gateway.
+        :param managed_endpoint_configuration: The configuration for the managed endpoint.
+        :param tags: A map of the key-value pairs of the tag or tags to assign to the resource.
+        :param trust_store_configuration: The configuration of the trust store.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-rtbfabric-respondergateway.html
+        :exampleMetadata: fixture=_generated
+
+        Example::
+
+            # The code below shows an example of how to instantiate this type.
+            # The values are placeholders you should change.
+            from aws_cdk import aws_rtbfabric as rtbfabric
+            
+            cfn_responder_gateway_props = rtbfabric.CfnResponderGatewayProps(
+                port=123,
+                protocol="protocol",
+                security_group_ids=["securityGroupIds"],
+                subnet_ids=["subnetIds"],
+                vpc_id="vpcId",
+            
+                # the properties below are optional
+                description="description",
+                domain_name="domainName",
+                managed_endpoint_configuration=rtbfabric.CfnResponderGateway.ManagedEndpointConfigurationProperty(
+                    auto_scaling_groups_configuration=rtbfabric.CfnResponderGateway.AutoScalingGroupsConfigurationProperty(
+                        auto_scaling_group_name_list=["autoScalingGroupNameList"],
+                        role_arn="roleArn"
+                    ),
+                    eks_endpoints_configuration=rtbfabric.CfnResponderGateway.EksEndpointsConfigurationProperty(
+                        cluster_api_server_ca_certificate_chain="clusterApiServerCaCertificateChain",
+                        cluster_api_server_endpoint_uri="clusterApiServerEndpointUri",
+                        cluster_name="clusterName",
+                        endpoints_resource_name="endpointsResourceName",
+                        endpoints_resource_namespace="endpointsResourceNamespace",
+                        role_arn="roleArn"
+                    )
+                ),
+                tags=[CfnTag(
+                    key="key",
+                    value="value"
+                )],
+                trust_store_configuration=rtbfabric.CfnResponderGateway.TrustStoreConfigurationProperty(
+                    certificate_authority_certificates=["certificateAuthorityCertificates"]
+                )
+            )
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__c9eb5e991b472975a887a9142289f690ca12906379267bff2fae6a074009eacd)
+            check_type(argname="argument port", value=port, expected_type=type_hints["port"])
+            check_type(argname="argument protocol", value=protocol, expected_type=type_hints["protocol"])
+            check_type(argname="argument security_group_ids", value=security_group_ids, expected_type=type_hints["security_group_ids"])
+            check_type(argname="argument subnet_ids", value=subnet_ids, expected_type=type_hints["subnet_ids"])
+            check_type(argname="argument vpc_id", value=vpc_id, expected_type=type_hints["vpc_id"])
+            check_type(argname="argument description", value=description, expected_type=type_hints["description"])
+            check_type(argname="argument domain_name", value=domain_name, expected_type=type_hints["domain_name"])
+            check_type(argname="argument managed_endpoint_configuration", value=managed_endpoint_configuration, expected_type=type_hints["managed_endpoint_configuration"])
+            check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
+            check_type(argname="argument trust_store_configuration", value=trust_store_configuration, expected_type=type_hints["trust_store_configuration"])
+        self._values: typing.Dict[builtins.str, typing.Any] = {
+            "port": port,
+            "protocol": protocol,
+            "security_group_ids": security_group_ids,
+            "subnet_ids": subnet_ids,
+            "vpc_id": vpc_id,
+        }
+        if description is not None:
+            self._values["description"] = description
+        if domain_name is not None:
+            self._values["domain_name"] = domain_name
+        if managed_endpoint_configuration is not None:
+            self._values["managed_endpoint_configuration"] = managed_endpoint_configuration
+        if tags is not None:
+            self._values["tags"] = tags
+        if trust_store_configuration is not None:
+            self._values["trust_store_configuration"] = trust_store_configuration
+
+    @builtins.property
+    def port(self) -> jsii.Number:
+        '''The networking port to use.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-rtbfabric-respondergateway.html#cfn-rtbfabric-respondergateway-port
+        '''
+        result = self._values.get("port")
+        assert result is not None, "Required property 'port' is missing"
+        return typing.cast(jsii.Number, result)
+
+    @builtins.property
+    def protocol(self) -> builtins.str:
+        '''The networking protocol to use.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-rtbfabric-respondergateway.html#cfn-rtbfabric-respondergateway-protocol
+        '''
+        result = self._values.get("protocol")
+        assert result is not None, "Required property 'protocol' is missing"
+        return typing.cast(builtins.str, result)
+
+    @builtins.property
+    def security_group_ids(self) -> typing.List[builtins.str]:
+        '''The unique identifiers of the security groups.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-rtbfabric-respondergateway.html#cfn-rtbfabric-respondergateway-securitygroupids
+        '''
+        result = self._values.get("security_group_ids")
+        assert result is not None, "Required property 'security_group_ids' is missing"
+        return typing.cast(typing.List[builtins.str], result)
+
+    @builtins.property
+    def subnet_ids(self) -> typing.List[builtins.str]:
+        '''The unique identifiers of the subnets.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-rtbfabric-respondergateway.html#cfn-rtbfabric-respondergateway-subnetids
+        '''
+        result = self._values.get("subnet_ids")
+        assert result is not None, "Required property 'subnet_ids' is missing"
+        return typing.cast(typing.List[builtins.str], result)
+
+    @builtins.property
+    def vpc_id(self) -> builtins.str:
+        '''The unique identifier of the Virtual Private Cloud (VPC).
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-rtbfabric-respondergateway.html#cfn-rtbfabric-respondergateway-vpcid
+        '''
+        result = self._values.get("vpc_id")
+        assert result is not None, "Required property 'vpc_id' is missing"
+        return typing.cast(builtins.str, result)
+
+    @builtins.property
+    def description(self) -> typing.Optional[builtins.str]:
+        '''An optional description for the responder gateway.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-rtbfabric-respondergateway.html#cfn-rtbfabric-respondergateway-description
+        '''
+        result = self._values.get("description")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def domain_name(self) -> typing.Optional[builtins.str]:
+        '''The domain name for the responder gateway.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-rtbfabric-respondergateway.html#cfn-rtbfabric-respondergateway-domainname
+        '''
+        result = self._values.get("domain_name")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def managed_endpoint_configuration(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnResponderGateway.ManagedEndpointConfigurationProperty]]:
+        '''The configuration for the managed endpoint.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-rtbfabric-respondergateway.html#cfn-rtbfabric-respondergateway-managedendpointconfiguration
+        '''
+        result = self._values.get("managed_endpoint_configuration")
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnResponderGateway.ManagedEndpointConfigurationProperty]], result)
+
+    @builtins.property
+    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+        '''A map of the key-value pairs of the tag or tags to assign to the resource.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-rtbfabric-respondergateway.html#cfn-rtbfabric-respondergateway-tags
+        '''
+        result = self._values.get("tags")
+        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+
+    @builtins.property
+    def trust_store_configuration(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnResponderGateway.TrustStoreConfigurationProperty]]:
+        '''The configuration of the trust store.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-rtbfabric-respondergateway.html#cfn-rtbfabric-respondergateway-truststoreconfiguration
+        '''
+        result = self._values.get("trust_store_configuration")
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnResponderGateway.TrustStoreConfigurationProperty]], result)
+
+    def __eq__(self, rhs: typing.Any) -> builtins.bool:
+        return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+    def __ne__(self, rhs: typing.Any) -> builtins.bool:
+        return not (rhs == self)
+
+    def __repr__(self) -> str:
+        return "CfnResponderGatewayProps(%s)" % ", ".join(
+            k + "=" + repr(v) for k, v in self._values.items()
+        )
+
+
 __all__ = [
     "CfnLink",
     "CfnLinkProps",
@@ -3266,76 +3089,9 @@ __all__ = [
     "CfnRequesterGatewayProps",
     "CfnResponderGateway",
     "CfnResponderGatewayProps",
-    "ILinkRef",
-    "IRequesterGatewayRef",
-    "IResponderGatewayRef",
-    "LinkReference",
-    "RequesterGatewayReference",
-    "ResponderGatewayReference",
 ]
 
 publication.publish()
-
-def _typecheckingstub__012c58c752deffb32adb9b9c3e8a29a8373d9f395d7e2679c67f05f37f77812a(
-    *,
-    gateway_id: builtins.str,
-    link_log_settings: typing.Union[_IResolvable_da3f097b, typing.Union[CfnLink.LinkLogSettingsProperty, typing.Dict[builtins.str, typing.Any]]],
-    peer_gateway_id: builtins.str,
-    http_responder_allowed: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-    link_attributes: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnLink.LinkAttributesProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-    module_configuration_list: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnLink.ModuleConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
-    tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-) -> None:
-    """Type checking stubs"""
-    pass
-
-def _typecheckingstub__e861505bd65d62c115117db14bdc56cdccfb7c596f849bc81dadfc3f63484f16(
-    *,
-    security_group_ids: typing.Sequence[builtins.str],
-    subnet_ids: typing.Sequence[builtins.str],
-    vpc_id: builtins.str,
-    description: typing.Optional[builtins.str] = None,
-    tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-) -> None:
-    """Type checking stubs"""
-    pass
-
-def _typecheckingstub__c9eb5e991b472975a887a9142289f690ca12906379267bff2fae6a074009eacd(
-    *,
-    port: jsii.Number,
-    protocol: builtins.str,
-    security_group_ids: typing.Sequence[builtins.str],
-    subnet_ids: typing.Sequence[builtins.str],
-    vpc_id: builtins.str,
-    description: typing.Optional[builtins.str] = None,
-    domain_name: typing.Optional[builtins.str] = None,
-    managed_endpoint_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnResponderGateway.ManagedEndpointConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-    tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-    trust_store_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnResponderGateway.TrustStoreConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-) -> None:
-    """Type checking stubs"""
-    pass
-
-def _typecheckingstub__b8cfa7fc8596e5037663fc1614d35cd2dac29cce3907ee0c5a73b82d3d7f8681(
-    *,
-    link_arn: builtins.str,
-) -> None:
-    """Type checking stubs"""
-    pass
-
-def _typecheckingstub__473d5b02aaa1b449f47f7d29a7c5ff223a6dfc78b1c6ab12866aa3da8c72bd71(
-    *,
-    requester_gateway_arn: builtins.str,
-) -> None:
-    """Type checking stubs"""
-    pass
-
-def _typecheckingstub__6faecaa1212874c425d9dc78ab07ad8e354f119bc167d71fbe0377af246b1612(
-    *,
-    responder_gateway_arn: builtins.str,
-) -> None:
-    """Type checking stubs"""
-    pass
 
 def _typecheckingstub__33e403b84fbb081fd16a0097272c1b774ceb7dfcf2ef00e8d7edb2e0fe7cec74(
     scope: _constructs_77d1e7e8.Construct,
@@ -3521,6 +3277,19 @@ def _typecheckingstub__7a4d5a36bb204668cc9f3235d69b4d6dd33abe2f27737729656b5fd76
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__012c58c752deffb32adb9b9c3e8a29a8373d9f395d7e2679c67f05f37f77812a(
+    *,
+    gateway_id: builtins.str,
+    link_log_settings: typing.Union[_IResolvable_da3f097b, typing.Union[CfnLink.LinkLogSettingsProperty, typing.Dict[builtins.str, typing.Any]]],
+    peer_gateway_id: builtins.str,
+    http_responder_allowed: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+    link_attributes: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnLink.LinkAttributesProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    module_configuration_list: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnLink.ModuleConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+    tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__f422ad74a878dd27ca273fe5fdb545d09c78a5ac256926db3df20c37e5494bcb(
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
@@ -3572,6 +3341,17 @@ def _typecheckingstub__b1760b22a44b3e180e50000774882d4780c0aa85c37c931f50882d305
 
 def _typecheckingstub__49d27ee86984f1ea979cd85d326d12ed9f60279e658da842a417dc4a27e2ba07(
     value: typing.Optional[typing.List[_CfnTag_f6864754]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__e861505bd65d62c115117db14bdc56cdccfb7c596f849bc81dadfc3f63484f16(
+    *,
+    security_group_ids: typing.Sequence[builtins.str],
+    subnet_ids: typing.Sequence[builtins.str],
+    vpc_id: builtins.str,
+    description: typing.Optional[builtins.str] = None,
+    tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -3701,5 +3481,18 @@ def _typecheckingstub__e6cdb06483a6be6c8f2015cdc677b1237ae909cbf1496feb35e652044
     """Type checking stubs"""
     pass
 
-for cls in [ILinkRef, IRequesterGatewayRef, IResponderGatewayRef]:
-    typing.cast(typing.Any, cls).__protocol_attrs__ = typing.cast(typing.Any, cls).__protocol_attrs__ - set(['__jsii_proxy_class__', '__jsii_type__'])
+def _typecheckingstub__c9eb5e991b472975a887a9142289f690ca12906379267bff2fae6a074009eacd(
+    *,
+    port: jsii.Number,
+    protocol: builtins.str,
+    security_group_ids: typing.Sequence[builtins.str],
+    subnet_ids: typing.Sequence[builtins.str],
+    vpc_id: builtins.str,
+    description: typing.Optional[builtins.str] = None,
+    domain_name: typing.Optional[builtins.str] = None,
+    managed_endpoint_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnResponderGateway.ManagedEndpointConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+    trust_store_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnResponderGateway.TrustStoreConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass

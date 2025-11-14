@@ -10,7 +10,7 @@ HOST_PATTERN = r"^[a-zA-Z0-9._-]+[.]snowflakecomputing[.](com|cn)$"
 class SnowflakeSqlHelper(SqlHelper):
 
     @staticmethod
-    def to_sql_config(connection: Connection) -> Dict[str, Any]:
+    def to_sql_config(connection: Connection, **kwargs) -> Dict[str, Any]:
         """
         Transform Snowflake connection data into SQL interface configuration.
 

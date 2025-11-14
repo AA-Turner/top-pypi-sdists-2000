@@ -19,7 +19,7 @@ class AthenaSqlHelper(SqlHelper):
     """
 
     @staticmethod
-    def to_sql_config(connection: Connection) -> Dict[str, Any]:
+    def to_sql_config(connection: Connection, **kwargs) -> Dict[str, Any]:
         """
         Transform DataZone Athena connection data into SQL interface configuration.
 
@@ -45,6 +45,8 @@ class AthenaSqlHelper(SqlHelper):
         work_group = connection_data["workgroup_name"]
         s3_staging_dir = AthenaSqlHelper._get_s3_staging_dir(work_group, region)
         connection_creds = connection_data["connection_creds"]
+        catalog_name = kwargs.get("catalog_name")
+        schema_name = kwargs.get("schema_name")
 
         config = {
             "region": region,
@@ -56,6 +58,10 @@ class AthenaSqlHelper(SqlHelper):
 
         if connection_creds.get("session_token"):
             config["aws_session_token"] = connection_creds.get("session_token")
+        if catalog_name:
+            config["catalog_name"] = catalog_name
+        if schema_name:
+            config["schema_name"] = schema_name
 
         return config
 

@@ -16,6 +16,7 @@ from pyspark.sql.connect.session import SparkSession as _SparkSession
 
 from sagemaker_studio.project import ClientConfig, Project
 from sagemaker_studio.utils._internal import InternalUtils
+from sagemaker_studio.utils.loggerutils import sync_with_metrics
 from sagemaker_studio.utils.spark.session.athena.interceptors import CustomChannelBuilder
 from sagemaker_studio.utils.spark.session.athena.internal_spark_utils import generate_spark_configs
 from sagemaker_studio.utils.spark.session.spark_session_manager import SparkSessionManager
@@ -142,6 +143,7 @@ class AthenaSparkSessionManager(SparkSessionManager):
     def get_session_id(self):
         return self.athena_session_id
 
+    @sync_with_metrics("_start_athena_session")
     def _start_athena_session(self, athena_wg_name):
         """Get Athena Spark Connect URL for the given workgroup."""
         client_token = str(uuid.uuid4())
@@ -157,7 +159,7 @@ class AthenaSparkSessionManager(SparkSessionManager):
                         {"Name": "spark-defaults", "Properties": generate_spark_configs(account_id)}
                     ]
                 },
-                SessionIdleTimeoutInMinutes=180,
+                SessionIdleTimeoutInMinutes=15,
                 ClientRequestToken=client_token,
                 Tags=[{"Key": "AmazonDataZoneSessionOwner", "Value": user_id}],
             )

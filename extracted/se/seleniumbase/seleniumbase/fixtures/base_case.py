@@ -230,15 +230,16 @@ class BaseCase(unittest.TestCase):
         elif (
             hasattr(self.driver, "_is_using_uc")
             and self.driver._is_using_uc
-            and hasattr(self.driver, "_is_using_auth")
-            and self.driver._is_using_auth
+            # and hasattr(self.driver, "_is_using_auth")
+            # and self.driver._is_using_auth
             and (
                 not hasattr(self.driver, "_is_using_cdp")
                 or not self.driver._is_using_cdp
             )
         ):
             # Auth in UC Mode requires CDP Mode
-            logging.info("UC Mode requires CDP Mode for auth. Activating now.")
+            # (and now we're always forcing it)
+            logging.info("open() in UC Mode now always activates CDP Mode.")
             self.activate_cdp_mode(url)
             return
         elif (
@@ -3968,8 +3969,23 @@ class BaseCase(unittest.TestCase):
 
     def open_new_window(self, switch_to=True):
         """Opens a new browser tab/window and switches to it by default."""
+        url = None
+        if self.__looks_like_a_page_url(str(switch_to)):
+            # Different API for CDP Mode: First arg is a `url`.
+            # (Also, don't break backwards compat for reg mode)
+            url = switch_to
+            switch_to = True
         if self.__is_cdp_swap_needed():
-            self.cdp.open_new_tab(switch_to=switch_to)
+            self.cdp.open_new_tab(url=url, switch_to=switch_to)
+            return
+        elif (
+            hasattr(self.driver, "_is_using_uc")
+            and self.driver._is_using_uc
+            and hasattr(self.driver, "_is_using_cdp")
+            and self.driver._is_using_cdp
+        ):
+            self.disconnect()
+            self.cdp.open_new_tab(url=url, switch_to=switch_to)
             return
         self.wait_for_ready_state_complete()
         if switch_to:
@@ -5039,9 +5055,8 @@ class BaseCase(unittest.TestCase):
         if hasattr(self.cdp, "find_element_by_text"):
             self.find_element_by_text = self.cdp.find_element_by_text
         if (
-            hasattr(sb_config, "_cdp_proxy")
-            and sb_config._cdp_proxy
-            and "@" in sb_config._cdp_proxy
+            hasattr(self.driver, "_is_using_auth")
+            and self.driver._is_using_auth
         ):
             with suppress(Exception):
                 self.cdp.loop.run_until_complete(self.cdp.page.wait(0.25))
@@ -6313,7 +6328,12 @@ class BaseCase(unittest.TestCase):
         scroll - the option to scroll to the element first (Default: True)
         timeout - the time to wait for the element to appear """
         self.__check_scope()
-        if not self.__is_cdp_swap_needed():
+        if self.__is_cdp_swap_needed():
+            if page_utils.is_xpath_selector(selector):
+                if "contains(" in selector:
+                    self.cdp.highlight(selector)
+                    return
+        else:
             self._check_browser()
         self.__skip_if_esc()
         if isinstance(selector, WebElement):
@@ -6358,6 +6378,7 @@ class BaseCase(unittest.TestCase):
         By default, "html" will be used as the CSS Selector target.
         You can specify how many times in-a-row the action happens."""
         self.__check_scope()
+        self._check_browser()
         if times < 1:
             return
         element = self.wait_for_element_present(selector)
@@ -6380,6 +6401,7 @@ class BaseCase(unittest.TestCase):
         By default, "html" will be used as the CSS Selector target.
         You can specify how many times in-a-row the action happens."""
         self.__check_scope()
+        self._check_browser()
         if times < 1:
             return
         element = self.wait_for_element_present(selector)
@@ -6402,6 +6424,7 @@ class BaseCase(unittest.TestCase):
         By default, "html" will be used as the CSS Selector target.
         You can specify how many times in-a-row the action happens."""
         self.__check_scope()
+        self._check_browser()
         if times < 1:
             return
         element = self.wait_for_element_present(selector)
@@ -6424,6 +6447,7 @@ class BaseCase(unittest.TestCase):
         By default, "html" will be used as the CSS Selector target.
         You can specify how many times in-a-row the action happens."""
         self.__check_scope()
+        self._check_browser()
         if times < 1:
             return
         element = self.wait_for_element_present(selector)
@@ -8775,6 +8799,9 @@ class BaseCase(unittest.TestCase):
         if self.timeout_multiplier and timeout == settings.LARGE_TIMEOUT:
             timeout = self.__get_new_timeout(timeout)
         selector, by = self.__recalculate_selector(selector, by)
+        if self.__is_cdp_swap_needed():
+            self.cdp.set_value(selector, text)
+            return
         self.wait_for_ready_state_complete()
         element = page_actions.wait_for_element_present(
             self.driver, selector, by, timeout
@@ -8795,10 +8822,14 @@ class BaseCase(unittest.TestCase):
         if self.timeout_multiplier and timeout == settings.LARGE_TIMEOUT:
             timeout = self.__get_new_timeout(timeout)
         selector, by = self.__recalculate_selector(selector, by)
-        self.wait_for_ready_state_complete()
-        element = page_actions.wait_for_element_present(
-            self.driver, selector, by, timeout
-        )
+        element = None
+        if self.__is_cdp_swap_needed():
+            element = self.cdp.select(selector, timeout=timeout)
+        else:
+            self.wait_for_ready_state_complete()
+            element = page_actions.wait_for_element_present(
+                self.driver, selector, by, timeout
+            )
         if element.tag_name.lower() in ["input", "textarea"]:
             self.js_update_text(selector, text, by=by, timeout=timeout)
             return
@@ -15939,7 +15970,7 @@ class BaseCase(unittest.TestCase):
             and self._outcome.errors
         ):
             try:
-                exc_message = self._outcome.errors[0][1][1]
+                exc_message = self._outcome.errors[-1][1][1]
             except Exception:
                 exc_message = "(Unknown Exception)"
         else:
@@ -16087,8 +16118,16 @@ class BaseCase(unittest.TestCase):
             else:
                 return False
         elif hasattr(self, "_outcome") and hasattr(self._outcome, "errors"):
-            if self._outcome.errors:
-                has_exception = True
+            if python3_11_or_newer:
+                if (
+                    self._outcome.errors
+                    and self._outcome.errors[-1]
+                    and self._outcome.errors[-1][1]
+                ):
+                    has_exception = True
+            else:
+                if self._outcome.errors:
+                    has_exception = True
         else:
             has_exception = sys.exc_info()[1] is not None
         if self.__will_be_skipped and hasattr(self, "_using_sb_fixture"):

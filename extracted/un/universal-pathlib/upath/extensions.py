@@ -18,13 +18,15 @@ from fsspec import AbstractFileSystem
 
 from upath._chain import Chain
 from upath._chain import ChainSegment
-from upath._stat import UPathStatResult
+from upath.core import UnsupportedOperation
 from upath.core import UPath
 from upath.types import UNSET_DEFAULT
 from upath.types import JoinablePathLike
 from upath.types import PathInfo
 from upath.types import ReadablePath
 from upath.types import ReadablePathLike
+from upath.types import StatResultType
+from upath.types import SupportsPathLike
 from upath.types import UPathParser
 from upath.types import WritablePathLike
 
@@ -200,10 +202,10 @@ class ProxyUPath:
         self,
         *,
         follow_symlinks=True,
-    ) -> UPathStatResult:
+    ) -> StatResultType:
         return self.__wrapped__.stat(follow_symlinks=follow_symlinks)
 
-    def lstat(self) -> UPathStatResult:
+    def lstat(self) -> StatResultType:
         return self.__wrapped__.stat(follow_symlinks=False)
 
     def chmod(self, mode: int, *, follow_symlinks: bool = True) -> None:
@@ -249,8 +251,8 @@ class ProxyUPath:
         self,
         pattern: str,
         *,
-        case_sensitive: bool = UNSET_DEFAULT,
-        recurse_symlinks: bool = UNSET_DEFAULT,
+        case_sensitive: bool | None = None,
+        recurse_symlinks: bool = False,
     ) -> Iterator[Self]:
         for p in self.__wrapped__.glob(
             pattern, case_sensitive=case_sensitive, recurse_symlinks=recurse_symlinks
@@ -261,8 +263,8 @@ class ProxyUPath:
         self,
         pattern: str,
         *,
-        case_sensitive: bool = UNSET_DEFAULT,
-        recurse_symlinks: bool = UNSET_DEFAULT,
+        case_sensitive: bool | None = None,
+        recurse_symlinks: bool = False,
     ) -> Iterator[Self]:
         for p in self.__wrapped__.rglob(
             pattern, case_sensitive=case_sensitive, recurse_symlinks=recurse_symlinks
@@ -282,22 +284,37 @@ class ProxyUPath:
         return self.__wrapped__.is_absolute()
 
     def __eq__(self, other: object) -> bool:
-        return self.__wrapped__.__eq__(other)
+        if not isinstance(other, type(self)):
+            return NotImplemented
+        return self.__wrapped__.__eq__(other.__wrapped__)
 
     def __hash__(self) -> int:
         return self.__wrapped__.__hash__()
 
+    def __ne__(self, other: object) -> bool:
+        if not isinstance(other, type(self)):
+            return NotImplemented
+        return self.__wrapped__.__ne__(other.__wrapped__)
+
     def __lt__(self, other: object) -> bool:
-        return self.__wrapped__.__lt__(other)
+        if not isinstance(other, type(self)):
+            return NotImplemented
+        return self.__wrapped__.__lt__(other.__wrapped__)
 
     def __le__(self, other: object) -> bool:
-        return self.__wrapped__.__le__(other)
+        if not isinstance(other, type(self)):
+            return NotImplemented
+        return self.__wrapped__.__le__(other.__wrapped__)
 
     def __gt__(self, other: object) -> bool:
-        return self.__wrapped__.__gt__(other)
+        if not isinstance(other, type(self)):
+            return NotImplemented
+        return self.__wrapped__.__gt__(other.__wrapped__)
 
     def __ge__(self, other: object) -> bool:
-        return self.__wrapped__.__ge__(other)
+        if not isinstance(other, type(self)):
+            return NotImplemented
+        return self.__wrapped__.__ge__(other.__wrapped__)
 
     def resolve(self, strict: bool = False) -> Self:
         return self._from_upath(self.__wrapped__.resolve(strict=strict))
@@ -311,8 +328,11 @@ class ProxyUPath:
     def unlink(self, missing_ok: bool = False) -> None:
         self.__wrapped__.unlink(missing_ok=missing_ok)
 
-    def rmdir(self, recursive: bool = True) -> None:  # fixme: non-standard
-        self.__wrapped__.rmdir(recursive=recursive)
+    def rmdir(self, recursive: bool = UNSET_DEFAULT) -> None:  # fixme: non-standard
+        kwargs: dict[str, Any] = {}
+        if recursive is not UNSET_DEFAULT:
+            kwargs["recursive"] = recursive
+        self.__wrapped__.rmdir(**kwargs)
 
     def rename(
         self,
@@ -322,9 +342,14 @@ class ProxyUPath:
         maxdepth: int | None = UNSET_DEFAULT,
         **kwargs: Any,
     ) -> Self:
+        if recursive is not UNSET_DEFAULT:
+            kwargs["recursive"] = recursive
+        if maxdepth is not UNSET_DEFAULT:
+            kwargs["maxdepth"] = maxdepth
         return self._from_upath(
             self.__wrapped__.rename(
-                target, recursive=recursive, maxdepth=maxdepth, **kwargs
+                target.__wrapped__ if isinstance(target, ProxyUPath) else target,
+                **kwargs,
             )
         )
 
@@ -357,11 +382,11 @@ class ProxyUPath:
 
     @classmethod
     def cwd(cls) -> Self:
-        raise NotImplementedError
+        raise UnsupportedOperation(".cwd() not supported")
 
     @classmethod
     def home(cls) -> Self:
-        raise NotImplementedError
+        raise UnsupportedOperation(".home() not supported")
 
     def relative_to(  # type: ignore[override]
         self,
@@ -382,7 +407,7 @@ class ProxyUPath:
     def hardlink_to(self, target: ReadablePathLike) -> None:
         return self.__wrapped__.hardlink_to(target)
 
-    def match(self, pattern: str) -> bool:
+    def match(self, pattern: str, *, case_sensitive: bool | None = None) -> bool:
         return self.__wrapped__.match(pattern)
 
     @property
@@ -510,8 +535,13 @@ class ProxyUPath:
     def parents(self) -> Sequence[Self]:
         return tuple(self._from_upath(p) for p in self.__wrapped__.parents)
 
-    def full_match(self, pattern: str) -> bool:
-        return self.__wrapped__.full_match(pattern)
+    def full_match(
+        self,
+        pattern: str | SupportsPathLike,
+        *,
+        case_sensitive: bool | None = None,
+    ) -> bool:
+        return self.__wrapped__.full_match(pattern, case_sensitive=case_sensitive)
 
 
 UPath.register(ProxyUPath)

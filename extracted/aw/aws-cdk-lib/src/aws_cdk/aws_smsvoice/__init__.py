@@ -71,1814 +71,31 @@ import constructs as _constructs_77d1e7e8
 from .. import (
     CfnResource as _CfnResource_9df397a6,
     CfnTag as _CfnTag_f6864754,
-    IEnvironmentAware as _IEnvironmentAware_a408b00d,
     IInspectable as _IInspectable_c2943556,
     IResolvable as _IResolvable_da3f097b,
     ITaggableV2 as _ITaggableV2_4e6798f8,
     TagManager as _TagManager_0a598cb3,
     TreeInspector as _TreeInspector_488e0dd5,
 )
-
-
-@jsii.data_type(
-    jsii_type="aws-cdk-lib.aws_smsvoice.CfnConfigurationSetProps",
-    jsii_struct_bases=[],
-    name_mapping={
-        "configuration_set_name": "configurationSetName",
-        "default_sender_id": "defaultSenderId",
-        "event_destinations": "eventDestinations",
-        "message_feedback_enabled": "messageFeedbackEnabled",
-        "protect_configuration_id": "protectConfigurationId",
-        "tags": "tags",
-    },
+from ..interfaces.aws_smsvoice import (
+    ConfigurationSetReference as _ConfigurationSetReference_540b1fe3,
+    IConfigurationSetRef as _IConfigurationSetRef_be3ec7c2,
+    IOptOutListRef as _IOptOutListRef_1d44f5f8,
+    IPhoneNumberRef as _IPhoneNumberRef_7c6c9ced,
+    IPoolRef as _IPoolRef_897848fa,
+    IProtectConfigurationRef as _IProtectConfigurationRef_e1ab5693,
+    IResourcePolicyRef as _IResourcePolicyRef_99a2534c,
+    ISenderIdRef as _ISenderIdRef_c6023099,
+    OptOutListReference as _OptOutListReference_e0a13902,
+    PhoneNumberReference as _PhoneNumberReference_c338f1b9,
+    PoolReference as _PoolReference_a27a62c2,
+    ProtectConfigurationReference as _ProtectConfigurationReference_c0c38d05,
+    ResourcePolicyReference as _ResourcePolicyReference_b377e19e,
+    SenderIdReference as _SenderIdReference_10c27954,
 )
-class CfnConfigurationSetProps:
-    def __init__(
-        self,
-        *,
-        configuration_set_name: typing.Optional[builtins.str] = None,
-        default_sender_id: typing.Optional[builtins.str] = None,
-        event_destinations: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnConfigurationSet.EventDestinationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        message_feedback_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        protect_configuration_id: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-    ) -> None:
-        '''Properties for defining a ``CfnConfigurationSet``.
 
-        :param configuration_set_name: The name of the ConfigurationSet.
-        :param default_sender_id: The default sender ID used by the ConfigurationSet.
-        :param event_destinations: An array of EventDestination objects that describe any events to log and where to log them.
-        :param message_feedback_enabled: Set to true to enable feedback for the message.
-        :param protect_configuration_id: The unique identifier for the protect configuration.
-        :param tags: An array of key and value pair tags that's associated with the new configuration set.
 
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-smsvoice-configurationset.html
-        :exampleMetadata: fixture=_generated
-
-        Example::
-
-            # The code below shows an example of how to instantiate this type.
-            # The values are placeholders you should change.
-            from aws_cdk import aws_smsvoice as smsvoice
-            
-            cfn_configuration_set_props = smsvoice.CfnConfigurationSetProps(
-                configuration_set_name="configurationSetName",
-                default_sender_id="defaultSenderId",
-                event_destinations=[smsvoice.CfnConfigurationSet.EventDestinationProperty(
-                    enabled=False,
-                    event_destination_name="eventDestinationName",
-                    matching_event_types=["matchingEventTypes"],
-            
-                    # the properties below are optional
-                    cloud_watch_logs_destination=smsvoice.CfnConfigurationSet.CloudWatchLogsDestinationProperty(
-                        iam_role_arn="iamRoleArn",
-                        log_group_arn="logGroupArn"
-                    ),
-                    kinesis_firehose_destination=smsvoice.CfnConfigurationSet.KinesisFirehoseDestinationProperty(
-                        delivery_stream_arn="deliveryStreamArn",
-                        iam_role_arn="iamRoleArn"
-                    ),
-                    sns_destination=smsvoice.CfnConfigurationSet.SnsDestinationProperty(
-                        topic_arn="topicArn"
-                    )
-                )],
-                message_feedback_enabled=False,
-                protect_configuration_id="protectConfigurationId",
-                tags=[CfnTag(
-                    key="key",
-                    value="value"
-                )]
-            )
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__259d6b5c44c463276b6d9a529504479acbd49524ef7bd8a0d1d913ca2d1a58a3)
-            check_type(argname="argument configuration_set_name", value=configuration_set_name, expected_type=type_hints["configuration_set_name"])
-            check_type(argname="argument default_sender_id", value=default_sender_id, expected_type=type_hints["default_sender_id"])
-            check_type(argname="argument event_destinations", value=event_destinations, expected_type=type_hints["event_destinations"])
-            check_type(argname="argument message_feedback_enabled", value=message_feedback_enabled, expected_type=type_hints["message_feedback_enabled"])
-            check_type(argname="argument protect_configuration_id", value=protect_configuration_id, expected_type=type_hints["protect_configuration_id"])
-            check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
-        self._values: typing.Dict[builtins.str, typing.Any] = {}
-        if configuration_set_name is not None:
-            self._values["configuration_set_name"] = configuration_set_name
-        if default_sender_id is not None:
-            self._values["default_sender_id"] = default_sender_id
-        if event_destinations is not None:
-            self._values["event_destinations"] = event_destinations
-        if message_feedback_enabled is not None:
-            self._values["message_feedback_enabled"] = message_feedback_enabled
-        if protect_configuration_id is not None:
-            self._values["protect_configuration_id"] = protect_configuration_id
-        if tags is not None:
-            self._values["tags"] = tags
-
-    @builtins.property
-    def configuration_set_name(self) -> typing.Optional[builtins.str]:
-        '''The name of the ConfigurationSet.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-smsvoice-configurationset.html#cfn-smsvoice-configurationset-configurationsetname
-        '''
-        result = self._values.get("configuration_set_name")
-        return typing.cast(typing.Optional[builtins.str], result)
-
-    @builtins.property
-    def default_sender_id(self) -> typing.Optional[builtins.str]:
-        '''The default sender ID used by the ConfigurationSet.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-smsvoice-configurationset.html#cfn-smsvoice-configurationset-defaultsenderid
-        '''
-        result = self._values.get("default_sender_id")
-        return typing.cast(typing.Optional[builtins.str], result)
-
-    @builtins.property
-    def event_destinations(
-        self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnConfigurationSet.EventDestinationProperty"]]]]:
-        '''An array of EventDestination objects that describe any events to log and where to log them.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-smsvoice-configurationset.html#cfn-smsvoice-configurationset-eventdestinations
-        '''
-        result = self._values.get("event_destinations")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnConfigurationSet.EventDestinationProperty"]]]], result)
-
-    @builtins.property
-    def message_feedback_enabled(
-        self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
-        '''Set to true to enable feedback for the message.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-smsvoice-configurationset.html#cfn-smsvoice-configurationset-messagefeedbackenabled
-        '''
-        result = self._values.get("message_feedback_enabled")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
-
-    @builtins.property
-    def protect_configuration_id(self) -> typing.Optional[builtins.str]:
-        '''The unique identifier for the protect configuration.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-smsvoice-configurationset.html#cfn-smsvoice-configurationset-protectconfigurationid
-        '''
-        result = self._values.get("protect_configuration_id")
-        return typing.cast(typing.Optional[builtins.str], result)
-
-    @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
-        '''An array of key and value pair tags that's associated with the new configuration set.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-smsvoice-configurationset.html#cfn-smsvoice-configurationset-tags
-        '''
-        result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
-
-    def __eq__(self, rhs: typing.Any) -> builtins.bool:
-        return isinstance(rhs, self.__class__) and rhs._values == self._values
-
-    def __ne__(self, rhs: typing.Any) -> builtins.bool:
-        return not (rhs == self)
-
-    def __repr__(self) -> str:
-        return "CfnConfigurationSetProps(%s)" % ", ".join(
-            k + "=" + repr(v) for k, v in self._values.items()
-        )
-
-
-@jsii.data_type(
-    jsii_type="aws-cdk-lib.aws_smsvoice.CfnOptOutListProps",
-    jsii_struct_bases=[],
-    name_mapping={"opt_out_list_name": "optOutListName", "tags": "tags"},
-)
-class CfnOptOutListProps:
-    def __init__(
-        self,
-        *,
-        opt_out_list_name: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-    ) -> None:
-        '''Properties for defining a ``CfnOptOutList``.
-
-        :param opt_out_list_name: The name of the OptOutList.
-        :param tags: An array of tags (key and value pairs) to associate with the new OptOutList.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-smsvoice-optoutlist.html
-        :exampleMetadata: fixture=_generated
-
-        Example::
-
-            # The code below shows an example of how to instantiate this type.
-            # The values are placeholders you should change.
-            from aws_cdk import aws_smsvoice as smsvoice
-            
-            cfn_opt_out_list_props = smsvoice.CfnOptOutListProps(
-                opt_out_list_name="optOutListName",
-                tags=[CfnTag(
-                    key="key",
-                    value="value"
-                )]
-            )
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__05e14e4fd94b66cfd8dd4c43fcb451f3af9853476744da6a554feeac6fa9de3e)
-            check_type(argname="argument opt_out_list_name", value=opt_out_list_name, expected_type=type_hints["opt_out_list_name"])
-            check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
-        self._values: typing.Dict[builtins.str, typing.Any] = {}
-        if opt_out_list_name is not None:
-            self._values["opt_out_list_name"] = opt_out_list_name
-        if tags is not None:
-            self._values["tags"] = tags
-
-    @builtins.property
-    def opt_out_list_name(self) -> typing.Optional[builtins.str]:
-        '''The name of the OptOutList.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-smsvoice-optoutlist.html#cfn-smsvoice-optoutlist-optoutlistname
-        '''
-        result = self._values.get("opt_out_list_name")
-        return typing.cast(typing.Optional[builtins.str], result)
-
-    @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
-        '''An array of tags (key and value pairs) to associate with the new OptOutList.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-smsvoice-optoutlist.html#cfn-smsvoice-optoutlist-tags
-        '''
-        result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
-
-    def __eq__(self, rhs: typing.Any) -> builtins.bool:
-        return isinstance(rhs, self.__class__) and rhs._values == self._values
-
-    def __ne__(self, rhs: typing.Any) -> builtins.bool:
-        return not (rhs == self)
-
-    def __repr__(self) -> str:
-        return "CfnOptOutListProps(%s)" % ", ".join(
-            k + "=" + repr(v) for k, v in self._values.items()
-        )
-
-
-@jsii.data_type(
-    jsii_type="aws-cdk-lib.aws_smsvoice.CfnPhoneNumberProps",
-    jsii_struct_bases=[],
-    name_mapping={
-        "iso_country_code": "isoCountryCode",
-        "mandatory_keywords": "mandatoryKeywords",
-        "number_capabilities": "numberCapabilities",
-        "number_type": "numberType",
-        "deletion_protection_enabled": "deletionProtectionEnabled",
-        "optional_keywords": "optionalKeywords",
-        "opt_out_list_name": "optOutListName",
-        "self_managed_opt_outs_enabled": "selfManagedOptOutsEnabled",
-        "tags": "tags",
-        "two_way": "twoWay",
-    },
-)
-class CfnPhoneNumberProps:
-    def __init__(
-        self,
-        *,
-        iso_country_code: builtins.str,
-        mandatory_keywords: typing.Union[_IResolvable_da3f097b, typing.Union["CfnPhoneNumber.MandatoryKeywordsProperty", typing.Dict[builtins.str, typing.Any]]],
-        number_capabilities: typing.Sequence[builtins.str],
-        number_type: builtins.str,
-        deletion_protection_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        optional_keywords: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnPhoneNumber.OptionalKeywordProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        opt_out_list_name: typing.Optional[builtins.str] = None,
-        self_managed_opt_outs_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-        two_way: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnPhoneNumber.TwoWayProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-    ) -> None:
-        '''Properties for defining a ``CfnPhoneNumber``.
-
-        :param iso_country_code: The two-character code, in ISO 3166-1 alpha-2 format, for the country or region.
-        :param mandatory_keywords: Creates or updates a ``MandatoryKeyword`` configuration on an origination phone number For more information, see `Keywords <https://docs.aws.amazon.com/sms-voice/latest/userguide/keywords.html>`_ in the End User Messaging User Guide.
-        :param number_capabilities: Indicates if the phone number will be used for text messages, voice messages, or both.
-        :param number_type: The type of phone number to request. .. epigraph:: The ``ShortCode`` number type is not supported in AWS CloudFormation .
-        :param deletion_protection_enabled: By default this is set to false. When set to true the phone number can't be deleted.
-        :param optional_keywords: A keyword is a word that you can search for on a particular phone number or pool. It is also a specific word or phrase that an end user can send to your number to elicit a response, such as an informational message or a special offer. When your number receives a message that begins with a keyword, End User Messaging responds with a customizable message. Optional keywords are differentiated from mandatory keywords. For more information, see `Keywords <https://docs.aws.amazon.com/sms-voice/latest/userguide/keywords.html>`_ in the End User Messaging User Guide.
-        :param opt_out_list_name: The name of the OptOutList associated with the phone number.
-        :param self_managed_opt_outs_enabled: When set to false and an end recipient sends a message that begins with HELP or STOP to one of your dedicated numbers, End User Messaging automatically replies with a customizable message and adds the end recipient to the OptOutList. When set to true you're responsible for responding to HELP and STOP requests. You're also responsible for tracking and honoring opt-out request. For more information see `Self-managed opt-outs <https://docs.aws.amazon.com/sms-voice/latest/userguide/opt-out-list-self-managed.html>`_
-        :param tags: An array of tags (key and value pairs) to associate with the requested phone number.
-        :param two_way: Describes the two-way SMS configuration for a phone number. For more information, see `Two-way SMS messaging <https://docs.aws.amazon.com/sms-voice/latest/userguide/two-way-sms.html>`_ in the End User Messaging User Guide.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-smsvoice-phonenumber.html
-        :exampleMetadata: fixture=_generated
-
-        Example::
-
-            # The code below shows an example of how to instantiate this type.
-            # The values are placeholders you should change.
-            from aws_cdk import aws_smsvoice as smsvoice
-            
-            cfn_phone_number_props = smsvoice.CfnPhoneNumberProps(
-                iso_country_code="isoCountryCode",
-                mandatory_keywords=smsvoice.CfnPhoneNumber.MandatoryKeywordsProperty(
-                    help=smsvoice.CfnPhoneNumber.MandatoryKeywordProperty(
-                        message="message"
-                    ),
-                    stop=smsvoice.CfnPhoneNumber.MandatoryKeywordProperty(
-                        message="message"
-                    )
-                ),
-                number_capabilities=["numberCapabilities"],
-                number_type="numberType",
-            
-                # the properties below are optional
-                deletion_protection_enabled=False,
-                optional_keywords=[smsvoice.CfnPhoneNumber.OptionalKeywordProperty(
-                    action="action",
-                    keyword="keyword",
-                    message="message"
-                )],
-                opt_out_list_name="optOutListName",
-                self_managed_opt_outs_enabled=False,
-                tags=[CfnTag(
-                    key="key",
-                    value="value"
-                )],
-                two_way=smsvoice.CfnPhoneNumber.TwoWayProperty(
-                    enabled=False,
-            
-                    # the properties below are optional
-                    channel_arn="channelArn",
-                    channel_role="channelRole"
-                )
-            )
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__b70b72342e4afd37b29a5920f6cf7f0c27b8afc2a3cf6820cba50a42c515dbed)
-            check_type(argname="argument iso_country_code", value=iso_country_code, expected_type=type_hints["iso_country_code"])
-            check_type(argname="argument mandatory_keywords", value=mandatory_keywords, expected_type=type_hints["mandatory_keywords"])
-            check_type(argname="argument number_capabilities", value=number_capabilities, expected_type=type_hints["number_capabilities"])
-            check_type(argname="argument number_type", value=number_type, expected_type=type_hints["number_type"])
-            check_type(argname="argument deletion_protection_enabled", value=deletion_protection_enabled, expected_type=type_hints["deletion_protection_enabled"])
-            check_type(argname="argument optional_keywords", value=optional_keywords, expected_type=type_hints["optional_keywords"])
-            check_type(argname="argument opt_out_list_name", value=opt_out_list_name, expected_type=type_hints["opt_out_list_name"])
-            check_type(argname="argument self_managed_opt_outs_enabled", value=self_managed_opt_outs_enabled, expected_type=type_hints["self_managed_opt_outs_enabled"])
-            check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
-            check_type(argname="argument two_way", value=two_way, expected_type=type_hints["two_way"])
-        self._values: typing.Dict[builtins.str, typing.Any] = {
-            "iso_country_code": iso_country_code,
-            "mandatory_keywords": mandatory_keywords,
-            "number_capabilities": number_capabilities,
-            "number_type": number_type,
-        }
-        if deletion_protection_enabled is not None:
-            self._values["deletion_protection_enabled"] = deletion_protection_enabled
-        if optional_keywords is not None:
-            self._values["optional_keywords"] = optional_keywords
-        if opt_out_list_name is not None:
-            self._values["opt_out_list_name"] = opt_out_list_name
-        if self_managed_opt_outs_enabled is not None:
-            self._values["self_managed_opt_outs_enabled"] = self_managed_opt_outs_enabled
-        if tags is not None:
-            self._values["tags"] = tags
-        if two_way is not None:
-            self._values["two_way"] = two_way
-
-    @builtins.property
-    def iso_country_code(self) -> builtins.str:
-        '''The two-character code, in ISO 3166-1 alpha-2 format, for the country or region.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-smsvoice-phonenumber.html#cfn-smsvoice-phonenumber-isocountrycode
-        '''
-        result = self._values.get("iso_country_code")
-        assert result is not None, "Required property 'iso_country_code' is missing"
-        return typing.cast(builtins.str, result)
-
-    @builtins.property
-    def mandatory_keywords(
-        self,
-    ) -> typing.Union[_IResolvable_da3f097b, "CfnPhoneNumber.MandatoryKeywordsProperty"]:
-        '''Creates or updates a ``MandatoryKeyword`` configuration on an origination phone number For more information, see `Keywords <https://docs.aws.amazon.com/sms-voice/latest/userguide/keywords.html>`_ in the End User Messaging  User Guide.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-smsvoice-phonenumber.html#cfn-smsvoice-phonenumber-mandatorykeywords
-        '''
-        result = self._values.get("mandatory_keywords")
-        assert result is not None, "Required property 'mandatory_keywords' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnPhoneNumber.MandatoryKeywordsProperty"], result)
-
-    @builtins.property
-    def number_capabilities(self) -> typing.List[builtins.str]:
-        '''Indicates if the phone number will be used for text messages, voice messages, or both.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-smsvoice-phonenumber.html#cfn-smsvoice-phonenumber-numbercapabilities
-        '''
-        result = self._values.get("number_capabilities")
-        assert result is not None, "Required property 'number_capabilities' is missing"
-        return typing.cast(typing.List[builtins.str], result)
-
-    @builtins.property
-    def number_type(self) -> builtins.str:
-        '''The type of phone number to request.
-
-        .. epigraph::
-
-           The ``ShortCode`` number type is not supported in AWS CloudFormation .
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-smsvoice-phonenumber.html#cfn-smsvoice-phonenumber-numbertype
-        '''
-        result = self._values.get("number_type")
-        assert result is not None, "Required property 'number_type' is missing"
-        return typing.cast(builtins.str, result)
-
-    @builtins.property
-    def deletion_protection_enabled(
-        self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
-        '''By default this is set to false.
-
-        When set to true the phone number can't be deleted.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-smsvoice-phonenumber.html#cfn-smsvoice-phonenumber-deletionprotectionenabled
-        '''
-        result = self._values.get("deletion_protection_enabled")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
-
-    @builtins.property
-    def optional_keywords(
-        self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnPhoneNumber.OptionalKeywordProperty"]]]]:
-        '''A keyword is a word that you can search for on a particular phone number or pool.
-
-        It is also a specific word or phrase that an end user can send to your number to elicit a response, such as an informational message or a special offer. When your number receives a message that begins with a keyword, End User Messaging  responds with a customizable message. Optional keywords are differentiated from mandatory keywords. For more information, see `Keywords <https://docs.aws.amazon.com/sms-voice/latest/userguide/keywords.html>`_ in the End User Messaging  User Guide.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-smsvoice-phonenumber.html#cfn-smsvoice-phonenumber-optionalkeywords
-        '''
-        result = self._values.get("optional_keywords")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnPhoneNumber.OptionalKeywordProperty"]]]], result)
-
-    @builtins.property
-    def opt_out_list_name(self) -> typing.Optional[builtins.str]:
-        '''The name of the OptOutList associated with the phone number.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-smsvoice-phonenumber.html#cfn-smsvoice-phonenumber-optoutlistname
-        '''
-        result = self._values.get("opt_out_list_name")
-        return typing.cast(typing.Optional[builtins.str], result)
-
-    @builtins.property
-    def self_managed_opt_outs_enabled(
-        self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
-        '''When set to false and an end recipient sends a message that begins with HELP or STOP to one of your dedicated numbers, End User Messaging  automatically replies with a customizable message and adds the end recipient to the OptOutList.
-
-        When set to true you're responsible for responding to HELP and STOP requests. You're also responsible for tracking and honoring opt-out request. For more information see `Self-managed opt-outs <https://docs.aws.amazon.com/sms-voice/latest/userguide/opt-out-list-self-managed.html>`_
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-smsvoice-phonenumber.html#cfn-smsvoice-phonenumber-selfmanagedoptoutsenabled
-        '''
-        result = self._values.get("self_managed_opt_outs_enabled")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
-
-    @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
-        '''An array of tags (key and value pairs) to associate with the requested phone number.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-smsvoice-phonenumber.html#cfn-smsvoice-phonenumber-tags
-        '''
-        result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
-
-    @builtins.property
-    def two_way(
-        self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPhoneNumber.TwoWayProperty"]]:
-        '''Describes the two-way SMS configuration for a phone number.
-
-        For more information, see `Two-way SMS messaging <https://docs.aws.amazon.com/sms-voice/latest/userguide/two-way-sms.html>`_ in the End User Messaging  User Guide.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-smsvoice-phonenumber.html#cfn-smsvoice-phonenumber-twoway
-        '''
-        result = self._values.get("two_way")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPhoneNumber.TwoWayProperty"]], result)
-
-    def __eq__(self, rhs: typing.Any) -> builtins.bool:
-        return isinstance(rhs, self.__class__) and rhs._values == self._values
-
-    def __ne__(self, rhs: typing.Any) -> builtins.bool:
-        return not (rhs == self)
-
-    def __repr__(self) -> str:
-        return "CfnPhoneNumberProps(%s)" % ", ".join(
-            k + "=" + repr(v) for k, v in self._values.items()
-        )
-
-
-@jsii.data_type(
-    jsii_type="aws-cdk-lib.aws_smsvoice.CfnPoolProps",
-    jsii_struct_bases=[],
-    name_mapping={
-        "mandatory_keywords": "mandatoryKeywords",
-        "origination_identities": "originationIdentities",
-        "deletion_protection_enabled": "deletionProtectionEnabled",
-        "optional_keywords": "optionalKeywords",
-        "opt_out_list_name": "optOutListName",
-        "self_managed_opt_outs_enabled": "selfManagedOptOutsEnabled",
-        "shared_routes_enabled": "sharedRoutesEnabled",
-        "tags": "tags",
-        "two_way": "twoWay",
-    },
-)
-class CfnPoolProps:
-    def __init__(
-        self,
-        *,
-        mandatory_keywords: typing.Union[_IResolvable_da3f097b, typing.Union["CfnPool.MandatoryKeywordsProperty", typing.Dict[builtins.str, typing.Any]]],
-        origination_identities: typing.Sequence[builtins.str],
-        deletion_protection_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        optional_keywords: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnPool.OptionalKeywordProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        opt_out_list_name: typing.Optional[builtins.str] = None,
-        self_managed_opt_outs_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        shared_routes_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-        two_way: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnPool.TwoWayProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-    ) -> None:
-        '''Properties for defining a ``CfnPool``.
-
-        :param mandatory_keywords: Creates or updates the pool's ``MandatoryKeyword`` configuration. For more information, see `Keywords <https://docs.aws.amazon.com/sms-voice/latest/userguide/keywords.html>`_ in the End User Messaging User Guide.
-        :param origination_identities: The list of origination identities to apply to the pool, either ``PhoneNumberArn`` or ``SenderIdArn`` . For more information, see `Registrations <https://docs.aws.amazon.com/sms-voice/latest/userguide/registrations.html>`_ in the End User Messaging User Guide. .. epigraph:: If you are using a shared End User Messaging resource then you must use the full Amazon Resource Name (ARN).
-        :param deletion_protection_enabled: When set to true the pool can't be deleted.
-        :param optional_keywords: Specifies any optional keywords to associate with the pool. For more information, see `Keywords <https://docs.aws.amazon.com/sms-voice/latest/userguide/keywords.html>`_ in the End User Messaging User Guide.
-        :param opt_out_list_name: The name of the OptOutList associated with the pool.
-        :param self_managed_opt_outs_enabled: When set to false, an end recipient sends a message that begins with HELP or STOP to one of your dedicated numbers, End User Messaging automatically replies with a customizable message and adds the end recipient to the OptOutList. When set to true you're responsible for responding to HELP and STOP requests. You're also responsible for tracking and honoring opt-out requests. For more information see `Self-managed opt-outs <https://docs.aws.amazon.com//pinpoint/latest/userguide/settings-sms-managing.html#settings-account-sms-self-managed-opt-out>`_
-        :param shared_routes_enabled: Allows you to enable shared routes on your pool. By default, this is set to ``False`` . If you set this value to ``True`` , your messages are sent using phone numbers or sender IDs (depending on the country) that are shared with other users. In some countries, such as the United States, senders aren't allowed to use shared routes and must use a dedicated phone number or short code.
-        :param tags: An array of tags (key and value pairs) associated with the pool.
-        :param two_way: Describes the two-way SMS configuration for a phone number. For more information, see `Two-way SMS messaging <https://docs.aws.amazon.com/sms-voice/latest/userguide/two-way-sms.html>`_ in the End User Messaging User Guide.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-smsvoice-pool.html
-        :exampleMetadata: fixture=_generated
-
-        Example::
-
-            # The code below shows an example of how to instantiate this type.
-            # The values are placeholders you should change.
-            from aws_cdk import aws_smsvoice as smsvoice
-            
-            cfn_pool_props = smsvoice.CfnPoolProps(
-                mandatory_keywords=smsvoice.CfnPool.MandatoryKeywordsProperty(
-                    help=smsvoice.CfnPool.MandatoryKeywordProperty(
-                        message="message"
-                    ),
-                    stop=smsvoice.CfnPool.MandatoryKeywordProperty(
-                        message="message"
-                    )
-                ),
-                origination_identities=["originationIdentities"],
-            
-                # the properties below are optional
-                deletion_protection_enabled=False,
-                optional_keywords=[smsvoice.CfnPool.OptionalKeywordProperty(
-                    action="action",
-                    keyword="keyword",
-                    message="message"
-                )],
-                opt_out_list_name="optOutListName",
-                self_managed_opt_outs_enabled=False,
-                shared_routes_enabled=False,
-                tags=[CfnTag(
-                    key="key",
-                    value="value"
-                )],
-                two_way=smsvoice.CfnPool.TwoWayProperty(
-                    enabled=False,
-            
-                    # the properties below are optional
-                    channel_arn="channelArn",
-                    channel_role="channelRole"
-                )
-            )
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__9949eaef09160ab08c0556130c6a54f66b5bab92951d0608bd8f05d3071a5abd)
-            check_type(argname="argument mandatory_keywords", value=mandatory_keywords, expected_type=type_hints["mandatory_keywords"])
-            check_type(argname="argument origination_identities", value=origination_identities, expected_type=type_hints["origination_identities"])
-            check_type(argname="argument deletion_protection_enabled", value=deletion_protection_enabled, expected_type=type_hints["deletion_protection_enabled"])
-            check_type(argname="argument optional_keywords", value=optional_keywords, expected_type=type_hints["optional_keywords"])
-            check_type(argname="argument opt_out_list_name", value=opt_out_list_name, expected_type=type_hints["opt_out_list_name"])
-            check_type(argname="argument self_managed_opt_outs_enabled", value=self_managed_opt_outs_enabled, expected_type=type_hints["self_managed_opt_outs_enabled"])
-            check_type(argname="argument shared_routes_enabled", value=shared_routes_enabled, expected_type=type_hints["shared_routes_enabled"])
-            check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
-            check_type(argname="argument two_way", value=two_way, expected_type=type_hints["two_way"])
-        self._values: typing.Dict[builtins.str, typing.Any] = {
-            "mandatory_keywords": mandatory_keywords,
-            "origination_identities": origination_identities,
-        }
-        if deletion_protection_enabled is not None:
-            self._values["deletion_protection_enabled"] = deletion_protection_enabled
-        if optional_keywords is not None:
-            self._values["optional_keywords"] = optional_keywords
-        if opt_out_list_name is not None:
-            self._values["opt_out_list_name"] = opt_out_list_name
-        if self_managed_opt_outs_enabled is not None:
-            self._values["self_managed_opt_outs_enabled"] = self_managed_opt_outs_enabled
-        if shared_routes_enabled is not None:
-            self._values["shared_routes_enabled"] = shared_routes_enabled
-        if tags is not None:
-            self._values["tags"] = tags
-        if two_way is not None:
-            self._values["two_way"] = two_way
-
-    @builtins.property
-    def mandatory_keywords(
-        self,
-    ) -> typing.Union[_IResolvable_da3f097b, "CfnPool.MandatoryKeywordsProperty"]:
-        '''Creates or updates the pool's ``MandatoryKeyword`` configuration.
-
-        For more information, see `Keywords <https://docs.aws.amazon.com/sms-voice/latest/userguide/keywords.html>`_ in the End User Messaging  User Guide.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-smsvoice-pool.html#cfn-smsvoice-pool-mandatorykeywords
-        '''
-        result = self._values.get("mandatory_keywords")
-        assert result is not None, "Required property 'mandatory_keywords' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnPool.MandatoryKeywordsProperty"], result)
-
-    @builtins.property
-    def origination_identities(self) -> typing.List[builtins.str]:
-        '''The list of origination identities to apply to the pool, either ``PhoneNumberArn`` or ``SenderIdArn`` .
-
-        For more information, see `Registrations <https://docs.aws.amazon.com/sms-voice/latest/userguide/registrations.html>`_ in the End User Messaging  User Guide.
-        .. epigraph::
-
-           If you are using a shared End User Messaging  resource then you must use the full Amazon Resource Name (ARN).
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-smsvoice-pool.html#cfn-smsvoice-pool-originationidentities
-        '''
-        result = self._values.get("origination_identities")
-        assert result is not None, "Required property 'origination_identities' is missing"
-        return typing.cast(typing.List[builtins.str], result)
-
-    @builtins.property
-    def deletion_protection_enabled(
-        self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
-        '''When set to true the pool can't be deleted.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-smsvoice-pool.html#cfn-smsvoice-pool-deletionprotectionenabled
-        '''
-        result = self._values.get("deletion_protection_enabled")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
-
-    @builtins.property
-    def optional_keywords(
-        self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnPool.OptionalKeywordProperty"]]]]:
-        '''Specifies any optional keywords to associate with the pool.
-
-        For more information, see `Keywords <https://docs.aws.amazon.com/sms-voice/latest/userguide/keywords.html>`_ in the End User Messaging  User Guide.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-smsvoice-pool.html#cfn-smsvoice-pool-optionalkeywords
-        '''
-        result = self._values.get("optional_keywords")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnPool.OptionalKeywordProperty"]]]], result)
-
-    @builtins.property
-    def opt_out_list_name(self) -> typing.Optional[builtins.str]:
-        '''The name of the OptOutList associated with the pool.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-smsvoice-pool.html#cfn-smsvoice-pool-optoutlistname
-        '''
-        result = self._values.get("opt_out_list_name")
-        return typing.cast(typing.Optional[builtins.str], result)
-
-    @builtins.property
-    def self_managed_opt_outs_enabled(
-        self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
-        '''When set to false, an end recipient sends a message that begins with HELP or STOP to one of your dedicated numbers, End User Messaging  automatically replies with a customizable message and adds the end recipient to the OptOutList.
-
-        When set to true you're responsible for responding to HELP and STOP requests. You're also responsible for tracking and honoring opt-out requests. For more information see `Self-managed opt-outs <https://docs.aws.amazon.com//pinpoint/latest/userguide/settings-sms-managing.html#settings-account-sms-self-managed-opt-out>`_
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-smsvoice-pool.html#cfn-smsvoice-pool-selfmanagedoptoutsenabled
-        '''
-        result = self._values.get("self_managed_opt_outs_enabled")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
-
-    @builtins.property
-    def shared_routes_enabled(
-        self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
-        '''Allows you to enable shared routes on your pool.
-
-        By default, this is set to ``False`` . If you set this value to ``True`` , your messages are sent using phone numbers or sender IDs (depending on the country) that are shared with other users. In some countries, such as the United States, senders aren't allowed to use shared routes and must use a dedicated phone number or short code.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-smsvoice-pool.html#cfn-smsvoice-pool-sharedroutesenabled
-        '''
-        result = self._values.get("shared_routes_enabled")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
-
-    @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
-        '''An array of tags (key and value pairs) associated with the pool.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-smsvoice-pool.html#cfn-smsvoice-pool-tags
-        '''
-        result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
-
-    @builtins.property
-    def two_way(
-        self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPool.TwoWayProperty"]]:
-        '''Describes the two-way SMS configuration for a phone number.
-
-        For more information, see `Two-way SMS messaging <https://docs.aws.amazon.com/sms-voice/latest/userguide/two-way-sms.html>`_ in the End User Messaging  User Guide.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-smsvoice-pool.html#cfn-smsvoice-pool-twoway
-        '''
-        result = self._values.get("two_way")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPool.TwoWayProperty"]], result)
-
-    def __eq__(self, rhs: typing.Any) -> builtins.bool:
-        return isinstance(rhs, self.__class__) and rhs._values == self._values
-
-    def __ne__(self, rhs: typing.Any) -> builtins.bool:
-        return not (rhs == self)
-
-    def __repr__(self) -> str:
-        return "CfnPoolProps(%s)" % ", ".join(
-            k + "=" + repr(v) for k, v in self._values.items()
-        )
-
-
-@jsii.data_type(
-    jsii_type="aws-cdk-lib.aws_smsvoice.CfnProtectConfigurationProps",
-    jsii_struct_bases=[],
-    name_mapping={
-        "country_rule_set": "countryRuleSet",
-        "deletion_protection_enabled": "deletionProtectionEnabled",
-        "tags": "tags",
-    },
-)
-class CfnProtectConfigurationProps:
-    def __init__(
-        self,
-        *,
-        country_rule_set: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnProtectConfiguration.CountryRuleSetProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        deletion_protection_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-    ) -> None:
-        '''Properties for defining a ``CfnProtectConfiguration``.
-
-        :param country_rule_set: The set of ``CountryRules`` you specify to control which countries End User Messaging can send your messages to.
-        :param deletion_protection_enabled: The status of deletion protection for the protect configuration. When set to true deletion protection is enabled. By default this is set to false.
-        :param tags: An array of key and value pair tags that are associated with the resource.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-smsvoice-protectconfiguration.html
-        :exampleMetadata: fixture=_generated
-
-        Example::
-
-            # The code below shows an example of how to instantiate this type.
-            # The values are placeholders you should change.
-            from aws_cdk import aws_smsvoice as smsvoice
-            
-            cfn_protect_configuration_props = smsvoice.CfnProtectConfigurationProps(
-                country_rule_set=smsvoice.CfnProtectConfiguration.CountryRuleSetProperty(
-                    mms=[smsvoice.CfnProtectConfiguration.CountryRuleProperty(
-                        country_code="countryCode",
-                        protect_status="protectStatus"
-                    )],
-                    sms=[smsvoice.CfnProtectConfiguration.CountryRuleProperty(
-                        country_code="countryCode",
-                        protect_status="protectStatus"
-                    )],
-                    voice=[smsvoice.CfnProtectConfiguration.CountryRuleProperty(
-                        country_code="countryCode",
-                        protect_status="protectStatus"
-                    )]
-                ),
-                deletion_protection_enabled=False,
-                tags=[CfnTag(
-                    key="key",
-                    value="value"
-                )]
-            )
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__78062d029c984e0fa8e4c182345051e18cb19671a3a88fec3a04ea748b2d3ea8)
-            check_type(argname="argument country_rule_set", value=country_rule_set, expected_type=type_hints["country_rule_set"])
-            check_type(argname="argument deletion_protection_enabled", value=deletion_protection_enabled, expected_type=type_hints["deletion_protection_enabled"])
-            check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
-        self._values: typing.Dict[builtins.str, typing.Any] = {}
-        if country_rule_set is not None:
-            self._values["country_rule_set"] = country_rule_set
-        if deletion_protection_enabled is not None:
-            self._values["deletion_protection_enabled"] = deletion_protection_enabled
-        if tags is not None:
-            self._values["tags"] = tags
-
-    @builtins.property
-    def country_rule_set(
-        self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnProtectConfiguration.CountryRuleSetProperty"]]:
-        '''The set of ``CountryRules`` you specify to control which countries End User Messaging  can send your messages to.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-smsvoice-protectconfiguration.html#cfn-smsvoice-protectconfiguration-countryruleset
-        '''
-        result = self._values.get("country_rule_set")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnProtectConfiguration.CountryRuleSetProperty"]], result)
-
-    @builtins.property
-    def deletion_protection_enabled(
-        self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
-        '''The status of deletion protection for the protect configuration.
-
-        When set to true deletion protection is enabled. By default this is set to false.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-smsvoice-protectconfiguration.html#cfn-smsvoice-protectconfiguration-deletionprotectionenabled
-        '''
-        result = self._values.get("deletion_protection_enabled")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
-
-    @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
-        '''An array of key and value pair tags that are associated with the resource.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-smsvoice-protectconfiguration.html#cfn-smsvoice-protectconfiguration-tags
-        '''
-        result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
-
-    def __eq__(self, rhs: typing.Any) -> builtins.bool:
-        return isinstance(rhs, self.__class__) and rhs._values == self._values
-
-    def __ne__(self, rhs: typing.Any) -> builtins.bool:
-        return not (rhs == self)
-
-    def __repr__(self) -> str:
-        return "CfnProtectConfigurationProps(%s)" % ", ".join(
-            k + "=" + repr(v) for k, v in self._values.items()
-        )
-
-
-@jsii.data_type(
-    jsii_type="aws-cdk-lib.aws_smsvoice.CfnResourcePolicyProps",
-    jsii_struct_bases=[],
-    name_mapping={"policy_document": "policyDocument", "resource_arn": "resourceArn"},
-)
-class CfnResourcePolicyProps:
-    def __init__(
-        self,
-        *,
-        policy_document: typing.Any,
-        resource_arn: builtins.str,
-    ) -> None:
-        '''Properties for defining a ``CfnResourcePolicy``.
-
-        :param policy_document: The JSON formatted resource-based policy to attach.
-        :param resource_arn: The Amazon Resource Name (ARN) of the End User Messaging resource attached to the resource-based policy.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-smsvoice-resourcepolicy.html
-        :exampleMetadata: fixture=_generated
-
-        Example::
-
-            # The code below shows an example of how to instantiate this type.
-            # The values are placeholders you should change.
-            from aws_cdk import aws_smsvoice as smsvoice
-            
-            # policy_document: Any
-            
-            cfn_resource_policy_props = smsvoice.CfnResourcePolicyProps(
-                policy_document=policy_document,
-                resource_arn="resourceArn"
-            )
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__52e1771fac2c1d0d2462745e3a14b0f3c7951b49866b77d8397eb55313b71662)
-            check_type(argname="argument policy_document", value=policy_document, expected_type=type_hints["policy_document"])
-            check_type(argname="argument resource_arn", value=resource_arn, expected_type=type_hints["resource_arn"])
-        self._values: typing.Dict[builtins.str, typing.Any] = {
-            "policy_document": policy_document,
-            "resource_arn": resource_arn,
-        }
-
-    @builtins.property
-    def policy_document(self) -> typing.Any:
-        '''The JSON formatted resource-based policy to attach.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-smsvoice-resourcepolicy.html#cfn-smsvoice-resourcepolicy-policydocument
-        '''
-        result = self._values.get("policy_document")
-        assert result is not None, "Required property 'policy_document' is missing"
-        return typing.cast(typing.Any, result)
-
-    @builtins.property
-    def resource_arn(self) -> builtins.str:
-        '''The Amazon Resource Name (ARN) of the End User Messaging  resource attached to the resource-based policy.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-smsvoice-resourcepolicy.html#cfn-smsvoice-resourcepolicy-resourcearn
-        '''
-        result = self._values.get("resource_arn")
-        assert result is not None, "Required property 'resource_arn' is missing"
-        return typing.cast(builtins.str, result)
-
-    def __eq__(self, rhs: typing.Any) -> builtins.bool:
-        return isinstance(rhs, self.__class__) and rhs._values == self._values
-
-    def __ne__(self, rhs: typing.Any) -> builtins.bool:
-        return not (rhs == self)
-
-    def __repr__(self) -> str:
-        return "CfnResourcePolicyProps(%s)" % ", ".join(
-            k + "=" + repr(v) for k, v in self._values.items()
-        )
-
-
-@jsii.data_type(
-    jsii_type="aws-cdk-lib.aws_smsvoice.CfnSenderIdProps",
-    jsii_struct_bases=[],
-    name_mapping={
-        "iso_country_code": "isoCountryCode",
-        "sender_id": "senderId",
-        "deletion_protection_enabled": "deletionProtectionEnabled",
-        "tags": "tags",
-    },
-)
-class CfnSenderIdProps:
-    def __init__(
-        self,
-        *,
-        iso_country_code: builtins.str,
-        sender_id: builtins.str,
-        deletion_protection_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-    ) -> None:
-        '''Properties for defining a ``CfnSenderId``.
-
-        :param iso_country_code: The two-character code, in ISO 3166-1 alpha-2 format, for the country or region.
-        :param sender_id: The sender ID string to request.
-        :param deletion_protection_enabled: By default this is set to false. When set to true the sender ID can't be deleted.
-        :param tags: An array of tags (key and value pairs) to associate with the sender ID.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-smsvoice-senderid.html
-        :exampleMetadata: fixture=_generated
-
-        Example::
-
-            # The code below shows an example of how to instantiate this type.
-            # The values are placeholders you should change.
-            from aws_cdk import aws_smsvoice as smsvoice
-            
-            cfn_sender_id_props = smsvoice.CfnSenderIdProps(
-                iso_country_code="isoCountryCode",
-                sender_id="senderId",
-            
-                # the properties below are optional
-                deletion_protection_enabled=False,
-                tags=[CfnTag(
-                    key="key",
-                    value="value"
-                )]
-            )
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__e4efc3bfced2a81fa707bcebc646c7b881da4e547ba3c3005837a6b500a365e2)
-            check_type(argname="argument iso_country_code", value=iso_country_code, expected_type=type_hints["iso_country_code"])
-            check_type(argname="argument sender_id", value=sender_id, expected_type=type_hints["sender_id"])
-            check_type(argname="argument deletion_protection_enabled", value=deletion_protection_enabled, expected_type=type_hints["deletion_protection_enabled"])
-            check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
-        self._values: typing.Dict[builtins.str, typing.Any] = {
-            "iso_country_code": iso_country_code,
-            "sender_id": sender_id,
-        }
-        if deletion_protection_enabled is not None:
-            self._values["deletion_protection_enabled"] = deletion_protection_enabled
-        if tags is not None:
-            self._values["tags"] = tags
-
-    @builtins.property
-    def iso_country_code(self) -> builtins.str:
-        '''The two-character code, in ISO 3166-1 alpha-2 format, for the country or region.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-smsvoice-senderid.html#cfn-smsvoice-senderid-isocountrycode
-        '''
-        result = self._values.get("iso_country_code")
-        assert result is not None, "Required property 'iso_country_code' is missing"
-        return typing.cast(builtins.str, result)
-
-    @builtins.property
-    def sender_id(self) -> builtins.str:
-        '''The sender ID string to request.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-smsvoice-senderid.html#cfn-smsvoice-senderid-senderid
-        '''
-        result = self._values.get("sender_id")
-        assert result is not None, "Required property 'sender_id' is missing"
-        return typing.cast(builtins.str, result)
-
-    @builtins.property
-    def deletion_protection_enabled(
-        self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
-        '''By default this is set to false.
-
-        When set to true the sender ID can't be deleted.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-smsvoice-senderid.html#cfn-smsvoice-senderid-deletionprotectionenabled
-        '''
-        result = self._values.get("deletion_protection_enabled")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
-
-    @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
-        '''An array of tags (key and value pairs) to associate with the sender ID.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-smsvoice-senderid.html#cfn-smsvoice-senderid-tags
-        '''
-        result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
-
-    def __eq__(self, rhs: typing.Any) -> builtins.bool:
-        return isinstance(rhs, self.__class__) and rhs._values == self._values
-
-    def __ne__(self, rhs: typing.Any) -> builtins.bool:
-        return not (rhs == self)
-
-    def __repr__(self) -> str:
-        return "CfnSenderIdProps(%s)" % ", ".join(
-            k + "=" + repr(v) for k, v in self._values.items()
-        )
-
-
-@jsii.data_type(
-    jsii_type="aws-cdk-lib.aws_smsvoice.ConfigurationSetReference",
-    jsii_struct_bases=[],
-    name_mapping={
-        "configuration_set_arn": "configurationSetArn",
-        "configuration_set_name": "configurationSetName",
-    },
-)
-class ConfigurationSetReference:
-    def __init__(
-        self,
-        *,
-        configuration_set_arn: builtins.str,
-        configuration_set_name: builtins.str,
-    ) -> None:
-        '''A reference to a ConfigurationSet resource.
-
-        :param configuration_set_arn: The ARN of the ConfigurationSet resource.
-        :param configuration_set_name: The ConfigurationSetName of the ConfigurationSet resource.
-
-        :exampleMetadata: fixture=_generated
-
-        Example::
-
-            # The code below shows an example of how to instantiate this type.
-            # The values are placeholders you should change.
-            from aws_cdk import aws_smsvoice as smsvoice
-            
-            configuration_set_reference = smsvoice.ConfigurationSetReference(
-                configuration_set_arn="configurationSetArn",
-                configuration_set_name="configurationSetName"
-            )
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__2e5bb5d3852dbb8456b6f01952af083f729085a4c37fe486c0d0f4a60daa8c40)
-            check_type(argname="argument configuration_set_arn", value=configuration_set_arn, expected_type=type_hints["configuration_set_arn"])
-            check_type(argname="argument configuration_set_name", value=configuration_set_name, expected_type=type_hints["configuration_set_name"])
-        self._values: typing.Dict[builtins.str, typing.Any] = {
-            "configuration_set_arn": configuration_set_arn,
-            "configuration_set_name": configuration_set_name,
-        }
-
-    @builtins.property
-    def configuration_set_arn(self) -> builtins.str:
-        '''The ARN of the ConfigurationSet resource.'''
-        result = self._values.get("configuration_set_arn")
-        assert result is not None, "Required property 'configuration_set_arn' is missing"
-        return typing.cast(builtins.str, result)
-
-    @builtins.property
-    def configuration_set_name(self) -> builtins.str:
-        '''The ConfigurationSetName of the ConfigurationSet resource.'''
-        result = self._values.get("configuration_set_name")
-        assert result is not None, "Required property 'configuration_set_name' is missing"
-        return typing.cast(builtins.str, result)
-
-    def __eq__(self, rhs: typing.Any) -> builtins.bool:
-        return isinstance(rhs, self.__class__) and rhs._values == self._values
-
-    def __ne__(self, rhs: typing.Any) -> builtins.bool:
-        return not (rhs == self)
-
-    def __repr__(self) -> str:
-        return "ConfigurationSetReference(%s)" % ", ".join(
-            k + "=" + repr(v) for k, v in self._values.items()
-        )
-
-
-@jsii.interface(jsii_type="aws-cdk-lib.aws_smsvoice.IConfigurationSetRef")
-class IConfigurationSetRef(
-    _constructs_77d1e7e8.IConstruct,
-    _IEnvironmentAware_a408b00d,
-    typing_extensions.Protocol,
-):
-    '''(experimental) Indicates that this resource can be referenced as a ConfigurationSet.
-
-    :stability: experimental
-    '''
-
-    @builtins.property
-    @jsii.member(jsii_name="configurationSetRef")
-    def configuration_set_ref(self) -> ConfigurationSetReference:
-        '''(experimental) A reference to a ConfigurationSet resource.
-
-        :stability: experimental
-        '''
-        ...
-
-
-class _IConfigurationSetRefProxy(
-    jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
-    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
-):
-    '''(experimental) Indicates that this resource can be referenced as a ConfigurationSet.
-
-    :stability: experimental
-    '''
-
-    __jsii_type__: typing.ClassVar[str] = "aws-cdk-lib.aws_smsvoice.IConfigurationSetRef"
-
-    @builtins.property
-    @jsii.member(jsii_name="configurationSetRef")
-    def configuration_set_ref(self) -> ConfigurationSetReference:
-        '''(experimental) A reference to a ConfigurationSet resource.
-
-        :stability: experimental
-        '''
-        return typing.cast(ConfigurationSetReference, jsii.get(self, "configurationSetRef"))
-
-# Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
-typing.cast(typing.Any, IConfigurationSetRef).__jsii_proxy_class__ = lambda : _IConfigurationSetRefProxy
-
-
-@jsii.interface(jsii_type="aws-cdk-lib.aws_smsvoice.IOptOutListRef")
-class IOptOutListRef(
-    _constructs_77d1e7e8.IConstruct,
-    _IEnvironmentAware_a408b00d,
-    typing_extensions.Protocol,
-):
-    '''(experimental) Indicates that this resource can be referenced as a OptOutList.
-
-    :stability: experimental
-    '''
-
-    @builtins.property
-    @jsii.member(jsii_name="optOutListRef")
-    def opt_out_list_ref(self) -> "OptOutListReference":
-        '''(experimental) A reference to a OptOutList resource.
-
-        :stability: experimental
-        '''
-        ...
-
-
-class _IOptOutListRefProxy(
-    jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
-    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
-):
-    '''(experimental) Indicates that this resource can be referenced as a OptOutList.
-
-    :stability: experimental
-    '''
-
-    __jsii_type__: typing.ClassVar[str] = "aws-cdk-lib.aws_smsvoice.IOptOutListRef"
-
-    @builtins.property
-    @jsii.member(jsii_name="optOutListRef")
-    def opt_out_list_ref(self) -> "OptOutListReference":
-        '''(experimental) A reference to a OptOutList resource.
-
-        :stability: experimental
-        '''
-        return typing.cast("OptOutListReference", jsii.get(self, "optOutListRef"))
-
-# Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
-typing.cast(typing.Any, IOptOutListRef).__jsii_proxy_class__ = lambda : _IOptOutListRefProxy
-
-
-@jsii.interface(jsii_type="aws-cdk-lib.aws_smsvoice.IPhoneNumberRef")
-class IPhoneNumberRef(
-    _constructs_77d1e7e8.IConstruct,
-    _IEnvironmentAware_a408b00d,
-    typing_extensions.Protocol,
-):
-    '''(experimental) Indicates that this resource can be referenced as a PhoneNumber.
-
-    :stability: experimental
-    '''
-
-    @builtins.property
-    @jsii.member(jsii_name="phoneNumberRef")
-    def phone_number_ref(self) -> "PhoneNumberReference":
-        '''(experimental) A reference to a PhoneNumber resource.
-
-        :stability: experimental
-        '''
-        ...
-
-
-class _IPhoneNumberRefProxy(
-    jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
-    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
-):
-    '''(experimental) Indicates that this resource can be referenced as a PhoneNumber.
-
-    :stability: experimental
-    '''
-
-    __jsii_type__: typing.ClassVar[str] = "aws-cdk-lib.aws_smsvoice.IPhoneNumberRef"
-
-    @builtins.property
-    @jsii.member(jsii_name="phoneNumberRef")
-    def phone_number_ref(self) -> "PhoneNumberReference":
-        '''(experimental) A reference to a PhoneNumber resource.
-
-        :stability: experimental
-        '''
-        return typing.cast("PhoneNumberReference", jsii.get(self, "phoneNumberRef"))
-
-# Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
-typing.cast(typing.Any, IPhoneNumberRef).__jsii_proxy_class__ = lambda : _IPhoneNumberRefProxy
-
-
-@jsii.interface(jsii_type="aws-cdk-lib.aws_smsvoice.IPoolRef")
-class IPoolRef(
-    _constructs_77d1e7e8.IConstruct,
-    _IEnvironmentAware_a408b00d,
-    typing_extensions.Protocol,
-):
-    '''(experimental) Indicates that this resource can be referenced as a Pool.
-
-    :stability: experimental
-    '''
-
-    @builtins.property
-    @jsii.member(jsii_name="poolRef")
-    def pool_ref(self) -> "PoolReference":
-        '''(experimental) A reference to a Pool resource.
-
-        :stability: experimental
-        '''
-        ...
-
-
-class _IPoolRefProxy(
-    jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
-    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
-):
-    '''(experimental) Indicates that this resource can be referenced as a Pool.
-
-    :stability: experimental
-    '''
-
-    __jsii_type__: typing.ClassVar[str] = "aws-cdk-lib.aws_smsvoice.IPoolRef"
-
-    @builtins.property
-    @jsii.member(jsii_name="poolRef")
-    def pool_ref(self) -> "PoolReference":
-        '''(experimental) A reference to a Pool resource.
-
-        :stability: experimental
-        '''
-        return typing.cast("PoolReference", jsii.get(self, "poolRef"))
-
-# Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
-typing.cast(typing.Any, IPoolRef).__jsii_proxy_class__ = lambda : _IPoolRefProxy
-
-
-@jsii.interface(jsii_type="aws-cdk-lib.aws_smsvoice.IProtectConfigurationRef")
-class IProtectConfigurationRef(
-    _constructs_77d1e7e8.IConstruct,
-    _IEnvironmentAware_a408b00d,
-    typing_extensions.Protocol,
-):
-    '''(experimental) Indicates that this resource can be referenced as a ProtectConfiguration.
-
-    :stability: experimental
-    '''
-
-    @builtins.property
-    @jsii.member(jsii_name="protectConfigurationRef")
-    def protect_configuration_ref(self) -> "ProtectConfigurationReference":
-        '''(experimental) A reference to a ProtectConfiguration resource.
-
-        :stability: experimental
-        '''
-        ...
-
-
-class _IProtectConfigurationRefProxy(
-    jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
-    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
-):
-    '''(experimental) Indicates that this resource can be referenced as a ProtectConfiguration.
-
-    :stability: experimental
-    '''
-
-    __jsii_type__: typing.ClassVar[str] = "aws-cdk-lib.aws_smsvoice.IProtectConfigurationRef"
-
-    @builtins.property
-    @jsii.member(jsii_name="protectConfigurationRef")
-    def protect_configuration_ref(self) -> "ProtectConfigurationReference":
-        '''(experimental) A reference to a ProtectConfiguration resource.
-
-        :stability: experimental
-        '''
-        return typing.cast("ProtectConfigurationReference", jsii.get(self, "protectConfigurationRef"))
-
-# Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
-typing.cast(typing.Any, IProtectConfigurationRef).__jsii_proxy_class__ = lambda : _IProtectConfigurationRefProxy
-
-
-@jsii.interface(jsii_type="aws-cdk-lib.aws_smsvoice.IResourcePolicyRef")
-class IResourcePolicyRef(
-    _constructs_77d1e7e8.IConstruct,
-    _IEnvironmentAware_a408b00d,
-    typing_extensions.Protocol,
-):
-    '''(experimental) Indicates that this resource can be referenced as a ResourcePolicy.
-
-    :stability: experimental
-    '''
-
-    @builtins.property
-    @jsii.member(jsii_name="resourcePolicyRef")
-    def resource_policy_ref(self) -> "ResourcePolicyReference":
-        '''(experimental) A reference to a ResourcePolicy resource.
-
-        :stability: experimental
-        '''
-        ...
-
-
-class _IResourcePolicyRefProxy(
-    jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
-    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
-):
-    '''(experimental) Indicates that this resource can be referenced as a ResourcePolicy.
-
-    :stability: experimental
-    '''
-
-    __jsii_type__: typing.ClassVar[str] = "aws-cdk-lib.aws_smsvoice.IResourcePolicyRef"
-
-    @builtins.property
-    @jsii.member(jsii_name="resourcePolicyRef")
-    def resource_policy_ref(self) -> "ResourcePolicyReference":
-        '''(experimental) A reference to a ResourcePolicy resource.
-
-        :stability: experimental
-        '''
-        return typing.cast("ResourcePolicyReference", jsii.get(self, "resourcePolicyRef"))
-
-# Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
-typing.cast(typing.Any, IResourcePolicyRef).__jsii_proxy_class__ = lambda : _IResourcePolicyRefProxy
-
-
-@jsii.interface(jsii_type="aws-cdk-lib.aws_smsvoice.ISenderIdRef")
-class ISenderIdRef(
-    _constructs_77d1e7e8.IConstruct,
-    _IEnvironmentAware_a408b00d,
-    typing_extensions.Protocol,
-):
-    '''(experimental) Indicates that this resource can be referenced as a SenderId.
-
-    :stability: experimental
-    '''
-
-    @builtins.property
-    @jsii.member(jsii_name="senderIdRef")
-    def sender_id_ref(self) -> "SenderIdReference":
-        '''(experimental) A reference to a SenderId resource.
-
-        :stability: experimental
-        '''
-        ...
-
-
-class _ISenderIdRefProxy(
-    jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
-    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
-):
-    '''(experimental) Indicates that this resource can be referenced as a SenderId.
-
-    :stability: experimental
-    '''
-
-    __jsii_type__: typing.ClassVar[str] = "aws-cdk-lib.aws_smsvoice.ISenderIdRef"
-
-    @builtins.property
-    @jsii.member(jsii_name="senderIdRef")
-    def sender_id_ref(self) -> "SenderIdReference":
-        '''(experimental) A reference to a SenderId resource.
-
-        :stability: experimental
-        '''
-        return typing.cast("SenderIdReference", jsii.get(self, "senderIdRef"))
-
-# Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
-typing.cast(typing.Any, ISenderIdRef).__jsii_proxy_class__ = lambda : _ISenderIdRefProxy
-
-
-@jsii.data_type(
-    jsii_type="aws-cdk-lib.aws_smsvoice.OptOutListReference",
-    jsii_struct_bases=[],
-    name_mapping={
-        "opt_out_list_arn": "optOutListArn",
-        "opt_out_list_name": "optOutListName",
-    },
-)
-class OptOutListReference:
-    def __init__(
-        self,
-        *,
-        opt_out_list_arn: builtins.str,
-        opt_out_list_name: builtins.str,
-    ) -> None:
-        '''A reference to a OptOutList resource.
-
-        :param opt_out_list_arn: The ARN of the OptOutList resource.
-        :param opt_out_list_name: The OptOutListName of the OptOutList resource.
-
-        :exampleMetadata: fixture=_generated
-
-        Example::
-
-            # The code below shows an example of how to instantiate this type.
-            # The values are placeholders you should change.
-            from aws_cdk import aws_smsvoice as smsvoice
-            
-            opt_out_list_reference = smsvoice.OptOutListReference(
-                opt_out_list_arn="optOutListArn",
-                opt_out_list_name="optOutListName"
-            )
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__bfd1ef6e5e992834ccc3c45148952accc4dbcb9f4b552b0933fbdfa4c4867558)
-            check_type(argname="argument opt_out_list_arn", value=opt_out_list_arn, expected_type=type_hints["opt_out_list_arn"])
-            check_type(argname="argument opt_out_list_name", value=opt_out_list_name, expected_type=type_hints["opt_out_list_name"])
-        self._values: typing.Dict[builtins.str, typing.Any] = {
-            "opt_out_list_arn": opt_out_list_arn,
-            "opt_out_list_name": opt_out_list_name,
-        }
-
-    @builtins.property
-    def opt_out_list_arn(self) -> builtins.str:
-        '''The ARN of the OptOutList resource.'''
-        result = self._values.get("opt_out_list_arn")
-        assert result is not None, "Required property 'opt_out_list_arn' is missing"
-        return typing.cast(builtins.str, result)
-
-    @builtins.property
-    def opt_out_list_name(self) -> builtins.str:
-        '''The OptOutListName of the OptOutList resource.'''
-        result = self._values.get("opt_out_list_name")
-        assert result is not None, "Required property 'opt_out_list_name' is missing"
-        return typing.cast(builtins.str, result)
-
-    def __eq__(self, rhs: typing.Any) -> builtins.bool:
-        return isinstance(rhs, self.__class__) and rhs._values == self._values
-
-    def __ne__(self, rhs: typing.Any) -> builtins.bool:
-        return not (rhs == self)
-
-    def __repr__(self) -> str:
-        return "OptOutListReference(%s)" % ", ".join(
-            k + "=" + repr(v) for k, v in self._values.items()
-        )
-
-
-@jsii.data_type(
-    jsii_type="aws-cdk-lib.aws_smsvoice.PhoneNumberReference",
-    jsii_struct_bases=[],
-    name_mapping={
-        "phone_number_arn": "phoneNumberArn",
-        "phone_number_id": "phoneNumberId",
-    },
-)
-class PhoneNumberReference:
-    def __init__(
-        self,
-        *,
-        phone_number_arn: builtins.str,
-        phone_number_id: builtins.str,
-    ) -> None:
-        '''A reference to a PhoneNumber resource.
-
-        :param phone_number_arn: The ARN of the PhoneNumber resource.
-        :param phone_number_id: The PhoneNumberId of the PhoneNumber resource.
-
-        :exampleMetadata: fixture=_generated
-
-        Example::
-
-            # The code below shows an example of how to instantiate this type.
-            # The values are placeholders you should change.
-            from aws_cdk import aws_smsvoice as smsvoice
-            
-            phone_number_reference = smsvoice.PhoneNumberReference(
-                phone_number_arn="phoneNumberArn",
-                phone_number_id="phoneNumberId"
-            )
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__349249fdc8c61039a673d8f3a5b07663edefe3b173fb8ffdba04e1e12c00df64)
-            check_type(argname="argument phone_number_arn", value=phone_number_arn, expected_type=type_hints["phone_number_arn"])
-            check_type(argname="argument phone_number_id", value=phone_number_id, expected_type=type_hints["phone_number_id"])
-        self._values: typing.Dict[builtins.str, typing.Any] = {
-            "phone_number_arn": phone_number_arn,
-            "phone_number_id": phone_number_id,
-        }
-
-    @builtins.property
-    def phone_number_arn(self) -> builtins.str:
-        '''The ARN of the PhoneNumber resource.'''
-        result = self._values.get("phone_number_arn")
-        assert result is not None, "Required property 'phone_number_arn' is missing"
-        return typing.cast(builtins.str, result)
-
-    @builtins.property
-    def phone_number_id(self) -> builtins.str:
-        '''The PhoneNumberId of the PhoneNumber resource.'''
-        result = self._values.get("phone_number_id")
-        assert result is not None, "Required property 'phone_number_id' is missing"
-        return typing.cast(builtins.str, result)
-
-    def __eq__(self, rhs: typing.Any) -> builtins.bool:
-        return isinstance(rhs, self.__class__) and rhs._values == self._values
-
-    def __ne__(self, rhs: typing.Any) -> builtins.bool:
-        return not (rhs == self)
-
-    def __repr__(self) -> str:
-        return "PhoneNumberReference(%s)" % ", ".join(
-            k + "=" + repr(v) for k, v in self._values.items()
-        )
-
-
-@jsii.data_type(
-    jsii_type="aws-cdk-lib.aws_smsvoice.PoolReference",
-    jsii_struct_bases=[],
-    name_mapping={"pool_arn": "poolArn", "pool_id": "poolId"},
-)
-class PoolReference:
-    def __init__(self, *, pool_arn: builtins.str, pool_id: builtins.str) -> None:
-        '''A reference to a Pool resource.
-
-        :param pool_arn: The ARN of the Pool resource.
-        :param pool_id: The PoolId of the Pool resource.
-
-        :exampleMetadata: fixture=_generated
-
-        Example::
-
-            # The code below shows an example of how to instantiate this type.
-            # The values are placeholders you should change.
-            from aws_cdk import aws_smsvoice as smsvoice
-            
-            pool_reference = smsvoice.PoolReference(
-                pool_arn="poolArn",
-                pool_id="poolId"
-            )
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__59ffeb3ac05b698611a04dee6b3e67449249804588f0e420a1a2f04dc5cc0f00)
-            check_type(argname="argument pool_arn", value=pool_arn, expected_type=type_hints["pool_arn"])
-            check_type(argname="argument pool_id", value=pool_id, expected_type=type_hints["pool_id"])
-        self._values: typing.Dict[builtins.str, typing.Any] = {
-            "pool_arn": pool_arn,
-            "pool_id": pool_id,
-        }
-
-    @builtins.property
-    def pool_arn(self) -> builtins.str:
-        '''The ARN of the Pool resource.'''
-        result = self._values.get("pool_arn")
-        assert result is not None, "Required property 'pool_arn' is missing"
-        return typing.cast(builtins.str, result)
-
-    @builtins.property
-    def pool_id(self) -> builtins.str:
-        '''The PoolId of the Pool resource.'''
-        result = self._values.get("pool_id")
-        assert result is not None, "Required property 'pool_id' is missing"
-        return typing.cast(builtins.str, result)
-
-    def __eq__(self, rhs: typing.Any) -> builtins.bool:
-        return isinstance(rhs, self.__class__) and rhs._values == self._values
-
-    def __ne__(self, rhs: typing.Any) -> builtins.bool:
-        return not (rhs == self)
-
-    def __repr__(self) -> str:
-        return "PoolReference(%s)" % ", ".join(
-            k + "=" + repr(v) for k, v in self._values.items()
-        )
-
-
-@jsii.data_type(
-    jsii_type="aws-cdk-lib.aws_smsvoice.ProtectConfigurationReference",
-    jsii_struct_bases=[],
-    name_mapping={
-        "protect_configuration_arn": "protectConfigurationArn",
-        "protect_configuration_id": "protectConfigurationId",
-    },
-)
-class ProtectConfigurationReference:
-    def __init__(
-        self,
-        *,
-        protect_configuration_arn: builtins.str,
-        protect_configuration_id: builtins.str,
-    ) -> None:
-        '''A reference to a ProtectConfiguration resource.
-
-        :param protect_configuration_arn: The ARN of the ProtectConfiguration resource.
-        :param protect_configuration_id: The ProtectConfigurationId of the ProtectConfiguration resource.
-
-        :exampleMetadata: fixture=_generated
-
-        Example::
-
-            # The code below shows an example of how to instantiate this type.
-            # The values are placeholders you should change.
-            from aws_cdk import aws_smsvoice as smsvoice
-            
-            protect_configuration_reference = smsvoice.ProtectConfigurationReference(
-                protect_configuration_arn="protectConfigurationArn",
-                protect_configuration_id="protectConfigurationId"
-            )
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__f751fa19685536627fe3dc2dbabf8ec124aaab802405a6d3177f6088af478b94)
-            check_type(argname="argument protect_configuration_arn", value=protect_configuration_arn, expected_type=type_hints["protect_configuration_arn"])
-            check_type(argname="argument protect_configuration_id", value=protect_configuration_id, expected_type=type_hints["protect_configuration_id"])
-        self._values: typing.Dict[builtins.str, typing.Any] = {
-            "protect_configuration_arn": protect_configuration_arn,
-            "protect_configuration_id": protect_configuration_id,
-        }
-
-    @builtins.property
-    def protect_configuration_arn(self) -> builtins.str:
-        '''The ARN of the ProtectConfiguration resource.'''
-        result = self._values.get("protect_configuration_arn")
-        assert result is not None, "Required property 'protect_configuration_arn' is missing"
-        return typing.cast(builtins.str, result)
-
-    @builtins.property
-    def protect_configuration_id(self) -> builtins.str:
-        '''The ProtectConfigurationId of the ProtectConfiguration resource.'''
-        result = self._values.get("protect_configuration_id")
-        assert result is not None, "Required property 'protect_configuration_id' is missing"
-        return typing.cast(builtins.str, result)
-
-    def __eq__(self, rhs: typing.Any) -> builtins.bool:
-        return isinstance(rhs, self.__class__) and rhs._values == self._values
-
-    def __ne__(self, rhs: typing.Any) -> builtins.bool:
-        return not (rhs == self)
-
-    def __repr__(self) -> str:
-        return "ProtectConfigurationReference(%s)" % ", ".join(
-            k + "=" + repr(v) for k, v in self._values.items()
-        )
-
-
-@jsii.data_type(
-    jsii_type="aws-cdk-lib.aws_smsvoice.ResourcePolicyReference",
-    jsii_struct_bases=[],
-    name_mapping={"resource_arn": "resourceArn"},
-)
-class ResourcePolicyReference:
-    def __init__(self, *, resource_arn: builtins.str) -> None:
-        '''A reference to a ResourcePolicy resource.
-
-        :param resource_arn: The ResourceArn of the ResourcePolicy resource.
-
-        :exampleMetadata: fixture=_generated
-
-        Example::
-
-            # The code below shows an example of how to instantiate this type.
-            # The values are placeholders you should change.
-            from aws_cdk import aws_smsvoice as smsvoice
-            
-            resource_policy_reference = smsvoice.ResourcePolicyReference(
-                resource_arn="resourceArn"
-            )
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__334040876bacd6c4e8f16a245c89b0d4a30c2d7ade4753cd91a3d0b8d26ab007)
-            check_type(argname="argument resource_arn", value=resource_arn, expected_type=type_hints["resource_arn"])
-        self._values: typing.Dict[builtins.str, typing.Any] = {
-            "resource_arn": resource_arn,
-        }
-
-    @builtins.property
-    def resource_arn(self) -> builtins.str:
-        '''The ResourceArn of the ResourcePolicy resource.'''
-        result = self._values.get("resource_arn")
-        assert result is not None, "Required property 'resource_arn' is missing"
-        return typing.cast(builtins.str, result)
-
-    def __eq__(self, rhs: typing.Any) -> builtins.bool:
-        return isinstance(rhs, self.__class__) and rhs._values == self._values
-
-    def __ne__(self, rhs: typing.Any) -> builtins.bool:
-        return not (rhs == self)
-
-    def __repr__(self) -> str:
-        return "ResourcePolicyReference(%s)" % ", ".join(
-            k + "=" + repr(v) for k, v in self._values.items()
-        )
-
-
-@jsii.data_type(
-    jsii_type="aws-cdk-lib.aws_smsvoice.SenderIdReference",
-    jsii_struct_bases=[],
-    name_mapping={
-        "iso_country_code": "isoCountryCode",
-        "sender_id": "senderId",
-        "sender_id_arn": "senderIdArn",
-    },
-)
-class SenderIdReference:
-    def __init__(
-        self,
-        *,
-        iso_country_code: builtins.str,
-        sender_id: builtins.str,
-        sender_id_arn: builtins.str,
-    ) -> None:
-        '''A reference to a SenderId resource.
-
-        :param iso_country_code: The IsoCountryCode of the SenderId resource.
-        :param sender_id: The SenderId of the SenderId resource.
-        :param sender_id_arn: The ARN of the SenderId resource.
-
-        :exampleMetadata: fixture=_generated
-
-        Example::
-
-            # The code below shows an example of how to instantiate this type.
-            # The values are placeholders you should change.
-            from aws_cdk import aws_smsvoice as smsvoice
-            
-            sender_id_reference = smsvoice.SenderIdReference(
-                iso_country_code="isoCountryCode",
-                sender_id="senderId",
-                sender_id_arn="senderIdArn"
-            )
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__258a8a47be22366d003909ddfc9f414a69700c407d737345d8a7ac86cf1401d8)
-            check_type(argname="argument iso_country_code", value=iso_country_code, expected_type=type_hints["iso_country_code"])
-            check_type(argname="argument sender_id", value=sender_id, expected_type=type_hints["sender_id"])
-            check_type(argname="argument sender_id_arn", value=sender_id_arn, expected_type=type_hints["sender_id_arn"])
-        self._values: typing.Dict[builtins.str, typing.Any] = {
-            "iso_country_code": iso_country_code,
-            "sender_id": sender_id,
-            "sender_id_arn": sender_id_arn,
-        }
-
-    @builtins.property
-    def iso_country_code(self) -> builtins.str:
-        '''The IsoCountryCode of the SenderId resource.'''
-        result = self._values.get("iso_country_code")
-        assert result is not None, "Required property 'iso_country_code' is missing"
-        return typing.cast(builtins.str, result)
-
-    @builtins.property
-    def sender_id(self) -> builtins.str:
-        '''The SenderId of the SenderId resource.'''
-        result = self._values.get("sender_id")
-        assert result is not None, "Required property 'sender_id' is missing"
-        return typing.cast(builtins.str, result)
-
-    @builtins.property
-    def sender_id_arn(self) -> builtins.str:
-        '''The ARN of the SenderId resource.'''
-        result = self._values.get("sender_id_arn")
-        assert result is not None, "Required property 'sender_id_arn' is missing"
-        return typing.cast(builtins.str, result)
-
-    def __eq__(self, rhs: typing.Any) -> builtins.bool:
-        return isinstance(rhs, self.__class__) and rhs._values == self._values
-
-    def __ne__(self, rhs: typing.Any) -> builtins.bool:
-        return not (rhs == self)
-
-    def __repr__(self) -> str:
-        return "SenderIdReference(%s)" % ", ".join(
-            k + "=" + repr(v) for k, v in self._values.items()
-        )
-
-
-@jsii.implements(_IInspectable_c2943556, IConfigurationSetRef, _ITaggableV2_4e6798f8)
+@jsii.implements(_IInspectable_c2943556, _IConfigurationSetRef_be3ec7c2, _ITaggableV2_4e6798f8)
 class CfnConfigurationSet(
     _CfnResource_9df397a6,
     metaclass=jsii.JSIIMeta,
@@ -1944,7 +161,8 @@ class CfnConfigurationSet(
         protect_configuration_id: typing.Optional[builtins.str] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
-        '''
+        '''Create a new ``AWS::SMSVOICE::ConfigurationSet``.
+
         :param scope: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
         :param configuration_set_name: The name of the ConfigurationSet.
@@ -1976,7 +194,7 @@ class CfnConfigurationSet(
         scope: _constructs_77d1e7e8.Construct,
         id: builtins.str,
         arn: builtins.str,
-    ) -> IConfigurationSetRef:
+    ) -> _IConfigurationSetRef_be3ec7c2:
         '''Creates a new IConfigurationSetRef from an ARN.
 
         :param scope: -
@@ -1988,7 +206,7 @@ class CfnConfigurationSet(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
-        return typing.cast(IConfigurationSetRef, jsii.sinvoke(cls, "fromConfigurationSetArn", [scope, id, arn]))
+        return typing.cast(_IConfigurationSetRef_be3ec7c2, jsii.sinvoke(cls, "fromConfigurationSetArn", [scope, id, arn]))
 
     @jsii.member(jsii_name="fromConfigurationSetName")
     @builtins.classmethod
@@ -1997,7 +215,7 @@ class CfnConfigurationSet(
         scope: _constructs_77d1e7e8.Construct,
         id: builtins.str,
         configuration_set_name: builtins.str,
-    ) -> IConfigurationSetRef:
+    ) -> _IConfigurationSetRef_be3ec7c2:
         '''Creates a new IConfigurationSetRef from a configurationSetName.
 
         :param scope: -
@@ -2009,7 +227,7 @@ class CfnConfigurationSet(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument configuration_set_name", value=configuration_set_name, expected_type=type_hints["configuration_set_name"])
-        return typing.cast(IConfigurationSetRef, jsii.sinvoke(cls, "fromConfigurationSetName", [scope, id, configuration_set_name]))
+        return typing.cast(_IConfigurationSetRef_be3ec7c2, jsii.sinvoke(cls, "fromConfigurationSetName", [scope, id, configuration_set_name]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -2063,9 +281,9 @@ class CfnConfigurationSet(
 
     @builtins.property
     @jsii.member(jsii_name="configurationSetRef")
-    def configuration_set_ref(self) -> ConfigurationSetReference:
+    def configuration_set_ref(self) -> _ConfigurationSetReference_540b1fe3:
         '''A reference to a ConfigurationSet resource.'''
-        return typing.cast(ConfigurationSetReference, jsii.get(self, "configurationSetRef"))
+        return typing.cast(_ConfigurationSetReference_540b1fe3, jsii.get(self, "configurationSetRef"))
 
     @builtins.property
     @jsii.member(jsii_name="configurationSetName")
@@ -2517,7 +735,169 @@ class CfnConfigurationSet(
             )
 
 
-@jsii.implements(_IInspectable_c2943556, IOptOutListRef, _ITaggableV2_4e6798f8)
+@jsii.data_type(
+    jsii_type="aws-cdk-lib.aws_smsvoice.CfnConfigurationSetProps",
+    jsii_struct_bases=[],
+    name_mapping={
+        "configuration_set_name": "configurationSetName",
+        "default_sender_id": "defaultSenderId",
+        "event_destinations": "eventDestinations",
+        "message_feedback_enabled": "messageFeedbackEnabled",
+        "protect_configuration_id": "protectConfigurationId",
+        "tags": "tags",
+    },
+)
+class CfnConfigurationSetProps:
+    def __init__(
+        self,
+        *,
+        configuration_set_name: typing.Optional[builtins.str] = None,
+        default_sender_id: typing.Optional[builtins.str] = None,
+        event_destinations: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnConfigurationSet.EventDestinationProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        message_feedback_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        protect_configuration_id: typing.Optional[builtins.str] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+    ) -> None:
+        '''Properties for defining a ``CfnConfigurationSet``.
+
+        :param configuration_set_name: The name of the ConfigurationSet.
+        :param default_sender_id: The default sender ID used by the ConfigurationSet.
+        :param event_destinations: An array of EventDestination objects that describe any events to log and where to log them.
+        :param message_feedback_enabled: Set to true to enable feedback for the message.
+        :param protect_configuration_id: The unique identifier for the protect configuration.
+        :param tags: An array of key and value pair tags that's associated with the new configuration set.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-smsvoice-configurationset.html
+        :exampleMetadata: fixture=_generated
+
+        Example::
+
+            # The code below shows an example of how to instantiate this type.
+            # The values are placeholders you should change.
+            from aws_cdk import aws_smsvoice as smsvoice
+            
+            cfn_configuration_set_props = smsvoice.CfnConfigurationSetProps(
+                configuration_set_name="configurationSetName",
+                default_sender_id="defaultSenderId",
+                event_destinations=[smsvoice.CfnConfigurationSet.EventDestinationProperty(
+                    enabled=False,
+                    event_destination_name="eventDestinationName",
+                    matching_event_types=["matchingEventTypes"],
+            
+                    # the properties below are optional
+                    cloud_watch_logs_destination=smsvoice.CfnConfigurationSet.CloudWatchLogsDestinationProperty(
+                        iam_role_arn="iamRoleArn",
+                        log_group_arn="logGroupArn"
+                    ),
+                    kinesis_firehose_destination=smsvoice.CfnConfigurationSet.KinesisFirehoseDestinationProperty(
+                        delivery_stream_arn="deliveryStreamArn",
+                        iam_role_arn="iamRoleArn"
+                    ),
+                    sns_destination=smsvoice.CfnConfigurationSet.SnsDestinationProperty(
+                        topic_arn="topicArn"
+                    )
+                )],
+                message_feedback_enabled=False,
+                protect_configuration_id="protectConfigurationId",
+                tags=[CfnTag(
+                    key="key",
+                    value="value"
+                )]
+            )
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__259d6b5c44c463276b6d9a529504479acbd49524ef7bd8a0d1d913ca2d1a58a3)
+            check_type(argname="argument configuration_set_name", value=configuration_set_name, expected_type=type_hints["configuration_set_name"])
+            check_type(argname="argument default_sender_id", value=default_sender_id, expected_type=type_hints["default_sender_id"])
+            check_type(argname="argument event_destinations", value=event_destinations, expected_type=type_hints["event_destinations"])
+            check_type(argname="argument message_feedback_enabled", value=message_feedback_enabled, expected_type=type_hints["message_feedback_enabled"])
+            check_type(argname="argument protect_configuration_id", value=protect_configuration_id, expected_type=type_hints["protect_configuration_id"])
+            check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
+        self._values: typing.Dict[builtins.str, typing.Any] = {}
+        if configuration_set_name is not None:
+            self._values["configuration_set_name"] = configuration_set_name
+        if default_sender_id is not None:
+            self._values["default_sender_id"] = default_sender_id
+        if event_destinations is not None:
+            self._values["event_destinations"] = event_destinations
+        if message_feedback_enabled is not None:
+            self._values["message_feedback_enabled"] = message_feedback_enabled
+        if protect_configuration_id is not None:
+            self._values["protect_configuration_id"] = protect_configuration_id
+        if tags is not None:
+            self._values["tags"] = tags
+
+    @builtins.property
+    def configuration_set_name(self) -> typing.Optional[builtins.str]:
+        '''The name of the ConfigurationSet.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-smsvoice-configurationset.html#cfn-smsvoice-configurationset-configurationsetname
+        '''
+        result = self._values.get("configuration_set_name")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def default_sender_id(self) -> typing.Optional[builtins.str]:
+        '''The default sender ID used by the ConfigurationSet.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-smsvoice-configurationset.html#cfn-smsvoice-configurationset-defaultsenderid
+        '''
+        result = self._values.get("default_sender_id")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def event_destinations(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnConfigurationSet.EventDestinationProperty]]]]:
+        '''An array of EventDestination objects that describe any events to log and where to log them.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-smsvoice-configurationset.html#cfn-smsvoice-configurationset-eventdestinations
+        '''
+        result = self._values.get("event_destinations")
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnConfigurationSet.EventDestinationProperty]]]], result)
+
+    @builtins.property
+    def message_feedback_enabled(
+        self,
+    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        '''Set to true to enable feedback for the message.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-smsvoice-configurationset.html#cfn-smsvoice-configurationset-messagefeedbackenabled
+        '''
+        result = self._values.get("message_feedback_enabled")
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+
+    @builtins.property
+    def protect_configuration_id(self) -> typing.Optional[builtins.str]:
+        '''The unique identifier for the protect configuration.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-smsvoice-configurationset.html#cfn-smsvoice-configurationset-protectconfigurationid
+        '''
+        result = self._values.get("protect_configuration_id")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+        '''An array of key and value pair tags that's associated with the new configuration set.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-smsvoice-configurationset.html#cfn-smsvoice-configurationset-tags
+        '''
+        result = self._values.get("tags")
+        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+
+    def __eq__(self, rhs: typing.Any) -> builtins.bool:
+        return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+    def __ne__(self, rhs: typing.Any) -> builtins.bool:
+        return not (rhs == self)
+
+    def __repr__(self) -> str:
+        return "CfnConfigurationSetProps(%s)" % ", ".join(
+            k + "=" + repr(v) for k, v in self._values.items()
+        )
+
+
+@jsii.implements(_IInspectable_c2943556, _IOptOutListRef_1d44f5f8, _ITaggableV2_4e6798f8)
 class CfnOptOutList(
     _CfnResource_9df397a6,
     metaclass=jsii.JSIIMeta,
@@ -2556,7 +936,8 @@ class CfnOptOutList(
         opt_out_list_name: typing.Optional[builtins.str] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
-        '''
+        '''Create a new ``AWS::SMSVOICE::OptOutList``.
+
         :param scope: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
         :param opt_out_list_name: The name of the OptOutList.
@@ -2577,7 +958,7 @@ class CfnOptOutList(
         scope: _constructs_77d1e7e8.Construct,
         id: builtins.str,
         arn: builtins.str,
-    ) -> IOptOutListRef:
+    ) -> _IOptOutListRef_1d44f5f8:
         '''Creates a new IOptOutListRef from an ARN.
 
         :param scope: -
@@ -2589,7 +970,7 @@ class CfnOptOutList(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
-        return typing.cast(IOptOutListRef, jsii.sinvoke(cls, "fromOptOutListArn", [scope, id, arn]))
+        return typing.cast(_IOptOutListRef_1d44f5f8, jsii.sinvoke(cls, "fromOptOutListArn", [scope, id, arn]))
 
     @jsii.member(jsii_name="fromOptOutListName")
     @builtins.classmethod
@@ -2598,7 +979,7 @@ class CfnOptOutList(
         scope: _constructs_77d1e7e8.Construct,
         id: builtins.str,
         opt_out_list_name: builtins.str,
-    ) -> IOptOutListRef:
+    ) -> _IOptOutListRef_1d44f5f8:
         '''Creates a new IOptOutListRef from a optOutListName.
 
         :param scope: -
@@ -2610,7 +991,7 @@ class CfnOptOutList(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument opt_out_list_name", value=opt_out_list_name, expected_type=type_hints["opt_out_list_name"])
-        return typing.cast(IOptOutListRef, jsii.sinvoke(cls, "fromOptOutListName", [scope, id, opt_out_list_name]))
+        return typing.cast(_IOptOutListRef_1d44f5f8, jsii.sinvoke(cls, "fromOptOutListName", [scope, id, opt_out_list_name]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -2664,9 +1045,9 @@ class CfnOptOutList(
 
     @builtins.property
     @jsii.member(jsii_name="optOutListRef")
-    def opt_out_list_ref(self) -> OptOutListReference:
+    def opt_out_list_ref(self) -> _OptOutListReference_e0a13902:
         '''A reference to a OptOutList resource.'''
-        return typing.cast(OptOutListReference, jsii.get(self, "optOutListRef"))
+        return typing.cast(_OptOutListReference_e0a13902, jsii.get(self, "optOutListRef"))
 
     @builtins.property
     @jsii.member(jsii_name="optOutListName")
@@ -2695,7 +1076,81 @@ class CfnOptOutList(
         jsii.set(self, "tags", value) # pyright: ignore[reportArgumentType]
 
 
-@jsii.implements(_IInspectable_c2943556, IPhoneNumberRef, _ITaggableV2_4e6798f8)
+@jsii.data_type(
+    jsii_type="aws-cdk-lib.aws_smsvoice.CfnOptOutListProps",
+    jsii_struct_bases=[],
+    name_mapping={"opt_out_list_name": "optOutListName", "tags": "tags"},
+)
+class CfnOptOutListProps:
+    def __init__(
+        self,
+        *,
+        opt_out_list_name: typing.Optional[builtins.str] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+    ) -> None:
+        '''Properties for defining a ``CfnOptOutList``.
+
+        :param opt_out_list_name: The name of the OptOutList.
+        :param tags: An array of tags (key and value pairs) to associate with the new OptOutList.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-smsvoice-optoutlist.html
+        :exampleMetadata: fixture=_generated
+
+        Example::
+
+            # The code below shows an example of how to instantiate this type.
+            # The values are placeholders you should change.
+            from aws_cdk import aws_smsvoice as smsvoice
+            
+            cfn_opt_out_list_props = smsvoice.CfnOptOutListProps(
+                opt_out_list_name="optOutListName",
+                tags=[CfnTag(
+                    key="key",
+                    value="value"
+                )]
+            )
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__05e14e4fd94b66cfd8dd4c43fcb451f3af9853476744da6a554feeac6fa9de3e)
+            check_type(argname="argument opt_out_list_name", value=opt_out_list_name, expected_type=type_hints["opt_out_list_name"])
+            check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
+        self._values: typing.Dict[builtins.str, typing.Any] = {}
+        if opt_out_list_name is not None:
+            self._values["opt_out_list_name"] = opt_out_list_name
+        if tags is not None:
+            self._values["tags"] = tags
+
+    @builtins.property
+    def opt_out_list_name(self) -> typing.Optional[builtins.str]:
+        '''The name of the OptOutList.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-smsvoice-optoutlist.html#cfn-smsvoice-optoutlist-optoutlistname
+        '''
+        result = self._values.get("opt_out_list_name")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+        '''An array of tags (key and value pairs) to associate with the new OptOutList.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-smsvoice-optoutlist.html#cfn-smsvoice-optoutlist-tags
+        '''
+        result = self._values.get("tags")
+        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+
+    def __eq__(self, rhs: typing.Any) -> builtins.bool:
+        return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+    def __ne__(self, rhs: typing.Any) -> builtins.bool:
+        return not (rhs == self)
+
+    def __repr__(self) -> str:
+        return "CfnOptOutListProps(%s)" % ", ".join(
+            k + "=" + repr(v) for k, v in self._values.items()
+        )
+
+
+@jsii.implements(_IInspectable_c2943556, _IPhoneNumberRef_7c6c9ced, _ITaggableV2_4e6798f8)
 class CfnPhoneNumber(
     _CfnResource_9df397a6,
     metaclass=jsii.JSIIMeta,
@@ -2770,7 +1225,8 @@ class CfnPhoneNumber(
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
         two_way: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnPhoneNumber.TwoWayProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
-        '''
+        '''Create a new ``AWS::SMSVOICE::PhoneNumber``.
+
         :param scope: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
         :param iso_country_code: The two-character code, in ISO 3166-1 alpha-2 format, for the country or region.
@@ -2810,7 +1266,7 @@ class CfnPhoneNumber(
         scope: _constructs_77d1e7e8.Construct,
         id: builtins.str,
         arn: builtins.str,
-    ) -> IPhoneNumberRef:
+    ) -> _IPhoneNumberRef_7c6c9ced:
         '''Creates a new IPhoneNumberRef from an ARN.
 
         :param scope: -
@@ -2822,7 +1278,7 @@ class CfnPhoneNumber(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
-        return typing.cast(IPhoneNumberRef, jsii.sinvoke(cls, "fromPhoneNumberArn", [scope, id, arn]))
+        return typing.cast(_IPhoneNumberRef_7c6c9ced, jsii.sinvoke(cls, "fromPhoneNumberArn", [scope, id, arn]))
 
     @jsii.member(jsii_name="fromPhoneNumberId")
     @builtins.classmethod
@@ -2831,7 +1287,7 @@ class CfnPhoneNumber(
         scope: _constructs_77d1e7e8.Construct,
         id: builtins.str,
         phone_number_id: builtins.str,
-    ) -> IPhoneNumberRef:
+    ) -> _IPhoneNumberRef_7c6c9ced:
         '''Creates a new IPhoneNumberRef from a phoneNumberId.
 
         :param scope: -
@@ -2843,7 +1299,7 @@ class CfnPhoneNumber(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument phone_number_id", value=phone_number_id, expected_type=type_hints["phone_number_id"])
-        return typing.cast(IPhoneNumberRef, jsii.sinvoke(cls, "fromPhoneNumberId", [scope, id, phone_number_id]))
+        return typing.cast(_IPhoneNumberRef_7c6c9ced, jsii.sinvoke(cls, "fromPhoneNumberId", [scope, id, phone_number_id]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -2915,9 +1371,9 @@ class CfnPhoneNumber(
 
     @builtins.property
     @jsii.member(jsii_name="phoneNumberRef")
-    def phone_number_ref(self) -> PhoneNumberReference:
+    def phone_number_ref(self) -> _PhoneNumberReference_c338f1b9:
         '''A reference to a PhoneNumber resource.'''
-        return typing.cast(PhoneNumberReference, jsii.get(self, "phoneNumberRef"))
+        return typing.cast(_PhoneNumberReference_c338f1b9, jsii.get(self, "phoneNumberRef"))
 
     @builtins.property
     @jsii.member(jsii_name="isoCountryCode")
@@ -3396,7 +1852,254 @@ class CfnPhoneNumber(
             )
 
 
-@jsii.implements(_IInspectable_c2943556, IPoolRef, _ITaggableV2_4e6798f8)
+@jsii.data_type(
+    jsii_type="aws-cdk-lib.aws_smsvoice.CfnPhoneNumberProps",
+    jsii_struct_bases=[],
+    name_mapping={
+        "iso_country_code": "isoCountryCode",
+        "mandatory_keywords": "mandatoryKeywords",
+        "number_capabilities": "numberCapabilities",
+        "number_type": "numberType",
+        "deletion_protection_enabled": "deletionProtectionEnabled",
+        "optional_keywords": "optionalKeywords",
+        "opt_out_list_name": "optOutListName",
+        "self_managed_opt_outs_enabled": "selfManagedOptOutsEnabled",
+        "tags": "tags",
+        "two_way": "twoWay",
+    },
+)
+class CfnPhoneNumberProps:
+    def __init__(
+        self,
+        *,
+        iso_country_code: builtins.str,
+        mandatory_keywords: typing.Union[_IResolvable_da3f097b, typing.Union[CfnPhoneNumber.MandatoryKeywordsProperty, typing.Dict[builtins.str, typing.Any]]],
+        number_capabilities: typing.Sequence[builtins.str],
+        number_type: builtins.str,
+        deletion_protection_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        optional_keywords: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnPhoneNumber.OptionalKeywordProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        opt_out_list_name: typing.Optional[builtins.str] = None,
+        self_managed_opt_outs_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        two_way: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnPhoneNumber.TwoWayProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    ) -> None:
+        '''Properties for defining a ``CfnPhoneNumber``.
+
+        :param iso_country_code: The two-character code, in ISO 3166-1 alpha-2 format, for the country or region.
+        :param mandatory_keywords: Creates or updates a ``MandatoryKeyword`` configuration on an origination phone number For more information, see `Keywords <https://docs.aws.amazon.com/sms-voice/latest/userguide/keywords.html>`_ in the End User Messaging User Guide.
+        :param number_capabilities: Indicates if the phone number will be used for text messages, voice messages, or both.
+        :param number_type: The type of phone number to request. .. epigraph:: The ``ShortCode`` number type is not supported in AWS CloudFormation .
+        :param deletion_protection_enabled: By default this is set to false. When set to true the phone number can't be deleted.
+        :param optional_keywords: A keyword is a word that you can search for on a particular phone number or pool. It is also a specific word or phrase that an end user can send to your number to elicit a response, such as an informational message or a special offer. When your number receives a message that begins with a keyword, End User Messaging responds with a customizable message. Optional keywords are differentiated from mandatory keywords. For more information, see `Keywords <https://docs.aws.amazon.com/sms-voice/latest/userguide/keywords.html>`_ in the End User Messaging User Guide.
+        :param opt_out_list_name: The name of the OptOutList associated with the phone number.
+        :param self_managed_opt_outs_enabled: When set to false and an end recipient sends a message that begins with HELP or STOP to one of your dedicated numbers, End User Messaging automatically replies with a customizable message and adds the end recipient to the OptOutList. When set to true you're responsible for responding to HELP and STOP requests. You're also responsible for tracking and honoring opt-out request. For more information see `Self-managed opt-outs <https://docs.aws.amazon.com/sms-voice/latest/userguide/opt-out-list-self-managed.html>`_
+        :param tags: An array of tags (key and value pairs) to associate with the requested phone number.
+        :param two_way: Describes the two-way SMS configuration for a phone number. For more information, see `Two-way SMS messaging <https://docs.aws.amazon.com/sms-voice/latest/userguide/two-way-sms.html>`_ in the End User Messaging User Guide.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-smsvoice-phonenumber.html
+        :exampleMetadata: fixture=_generated
+
+        Example::
+
+            # The code below shows an example of how to instantiate this type.
+            # The values are placeholders you should change.
+            from aws_cdk import aws_smsvoice as smsvoice
+            
+            cfn_phone_number_props = smsvoice.CfnPhoneNumberProps(
+                iso_country_code="isoCountryCode",
+                mandatory_keywords=smsvoice.CfnPhoneNumber.MandatoryKeywordsProperty(
+                    help=smsvoice.CfnPhoneNumber.MandatoryKeywordProperty(
+                        message="message"
+                    ),
+                    stop=smsvoice.CfnPhoneNumber.MandatoryKeywordProperty(
+                        message="message"
+                    )
+                ),
+                number_capabilities=["numberCapabilities"],
+                number_type="numberType",
+            
+                # the properties below are optional
+                deletion_protection_enabled=False,
+                optional_keywords=[smsvoice.CfnPhoneNumber.OptionalKeywordProperty(
+                    action="action",
+                    keyword="keyword",
+                    message="message"
+                )],
+                opt_out_list_name="optOutListName",
+                self_managed_opt_outs_enabled=False,
+                tags=[CfnTag(
+                    key="key",
+                    value="value"
+                )],
+                two_way=smsvoice.CfnPhoneNumber.TwoWayProperty(
+                    enabled=False,
+            
+                    # the properties below are optional
+                    channel_arn="channelArn",
+                    channel_role="channelRole"
+                )
+            )
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__b70b72342e4afd37b29a5920f6cf7f0c27b8afc2a3cf6820cba50a42c515dbed)
+            check_type(argname="argument iso_country_code", value=iso_country_code, expected_type=type_hints["iso_country_code"])
+            check_type(argname="argument mandatory_keywords", value=mandatory_keywords, expected_type=type_hints["mandatory_keywords"])
+            check_type(argname="argument number_capabilities", value=number_capabilities, expected_type=type_hints["number_capabilities"])
+            check_type(argname="argument number_type", value=number_type, expected_type=type_hints["number_type"])
+            check_type(argname="argument deletion_protection_enabled", value=deletion_protection_enabled, expected_type=type_hints["deletion_protection_enabled"])
+            check_type(argname="argument optional_keywords", value=optional_keywords, expected_type=type_hints["optional_keywords"])
+            check_type(argname="argument opt_out_list_name", value=opt_out_list_name, expected_type=type_hints["opt_out_list_name"])
+            check_type(argname="argument self_managed_opt_outs_enabled", value=self_managed_opt_outs_enabled, expected_type=type_hints["self_managed_opt_outs_enabled"])
+            check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
+            check_type(argname="argument two_way", value=two_way, expected_type=type_hints["two_way"])
+        self._values: typing.Dict[builtins.str, typing.Any] = {
+            "iso_country_code": iso_country_code,
+            "mandatory_keywords": mandatory_keywords,
+            "number_capabilities": number_capabilities,
+            "number_type": number_type,
+        }
+        if deletion_protection_enabled is not None:
+            self._values["deletion_protection_enabled"] = deletion_protection_enabled
+        if optional_keywords is not None:
+            self._values["optional_keywords"] = optional_keywords
+        if opt_out_list_name is not None:
+            self._values["opt_out_list_name"] = opt_out_list_name
+        if self_managed_opt_outs_enabled is not None:
+            self._values["self_managed_opt_outs_enabled"] = self_managed_opt_outs_enabled
+        if tags is not None:
+            self._values["tags"] = tags
+        if two_way is not None:
+            self._values["two_way"] = two_way
+
+    @builtins.property
+    def iso_country_code(self) -> builtins.str:
+        '''The two-character code, in ISO 3166-1 alpha-2 format, for the country or region.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-smsvoice-phonenumber.html#cfn-smsvoice-phonenumber-isocountrycode
+        '''
+        result = self._values.get("iso_country_code")
+        assert result is not None, "Required property 'iso_country_code' is missing"
+        return typing.cast(builtins.str, result)
+
+    @builtins.property
+    def mandatory_keywords(
+        self,
+    ) -> typing.Union[_IResolvable_da3f097b, CfnPhoneNumber.MandatoryKeywordsProperty]:
+        '''Creates or updates a ``MandatoryKeyword`` configuration on an origination phone number For more information, see `Keywords <https://docs.aws.amazon.com/sms-voice/latest/userguide/keywords.html>`_ in the End User Messaging  User Guide.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-smsvoice-phonenumber.html#cfn-smsvoice-phonenumber-mandatorykeywords
+        '''
+        result = self._values.get("mandatory_keywords")
+        assert result is not None, "Required property 'mandatory_keywords' is missing"
+        return typing.cast(typing.Union[_IResolvable_da3f097b, CfnPhoneNumber.MandatoryKeywordsProperty], result)
+
+    @builtins.property
+    def number_capabilities(self) -> typing.List[builtins.str]:
+        '''Indicates if the phone number will be used for text messages, voice messages, or both.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-smsvoice-phonenumber.html#cfn-smsvoice-phonenumber-numbercapabilities
+        '''
+        result = self._values.get("number_capabilities")
+        assert result is not None, "Required property 'number_capabilities' is missing"
+        return typing.cast(typing.List[builtins.str], result)
+
+    @builtins.property
+    def number_type(self) -> builtins.str:
+        '''The type of phone number to request.
+
+        .. epigraph::
+
+           The ``ShortCode`` number type is not supported in AWS CloudFormation .
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-smsvoice-phonenumber.html#cfn-smsvoice-phonenumber-numbertype
+        '''
+        result = self._values.get("number_type")
+        assert result is not None, "Required property 'number_type' is missing"
+        return typing.cast(builtins.str, result)
+
+    @builtins.property
+    def deletion_protection_enabled(
+        self,
+    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        '''By default this is set to false.
+
+        When set to true the phone number can't be deleted.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-smsvoice-phonenumber.html#cfn-smsvoice-phonenumber-deletionprotectionenabled
+        '''
+        result = self._values.get("deletion_protection_enabled")
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+
+    @builtins.property
+    def optional_keywords(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnPhoneNumber.OptionalKeywordProperty]]]]:
+        '''A keyword is a word that you can search for on a particular phone number or pool.
+
+        It is also a specific word or phrase that an end user can send to your number to elicit a response, such as an informational message or a special offer. When your number receives a message that begins with a keyword, End User Messaging  responds with a customizable message. Optional keywords are differentiated from mandatory keywords. For more information, see `Keywords <https://docs.aws.amazon.com/sms-voice/latest/userguide/keywords.html>`_ in the End User Messaging  User Guide.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-smsvoice-phonenumber.html#cfn-smsvoice-phonenumber-optionalkeywords
+        '''
+        result = self._values.get("optional_keywords")
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnPhoneNumber.OptionalKeywordProperty]]]], result)
+
+    @builtins.property
+    def opt_out_list_name(self) -> typing.Optional[builtins.str]:
+        '''The name of the OptOutList associated with the phone number.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-smsvoice-phonenumber.html#cfn-smsvoice-phonenumber-optoutlistname
+        '''
+        result = self._values.get("opt_out_list_name")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def self_managed_opt_outs_enabled(
+        self,
+    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        '''When set to false and an end recipient sends a message that begins with HELP or STOP to one of your dedicated numbers, End User Messaging  automatically replies with a customizable message and adds the end recipient to the OptOutList.
+
+        When set to true you're responsible for responding to HELP and STOP requests. You're also responsible for tracking and honoring opt-out request. For more information see `Self-managed opt-outs <https://docs.aws.amazon.com/sms-voice/latest/userguide/opt-out-list-self-managed.html>`_
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-smsvoice-phonenumber.html#cfn-smsvoice-phonenumber-selfmanagedoptoutsenabled
+        '''
+        result = self._values.get("self_managed_opt_outs_enabled")
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+
+    @builtins.property
+    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+        '''An array of tags (key and value pairs) to associate with the requested phone number.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-smsvoice-phonenumber.html#cfn-smsvoice-phonenumber-tags
+        '''
+        result = self._values.get("tags")
+        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+
+    @builtins.property
+    def two_way(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnPhoneNumber.TwoWayProperty]]:
+        '''Describes the two-way SMS configuration for a phone number.
+
+        For more information, see `Two-way SMS messaging <https://docs.aws.amazon.com/sms-voice/latest/userguide/two-way-sms.html>`_ in the End User Messaging  User Guide.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-smsvoice-phonenumber.html#cfn-smsvoice-phonenumber-twoway
+        '''
+        result = self._values.get("two_way")
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnPhoneNumber.TwoWayProperty]], result)
+
+    def __eq__(self, rhs: typing.Any) -> builtins.bool:
+        return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+    def __ne__(self, rhs: typing.Any) -> builtins.bool:
+        return not (rhs == self)
+
+    def __repr__(self) -> str:
+        return "CfnPhoneNumberProps(%s)" % ", ".join(
+            k + "=" + repr(v) for k, v in self._values.items()
+        )
+
+
+@jsii.implements(_IInspectable_c2943556, _IPoolRef_897848fa, _ITaggableV2_4e6798f8)
 class CfnPool(
     _CfnResource_9df397a6,
     metaclass=jsii.JSIIMeta,
@@ -3470,7 +2173,8 @@ class CfnPool(
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
         two_way: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnPool.TwoWayProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
-        '''
+        '''Create a new ``AWS::SMSVOICE::Pool``.
+
         :param scope: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
         :param mandatory_keywords: Creates or updates the pool's ``MandatoryKeyword`` configuration. For more information, see `Keywords <https://docs.aws.amazon.com/sms-voice/latest/userguide/keywords.html>`_ in the End User Messaging User Guide.
@@ -3508,7 +2212,7 @@ class CfnPool(
         scope: _constructs_77d1e7e8.Construct,
         id: builtins.str,
         arn: builtins.str,
-    ) -> IPoolRef:
+    ) -> _IPoolRef_897848fa:
         '''Creates a new IPoolRef from an ARN.
 
         :param scope: -
@@ -3520,7 +2224,7 @@ class CfnPool(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
-        return typing.cast(IPoolRef, jsii.sinvoke(cls, "fromPoolArn", [scope, id, arn]))
+        return typing.cast(_IPoolRef_897848fa, jsii.sinvoke(cls, "fromPoolArn", [scope, id, arn]))
 
     @jsii.member(jsii_name="fromPoolId")
     @builtins.classmethod
@@ -3529,7 +2233,7 @@ class CfnPool(
         scope: _constructs_77d1e7e8.Construct,
         id: builtins.str,
         pool_id: builtins.str,
-    ) -> IPoolRef:
+    ) -> _IPoolRef_897848fa:
         '''Creates a new IPoolRef from a poolId.
 
         :param scope: -
@@ -3541,7 +2245,7 @@ class CfnPool(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument pool_id", value=pool_id, expected_type=type_hints["pool_id"])
-        return typing.cast(IPoolRef, jsii.sinvoke(cls, "fromPoolId", [scope, id, pool_id]))
+        return typing.cast(_IPoolRef_897848fa, jsii.sinvoke(cls, "fromPoolId", [scope, id, pool_id]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -3604,9 +2308,9 @@ class CfnPool(
 
     @builtins.property
     @jsii.member(jsii_name="poolRef")
-    def pool_ref(self) -> PoolReference:
+    def pool_ref(self) -> _PoolReference_a27a62c2:
         '''A reference to a Pool resource.'''
-        return typing.cast(PoolReference, jsii.get(self, "poolRef"))
+        return typing.cast(_PoolReference_a27a62c2, jsii.get(self, "poolRef"))
 
     @builtins.property
     @jsii.member(jsii_name="mandatoryKeywords")
@@ -4077,7 +2781,243 @@ class CfnPool(
             )
 
 
-@jsii.implements(_IInspectable_c2943556, IProtectConfigurationRef, _ITaggableV2_4e6798f8)
+@jsii.data_type(
+    jsii_type="aws-cdk-lib.aws_smsvoice.CfnPoolProps",
+    jsii_struct_bases=[],
+    name_mapping={
+        "mandatory_keywords": "mandatoryKeywords",
+        "origination_identities": "originationIdentities",
+        "deletion_protection_enabled": "deletionProtectionEnabled",
+        "optional_keywords": "optionalKeywords",
+        "opt_out_list_name": "optOutListName",
+        "self_managed_opt_outs_enabled": "selfManagedOptOutsEnabled",
+        "shared_routes_enabled": "sharedRoutesEnabled",
+        "tags": "tags",
+        "two_way": "twoWay",
+    },
+)
+class CfnPoolProps:
+    def __init__(
+        self,
+        *,
+        mandatory_keywords: typing.Union[_IResolvable_da3f097b, typing.Union[CfnPool.MandatoryKeywordsProperty, typing.Dict[builtins.str, typing.Any]]],
+        origination_identities: typing.Sequence[builtins.str],
+        deletion_protection_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        optional_keywords: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnPool.OptionalKeywordProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        opt_out_list_name: typing.Optional[builtins.str] = None,
+        self_managed_opt_outs_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        shared_routes_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        two_way: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnPool.TwoWayProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    ) -> None:
+        '''Properties for defining a ``CfnPool``.
+
+        :param mandatory_keywords: Creates or updates the pool's ``MandatoryKeyword`` configuration. For more information, see `Keywords <https://docs.aws.amazon.com/sms-voice/latest/userguide/keywords.html>`_ in the End User Messaging User Guide.
+        :param origination_identities: The list of origination identities to apply to the pool, either ``PhoneNumberArn`` or ``SenderIdArn`` . For more information, see `Registrations <https://docs.aws.amazon.com/sms-voice/latest/userguide/registrations.html>`_ in the End User Messaging User Guide. .. epigraph:: If you are using a shared End User Messaging resource then you must use the full Amazon Resource Name (ARN).
+        :param deletion_protection_enabled: When set to true the pool can't be deleted.
+        :param optional_keywords: Specifies any optional keywords to associate with the pool. For more information, see `Keywords <https://docs.aws.amazon.com/sms-voice/latest/userguide/keywords.html>`_ in the End User Messaging User Guide.
+        :param opt_out_list_name: The name of the OptOutList associated with the pool.
+        :param self_managed_opt_outs_enabled: When set to false, an end recipient sends a message that begins with HELP or STOP to one of your dedicated numbers, End User Messaging automatically replies with a customizable message and adds the end recipient to the OptOutList. When set to true you're responsible for responding to HELP and STOP requests. You're also responsible for tracking and honoring opt-out requests. For more information see `Self-managed opt-outs <https://docs.aws.amazon.com//pinpoint/latest/userguide/settings-sms-managing.html#settings-account-sms-self-managed-opt-out>`_
+        :param shared_routes_enabled: Allows you to enable shared routes on your pool. By default, this is set to ``False`` . If you set this value to ``True`` , your messages are sent using phone numbers or sender IDs (depending on the country) that are shared with other users. In some countries, such as the United States, senders aren't allowed to use shared routes and must use a dedicated phone number or short code.
+        :param tags: An array of tags (key and value pairs) associated with the pool.
+        :param two_way: Describes the two-way SMS configuration for a phone number. For more information, see `Two-way SMS messaging <https://docs.aws.amazon.com/sms-voice/latest/userguide/two-way-sms.html>`_ in the End User Messaging User Guide.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-smsvoice-pool.html
+        :exampleMetadata: fixture=_generated
+
+        Example::
+
+            # The code below shows an example of how to instantiate this type.
+            # The values are placeholders you should change.
+            from aws_cdk import aws_smsvoice as smsvoice
+            
+            cfn_pool_props = smsvoice.CfnPoolProps(
+                mandatory_keywords=smsvoice.CfnPool.MandatoryKeywordsProperty(
+                    help=smsvoice.CfnPool.MandatoryKeywordProperty(
+                        message="message"
+                    ),
+                    stop=smsvoice.CfnPool.MandatoryKeywordProperty(
+                        message="message"
+                    )
+                ),
+                origination_identities=["originationIdentities"],
+            
+                # the properties below are optional
+                deletion_protection_enabled=False,
+                optional_keywords=[smsvoice.CfnPool.OptionalKeywordProperty(
+                    action="action",
+                    keyword="keyword",
+                    message="message"
+                )],
+                opt_out_list_name="optOutListName",
+                self_managed_opt_outs_enabled=False,
+                shared_routes_enabled=False,
+                tags=[CfnTag(
+                    key="key",
+                    value="value"
+                )],
+                two_way=smsvoice.CfnPool.TwoWayProperty(
+                    enabled=False,
+            
+                    # the properties below are optional
+                    channel_arn="channelArn",
+                    channel_role="channelRole"
+                )
+            )
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__9949eaef09160ab08c0556130c6a54f66b5bab92951d0608bd8f05d3071a5abd)
+            check_type(argname="argument mandatory_keywords", value=mandatory_keywords, expected_type=type_hints["mandatory_keywords"])
+            check_type(argname="argument origination_identities", value=origination_identities, expected_type=type_hints["origination_identities"])
+            check_type(argname="argument deletion_protection_enabled", value=deletion_protection_enabled, expected_type=type_hints["deletion_protection_enabled"])
+            check_type(argname="argument optional_keywords", value=optional_keywords, expected_type=type_hints["optional_keywords"])
+            check_type(argname="argument opt_out_list_name", value=opt_out_list_name, expected_type=type_hints["opt_out_list_name"])
+            check_type(argname="argument self_managed_opt_outs_enabled", value=self_managed_opt_outs_enabled, expected_type=type_hints["self_managed_opt_outs_enabled"])
+            check_type(argname="argument shared_routes_enabled", value=shared_routes_enabled, expected_type=type_hints["shared_routes_enabled"])
+            check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
+            check_type(argname="argument two_way", value=two_way, expected_type=type_hints["two_way"])
+        self._values: typing.Dict[builtins.str, typing.Any] = {
+            "mandatory_keywords": mandatory_keywords,
+            "origination_identities": origination_identities,
+        }
+        if deletion_protection_enabled is not None:
+            self._values["deletion_protection_enabled"] = deletion_protection_enabled
+        if optional_keywords is not None:
+            self._values["optional_keywords"] = optional_keywords
+        if opt_out_list_name is not None:
+            self._values["opt_out_list_name"] = opt_out_list_name
+        if self_managed_opt_outs_enabled is not None:
+            self._values["self_managed_opt_outs_enabled"] = self_managed_opt_outs_enabled
+        if shared_routes_enabled is not None:
+            self._values["shared_routes_enabled"] = shared_routes_enabled
+        if tags is not None:
+            self._values["tags"] = tags
+        if two_way is not None:
+            self._values["two_way"] = two_way
+
+    @builtins.property
+    def mandatory_keywords(
+        self,
+    ) -> typing.Union[_IResolvable_da3f097b, CfnPool.MandatoryKeywordsProperty]:
+        '''Creates or updates the pool's ``MandatoryKeyword`` configuration.
+
+        For more information, see `Keywords <https://docs.aws.amazon.com/sms-voice/latest/userguide/keywords.html>`_ in the End User Messaging  User Guide.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-smsvoice-pool.html#cfn-smsvoice-pool-mandatorykeywords
+        '''
+        result = self._values.get("mandatory_keywords")
+        assert result is not None, "Required property 'mandatory_keywords' is missing"
+        return typing.cast(typing.Union[_IResolvable_da3f097b, CfnPool.MandatoryKeywordsProperty], result)
+
+    @builtins.property
+    def origination_identities(self) -> typing.List[builtins.str]:
+        '''The list of origination identities to apply to the pool, either ``PhoneNumberArn`` or ``SenderIdArn`` .
+
+        For more information, see `Registrations <https://docs.aws.amazon.com/sms-voice/latest/userguide/registrations.html>`_ in the End User Messaging  User Guide.
+        .. epigraph::
+
+           If you are using a shared End User Messaging  resource then you must use the full Amazon Resource Name (ARN).
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-smsvoice-pool.html#cfn-smsvoice-pool-originationidentities
+        '''
+        result = self._values.get("origination_identities")
+        assert result is not None, "Required property 'origination_identities' is missing"
+        return typing.cast(typing.List[builtins.str], result)
+
+    @builtins.property
+    def deletion_protection_enabled(
+        self,
+    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        '''When set to true the pool can't be deleted.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-smsvoice-pool.html#cfn-smsvoice-pool-deletionprotectionenabled
+        '''
+        result = self._values.get("deletion_protection_enabled")
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+
+    @builtins.property
+    def optional_keywords(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnPool.OptionalKeywordProperty]]]]:
+        '''Specifies any optional keywords to associate with the pool.
+
+        For more information, see `Keywords <https://docs.aws.amazon.com/sms-voice/latest/userguide/keywords.html>`_ in the End User Messaging  User Guide.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-smsvoice-pool.html#cfn-smsvoice-pool-optionalkeywords
+        '''
+        result = self._values.get("optional_keywords")
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnPool.OptionalKeywordProperty]]]], result)
+
+    @builtins.property
+    def opt_out_list_name(self) -> typing.Optional[builtins.str]:
+        '''The name of the OptOutList associated with the pool.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-smsvoice-pool.html#cfn-smsvoice-pool-optoutlistname
+        '''
+        result = self._values.get("opt_out_list_name")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def self_managed_opt_outs_enabled(
+        self,
+    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        '''When set to false, an end recipient sends a message that begins with HELP or STOP to one of your dedicated numbers, End User Messaging  automatically replies with a customizable message and adds the end recipient to the OptOutList.
+
+        When set to true you're responsible for responding to HELP and STOP requests. You're also responsible for tracking and honoring opt-out requests. For more information see `Self-managed opt-outs <https://docs.aws.amazon.com//pinpoint/latest/userguide/settings-sms-managing.html#settings-account-sms-self-managed-opt-out>`_
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-smsvoice-pool.html#cfn-smsvoice-pool-selfmanagedoptoutsenabled
+        '''
+        result = self._values.get("self_managed_opt_outs_enabled")
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+
+    @builtins.property
+    def shared_routes_enabled(
+        self,
+    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        '''Allows you to enable shared routes on your pool.
+
+        By default, this is set to ``False`` . If you set this value to ``True`` , your messages are sent using phone numbers or sender IDs (depending on the country) that are shared with other users. In some countries, such as the United States, senders aren't allowed to use shared routes and must use a dedicated phone number or short code.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-smsvoice-pool.html#cfn-smsvoice-pool-sharedroutesenabled
+        '''
+        result = self._values.get("shared_routes_enabled")
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+
+    @builtins.property
+    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+        '''An array of tags (key and value pairs) associated with the pool.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-smsvoice-pool.html#cfn-smsvoice-pool-tags
+        '''
+        result = self._values.get("tags")
+        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+
+    @builtins.property
+    def two_way(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnPool.TwoWayProperty]]:
+        '''Describes the two-way SMS configuration for a phone number.
+
+        For more information, see `Two-way SMS messaging <https://docs.aws.amazon.com/sms-voice/latest/userguide/two-way-sms.html>`_ in the End User Messaging  User Guide.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-smsvoice-pool.html#cfn-smsvoice-pool-twoway
+        '''
+        result = self._values.get("two_way")
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnPool.TwoWayProperty]], result)
+
+    def __eq__(self, rhs: typing.Any) -> builtins.bool:
+        return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+    def __ne__(self, rhs: typing.Any) -> builtins.bool:
+        return not (rhs == self)
+
+    def __repr__(self) -> str:
+        return "CfnPoolProps(%s)" % ", ".join(
+            k + "=" + repr(v) for k, v in self._values.items()
+        )
+
+
+@jsii.implements(_IInspectable_c2943556, _IProtectConfigurationRef_e1ab5693, _ITaggableV2_4e6798f8)
 class CfnProtectConfiguration(
     _CfnResource_9df397a6,
     metaclass=jsii.JSIIMeta,
@@ -4129,7 +3069,8 @@ class CfnProtectConfiguration(
         deletion_protection_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
-        '''
+        '''Create a new ``AWS::SMSVOICE::ProtectConfiguration``.
+
         :param scope: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
         :param country_rule_set: The set of ``CountryRules`` you specify to control which countries End User Messaging can send your messages to.
@@ -4155,7 +3096,7 @@ class CfnProtectConfiguration(
         scope: _constructs_77d1e7e8.Construct,
         id: builtins.str,
         arn: builtins.str,
-    ) -> IProtectConfigurationRef:
+    ) -> _IProtectConfigurationRef_e1ab5693:
         '''Creates a new IProtectConfigurationRef from an ARN.
 
         :param scope: -
@@ -4167,7 +3108,7 @@ class CfnProtectConfiguration(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
-        return typing.cast(IProtectConfigurationRef, jsii.sinvoke(cls, "fromProtectConfigurationArn", [scope, id, arn]))
+        return typing.cast(_IProtectConfigurationRef_e1ab5693, jsii.sinvoke(cls, "fromProtectConfigurationArn", [scope, id, arn]))
 
     @jsii.member(jsii_name="fromProtectConfigurationId")
     @builtins.classmethod
@@ -4176,7 +3117,7 @@ class CfnProtectConfiguration(
         scope: _constructs_77d1e7e8.Construct,
         id: builtins.str,
         protect_configuration_id: builtins.str,
-    ) -> IProtectConfigurationRef:
+    ) -> _IProtectConfigurationRef_e1ab5693:
         '''Creates a new IProtectConfigurationRef from a protectConfigurationId.
 
         :param scope: -
@@ -4188,7 +3129,7 @@ class CfnProtectConfiguration(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument protect_configuration_id", value=protect_configuration_id, expected_type=type_hints["protect_configuration_id"])
-        return typing.cast(IProtectConfigurationRef, jsii.sinvoke(cls, "fromProtectConfigurationId", [scope, id, protect_configuration_id]))
+        return typing.cast(_IProtectConfigurationRef_e1ab5693, jsii.sinvoke(cls, "fromProtectConfigurationId", [scope, id, protect_configuration_id]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -4251,9 +3192,9 @@ class CfnProtectConfiguration(
 
     @builtins.property
     @jsii.member(jsii_name="protectConfigurationRef")
-    def protect_configuration_ref(self) -> ProtectConfigurationReference:
+    def protect_configuration_ref(self) -> _ProtectConfigurationReference_c0c38d05:
         '''A reference to a ProtectConfiguration resource.'''
-        return typing.cast(ProtectConfigurationReference, jsii.get(self, "protectConfigurationRef"))
+        return typing.cast(_ProtectConfigurationReference_c0c38d05, jsii.get(self, "protectConfigurationRef"))
 
     @builtins.property
     @jsii.member(jsii_name="countryRuleSet")
@@ -4487,7 +3428,119 @@ class CfnProtectConfiguration(
             )
 
 
-@jsii.implements(_IInspectable_c2943556, IResourcePolicyRef)
+@jsii.data_type(
+    jsii_type="aws-cdk-lib.aws_smsvoice.CfnProtectConfigurationProps",
+    jsii_struct_bases=[],
+    name_mapping={
+        "country_rule_set": "countryRuleSet",
+        "deletion_protection_enabled": "deletionProtectionEnabled",
+        "tags": "tags",
+    },
+)
+class CfnProtectConfigurationProps:
+    def __init__(
+        self,
+        *,
+        country_rule_set: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnProtectConfiguration.CountryRuleSetProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        deletion_protection_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+    ) -> None:
+        '''Properties for defining a ``CfnProtectConfiguration``.
+
+        :param country_rule_set: The set of ``CountryRules`` you specify to control which countries End User Messaging can send your messages to.
+        :param deletion_protection_enabled: The status of deletion protection for the protect configuration. When set to true deletion protection is enabled. By default this is set to false.
+        :param tags: An array of key and value pair tags that are associated with the resource.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-smsvoice-protectconfiguration.html
+        :exampleMetadata: fixture=_generated
+
+        Example::
+
+            # The code below shows an example of how to instantiate this type.
+            # The values are placeholders you should change.
+            from aws_cdk import aws_smsvoice as smsvoice
+            
+            cfn_protect_configuration_props = smsvoice.CfnProtectConfigurationProps(
+                country_rule_set=smsvoice.CfnProtectConfiguration.CountryRuleSetProperty(
+                    mms=[smsvoice.CfnProtectConfiguration.CountryRuleProperty(
+                        country_code="countryCode",
+                        protect_status="protectStatus"
+                    )],
+                    sms=[smsvoice.CfnProtectConfiguration.CountryRuleProperty(
+                        country_code="countryCode",
+                        protect_status="protectStatus"
+                    )],
+                    voice=[smsvoice.CfnProtectConfiguration.CountryRuleProperty(
+                        country_code="countryCode",
+                        protect_status="protectStatus"
+                    )]
+                ),
+                deletion_protection_enabled=False,
+                tags=[CfnTag(
+                    key="key",
+                    value="value"
+                )]
+            )
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__78062d029c984e0fa8e4c182345051e18cb19671a3a88fec3a04ea748b2d3ea8)
+            check_type(argname="argument country_rule_set", value=country_rule_set, expected_type=type_hints["country_rule_set"])
+            check_type(argname="argument deletion_protection_enabled", value=deletion_protection_enabled, expected_type=type_hints["deletion_protection_enabled"])
+            check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
+        self._values: typing.Dict[builtins.str, typing.Any] = {}
+        if country_rule_set is not None:
+            self._values["country_rule_set"] = country_rule_set
+        if deletion_protection_enabled is not None:
+            self._values["deletion_protection_enabled"] = deletion_protection_enabled
+        if tags is not None:
+            self._values["tags"] = tags
+
+    @builtins.property
+    def country_rule_set(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnProtectConfiguration.CountryRuleSetProperty]]:
+        '''The set of ``CountryRules`` you specify to control which countries End User Messaging  can send your messages to.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-smsvoice-protectconfiguration.html#cfn-smsvoice-protectconfiguration-countryruleset
+        '''
+        result = self._values.get("country_rule_set")
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnProtectConfiguration.CountryRuleSetProperty]], result)
+
+    @builtins.property
+    def deletion_protection_enabled(
+        self,
+    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        '''The status of deletion protection for the protect configuration.
+
+        When set to true deletion protection is enabled. By default this is set to false.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-smsvoice-protectconfiguration.html#cfn-smsvoice-protectconfiguration-deletionprotectionenabled
+        '''
+        result = self._values.get("deletion_protection_enabled")
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+
+    @builtins.property
+    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+        '''An array of key and value pair tags that are associated with the resource.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-smsvoice-protectconfiguration.html#cfn-smsvoice-protectconfiguration-tags
+        '''
+        result = self._values.get("tags")
+        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+
+    def __eq__(self, rhs: typing.Any) -> builtins.bool:
+        return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+    def __ne__(self, rhs: typing.Any) -> builtins.bool:
+        return not (rhs == self)
+
+    def __repr__(self) -> str:
+        return "CfnProtectConfigurationProps(%s)" % ", ".join(
+            k + "=" + repr(v) for k, v in self._values.items()
+        )
+
+
+@jsii.implements(_IInspectable_c2943556, _IResourcePolicyRef_99a2534c)
 class CfnResourcePolicy(
     _CfnResource_9df397a6,
     metaclass=jsii.JSIIMeta,
@@ -4523,7 +3576,8 @@ class CfnResourcePolicy(
         policy_document: typing.Any,
         resource_arn: builtins.str,
     ) -> None:
-        '''
+        '''Create a new ``AWS::SMSVOICE::ResourcePolicy``.
+
         :param scope: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
         :param policy_document: The JSON formatted resource-based policy to attach.
@@ -4576,9 +3630,9 @@ class CfnResourcePolicy(
 
     @builtins.property
     @jsii.member(jsii_name="resourcePolicyRef")
-    def resource_policy_ref(self) -> ResourcePolicyReference:
+    def resource_policy_ref(self) -> _ResourcePolicyReference_b377e19e:
         '''A reference to a ResourcePolicy resource.'''
-        return typing.cast(ResourcePolicyReference, jsii.get(self, "resourcePolicyRef"))
+        return typing.cast(_ResourcePolicyReference_b377e19e, jsii.get(self, "resourcePolicyRef"))
 
     @builtins.property
     @jsii.member(jsii_name="policyDocument")
@@ -4607,7 +3661,81 @@ class CfnResourcePolicy(
         jsii.set(self, "resourceArn", value) # pyright: ignore[reportArgumentType]
 
 
-@jsii.implements(_IInspectable_c2943556, ISenderIdRef, _ITaggableV2_4e6798f8)
+@jsii.data_type(
+    jsii_type="aws-cdk-lib.aws_smsvoice.CfnResourcePolicyProps",
+    jsii_struct_bases=[],
+    name_mapping={"policy_document": "policyDocument", "resource_arn": "resourceArn"},
+)
+class CfnResourcePolicyProps:
+    def __init__(
+        self,
+        *,
+        policy_document: typing.Any,
+        resource_arn: builtins.str,
+    ) -> None:
+        '''Properties for defining a ``CfnResourcePolicy``.
+
+        :param policy_document: The JSON formatted resource-based policy to attach.
+        :param resource_arn: The Amazon Resource Name (ARN) of the End User Messaging resource attached to the resource-based policy.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-smsvoice-resourcepolicy.html
+        :exampleMetadata: fixture=_generated
+
+        Example::
+
+            # The code below shows an example of how to instantiate this type.
+            # The values are placeholders you should change.
+            from aws_cdk import aws_smsvoice as smsvoice
+            
+            # policy_document: Any
+            
+            cfn_resource_policy_props = smsvoice.CfnResourcePolicyProps(
+                policy_document=policy_document,
+                resource_arn="resourceArn"
+            )
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__52e1771fac2c1d0d2462745e3a14b0f3c7951b49866b77d8397eb55313b71662)
+            check_type(argname="argument policy_document", value=policy_document, expected_type=type_hints["policy_document"])
+            check_type(argname="argument resource_arn", value=resource_arn, expected_type=type_hints["resource_arn"])
+        self._values: typing.Dict[builtins.str, typing.Any] = {
+            "policy_document": policy_document,
+            "resource_arn": resource_arn,
+        }
+
+    @builtins.property
+    def policy_document(self) -> typing.Any:
+        '''The JSON formatted resource-based policy to attach.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-smsvoice-resourcepolicy.html#cfn-smsvoice-resourcepolicy-policydocument
+        '''
+        result = self._values.get("policy_document")
+        assert result is not None, "Required property 'policy_document' is missing"
+        return typing.cast(typing.Any, result)
+
+    @builtins.property
+    def resource_arn(self) -> builtins.str:
+        '''The Amazon Resource Name (ARN) of the End User Messaging  resource attached to the resource-based policy.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-smsvoice-resourcepolicy.html#cfn-smsvoice-resourcepolicy-resourcearn
+        '''
+        result = self._values.get("resource_arn")
+        assert result is not None, "Required property 'resource_arn' is missing"
+        return typing.cast(builtins.str, result)
+
+    def __eq__(self, rhs: typing.Any) -> builtins.bool:
+        return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+    def __ne__(self, rhs: typing.Any) -> builtins.bool:
+        return not (rhs == self)
+
+    def __repr__(self) -> str:
+        return "CfnResourcePolicyProps(%s)" % ", ".join(
+            k + "=" + repr(v) for k, v in self._values.items()
+        )
+
+
+@jsii.implements(_IInspectable_c2943556, _ISenderIdRef_c6023099, _ITaggableV2_4e6798f8)
 class CfnSenderId(
     _CfnResource_9df397a6,
     metaclass=jsii.JSIIMeta,
@@ -4648,7 +3776,8 @@ class CfnSenderId(
         deletion_protection_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
-        '''
+        '''Create a new ``AWS::SMSVOICE::SenderId``.
+
         :param scope: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
         :param iso_country_code: The two-character code, in ISO 3166-1 alpha-2 format, for the country or region.
@@ -4721,9 +3850,9 @@ class CfnSenderId(
 
     @builtins.property
     @jsii.member(jsii_name="senderIdRef")
-    def sender_id_ref(self) -> SenderIdReference:
+    def sender_id_ref(self) -> _SenderIdReference_10c27954:
         '''A reference to a SenderId resource.'''
-        return typing.cast(SenderIdReference, jsii.get(self, "senderIdRef"))
+        return typing.cast(_SenderIdReference_10c27954, jsii.get(self, "senderIdRef"))
 
     @builtins.property
     @jsii.member(jsii_name="isoCountryCode")
@@ -4783,6 +3912,122 @@ class CfnSenderId(
         jsii.set(self, "tags", value) # pyright: ignore[reportArgumentType]
 
 
+@jsii.data_type(
+    jsii_type="aws-cdk-lib.aws_smsvoice.CfnSenderIdProps",
+    jsii_struct_bases=[],
+    name_mapping={
+        "iso_country_code": "isoCountryCode",
+        "sender_id": "senderId",
+        "deletion_protection_enabled": "deletionProtectionEnabled",
+        "tags": "tags",
+    },
+)
+class CfnSenderIdProps:
+    def __init__(
+        self,
+        *,
+        iso_country_code: builtins.str,
+        sender_id: builtins.str,
+        deletion_protection_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+    ) -> None:
+        '''Properties for defining a ``CfnSenderId``.
+
+        :param iso_country_code: The two-character code, in ISO 3166-1 alpha-2 format, for the country or region.
+        :param sender_id: The sender ID string to request.
+        :param deletion_protection_enabled: By default this is set to false. When set to true the sender ID can't be deleted.
+        :param tags: An array of tags (key and value pairs) to associate with the sender ID.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-smsvoice-senderid.html
+        :exampleMetadata: fixture=_generated
+
+        Example::
+
+            # The code below shows an example of how to instantiate this type.
+            # The values are placeholders you should change.
+            from aws_cdk import aws_smsvoice as smsvoice
+            
+            cfn_sender_id_props = smsvoice.CfnSenderIdProps(
+                iso_country_code="isoCountryCode",
+                sender_id="senderId",
+            
+                # the properties below are optional
+                deletion_protection_enabled=False,
+                tags=[CfnTag(
+                    key="key",
+                    value="value"
+                )]
+            )
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__e4efc3bfced2a81fa707bcebc646c7b881da4e547ba3c3005837a6b500a365e2)
+            check_type(argname="argument iso_country_code", value=iso_country_code, expected_type=type_hints["iso_country_code"])
+            check_type(argname="argument sender_id", value=sender_id, expected_type=type_hints["sender_id"])
+            check_type(argname="argument deletion_protection_enabled", value=deletion_protection_enabled, expected_type=type_hints["deletion_protection_enabled"])
+            check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
+        self._values: typing.Dict[builtins.str, typing.Any] = {
+            "iso_country_code": iso_country_code,
+            "sender_id": sender_id,
+        }
+        if deletion_protection_enabled is not None:
+            self._values["deletion_protection_enabled"] = deletion_protection_enabled
+        if tags is not None:
+            self._values["tags"] = tags
+
+    @builtins.property
+    def iso_country_code(self) -> builtins.str:
+        '''The two-character code, in ISO 3166-1 alpha-2 format, for the country or region.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-smsvoice-senderid.html#cfn-smsvoice-senderid-isocountrycode
+        '''
+        result = self._values.get("iso_country_code")
+        assert result is not None, "Required property 'iso_country_code' is missing"
+        return typing.cast(builtins.str, result)
+
+    @builtins.property
+    def sender_id(self) -> builtins.str:
+        '''The sender ID string to request.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-smsvoice-senderid.html#cfn-smsvoice-senderid-senderid
+        '''
+        result = self._values.get("sender_id")
+        assert result is not None, "Required property 'sender_id' is missing"
+        return typing.cast(builtins.str, result)
+
+    @builtins.property
+    def deletion_protection_enabled(
+        self,
+    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        '''By default this is set to false.
+
+        When set to true the sender ID can't be deleted.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-smsvoice-senderid.html#cfn-smsvoice-senderid-deletionprotectionenabled
+        '''
+        result = self._values.get("deletion_protection_enabled")
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+
+    @builtins.property
+    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+        '''An array of tags (key and value pairs) to associate with the sender ID.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-smsvoice-senderid.html#cfn-smsvoice-senderid-tags
+        '''
+        result = self._values.get("tags")
+        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+
+    def __eq__(self, rhs: typing.Any) -> builtins.bool:
+        return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+    def __ne__(self, rhs: typing.Any) -> builtins.bool:
+        return not (rhs == self)
+
+    def __repr__(self) -> str:
+        return "CfnSenderIdProps(%s)" % ", ".join(
+            k + "=" + repr(v) for k, v in self._values.items()
+        )
+
+
 __all__ = [
     "CfnConfigurationSet",
     "CfnConfigurationSetProps",
@@ -4798,157 +4043,9 @@ __all__ = [
     "CfnResourcePolicyProps",
     "CfnSenderId",
     "CfnSenderIdProps",
-    "ConfigurationSetReference",
-    "IConfigurationSetRef",
-    "IOptOutListRef",
-    "IPhoneNumberRef",
-    "IPoolRef",
-    "IProtectConfigurationRef",
-    "IResourcePolicyRef",
-    "ISenderIdRef",
-    "OptOutListReference",
-    "PhoneNumberReference",
-    "PoolReference",
-    "ProtectConfigurationReference",
-    "ResourcePolicyReference",
-    "SenderIdReference",
 ]
 
 publication.publish()
-
-def _typecheckingstub__259d6b5c44c463276b6d9a529504479acbd49524ef7bd8a0d1d913ca2d1a58a3(
-    *,
-    configuration_set_name: typing.Optional[builtins.str] = None,
-    default_sender_id: typing.Optional[builtins.str] = None,
-    event_destinations: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnConfigurationSet.EventDestinationProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
-    message_feedback_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-    protect_configuration_id: typing.Optional[builtins.str] = None,
-    tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-) -> None:
-    """Type checking stubs"""
-    pass
-
-def _typecheckingstub__05e14e4fd94b66cfd8dd4c43fcb451f3af9853476744da6a554feeac6fa9de3e(
-    *,
-    opt_out_list_name: typing.Optional[builtins.str] = None,
-    tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-) -> None:
-    """Type checking stubs"""
-    pass
-
-def _typecheckingstub__b70b72342e4afd37b29a5920f6cf7f0c27b8afc2a3cf6820cba50a42c515dbed(
-    *,
-    iso_country_code: builtins.str,
-    mandatory_keywords: typing.Union[_IResolvable_da3f097b, typing.Union[CfnPhoneNumber.MandatoryKeywordsProperty, typing.Dict[builtins.str, typing.Any]]],
-    number_capabilities: typing.Sequence[builtins.str],
-    number_type: builtins.str,
-    deletion_protection_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-    optional_keywords: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnPhoneNumber.OptionalKeywordProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
-    opt_out_list_name: typing.Optional[builtins.str] = None,
-    self_managed_opt_outs_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-    tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-    two_way: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnPhoneNumber.TwoWayProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-) -> None:
-    """Type checking stubs"""
-    pass
-
-def _typecheckingstub__9949eaef09160ab08c0556130c6a54f66b5bab92951d0608bd8f05d3071a5abd(
-    *,
-    mandatory_keywords: typing.Union[_IResolvable_da3f097b, typing.Union[CfnPool.MandatoryKeywordsProperty, typing.Dict[builtins.str, typing.Any]]],
-    origination_identities: typing.Sequence[builtins.str],
-    deletion_protection_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-    optional_keywords: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnPool.OptionalKeywordProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
-    opt_out_list_name: typing.Optional[builtins.str] = None,
-    self_managed_opt_outs_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-    shared_routes_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-    tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-    two_way: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnPool.TwoWayProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-) -> None:
-    """Type checking stubs"""
-    pass
-
-def _typecheckingstub__78062d029c984e0fa8e4c182345051e18cb19671a3a88fec3a04ea748b2d3ea8(
-    *,
-    country_rule_set: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnProtectConfiguration.CountryRuleSetProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-    deletion_protection_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-    tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-) -> None:
-    """Type checking stubs"""
-    pass
-
-def _typecheckingstub__52e1771fac2c1d0d2462745e3a14b0f3c7951b49866b77d8397eb55313b71662(
-    *,
-    policy_document: typing.Any,
-    resource_arn: builtins.str,
-) -> None:
-    """Type checking stubs"""
-    pass
-
-def _typecheckingstub__e4efc3bfced2a81fa707bcebc646c7b881da4e547ba3c3005837a6b500a365e2(
-    *,
-    iso_country_code: builtins.str,
-    sender_id: builtins.str,
-    deletion_protection_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-    tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-) -> None:
-    """Type checking stubs"""
-    pass
-
-def _typecheckingstub__2e5bb5d3852dbb8456b6f01952af083f729085a4c37fe486c0d0f4a60daa8c40(
-    *,
-    configuration_set_arn: builtins.str,
-    configuration_set_name: builtins.str,
-) -> None:
-    """Type checking stubs"""
-    pass
-
-def _typecheckingstub__bfd1ef6e5e992834ccc3c45148952accc4dbcb9f4b552b0933fbdfa4c4867558(
-    *,
-    opt_out_list_arn: builtins.str,
-    opt_out_list_name: builtins.str,
-) -> None:
-    """Type checking stubs"""
-    pass
-
-def _typecheckingstub__349249fdc8c61039a673d8f3a5b07663edefe3b173fb8ffdba04e1e12c00df64(
-    *,
-    phone_number_arn: builtins.str,
-    phone_number_id: builtins.str,
-) -> None:
-    """Type checking stubs"""
-    pass
-
-def _typecheckingstub__59ffeb3ac05b698611a04dee6b3e67449249804588f0e420a1a2f04dc5cc0f00(
-    *,
-    pool_arn: builtins.str,
-    pool_id: builtins.str,
-) -> None:
-    """Type checking stubs"""
-    pass
-
-def _typecheckingstub__f751fa19685536627fe3dc2dbabf8ec124aaab802405a6d3177f6088af478b94(
-    *,
-    protect_configuration_arn: builtins.str,
-    protect_configuration_id: builtins.str,
-) -> None:
-    """Type checking stubs"""
-    pass
-
-def _typecheckingstub__334040876bacd6c4e8f16a245c89b0d4a30c2d7ade4753cd91a3d0b8d26ab007(
-    *,
-    resource_arn: builtins.str,
-) -> None:
-    """Type checking stubs"""
-    pass
-
-def _typecheckingstub__258a8a47be22366d003909ddfc9f414a69700c407d737345d8a7ac86cf1401d8(
-    *,
-    iso_country_code: builtins.str,
-    sender_id: builtins.str,
-    sender_id_arn: builtins.str,
-) -> None:
-    """Type checking stubs"""
-    pass
 
 def _typecheckingstub__40dfc64df6dc2c0a72f2a15a90352d0f45df52177e2673d853e93c45f6ff9bfe(
     scope: _constructs_77d1e7e8.Construct,
@@ -5063,6 +4160,18 @@ def _typecheckingstub__e91819987879ee4dec183c370f8f16a53dffc5fa977336312072fb1db
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__259d6b5c44c463276b6d9a529504479acbd49524ef7bd8a0d1d913ca2d1a58a3(
+    *,
+    configuration_set_name: typing.Optional[builtins.str] = None,
+    default_sender_id: typing.Optional[builtins.str] = None,
+    event_destinations: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnConfigurationSet.EventDestinationProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+    message_feedback_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+    protect_configuration_id: typing.Optional[builtins.str] = None,
+    tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__ea38a41fadafddeabec02441f39c67873aa2e47aa1a61c10bd392305083031cc(
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
@@ -5109,6 +4218,14 @@ def _typecheckingstub__6977ae7d56495d20d799b91baa1ff8181a6a95f332ee17575071e0fb1
 
 def _typecheckingstub__35f7671a5586fbcab6fa7a0f53bc16a7df7f5b446336ced45e9ee9df5e1ba997(
     value: typing.Optional[typing.List[_CfnTag_f6864754]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__05e14e4fd94b66cfd8dd4c43fcb451f3af9853476744da6a554feeac6fa9de3e(
+    *,
+    opt_out_list_name: typing.Optional[builtins.str] = None,
+    tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -5252,6 +4369,22 @@ def _typecheckingstub__67ff2e896f2988f660e4ee2793f64f4dc62d209cbf013b2753d3b0347
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__b70b72342e4afd37b29a5920f6cf7f0c27b8afc2a3cf6820cba50a42c515dbed(
+    *,
+    iso_country_code: builtins.str,
+    mandatory_keywords: typing.Union[_IResolvable_da3f097b, typing.Union[CfnPhoneNumber.MandatoryKeywordsProperty, typing.Dict[builtins.str, typing.Any]]],
+    number_capabilities: typing.Sequence[builtins.str],
+    number_type: builtins.str,
+    deletion_protection_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+    optional_keywords: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnPhoneNumber.OptionalKeywordProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+    opt_out_list_name: typing.Optional[builtins.str] = None,
+    self_managed_opt_outs_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+    tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+    two_way: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnPhoneNumber.TwoWayProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__59ec152307c1b9f9d8e2674741d58c16f421e0af6e557203e2d5863f8dd4ec54(
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
@@ -5384,6 +4517,21 @@ def _typecheckingstub__9e85b91eb6b2f50f5a971419d7521040342911deee5fc2d8e19a9a52d
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__9949eaef09160ab08c0556130c6a54f66b5bab92951d0608bd8f05d3071a5abd(
+    *,
+    mandatory_keywords: typing.Union[_IResolvable_da3f097b, typing.Union[CfnPool.MandatoryKeywordsProperty, typing.Dict[builtins.str, typing.Any]]],
+    origination_identities: typing.Sequence[builtins.str],
+    deletion_protection_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+    optional_keywords: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnPool.OptionalKeywordProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+    opt_out_list_name: typing.Optional[builtins.str] = None,
+    self_managed_opt_outs_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+    shared_routes_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+    tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+    two_way: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnPool.TwoWayProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__3395de3209762a050f467d1fe0a98e4e81c55a9fa41d448e97b764225b94b11b(
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
@@ -5458,6 +4606,15 @@ def _typecheckingstub__81f93bccabab2bfa8d607d10049ef5df87296c85f8ebd25e0c1c13ee5
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__78062d029c984e0fa8e4c182345051e18cb19671a3a88fec3a04ea748b2d3ea8(
+    *,
+    country_rule_set: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnProtectConfiguration.CountryRuleSetProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    deletion_protection_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+    tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__c761f216c3c857d8d515932ebd2444a6befe013279fe63864342547680d1115d(
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
@@ -5488,6 +4645,14 @@ def _typecheckingstub__4a78fbd4533c352d8648be0f639d4450452998ccf2ffac29dc1b66dc0
 
 def _typecheckingstub__8aa28206c4f9b177dc462240fc0847f3c51410a6c2d2d6e506145ebcaad78170(
     value: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__52e1771fac2c1d0d2462745e3a14b0f3c7951b49866b77d8397eb55313b71662(
+    *,
+    policy_document: typing.Any,
+    resource_arn: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -5540,5 +4705,12 @@ def _typecheckingstub__032142149c9722a7758daf53b4af657dc1c49bbf0817db09eaabeb307
     """Type checking stubs"""
     pass
 
-for cls in [IConfigurationSetRef, IOptOutListRef, IPhoneNumberRef, IPoolRef, IProtectConfigurationRef, IResourcePolicyRef, ISenderIdRef]:
-    typing.cast(typing.Any, cls).__protocol_attrs__ = typing.cast(typing.Any, cls).__protocol_attrs__ - set(['__jsii_proxy_class__', '__jsii_type__'])
+def _typecheckingstub__e4efc3bfced2a81fa707bcebc646c7b881da4e547ba3c3005837a6b500a365e2(
+    *,
+    iso_country_code: builtins.str,
+    sender_id: builtins.str,
+    deletion_protection_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+    tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass

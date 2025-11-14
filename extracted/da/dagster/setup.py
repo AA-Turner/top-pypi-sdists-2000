@@ -66,7 +66,6 @@ setup(
         "Environment :: Web Environment",
         "Intended Audience :: Developers",
         "Intended Audience :: System Administrators",
-        "Programming Language :: Python :: 3.9",
         "Programming Language :: Python :: 3.10",
         "Programming Language :: Python :: 3.11",
         "Programming Language :: Python :: 3.12",
@@ -78,7 +77,7 @@ setup(
     ],
     packages=find_packages(exclude=["dagster_tests*"]),
     include_package_data=True,
-    python_requires=">=3.9,<3.14",
+    python_requires=">=3.10,<3.14",
     install_requires=[
         # cli
         "click>=5.0,<9.0",
@@ -112,8 +111,8 @@ setup(
         "universal_pathlib>=0.2.0; python_version>='3.12'",
         "rich",
         "filelock",
-        "dagster-pipes==1.12.1",
-        "dagster-shared==1.12.1",
+        "dagster-pipes==1.12.2",
+        "dagster-shared==1.12.2",
         "antlr4-python3-runtime",
     ],
     extras_require={

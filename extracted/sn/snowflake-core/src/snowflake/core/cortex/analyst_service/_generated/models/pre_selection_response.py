@@ -36,6 +36,9 @@ class PreSelectionResponse(BaseModel):
     tables : list[TableColumns], optional
 
     warnings : list[Warning], optional
+
+    experimental : str, optional
+        JSON serialized string of experimental API fields (undocumented).
     """
 
     request_id: Optional[StrictStr] = None
@@ -44,7 +47,9 @@ class PreSelectionResponse(BaseModel):
 
     warnings: Optional[List[Warning]] = None
 
-    __properties = ["request_id", "tables", "warnings"]
+    experimental: Optional[StrictStr] = None
+
+    __properties = ["request_id", "tables", "warnings", "experimental"]
 
     class Config:  # noqa: D106
         populate_by_name = True
@@ -115,6 +120,7 @@ class PreSelectionResponse(BaseModel):
                 "warnings": [Warning.from_dict(_item) for _item in obj.get("warnings")]
                 if obj.get("warnings") is not None
                 else None,
+                "experimental": obj.get("experimental"),
             }
         )
 
@@ -127,6 +133,7 @@ class PreSelectionResponseModel:
         request_id: Optional[str] = None,
         tables: Optional[list[TableColumns]] = None,
         warnings: Optional[list[Warning]] = None,
+        experimental: Optional[str] = None,
     ):
         """A model object representing the PreSelectionResponse resource.
 
@@ -139,12 +146,16 @@ class PreSelectionResponseModel:
         tables : list[TableColumns], optional
 
         warnings : list[Warning], optional
+
+        experimental : str, optional
+            JSON serialized string of experimental API fields (undocumented).
         """
         self.request_id = request_id
         self.tables = tables
         self.warnings = warnings
+        self.experimental = experimental
 
-    __properties = ["request_id", "tables", "warnings"]
+    __properties = ["request_id", "tables", "warnings", "experimental"]
 
     def __repr__(self) -> str:
         return repr(self._to_model())
@@ -154,6 +165,7 @@ class PreSelectionResponseModel:
             request_id=self.request_id,
             tables=[x._to_model() for x in self.tables] if self.tables is not None else None,
             warnings=[x._to_model() for x in self.warnings] if self.warnings is not None else None,
+            experimental=self.experimental,
         )
 
     @classmethod
@@ -162,6 +174,7 @@ class PreSelectionResponseModel:
             request_id=model.request_id,
             tables=[TableColumnsModel._from_model(x) for x in model.tables] if model.tables else None,
             warnings=[WarningModel._from_model(x) for x in model.warnings] if model.warnings else None,
+            experimental=model.experimental,
         )
 
     def to_dict(self):

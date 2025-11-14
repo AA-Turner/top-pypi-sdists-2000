@@ -71,755 +71,23 @@ import constructs as _constructs_77d1e7e8
 from .. import (
     CfnResource as _CfnResource_9df397a6,
     CfnTag as _CfnTag_f6864754,
-    IEnvironmentAware as _IEnvironmentAware_a408b00d,
     IInspectable as _IInspectable_c2943556,
     IResolvable as _IResolvable_da3f097b,
     ITaggableV2 as _ITaggableV2_4e6798f8,
     TagManager as _TagManager_0a598cb3,
     TreeInspector as _TreeInspector_488e0dd5,
 )
-
-
-@jsii.data_type(
-    jsii_type="aws-cdk-lib.aws_applicationsignals.CfnDiscoveryProps",
-    jsii_struct_bases=[],
-    name_mapping={},
+from ..interfaces.aws_applicationsignals import (
+    DiscoveryReference as _DiscoveryReference_98a0e1a1,
+    GroupingConfigurationReference as _GroupingConfigurationReference_e449fdf2,
+    IDiscoveryRef as _IDiscoveryRef_04ec4c36,
+    IGroupingConfigurationRef as _IGroupingConfigurationRef_b3b19f75,
+    IServiceLevelObjectiveRef as _IServiceLevelObjectiveRef_54989f43,
+    ServiceLevelObjectiveReference as _ServiceLevelObjectiveReference_d462c55f,
 )
-class CfnDiscoveryProps:
-    def __init__(self) -> None:
-        '''Properties for defining a ``CfnDiscovery``.
 
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-applicationsignals-discovery.html
-        :exampleMetadata: fixture=_generated
 
-        Example::
-
-            # The code below shows an example of how to instantiate this type.
-            # The values are placeholders you should change.
-            from aws_cdk import aws_applicationsignals as applicationsignals
-            
-            cfn_discovery_props = applicationsignals.CfnDiscoveryProps()
-        '''
-        self._values: typing.Dict[builtins.str, typing.Any] = {}
-
-    def __eq__(self, rhs: typing.Any) -> builtins.bool:
-        return isinstance(rhs, self.__class__) and rhs._values == self._values
-
-    def __ne__(self, rhs: typing.Any) -> builtins.bool:
-        return not (rhs == self)
-
-    def __repr__(self) -> str:
-        return "CfnDiscoveryProps(%s)" % ", ".join(
-            k + "=" + repr(v) for k, v in self._values.items()
-        )
-
-
-@jsii.data_type(
-    jsii_type="aws-cdk-lib.aws_applicationsignals.CfnGroupingConfigurationProps",
-    jsii_struct_bases=[],
-    name_mapping={"grouping_attribute_definitions": "groupingAttributeDefinitions"},
-)
-class CfnGroupingConfigurationProps:
-    def __init__(
-        self,
-        *,
-        grouping_attribute_definitions: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnGroupingConfiguration.GroupingAttributeDefinitionProperty", typing.Dict[builtins.str, typing.Any]]]]],
-    ) -> None:
-        '''Properties for defining a ``CfnGroupingConfiguration``.
-
-        :param grouping_attribute_definitions: An array of grouping attribute definitions that specify how services should be grouped based on various attributes and source keys.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-applicationsignals-groupingconfiguration.html
-        :exampleMetadata: fixture=_generated
-
-        Example::
-
-            # The code below shows an example of how to instantiate this type.
-            # The values are placeholders you should change.
-            from aws_cdk import aws_applicationsignals as applicationsignals
-            
-            cfn_grouping_configuration_props = applicationsignals.CfnGroupingConfigurationProps(
-                grouping_attribute_definitions=[applicationsignals.CfnGroupingConfiguration.GroupingAttributeDefinitionProperty(
-                    grouping_name="groupingName",
-                    grouping_source_keys=["groupingSourceKeys"],
-            
-                    # the properties below are optional
-                    default_grouping_value="defaultGroupingValue"
-                )]
-            )
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__f1092a665e6fb60575de2d22516416485dc448d30b228f509e488593e009ff91)
-            check_type(argname="argument grouping_attribute_definitions", value=grouping_attribute_definitions, expected_type=type_hints["grouping_attribute_definitions"])
-        self._values: typing.Dict[builtins.str, typing.Any] = {
-            "grouping_attribute_definitions": grouping_attribute_definitions,
-        }
-
-    @builtins.property
-    def grouping_attribute_definitions(
-        self,
-    ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnGroupingConfiguration.GroupingAttributeDefinitionProperty"]]]:
-        '''An array of grouping attribute definitions that specify how services should be grouped based on various attributes and source keys.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-applicationsignals-groupingconfiguration.html#cfn-applicationsignals-groupingconfiguration-groupingattributedefinitions
-        '''
-        result = self._values.get("grouping_attribute_definitions")
-        assert result is not None, "Required property 'grouping_attribute_definitions' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnGroupingConfiguration.GroupingAttributeDefinitionProperty"]]], result)
-
-    def __eq__(self, rhs: typing.Any) -> builtins.bool:
-        return isinstance(rhs, self.__class__) and rhs._values == self._values
-
-    def __ne__(self, rhs: typing.Any) -> builtins.bool:
-        return not (rhs == self)
-
-    def __repr__(self) -> str:
-        return "CfnGroupingConfigurationProps(%s)" % ", ".join(
-            k + "=" + repr(v) for k, v in self._values.items()
-        )
-
-
-@jsii.data_type(
-    jsii_type="aws-cdk-lib.aws_applicationsignals.CfnServiceLevelObjectiveProps",
-    jsii_struct_bases=[],
-    name_mapping={
-        "name": "name",
-        "burn_rate_configurations": "burnRateConfigurations",
-        "description": "description",
-        "exclusion_windows": "exclusionWindows",
-        "goal": "goal",
-        "request_based_sli": "requestBasedSli",
-        "sli": "sli",
-        "tags": "tags",
-    },
-)
-class CfnServiceLevelObjectiveProps:
-    def __init__(
-        self,
-        *,
-        name: builtins.str,
-        burn_rate_configurations: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnServiceLevelObjective.BurnRateConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        description: typing.Optional[builtins.str] = None,
-        exclusion_windows: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnServiceLevelObjective.ExclusionWindowProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        goal: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnServiceLevelObjective.GoalProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        request_based_sli: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnServiceLevelObjective.RequestBasedSliProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        sli: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnServiceLevelObjective.SliProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-    ) -> None:
-        '''Properties for defining a ``CfnServiceLevelObjective``.
-
-        :param name: A name for this SLO.
-        :param burn_rate_configurations: Each object in this array defines the length of the look-back window used to calculate one burn rate metric for this SLO. The burn rate measures how fast the service is consuming the error budget, relative to the attainment goal of the SLO.
-        :param description: An optional description for this SLO. Default: - "No description"
-        :param exclusion_windows: The time window to be excluded from the SLO performance metrics.
-        :param goal: This structure contains the attributes that determine the goal of an SLO. This includes the time period for evaluation and the attainment threshold.
-        :param request_based_sli: A structure containing information about the performance metric that this SLO monitors, if this is a request-based SLO.
-        :param sli: A structure containing information about the performance metric that this SLO monitors, if this is a period-based SLO.
-        :param tags: A list of key-value pairs to associate with the SLO. You can associate as many as 50 tags with an SLO. To be able to associate tags with the SLO when you create the SLO, you must have the cloudwatch:TagResource permission. Tags can help you organize and categorize your resources. You can also use them to scope user permissions by granting a user permission to access or change only resources with certain tag values.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-applicationsignals-servicelevelobjective.html
-        :exampleMetadata: fixture=_generated
-
-        Example::
-
-            # The code below shows an example of how to instantiate this type.
-            # The values are placeholders you should change.
-            from aws_cdk import aws_applicationsignals as applicationsignals
-            
-            cfn_service_level_objective_props = applicationsignals.CfnServiceLevelObjectiveProps(
-                name="name",
-            
-                # the properties below are optional
-                burn_rate_configurations=[applicationsignals.CfnServiceLevelObjective.BurnRateConfigurationProperty(
-                    look_back_window_minutes=123
-                )],
-                description="description",
-                exclusion_windows=[applicationsignals.CfnServiceLevelObjective.ExclusionWindowProperty(
-                    window=applicationsignals.CfnServiceLevelObjective.WindowProperty(
-                        duration=123,
-                        duration_unit="durationUnit"
-                    ),
-            
-                    # the properties below are optional
-                    reason="reason",
-                    recurrence_rule=applicationsignals.CfnServiceLevelObjective.RecurrenceRuleProperty(
-                        expression="expression"
-                    ),
-                    start_time="startTime"
-                )],
-                goal=applicationsignals.CfnServiceLevelObjective.GoalProperty(
-                    attainment_goal=123,
-                    interval=applicationsignals.CfnServiceLevelObjective.IntervalProperty(
-                        calendar_interval=applicationsignals.CfnServiceLevelObjective.CalendarIntervalProperty(
-                            duration=123,
-                            duration_unit="durationUnit",
-                            start_time=123
-                        ),
-                        rolling_interval=applicationsignals.CfnServiceLevelObjective.RollingIntervalProperty(
-                            duration=123,
-                            duration_unit="durationUnit"
-                        )
-                    ),
-                    warning_threshold=123
-                ),
-                request_based_sli=applicationsignals.CfnServiceLevelObjective.RequestBasedSliProperty(
-                    request_based_sli_metric=applicationsignals.CfnServiceLevelObjective.RequestBasedSliMetricProperty(
-                        dependency_config=applicationsignals.CfnServiceLevelObjective.DependencyConfigProperty(
-                            dependency_key_attributes={
-                                "dependency_key_attributes_key": "dependencyKeyAttributes"
-                            },
-                            dependency_operation_name="dependencyOperationName"
-                        ),
-                        key_attributes={
-                            "key_attributes_key": "keyAttributes"
-                        },
-                        metric_type="metricType",
-                        monitored_request_count_metric=applicationsignals.CfnServiceLevelObjective.MonitoredRequestCountMetricProperty(
-                            bad_count_metric=[applicationsignals.CfnServiceLevelObjective.MetricDataQueryProperty(
-                                id="id",
-            
-                                # the properties below are optional
-                                account_id="accountId",
-                                expression="expression",
-                                metric_stat=applicationsignals.CfnServiceLevelObjective.MetricStatProperty(
-                                    metric=applicationsignals.CfnServiceLevelObjective.MetricProperty(
-                                        dimensions=[applicationsignals.CfnServiceLevelObjective.DimensionProperty(
-                                            name="name",
-                                            value="value"
-                                        )],
-                                        metric_name="metricName",
-                                        namespace="namespace"
-                                    ),
-                                    period=123,
-                                    stat="stat",
-            
-                                    # the properties below are optional
-                                    unit="unit"
-                                ),
-                                return_data=False
-                            )],
-                            good_count_metric=[applicationsignals.CfnServiceLevelObjective.MetricDataQueryProperty(
-                                id="id",
-            
-                                # the properties below are optional
-                                account_id="accountId",
-                                expression="expression",
-                                metric_stat=applicationsignals.CfnServiceLevelObjective.MetricStatProperty(
-                                    metric=applicationsignals.CfnServiceLevelObjective.MetricProperty(
-                                        dimensions=[applicationsignals.CfnServiceLevelObjective.DimensionProperty(
-                                            name="name",
-                                            value="value"
-                                        )],
-                                        metric_name="metricName",
-                                        namespace="namespace"
-                                    ),
-                                    period=123,
-                                    stat="stat",
-            
-                                    # the properties below are optional
-                                    unit="unit"
-                                ),
-                                return_data=False
-                            )]
-                        ),
-                        operation_name="operationName",
-                        total_request_count_metric=[applicationsignals.CfnServiceLevelObjective.MetricDataQueryProperty(
-                            id="id",
-            
-                            # the properties below are optional
-                            account_id="accountId",
-                            expression="expression",
-                            metric_stat=applicationsignals.CfnServiceLevelObjective.MetricStatProperty(
-                                metric=applicationsignals.CfnServiceLevelObjective.MetricProperty(
-                                    dimensions=[applicationsignals.CfnServiceLevelObjective.DimensionProperty(
-                                        name="name",
-                                        value="value"
-                                    )],
-                                    metric_name="metricName",
-                                    namespace="namespace"
-                                ),
-                                period=123,
-                                stat="stat",
-            
-                                # the properties below are optional
-                                unit="unit"
-                            ),
-                            return_data=False
-                        )]
-                    ),
-            
-                    # the properties below are optional
-                    comparison_operator="comparisonOperator",
-                    metric_threshold=123
-                ),
-                sli=applicationsignals.CfnServiceLevelObjective.SliProperty(
-                    comparison_operator="comparisonOperator",
-                    metric_threshold=123,
-                    sli_metric=applicationsignals.CfnServiceLevelObjective.SliMetricProperty(
-                        dependency_config=applicationsignals.CfnServiceLevelObjective.DependencyConfigProperty(
-                            dependency_key_attributes={
-                                "dependency_key_attributes_key": "dependencyKeyAttributes"
-                            },
-                            dependency_operation_name="dependencyOperationName"
-                        ),
-                        key_attributes={
-                            "key_attributes_key": "keyAttributes"
-                        },
-                        metric_data_queries=[applicationsignals.CfnServiceLevelObjective.MetricDataQueryProperty(
-                            id="id",
-            
-                            # the properties below are optional
-                            account_id="accountId",
-                            expression="expression",
-                            metric_stat=applicationsignals.CfnServiceLevelObjective.MetricStatProperty(
-                                metric=applicationsignals.CfnServiceLevelObjective.MetricProperty(
-                                    dimensions=[applicationsignals.CfnServiceLevelObjective.DimensionProperty(
-                                        name="name",
-                                        value="value"
-                                    )],
-                                    metric_name="metricName",
-                                    namespace="namespace"
-                                ),
-                                period=123,
-                                stat="stat",
-            
-                                # the properties below are optional
-                                unit="unit"
-                            ),
-                            return_data=False
-                        )],
-                        metric_type="metricType",
-                        operation_name="operationName",
-                        period_seconds=123,
-                        statistic="statistic"
-                    )
-                ),
-                tags=[CfnTag(
-                    key="key",
-                    value="value"
-                )]
-            )
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__8a302456885343cc9ce5e0497feed773de1ef0f44e2934f97458bfdc5a810dee)
-            check_type(argname="argument name", value=name, expected_type=type_hints["name"])
-            check_type(argname="argument burn_rate_configurations", value=burn_rate_configurations, expected_type=type_hints["burn_rate_configurations"])
-            check_type(argname="argument description", value=description, expected_type=type_hints["description"])
-            check_type(argname="argument exclusion_windows", value=exclusion_windows, expected_type=type_hints["exclusion_windows"])
-            check_type(argname="argument goal", value=goal, expected_type=type_hints["goal"])
-            check_type(argname="argument request_based_sli", value=request_based_sli, expected_type=type_hints["request_based_sli"])
-            check_type(argname="argument sli", value=sli, expected_type=type_hints["sli"])
-            check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
-        self._values: typing.Dict[builtins.str, typing.Any] = {
-            "name": name,
-        }
-        if burn_rate_configurations is not None:
-            self._values["burn_rate_configurations"] = burn_rate_configurations
-        if description is not None:
-            self._values["description"] = description
-        if exclusion_windows is not None:
-            self._values["exclusion_windows"] = exclusion_windows
-        if goal is not None:
-            self._values["goal"] = goal
-        if request_based_sli is not None:
-            self._values["request_based_sli"] = request_based_sli
-        if sli is not None:
-            self._values["sli"] = sli
-        if tags is not None:
-            self._values["tags"] = tags
-
-    @builtins.property
-    def name(self) -> builtins.str:
-        '''A name for this SLO.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-applicationsignals-servicelevelobjective.html#cfn-applicationsignals-servicelevelobjective-name
-        '''
-        result = self._values.get("name")
-        assert result is not None, "Required property 'name' is missing"
-        return typing.cast(builtins.str, result)
-
-    @builtins.property
-    def burn_rate_configurations(
-        self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnServiceLevelObjective.BurnRateConfigurationProperty"]]]]:
-        '''Each object in this array defines the length of the look-back window used to calculate one burn rate metric for this SLO.
-
-        The burn rate measures how fast the service is consuming the error budget, relative to the attainment goal of the SLO.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-applicationsignals-servicelevelobjective.html#cfn-applicationsignals-servicelevelobjective-burnrateconfigurations
-        '''
-        result = self._values.get("burn_rate_configurations")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnServiceLevelObjective.BurnRateConfigurationProperty"]]]], result)
-
-    @builtins.property
-    def description(self) -> typing.Optional[builtins.str]:
-        '''An optional description for this SLO.
-
-        :default: - "No description"
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-applicationsignals-servicelevelobjective.html#cfn-applicationsignals-servicelevelobjective-description
-        '''
-        result = self._values.get("description")
-        return typing.cast(typing.Optional[builtins.str], result)
-
-    @builtins.property
-    def exclusion_windows(
-        self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnServiceLevelObjective.ExclusionWindowProperty"]]]]:
-        '''The time window to be excluded from the SLO performance metrics.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-applicationsignals-servicelevelobjective.html#cfn-applicationsignals-servicelevelobjective-exclusionwindows
-        '''
-        result = self._values.get("exclusion_windows")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnServiceLevelObjective.ExclusionWindowProperty"]]]], result)
-
-    @builtins.property
-    def goal(
-        self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnServiceLevelObjective.GoalProperty"]]:
-        '''This structure contains the attributes that determine the goal of an SLO.
-
-        This includes the time period for evaluation and the attainment threshold.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-applicationsignals-servicelevelobjective.html#cfn-applicationsignals-servicelevelobjective-goal
-        '''
-        result = self._values.get("goal")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnServiceLevelObjective.GoalProperty"]], result)
-
-    @builtins.property
-    def request_based_sli(
-        self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnServiceLevelObjective.RequestBasedSliProperty"]]:
-        '''A structure containing information about the performance metric that this SLO monitors, if this is a request-based SLO.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-applicationsignals-servicelevelobjective.html#cfn-applicationsignals-servicelevelobjective-requestbasedsli
-        '''
-        result = self._values.get("request_based_sli")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnServiceLevelObjective.RequestBasedSliProperty"]], result)
-
-    @builtins.property
-    def sli(
-        self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnServiceLevelObjective.SliProperty"]]:
-        '''A structure containing information about the performance metric that this SLO monitors, if this is a period-based SLO.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-applicationsignals-servicelevelobjective.html#cfn-applicationsignals-servicelevelobjective-sli
-        '''
-        result = self._values.get("sli")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnServiceLevelObjective.SliProperty"]], result)
-
-    @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
-        '''A list of key-value pairs to associate with the SLO.
-
-        You can associate as many as 50 tags with an SLO. To be able to associate tags with the SLO when you create the SLO, you must have the cloudwatch:TagResource permission.
-
-        Tags can help you organize and categorize your resources. You can also use them to scope user permissions by granting a user permission to access or change only resources with certain tag values.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-applicationsignals-servicelevelobjective.html#cfn-applicationsignals-servicelevelobjective-tags
-        '''
-        result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
-
-    def __eq__(self, rhs: typing.Any) -> builtins.bool:
-        return isinstance(rhs, self.__class__) and rhs._values == self._values
-
-    def __ne__(self, rhs: typing.Any) -> builtins.bool:
-        return not (rhs == self)
-
-    def __repr__(self) -> str:
-        return "CfnServiceLevelObjectiveProps(%s)" % ", ".join(
-            k + "=" + repr(v) for k, v in self._values.items()
-        )
-
-
-@jsii.data_type(
-    jsii_type="aws-cdk-lib.aws_applicationsignals.DiscoveryReference",
-    jsii_struct_bases=[],
-    name_mapping={"account_id": "accountId"},
-)
-class DiscoveryReference:
-    def __init__(self, *, account_id: builtins.str) -> None:
-        '''A reference to a Discovery resource.
-
-        :param account_id: The AccountId of the Discovery resource.
-
-        :exampleMetadata: fixture=_generated
-
-        Example::
-
-            # The code below shows an example of how to instantiate this type.
-            # The values are placeholders you should change.
-            from aws_cdk import aws_applicationsignals as applicationsignals
-            
-            discovery_reference = applicationsignals.DiscoveryReference(
-                account_id="accountId"
-            )
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__3ae2bd86b52b8376135e6a0403bddad426628a9251837d98b72330906f2e84b9)
-            check_type(argname="argument account_id", value=account_id, expected_type=type_hints["account_id"])
-        self._values: typing.Dict[builtins.str, typing.Any] = {
-            "account_id": account_id,
-        }
-
-    @builtins.property
-    def account_id(self) -> builtins.str:
-        '''The AccountId of the Discovery resource.'''
-        result = self._values.get("account_id")
-        assert result is not None, "Required property 'account_id' is missing"
-        return typing.cast(builtins.str, result)
-
-    def __eq__(self, rhs: typing.Any) -> builtins.bool:
-        return isinstance(rhs, self.__class__) and rhs._values == self._values
-
-    def __ne__(self, rhs: typing.Any) -> builtins.bool:
-        return not (rhs == self)
-
-    def __repr__(self) -> str:
-        return "DiscoveryReference(%s)" % ", ".join(
-            k + "=" + repr(v) for k, v in self._values.items()
-        )
-
-
-@jsii.data_type(
-    jsii_type="aws-cdk-lib.aws_applicationsignals.GroupingConfigurationReference",
-    jsii_struct_bases=[],
-    name_mapping={"account_id": "accountId"},
-)
-class GroupingConfigurationReference:
-    def __init__(self, *, account_id: builtins.str) -> None:
-        '''A reference to a GroupingConfiguration resource.
-
-        :param account_id: The AccountId of the GroupingConfiguration resource.
-
-        :exampleMetadata: fixture=_generated
-
-        Example::
-
-            # The code below shows an example of how to instantiate this type.
-            # The values are placeholders you should change.
-            from aws_cdk import aws_applicationsignals as applicationsignals
-            
-            grouping_configuration_reference = applicationsignals.GroupingConfigurationReference(
-                account_id="accountId"
-            )
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__ae567aeddbe652faa360c59707e41b9c2af35fb469b410ba0b525e8b848a24cf)
-            check_type(argname="argument account_id", value=account_id, expected_type=type_hints["account_id"])
-        self._values: typing.Dict[builtins.str, typing.Any] = {
-            "account_id": account_id,
-        }
-
-    @builtins.property
-    def account_id(self) -> builtins.str:
-        '''The AccountId of the GroupingConfiguration resource.'''
-        result = self._values.get("account_id")
-        assert result is not None, "Required property 'account_id' is missing"
-        return typing.cast(builtins.str, result)
-
-    def __eq__(self, rhs: typing.Any) -> builtins.bool:
-        return isinstance(rhs, self.__class__) and rhs._values == self._values
-
-    def __ne__(self, rhs: typing.Any) -> builtins.bool:
-        return not (rhs == self)
-
-    def __repr__(self) -> str:
-        return "GroupingConfigurationReference(%s)" % ", ".join(
-            k + "=" + repr(v) for k, v in self._values.items()
-        )
-
-
-@jsii.interface(jsii_type="aws-cdk-lib.aws_applicationsignals.IDiscoveryRef")
-class IDiscoveryRef(
-    _constructs_77d1e7e8.IConstruct,
-    _IEnvironmentAware_a408b00d,
-    typing_extensions.Protocol,
-):
-    '''(experimental) Indicates that this resource can be referenced as a Discovery.
-
-    :stability: experimental
-    '''
-
-    @builtins.property
-    @jsii.member(jsii_name="discoveryRef")
-    def discovery_ref(self) -> DiscoveryReference:
-        '''(experimental) A reference to a Discovery resource.
-
-        :stability: experimental
-        '''
-        ...
-
-
-class _IDiscoveryRefProxy(
-    jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
-    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
-):
-    '''(experimental) Indicates that this resource can be referenced as a Discovery.
-
-    :stability: experimental
-    '''
-
-    __jsii_type__: typing.ClassVar[str] = "aws-cdk-lib.aws_applicationsignals.IDiscoveryRef"
-
-    @builtins.property
-    @jsii.member(jsii_name="discoveryRef")
-    def discovery_ref(self) -> DiscoveryReference:
-        '''(experimental) A reference to a Discovery resource.
-
-        :stability: experimental
-        '''
-        return typing.cast(DiscoveryReference, jsii.get(self, "discoveryRef"))
-
-# Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
-typing.cast(typing.Any, IDiscoveryRef).__jsii_proxy_class__ = lambda : _IDiscoveryRefProxy
-
-
-@jsii.interface(
-    jsii_type="aws-cdk-lib.aws_applicationsignals.IGroupingConfigurationRef"
-)
-class IGroupingConfigurationRef(
-    _constructs_77d1e7e8.IConstruct,
-    _IEnvironmentAware_a408b00d,
-    typing_extensions.Protocol,
-):
-    '''(experimental) Indicates that this resource can be referenced as a GroupingConfiguration.
-
-    :stability: experimental
-    '''
-
-    @builtins.property
-    @jsii.member(jsii_name="groupingConfigurationRef")
-    def grouping_configuration_ref(self) -> GroupingConfigurationReference:
-        '''(experimental) A reference to a GroupingConfiguration resource.
-
-        :stability: experimental
-        '''
-        ...
-
-
-class _IGroupingConfigurationRefProxy(
-    jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
-    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
-):
-    '''(experimental) Indicates that this resource can be referenced as a GroupingConfiguration.
-
-    :stability: experimental
-    '''
-
-    __jsii_type__: typing.ClassVar[str] = "aws-cdk-lib.aws_applicationsignals.IGroupingConfigurationRef"
-
-    @builtins.property
-    @jsii.member(jsii_name="groupingConfigurationRef")
-    def grouping_configuration_ref(self) -> GroupingConfigurationReference:
-        '''(experimental) A reference to a GroupingConfiguration resource.
-
-        :stability: experimental
-        '''
-        return typing.cast(GroupingConfigurationReference, jsii.get(self, "groupingConfigurationRef"))
-
-# Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
-typing.cast(typing.Any, IGroupingConfigurationRef).__jsii_proxy_class__ = lambda : _IGroupingConfigurationRefProxy
-
-
-@jsii.interface(
-    jsii_type="aws-cdk-lib.aws_applicationsignals.IServiceLevelObjectiveRef"
-)
-class IServiceLevelObjectiveRef(
-    _constructs_77d1e7e8.IConstruct,
-    _IEnvironmentAware_a408b00d,
-    typing_extensions.Protocol,
-):
-    '''(experimental) Indicates that this resource can be referenced as a ServiceLevelObjective.
-
-    :stability: experimental
-    '''
-
-    @builtins.property
-    @jsii.member(jsii_name="serviceLevelObjectiveRef")
-    def service_level_objective_ref(self) -> "ServiceLevelObjectiveReference":
-        '''(experimental) A reference to a ServiceLevelObjective resource.
-
-        :stability: experimental
-        '''
-        ...
-
-
-class _IServiceLevelObjectiveRefProxy(
-    jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
-    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
-):
-    '''(experimental) Indicates that this resource can be referenced as a ServiceLevelObjective.
-
-    :stability: experimental
-    '''
-
-    __jsii_type__: typing.ClassVar[str] = "aws-cdk-lib.aws_applicationsignals.IServiceLevelObjectiveRef"
-
-    @builtins.property
-    @jsii.member(jsii_name="serviceLevelObjectiveRef")
-    def service_level_objective_ref(self) -> "ServiceLevelObjectiveReference":
-        '''(experimental) A reference to a ServiceLevelObjective resource.
-
-        :stability: experimental
-        '''
-        return typing.cast("ServiceLevelObjectiveReference", jsii.get(self, "serviceLevelObjectiveRef"))
-
-# Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
-typing.cast(typing.Any, IServiceLevelObjectiveRef).__jsii_proxy_class__ = lambda : _IServiceLevelObjectiveRefProxy
-
-
-@jsii.data_type(
-    jsii_type="aws-cdk-lib.aws_applicationsignals.ServiceLevelObjectiveReference",
-    jsii_struct_bases=[],
-    name_mapping={"service_level_objective_arn": "serviceLevelObjectiveArn"},
-)
-class ServiceLevelObjectiveReference:
-    def __init__(self, *, service_level_objective_arn: builtins.str) -> None:
-        '''A reference to a ServiceLevelObjective resource.
-
-        :param service_level_objective_arn: The Arn of the ServiceLevelObjective resource.
-
-        :exampleMetadata: fixture=_generated
-
-        Example::
-
-            # The code below shows an example of how to instantiate this type.
-            # The values are placeholders you should change.
-            from aws_cdk import aws_applicationsignals as applicationsignals
-            
-            service_level_objective_reference = applicationsignals.ServiceLevelObjectiveReference(
-                service_level_objective_arn="serviceLevelObjectiveArn"
-            )
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__ffb2179a3df5fd3e340705140187e7094f0de9530c40bd432501e998aafc7145)
-            check_type(argname="argument service_level_objective_arn", value=service_level_objective_arn, expected_type=type_hints["service_level_objective_arn"])
-        self._values: typing.Dict[builtins.str, typing.Any] = {
-            "service_level_objective_arn": service_level_objective_arn,
-        }
-
-    @builtins.property
-    def service_level_objective_arn(self) -> builtins.str:
-        '''The Arn of the ServiceLevelObjective resource.'''
-        result = self._values.get("service_level_objective_arn")
-        assert result is not None, "Required property 'service_level_objective_arn' is missing"
-        return typing.cast(builtins.str, result)
-
-    def __eq__(self, rhs: typing.Any) -> builtins.bool:
-        return isinstance(rhs, self.__class__) and rhs._values == self._values
-
-    def __ne__(self, rhs: typing.Any) -> builtins.bool:
-        return not (rhs == self)
-
-    def __repr__(self) -> str:
-        return "ServiceLevelObjectiveReference(%s)" % ", ".join(
-            k + "=" + repr(v) for k, v in self._values.items()
-        )
-
-
-@jsii.implements(_IInspectable_c2943556, IDiscoveryRef)
+@jsii.implements(_IInspectable_c2943556, _IDiscoveryRef_04ec4c36)
 class CfnDiscovery(
     _CfnResource_9df397a6,
     metaclass=jsii.JSIIMeta,
@@ -857,7 +125,8 @@ class CfnDiscovery(
     '''
 
     def __init__(self, scope: _constructs_77d1e7e8.Construct, id: builtins.str) -> None:
-        '''
+        '''Create a new ``AWS::ApplicationSignals::Discovery``.
+
         :param scope: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
         '''
@@ -915,12 +184,46 @@ class CfnDiscovery(
 
     @builtins.property
     @jsii.member(jsii_name="discoveryRef")
-    def discovery_ref(self) -> DiscoveryReference:
+    def discovery_ref(self) -> _DiscoveryReference_98a0e1a1:
         '''A reference to a Discovery resource.'''
-        return typing.cast(DiscoveryReference, jsii.get(self, "discoveryRef"))
+        return typing.cast(_DiscoveryReference_98a0e1a1, jsii.get(self, "discoveryRef"))
 
 
-@jsii.implements(_IInspectable_c2943556, IGroupingConfigurationRef)
+@jsii.data_type(
+    jsii_type="aws-cdk-lib.aws_applicationsignals.CfnDiscoveryProps",
+    jsii_struct_bases=[],
+    name_mapping={},
+)
+class CfnDiscoveryProps:
+    def __init__(self) -> None:
+        '''Properties for defining a ``CfnDiscovery``.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-applicationsignals-discovery.html
+        :exampleMetadata: fixture=_generated
+
+        Example::
+
+            # The code below shows an example of how to instantiate this type.
+            # The values are placeholders you should change.
+            from aws_cdk import aws_applicationsignals as applicationsignals
+            
+            cfn_discovery_props = applicationsignals.CfnDiscoveryProps()
+        '''
+        self._values: typing.Dict[builtins.str, typing.Any] = {}
+
+    def __eq__(self, rhs: typing.Any) -> builtins.bool:
+        return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+    def __ne__(self, rhs: typing.Any) -> builtins.bool:
+        return not (rhs == self)
+
+    def __repr__(self) -> str:
+        return "CfnDiscoveryProps(%s)" % ", ".join(
+            k + "=" + repr(v) for k, v in self._values.items()
+        )
+
+
+@jsii.implements(_IInspectable_c2943556, _IGroupingConfigurationRef_b3b19f75)
 class CfnGroupingConfiguration(
     _CfnResource_9df397a6,
     metaclass=jsii.JSIIMeta,
@@ -956,7 +259,8 @@ class CfnGroupingConfiguration(
         *,
         grouping_attribute_definitions: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnGroupingConfiguration.GroupingAttributeDefinitionProperty", typing.Dict[builtins.str, typing.Any]]]]],
     ) -> None:
-        '''
+        '''Create a new ``AWS::ApplicationSignals::GroupingConfiguration``.
+
         :param scope: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
         :param grouping_attribute_definitions: An array of grouping attribute definitions that specify how services should be grouped based on various attributes and source keys.
@@ -1028,9 +332,9 @@ class CfnGroupingConfiguration(
 
     @builtins.property
     @jsii.member(jsii_name="groupingConfigurationRef")
-    def grouping_configuration_ref(self) -> GroupingConfigurationReference:
+    def grouping_configuration_ref(self) -> _GroupingConfigurationReference_e449fdf2:
         '''A reference to a GroupingConfiguration resource.'''
-        return typing.cast(GroupingConfigurationReference, jsii.get(self, "groupingConfigurationRef"))
+        return typing.cast(_GroupingConfigurationReference_e449fdf2, jsii.get(self, "groupingConfigurationRef"))
 
     @builtins.property
     @jsii.member(jsii_name="groupingAttributeDefinitions")
@@ -1151,7 +455,72 @@ class CfnGroupingConfiguration(
             )
 
 
-@jsii.implements(_IInspectable_c2943556, IServiceLevelObjectiveRef, _ITaggableV2_4e6798f8)
+@jsii.data_type(
+    jsii_type="aws-cdk-lib.aws_applicationsignals.CfnGroupingConfigurationProps",
+    jsii_struct_bases=[],
+    name_mapping={"grouping_attribute_definitions": "groupingAttributeDefinitions"},
+)
+class CfnGroupingConfigurationProps:
+    def __init__(
+        self,
+        *,
+        grouping_attribute_definitions: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnGroupingConfiguration.GroupingAttributeDefinitionProperty, typing.Dict[builtins.str, typing.Any]]]]],
+    ) -> None:
+        '''Properties for defining a ``CfnGroupingConfiguration``.
+
+        :param grouping_attribute_definitions: An array of grouping attribute definitions that specify how services should be grouped based on various attributes and source keys.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-applicationsignals-groupingconfiguration.html
+        :exampleMetadata: fixture=_generated
+
+        Example::
+
+            # The code below shows an example of how to instantiate this type.
+            # The values are placeholders you should change.
+            from aws_cdk import aws_applicationsignals as applicationsignals
+            
+            cfn_grouping_configuration_props = applicationsignals.CfnGroupingConfigurationProps(
+                grouping_attribute_definitions=[applicationsignals.CfnGroupingConfiguration.GroupingAttributeDefinitionProperty(
+                    grouping_name="groupingName",
+                    grouping_source_keys=["groupingSourceKeys"],
+            
+                    # the properties below are optional
+                    default_grouping_value="defaultGroupingValue"
+                )]
+            )
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__f1092a665e6fb60575de2d22516416485dc448d30b228f509e488593e009ff91)
+            check_type(argname="argument grouping_attribute_definitions", value=grouping_attribute_definitions, expected_type=type_hints["grouping_attribute_definitions"])
+        self._values: typing.Dict[builtins.str, typing.Any] = {
+            "grouping_attribute_definitions": grouping_attribute_definitions,
+        }
+
+    @builtins.property
+    def grouping_attribute_definitions(
+        self,
+    ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnGroupingConfiguration.GroupingAttributeDefinitionProperty]]]:
+        '''An array of grouping attribute definitions that specify how services should be grouped based on various attributes and source keys.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-applicationsignals-groupingconfiguration.html#cfn-applicationsignals-groupingconfiguration-groupingattributedefinitions
+        '''
+        result = self._values.get("grouping_attribute_definitions")
+        assert result is not None, "Required property 'grouping_attribute_definitions' is missing"
+        return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnGroupingConfiguration.GroupingAttributeDefinitionProperty]]], result)
+
+    def __eq__(self, rhs: typing.Any) -> builtins.bool:
+        return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+    def __ne__(self, rhs: typing.Any) -> builtins.bool:
+        return not (rhs == self)
+
+    def __repr__(self) -> str:
+        return "CfnGroupingConfigurationProps(%s)" % ", ".join(
+            k + "=" + repr(v) for k, v in self._values.items()
+        )
+
+
+@jsii.implements(_IInspectable_c2943556, _IServiceLevelObjectiveRef_54989f43, _ITaggableV2_4e6798f8)
 class CfnServiceLevelObjective(
     _CfnResource_9df397a6,
     metaclass=jsii.JSIIMeta,
@@ -1399,7 +768,8 @@ class CfnServiceLevelObjective(
         sli: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnServiceLevelObjective.SliProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
-        '''
+        '''Create a new ``AWS::ApplicationSignals::ServiceLevelObjective``.
+
         :param scope: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
         :param name: A name for this SLO.
@@ -1507,9 +877,9 @@ class CfnServiceLevelObjective(
 
     @builtins.property
     @jsii.member(jsii_name="serviceLevelObjectiveRef")
-    def service_level_objective_ref(self) -> ServiceLevelObjectiveReference:
+    def service_level_objective_ref(self) -> _ServiceLevelObjectiveReference_d462c55f:
         '''A reference to a ServiceLevelObjective resource.'''
-        return typing.cast(ServiceLevelObjectiveReference, jsii.get(self, "serviceLevelObjectiveRef"))
+        return typing.cast(_ServiceLevelObjectiveReference_d462c55f, jsii.get(self, "serviceLevelObjectiveRef"))
 
     @builtins.property
     @jsii.member(jsii_name="name")
@@ -3722,6 +3092,360 @@ class CfnServiceLevelObjective(
             )
 
 
+@jsii.data_type(
+    jsii_type="aws-cdk-lib.aws_applicationsignals.CfnServiceLevelObjectiveProps",
+    jsii_struct_bases=[],
+    name_mapping={
+        "name": "name",
+        "burn_rate_configurations": "burnRateConfigurations",
+        "description": "description",
+        "exclusion_windows": "exclusionWindows",
+        "goal": "goal",
+        "request_based_sli": "requestBasedSli",
+        "sli": "sli",
+        "tags": "tags",
+    },
+)
+class CfnServiceLevelObjectiveProps:
+    def __init__(
+        self,
+        *,
+        name: builtins.str,
+        burn_rate_configurations: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnServiceLevelObjective.BurnRateConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        description: typing.Optional[builtins.str] = None,
+        exclusion_windows: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnServiceLevelObjective.ExclusionWindowProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        goal: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnServiceLevelObjective.GoalProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        request_based_sli: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnServiceLevelObjective.RequestBasedSliProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        sli: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnServiceLevelObjective.SliProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+    ) -> None:
+        '''Properties for defining a ``CfnServiceLevelObjective``.
+
+        :param name: A name for this SLO.
+        :param burn_rate_configurations: Each object in this array defines the length of the look-back window used to calculate one burn rate metric for this SLO. The burn rate measures how fast the service is consuming the error budget, relative to the attainment goal of the SLO.
+        :param description: An optional description for this SLO. Default: - "No description"
+        :param exclusion_windows: The time window to be excluded from the SLO performance metrics.
+        :param goal: This structure contains the attributes that determine the goal of an SLO. This includes the time period for evaluation and the attainment threshold.
+        :param request_based_sli: A structure containing information about the performance metric that this SLO monitors, if this is a request-based SLO.
+        :param sli: A structure containing information about the performance metric that this SLO monitors, if this is a period-based SLO.
+        :param tags: A list of key-value pairs to associate with the SLO. You can associate as many as 50 tags with an SLO. To be able to associate tags with the SLO when you create the SLO, you must have the cloudwatch:TagResource permission. Tags can help you organize and categorize your resources. You can also use them to scope user permissions by granting a user permission to access or change only resources with certain tag values.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-applicationsignals-servicelevelobjective.html
+        :exampleMetadata: fixture=_generated
+
+        Example::
+
+            # The code below shows an example of how to instantiate this type.
+            # The values are placeholders you should change.
+            from aws_cdk import aws_applicationsignals as applicationsignals
+            
+            cfn_service_level_objective_props = applicationsignals.CfnServiceLevelObjectiveProps(
+                name="name",
+            
+                # the properties below are optional
+                burn_rate_configurations=[applicationsignals.CfnServiceLevelObjective.BurnRateConfigurationProperty(
+                    look_back_window_minutes=123
+                )],
+                description="description",
+                exclusion_windows=[applicationsignals.CfnServiceLevelObjective.ExclusionWindowProperty(
+                    window=applicationsignals.CfnServiceLevelObjective.WindowProperty(
+                        duration=123,
+                        duration_unit="durationUnit"
+                    ),
+            
+                    # the properties below are optional
+                    reason="reason",
+                    recurrence_rule=applicationsignals.CfnServiceLevelObjective.RecurrenceRuleProperty(
+                        expression="expression"
+                    ),
+                    start_time="startTime"
+                )],
+                goal=applicationsignals.CfnServiceLevelObjective.GoalProperty(
+                    attainment_goal=123,
+                    interval=applicationsignals.CfnServiceLevelObjective.IntervalProperty(
+                        calendar_interval=applicationsignals.CfnServiceLevelObjective.CalendarIntervalProperty(
+                            duration=123,
+                            duration_unit="durationUnit",
+                            start_time=123
+                        ),
+                        rolling_interval=applicationsignals.CfnServiceLevelObjective.RollingIntervalProperty(
+                            duration=123,
+                            duration_unit="durationUnit"
+                        )
+                    ),
+                    warning_threshold=123
+                ),
+                request_based_sli=applicationsignals.CfnServiceLevelObjective.RequestBasedSliProperty(
+                    request_based_sli_metric=applicationsignals.CfnServiceLevelObjective.RequestBasedSliMetricProperty(
+                        dependency_config=applicationsignals.CfnServiceLevelObjective.DependencyConfigProperty(
+                            dependency_key_attributes={
+                                "dependency_key_attributes_key": "dependencyKeyAttributes"
+                            },
+                            dependency_operation_name="dependencyOperationName"
+                        ),
+                        key_attributes={
+                            "key_attributes_key": "keyAttributes"
+                        },
+                        metric_type="metricType",
+                        monitored_request_count_metric=applicationsignals.CfnServiceLevelObjective.MonitoredRequestCountMetricProperty(
+                            bad_count_metric=[applicationsignals.CfnServiceLevelObjective.MetricDataQueryProperty(
+                                id="id",
+            
+                                # the properties below are optional
+                                account_id="accountId",
+                                expression="expression",
+                                metric_stat=applicationsignals.CfnServiceLevelObjective.MetricStatProperty(
+                                    metric=applicationsignals.CfnServiceLevelObjective.MetricProperty(
+                                        dimensions=[applicationsignals.CfnServiceLevelObjective.DimensionProperty(
+                                            name="name",
+                                            value="value"
+                                        )],
+                                        metric_name="metricName",
+                                        namespace="namespace"
+                                    ),
+                                    period=123,
+                                    stat="stat",
+            
+                                    # the properties below are optional
+                                    unit="unit"
+                                ),
+                                return_data=False
+                            )],
+                            good_count_metric=[applicationsignals.CfnServiceLevelObjective.MetricDataQueryProperty(
+                                id="id",
+            
+                                # the properties below are optional
+                                account_id="accountId",
+                                expression="expression",
+                                metric_stat=applicationsignals.CfnServiceLevelObjective.MetricStatProperty(
+                                    metric=applicationsignals.CfnServiceLevelObjective.MetricProperty(
+                                        dimensions=[applicationsignals.CfnServiceLevelObjective.DimensionProperty(
+                                            name="name",
+                                            value="value"
+                                        )],
+                                        metric_name="metricName",
+                                        namespace="namespace"
+                                    ),
+                                    period=123,
+                                    stat="stat",
+            
+                                    # the properties below are optional
+                                    unit="unit"
+                                ),
+                                return_data=False
+                            )]
+                        ),
+                        operation_name="operationName",
+                        total_request_count_metric=[applicationsignals.CfnServiceLevelObjective.MetricDataQueryProperty(
+                            id="id",
+            
+                            # the properties below are optional
+                            account_id="accountId",
+                            expression="expression",
+                            metric_stat=applicationsignals.CfnServiceLevelObjective.MetricStatProperty(
+                                metric=applicationsignals.CfnServiceLevelObjective.MetricProperty(
+                                    dimensions=[applicationsignals.CfnServiceLevelObjective.DimensionProperty(
+                                        name="name",
+                                        value="value"
+                                    )],
+                                    metric_name="metricName",
+                                    namespace="namespace"
+                                ),
+                                period=123,
+                                stat="stat",
+            
+                                # the properties below are optional
+                                unit="unit"
+                            ),
+                            return_data=False
+                        )]
+                    ),
+            
+                    # the properties below are optional
+                    comparison_operator="comparisonOperator",
+                    metric_threshold=123
+                ),
+                sli=applicationsignals.CfnServiceLevelObjective.SliProperty(
+                    comparison_operator="comparisonOperator",
+                    metric_threshold=123,
+                    sli_metric=applicationsignals.CfnServiceLevelObjective.SliMetricProperty(
+                        dependency_config=applicationsignals.CfnServiceLevelObjective.DependencyConfigProperty(
+                            dependency_key_attributes={
+                                "dependency_key_attributes_key": "dependencyKeyAttributes"
+                            },
+                            dependency_operation_name="dependencyOperationName"
+                        ),
+                        key_attributes={
+                            "key_attributes_key": "keyAttributes"
+                        },
+                        metric_data_queries=[applicationsignals.CfnServiceLevelObjective.MetricDataQueryProperty(
+                            id="id",
+            
+                            # the properties below are optional
+                            account_id="accountId",
+                            expression="expression",
+                            metric_stat=applicationsignals.CfnServiceLevelObjective.MetricStatProperty(
+                                metric=applicationsignals.CfnServiceLevelObjective.MetricProperty(
+                                    dimensions=[applicationsignals.CfnServiceLevelObjective.DimensionProperty(
+                                        name="name",
+                                        value="value"
+                                    )],
+                                    metric_name="metricName",
+                                    namespace="namespace"
+                                ),
+                                period=123,
+                                stat="stat",
+            
+                                # the properties below are optional
+                                unit="unit"
+                            ),
+                            return_data=False
+                        )],
+                        metric_type="metricType",
+                        operation_name="operationName",
+                        period_seconds=123,
+                        statistic="statistic"
+                    )
+                ),
+                tags=[CfnTag(
+                    key="key",
+                    value="value"
+                )]
+            )
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__8a302456885343cc9ce5e0497feed773de1ef0f44e2934f97458bfdc5a810dee)
+            check_type(argname="argument name", value=name, expected_type=type_hints["name"])
+            check_type(argname="argument burn_rate_configurations", value=burn_rate_configurations, expected_type=type_hints["burn_rate_configurations"])
+            check_type(argname="argument description", value=description, expected_type=type_hints["description"])
+            check_type(argname="argument exclusion_windows", value=exclusion_windows, expected_type=type_hints["exclusion_windows"])
+            check_type(argname="argument goal", value=goal, expected_type=type_hints["goal"])
+            check_type(argname="argument request_based_sli", value=request_based_sli, expected_type=type_hints["request_based_sli"])
+            check_type(argname="argument sli", value=sli, expected_type=type_hints["sli"])
+            check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
+        self._values: typing.Dict[builtins.str, typing.Any] = {
+            "name": name,
+        }
+        if burn_rate_configurations is not None:
+            self._values["burn_rate_configurations"] = burn_rate_configurations
+        if description is not None:
+            self._values["description"] = description
+        if exclusion_windows is not None:
+            self._values["exclusion_windows"] = exclusion_windows
+        if goal is not None:
+            self._values["goal"] = goal
+        if request_based_sli is not None:
+            self._values["request_based_sli"] = request_based_sli
+        if sli is not None:
+            self._values["sli"] = sli
+        if tags is not None:
+            self._values["tags"] = tags
+
+    @builtins.property
+    def name(self) -> builtins.str:
+        '''A name for this SLO.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-applicationsignals-servicelevelobjective.html#cfn-applicationsignals-servicelevelobjective-name
+        '''
+        result = self._values.get("name")
+        assert result is not None, "Required property 'name' is missing"
+        return typing.cast(builtins.str, result)
+
+    @builtins.property
+    def burn_rate_configurations(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnServiceLevelObjective.BurnRateConfigurationProperty]]]]:
+        '''Each object in this array defines the length of the look-back window used to calculate one burn rate metric for this SLO.
+
+        The burn rate measures how fast the service is consuming the error budget, relative to the attainment goal of the SLO.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-applicationsignals-servicelevelobjective.html#cfn-applicationsignals-servicelevelobjective-burnrateconfigurations
+        '''
+        result = self._values.get("burn_rate_configurations")
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnServiceLevelObjective.BurnRateConfigurationProperty]]]], result)
+
+    @builtins.property
+    def description(self) -> typing.Optional[builtins.str]:
+        '''An optional description for this SLO.
+
+        :default: - "No description"
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-applicationsignals-servicelevelobjective.html#cfn-applicationsignals-servicelevelobjective-description
+        '''
+        result = self._values.get("description")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def exclusion_windows(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnServiceLevelObjective.ExclusionWindowProperty]]]]:
+        '''The time window to be excluded from the SLO performance metrics.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-applicationsignals-servicelevelobjective.html#cfn-applicationsignals-servicelevelobjective-exclusionwindows
+        '''
+        result = self._values.get("exclusion_windows")
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnServiceLevelObjective.ExclusionWindowProperty]]]], result)
+
+    @builtins.property
+    def goal(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnServiceLevelObjective.GoalProperty]]:
+        '''This structure contains the attributes that determine the goal of an SLO.
+
+        This includes the time period for evaluation and the attainment threshold.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-applicationsignals-servicelevelobjective.html#cfn-applicationsignals-servicelevelobjective-goal
+        '''
+        result = self._values.get("goal")
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnServiceLevelObjective.GoalProperty]], result)
+
+    @builtins.property
+    def request_based_sli(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnServiceLevelObjective.RequestBasedSliProperty]]:
+        '''A structure containing information about the performance metric that this SLO monitors, if this is a request-based SLO.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-applicationsignals-servicelevelobjective.html#cfn-applicationsignals-servicelevelobjective-requestbasedsli
+        '''
+        result = self._values.get("request_based_sli")
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnServiceLevelObjective.RequestBasedSliProperty]], result)
+
+    @builtins.property
+    def sli(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnServiceLevelObjective.SliProperty]]:
+        '''A structure containing information about the performance metric that this SLO monitors, if this is a period-based SLO.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-applicationsignals-servicelevelobjective.html#cfn-applicationsignals-servicelevelobjective-sli
+        '''
+        result = self._values.get("sli")
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnServiceLevelObjective.SliProperty]], result)
+
+    @builtins.property
+    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+        '''A list of key-value pairs to associate with the SLO.
+
+        You can associate as many as 50 tags with an SLO. To be able to associate tags with the SLO when you create the SLO, you must have the cloudwatch:TagResource permission.
+
+        Tags can help you organize and categorize your resources. You can also use them to scope user permissions by granting a user permission to access or change only resources with certain tag values.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-applicationsignals-servicelevelobjective.html#cfn-applicationsignals-servicelevelobjective-tags
+        '''
+        result = self._values.get("tags")
+        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+
+    def __eq__(self, rhs: typing.Any) -> builtins.bool:
+        return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+    def __ne__(self, rhs: typing.Any) -> builtins.bool:
+        return not (rhs == self)
+
+    def __repr__(self) -> str:
+        return "CfnServiceLevelObjectiveProps(%s)" % ", ".join(
+            k + "=" + repr(v) for k, v in self._values.items()
+        )
+
+
 __all__ = [
     "CfnDiscovery",
     "CfnDiscoveryProps",
@@ -3729,57 +3453,9 @@ __all__ = [
     "CfnGroupingConfigurationProps",
     "CfnServiceLevelObjective",
     "CfnServiceLevelObjectiveProps",
-    "DiscoveryReference",
-    "GroupingConfigurationReference",
-    "IDiscoveryRef",
-    "IGroupingConfigurationRef",
-    "IServiceLevelObjectiveRef",
-    "ServiceLevelObjectiveReference",
 ]
 
 publication.publish()
-
-def _typecheckingstub__f1092a665e6fb60575de2d22516416485dc448d30b228f509e488593e009ff91(
-    *,
-    grouping_attribute_definitions: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnGroupingConfiguration.GroupingAttributeDefinitionProperty, typing.Dict[builtins.str, typing.Any]]]]],
-) -> None:
-    """Type checking stubs"""
-    pass
-
-def _typecheckingstub__8a302456885343cc9ce5e0497feed773de1ef0f44e2934f97458bfdc5a810dee(
-    *,
-    name: builtins.str,
-    burn_rate_configurations: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnServiceLevelObjective.BurnRateConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
-    description: typing.Optional[builtins.str] = None,
-    exclusion_windows: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnServiceLevelObjective.ExclusionWindowProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
-    goal: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnServiceLevelObjective.GoalProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-    request_based_sli: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnServiceLevelObjective.RequestBasedSliProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-    sli: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnServiceLevelObjective.SliProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-    tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-) -> None:
-    """Type checking stubs"""
-    pass
-
-def _typecheckingstub__3ae2bd86b52b8376135e6a0403bddad426628a9251837d98b72330906f2e84b9(
-    *,
-    account_id: builtins.str,
-) -> None:
-    """Type checking stubs"""
-    pass
-
-def _typecheckingstub__ae567aeddbe652faa360c59707e41b9c2af35fb469b410ba0b525e8b848a24cf(
-    *,
-    account_id: builtins.str,
-) -> None:
-    """Type checking stubs"""
-    pass
-
-def _typecheckingstub__ffb2179a3df5fd3e340705140187e7094f0de9530c40bd432501e998aafc7145(
-    *,
-    service_level_objective_arn: builtins.str,
-) -> None:
-    """Type checking stubs"""
-    pass
 
 def _typecheckingstub__431b690cfc38177c6d13e2a64c92a9b242c6a79b7a4c3d863419e7fee6120750(
     scope: _constructs_77d1e7e8.Construct,
@@ -3832,6 +3508,13 @@ def _typecheckingstub__4809aa4639bc02468e9643d2a4f1a9e5305f3985a02486a04a21025dc
     grouping_name: builtins.str,
     grouping_source_keys: typing.Sequence[builtins.str],
     default_grouping_value: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__f1092a665e6fb60575de2d22516416485dc448d30b228f509e488593e009ff91(
+    *,
+    grouping_attribute_definitions: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnGroupingConfiguration.GroupingAttributeDefinitionProperty, typing.Dict[builtins.str, typing.Any]]]]],
 ) -> None:
     """Type checking stubs"""
     pass
@@ -4075,5 +3758,16 @@ def _typecheckingstub__7cd27fd1807625da6b260ce4b909abd68a6e0ece1732fab3f05f19247
     """Type checking stubs"""
     pass
 
-for cls in [IDiscoveryRef, IGroupingConfigurationRef, IServiceLevelObjectiveRef]:
-    typing.cast(typing.Any, cls).__protocol_attrs__ = typing.cast(typing.Any, cls).__protocol_attrs__ - set(['__jsii_proxy_class__', '__jsii_type__'])
+def _typecheckingstub__8a302456885343cc9ce5e0497feed773de1ef0f44e2934f97458bfdc5a810dee(
+    *,
+    name: builtins.str,
+    burn_rate_configurations: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnServiceLevelObjective.BurnRateConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+    description: typing.Optional[builtins.str] = None,
+    exclusion_windows: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnServiceLevelObjective.ExclusionWindowProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+    goal: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnServiceLevelObjective.GoalProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    request_based_sli: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnServiceLevelObjective.RequestBasedSliProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    sli: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnServiceLevelObjective.SliProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass

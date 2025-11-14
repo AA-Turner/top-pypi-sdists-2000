@@ -64,8 +64,8 @@ class FunctionCollection(FunctionCollectionBase):
 class FunctionResource(FunctionResourceBase):
     """Represents a reference to a Snowflake function.
 
-    With this function reference, you can create and fetch information about functions, as well
-    as perform certain actions on them.
+    With this function reference, you can fetch information about a function, as well as perform
+    certain actions on it.
     """
 
     _identifier_requires_args = True

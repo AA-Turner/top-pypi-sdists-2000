@@ -61,7 +61,6 @@ import constructs as _constructs_77d1e7e8
 from .. import (
     CfnResource as _CfnResource_9df397a6,
     CfnTag as _CfnTag_f6864754,
-    IEnvironmentAware as _IEnvironmentAware_a408b00d,
     IInspectable as _IInspectable_c2943556,
     IResolvable as _IResolvable_da3f097b,
     ITaggable as _ITaggable_36806126,
@@ -69,893 +68,17 @@ from .. import (
     TagManager as _TagManager_0a598cb3,
     TreeInspector as _TreeInspector_488e0dd5,
 )
-
-
-@jsii.data_type(
-    jsii_type="aws-cdk-lib.aws_appintegrations.ApplicationReference",
-    jsii_struct_bases=[],
-    name_mapping={"application_arn": "applicationArn"},
+from ..interfaces.aws_appintegrations import (
+    ApplicationReference as _ApplicationReference_eb7f83ac,
+    DataIntegrationReference as _DataIntegrationReference_82094d23,
+    EventIntegrationReference as _EventIntegrationReference_2d3a8ab8,
+    IApplicationRef as _IApplicationRef_f88446ed,
+    IDataIntegrationRef as _IDataIntegrationRef_c5e65586,
+    IEventIntegrationRef as _IEventIntegrationRef_d2c58e8f,
 )
-class ApplicationReference:
-    def __init__(self, *, application_arn: builtins.str) -> None:
-        '''A reference to a Application resource.
 
-        :param application_arn: The ApplicationArn of the Application resource.
 
-        :exampleMetadata: fixture=_generated
-
-        Example::
-
-            # The code below shows an example of how to instantiate this type.
-            # The values are placeholders you should change.
-            from aws_cdk import aws_appintegrations as appintegrations
-            
-            application_reference = appintegrations.ApplicationReference(
-                application_arn="applicationArn"
-            )
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__2ce77147616ff1c722ea64fc1d4f3fce2bdfff799271c0caad1223fffb893718)
-            check_type(argname="argument application_arn", value=application_arn, expected_type=type_hints["application_arn"])
-        self._values: typing.Dict[builtins.str, typing.Any] = {
-            "application_arn": application_arn,
-        }
-
-    @builtins.property
-    def application_arn(self) -> builtins.str:
-        '''The ApplicationArn of the Application resource.'''
-        result = self._values.get("application_arn")
-        assert result is not None, "Required property 'application_arn' is missing"
-        return typing.cast(builtins.str, result)
-
-    def __eq__(self, rhs: typing.Any) -> builtins.bool:
-        return isinstance(rhs, self.__class__) and rhs._values == self._values
-
-    def __ne__(self, rhs: typing.Any) -> builtins.bool:
-        return not (rhs == self)
-
-    def __repr__(self) -> str:
-        return "ApplicationReference(%s)" % ", ".join(
-            k + "=" + repr(v) for k, v in self._values.items()
-        )
-
-
-@jsii.data_type(
-    jsii_type="aws-cdk-lib.aws_appintegrations.CfnApplicationProps",
-    jsii_struct_bases=[],
-    name_mapping={
-        "application_source_config": "applicationSourceConfig",
-        "description": "description",
-        "name": "name",
-        "namespace": "namespace",
-        "application_config": "applicationConfig",
-        "iframe_config": "iframeConfig",
-        "initialization_timeout": "initializationTimeout",
-        "is_service": "isService",
-        "permissions": "permissions",
-        "tags": "tags",
-    },
-)
-class CfnApplicationProps:
-    def __init__(
-        self,
-        *,
-        application_source_config: typing.Union[_IResolvable_da3f097b, typing.Union["CfnApplication.ApplicationSourceConfigProperty", typing.Dict[builtins.str, typing.Any]]],
-        description: builtins.str,
-        name: builtins.str,
-        namespace: builtins.str,
-        application_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnApplication.ApplicationConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        iframe_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnApplication.IframeConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        initialization_timeout: typing.Optional[jsii.Number] = None,
-        is_service: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        permissions: typing.Optional[typing.Sequence[builtins.str]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-    ) -> None:
-        '''Properties for defining a ``CfnApplication``.
-
-        :param application_source_config: The configuration for where the application should be loaded from.
-        :param description: The description of the application.
-        :param name: The name of the application.
-        :param namespace: The namespace of the application.
-        :param application_config: 
-        :param iframe_config: 
-        :param initialization_timeout: The initialization timeout in milliseconds. Required when IsService is true.
-        :param is_service: Indicates whether the application is a service. Default: - false
-        :param permissions: The configuration of events or requests that the application has access to.
-        :param tags: The tags used to organize, track, or control access for this resource. For example, { "tags": {"key1":"value1", "key2":"value2"} }.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appintegrations-application.html
-        :exampleMetadata: fixture=_generated
-
-        Example::
-
-            # The code below shows an example of how to instantiate this type.
-            # The values are placeholders you should change.
-            from aws_cdk import aws_appintegrations as appintegrations
-            
-            cfn_application_props = appintegrations.CfnApplicationProps(
-                application_source_config=appintegrations.CfnApplication.ApplicationSourceConfigProperty(
-                    external_url_config=appintegrations.CfnApplication.ExternalUrlConfigProperty(
-                        access_url="accessUrl",
-            
-                        # the properties below are optional
-                        approved_origins=["approvedOrigins"]
-                    )
-                ),
-                description="description",
-                name="name",
-                namespace="namespace",
-            
-                # the properties below are optional
-                application_config=appintegrations.CfnApplication.ApplicationConfigProperty(
-                    contact_handling=appintegrations.CfnApplication.ContactHandlingProperty(
-                        scope="scope"
-                    )
-                ),
-                iframe_config=appintegrations.CfnApplication.IframeConfigProperty(
-                    allow=["allow"],
-                    sandbox=["sandbox"]
-                ),
-                initialization_timeout=123,
-                is_service=False,
-                permissions=["permissions"],
-                tags=[CfnTag(
-                    key="key",
-                    value="value"
-                )]
-            )
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__7d2c7ce5dfd3af1b41c02f961c30070527579ac243574e11a9dfe26cc453fe9f)
-            check_type(argname="argument application_source_config", value=application_source_config, expected_type=type_hints["application_source_config"])
-            check_type(argname="argument description", value=description, expected_type=type_hints["description"])
-            check_type(argname="argument name", value=name, expected_type=type_hints["name"])
-            check_type(argname="argument namespace", value=namespace, expected_type=type_hints["namespace"])
-            check_type(argname="argument application_config", value=application_config, expected_type=type_hints["application_config"])
-            check_type(argname="argument iframe_config", value=iframe_config, expected_type=type_hints["iframe_config"])
-            check_type(argname="argument initialization_timeout", value=initialization_timeout, expected_type=type_hints["initialization_timeout"])
-            check_type(argname="argument is_service", value=is_service, expected_type=type_hints["is_service"])
-            check_type(argname="argument permissions", value=permissions, expected_type=type_hints["permissions"])
-            check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
-        self._values: typing.Dict[builtins.str, typing.Any] = {
-            "application_source_config": application_source_config,
-            "description": description,
-            "name": name,
-            "namespace": namespace,
-        }
-        if application_config is not None:
-            self._values["application_config"] = application_config
-        if iframe_config is not None:
-            self._values["iframe_config"] = iframe_config
-        if initialization_timeout is not None:
-            self._values["initialization_timeout"] = initialization_timeout
-        if is_service is not None:
-            self._values["is_service"] = is_service
-        if permissions is not None:
-            self._values["permissions"] = permissions
-        if tags is not None:
-            self._values["tags"] = tags
-
-    @builtins.property
-    def application_source_config(
-        self,
-    ) -> typing.Union[_IResolvable_da3f097b, "CfnApplication.ApplicationSourceConfigProperty"]:
-        '''The configuration for where the application should be loaded from.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appintegrations-application.html#cfn-appintegrations-application-applicationsourceconfig
-        '''
-        result = self._values.get("application_source_config")
-        assert result is not None, "Required property 'application_source_config' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnApplication.ApplicationSourceConfigProperty"], result)
-
-    @builtins.property
-    def description(self) -> builtins.str:
-        '''The description of the application.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appintegrations-application.html#cfn-appintegrations-application-description
-        '''
-        result = self._values.get("description")
-        assert result is not None, "Required property 'description' is missing"
-        return typing.cast(builtins.str, result)
-
-    @builtins.property
-    def name(self) -> builtins.str:
-        '''The name of the application.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appintegrations-application.html#cfn-appintegrations-application-name
-        '''
-        result = self._values.get("name")
-        assert result is not None, "Required property 'name' is missing"
-        return typing.cast(builtins.str, result)
-
-    @builtins.property
-    def namespace(self) -> builtins.str:
-        '''The namespace of the application.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appintegrations-application.html#cfn-appintegrations-application-namespace
-        '''
-        result = self._values.get("namespace")
-        assert result is not None, "Required property 'namespace' is missing"
-        return typing.cast(builtins.str, result)
-
-    @builtins.property
-    def application_config(
-        self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApplication.ApplicationConfigProperty"]]:
-        '''
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appintegrations-application.html#cfn-appintegrations-application-applicationconfig
-        '''
-        result = self._values.get("application_config")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApplication.ApplicationConfigProperty"]], result)
-
-    @builtins.property
-    def iframe_config(
-        self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApplication.IframeConfigProperty"]]:
-        '''
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appintegrations-application.html#cfn-appintegrations-application-iframeconfig
-        '''
-        result = self._values.get("iframe_config")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApplication.IframeConfigProperty"]], result)
-
-    @builtins.property
-    def initialization_timeout(self) -> typing.Optional[jsii.Number]:
-        '''The initialization timeout in milliseconds.
-
-        Required when IsService is true.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appintegrations-application.html#cfn-appintegrations-application-initializationtimeout
-        '''
-        result = self._values.get("initialization_timeout")
-        return typing.cast(typing.Optional[jsii.Number], result)
-
-    @builtins.property
-    def is_service(
-        self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
-        '''Indicates whether the application is a service.
-
-        :default: - false
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appintegrations-application.html#cfn-appintegrations-application-isservice
-        '''
-        result = self._values.get("is_service")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
-
-    @builtins.property
-    def permissions(self) -> typing.Optional[typing.List[builtins.str]]:
-        '''The configuration of events or requests that the application has access to.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appintegrations-application.html#cfn-appintegrations-application-permissions
-        '''
-        result = self._values.get("permissions")
-        return typing.cast(typing.Optional[typing.List[builtins.str]], result)
-
-    @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
-        '''The tags used to organize, track, or control access for this resource.
-
-        For example, { "tags": {"key1":"value1", "key2":"value2"} }.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appintegrations-application.html#cfn-appintegrations-application-tags
-        '''
-        result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
-
-    def __eq__(self, rhs: typing.Any) -> builtins.bool:
-        return isinstance(rhs, self.__class__) and rhs._values == self._values
-
-    def __ne__(self, rhs: typing.Any) -> builtins.bool:
-        return not (rhs == self)
-
-    def __repr__(self) -> str:
-        return "CfnApplicationProps(%s)" % ", ".join(
-            k + "=" + repr(v) for k, v in self._values.items()
-        )
-
-
-@jsii.data_type(
-    jsii_type="aws-cdk-lib.aws_appintegrations.CfnDataIntegrationProps",
-    jsii_struct_bases=[],
-    name_mapping={
-        "kms_key": "kmsKey",
-        "name": "name",
-        "source_uri": "sourceUri",
-        "description": "description",
-        "file_configuration": "fileConfiguration",
-        "object_configuration": "objectConfiguration",
-        "schedule_config": "scheduleConfig",
-        "tags": "tags",
-    },
-)
-class CfnDataIntegrationProps:
-    def __init__(
-        self,
-        *,
-        kms_key: builtins.str,
-        name: builtins.str,
-        source_uri: builtins.str,
-        description: typing.Optional[builtins.str] = None,
-        file_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataIntegration.FileConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        object_configuration: typing.Any = None,
-        schedule_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataIntegration.ScheduleConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-    ) -> None:
-        '''Properties for defining a ``CfnDataIntegration``.
-
-        :param kms_key: The KMS key for the DataIntegration.
-        :param name: The name of the DataIntegration.
-        :param source_uri: The URI of the data source.
-        :param description: A description of the DataIntegration.
-        :param file_configuration: The configuration for what files should be pulled from the source.
-        :param object_configuration: The configuration for what data should be pulled from the source.
-        :param schedule_config: The name of the data and how often it should be pulled from the source.
-        :param tags: An array of key-value pairs to apply to this resource. For more information, see `Tag <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-resource-tags.html>`_ .
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appintegrations-dataintegration.html
-        :exampleMetadata: fixture=_generated
-
-        Example::
-
-            # The code below shows an example of how to instantiate this type.
-            # The values are placeholders you should change.
-            from aws_cdk import aws_appintegrations as appintegrations
-            
-            # filters: Any
-            # object_configuration: Any
-            
-            cfn_data_integration_props = appintegrations.CfnDataIntegrationProps(
-                kms_key="kmsKey",
-                name="name",
-                source_uri="sourceUri",
-            
-                # the properties below are optional
-                description="description",
-                file_configuration=appintegrations.CfnDataIntegration.FileConfigurationProperty(
-                    folders=["folders"],
-            
-                    # the properties below are optional
-                    filters=filters
-                ),
-                object_configuration=object_configuration,
-                schedule_config=appintegrations.CfnDataIntegration.ScheduleConfigProperty(
-                    schedule_expression="scheduleExpression",
-            
-                    # the properties below are optional
-                    first_execution_from="firstExecutionFrom",
-                    object="object"
-                ),
-                tags=[CfnTag(
-                    key="key",
-                    value="value"
-                )]
-            )
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__e4e7b2c594c26fb87f1ee6d6a6b7787330233c7a73e8ce2cfe23ce1b18ffe290)
-            check_type(argname="argument kms_key", value=kms_key, expected_type=type_hints["kms_key"])
-            check_type(argname="argument name", value=name, expected_type=type_hints["name"])
-            check_type(argname="argument source_uri", value=source_uri, expected_type=type_hints["source_uri"])
-            check_type(argname="argument description", value=description, expected_type=type_hints["description"])
-            check_type(argname="argument file_configuration", value=file_configuration, expected_type=type_hints["file_configuration"])
-            check_type(argname="argument object_configuration", value=object_configuration, expected_type=type_hints["object_configuration"])
-            check_type(argname="argument schedule_config", value=schedule_config, expected_type=type_hints["schedule_config"])
-            check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
-        self._values: typing.Dict[builtins.str, typing.Any] = {
-            "kms_key": kms_key,
-            "name": name,
-            "source_uri": source_uri,
-        }
-        if description is not None:
-            self._values["description"] = description
-        if file_configuration is not None:
-            self._values["file_configuration"] = file_configuration
-        if object_configuration is not None:
-            self._values["object_configuration"] = object_configuration
-        if schedule_config is not None:
-            self._values["schedule_config"] = schedule_config
-        if tags is not None:
-            self._values["tags"] = tags
-
-    @builtins.property
-    def kms_key(self) -> builtins.str:
-        '''The KMS key for the DataIntegration.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appintegrations-dataintegration.html#cfn-appintegrations-dataintegration-kmskey
-        '''
-        result = self._values.get("kms_key")
-        assert result is not None, "Required property 'kms_key' is missing"
-        return typing.cast(builtins.str, result)
-
-    @builtins.property
-    def name(self) -> builtins.str:
-        '''The name of the DataIntegration.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appintegrations-dataintegration.html#cfn-appintegrations-dataintegration-name
-        '''
-        result = self._values.get("name")
-        assert result is not None, "Required property 'name' is missing"
-        return typing.cast(builtins.str, result)
-
-    @builtins.property
-    def source_uri(self) -> builtins.str:
-        '''The URI of the data source.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appintegrations-dataintegration.html#cfn-appintegrations-dataintegration-sourceuri
-        '''
-        result = self._values.get("source_uri")
-        assert result is not None, "Required property 'source_uri' is missing"
-        return typing.cast(builtins.str, result)
-
-    @builtins.property
-    def description(self) -> typing.Optional[builtins.str]:
-        '''A description of the DataIntegration.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appintegrations-dataintegration.html#cfn-appintegrations-dataintegration-description
-        '''
-        result = self._values.get("description")
-        return typing.cast(typing.Optional[builtins.str], result)
-
-    @builtins.property
-    def file_configuration(
-        self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataIntegration.FileConfigurationProperty"]]:
-        '''The configuration for what files should be pulled from the source.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appintegrations-dataintegration.html#cfn-appintegrations-dataintegration-fileconfiguration
-        '''
-        result = self._values.get("file_configuration")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataIntegration.FileConfigurationProperty"]], result)
-
-    @builtins.property
-    def object_configuration(self) -> typing.Any:
-        '''The configuration for what data should be pulled from the source.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appintegrations-dataintegration.html#cfn-appintegrations-dataintegration-objectconfiguration
-        '''
-        result = self._values.get("object_configuration")
-        return typing.cast(typing.Any, result)
-
-    @builtins.property
-    def schedule_config(
-        self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataIntegration.ScheduleConfigProperty"]]:
-        '''The name of the data and how often it should be pulled from the source.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appintegrations-dataintegration.html#cfn-appintegrations-dataintegration-scheduleconfig
-        '''
-        result = self._values.get("schedule_config")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataIntegration.ScheduleConfigProperty"]], result)
-
-    @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
-        '''An array of key-value pairs to apply to this resource.
-
-        For more information, see `Tag <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-resource-tags.html>`_ .
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appintegrations-dataintegration.html#cfn-appintegrations-dataintegration-tags
-        '''
-        result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
-
-    def __eq__(self, rhs: typing.Any) -> builtins.bool:
-        return isinstance(rhs, self.__class__) and rhs._values == self._values
-
-    def __ne__(self, rhs: typing.Any) -> builtins.bool:
-        return not (rhs == self)
-
-    def __repr__(self) -> str:
-        return "CfnDataIntegrationProps(%s)" % ", ".join(
-            k + "=" + repr(v) for k, v in self._values.items()
-        )
-
-
-@jsii.data_type(
-    jsii_type="aws-cdk-lib.aws_appintegrations.CfnEventIntegrationProps",
-    jsii_struct_bases=[],
-    name_mapping={
-        "event_bridge_bus": "eventBridgeBus",
-        "event_filter": "eventFilter",
-        "name": "name",
-        "description": "description",
-        "tags": "tags",
-    },
-)
-class CfnEventIntegrationProps:
-    def __init__(
-        self,
-        *,
-        event_bridge_bus: builtins.str,
-        event_filter: typing.Union[_IResolvable_da3f097b, typing.Union["CfnEventIntegration.EventFilterProperty", typing.Dict[builtins.str, typing.Any]]],
-        name: builtins.str,
-        description: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-    ) -> None:
-        '''Properties for defining a ``CfnEventIntegration``.
-
-        :param event_bridge_bus: The Amazon EventBridge bus for the event integration.
-        :param event_filter: The event integration filter.
-        :param name: The name of the event integration.
-        :param description: The event integration description.
-        :param tags: An array of key-value pairs to apply to this resource. For more information, see `Tag <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-resource-tags.html>`_ .
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appintegrations-eventintegration.html
-        :exampleMetadata: fixture=_generated
-
-        Example::
-
-            # The code below shows an example of how to instantiate this type.
-            # The values are placeholders you should change.
-            from aws_cdk import aws_appintegrations as appintegrations
-            
-            cfn_event_integration_props = appintegrations.CfnEventIntegrationProps(
-                event_bridge_bus="eventBridgeBus",
-                event_filter=appintegrations.CfnEventIntegration.EventFilterProperty(
-                    source="source"
-                ),
-                name="name",
-            
-                # the properties below are optional
-                description="description",
-                tags=[CfnTag(
-                    key="key",
-                    value="value"
-                )]
-            )
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__f9153bde28b2e9d1843c748f4d513f8ac68ef7ba9754ea2cdad14193f14742d6)
-            check_type(argname="argument event_bridge_bus", value=event_bridge_bus, expected_type=type_hints["event_bridge_bus"])
-            check_type(argname="argument event_filter", value=event_filter, expected_type=type_hints["event_filter"])
-            check_type(argname="argument name", value=name, expected_type=type_hints["name"])
-            check_type(argname="argument description", value=description, expected_type=type_hints["description"])
-            check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
-        self._values: typing.Dict[builtins.str, typing.Any] = {
-            "event_bridge_bus": event_bridge_bus,
-            "event_filter": event_filter,
-            "name": name,
-        }
-        if description is not None:
-            self._values["description"] = description
-        if tags is not None:
-            self._values["tags"] = tags
-
-    @builtins.property
-    def event_bridge_bus(self) -> builtins.str:
-        '''The Amazon EventBridge bus for the event integration.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appintegrations-eventintegration.html#cfn-appintegrations-eventintegration-eventbridgebus
-        '''
-        result = self._values.get("event_bridge_bus")
-        assert result is not None, "Required property 'event_bridge_bus' is missing"
-        return typing.cast(builtins.str, result)
-
-    @builtins.property
-    def event_filter(
-        self,
-    ) -> typing.Union[_IResolvable_da3f097b, "CfnEventIntegration.EventFilterProperty"]:
-        '''The event integration filter.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appintegrations-eventintegration.html#cfn-appintegrations-eventintegration-eventfilter
-        '''
-        result = self._values.get("event_filter")
-        assert result is not None, "Required property 'event_filter' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnEventIntegration.EventFilterProperty"], result)
-
-    @builtins.property
-    def name(self) -> builtins.str:
-        '''The name of the event integration.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appintegrations-eventintegration.html#cfn-appintegrations-eventintegration-name
-        '''
-        result = self._values.get("name")
-        assert result is not None, "Required property 'name' is missing"
-        return typing.cast(builtins.str, result)
-
-    @builtins.property
-    def description(self) -> typing.Optional[builtins.str]:
-        '''The event integration description.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appintegrations-eventintegration.html#cfn-appintegrations-eventintegration-description
-        '''
-        result = self._values.get("description")
-        return typing.cast(typing.Optional[builtins.str], result)
-
-    @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
-        '''An array of key-value pairs to apply to this resource.
-
-        For more information, see `Tag <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-resource-tags.html>`_ .
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appintegrations-eventintegration.html#cfn-appintegrations-eventintegration-tags
-        '''
-        result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
-
-    def __eq__(self, rhs: typing.Any) -> builtins.bool:
-        return isinstance(rhs, self.__class__) and rhs._values == self._values
-
-    def __ne__(self, rhs: typing.Any) -> builtins.bool:
-        return not (rhs == self)
-
-    def __repr__(self) -> str:
-        return "CfnEventIntegrationProps(%s)" % ", ".join(
-            k + "=" + repr(v) for k, v in self._values.items()
-        )
-
-
-@jsii.data_type(
-    jsii_type="aws-cdk-lib.aws_appintegrations.DataIntegrationReference",
-    jsii_struct_bases=[],
-    name_mapping={
-        "data_integration_arn": "dataIntegrationArn",
-        "data_integration_id": "dataIntegrationId",
-    },
-)
-class DataIntegrationReference:
-    def __init__(
-        self,
-        *,
-        data_integration_arn: builtins.str,
-        data_integration_id: builtins.str,
-    ) -> None:
-        '''A reference to a DataIntegration resource.
-
-        :param data_integration_arn: The ARN of the DataIntegration resource.
-        :param data_integration_id: The Id of the DataIntegration resource.
-
-        :exampleMetadata: fixture=_generated
-
-        Example::
-
-            # The code below shows an example of how to instantiate this type.
-            # The values are placeholders you should change.
-            from aws_cdk import aws_appintegrations as appintegrations
-            
-            data_integration_reference = appintegrations.DataIntegrationReference(
-                data_integration_arn="dataIntegrationArn",
-                data_integration_id="dataIntegrationId"
-            )
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__dddf22b8e14ea51a962e9fb5109997a2aada8286aa2a28be1c083be29f4ff3e2)
-            check_type(argname="argument data_integration_arn", value=data_integration_arn, expected_type=type_hints["data_integration_arn"])
-            check_type(argname="argument data_integration_id", value=data_integration_id, expected_type=type_hints["data_integration_id"])
-        self._values: typing.Dict[builtins.str, typing.Any] = {
-            "data_integration_arn": data_integration_arn,
-            "data_integration_id": data_integration_id,
-        }
-
-    @builtins.property
-    def data_integration_arn(self) -> builtins.str:
-        '''The ARN of the DataIntegration resource.'''
-        result = self._values.get("data_integration_arn")
-        assert result is not None, "Required property 'data_integration_arn' is missing"
-        return typing.cast(builtins.str, result)
-
-    @builtins.property
-    def data_integration_id(self) -> builtins.str:
-        '''The Id of the DataIntegration resource.'''
-        result = self._values.get("data_integration_id")
-        assert result is not None, "Required property 'data_integration_id' is missing"
-        return typing.cast(builtins.str, result)
-
-    def __eq__(self, rhs: typing.Any) -> builtins.bool:
-        return isinstance(rhs, self.__class__) and rhs._values == self._values
-
-    def __ne__(self, rhs: typing.Any) -> builtins.bool:
-        return not (rhs == self)
-
-    def __repr__(self) -> str:
-        return "DataIntegrationReference(%s)" % ", ".join(
-            k + "=" + repr(v) for k, v in self._values.items()
-        )
-
-
-@jsii.data_type(
-    jsii_type="aws-cdk-lib.aws_appintegrations.EventIntegrationReference",
-    jsii_struct_bases=[],
-    name_mapping={
-        "event_integration_arn": "eventIntegrationArn",
-        "event_integration_name": "eventIntegrationName",
-    },
-)
-class EventIntegrationReference:
-    def __init__(
-        self,
-        *,
-        event_integration_arn: builtins.str,
-        event_integration_name: builtins.str,
-    ) -> None:
-        '''A reference to a EventIntegration resource.
-
-        :param event_integration_arn: The ARN of the EventIntegration resource.
-        :param event_integration_name: The Name of the EventIntegration resource.
-
-        :exampleMetadata: fixture=_generated
-
-        Example::
-
-            # The code below shows an example of how to instantiate this type.
-            # The values are placeholders you should change.
-            from aws_cdk import aws_appintegrations as appintegrations
-            
-            event_integration_reference = appintegrations.EventIntegrationReference(
-                event_integration_arn="eventIntegrationArn",
-                event_integration_name="eventIntegrationName"
-            )
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__7dbe3ecd0db00317fe7e5333bb3e6092c1fa8bff865e03c3d1a90a1f42d6a242)
-            check_type(argname="argument event_integration_arn", value=event_integration_arn, expected_type=type_hints["event_integration_arn"])
-            check_type(argname="argument event_integration_name", value=event_integration_name, expected_type=type_hints["event_integration_name"])
-        self._values: typing.Dict[builtins.str, typing.Any] = {
-            "event_integration_arn": event_integration_arn,
-            "event_integration_name": event_integration_name,
-        }
-
-    @builtins.property
-    def event_integration_arn(self) -> builtins.str:
-        '''The ARN of the EventIntegration resource.'''
-        result = self._values.get("event_integration_arn")
-        assert result is not None, "Required property 'event_integration_arn' is missing"
-        return typing.cast(builtins.str, result)
-
-    @builtins.property
-    def event_integration_name(self) -> builtins.str:
-        '''The Name of the EventIntegration resource.'''
-        result = self._values.get("event_integration_name")
-        assert result is not None, "Required property 'event_integration_name' is missing"
-        return typing.cast(builtins.str, result)
-
-    def __eq__(self, rhs: typing.Any) -> builtins.bool:
-        return isinstance(rhs, self.__class__) and rhs._values == self._values
-
-    def __ne__(self, rhs: typing.Any) -> builtins.bool:
-        return not (rhs == self)
-
-    def __repr__(self) -> str:
-        return "EventIntegrationReference(%s)" % ", ".join(
-            k + "=" + repr(v) for k, v in self._values.items()
-        )
-
-
-@jsii.interface(jsii_type="aws-cdk-lib.aws_appintegrations.IApplicationRef")
-class IApplicationRef(
-    _constructs_77d1e7e8.IConstruct,
-    _IEnvironmentAware_a408b00d,
-    typing_extensions.Protocol,
-):
-    '''(experimental) Indicates that this resource can be referenced as a Application.
-
-    :stability: experimental
-    '''
-
-    @builtins.property
-    @jsii.member(jsii_name="applicationRef")
-    def application_ref(self) -> ApplicationReference:
-        '''(experimental) A reference to a Application resource.
-
-        :stability: experimental
-        '''
-        ...
-
-
-class _IApplicationRefProxy(
-    jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
-    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
-):
-    '''(experimental) Indicates that this resource can be referenced as a Application.
-
-    :stability: experimental
-    '''
-
-    __jsii_type__: typing.ClassVar[str] = "aws-cdk-lib.aws_appintegrations.IApplicationRef"
-
-    @builtins.property
-    @jsii.member(jsii_name="applicationRef")
-    def application_ref(self) -> ApplicationReference:
-        '''(experimental) A reference to a Application resource.
-
-        :stability: experimental
-        '''
-        return typing.cast(ApplicationReference, jsii.get(self, "applicationRef"))
-
-# Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
-typing.cast(typing.Any, IApplicationRef).__jsii_proxy_class__ = lambda : _IApplicationRefProxy
-
-
-@jsii.interface(jsii_type="aws-cdk-lib.aws_appintegrations.IDataIntegrationRef")
-class IDataIntegrationRef(
-    _constructs_77d1e7e8.IConstruct,
-    _IEnvironmentAware_a408b00d,
-    typing_extensions.Protocol,
-):
-    '''(experimental) Indicates that this resource can be referenced as a DataIntegration.
-
-    :stability: experimental
-    '''
-
-    @builtins.property
-    @jsii.member(jsii_name="dataIntegrationRef")
-    def data_integration_ref(self) -> DataIntegrationReference:
-        '''(experimental) A reference to a DataIntegration resource.
-
-        :stability: experimental
-        '''
-        ...
-
-
-class _IDataIntegrationRefProxy(
-    jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
-    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
-):
-    '''(experimental) Indicates that this resource can be referenced as a DataIntegration.
-
-    :stability: experimental
-    '''
-
-    __jsii_type__: typing.ClassVar[str] = "aws-cdk-lib.aws_appintegrations.IDataIntegrationRef"
-
-    @builtins.property
-    @jsii.member(jsii_name="dataIntegrationRef")
-    def data_integration_ref(self) -> DataIntegrationReference:
-        '''(experimental) A reference to a DataIntegration resource.
-
-        :stability: experimental
-        '''
-        return typing.cast(DataIntegrationReference, jsii.get(self, "dataIntegrationRef"))
-
-# Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
-typing.cast(typing.Any, IDataIntegrationRef).__jsii_proxy_class__ = lambda : _IDataIntegrationRefProxy
-
-
-@jsii.interface(jsii_type="aws-cdk-lib.aws_appintegrations.IEventIntegrationRef")
-class IEventIntegrationRef(
-    _constructs_77d1e7e8.IConstruct,
-    _IEnvironmentAware_a408b00d,
-    typing_extensions.Protocol,
-):
-    '''(experimental) Indicates that this resource can be referenced as a EventIntegration.
-
-    :stability: experimental
-    '''
-
-    @builtins.property
-    @jsii.member(jsii_name="eventIntegrationRef")
-    def event_integration_ref(self) -> EventIntegrationReference:
-        '''(experimental) A reference to a EventIntegration resource.
-
-        :stability: experimental
-        '''
-        ...
-
-
-class _IEventIntegrationRefProxy(
-    jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
-    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
-):
-    '''(experimental) Indicates that this resource can be referenced as a EventIntegration.
-
-    :stability: experimental
-    '''
-
-    __jsii_type__: typing.ClassVar[str] = "aws-cdk-lib.aws_appintegrations.IEventIntegrationRef"
-
-    @builtins.property
-    @jsii.member(jsii_name="eventIntegrationRef")
-    def event_integration_ref(self) -> EventIntegrationReference:
-        '''(experimental) A reference to a EventIntegration resource.
-
-        :stability: experimental
-        '''
-        return typing.cast(EventIntegrationReference, jsii.get(self, "eventIntegrationRef"))
-
-# Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
-typing.cast(typing.Any, IEventIntegrationRef).__jsii_proxy_class__ = lambda : _IEventIntegrationRefProxy
-
-
-@jsii.implements(_IInspectable_c2943556, IApplicationRef, _ITaggableV2_4e6798f8)
+@jsii.implements(_IInspectable_c2943556, _IApplicationRef_f88446ed, _ITaggableV2_4e6798f8)
 class CfnApplication(
     _CfnResource_9df397a6,
     metaclass=jsii.JSIIMeta,
@@ -1022,7 +145,8 @@ class CfnApplication(
         permissions: typing.Optional[typing.Sequence[builtins.str]] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
-        '''
+        '''Create a new ``AWS::AppIntegrations::Application``.
+
         :param scope: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
         :param application_source_config: The configuration for where the application should be loaded from.
@@ -1087,9 +211,9 @@ class CfnApplication(
 
     @builtins.property
     @jsii.member(jsii_name="applicationRef")
-    def application_ref(self) -> ApplicationReference:
+    def application_ref(self) -> _ApplicationReference_eb7f83ac:
         '''A reference to a Application resource.'''
-        return typing.cast(ApplicationReference, jsii.get(self, "applicationRef"))
+        return typing.cast(_ApplicationReference_eb7f83ac, jsii.get(self, "applicationRef"))
 
     @builtins.property
     @jsii.member(jsii_name="attrApplicationArn")
@@ -1582,7 +706,241 @@ class CfnApplication(
             )
 
 
-@jsii.implements(_IInspectable_c2943556, IDataIntegrationRef, _ITaggable_36806126)
+@jsii.data_type(
+    jsii_type="aws-cdk-lib.aws_appintegrations.CfnApplicationProps",
+    jsii_struct_bases=[],
+    name_mapping={
+        "application_source_config": "applicationSourceConfig",
+        "description": "description",
+        "name": "name",
+        "namespace": "namespace",
+        "application_config": "applicationConfig",
+        "iframe_config": "iframeConfig",
+        "initialization_timeout": "initializationTimeout",
+        "is_service": "isService",
+        "permissions": "permissions",
+        "tags": "tags",
+    },
+)
+class CfnApplicationProps:
+    def __init__(
+        self,
+        *,
+        application_source_config: typing.Union[_IResolvable_da3f097b, typing.Union[CfnApplication.ApplicationSourceConfigProperty, typing.Dict[builtins.str, typing.Any]]],
+        description: builtins.str,
+        name: builtins.str,
+        namespace: builtins.str,
+        application_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnApplication.ApplicationConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        iframe_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnApplication.IframeConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        initialization_timeout: typing.Optional[jsii.Number] = None,
+        is_service: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        permissions: typing.Optional[typing.Sequence[builtins.str]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+    ) -> None:
+        '''Properties for defining a ``CfnApplication``.
+
+        :param application_source_config: The configuration for where the application should be loaded from.
+        :param description: The description of the application.
+        :param name: The name of the application.
+        :param namespace: The namespace of the application.
+        :param application_config: 
+        :param iframe_config: 
+        :param initialization_timeout: The initialization timeout in milliseconds. Required when IsService is true.
+        :param is_service: Indicates whether the application is a service. Default: - false
+        :param permissions: The configuration of events or requests that the application has access to.
+        :param tags: The tags used to organize, track, or control access for this resource. For example, { "tags": {"key1":"value1", "key2":"value2"} }.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appintegrations-application.html
+        :exampleMetadata: fixture=_generated
+
+        Example::
+
+            # The code below shows an example of how to instantiate this type.
+            # The values are placeholders you should change.
+            from aws_cdk import aws_appintegrations as appintegrations
+            
+            cfn_application_props = appintegrations.CfnApplicationProps(
+                application_source_config=appintegrations.CfnApplication.ApplicationSourceConfigProperty(
+                    external_url_config=appintegrations.CfnApplication.ExternalUrlConfigProperty(
+                        access_url="accessUrl",
+            
+                        # the properties below are optional
+                        approved_origins=["approvedOrigins"]
+                    )
+                ),
+                description="description",
+                name="name",
+                namespace="namespace",
+            
+                # the properties below are optional
+                application_config=appintegrations.CfnApplication.ApplicationConfigProperty(
+                    contact_handling=appintegrations.CfnApplication.ContactHandlingProperty(
+                        scope="scope"
+                    )
+                ),
+                iframe_config=appintegrations.CfnApplication.IframeConfigProperty(
+                    allow=["allow"],
+                    sandbox=["sandbox"]
+                ),
+                initialization_timeout=123,
+                is_service=False,
+                permissions=["permissions"],
+                tags=[CfnTag(
+                    key="key",
+                    value="value"
+                )]
+            )
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__7d2c7ce5dfd3af1b41c02f961c30070527579ac243574e11a9dfe26cc453fe9f)
+            check_type(argname="argument application_source_config", value=application_source_config, expected_type=type_hints["application_source_config"])
+            check_type(argname="argument description", value=description, expected_type=type_hints["description"])
+            check_type(argname="argument name", value=name, expected_type=type_hints["name"])
+            check_type(argname="argument namespace", value=namespace, expected_type=type_hints["namespace"])
+            check_type(argname="argument application_config", value=application_config, expected_type=type_hints["application_config"])
+            check_type(argname="argument iframe_config", value=iframe_config, expected_type=type_hints["iframe_config"])
+            check_type(argname="argument initialization_timeout", value=initialization_timeout, expected_type=type_hints["initialization_timeout"])
+            check_type(argname="argument is_service", value=is_service, expected_type=type_hints["is_service"])
+            check_type(argname="argument permissions", value=permissions, expected_type=type_hints["permissions"])
+            check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
+        self._values: typing.Dict[builtins.str, typing.Any] = {
+            "application_source_config": application_source_config,
+            "description": description,
+            "name": name,
+            "namespace": namespace,
+        }
+        if application_config is not None:
+            self._values["application_config"] = application_config
+        if iframe_config is not None:
+            self._values["iframe_config"] = iframe_config
+        if initialization_timeout is not None:
+            self._values["initialization_timeout"] = initialization_timeout
+        if is_service is not None:
+            self._values["is_service"] = is_service
+        if permissions is not None:
+            self._values["permissions"] = permissions
+        if tags is not None:
+            self._values["tags"] = tags
+
+    @builtins.property
+    def application_source_config(
+        self,
+    ) -> typing.Union[_IResolvable_da3f097b, CfnApplication.ApplicationSourceConfigProperty]:
+        '''The configuration for where the application should be loaded from.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appintegrations-application.html#cfn-appintegrations-application-applicationsourceconfig
+        '''
+        result = self._values.get("application_source_config")
+        assert result is not None, "Required property 'application_source_config' is missing"
+        return typing.cast(typing.Union[_IResolvable_da3f097b, CfnApplication.ApplicationSourceConfigProperty], result)
+
+    @builtins.property
+    def description(self) -> builtins.str:
+        '''The description of the application.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appintegrations-application.html#cfn-appintegrations-application-description
+        '''
+        result = self._values.get("description")
+        assert result is not None, "Required property 'description' is missing"
+        return typing.cast(builtins.str, result)
+
+    @builtins.property
+    def name(self) -> builtins.str:
+        '''The name of the application.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appintegrations-application.html#cfn-appintegrations-application-name
+        '''
+        result = self._values.get("name")
+        assert result is not None, "Required property 'name' is missing"
+        return typing.cast(builtins.str, result)
+
+    @builtins.property
+    def namespace(self) -> builtins.str:
+        '''The namespace of the application.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appintegrations-application.html#cfn-appintegrations-application-namespace
+        '''
+        result = self._values.get("namespace")
+        assert result is not None, "Required property 'namespace' is missing"
+        return typing.cast(builtins.str, result)
+
+    @builtins.property
+    def application_config(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnApplication.ApplicationConfigProperty]]:
+        '''
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appintegrations-application.html#cfn-appintegrations-application-applicationconfig
+        '''
+        result = self._values.get("application_config")
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnApplication.ApplicationConfigProperty]], result)
+
+    @builtins.property
+    def iframe_config(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnApplication.IframeConfigProperty]]:
+        '''
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appintegrations-application.html#cfn-appintegrations-application-iframeconfig
+        '''
+        result = self._values.get("iframe_config")
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnApplication.IframeConfigProperty]], result)
+
+    @builtins.property
+    def initialization_timeout(self) -> typing.Optional[jsii.Number]:
+        '''The initialization timeout in milliseconds.
+
+        Required when IsService is true.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appintegrations-application.html#cfn-appintegrations-application-initializationtimeout
+        '''
+        result = self._values.get("initialization_timeout")
+        return typing.cast(typing.Optional[jsii.Number], result)
+
+    @builtins.property
+    def is_service(
+        self,
+    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        '''Indicates whether the application is a service.
+
+        :default: - false
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appintegrations-application.html#cfn-appintegrations-application-isservice
+        '''
+        result = self._values.get("is_service")
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+
+    @builtins.property
+    def permissions(self) -> typing.Optional[typing.List[builtins.str]]:
+        '''The configuration of events or requests that the application has access to.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appintegrations-application.html#cfn-appintegrations-application-permissions
+        '''
+        result = self._values.get("permissions")
+        return typing.cast(typing.Optional[typing.List[builtins.str]], result)
+
+    @builtins.property
+    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+        '''The tags used to organize, track, or control access for this resource.
+
+        For example, { "tags": {"key1":"value1", "key2":"value2"} }.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appintegrations-application.html#cfn-appintegrations-application-tags
+        '''
+        result = self._values.get("tags")
+        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+
+    def __eq__(self, rhs: typing.Any) -> builtins.bool:
+        return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+    def __ne__(self, rhs: typing.Any) -> builtins.bool:
+        return not (rhs == self)
+
+    def __repr__(self) -> str:
+        return "CfnApplicationProps(%s)" % ", ".join(
+            k + "=" + repr(v) for k, v in self._values.items()
+        )
+
+
+@jsii.implements(_IInspectable_c2943556, _IDataIntegrationRef_c5e65586, _ITaggable_36806126)
 class CfnDataIntegration(
     _CfnResource_9df397a6,
     metaclass=jsii.JSIIMeta,
@@ -1645,7 +1003,8 @@ class CfnDataIntegration(
         schedule_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataIntegration.ScheduleConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
-        '''
+        '''Create a new ``AWS::AppIntegrations::DataIntegration``.
+
         :param scope: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
         :param kms_key: The KMS key for the DataIntegration.
@@ -1681,7 +1040,7 @@ class CfnDataIntegration(
         scope: _constructs_77d1e7e8.Construct,
         id: builtins.str,
         arn: builtins.str,
-    ) -> IDataIntegrationRef:
+    ) -> _IDataIntegrationRef_c5e65586:
         '''Creates a new IDataIntegrationRef from an ARN.
 
         :param scope: -
@@ -1693,7 +1052,7 @@ class CfnDataIntegration(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
-        return typing.cast(IDataIntegrationRef, jsii.sinvoke(cls, "fromDataIntegrationArn", [scope, id, arn]))
+        return typing.cast(_IDataIntegrationRef_c5e65586, jsii.sinvoke(cls, "fromDataIntegrationArn", [scope, id, arn]))
 
     @jsii.member(jsii_name="fromDataIntegrationId")
     @builtins.classmethod
@@ -1702,7 +1061,7 @@ class CfnDataIntegration(
         scope: _constructs_77d1e7e8.Construct,
         id: builtins.str,
         data_integration_id: builtins.str,
-    ) -> IDataIntegrationRef:
+    ) -> _IDataIntegrationRef_c5e65586:
         '''Creates a new IDataIntegrationRef from a dataIntegrationId.
 
         :param scope: -
@@ -1714,7 +1073,7 @@ class CfnDataIntegration(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument data_integration_id", value=data_integration_id, expected_type=type_hints["data_integration_id"])
-        return typing.cast(IDataIntegrationRef, jsii.sinvoke(cls, "fromDataIntegrationId", [scope, id, data_integration_id]))
+        return typing.cast(_IDataIntegrationRef_c5e65586, jsii.sinvoke(cls, "fromDataIntegrationId", [scope, id, data_integration_id]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -1771,9 +1130,9 @@ class CfnDataIntegration(
 
     @builtins.property
     @jsii.member(jsii_name="dataIntegrationRef")
-    def data_integration_ref(self) -> DataIntegrationReference:
+    def data_integration_ref(self) -> _DataIntegrationReference_82094d23:
         '''A reference to a DataIntegration resource.'''
-        return typing.cast(DataIntegrationReference, jsii.get(self, "dataIntegrationRef"))
+        return typing.cast(_DataIntegrationReference_82094d23, jsii.get(self, "dataIntegrationRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
@@ -2063,7 +1422,203 @@ class CfnDataIntegration(
             )
 
 
-@jsii.implements(_IInspectable_c2943556, IEventIntegrationRef, _ITaggable_36806126)
+@jsii.data_type(
+    jsii_type="aws-cdk-lib.aws_appintegrations.CfnDataIntegrationProps",
+    jsii_struct_bases=[],
+    name_mapping={
+        "kms_key": "kmsKey",
+        "name": "name",
+        "source_uri": "sourceUri",
+        "description": "description",
+        "file_configuration": "fileConfiguration",
+        "object_configuration": "objectConfiguration",
+        "schedule_config": "scheduleConfig",
+        "tags": "tags",
+    },
+)
+class CfnDataIntegrationProps:
+    def __init__(
+        self,
+        *,
+        kms_key: builtins.str,
+        name: builtins.str,
+        source_uri: builtins.str,
+        description: typing.Optional[builtins.str] = None,
+        file_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDataIntegration.FileConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        object_configuration: typing.Any = None,
+        schedule_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDataIntegration.ScheduleConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+    ) -> None:
+        '''Properties for defining a ``CfnDataIntegration``.
+
+        :param kms_key: The KMS key for the DataIntegration.
+        :param name: The name of the DataIntegration.
+        :param source_uri: The URI of the data source.
+        :param description: A description of the DataIntegration.
+        :param file_configuration: The configuration for what files should be pulled from the source.
+        :param object_configuration: The configuration for what data should be pulled from the source.
+        :param schedule_config: The name of the data and how often it should be pulled from the source.
+        :param tags: An array of key-value pairs to apply to this resource. For more information, see `Tag <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-resource-tags.html>`_ .
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appintegrations-dataintegration.html
+        :exampleMetadata: fixture=_generated
+
+        Example::
+
+            # The code below shows an example of how to instantiate this type.
+            # The values are placeholders you should change.
+            from aws_cdk import aws_appintegrations as appintegrations
+            
+            # filters: Any
+            # object_configuration: Any
+            
+            cfn_data_integration_props = appintegrations.CfnDataIntegrationProps(
+                kms_key="kmsKey",
+                name="name",
+                source_uri="sourceUri",
+            
+                # the properties below are optional
+                description="description",
+                file_configuration=appintegrations.CfnDataIntegration.FileConfigurationProperty(
+                    folders=["folders"],
+            
+                    # the properties below are optional
+                    filters=filters
+                ),
+                object_configuration=object_configuration,
+                schedule_config=appintegrations.CfnDataIntegration.ScheduleConfigProperty(
+                    schedule_expression="scheduleExpression",
+            
+                    # the properties below are optional
+                    first_execution_from="firstExecutionFrom",
+                    object="object"
+                ),
+                tags=[CfnTag(
+                    key="key",
+                    value="value"
+                )]
+            )
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__e4e7b2c594c26fb87f1ee6d6a6b7787330233c7a73e8ce2cfe23ce1b18ffe290)
+            check_type(argname="argument kms_key", value=kms_key, expected_type=type_hints["kms_key"])
+            check_type(argname="argument name", value=name, expected_type=type_hints["name"])
+            check_type(argname="argument source_uri", value=source_uri, expected_type=type_hints["source_uri"])
+            check_type(argname="argument description", value=description, expected_type=type_hints["description"])
+            check_type(argname="argument file_configuration", value=file_configuration, expected_type=type_hints["file_configuration"])
+            check_type(argname="argument object_configuration", value=object_configuration, expected_type=type_hints["object_configuration"])
+            check_type(argname="argument schedule_config", value=schedule_config, expected_type=type_hints["schedule_config"])
+            check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
+        self._values: typing.Dict[builtins.str, typing.Any] = {
+            "kms_key": kms_key,
+            "name": name,
+            "source_uri": source_uri,
+        }
+        if description is not None:
+            self._values["description"] = description
+        if file_configuration is not None:
+            self._values["file_configuration"] = file_configuration
+        if object_configuration is not None:
+            self._values["object_configuration"] = object_configuration
+        if schedule_config is not None:
+            self._values["schedule_config"] = schedule_config
+        if tags is not None:
+            self._values["tags"] = tags
+
+    @builtins.property
+    def kms_key(self) -> builtins.str:
+        '''The KMS key for the DataIntegration.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appintegrations-dataintegration.html#cfn-appintegrations-dataintegration-kmskey
+        '''
+        result = self._values.get("kms_key")
+        assert result is not None, "Required property 'kms_key' is missing"
+        return typing.cast(builtins.str, result)
+
+    @builtins.property
+    def name(self) -> builtins.str:
+        '''The name of the DataIntegration.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appintegrations-dataintegration.html#cfn-appintegrations-dataintegration-name
+        '''
+        result = self._values.get("name")
+        assert result is not None, "Required property 'name' is missing"
+        return typing.cast(builtins.str, result)
+
+    @builtins.property
+    def source_uri(self) -> builtins.str:
+        '''The URI of the data source.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appintegrations-dataintegration.html#cfn-appintegrations-dataintegration-sourceuri
+        '''
+        result = self._values.get("source_uri")
+        assert result is not None, "Required property 'source_uri' is missing"
+        return typing.cast(builtins.str, result)
+
+    @builtins.property
+    def description(self) -> typing.Optional[builtins.str]:
+        '''A description of the DataIntegration.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appintegrations-dataintegration.html#cfn-appintegrations-dataintegration-description
+        '''
+        result = self._values.get("description")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def file_configuration(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDataIntegration.FileConfigurationProperty]]:
+        '''The configuration for what files should be pulled from the source.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appintegrations-dataintegration.html#cfn-appintegrations-dataintegration-fileconfiguration
+        '''
+        result = self._values.get("file_configuration")
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDataIntegration.FileConfigurationProperty]], result)
+
+    @builtins.property
+    def object_configuration(self) -> typing.Any:
+        '''The configuration for what data should be pulled from the source.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appintegrations-dataintegration.html#cfn-appintegrations-dataintegration-objectconfiguration
+        '''
+        result = self._values.get("object_configuration")
+        return typing.cast(typing.Any, result)
+
+    @builtins.property
+    def schedule_config(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDataIntegration.ScheduleConfigProperty]]:
+        '''The name of the data and how often it should be pulled from the source.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appintegrations-dataintegration.html#cfn-appintegrations-dataintegration-scheduleconfig
+        '''
+        result = self._values.get("schedule_config")
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDataIntegration.ScheduleConfigProperty]], result)
+
+    @builtins.property
+    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+        '''An array of key-value pairs to apply to this resource.
+
+        For more information, see `Tag <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-resource-tags.html>`_ .
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appintegrations-dataintegration.html#cfn-appintegrations-dataintegration-tags
+        '''
+        result = self._values.get("tags")
+        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+
+    def __eq__(self, rhs: typing.Any) -> builtins.bool:
+        return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+    def __ne__(self, rhs: typing.Any) -> builtins.bool:
+        return not (rhs == self)
+
+    def __repr__(self) -> str:
+        return "CfnDataIntegrationProps(%s)" % ", ".join(
+            k + "=" + repr(v) for k, v in self._values.items()
+        )
+
+
+@jsii.implements(_IInspectable_c2943556, _IEventIntegrationRef_d2c58e8f, _ITaggable_36806126)
 class CfnEventIntegration(
     _CfnResource_9df397a6,
     metaclass=jsii.JSIIMeta,
@@ -2110,7 +1665,8 @@ class CfnEventIntegration(
         description: typing.Optional[builtins.str] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
-        '''
+        '''Create a new ``AWS::AppIntegrations::EventIntegration``.
+
         :param scope: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
         :param event_bridge_bus: The Amazon EventBridge bus for the event integration.
@@ -2140,7 +1696,7 @@ class CfnEventIntegration(
         scope: _constructs_77d1e7e8.Construct,
         id: builtins.str,
         arn: builtins.str,
-    ) -> IEventIntegrationRef:
+    ) -> _IEventIntegrationRef_d2c58e8f:
         '''Creates a new IEventIntegrationRef from an ARN.
 
         :param scope: -
@@ -2152,7 +1708,7 @@ class CfnEventIntegration(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
-        return typing.cast(IEventIntegrationRef, jsii.sinvoke(cls, "fromEventIntegrationArn", [scope, id, arn]))
+        return typing.cast(_IEventIntegrationRef_d2c58e8f, jsii.sinvoke(cls, "fromEventIntegrationArn", [scope, id, arn]))
 
     @jsii.member(jsii_name="fromEventIntegrationName")
     @builtins.classmethod
@@ -2161,7 +1717,7 @@ class CfnEventIntegration(
         scope: _constructs_77d1e7e8.Construct,
         id: builtins.str,
         event_integration_name: builtins.str,
-    ) -> IEventIntegrationRef:
+    ) -> _IEventIntegrationRef_d2c58e8f:
         '''Creates a new IEventIntegrationRef from a eventIntegrationName.
 
         :param scope: -
@@ -2173,7 +1729,7 @@ class CfnEventIntegration(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument event_integration_name", value=event_integration_name, expected_type=type_hints["event_integration_name"])
-        return typing.cast(IEventIntegrationRef, jsii.sinvoke(cls, "fromEventIntegrationName", [scope, id, event_integration_name]))
+        return typing.cast(_IEventIntegrationRef_d2c58e8f, jsii.sinvoke(cls, "fromEventIntegrationName", [scope, id, event_integration_name]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -2221,9 +1777,9 @@ class CfnEventIntegration(
 
     @builtins.property
     @jsii.member(jsii_name="eventIntegrationRef")
-    def event_integration_ref(self) -> EventIntegrationReference:
+    def event_integration_ref(self) -> _EventIntegrationReference_2d3a8ab8:
         '''A reference to a EventIntegration resource.'''
-        return typing.cast(EventIntegrationReference, jsii.get(self, "eventIntegrationRef"))
+        return typing.cast(_EventIntegrationReference_2d3a8ab8, jsii.get(self, "eventIntegrationRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
@@ -2354,86 +1910,150 @@ class CfnEventIntegration(
             )
 
 
+@jsii.data_type(
+    jsii_type="aws-cdk-lib.aws_appintegrations.CfnEventIntegrationProps",
+    jsii_struct_bases=[],
+    name_mapping={
+        "event_bridge_bus": "eventBridgeBus",
+        "event_filter": "eventFilter",
+        "name": "name",
+        "description": "description",
+        "tags": "tags",
+    },
+)
+class CfnEventIntegrationProps:
+    def __init__(
+        self,
+        *,
+        event_bridge_bus: builtins.str,
+        event_filter: typing.Union[_IResolvable_da3f097b, typing.Union[CfnEventIntegration.EventFilterProperty, typing.Dict[builtins.str, typing.Any]]],
+        name: builtins.str,
+        description: typing.Optional[builtins.str] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+    ) -> None:
+        '''Properties for defining a ``CfnEventIntegration``.
+
+        :param event_bridge_bus: The Amazon EventBridge bus for the event integration.
+        :param event_filter: The event integration filter.
+        :param name: The name of the event integration.
+        :param description: The event integration description.
+        :param tags: An array of key-value pairs to apply to this resource. For more information, see `Tag <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-resource-tags.html>`_ .
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appintegrations-eventintegration.html
+        :exampleMetadata: fixture=_generated
+
+        Example::
+
+            # The code below shows an example of how to instantiate this type.
+            # The values are placeholders you should change.
+            from aws_cdk import aws_appintegrations as appintegrations
+            
+            cfn_event_integration_props = appintegrations.CfnEventIntegrationProps(
+                event_bridge_bus="eventBridgeBus",
+                event_filter=appintegrations.CfnEventIntegration.EventFilterProperty(
+                    source="source"
+                ),
+                name="name",
+            
+                # the properties below are optional
+                description="description",
+                tags=[CfnTag(
+                    key="key",
+                    value="value"
+                )]
+            )
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__f9153bde28b2e9d1843c748f4d513f8ac68ef7ba9754ea2cdad14193f14742d6)
+            check_type(argname="argument event_bridge_bus", value=event_bridge_bus, expected_type=type_hints["event_bridge_bus"])
+            check_type(argname="argument event_filter", value=event_filter, expected_type=type_hints["event_filter"])
+            check_type(argname="argument name", value=name, expected_type=type_hints["name"])
+            check_type(argname="argument description", value=description, expected_type=type_hints["description"])
+            check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
+        self._values: typing.Dict[builtins.str, typing.Any] = {
+            "event_bridge_bus": event_bridge_bus,
+            "event_filter": event_filter,
+            "name": name,
+        }
+        if description is not None:
+            self._values["description"] = description
+        if tags is not None:
+            self._values["tags"] = tags
+
+    @builtins.property
+    def event_bridge_bus(self) -> builtins.str:
+        '''The Amazon EventBridge bus for the event integration.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appintegrations-eventintegration.html#cfn-appintegrations-eventintegration-eventbridgebus
+        '''
+        result = self._values.get("event_bridge_bus")
+        assert result is not None, "Required property 'event_bridge_bus' is missing"
+        return typing.cast(builtins.str, result)
+
+    @builtins.property
+    def event_filter(
+        self,
+    ) -> typing.Union[_IResolvable_da3f097b, CfnEventIntegration.EventFilterProperty]:
+        '''The event integration filter.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appintegrations-eventintegration.html#cfn-appintegrations-eventintegration-eventfilter
+        '''
+        result = self._values.get("event_filter")
+        assert result is not None, "Required property 'event_filter' is missing"
+        return typing.cast(typing.Union[_IResolvable_da3f097b, CfnEventIntegration.EventFilterProperty], result)
+
+    @builtins.property
+    def name(self) -> builtins.str:
+        '''The name of the event integration.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appintegrations-eventintegration.html#cfn-appintegrations-eventintegration-name
+        '''
+        result = self._values.get("name")
+        assert result is not None, "Required property 'name' is missing"
+        return typing.cast(builtins.str, result)
+
+    @builtins.property
+    def description(self) -> typing.Optional[builtins.str]:
+        '''The event integration description.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appintegrations-eventintegration.html#cfn-appintegrations-eventintegration-description
+        '''
+        result = self._values.get("description")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+        '''An array of key-value pairs to apply to this resource.
+
+        For more information, see `Tag <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-resource-tags.html>`_ .
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appintegrations-eventintegration.html#cfn-appintegrations-eventintegration-tags
+        '''
+        result = self._values.get("tags")
+        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+
+    def __eq__(self, rhs: typing.Any) -> builtins.bool:
+        return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+    def __ne__(self, rhs: typing.Any) -> builtins.bool:
+        return not (rhs == self)
+
+    def __repr__(self) -> str:
+        return "CfnEventIntegrationProps(%s)" % ", ".join(
+            k + "=" + repr(v) for k, v in self._values.items()
+        )
+
+
 __all__ = [
-    "ApplicationReference",
     "CfnApplication",
     "CfnApplicationProps",
     "CfnDataIntegration",
     "CfnDataIntegrationProps",
     "CfnEventIntegration",
     "CfnEventIntegrationProps",
-    "DataIntegrationReference",
-    "EventIntegrationReference",
-    "IApplicationRef",
-    "IDataIntegrationRef",
-    "IEventIntegrationRef",
 ]
 
 publication.publish()
-
-def _typecheckingstub__2ce77147616ff1c722ea64fc1d4f3fce2bdfff799271c0caad1223fffb893718(
-    *,
-    application_arn: builtins.str,
-) -> None:
-    """Type checking stubs"""
-    pass
-
-def _typecheckingstub__7d2c7ce5dfd3af1b41c02f961c30070527579ac243574e11a9dfe26cc453fe9f(
-    *,
-    application_source_config: typing.Union[_IResolvable_da3f097b, typing.Union[CfnApplication.ApplicationSourceConfigProperty, typing.Dict[builtins.str, typing.Any]]],
-    description: builtins.str,
-    name: builtins.str,
-    namespace: builtins.str,
-    application_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnApplication.ApplicationConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-    iframe_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnApplication.IframeConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-    initialization_timeout: typing.Optional[jsii.Number] = None,
-    is_service: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-    permissions: typing.Optional[typing.Sequence[builtins.str]] = None,
-    tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-) -> None:
-    """Type checking stubs"""
-    pass
-
-def _typecheckingstub__e4e7b2c594c26fb87f1ee6d6a6b7787330233c7a73e8ce2cfe23ce1b18ffe290(
-    *,
-    kms_key: builtins.str,
-    name: builtins.str,
-    source_uri: builtins.str,
-    description: typing.Optional[builtins.str] = None,
-    file_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDataIntegration.FileConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-    object_configuration: typing.Any = None,
-    schedule_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDataIntegration.ScheduleConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-    tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-) -> None:
-    """Type checking stubs"""
-    pass
-
-def _typecheckingstub__f9153bde28b2e9d1843c748f4d513f8ac68ef7ba9754ea2cdad14193f14742d6(
-    *,
-    event_bridge_bus: builtins.str,
-    event_filter: typing.Union[_IResolvable_da3f097b, typing.Union[CfnEventIntegration.EventFilterProperty, typing.Dict[builtins.str, typing.Any]]],
-    name: builtins.str,
-    description: typing.Optional[builtins.str] = None,
-    tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-) -> None:
-    """Type checking stubs"""
-    pass
-
-def _typecheckingstub__dddf22b8e14ea51a962e9fb5109997a2aada8286aa2a28be1c083be29f4ff3e2(
-    *,
-    data_integration_arn: builtins.str,
-    data_integration_id: builtins.str,
-) -> None:
-    """Type checking stubs"""
-    pass
-
-def _typecheckingstub__7dbe3ecd0db00317fe7e5333bb3e6092c1fa8bff865e03c3d1a90a1f42d6a242(
-    *,
-    event_integration_arn: builtins.str,
-    event_integration_name: builtins.str,
-) -> None:
-    """Type checking stubs"""
-    pass
 
 def _typecheckingstub__2c1bbb1e03e672595eb80bdb7dcb70bb6e71fccf39633133ee8a5b86b6874772(
     scope: _constructs_77d1e7e8.Construct,
@@ -2562,6 +2182,22 @@ def _typecheckingstub__a4e1d29a683508d5dce338ead2d5d12168d88348304cab46c45234c9c
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__7d2c7ce5dfd3af1b41c02f961c30070527579ac243574e11a9dfe26cc453fe9f(
+    *,
+    application_source_config: typing.Union[_IResolvable_da3f097b, typing.Union[CfnApplication.ApplicationSourceConfigProperty, typing.Dict[builtins.str, typing.Any]]],
+    description: builtins.str,
+    name: builtins.str,
+    namespace: builtins.str,
+    application_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnApplication.ApplicationConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    iframe_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnApplication.IframeConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    initialization_timeout: typing.Optional[jsii.Number] = None,
+    is_service: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+    permissions: typing.Optional[typing.Sequence[builtins.str]] = None,
+    tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__07830c24dc09b0662b03583ee4edbdbaeb4fabf95d85c4f4ed965ea9d0999f40(
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
@@ -2671,6 +2307,20 @@ def _typecheckingstub__1fa0efcac2eeb739bb68a54b8c7816a32a28a265c96601fb14102a1f9
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__e4e7b2c594c26fb87f1ee6d6a6b7787330233c7a73e8ce2cfe23ce1b18ffe290(
+    *,
+    kms_key: builtins.str,
+    name: builtins.str,
+    source_uri: builtins.str,
+    description: typing.Optional[builtins.str] = None,
+    file_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDataIntegration.FileConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    object_configuration: typing.Any = None,
+    schedule_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDataIntegration.ScheduleConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__7f4a16fc332806342706d2878c9a173a25d599659c9ec58d0c31e1ae7a621e4f(
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
@@ -2749,5 +2399,13 @@ def _typecheckingstub__fe2caaefe76d9510e6ff29f9afdf7706ad87988fce20dbb68ad8862bc
     """Type checking stubs"""
     pass
 
-for cls in [IApplicationRef, IDataIntegrationRef, IEventIntegrationRef]:
-    typing.cast(typing.Any, cls).__protocol_attrs__ = typing.cast(typing.Any, cls).__protocol_attrs__ - set(['__jsii_proxy_class__', '__jsii_type__'])
+def _typecheckingstub__f9153bde28b2e9d1843c748f4d513f8ac68ef7ba9754ea2cdad14193f14742d6(
+    *,
+    event_bridge_bus: builtins.str,
+    event_filter: typing.Union[_IResolvable_da3f097b, typing.Union[CfnEventIntegration.EventFilterProperty, typing.Dict[builtins.str, typing.Any]]],
+    name: builtins.str,
+    description: typing.Optional[builtins.str] = None,
+    tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass

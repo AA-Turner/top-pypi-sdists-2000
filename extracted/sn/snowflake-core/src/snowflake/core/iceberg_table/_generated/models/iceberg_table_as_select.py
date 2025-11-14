@@ -35,14 +35,14 @@ class IcebergTableAsSelect(BaseModel):
     __________
     name : str
         Specifies the name for the table, must be unique for the schema in which the table is created
-    base_location : str
-        Specifies the path to a directory where Snowflake can write data and metadata files for the table
     columns : list[IcebergTableColumn], optional
 
     external_volume : str, optional
         Specifies the name of the external volume to use for the table
     cluster_by : list[str], optional
         Specifies one or more columns or column expressions in the table as the clustering key
+    base_location : str, optional
+        Specifies the path to a directory where Snowflake can write data and metadata files for the table
     comment : str, optional
         Specifies a comment for the table
     """
@@ -55,7 +55,7 @@ class IcebergTableAsSelect(BaseModel):
 
     cluster_by: Optional[List[StrictStr]] = None
 
-    base_location: StrictStr
+    base_location: Optional[StrictStr] = None
 
     comment: Optional[StrictStr] = None
 
@@ -133,11 +133,11 @@ class IcebergTableAsSelectModel:
     def __init__(
         self,
         name: str,
-        base_location: str,
         # optional properties
         columns: Optional[list[IcebergTableColumn]] = None,
         external_volume: Optional[str] = None,
         cluster_by: Optional[list[str]] = None,
+        base_location: Optional[str] = None,
         comment: Optional[str] = None,
     ):
         """A model object representing the IcebergTableAsSelect resource.
@@ -148,14 +148,14 @@ class IcebergTableAsSelectModel:
         __________
         name : str
             Specifies the name for the table, must be unique for the schema in which the table is created
-        base_location : str
-            Specifies the path to a directory where Snowflake can write data and metadata files for the table
         columns : list[IcebergTableColumn], optional
 
         external_volume : str, optional
             Specifies the name of the external volume to use for the table
         cluster_by : list[str], optional
             Specifies one or more columns or column expressions in the table as the clustering key
+        base_location : str, optional
+            Specifies the path to a directory where Snowflake can write data and metadata files for the table
         comment : str, optional
             Specifies a comment for the table
         """

@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: aws-cdk-lib
-Version: 2.223.0
+Version: 2.224.0
 Summary: Version 2 of the AWS Cloud Development Kit library
 Home-page: https://github.com/aws/aws-cdk
 Author: Amazon Web Services
@@ -24,7 +24,7 @@ Requires-Dist: aws-cdk.asset-awscli-v1==2.2.242
 Requires-Dist: aws-cdk.asset-node-proxy-agent-v6<3.0.0,>=2.1.0
 Requires-Dist: aws-cdk.cloud-assembly-schema<49.0.0,>=48.6.0
 Requires-Dist: constructs<11.0.0,>=10.0.0
-Requires-Dist: jsii<2.0.0,>=1.118.0
+Requires-Dist: jsii<2.0.0,>=1.119.0
 Requires-Dist: publication>=0.0.3
 Requires-Dist: typeguard<4.3.0,>=2.13.3
 
@@ -495,6 +495,8 @@ CloudFormation to re-read the secret.
 
 `SecretValue.ssmSecure()` is only supported for a limited set of resources.
 [Click here for a list of supported resources and properties](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/dynamic-references.html#template-parameters-dynamic-patterns-resources).
+
+`SecretValue.cfnDynamicReferenceKey` takes the same parameters as `SecretValue.secretsManager` and returns a key which can be used within a [dynamic reference](#dynamic-references) to dynamically load a secret from AWS Secrets Manager.
 
 ## ARN manipulation
 

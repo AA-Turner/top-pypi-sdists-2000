@@ -14,7 +14,7 @@ class RedshiftSqlHelper(SqlHelper):
     """
 
     @staticmethod
-    def to_sql_config(connection: Connection) -> Dict[str, Any]:
+    def to_sql_config(connection: Connection, **kwargs) -> Dict[str, Any]:
         """
         Transform DataZone Redshift connection data into SQL interface configuration.
 

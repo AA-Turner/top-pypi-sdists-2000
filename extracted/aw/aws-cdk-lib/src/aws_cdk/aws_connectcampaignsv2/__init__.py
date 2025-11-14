@@ -71,475 +71,19 @@ import constructs as _constructs_77d1e7e8
 from .. import (
     CfnResource as _CfnResource_9df397a6,
     CfnTag as _CfnTag_f6864754,
-    IEnvironmentAware as _IEnvironmentAware_a408b00d,
     IInspectable as _IInspectable_c2943556,
     IResolvable as _IResolvable_da3f097b,
     ITaggableV2 as _ITaggableV2_4e6798f8,
     TagManager as _TagManager_0a598cb3,
     TreeInspector as _TreeInspector_488e0dd5,
 )
-
-
-@jsii.data_type(
-    jsii_type="aws-cdk-lib.aws_connectcampaignsv2.CampaignReference",
-    jsii_struct_bases=[],
-    name_mapping={"campaign_arn": "campaignArn"},
+from ..interfaces.aws_connectcampaignsv2 import (
+    CampaignReference as _CampaignReference_e022fcab,
+    ICampaignRef as _ICampaignRef_408c1832,
 )
-class CampaignReference:
-    def __init__(self, *, campaign_arn: builtins.str) -> None:
-        '''A reference to a Campaign resource.
-
-        :param campaign_arn: The Arn of the Campaign resource.
-
-        :exampleMetadata: fixture=_generated
-
-        Example::
-
-            # The code below shows an example of how to instantiate this type.
-            # The values are placeholders you should change.
-            from aws_cdk import aws_connectcampaignsv2 as connectcampaignsv2
-            
-            campaign_reference = connectcampaignsv2.CampaignReference(
-                campaign_arn="campaignArn"
-            )
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__bdedd2867bc4e63db8bcbe9a1f633e8a80491f4033423ee6b6038592d20736e9)
-            check_type(argname="argument campaign_arn", value=campaign_arn, expected_type=type_hints["campaign_arn"])
-        self._values: typing.Dict[builtins.str, typing.Any] = {
-            "campaign_arn": campaign_arn,
-        }
-
-    @builtins.property
-    def campaign_arn(self) -> builtins.str:
-        '''The Arn of the Campaign resource.'''
-        result = self._values.get("campaign_arn")
-        assert result is not None, "Required property 'campaign_arn' is missing"
-        return typing.cast(builtins.str, result)
-
-    def __eq__(self, rhs: typing.Any) -> builtins.bool:
-        return isinstance(rhs, self.__class__) and rhs._values == self._values
-
-    def __ne__(self, rhs: typing.Any) -> builtins.bool:
-        return not (rhs == self)
-
-    def __repr__(self) -> str:
-        return "CampaignReference(%s)" % ", ".join(
-            k + "=" + repr(v) for k, v in self._values.items()
-        )
 
 
-@jsii.data_type(
-    jsii_type="aws-cdk-lib.aws_connectcampaignsv2.CfnCampaignProps",
-    jsii_struct_bases=[],
-    name_mapping={
-        "channel_subtype_config": "channelSubtypeConfig",
-        "connect_instance_id": "connectInstanceId",
-        "name": "name",
-        "communication_limits_override": "communicationLimitsOverride",
-        "communication_time_config": "communicationTimeConfig",
-        "connect_campaign_flow_arn": "connectCampaignFlowArn",
-        "schedule": "schedule",
-        "source": "source",
-        "tags": "tags",
-    },
-)
-class CfnCampaignProps:
-    def __init__(
-        self,
-        *,
-        channel_subtype_config: typing.Union[_IResolvable_da3f097b, typing.Union["CfnCampaign.ChannelSubtypeConfigProperty", typing.Dict[builtins.str, typing.Any]]],
-        connect_instance_id: builtins.str,
-        name: builtins.str,
-        communication_limits_override: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCampaign.CommunicationLimitsConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        communication_time_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCampaign.CommunicationTimeConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        connect_campaign_flow_arn: typing.Optional[builtins.str] = None,
-        schedule: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCampaign.ScheduleProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        source: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCampaign.SourceProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-    ) -> None:
-        '''Properties for defining a ``CfnCampaign``.
-
-        :param channel_subtype_config: Contains channel subtype configuration for an outbound campaign.
-        :param connect_instance_id: The identifier of the Amazon Connect instance. You can find the ``instanceId`` in the ARN of the instance.
-        :param name: The name of the outbound campaign.
-        :param communication_limits_override: Communication limits configuration for an outbound campaign.
-        :param communication_time_config: Contains communication time configuration for an outbound campaign.
-        :param connect_campaign_flow_arn: The Amazon Resource Name (ARN) of the Amazon Connect campaign flow associated with the outbound campaign.
-        :param schedule: Contains the schedule configuration.
-        :param source: Contains source configuration.
-        :param tags: The tags used to organize, track, or control access for this resource. For example, ``{ "tags": {"key1":"value1", "key2":"value2"} }`` .
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-connectcampaignsv2-campaign.html
-        :exampleMetadata: fixture=_generated
-
-        Example::
-
-            # The code below shows an example of how to instantiate this type.
-            # The values are placeholders you should change.
-            from aws_cdk import aws_connectcampaignsv2 as connectcampaignsv2
-            
-            # agentless_config: Any
-            
-            cfn_campaign_props = connectcampaignsv2.CfnCampaignProps(
-                channel_subtype_config=connectcampaignsv2.CfnCampaign.ChannelSubtypeConfigProperty(
-                    email=connectcampaignsv2.CfnCampaign.EmailChannelSubtypeConfigProperty(
-                        default_outbound_config=connectcampaignsv2.CfnCampaign.EmailOutboundConfigProperty(
-                            connect_source_email_address="connectSourceEmailAddress",
-                            wisdom_template_arn="wisdomTemplateArn",
-            
-                            # the properties below are optional
-                            source_email_address_display_name="sourceEmailAddressDisplayName"
-                        ),
-                        outbound_mode=connectcampaignsv2.CfnCampaign.EmailOutboundModeProperty(
-                            agentless_config=agentless_config
-                        ),
-            
-                        # the properties below are optional
-                        capacity=123
-                    ),
-                    sms=connectcampaignsv2.CfnCampaign.SmsChannelSubtypeConfigProperty(
-                        default_outbound_config=connectcampaignsv2.CfnCampaign.SmsOutboundConfigProperty(
-                            connect_source_phone_number_arn="connectSourcePhoneNumberArn",
-                            wisdom_template_arn="wisdomTemplateArn"
-                        ),
-                        outbound_mode=connectcampaignsv2.CfnCampaign.SmsOutboundModeProperty(
-                            agentless_config=agentless_config
-                        ),
-            
-                        # the properties below are optional
-                        capacity=123
-                    ),
-                    telephony=connectcampaignsv2.CfnCampaign.TelephonyChannelSubtypeConfigProperty(
-                        default_outbound_config=connectcampaignsv2.CfnCampaign.TelephonyOutboundConfigProperty(
-                            connect_contact_flow_id="connectContactFlowId",
-            
-                            # the properties below are optional
-                            answer_machine_detection_config=connectcampaignsv2.CfnCampaign.AnswerMachineDetectionConfigProperty(
-                                enable_answer_machine_detection=False,
-            
-                                # the properties below are optional
-                                await_answer_machine_prompt=False
-                            ),
-                            connect_source_phone_number="connectSourcePhoneNumber"
-                        ),
-                        outbound_mode=connectcampaignsv2.CfnCampaign.TelephonyOutboundModeProperty(
-                            agentless_config=agentless_config,
-                            predictive_config=connectcampaignsv2.CfnCampaign.PredictiveConfigProperty(
-                                bandwidth_allocation=123
-                            ),
-                            preview_config=connectcampaignsv2.CfnCampaign.PreviewConfigProperty(
-                                bandwidth_allocation=123,
-                                timeout_config=connectcampaignsv2.CfnCampaign.TimeoutConfigProperty(
-                                    duration_in_seconds=123
-                                ),
-            
-                                # the properties below are optional
-                                agent_actions=["agentActions"]
-                            ),
-                            progressive_config=connectcampaignsv2.CfnCampaign.ProgressiveConfigProperty(
-                                bandwidth_allocation=123
-                            )
-                        ),
-            
-                        # the properties below are optional
-                        capacity=123,
-                        connect_queue_id="connectQueueId"
-                    )
-                ),
-                connect_instance_id="connectInstanceId",
-                name="name",
-            
-                # the properties below are optional
-                communication_limits_override=connectcampaignsv2.CfnCampaign.CommunicationLimitsConfigProperty(
-                    all_channels_subtypes=connectcampaignsv2.CfnCampaign.CommunicationLimitsProperty(
-                        communication_limit_list=[connectcampaignsv2.CfnCampaign.CommunicationLimitProperty(
-                            frequency=123,
-                            max_count_per_recipient=123,
-                            unit="unit"
-                        )]
-                    ),
-                    instance_limits_handling="instanceLimitsHandling"
-                ),
-                communication_time_config=connectcampaignsv2.CfnCampaign.CommunicationTimeConfigProperty(
-                    local_time_zone_config=connectcampaignsv2.CfnCampaign.LocalTimeZoneConfigProperty(
-                        default_time_zone="defaultTimeZone",
-                        local_time_zone_detection=["localTimeZoneDetection"]
-                    ),
-            
-                    # the properties below are optional
-                    email=connectcampaignsv2.CfnCampaign.TimeWindowProperty(
-                        open_hours=connectcampaignsv2.CfnCampaign.OpenHoursProperty(
-                            daily_hours=[connectcampaignsv2.CfnCampaign.DailyHourProperty(
-                                key="key",
-                                value=[connectcampaignsv2.CfnCampaign.TimeRangeProperty(
-                                    end_time="endTime",
-                                    start_time="startTime"
-                                )]
-                            )]
-                        ),
-            
-                        # the properties below are optional
-                        restricted_periods=connectcampaignsv2.CfnCampaign.RestrictedPeriodsProperty(
-                            restricted_period_list=[connectcampaignsv2.CfnCampaign.RestrictedPeriodProperty(
-                                end_date="endDate",
-                                start_date="startDate",
-            
-                                # the properties below are optional
-                                name="name"
-                            )]
-                        )
-                    ),
-                    sms=connectcampaignsv2.CfnCampaign.TimeWindowProperty(
-                        open_hours=connectcampaignsv2.CfnCampaign.OpenHoursProperty(
-                            daily_hours=[connectcampaignsv2.CfnCampaign.DailyHourProperty(
-                                key="key",
-                                value=[connectcampaignsv2.CfnCampaign.TimeRangeProperty(
-                                    end_time="endTime",
-                                    start_time="startTime"
-                                )]
-                            )]
-                        ),
-            
-                        # the properties below are optional
-                        restricted_periods=connectcampaignsv2.CfnCampaign.RestrictedPeriodsProperty(
-                            restricted_period_list=[connectcampaignsv2.CfnCampaign.RestrictedPeriodProperty(
-                                end_date="endDate",
-                                start_date="startDate",
-            
-                                # the properties below are optional
-                                name="name"
-                            )]
-                        )
-                    ),
-                    telephony=connectcampaignsv2.CfnCampaign.TimeWindowProperty(
-                        open_hours=connectcampaignsv2.CfnCampaign.OpenHoursProperty(
-                            daily_hours=[connectcampaignsv2.CfnCampaign.DailyHourProperty(
-                                key="key",
-                                value=[connectcampaignsv2.CfnCampaign.TimeRangeProperty(
-                                    end_time="endTime",
-                                    start_time="startTime"
-                                )]
-                            )]
-                        ),
-            
-                        # the properties below are optional
-                        restricted_periods=connectcampaignsv2.CfnCampaign.RestrictedPeriodsProperty(
-                            restricted_period_list=[connectcampaignsv2.CfnCampaign.RestrictedPeriodProperty(
-                                end_date="endDate",
-                                start_date="startDate",
-            
-                                # the properties below are optional
-                                name="name"
-                            )]
-                        )
-                    )
-                ),
-                connect_campaign_flow_arn="connectCampaignFlowArn",
-                schedule=connectcampaignsv2.CfnCampaign.ScheduleProperty(
-                    end_time="endTime",
-                    start_time="startTime",
-            
-                    # the properties below are optional
-                    refresh_frequency="refreshFrequency"
-                ),
-                source=connectcampaignsv2.CfnCampaign.SourceProperty(
-                    customer_profiles_segment_arn="customerProfilesSegmentArn",
-                    event_trigger=connectcampaignsv2.CfnCampaign.EventTriggerProperty(
-                        customer_profiles_domain_arn="customerProfilesDomainArn"
-                    )
-                ),
-                tags=[CfnTag(
-                    key="key",
-                    value="value"
-                )]
-            )
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__3c58eb40b443fce35feb659905089795642547d367bd583cc8addd65c75034e8)
-            check_type(argname="argument channel_subtype_config", value=channel_subtype_config, expected_type=type_hints["channel_subtype_config"])
-            check_type(argname="argument connect_instance_id", value=connect_instance_id, expected_type=type_hints["connect_instance_id"])
-            check_type(argname="argument name", value=name, expected_type=type_hints["name"])
-            check_type(argname="argument communication_limits_override", value=communication_limits_override, expected_type=type_hints["communication_limits_override"])
-            check_type(argname="argument communication_time_config", value=communication_time_config, expected_type=type_hints["communication_time_config"])
-            check_type(argname="argument connect_campaign_flow_arn", value=connect_campaign_flow_arn, expected_type=type_hints["connect_campaign_flow_arn"])
-            check_type(argname="argument schedule", value=schedule, expected_type=type_hints["schedule"])
-            check_type(argname="argument source", value=source, expected_type=type_hints["source"])
-            check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
-        self._values: typing.Dict[builtins.str, typing.Any] = {
-            "channel_subtype_config": channel_subtype_config,
-            "connect_instance_id": connect_instance_id,
-            "name": name,
-        }
-        if communication_limits_override is not None:
-            self._values["communication_limits_override"] = communication_limits_override
-        if communication_time_config is not None:
-            self._values["communication_time_config"] = communication_time_config
-        if connect_campaign_flow_arn is not None:
-            self._values["connect_campaign_flow_arn"] = connect_campaign_flow_arn
-        if schedule is not None:
-            self._values["schedule"] = schedule
-        if source is not None:
-            self._values["source"] = source
-        if tags is not None:
-            self._values["tags"] = tags
-
-    @builtins.property
-    def channel_subtype_config(
-        self,
-    ) -> typing.Union[_IResolvable_da3f097b, "CfnCampaign.ChannelSubtypeConfigProperty"]:
-        '''Contains channel subtype configuration for an outbound campaign.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-connectcampaignsv2-campaign.html#cfn-connectcampaignsv2-campaign-channelsubtypeconfig
-        '''
-        result = self._values.get("channel_subtype_config")
-        assert result is not None, "Required property 'channel_subtype_config' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnCampaign.ChannelSubtypeConfigProperty"], result)
-
-    @builtins.property
-    def connect_instance_id(self) -> builtins.str:
-        '''The identifier of the Amazon Connect instance.
-
-        You can find the ``instanceId`` in the ARN of the instance.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-connectcampaignsv2-campaign.html#cfn-connectcampaignsv2-campaign-connectinstanceid
-        '''
-        result = self._values.get("connect_instance_id")
-        assert result is not None, "Required property 'connect_instance_id' is missing"
-        return typing.cast(builtins.str, result)
-
-    @builtins.property
-    def name(self) -> builtins.str:
-        '''The name of the outbound campaign.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-connectcampaignsv2-campaign.html#cfn-connectcampaignsv2-campaign-name
-        '''
-        result = self._values.get("name")
-        assert result is not None, "Required property 'name' is missing"
-        return typing.cast(builtins.str, result)
-
-    @builtins.property
-    def communication_limits_override(
-        self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCampaign.CommunicationLimitsConfigProperty"]]:
-        '''Communication limits configuration for an outbound campaign.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-connectcampaignsv2-campaign.html#cfn-connectcampaignsv2-campaign-communicationlimitsoverride
-        '''
-        result = self._values.get("communication_limits_override")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCampaign.CommunicationLimitsConfigProperty"]], result)
-
-    @builtins.property
-    def communication_time_config(
-        self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCampaign.CommunicationTimeConfigProperty"]]:
-        '''Contains communication time configuration for an outbound campaign.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-connectcampaignsv2-campaign.html#cfn-connectcampaignsv2-campaign-communicationtimeconfig
-        '''
-        result = self._values.get("communication_time_config")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCampaign.CommunicationTimeConfigProperty"]], result)
-
-    @builtins.property
-    def connect_campaign_flow_arn(self) -> typing.Optional[builtins.str]:
-        '''The Amazon Resource Name (ARN) of the Amazon Connect campaign flow associated with the outbound campaign.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-connectcampaignsv2-campaign.html#cfn-connectcampaignsv2-campaign-connectcampaignflowarn
-        '''
-        result = self._values.get("connect_campaign_flow_arn")
-        return typing.cast(typing.Optional[builtins.str], result)
-
-    @builtins.property
-    def schedule(
-        self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCampaign.ScheduleProperty"]]:
-        '''Contains the schedule configuration.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-connectcampaignsv2-campaign.html#cfn-connectcampaignsv2-campaign-schedule
-        '''
-        result = self._values.get("schedule")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCampaign.ScheduleProperty"]], result)
-
-    @builtins.property
-    def source(
-        self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCampaign.SourceProperty"]]:
-        '''Contains source configuration.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-connectcampaignsv2-campaign.html#cfn-connectcampaignsv2-campaign-source
-        '''
-        result = self._values.get("source")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCampaign.SourceProperty"]], result)
-
-    @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
-        '''The tags used to organize, track, or control access for this resource.
-
-        For example, ``{ "tags": {"key1":"value1", "key2":"value2"} }`` .
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-connectcampaignsv2-campaign.html#cfn-connectcampaignsv2-campaign-tags
-        '''
-        result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
-
-    def __eq__(self, rhs: typing.Any) -> builtins.bool:
-        return isinstance(rhs, self.__class__) and rhs._values == self._values
-
-    def __ne__(self, rhs: typing.Any) -> builtins.bool:
-        return not (rhs == self)
-
-    def __repr__(self) -> str:
-        return "CfnCampaignProps(%s)" % ", ".join(
-            k + "=" + repr(v) for k, v in self._values.items()
-        )
-
-
-@jsii.interface(jsii_type="aws-cdk-lib.aws_connectcampaignsv2.ICampaignRef")
-class ICampaignRef(
-    _constructs_77d1e7e8.IConstruct,
-    _IEnvironmentAware_a408b00d,
-    typing_extensions.Protocol,
-):
-    '''(experimental) Indicates that this resource can be referenced as a Campaign.
-
-    :stability: experimental
-    '''
-
-    @builtins.property
-    @jsii.member(jsii_name="campaignRef")
-    def campaign_ref(self) -> CampaignReference:
-        '''(experimental) A reference to a Campaign resource.
-
-        :stability: experimental
-        '''
-        ...
-
-
-class _ICampaignRefProxy(
-    jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
-    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
-):
-    '''(experimental) Indicates that this resource can be referenced as a Campaign.
-
-    :stability: experimental
-    '''
-
-    __jsii_type__: typing.ClassVar[str] = "aws-cdk-lib.aws_connectcampaignsv2.ICampaignRef"
-
-    @builtins.property
-    @jsii.member(jsii_name="campaignRef")
-    def campaign_ref(self) -> CampaignReference:
-        '''(experimental) A reference to a Campaign resource.
-
-        :stability: experimental
-        '''
-        return typing.cast(CampaignReference, jsii.get(self, "campaignRef"))
-
-# Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
-typing.cast(typing.Any, ICampaignRef).__jsii_proxy_class__ = lambda : _ICampaignRefProxy
-
-
-@jsii.implements(_IInspectable_c2943556, ICampaignRef, _ITaggableV2_4e6798f8)
+@jsii.implements(_IInspectable_c2943556, _ICampaignRef_408c1832, _ITaggableV2_4e6798f8)
 class CfnCampaign(
     _CfnResource_9df397a6,
     metaclass=jsii.JSIIMeta,
@@ -754,7 +298,8 @@ class CfnCampaign(
         source: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCampaign.SourceProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
-        '''
+        '''Create a new ``AWS::ConnectCampaignsV2::Campaign``.
+
         :param scope: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
         :param channel_subtype_config: Contains channel subtype configuration for an outbound campaign.
@@ -826,9 +371,9 @@ class CfnCampaign(
 
     @builtins.property
     @jsii.member(jsii_name="campaignRef")
-    def campaign_ref(self) -> CampaignReference:
+    def campaign_ref(self) -> _CampaignReference_e022fcab:
         '''A reference to a Campaign resource.'''
-        return typing.cast(CampaignReference, jsii.get(self, "campaignRef"))
+        return typing.cast(_CampaignReference_e022fcab, jsii.get(self, "campaignRef"))
 
     @builtins.property
     @jsii.member(jsii_name="cdkTagManager")
@@ -3489,36 +3034,377 @@ class CfnCampaign(
             )
 
 
+@jsii.data_type(
+    jsii_type="aws-cdk-lib.aws_connectcampaignsv2.CfnCampaignProps",
+    jsii_struct_bases=[],
+    name_mapping={
+        "channel_subtype_config": "channelSubtypeConfig",
+        "connect_instance_id": "connectInstanceId",
+        "name": "name",
+        "communication_limits_override": "communicationLimitsOverride",
+        "communication_time_config": "communicationTimeConfig",
+        "connect_campaign_flow_arn": "connectCampaignFlowArn",
+        "schedule": "schedule",
+        "source": "source",
+        "tags": "tags",
+    },
+)
+class CfnCampaignProps:
+    def __init__(
+        self,
+        *,
+        channel_subtype_config: typing.Union[_IResolvable_da3f097b, typing.Union[CfnCampaign.ChannelSubtypeConfigProperty, typing.Dict[builtins.str, typing.Any]]],
+        connect_instance_id: builtins.str,
+        name: builtins.str,
+        communication_limits_override: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCampaign.CommunicationLimitsConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        communication_time_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCampaign.CommunicationTimeConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        connect_campaign_flow_arn: typing.Optional[builtins.str] = None,
+        schedule: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCampaign.ScheduleProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        source: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCampaign.SourceProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+    ) -> None:
+        '''Properties for defining a ``CfnCampaign``.
+
+        :param channel_subtype_config: Contains channel subtype configuration for an outbound campaign.
+        :param connect_instance_id: The identifier of the Amazon Connect instance. You can find the ``instanceId`` in the ARN of the instance.
+        :param name: The name of the outbound campaign.
+        :param communication_limits_override: Communication limits configuration for an outbound campaign.
+        :param communication_time_config: Contains communication time configuration for an outbound campaign.
+        :param connect_campaign_flow_arn: The Amazon Resource Name (ARN) of the Amazon Connect campaign flow associated with the outbound campaign.
+        :param schedule: Contains the schedule configuration.
+        :param source: Contains source configuration.
+        :param tags: The tags used to organize, track, or control access for this resource. For example, ``{ "tags": {"key1":"value1", "key2":"value2"} }`` .
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-connectcampaignsv2-campaign.html
+        :exampleMetadata: fixture=_generated
+
+        Example::
+
+            # The code below shows an example of how to instantiate this type.
+            # The values are placeholders you should change.
+            from aws_cdk import aws_connectcampaignsv2 as connectcampaignsv2
+            
+            # agentless_config: Any
+            
+            cfn_campaign_props = connectcampaignsv2.CfnCampaignProps(
+                channel_subtype_config=connectcampaignsv2.CfnCampaign.ChannelSubtypeConfigProperty(
+                    email=connectcampaignsv2.CfnCampaign.EmailChannelSubtypeConfigProperty(
+                        default_outbound_config=connectcampaignsv2.CfnCampaign.EmailOutboundConfigProperty(
+                            connect_source_email_address="connectSourceEmailAddress",
+                            wisdom_template_arn="wisdomTemplateArn",
+            
+                            # the properties below are optional
+                            source_email_address_display_name="sourceEmailAddressDisplayName"
+                        ),
+                        outbound_mode=connectcampaignsv2.CfnCampaign.EmailOutboundModeProperty(
+                            agentless_config=agentless_config
+                        ),
+            
+                        # the properties below are optional
+                        capacity=123
+                    ),
+                    sms=connectcampaignsv2.CfnCampaign.SmsChannelSubtypeConfigProperty(
+                        default_outbound_config=connectcampaignsv2.CfnCampaign.SmsOutboundConfigProperty(
+                            connect_source_phone_number_arn="connectSourcePhoneNumberArn",
+                            wisdom_template_arn="wisdomTemplateArn"
+                        ),
+                        outbound_mode=connectcampaignsv2.CfnCampaign.SmsOutboundModeProperty(
+                            agentless_config=agentless_config
+                        ),
+            
+                        # the properties below are optional
+                        capacity=123
+                    ),
+                    telephony=connectcampaignsv2.CfnCampaign.TelephonyChannelSubtypeConfigProperty(
+                        default_outbound_config=connectcampaignsv2.CfnCampaign.TelephonyOutboundConfigProperty(
+                            connect_contact_flow_id="connectContactFlowId",
+            
+                            # the properties below are optional
+                            answer_machine_detection_config=connectcampaignsv2.CfnCampaign.AnswerMachineDetectionConfigProperty(
+                                enable_answer_machine_detection=False,
+            
+                                # the properties below are optional
+                                await_answer_machine_prompt=False
+                            ),
+                            connect_source_phone_number="connectSourcePhoneNumber"
+                        ),
+                        outbound_mode=connectcampaignsv2.CfnCampaign.TelephonyOutboundModeProperty(
+                            agentless_config=agentless_config,
+                            predictive_config=connectcampaignsv2.CfnCampaign.PredictiveConfigProperty(
+                                bandwidth_allocation=123
+                            ),
+                            preview_config=connectcampaignsv2.CfnCampaign.PreviewConfigProperty(
+                                bandwidth_allocation=123,
+                                timeout_config=connectcampaignsv2.CfnCampaign.TimeoutConfigProperty(
+                                    duration_in_seconds=123
+                                ),
+            
+                                # the properties below are optional
+                                agent_actions=["agentActions"]
+                            ),
+                            progressive_config=connectcampaignsv2.CfnCampaign.ProgressiveConfigProperty(
+                                bandwidth_allocation=123
+                            )
+                        ),
+            
+                        # the properties below are optional
+                        capacity=123,
+                        connect_queue_id="connectQueueId"
+                    )
+                ),
+                connect_instance_id="connectInstanceId",
+                name="name",
+            
+                # the properties below are optional
+                communication_limits_override=connectcampaignsv2.CfnCampaign.CommunicationLimitsConfigProperty(
+                    all_channels_subtypes=connectcampaignsv2.CfnCampaign.CommunicationLimitsProperty(
+                        communication_limit_list=[connectcampaignsv2.CfnCampaign.CommunicationLimitProperty(
+                            frequency=123,
+                            max_count_per_recipient=123,
+                            unit="unit"
+                        )]
+                    ),
+                    instance_limits_handling="instanceLimitsHandling"
+                ),
+                communication_time_config=connectcampaignsv2.CfnCampaign.CommunicationTimeConfigProperty(
+                    local_time_zone_config=connectcampaignsv2.CfnCampaign.LocalTimeZoneConfigProperty(
+                        default_time_zone="defaultTimeZone",
+                        local_time_zone_detection=["localTimeZoneDetection"]
+                    ),
+            
+                    # the properties below are optional
+                    email=connectcampaignsv2.CfnCampaign.TimeWindowProperty(
+                        open_hours=connectcampaignsv2.CfnCampaign.OpenHoursProperty(
+                            daily_hours=[connectcampaignsv2.CfnCampaign.DailyHourProperty(
+                                key="key",
+                                value=[connectcampaignsv2.CfnCampaign.TimeRangeProperty(
+                                    end_time="endTime",
+                                    start_time="startTime"
+                                )]
+                            )]
+                        ),
+            
+                        # the properties below are optional
+                        restricted_periods=connectcampaignsv2.CfnCampaign.RestrictedPeriodsProperty(
+                            restricted_period_list=[connectcampaignsv2.CfnCampaign.RestrictedPeriodProperty(
+                                end_date="endDate",
+                                start_date="startDate",
+            
+                                # the properties below are optional
+                                name="name"
+                            )]
+                        )
+                    ),
+                    sms=connectcampaignsv2.CfnCampaign.TimeWindowProperty(
+                        open_hours=connectcampaignsv2.CfnCampaign.OpenHoursProperty(
+                            daily_hours=[connectcampaignsv2.CfnCampaign.DailyHourProperty(
+                                key="key",
+                                value=[connectcampaignsv2.CfnCampaign.TimeRangeProperty(
+                                    end_time="endTime",
+                                    start_time="startTime"
+                                )]
+                            )]
+                        ),
+            
+                        # the properties below are optional
+                        restricted_periods=connectcampaignsv2.CfnCampaign.RestrictedPeriodsProperty(
+                            restricted_period_list=[connectcampaignsv2.CfnCampaign.RestrictedPeriodProperty(
+                                end_date="endDate",
+                                start_date="startDate",
+            
+                                # the properties below are optional
+                                name="name"
+                            )]
+                        )
+                    ),
+                    telephony=connectcampaignsv2.CfnCampaign.TimeWindowProperty(
+                        open_hours=connectcampaignsv2.CfnCampaign.OpenHoursProperty(
+                            daily_hours=[connectcampaignsv2.CfnCampaign.DailyHourProperty(
+                                key="key",
+                                value=[connectcampaignsv2.CfnCampaign.TimeRangeProperty(
+                                    end_time="endTime",
+                                    start_time="startTime"
+                                )]
+                            )]
+                        ),
+            
+                        # the properties below are optional
+                        restricted_periods=connectcampaignsv2.CfnCampaign.RestrictedPeriodsProperty(
+                            restricted_period_list=[connectcampaignsv2.CfnCampaign.RestrictedPeriodProperty(
+                                end_date="endDate",
+                                start_date="startDate",
+            
+                                # the properties below are optional
+                                name="name"
+                            )]
+                        )
+                    )
+                ),
+                connect_campaign_flow_arn="connectCampaignFlowArn",
+                schedule=connectcampaignsv2.CfnCampaign.ScheduleProperty(
+                    end_time="endTime",
+                    start_time="startTime",
+            
+                    # the properties below are optional
+                    refresh_frequency="refreshFrequency"
+                ),
+                source=connectcampaignsv2.CfnCampaign.SourceProperty(
+                    customer_profiles_segment_arn="customerProfilesSegmentArn",
+                    event_trigger=connectcampaignsv2.CfnCampaign.EventTriggerProperty(
+                        customer_profiles_domain_arn="customerProfilesDomainArn"
+                    )
+                ),
+                tags=[CfnTag(
+                    key="key",
+                    value="value"
+                )]
+            )
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__3c58eb40b443fce35feb659905089795642547d367bd583cc8addd65c75034e8)
+            check_type(argname="argument channel_subtype_config", value=channel_subtype_config, expected_type=type_hints["channel_subtype_config"])
+            check_type(argname="argument connect_instance_id", value=connect_instance_id, expected_type=type_hints["connect_instance_id"])
+            check_type(argname="argument name", value=name, expected_type=type_hints["name"])
+            check_type(argname="argument communication_limits_override", value=communication_limits_override, expected_type=type_hints["communication_limits_override"])
+            check_type(argname="argument communication_time_config", value=communication_time_config, expected_type=type_hints["communication_time_config"])
+            check_type(argname="argument connect_campaign_flow_arn", value=connect_campaign_flow_arn, expected_type=type_hints["connect_campaign_flow_arn"])
+            check_type(argname="argument schedule", value=schedule, expected_type=type_hints["schedule"])
+            check_type(argname="argument source", value=source, expected_type=type_hints["source"])
+            check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
+        self._values: typing.Dict[builtins.str, typing.Any] = {
+            "channel_subtype_config": channel_subtype_config,
+            "connect_instance_id": connect_instance_id,
+            "name": name,
+        }
+        if communication_limits_override is not None:
+            self._values["communication_limits_override"] = communication_limits_override
+        if communication_time_config is not None:
+            self._values["communication_time_config"] = communication_time_config
+        if connect_campaign_flow_arn is not None:
+            self._values["connect_campaign_flow_arn"] = connect_campaign_flow_arn
+        if schedule is not None:
+            self._values["schedule"] = schedule
+        if source is not None:
+            self._values["source"] = source
+        if tags is not None:
+            self._values["tags"] = tags
+
+    @builtins.property
+    def channel_subtype_config(
+        self,
+    ) -> typing.Union[_IResolvable_da3f097b, CfnCampaign.ChannelSubtypeConfigProperty]:
+        '''Contains channel subtype configuration for an outbound campaign.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-connectcampaignsv2-campaign.html#cfn-connectcampaignsv2-campaign-channelsubtypeconfig
+        '''
+        result = self._values.get("channel_subtype_config")
+        assert result is not None, "Required property 'channel_subtype_config' is missing"
+        return typing.cast(typing.Union[_IResolvable_da3f097b, CfnCampaign.ChannelSubtypeConfigProperty], result)
+
+    @builtins.property
+    def connect_instance_id(self) -> builtins.str:
+        '''The identifier of the Amazon Connect instance.
+
+        You can find the ``instanceId`` in the ARN of the instance.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-connectcampaignsv2-campaign.html#cfn-connectcampaignsv2-campaign-connectinstanceid
+        '''
+        result = self._values.get("connect_instance_id")
+        assert result is not None, "Required property 'connect_instance_id' is missing"
+        return typing.cast(builtins.str, result)
+
+    @builtins.property
+    def name(self) -> builtins.str:
+        '''The name of the outbound campaign.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-connectcampaignsv2-campaign.html#cfn-connectcampaignsv2-campaign-name
+        '''
+        result = self._values.get("name")
+        assert result is not None, "Required property 'name' is missing"
+        return typing.cast(builtins.str, result)
+
+    @builtins.property
+    def communication_limits_override(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnCampaign.CommunicationLimitsConfigProperty]]:
+        '''Communication limits configuration for an outbound campaign.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-connectcampaignsv2-campaign.html#cfn-connectcampaignsv2-campaign-communicationlimitsoverride
+        '''
+        result = self._values.get("communication_limits_override")
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnCampaign.CommunicationLimitsConfigProperty]], result)
+
+    @builtins.property
+    def communication_time_config(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnCampaign.CommunicationTimeConfigProperty]]:
+        '''Contains communication time configuration for an outbound campaign.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-connectcampaignsv2-campaign.html#cfn-connectcampaignsv2-campaign-communicationtimeconfig
+        '''
+        result = self._values.get("communication_time_config")
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnCampaign.CommunicationTimeConfigProperty]], result)
+
+    @builtins.property
+    def connect_campaign_flow_arn(self) -> typing.Optional[builtins.str]:
+        '''The Amazon Resource Name (ARN) of the Amazon Connect campaign flow associated with the outbound campaign.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-connectcampaignsv2-campaign.html#cfn-connectcampaignsv2-campaign-connectcampaignflowarn
+        '''
+        result = self._values.get("connect_campaign_flow_arn")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def schedule(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnCampaign.ScheduleProperty]]:
+        '''Contains the schedule configuration.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-connectcampaignsv2-campaign.html#cfn-connectcampaignsv2-campaign-schedule
+        '''
+        result = self._values.get("schedule")
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnCampaign.ScheduleProperty]], result)
+
+    @builtins.property
+    def source(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnCampaign.SourceProperty]]:
+        '''Contains source configuration.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-connectcampaignsv2-campaign.html#cfn-connectcampaignsv2-campaign-source
+        '''
+        result = self._values.get("source")
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnCampaign.SourceProperty]], result)
+
+    @builtins.property
+    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+        '''The tags used to organize, track, or control access for this resource.
+
+        For example, ``{ "tags": {"key1":"value1", "key2":"value2"} }`` .
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-connectcampaignsv2-campaign.html#cfn-connectcampaignsv2-campaign-tags
+        '''
+        result = self._values.get("tags")
+        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+
+    def __eq__(self, rhs: typing.Any) -> builtins.bool:
+        return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+    def __ne__(self, rhs: typing.Any) -> builtins.bool:
+        return not (rhs == self)
+
+    def __repr__(self) -> str:
+        return "CfnCampaignProps(%s)" % ", ".join(
+            k + "=" + repr(v) for k, v in self._values.items()
+        )
+
+
 __all__ = [
-    "CampaignReference",
     "CfnCampaign",
     "CfnCampaignProps",
-    "ICampaignRef",
 ]
 
 publication.publish()
-
-def _typecheckingstub__bdedd2867bc4e63db8bcbe9a1f633e8a80491f4033423ee6b6038592d20736e9(
-    *,
-    campaign_arn: builtins.str,
-) -> None:
-    """Type checking stubs"""
-    pass
-
-def _typecheckingstub__3c58eb40b443fce35feb659905089795642547d367bd583cc8addd65c75034e8(
-    *,
-    channel_subtype_config: typing.Union[_IResolvable_da3f097b, typing.Union[CfnCampaign.ChannelSubtypeConfigProperty, typing.Dict[builtins.str, typing.Any]]],
-    connect_instance_id: builtins.str,
-    name: builtins.str,
-    communication_limits_override: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCampaign.CommunicationLimitsConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-    communication_time_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCampaign.CommunicationTimeConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-    connect_campaign_flow_arn: typing.Optional[builtins.str] = None,
-    schedule: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCampaign.ScheduleProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-    source: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCampaign.SourceProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-    tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-) -> None:
-    """Type checking stubs"""
-    pass
 
 def _typecheckingstub__228f2b3a0b621ad8a32effe36abeb2d513f50077bd0ad5de7f33f1ea81da26bf(
     scope: _constructs_77d1e7e8.Construct,
@@ -3841,5 +3727,17 @@ def _typecheckingstub__50c6d60934a17c910bf659882748981ec00bd3f91d69165aff0db47e1
     """Type checking stubs"""
     pass
 
-for cls in [ICampaignRef]:
-    typing.cast(typing.Any, cls).__protocol_attrs__ = typing.cast(typing.Any, cls).__protocol_attrs__ - set(['__jsii_proxy_class__', '__jsii_type__'])
+def _typecheckingstub__3c58eb40b443fce35feb659905089795642547d367bd583cc8addd65c75034e8(
+    *,
+    channel_subtype_config: typing.Union[_IResolvable_da3f097b, typing.Union[CfnCampaign.ChannelSubtypeConfigProperty, typing.Dict[builtins.str, typing.Any]]],
+    connect_instance_id: builtins.str,
+    name: builtins.str,
+    communication_limits_override: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCampaign.CommunicationLimitsConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    communication_time_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCampaign.CommunicationTimeConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    connect_campaign_flow_arn: typing.Optional[builtins.str] = None,
+    schedule: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCampaign.ScheduleProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    source: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCampaign.SourceProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass

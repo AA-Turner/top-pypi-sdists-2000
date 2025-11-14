@@ -70,13 +70,158 @@ from .._jsii import *
 import constructs as _constructs_77d1e7e8
 from .. import (
     CfnResource as _CfnResource_9df397a6,
-    IEnvironmentAware as _IEnvironmentAware_a408b00d,
     IInspectable as _IInspectable_c2943556,
     IResolvable as _IResolvable_da3f097b,
     ITaggableV2 as _ITaggableV2_4e6798f8,
     TagManager as _TagManager_0a598cb3,
     TreeInspector as _TreeInspector_488e0dd5,
 )
+from ..interfaces.aws_pcaconnectorscep import (
+    ChallengeReference as _ChallengeReference_af70af46,
+    ConnectorReference as _ConnectorReference_d9584376,
+    IChallengeRef as _IChallengeRef_b8b2f04e,
+    IConnectorRef as _IConnectorRef_19318bf1,
+)
+
+
+@jsii.implements(_IInspectable_c2943556, _IChallengeRef_b8b2f04e, _ITaggableV2_4e6798f8)
+class CfnChallenge(
+    _CfnResource_9df397a6,
+    metaclass=jsii.JSIIMeta,
+    jsii_type="aws-cdk-lib.aws_pcaconnectorscep.CfnChallenge",
+):
+    '''For general-purpose connectors.
+
+    Creates a *challenge password* for the specified connector. The SCEP protocol uses a challenge password to authenticate a request before issuing a certificate from a certificate authority (CA). Your SCEP clients include the challenge password as part of their certificate request to Connector for SCEP. To retrieve the connector Amazon Resource Names (ARNs) for the connectors in your account, call `ListConnectors <https://docs.aws.amazon.com/pca-connector-scep/latest/APIReference/API_ListConnectors.html>`_ .
+
+    To create additional challenge passwords for the connector, call ``CreateChallenge`` again. We recommend frequently rotating your challenge passwords.
+
+    :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-pcaconnectorscep-challenge.html
+    :cloudformationResource: AWS::PCAConnectorSCEP::Challenge
+    :exampleMetadata: fixture=_generated
+
+    Example::
+
+        # The code below shows an example of how to instantiate this type.
+        # The values are placeholders you should change.
+        from aws_cdk import aws_pcaconnectorscep as pcaconnectorscep
+        
+        cfn_challenge = pcaconnectorscep.CfnChallenge(self, "MyCfnChallenge",
+            connector_arn="connectorArn",
+        
+            # the properties below are optional
+            tags={
+                "tags_key": "tags"
+            }
+        )
+    '''
+
+    def __init__(
+        self,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        *,
+        connector_arn: builtins.str,
+        tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
+    ) -> None:
+        '''Create a new ``AWS::PCAConnectorSCEP::Challenge``.
+
+        :param scope: Scope in which this resource is defined.
+        :param id: Construct identifier for this resource (unique in its scope).
+        :param connector_arn: The Amazon Resource Name (ARN) of the connector.
+        :param tags: 
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__24eb7fbef30f2d313fbf471c0e0cb20de5d3f7212801db2cea706e879fcbffbb)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+        props = CfnChallengeProps(connector_arn=connector_arn, tags=tags)
+
+        jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="inspect")
+    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+        '''Examines the CloudFormation resource and discloses attributes.
+
+        :param inspector: tree inspector to collect and process attributes.
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__d35413f13465487597f5d259678227986782b9e226cea3ff09ffde5c120680ea)
+            check_type(argname="argument inspector", value=inspector, expected_type=type_hints["inspector"])
+        return typing.cast(None, jsii.invoke(self, "inspect", [inspector]))
+
+    @jsii.member(jsii_name="renderProperties")
+    def _render_properties(
+        self,
+        props: typing.Mapping[builtins.str, typing.Any],
+    ) -> typing.Mapping[builtins.str, typing.Any]:
+        '''
+        :param props: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__489654af0c0fb058e21c2b228cbdb80abf0c133d0fb41f63a099fdd056c22465)
+            check_type(argname="argument props", value=props, expected_type=type_hints["props"])
+        return typing.cast(typing.Mapping[builtins.str, typing.Any], jsii.invoke(self, "renderProperties", [props]))
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="CFN_RESOURCE_TYPE_NAME")
+    def CFN_RESOURCE_TYPE_NAME(cls) -> builtins.str:
+        '''The CloudFormation resource type name for this resource class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "CFN_RESOURCE_TYPE_NAME"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrChallengeArn")
+    def attr_challenge_arn(self) -> builtins.str:
+        '''The Amazon Resource Name (ARN) of the challenge.
+
+        :cloudformationAttribute: ChallengeArn
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrChallengeArn"))
+
+    @builtins.property
+    @jsii.member(jsii_name="cdkTagManager")
+    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+        '''Tag Manager which manages the tags for this resource.'''
+        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+
+    @builtins.property
+    @jsii.member(jsii_name="cfnProperties")
+    def _cfn_properties(self) -> typing.Mapping[builtins.str, typing.Any]:
+        return typing.cast(typing.Mapping[builtins.str, typing.Any], jsii.get(self, "cfnProperties"))
+
+    @builtins.property
+    @jsii.member(jsii_name="challengeRef")
+    def challenge_ref(self) -> _ChallengeReference_af70af46:
+        '''A reference to a Challenge resource.'''
+        return typing.cast(_ChallengeReference_af70af46, jsii.get(self, "challengeRef"))
+
+    @builtins.property
+    @jsii.member(jsii_name="connectorArn")
+    def connector_arn(self) -> builtins.str:
+        '''The Amazon Resource Name (ARN) of the connector.'''
+        return typing.cast(builtins.str, jsii.get(self, "connectorArn"))
+
+    @connector_arn.setter
+    def connector_arn(self, value: builtins.str) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__e8915b9dc72ee63e750d3ef96a5cb2aff8a0fa11b46fd75a91cbaf3be0bbba4e)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "connectorArn", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="tags")
+    def tags(self) -> typing.Optional[typing.Mapping[builtins.str, builtins.str]]:
+        return typing.cast(typing.Optional[typing.Mapping[builtins.str, builtins.str]], jsii.get(self, "tags"))
+
+    @tags.setter
+    def tags(
+        self,
+        value: typing.Optional[typing.Mapping[builtins.str, builtins.str]],
+    ) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__02346c7d1384ddbe7e216be1ce5a2eaa7010ca8e5397d2d7987583123fa40455)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "tags", value) # pyright: ignore[reportArgumentType]
 
 
 @jsii.data_type(
@@ -154,437 +299,7 @@ class CfnChallengeProps:
         )
 
 
-@jsii.data_type(
-    jsii_type="aws-cdk-lib.aws_pcaconnectorscep.CfnConnectorProps",
-    jsii_struct_bases=[],
-    name_mapping={
-        "certificate_authority_arn": "certificateAuthorityArn",
-        "mobile_device_management": "mobileDeviceManagement",
-        "tags": "tags",
-    },
-)
-class CfnConnectorProps:
-    def __init__(
-        self,
-        *,
-        certificate_authority_arn: builtins.str,
-        mobile_device_management: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnConnector.MobileDeviceManagementProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
-    ) -> None:
-        '''Properties for defining a ``CfnConnector``.
-
-        :param certificate_authority_arn: The Amazon Resource Name (ARN) of the certificate authority associated with the connector.
-        :param mobile_device_management: Contains settings relevant to the mobile device management system that you chose for the connector. If you didn't configure ``MobileDeviceManagement`` , then the connector is for general-purpose use and this object is empty.
-        :param tags: 
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-pcaconnectorscep-connector.html
-        :exampleMetadata: fixture=_generated
-
-        Example::
-
-            # The code below shows an example of how to instantiate this type.
-            # The values are placeholders you should change.
-            from aws_cdk import aws_pcaconnectorscep as pcaconnectorscep
-            
-            cfn_connector_props = pcaconnectorscep.CfnConnectorProps(
-                certificate_authority_arn="certificateAuthorityArn",
-            
-                # the properties below are optional
-                mobile_device_management=pcaconnectorscep.CfnConnector.MobileDeviceManagementProperty(
-                    intune=pcaconnectorscep.CfnConnector.IntuneConfigurationProperty(
-                        azure_application_id="azureApplicationId",
-                        domain="domain"
-                    )
-                ),
-                tags={
-                    "tags_key": "tags"
-                }
-            )
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__c22911c5ba9019291e6d26ad4968076543da6a84dd36e0fdf942f0f31d64e393)
-            check_type(argname="argument certificate_authority_arn", value=certificate_authority_arn, expected_type=type_hints["certificate_authority_arn"])
-            check_type(argname="argument mobile_device_management", value=mobile_device_management, expected_type=type_hints["mobile_device_management"])
-            check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
-        self._values: typing.Dict[builtins.str, typing.Any] = {
-            "certificate_authority_arn": certificate_authority_arn,
-        }
-        if mobile_device_management is not None:
-            self._values["mobile_device_management"] = mobile_device_management
-        if tags is not None:
-            self._values["tags"] = tags
-
-    @builtins.property
-    def certificate_authority_arn(self) -> builtins.str:
-        '''The Amazon Resource Name (ARN) of the certificate authority associated with the connector.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-pcaconnectorscep-connector.html#cfn-pcaconnectorscep-connector-certificateauthorityarn
-        '''
-        result = self._values.get("certificate_authority_arn")
-        assert result is not None, "Required property 'certificate_authority_arn' is missing"
-        return typing.cast(builtins.str, result)
-
-    @builtins.property
-    def mobile_device_management(
-        self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnConnector.MobileDeviceManagementProperty"]]:
-        '''Contains settings relevant to the mobile device management system that you chose for the connector.
-
-        If you didn't configure ``MobileDeviceManagement`` , then the connector is for general-purpose use and this object is empty.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-pcaconnectorscep-connector.html#cfn-pcaconnectorscep-connector-mobiledevicemanagement
-        '''
-        result = self._values.get("mobile_device_management")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnConnector.MobileDeviceManagementProperty"]], result)
-
-    @builtins.property
-    def tags(self) -> typing.Optional[typing.Mapping[builtins.str, builtins.str]]:
-        '''
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-pcaconnectorscep-connector.html#cfn-pcaconnectorscep-connector-tags
-        '''
-        result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.Mapping[builtins.str, builtins.str]], result)
-
-    def __eq__(self, rhs: typing.Any) -> builtins.bool:
-        return isinstance(rhs, self.__class__) and rhs._values == self._values
-
-    def __ne__(self, rhs: typing.Any) -> builtins.bool:
-        return not (rhs == self)
-
-    def __repr__(self) -> str:
-        return "CfnConnectorProps(%s)" % ", ".join(
-            k + "=" + repr(v) for k, v in self._values.items()
-        )
-
-
-@jsii.data_type(
-    jsii_type="aws-cdk-lib.aws_pcaconnectorscep.ChallengeReference",
-    jsii_struct_bases=[],
-    name_mapping={"challenge_arn": "challengeArn"},
-)
-class ChallengeReference:
-    def __init__(self, *, challenge_arn: builtins.str) -> None:
-        '''A reference to a Challenge resource.
-
-        :param challenge_arn: The ChallengeArn of the Challenge resource.
-
-        :exampleMetadata: fixture=_generated
-
-        Example::
-
-            # The code below shows an example of how to instantiate this type.
-            # The values are placeholders you should change.
-            from aws_cdk import aws_pcaconnectorscep as pcaconnectorscep
-            
-            challenge_reference = pcaconnectorscep.ChallengeReference(
-                challenge_arn="challengeArn"
-            )
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__e8743c2063cbfc5c75c0c8c8e5223af770078d97c47be7e1dfe5054aa9cda011)
-            check_type(argname="argument challenge_arn", value=challenge_arn, expected_type=type_hints["challenge_arn"])
-        self._values: typing.Dict[builtins.str, typing.Any] = {
-            "challenge_arn": challenge_arn,
-        }
-
-    @builtins.property
-    def challenge_arn(self) -> builtins.str:
-        '''The ChallengeArn of the Challenge resource.'''
-        result = self._values.get("challenge_arn")
-        assert result is not None, "Required property 'challenge_arn' is missing"
-        return typing.cast(builtins.str, result)
-
-    def __eq__(self, rhs: typing.Any) -> builtins.bool:
-        return isinstance(rhs, self.__class__) and rhs._values == self._values
-
-    def __ne__(self, rhs: typing.Any) -> builtins.bool:
-        return not (rhs == self)
-
-    def __repr__(self) -> str:
-        return "ChallengeReference(%s)" % ", ".join(
-            k + "=" + repr(v) for k, v in self._values.items()
-        )
-
-
-@jsii.data_type(
-    jsii_type="aws-cdk-lib.aws_pcaconnectorscep.ConnectorReference",
-    jsii_struct_bases=[],
-    name_mapping={"connector_arn": "connectorArn"},
-)
-class ConnectorReference:
-    def __init__(self, *, connector_arn: builtins.str) -> None:
-        '''A reference to a Connector resource.
-
-        :param connector_arn: The ConnectorArn of the Connector resource.
-
-        :exampleMetadata: fixture=_generated
-
-        Example::
-
-            # The code below shows an example of how to instantiate this type.
-            # The values are placeholders you should change.
-            from aws_cdk import aws_pcaconnectorscep as pcaconnectorscep
-            
-            connector_reference = pcaconnectorscep.ConnectorReference(
-                connector_arn="connectorArn"
-            )
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__b057a32d3141458c436fa89cb93a42b67fd9f8fd505458fb947ca3e6f46fff4b)
-            check_type(argname="argument connector_arn", value=connector_arn, expected_type=type_hints["connector_arn"])
-        self._values: typing.Dict[builtins.str, typing.Any] = {
-            "connector_arn": connector_arn,
-        }
-
-    @builtins.property
-    def connector_arn(self) -> builtins.str:
-        '''The ConnectorArn of the Connector resource.'''
-        result = self._values.get("connector_arn")
-        assert result is not None, "Required property 'connector_arn' is missing"
-        return typing.cast(builtins.str, result)
-
-    def __eq__(self, rhs: typing.Any) -> builtins.bool:
-        return isinstance(rhs, self.__class__) and rhs._values == self._values
-
-    def __ne__(self, rhs: typing.Any) -> builtins.bool:
-        return not (rhs == self)
-
-    def __repr__(self) -> str:
-        return "ConnectorReference(%s)" % ", ".join(
-            k + "=" + repr(v) for k, v in self._values.items()
-        )
-
-
-@jsii.interface(jsii_type="aws-cdk-lib.aws_pcaconnectorscep.IChallengeRef")
-class IChallengeRef(
-    _constructs_77d1e7e8.IConstruct,
-    _IEnvironmentAware_a408b00d,
-    typing_extensions.Protocol,
-):
-    '''(experimental) Indicates that this resource can be referenced as a Challenge.
-
-    :stability: experimental
-    '''
-
-    @builtins.property
-    @jsii.member(jsii_name="challengeRef")
-    def challenge_ref(self) -> ChallengeReference:
-        '''(experimental) A reference to a Challenge resource.
-
-        :stability: experimental
-        '''
-        ...
-
-
-class _IChallengeRefProxy(
-    jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
-    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
-):
-    '''(experimental) Indicates that this resource can be referenced as a Challenge.
-
-    :stability: experimental
-    '''
-
-    __jsii_type__: typing.ClassVar[str] = "aws-cdk-lib.aws_pcaconnectorscep.IChallengeRef"
-
-    @builtins.property
-    @jsii.member(jsii_name="challengeRef")
-    def challenge_ref(self) -> ChallengeReference:
-        '''(experimental) A reference to a Challenge resource.
-
-        :stability: experimental
-        '''
-        return typing.cast(ChallengeReference, jsii.get(self, "challengeRef"))
-
-# Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
-typing.cast(typing.Any, IChallengeRef).__jsii_proxy_class__ = lambda : _IChallengeRefProxy
-
-
-@jsii.interface(jsii_type="aws-cdk-lib.aws_pcaconnectorscep.IConnectorRef")
-class IConnectorRef(
-    _constructs_77d1e7e8.IConstruct,
-    _IEnvironmentAware_a408b00d,
-    typing_extensions.Protocol,
-):
-    '''(experimental) Indicates that this resource can be referenced as a Connector.
-
-    :stability: experimental
-    '''
-
-    @builtins.property
-    @jsii.member(jsii_name="connectorRef")
-    def connector_ref(self) -> ConnectorReference:
-        '''(experimental) A reference to a Connector resource.
-
-        :stability: experimental
-        '''
-        ...
-
-
-class _IConnectorRefProxy(
-    jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
-    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
-):
-    '''(experimental) Indicates that this resource can be referenced as a Connector.
-
-    :stability: experimental
-    '''
-
-    __jsii_type__: typing.ClassVar[str] = "aws-cdk-lib.aws_pcaconnectorscep.IConnectorRef"
-
-    @builtins.property
-    @jsii.member(jsii_name="connectorRef")
-    def connector_ref(self) -> ConnectorReference:
-        '''(experimental) A reference to a Connector resource.
-
-        :stability: experimental
-        '''
-        return typing.cast(ConnectorReference, jsii.get(self, "connectorRef"))
-
-# Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
-typing.cast(typing.Any, IConnectorRef).__jsii_proxy_class__ = lambda : _IConnectorRefProxy
-
-
-@jsii.implements(_IInspectable_c2943556, IChallengeRef, _ITaggableV2_4e6798f8)
-class CfnChallenge(
-    _CfnResource_9df397a6,
-    metaclass=jsii.JSIIMeta,
-    jsii_type="aws-cdk-lib.aws_pcaconnectorscep.CfnChallenge",
-):
-    '''For general-purpose connectors.
-
-    Creates a *challenge password* for the specified connector. The SCEP protocol uses a challenge password to authenticate a request before issuing a certificate from a certificate authority (CA). Your SCEP clients include the challenge password as part of their certificate request to Connector for SCEP. To retrieve the connector Amazon Resource Names (ARNs) for the connectors in your account, call `ListConnectors <https://docs.aws.amazon.com/pca-connector-scep/latest/APIReference/API_ListConnectors.html>`_ .
-
-    To create additional challenge passwords for the connector, call ``CreateChallenge`` again. We recommend frequently rotating your challenge passwords.
-
-    :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-pcaconnectorscep-challenge.html
-    :cloudformationResource: AWS::PCAConnectorSCEP::Challenge
-    :exampleMetadata: fixture=_generated
-
-    Example::
-
-        # The code below shows an example of how to instantiate this type.
-        # The values are placeholders you should change.
-        from aws_cdk import aws_pcaconnectorscep as pcaconnectorscep
-        
-        cfn_challenge = pcaconnectorscep.CfnChallenge(self, "MyCfnChallenge",
-            connector_arn="connectorArn",
-        
-            # the properties below are optional
-            tags={
-                "tags_key": "tags"
-            }
-        )
-    '''
-
-    def __init__(
-        self,
-        scope: _constructs_77d1e7e8.Construct,
-        id: builtins.str,
-        *,
-        connector_arn: builtins.str,
-        tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
-    ) -> None:
-        '''
-        :param scope: Scope in which this resource is defined.
-        :param id: Construct identifier for this resource (unique in its scope).
-        :param connector_arn: The Amazon Resource Name (ARN) of the connector.
-        :param tags: 
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__24eb7fbef30f2d313fbf471c0e0cb20de5d3f7212801db2cea706e879fcbffbb)
-            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
-            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
-        props = CfnChallengeProps(connector_arn=connector_arn, tags=tags)
-
-        jsii.create(self.__class__, self, [scope, id, props])
-
-    @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
-        '''Examines the CloudFormation resource and discloses attributes.
-
-        :param inspector: tree inspector to collect and process attributes.
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__d35413f13465487597f5d259678227986782b9e226cea3ff09ffde5c120680ea)
-            check_type(argname="argument inspector", value=inspector, expected_type=type_hints["inspector"])
-        return typing.cast(None, jsii.invoke(self, "inspect", [inspector]))
-
-    @jsii.member(jsii_name="renderProperties")
-    def _render_properties(
-        self,
-        props: typing.Mapping[builtins.str, typing.Any],
-    ) -> typing.Mapping[builtins.str, typing.Any]:
-        '''
-        :param props: -
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__489654af0c0fb058e21c2b228cbdb80abf0c133d0fb41f63a099fdd056c22465)
-            check_type(argname="argument props", value=props, expected_type=type_hints["props"])
-        return typing.cast(typing.Mapping[builtins.str, typing.Any], jsii.invoke(self, "renderProperties", [props]))
-
-    @jsii.python.classproperty
-    @jsii.member(jsii_name="CFN_RESOURCE_TYPE_NAME")
-    def CFN_RESOURCE_TYPE_NAME(cls) -> builtins.str:
-        '''The CloudFormation resource type name for this resource class.'''
-        return typing.cast(builtins.str, jsii.sget(cls, "CFN_RESOURCE_TYPE_NAME"))
-
-    @builtins.property
-    @jsii.member(jsii_name="attrChallengeArn")
-    def attr_challenge_arn(self) -> builtins.str:
-        '''The Amazon Resource Name (ARN) of the challenge.
-
-        :cloudformationAttribute: ChallengeArn
-        '''
-        return typing.cast(builtins.str, jsii.get(self, "attrChallengeArn"))
-
-    @builtins.property
-    @jsii.member(jsii_name="cdkTagManager")
-    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
-        '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
-
-    @builtins.property
-    @jsii.member(jsii_name="cfnProperties")
-    def _cfn_properties(self) -> typing.Mapping[builtins.str, typing.Any]:
-        return typing.cast(typing.Mapping[builtins.str, typing.Any], jsii.get(self, "cfnProperties"))
-
-    @builtins.property
-    @jsii.member(jsii_name="challengeRef")
-    def challenge_ref(self) -> ChallengeReference:
-        '''A reference to a Challenge resource.'''
-        return typing.cast(ChallengeReference, jsii.get(self, "challengeRef"))
-
-    @builtins.property
-    @jsii.member(jsii_name="connectorArn")
-    def connector_arn(self) -> builtins.str:
-        '''The Amazon Resource Name (ARN) of the connector.'''
-        return typing.cast(builtins.str, jsii.get(self, "connectorArn"))
-
-    @connector_arn.setter
-    def connector_arn(self, value: builtins.str) -> None:
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__e8915b9dc72ee63e750d3ef96a5cb2aff8a0fa11b46fd75a91cbaf3be0bbba4e)
-            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
-        jsii.set(self, "connectorArn", value) # pyright: ignore[reportArgumentType]
-
-    @builtins.property
-    @jsii.member(jsii_name="tags")
-    def tags(self) -> typing.Optional[typing.Mapping[builtins.str, builtins.str]]:
-        return typing.cast(typing.Optional[typing.Mapping[builtins.str, builtins.str]], jsii.get(self, "tags"))
-
-    @tags.setter
-    def tags(
-        self,
-        value: typing.Optional[typing.Mapping[builtins.str, builtins.str]],
-    ) -> None:
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__02346c7d1384ddbe7e216be1ce5a2eaa7010ca8e5397d2d7987583123fa40455)
-            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
-        jsii.set(self, "tags", value) # pyright: ignore[reportArgumentType]
-
-
-@jsii.implements(_IInspectable_c2943556, IConnectorRef, _ITaggableV2_4e6798f8)
+@jsii.implements(_IInspectable_c2943556, _IConnectorRef_19318bf1, _ITaggableV2_4e6798f8)
 class CfnConnector(
     _CfnResource_9df397a6,
     metaclass=jsii.JSIIMeta,
@@ -629,7 +344,8 @@ class CfnConnector(
         mobile_device_management: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnConnector.MobileDeviceManagementProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
     ) -> None:
-        '''
+        '''Create a new ``AWS::PCAConnectorSCEP::Connector``.
+
         :param scope: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
         :param certificate_authority_arn: The Amazon Resource Name (ARN) of the certificate authority associated with the connector.
@@ -726,9 +442,9 @@ class CfnConnector(
 
     @builtins.property
     @jsii.member(jsii_name="connectorRef")
-    def connector_ref(self) -> ConnectorReference:
+    def connector_ref(self) -> _ConnectorReference_d9584376:
         '''A reference to a Connector resource.'''
-        return typing.cast(ConnectorReference, jsii.get(self, "connectorRef"))
+        return typing.cast(_ConnectorReference_d9584376, jsii.get(self, "connectorRef"))
 
     @builtins.property
     @jsii.member(jsii_name="certificateAuthorityArn")
@@ -1013,49 +729,117 @@ class CfnConnector(
             )
 
 
+@jsii.data_type(
+    jsii_type="aws-cdk-lib.aws_pcaconnectorscep.CfnConnectorProps",
+    jsii_struct_bases=[],
+    name_mapping={
+        "certificate_authority_arn": "certificateAuthorityArn",
+        "mobile_device_management": "mobileDeviceManagement",
+        "tags": "tags",
+    },
+)
+class CfnConnectorProps:
+    def __init__(
+        self,
+        *,
+        certificate_authority_arn: builtins.str,
+        mobile_device_management: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnConnector.MobileDeviceManagementProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
+    ) -> None:
+        '''Properties for defining a ``CfnConnector``.
+
+        :param certificate_authority_arn: The Amazon Resource Name (ARN) of the certificate authority associated with the connector.
+        :param mobile_device_management: Contains settings relevant to the mobile device management system that you chose for the connector. If you didn't configure ``MobileDeviceManagement`` , then the connector is for general-purpose use and this object is empty.
+        :param tags: 
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-pcaconnectorscep-connector.html
+        :exampleMetadata: fixture=_generated
+
+        Example::
+
+            # The code below shows an example of how to instantiate this type.
+            # The values are placeholders you should change.
+            from aws_cdk import aws_pcaconnectorscep as pcaconnectorscep
+            
+            cfn_connector_props = pcaconnectorscep.CfnConnectorProps(
+                certificate_authority_arn="certificateAuthorityArn",
+            
+                # the properties below are optional
+                mobile_device_management=pcaconnectorscep.CfnConnector.MobileDeviceManagementProperty(
+                    intune=pcaconnectorscep.CfnConnector.IntuneConfigurationProperty(
+                        azure_application_id="azureApplicationId",
+                        domain="domain"
+                    )
+                ),
+                tags={
+                    "tags_key": "tags"
+                }
+            )
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__c22911c5ba9019291e6d26ad4968076543da6a84dd36e0fdf942f0f31d64e393)
+            check_type(argname="argument certificate_authority_arn", value=certificate_authority_arn, expected_type=type_hints["certificate_authority_arn"])
+            check_type(argname="argument mobile_device_management", value=mobile_device_management, expected_type=type_hints["mobile_device_management"])
+            check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
+        self._values: typing.Dict[builtins.str, typing.Any] = {
+            "certificate_authority_arn": certificate_authority_arn,
+        }
+        if mobile_device_management is not None:
+            self._values["mobile_device_management"] = mobile_device_management
+        if tags is not None:
+            self._values["tags"] = tags
+
+    @builtins.property
+    def certificate_authority_arn(self) -> builtins.str:
+        '''The Amazon Resource Name (ARN) of the certificate authority associated with the connector.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-pcaconnectorscep-connector.html#cfn-pcaconnectorscep-connector-certificateauthorityarn
+        '''
+        result = self._values.get("certificate_authority_arn")
+        assert result is not None, "Required property 'certificate_authority_arn' is missing"
+        return typing.cast(builtins.str, result)
+
+    @builtins.property
+    def mobile_device_management(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnConnector.MobileDeviceManagementProperty]]:
+        '''Contains settings relevant to the mobile device management system that you chose for the connector.
+
+        If you didn't configure ``MobileDeviceManagement`` , then the connector is for general-purpose use and this object is empty.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-pcaconnectorscep-connector.html#cfn-pcaconnectorscep-connector-mobiledevicemanagement
+        '''
+        result = self._values.get("mobile_device_management")
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnConnector.MobileDeviceManagementProperty]], result)
+
+    @builtins.property
+    def tags(self) -> typing.Optional[typing.Mapping[builtins.str, builtins.str]]:
+        '''
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-pcaconnectorscep-connector.html#cfn-pcaconnectorscep-connector-tags
+        '''
+        result = self._values.get("tags")
+        return typing.cast(typing.Optional[typing.Mapping[builtins.str, builtins.str]], result)
+
+    def __eq__(self, rhs: typing.Any) -> builtins.bool:
+        return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+    def __ne__(self, rhs: typing.Any) -> builtins.bool:
+        return not (rhs == self)
+
+    def __repr__(self) -> str:
+        return "CfnConnectorProps(%s)" % ", ".join(
+            k + "=" + repr(v) for k, v in self._values.items()
+        )
+
+
 __all__ = [
     "CfnChallenge",
     "CfnChallengeProps",
     "CfnConnector",
     "CfnConnectorProps",
-    "ChallengeReference",
-    "ConnectorReference",
-    "IChallengeRef",
-    "IConnectorRef",
 ]
 
 publication.publish()
-
-def _typecheckingstub__6b914295b53d2239fac5aeded2d49fbf0b75e45d55296f667c76fc35288cf677(
-    *,
-    connector_arn: builtins.str,
-    tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
-) -> None:
-    """Type checking stubs"""
-    pass
-
-def _typecheckingstub__c22911c5ba9019291e6d26ad4968076543da6a84dd36e0fdf942f0f31d64e393(
-    *,
-    certificate_authority_arn: builtins.str,
-    mobile_device_management: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnConnector.MobileDeviceManagementProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-    tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
-) -> None:
-    """Type checking stubs"""
-    pass
-
-def _typecheckingstub__e8743c2063cbfc5c75c0c8c8e5223af770078d97c47be7e1dfe5054aa9cda011(
-    *,
-    challenge_arn: builtins.str,
-) -> None:
-    """Type checking stubs"""
-    pass
-
-def _typecheckingstub__b057a32d3141458c436fa89cb93a42b67fd9f8fd505458fb947ca3e6f46fff4b(
-    *,
-    connector_arn: builtins.str,
-) -> None:
-    """Type checking stubs"""
-    pass
 
 def _typecheckingstub__24eb7fbef30f2d313fbf471c0e0cb20de5d3f7212801db2cea706e879fcbffbb(
     scope: _constructs_77d1e7e8.Construct,
@@ -1087,6 +871,14 @@ def _typecheckingstub__e8915b9dc72ee63e750d3ef96a5cb2aff8a0fa11b46fd75a91cbaf3be
 
 def _typecheckingstub__02346c7d1384ddbe7e216be1ce5a2eaa7010ca8e5397d2d7987583123fa40455(
     value: typing.Optional[typing.Mapping[builtins.str, builtins.str]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__6b914295b53d2239fac5aeded2d49fbf0b75e45d55296f667c76fc35288cf677(
+    *,
+    connector_arn: builtins.str,
+    tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -1156,5 +948,11 @@ def _typecheckingstub__94fa39891872fe5b5cb744eb26f9e2aeaa4235adb9c2d31d752f535b7
     """Type checking stubs"""
     pass
 
-for cls in [IChallengeRef, IConnectorRef]:
-    typing.cast(typing.Any, cls).__protocol_attrs__ = typing.cast(typing.Any, cls).__protocol_attrs__ - set(['__jsii_proxy_class__', '__jsii_type__'])
+def _typecheckingstub__c22911c5ba9019291e6d26ad4968076543da6a84dd36e0fdf942f0f31d64e393(
+    *,
+    certificate_authority_arn: builtins.str,
+    mobile_device_management: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnConnector.MobileDeviceManagementProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass

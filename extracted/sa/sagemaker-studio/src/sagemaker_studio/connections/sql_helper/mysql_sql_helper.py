@@ -7,7 +7,7 @@ from sagemaker_studio.connections.sql_helper.sql_helper import SqlHelper
 class MySQLHelper(SqlHelper):
 
     @staticmethod
-    def to_sql_config(connection: Connection) -> Dict[str, Any]:
+    def to_sql_config(connection: Connection, **kwargs) -> Dict[str, Any]:
         """
         Transform DataZone MySQL connection data into SQL interface configuration.
 

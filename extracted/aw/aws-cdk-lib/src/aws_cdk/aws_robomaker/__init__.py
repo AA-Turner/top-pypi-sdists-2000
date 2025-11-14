@@ -60,13 +60,170 @@ from .._jsii import *
 import constructs as _constructs_77d1e7e8
 from .. import (
     CfnResource as _CfnResource_9df397a6,
-    IEnvironmentAware as _IEnvironmentAware_a408b00d,
     IInspectable as _IInspectable_c2943556,
     IResolvable as _IResolvable_da3f097b,
     ITaggable as _ITaggable_36806126,
     TagManager as _TagManager_0a598cb3,
     TreeInspector as _TreeInspector_488e0dd5,
 )
+from ..interfaces.aws_robomaker import (
+    FleetReference as _FleetReference_4138ef0f,
+    IFleetRef as _IFleetRef_0583e5dd,
+    IRobotApplicationRef as _IRobotApplicationRef_4ff8e56d,
+    IRobotApplicationVersionRef as _IRobotApplicationVersionRef_0def63df,
+    IRobotRef as _IRobotRef_1acaea37,
+    ISimulationApplicationRef as _ISimulationApplicationRef_b0735a82,
+    ISimulationApplicationVersionRef as _ISimulationApplicationVersionRef_aa56ccfe,
+    RobotApplicationReference as _RobotApplicationReference_4c0805f6,
+    RobotApplicationVersionReference as _RobotApplicationVersionReference_2f8b2a61,
+    RobotReference as _RobotReference_472e1f1f,
+    SimulationApplicationReference as _SimulationApplicationReference_461b3c69,
+    SimulationApplicationVersionReference as _SimulationApplicationVersionReference_c1423217,
+)
+
+
+@jsii.implements(_IInspectable_c2943556, _IFleetRef_0583e5dd, _ITaggable_36806126)
+class CfnFleet(
+    _CfnResource_9df397a6,
+    metaclass=jsii.JSIIMeta,
+    jsii_type="aws-cdk-lib.aws_robomaker.CfnFleet",
+):
+    '''.. epigraph::
+
+   The following resource is now deprecated.
+
+    This resource can no longer be provisioned via stack create or update operations, and should not be included in your stack templates.
+    .. epigraph::
+
+       We recommend migrating to AWS IoT Greengrass Version 2. For more information, see `Support Changes: May 2, 2022 <https://docs.aws.amazon.com/robomaker/latest/dg/chapter-support-policy.html#software-support-policy-may2022>`_ in the *AWS RoboMaker Developer Guide* .
+
+    The ``AWS::RoboMaker::Fleet`` resource creates an AWS RoboMaker fleet. Fleets contain robots and can receive deployments.
+
+    :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-robomaker-fleet.html
+    :cloudformationResource: AWS::RoboMaker::Fleet
+    :exampleMetadata: fixture=_generated
+
+    Example::
+
+        # The code below shows an example of how to instantiate this type.
+        # The values are placeholders you should change.
+        from aws_cdk import aws_robomaker as robomaker
+        
+        cfn_fleet = robomaker.CfnFleet(self, "MyCfnFleet",
+            name="name",
+            tags={
+                "tags_key": "tags"
+            }
+        )
+    '''
+
+    def __init__(
+        self,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        *,
+        name: typing.Optional[builtins.str] = None,
+        tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
+    ) -> None:
+        '''Create a new ``AWS::RoboMaker::Fleet``.
+
+        :param scope: Scope in which this resource is defined.
+        :param id: Construct identifier for this resource (unique in its scope).
+        :param name: The name of the fleet.
+        :param tags: The list of all tags added to the fleet.
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__4cf67028db50fbc82ea8f4501fdb4ee36d1ed66bd90e1e13e635239c75a407a8)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+        props = CfnFleetProps(name=name, tags=tags)
+
+        jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="inspect")
+    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+        '''Examines the CloudFormation resource and discloses attributes.
+
+        :param inspector: tree inspector to collect and process attributes.
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__79e824f817a2c25a6f542667057e9a4525e47750a2d9bc44f093375b07e8d178)
+            check_type(argname="argument inspector", value=inspector, expected_type=type_hints["inspector"])
+        return typing.cast(None, jsii.invoke(self, "inspect", [inspector]))
+
+    @jsii.member(jsii_name="renderProperties")
+    def _render_properties(
+        self,
+        props: typing.Mapping[builtins.str, typing.Any],
+    ) -> typing.Mapping[builtins.str, typing.Any]:
+        '''
+        :param props: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__195f1c8f4daafc0d71dbb26762ed99292b6f283831024397d9845964e6edd9c6)
+            check_type(argname="argument props", value=props, expected_type=type_hints["props"])
+        return typing.cast(typing.Mapping[builtins.str, typing.Any], jsii.invoke(self, "renderProperties", [props]))
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="CFN_RESOURCE_TYPE_NAME")
+    def CFN_RESOURCE_TYPE_NAME(cls) -> builtins.str:
+        '''The CloudFormation resource type name for this resource class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "CFN_RESOURCE_TYPE_NAME"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrArn")
+    def attr_arn(self) -> builtins.str:
+        '''The Amazon Resource Name (ARN) of the fleet, such as ``arn:aws:robomaker:us-west-2:123456789012:deployment-fleet/MyFleet/1539894765711`` .
+
+        :cloudformationAttribute: Arn
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrArn"))
+
+    @builtins.property
+    @jsii.member(jsii_name="cfnProperties")
+    def _cfn_properties(self) -> typing.Mapping[builtins.str, typing.Any]:
+        return typing.cast(typing.Mapping[builtins.str, typing.Any], jsii.get(self, "cfnProperties"))
+
+    @builtins.property
+    @jsii.member(jsii_name="fleetRef")
+    def fleet_ref(self) -> _FleetReference_4138ef0f:
+        '''A reference to a Fleet resource.'''
+        return typing.cast(_FleetReference_4138ef0f, jsii.get(self, "fleetRef"))
+
+    @builtins.property
+    @jsii.member(jsii_name="tags")
+    def tags(self) -> _TagManager_0a598cb3:
+        '''Tag Manager which manages the tags for this resource.'''
+        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+
+    @builtins.property
+    @jsii.member(jsii_name="name")
+    def name(self) -> typing.Optional[builtins.str]:
+        '''The name of the fleet.'''
+        return typing.cast(typing.Optional[builtins.str], jsii.get(self, "name"))
+
+    @name.setter
+    def name(self, value: typing.Optional[builtins.str]) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__fb2b0f115fd155ec1867ebdfab524eabaa919c39920655bedef657815f3fe35b)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "name", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="tagsRaw")
+    def tags_raw(self) -> typing.Optional[typing.Mapping[builtins.str, builtins.str]]:
+        '''The list of all tags added to the fleet.'''
+        return typing.cast(typing.Optional[typing.Mapping[builtins.str, builtins.str]], jsii.get(self, "tagsRaw"))
+
+    @tags_raw.setter
+    def tags_raw(
+        self,
+        value: typing.Optional[typing.Mapping[builtins.str, builtins.str]],
+    ) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__a4a9d74f73ceaf3ae033517a44602efdc6fd84668be6992907ba5276fd26df0c)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "tagsRaw", value) # pyright: ignore[reportArgumentType]
 
 
 @jsii.data_type(
@@ -142,1361 +299,7 @@ class CfnFleetProps:
         )
 
 
-@jsii.data_type(
-    jsii_type="aws-cdk-lib.aws_robomaker.CfnRobotApplicationProps",
-    jsii_struct_bases=[],
-    name_mapping={
-        "robot_software_suite": "robotSoftwareSuite",
-        "current_revision_id": "currentRevisionId",
-        "environment": "environment",
-        "name": "name",
-        "sources": "sources",
-        "tags": "tags",
-    },
-)
-class CfnRobotApplicationProps:
-    def __init__(
-        self,
-        *,
-        robot_software_suite: typing.Union[_IResolvable_da3f097b, typing.Union["CfnRobotApplication.RobotSoftwareSuiteProperty", typing.Dict[builtins.str, typing.Any]]],
-        current_revision_id: typing.Optional[builtins.str] = None,
-        environment: typing.Optional[builtins.str] = None,
-        name: typing.Optional[builtins.str] = None,
-        sources: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnRobotApplication.SourceConfigProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
-    ) -> None:
-        '''Properties for defining a ``CfnRobotApplication``.
-
-        :param robot_software_suite: The robot software suite used by the robot application.
-        :param current_revision_id: The current revision id.
-        :param environment: The environment of the robot application.
-        :param name: The name of the robot application.
-        :param sources: The sources of the robot application.
-        :param tags: A map that contains tag keys and tag values that are attached to the robot application.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-robomaker-robotapplication.html
-        :exampleMetadata: fixture=_generated
-
-        Example::
-
-            # The code below shows an example of how to instantiate this type.
-            # The values are placeholders you should change.
-            from aws_cdk import aws_robomaker as robomaker
-            
-            cfn_robot_application_props = robomaker.CfnRobotApplicationProps(
-                robot_software_suite=robomaker.CfnRobotApplication.RobotSoftwareSuiteProperty(
-                    name="name",
-            
-                    # the properties below are optional
-                    version="version"
-                ),
-            
-                # the properties below are optional
-                current_revision_id="currentRevisionId",
-                environment="environment",
-                name="name",
-                sources=[robomaker.CfnRobotApplication.SourceConfigProperty(
-                    architecture="architecture",
-                    s3_bucket="s3Bucket",
-                    s3_key="s3Key"
-                )],
-                tags={
-                    "tags_key": "tags"
-                }
-            )
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__52a4130d82e25da60f30538ac27bda30b72380a78b4ec426daeb7a4e2863826c)
-            check_type(argname="argument robot_software_suite", value=robot_software_suite, expected_type=type_hints["robot_software_suite"])
-            check_type(argname="argument current_revision_id", value=current_revision_id, expected_type=type_hints["current_revision_id"])
-            check_type(argname="argument environment", value=environment, expected_type=type_hints["environment"])
-            check_type(argname="argument name", value=name, expected_type=type_hints["name"])
-            check_type(argname="argument sources", value=sources, expected_type=type_hints["sources"])
-            check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
-        self._values: typing.Dict[builtins.str, typing.Any] = {
-            "robot_software_suite": robot_software_suite,
-        }
-        if current_revision_id is not None:
-            self._values["current_revision_id"] = current_revision_id
-        if environment is not None:
-            self._values["environment"] = environment
-        if name is not None:
-            self._values["name"] = name
-        if sources is not None:
-            self._values["sources"] = sources
-        if tags is not None:
-            self._values["tags"] = tags
-
-    @builtins.property
-    def robot_software_suite(
-        self,
-    ) -> typing.Union[_IResolvable_da3f097b, "CfnRobotApplication.RobotSoftwareSuiteProperty"]:
-        '''The robot software suite used by the robot application.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-robomaker-robotapplication.html#cfn-robomaker-robotapplication-robotsoftwaresuite
-        '''
-        result = self._values.get("robot_software_suite")
-        assert result is not None, "Required property 'robot_software_suite' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnRobotApplication.RobotSoftwareSuiteProperty"], result)
-
-    @builtins.property
-    def current_revision_id(self) -> typing.Optional[builtins.str]:
-        '''The current revision id.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-robomaker-robotapplication.html#cfn-robomaker-robotapplication-currentrevisionid
-        '''
-        result = self._values.get("current_revision_id")
-        return typing.cast(typing.Optional[builtins.str], result)
-
-    @builtins.property
-    def environment(self) -> typing.Optional[builtins.str]:
-        '''The environment of the robot application.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-robomaker-robotapplication.html#cfn-robomaker-robotapplication-environment
-        '''
-        result = self._values.get("environment")
-        return typing.cast(typing.Optional[builtins.str], result)
-
-    @builtins.property
-    def name(self) -> typing.Optional[builtins.str]:
-        '''The name of the robot application.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-robomaker-robotapplication.html#cfn-robomaker-robotapplication-name
-        '''
-        result = self._values.get("name")
-        return typing.cast(typing.Optional[builtins.str], result)
-
-    @builtins.property
-    def sources(
-        self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnRobotApplication.SourceConfigProperty"]]]]:
-        '''The sources of the robot application.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-robomaker-robotapplication.html#cfn-robomaker-robotapplication-sources
-        '''
-        result = self._values.get("sources")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnRobotApplication.SourceConfigProperty"]]]], result)
-
-    @builtins.property
-    def tags(self) -> typing.Optional[typing.Mapping[builtins.str, builtins.str]]:
-        '''A map that contains tag keys and tag values that are attached to the robot application.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-robomaker-robotapplication.html#cfn-robomaker-robotapplication-tags
-        '''
-        result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.Mapping[builtins.str, builtins.str]], result)
-
-    def __eq__(self, rhs: typing.Any) -> builtins.bool:
-        return isinstance(rhs, self.__class__) and rhs._values == self._values
-
-    def __ne__(self, rhs: typing.Any) -> builtins.bool:
-        return not (rhs == self)
-
-    def __repr__(self) -> str:
-        return "CfnRobotApplicationProps(%s)" % ", ".join(
-            k + "=" + repr(v) for k, v in self._values.items()
-        )
-
-
-@jsii.data_type(
-    jsii_type="aws-cdk-lib.aws_robomaker.CfnRobotApplicationVersionProps",
-    jsii_struct_bases=[],
-    name_mapping={
-        "application": "application",
-        "current_revision_id": "currentRevisionId",
-    },
-)
-class CfnRobotApplicationVersionProps:
-    def __init__(
-        self,
-        *,
-        application: builtins.str,
-        current_revision_id: typing.Optional[builtins.str] = None,
-    ) -> None:
-        '''Properties for defining a ``CfnRobotApplicationVersion``.
-
-        :param application: The application information for the robot application.
-        :param current_revision_id: The current revision id for the robot application. If you provide a value and it matches the latest revision ID, a new version will be created.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-robomaker-robotapplicationversion.html
-        :exampleMetadata: fixture=_generated
-
-        Example::
-
-            # The code below shows an example of how to instantiate this type.
-            # The values are placeholders you should change.
-            from aws_cdk import aws_robomaker as robomaker
-            
-            cfn_robot_application_version_props = robomaker.CfnRobotApplicationVersionProps(
-                application="application",
-            
-                # the properties below are optional
-                current_revision_id="currentRevisionId"
-            )
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__1ac07a372688198f4d1e1276b33a860cf9f2a1a35ffcb9183bd7e8544e85528a)
-            check_type(argname="argument application", value=application, expected_type=type_hints["application"])
-            check_type(argname="argument current_revision_id", value=current_revision_id, expected_type=type_hints["current_revision_id"])
-        self._values: typing.Dict[builtins.str, typing.Any] = {
-            "application": application,
-        }
-        if current_revision_id is not None:
-            self._values["current_revision_id"] = current_revision_id
-
-    @builtins.property
-    def application(self) -> builtins.str:
-        '''The application information for the robot application.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-robomaker-robotapplicationversion.html#cfn-robomaker-robotapplicationversion-application
-        '''
-        result = self._values.get("application")
-        assert result is not None, "Required property 'application' is missing"
-        return typing.cast(builtins.str, result)
-
-    @builtins.property
-    def current_revision_id(self) -> typing.Optional[builtins.str]:
-        '''The current revision id for the robot application.
-
-        If you provide a value and it matches the latest revision ID, a new version will be created.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-robomaker-robotapplicationversion.html#cfn-robomaker-robotapplicationversion-currentrevisionid
-        '''
-        result = self._values.get("current_revision_id")
-        return typing.cast(typing.Optional[builtins.str], result)
-
-    def __eq__(self, rhs: typing.Any) -> builtins.bool:
-        return isinstance(rhs, self.__class__) and rhs._values == self._values
-
-    def __ne__(self, rhs: typing.Any) -> builtins.bool:
-        return not (rhs == self)
-
-    def __repr__(self) -> str:
-        return "CfnRobotApplicationVersionProps(%s)" % ", ".join(
-            k + "=" + repr(v) for k, v in self._values.items()
-        )
-
-
-@jsii.data_type(
-    jsii_type="aws-cdk-lib.aws_robomaker.CfnRobotProps",
-    jsii_struct_bases=[],
-    name_mapping={
-        "architecture": "architecture",
-        "greengrass_group_id": "greengrassGroupId",
-        "fleet": "fleet",
-        "name": "name",
-        "tags": "tags",
-    },
-)
-class CfnRobotProps:
-    def __init__(
-        self,
-        *,
-        architecture: builtins.str,
-        greengrass_group_id: builtins.str,
-        fleet: typing.Optional[builtins.str] = None,
-        name: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
-    ) -> None:
-        '''Properties for defining a ``CfnRobot``.
-
-        :param architecture: The architecture of the robot.
-        :param greengrass_group_id: The Greengrass group associated with the robot.
-        :param fleet: The Amazon Resource Name (ARN) of the fleet to which the robot will be registered.
-        :param name: The name of the robot.
-        :param tags: A map that contains tag keys and tag values that are attached to the robot.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-robomaker-robot.html
-        :exampleMetadata: fixture=_generated
-
-        Example::
-
-            # The code below shows an example of how to instantiate this type.
-            # The values are placeholders you should change.
-            from aws_cdk import aws_robomaker as robomaker
-            
-            cfn_robot_props = robomaker.CfnRobotProps(
-                architecture="architecture",
-                greengrass_group_id="greengrassGroupId",
-            
-                # the properties below are optional
-                fleet="fleet",
-                name="name",
-                tags={
-                    "tags_key": "tags"
-                }
-            )
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__fb8dba61a5cbbdf07aaff4068a7feeb8d793259512cbf888a9f053970335df52)
-            check_type(argname="argument architecture", value=architecture, expected_type=type_hints["architecture"])
-            check_type(argname="argument greengrass_group_id", value=greengrass_group_id, expected_type=type_hints["greengrass_group_id"])
-            check_type(argname="argument fleet", value=fleet, expected_type=type_hints["fleet"])
-            check_type(argname="argument name", value=name, expected_type=type_hints["name"])
-            check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
-        self._values: typing.Dict[builtins.str, typing.Any] = {
-            "architecture": architecture,
-            "greengrass_group_id": greengrass_group_id,
-        }
-        if fleet is not None:
-            self._values["fleet"] = fleet
-        if name is not None:
-            self._values["name"] = name
-        if tags is not None:
-            self._values["tags"] = tags
-
-    @builtins.property
-    def architecture(self) -> builtins.str:
-        '''The architecture of the robot.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-robomaker-robot.html#cfn-robomaker-robot-architecture
-        '''
-        result = self._values.get("architecture")
-        assert result is not None, "Required property 'architecture' is missing"
-        return typing.cast(builtins.str, result)
-
-    @builtins.property
-    def greengrass_group_id(self) -> builtins.str:
-        '''The Greengrass group associated with the robot.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-robomaker-robot.html#cfn-robomaker-robot-greengrassgroupid
-        '''
-        result = self._values.get("greengrass_group_id")
-        assert result is not None, "Required property 'greengrass_group_id' is missing"
-        return typing.cast(builtins.str, result)
-
-    @builtins.property
-    def fleet(self) -> typing.Optional[builtins.str]:
-        '''The Amazon Resource Name (ARN) of the fleet to which the robot will be registered.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-robomaker-robot.html#cfn-robomaker-robot-fleet
-        '''
-        result = self._values.get("fleet")
-        return typing.cast(typing.Optional[builtins.str], result)
-
-    @builtins.property
-    def name(self) -> typing.Optional[builtins.str]:
-        '''The name of the robot.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-robomaker-robot.html#cfn-robomaker-robot-name
-        '''
-        result = self._values.get("name")
-        return typing.cast(typing.Optional[builtins.str], result)
-
-    @builtins.property
-    def tags(self) -> typing.Optional[typing.Mapping[builtins.str, builtins.str]]:
-        '''A map that contains tag keys and tag values that are attached to the robot.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-robomaker-robot.html#cfn-robomaker-robot-tags
-        '''
-        result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.Mapping[builtins.str, builtins.str]], result)
-
-    def __eq__(self, rhs: typing.Any) -> builtins.bool:
-        return isinstance(rhs, self.__class__) and rhs._values == self._values
-
-    def __ne__(self, rhs: typing.Any) -> builtins.bool:
-        return not (rhs == self)
-
-    def __repr__(self) -> str:
-        return "CfnRobotProps(%s)" % ", ".join(
-            k + "=" + repr(v) for k, v in self._values.items()
-        )
-
-
-@jsii.data_type(
-    jsii_type="aws-cdk-lib.aws_robomaker.CfnSimulationApplicationProps",
-    jsii_struct_bases=[],
-    name_mapping={
-        "robot_software_suite": "robotSoftwareSuite",
-        "simulation_software_suite": "simulationSoftwareSuite",
-        "current_revision_id": "currentRevisionId",
-        "environment": "environment",
-        "name": "name",
-        "rendering_engine": "renderingEngine",
-        "sources": "sources",
-        "tags": "tags",
-    },
-)
-class CfnSimulationApplicationProps:
-    def __init__(
-        self,
-        *,
-        robot_software_suite: typing.Union[_IResolvable_da3f097b, typing.Union["CfnSimulationApplication.RobotSoftwareSuiteProperty", typing.Dict[builtins.str, typing.Any]]],
-        simulation_software_suite: typing.Union[_IResolvable_da3f097b, typing.Union["CfnSimulationApplication.SimulationSoftwareSuiteProperty", typing.Dict[builtins.str, typing.Any]]],
-        current_revision_id: typing.Optional[builtins.str] = None,
-        environment: typing.Optional[builtins.str] = None,
-        name: typing.Optional[builtins.str] = None,
-        rendering_engine: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnSimulationApplication.RenderingEngineProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        sources: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnSimulationApplication.SourceConfigProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
-    ) -> None:
-        '''Properties for defining a ``CfnSimulationApplication``.
-
-        :param robot_software_suite: The robot software suite used by the simulation application.
-        :param simulation_software_suite: The simulation software suite used by the simulation application.
-        :param current_revision_id: The current revision id.
-        :param environment: The environment of the simulation application.
-        :param name: The name of the simulation application.
-        :param rendering_engine: The rendering engine for the simulation application.
-        :param sources: The sources of the simulation application.
-        :param tags: A map that contains tag keys and tag values that are attached to the simulation application.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-robomaker-simulationapplication.html
-        :exampleMetadata: fixture=_generated
-
-        Example::
-
-            # The code below shows an example of how to instantiate this type.
-            # The values are placeholders you should change.
-            from aws_cdk import aws_robomaker as robomaker
-            
-            cfn_simulation_application_props = robomaker.CfnSimulationApplicationProps(
-                robot_software_suite=robomaker.CfnSimulationApplication.RobotSoftwareSuiteProperty(
-                    name="name",
-            
-                    # the properties below are optional
-                    version="version"
-                ),
-                simulation_software_suite=robomaker.CfnSimulationApplication.SimulationSoftwareSuiteProperty(
-                    name="name",
-            
-                    # the properties below are optional
-                    version="version"
-                ),
-            
-                # the properties below are optional
-                current_revision_id="currentRevisionId",
-                environment="environment",
-                name="name",
-                rendering_engine=robomaker.CfnSimulationApplication.RenderingEngineProperty(
-                    name="name",
-                    version="version"
-                ),
-                sources=[robomaker.CfnSimulationApplication.SourceConfigProperty(
-                    architecture="architecture",
-                    s3_bucket="s3Bucket",
-                    s3_key="s3Key"
-                )],
-                tags={
-                    "tags_key": "tags"
-                }
-            )
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__a4fc5092e924ca6ac9045b6bf857cc7c5e8af28f105a1752b871bed705eac2ca)
-            check_type(argname="argument robot_software_suite", value=robot_software_suite, expected_type=type_hints["robot_software_suite"])
-            check_type(argname="argument simulation_software_suite", value=simulation_software_suite, expected_type=type_hints["simulation_software_suite"])
-            check_type(argname="argument current_revision_id", value=current_revision_id, expected_type=type_hints["current_revision_id"])
-            check_type(argname="argument environment", value=environment, expected_type=type_hints["environment"])
-            check_type(argname="argument name", value=name, expected_type=type_hints["name"])
-            check_type(argname="argument rendering_engine", value=rendering_engine, expected_type=type_hints["rendering_engine"])
-            check_type(argname="argument sources", value=sources, expected_type=type_hints["sources"])
-            check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
-        self._values: typing.Dict[builtins.str, typing.Any] = {
-            "robot_software_suite": robot_software_suite,
-            "simulation_software_suite": simulation_software_suite,
-        }
-        if current_revision_id is not None:
-            self._values["current_revision_id"] = current_revision_id
-        if environment is not None:
-            self._values["environment"] = environment
-        if name is not None:
-            self._values["name"] = name
-        if rendering_engine is not None:
-            self._values["rendering_engine"] = rendering_engine
-        if sources is not None:
-            self._values["sources"] = sources
-        if tags is not None:
-            self._values["tags"] = tags
-
-    @builtins.property
-    def robot_software_suite(
-        self,
-    ) -> typing.Union[_IResolvable_da3f097b, "CfnSimulationApplication.RobotSoftwareSuiteProperty"]:
-        '''The robot software suite used by the simulation application.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-robomaker-simulationapplication.html#cfn-robomaker-simulationapplication-robotsoftwaresuite
-        '''
-        result = self._values.get("robot_software_suite")
-        assert result is not None, "Required property 'robot_software_suite' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnSimulationApplication.RobotSoftwareSuiteProperty"], result)
-
-    @builtins.property
-    def simulation_software_suite(
-        self,
-    ) -> typing.Union[_IResolvable_da3f097b, "CfnSimulationApplication.SimulationSoftwareSuiteProperty"]:
-        '''The simulation software suite used by the simulation application.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-robomaker-simulationapplication.html#cfn-robomaker-simulationapplication-simulationsoftwaresuite
-        '''
-        result = self._values.get("simulation_software_suite")
-        assert result is not None, "Required property 'simulation_software_suite' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnSimulationApplication.SimulationSoftwareSuiteProperty"], result)
-
-    @builtins.property
-    def current_revision_id(self) -> typing.Optional[builtins.str]:
-        '''The current revision id.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-robomaker-simulationapplication.html#cfn-robomaker-simulationapplication-currentrevisionid
-        '''
-        result = self._values.get("current_revision_id")
-        return typing.cast(typing.Optional[builtins.str], result)
-
-    @builtins.property
-    def environment(self) -> typing.Optional[builtins.str]:
-        '''The environment of the simulation application.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-robomaker-simulationapplication.html#cfn-robomaker-simulationapplication-environment
-        '''
-        result = self._values.get("environment")
-        return typing.cast(typing.Optional[builtins.str], result)
-
-    @builtins.property
-    def name(self) -> typing.Optional[builtins.str]:
-        '''The name of the simulation application.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-robomaker-simulationapplication.html#cfn-robomaker-simulationapplication-name
-        '''
-        result = self._values.get("name")
-        return typing.cast(typing.Optional[builtins.str], result)
-
-    @builtins.property
-    def rendering_engine(
-        self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnSimulationApplication.RenderingEngineProperty"]]:
-        '''The rendering engine for the simulation application.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-robomaker-simulationapplication.html#cfn-robomaker-simulationapplication-renderingengine
-        '''
-        result = self._values.get("rendering_engine")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnSimulationApplication.RenderingEngineProperty"]], result)
-
-    @builtins.property
-    def sources(
-        self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnSimulationApplication.SourceConfigProperty"]]]]:
-        '''The sources of the simulation application.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-robomaker-simulationapplication.html#cfn-robomaker-simulationapplication-sources
-        '''
-        result = self._values.get("sources")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnSimulationApplication.SourceConfigProperty"]]]], result)
-
-    @builtins.property
-    def tags(self) -> typing.Optional[typing.Mapping[builtins.str, builtins.str]]:
-        '''A map that contains tag keys and tag values that are attached to the simulation application.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-robomaker-simulationapplication.html#cfn-robomaker-simulationapplication-tags
-        '''
-        result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.Mapping[builtins.str, builtins.str]], result)
-
-    def __eq__(self, rhs: typing.Any) -> builtins.bool:
-        return isinstance(rhs, self.__class__) and rhs._values == self._values
-
-    def __ne__(self, rhs: typing.Any) -> builtins.bool:
-        return not (rhs == self)
-
-    def __repr__(self) -> str:
-        return "CfnSimulationApplicationProps(%s)" % ", ".join(
-            k + "=" + repr(v) for k, v in self._values.items()
-        )
-
-
-@jsii.data_type(
-    jsii_type="aws-cdk-lib.aws_robomaker.CfnSimulationApplicationVersionProps",
-    jsii_struct_bases=[],
-    name_mapping={
-        "application": "application",
-        "current_revision_id": "currentRevisionId",
-    },
-)
-class CfnSimulationApplicationVersionProps:
-    def __init__(
-        self,
-        *,
-        application: builtins.str,
-        current_revision_id: typing.Optional[builtins.str] = None,
-    ) -> None:
-        '''Properties for defining a ``CfnSimulationApplicationVersion``.
-
-        :param application: The application information for the simulation application.
-        :param current_revision_id: The current revision id for the simulation application. If you provide a value and it matches the latest revision ID, a new version will be created.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-robomaker-simulationapplicationversion.html
-        :exampleMetadata: fixture=_generated
-
-        Example::
-
-            # The code below shows an example of how to instantiate this type.
-            # The values are placeholders you should change.
-            from aws_cdk import aws_robomaker as robomaker
-            
-            cfn_simulation_application_version_props = robomaker.CfnSimulationApplicationVersionProps(
-                application="application",
-            
-                # the properties below are optional
-                current_revision_id="currentRevisionId"
-            )
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__33d944589c147bd94eb24d591728491c11d414786b189bb1a955add8599bfacf)
-            check_type(argname="argument application", value=application, expected_type=type_hints["application"])
-            check_type(argname="argument current_revision_id", value=current_revision_id, expected_type=type_hints["current_revision_id"])
-        self._values: typing.Dict[builtins.str, typing.Any] = {
-            "application": application,
-        }
-        if current_revision_id is not None:
-            self._values["current_revision_id"] = current_revision_id
-
-    @builtins.property
-    def application(self) -> builtins.str:
-        '''The application information for the simulation application.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-robomaker-simulationapplicationversion.html#cfn-robomaker-simulationapplicationversion-application
-        '''
-        result = self._values.get("application")
-        assert result is not None, "Required property 'application' is missing"
-        return typing.cast(builtins.str, result)
-
-    @builtins.property
-    def current_revision_id(self) -> typing.Optional[builtins.str]:
-        '''The current revision id for the simulation application.
-
-        If you provide a value and it matches the latest revision ID, a new version will be created.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-robomaker-simulationapplicationversion.html#cfn-robomaker-simulationapplicationversion-currentrevisionid
-        '''
-        result = self._values.get("current_revision_id")
-        return typing.cast(typing.Optional[builtins.str], result)
-
-    def __eq__(self, rhs: typing.Any) -> builtins.bool:
-        return isinstance(rhs, self.__class__) and rhs._values == self._values
-
-    def __ne__(self, rhs: typing.Any) -> builtins.bool:
-        return not (rhs == self)
-
-    def __repr__(self) -> str:
-        return "CfnSimulationApplicationVersionProps(%s)" % ", ".join(
-            k + "=" + repr(v) for k, v in self._values.items()
-        )
-
-
-@jsii.data_type(
-    jsii_type="aws-cdk-lib.aws_robomaker.FleetReference",
-    jsii_struct_bases=[],
-    name_mapping={"fleet_arn": "fleetArn"},
-)
-class FleetReference:
-    def __init__(self, *, fleet_arn: builtins.str) -> None:
-        '''A reference to a Fleet resource.
-
-        :param fleet_arn: The Arn of the Fleet resource.
-
-        :exampleMetadata: fixture=_generated
-
-        Example::
-
-            # The code below shows an example of how to instantiate this type.
-            # The values are placeholders you should change.
-            from aws_cdk import aws_robomaker as robomaker
-            
-            fleet_reference = robomaker.FleetReference(
-                fleet_arn="fleetArn"
-            )
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__0784df1cec659bae3368e1c022df8a0f8130d857c7ab90ac768b11c2ffe3b1d9)
-            check_type(argname="argument fleet_arn", value=fleet_arn, expected_type=type_hints["fleet_arn"])
-        self._values: typing.Dict[builtins.str, typing.Any] = {
-            "fleet_arn": fleet_arn,
-        }
-
-    @builtins.property
-    def fleet_arn(self) -> builtins.str:
-        '''The Arn of the Fleet resource.'''
-        result = self._values.get("fleet_arn")
-        assert result is not None, "Required property 'fleet_arn' is missing"
-        return typing.cast(builtins.str, result)
-
-    def __eq__(self, rhs: typing.Any) -> builtins.bool:
-        return isinstance(rhs, self.__class__) and rhs._values == self._values
-
-    def __ne__(self, rhs: typing.Any) -> builtins.bool:
-        return not (rhs == self)
-
-    def __repr__(self) -> str:
-        return "FleetReference(%s)" % ", ".join(
-            k + "=" + repr(v) for k, v in self._values.items()
-        )
-
-
-@jsii.interface(jsii_type="aws-cdk-lib.aws_robomaker.IFleetRef")
-class IFleetRef(
-    _constructs_77d1e7e8.IConstruct,
-    _IEnvironmentAware_a408b00d,
-    typing_extensions.Protocol,
-):
-    '''(experimental) Indicates that this resource can be referenced as a Fleet.
-
-    :stability: experimental
-    '''
-
-    @builtins.property
-    @jsii.member(jsii_name="fleetRef")
-    def fleet_ref(self) -> FleetReference:
-        '''(experimental) A reference to a Fleet resource.
-
-        :stability: experimental
-        '''
-        ...
-
-
-class _IFleetRefProxy(
-    jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
-    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
-):
-    '''(experimental) Indicates that this resource can be referenced as a Fleet.
-
-    :stability: experimental
-    '''
-
-    __jsii_type__: typing.ClassVar[str] = "aws-cdk-lib.aws_robomaker.IFleetRef"
-
-    @builtins.property
-    @jsii.member(jsii_name="fleetRef")
-    def fleet_ref(self) -> FleetReference:
-        '''(experimental) A reference to a Fleet resource.
-
-        :stability: experimental
-        '''
-        return typing.cast(FleetReference, jsii.get(self, "fleetRef"))
-
-# Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
-typing.cast(typing.Any, IFleetRef).__jsii_proxy_class__ = lambda : _IFleetRefProxy
-
-
-@jsii.interface(jsii_type="aws-cdk-lib.aws_robomaker.IRobotApplicationRef")
-class IRobotApplicationRef(
-    _constructs_77d1e7e8.IConstruct,
-    _IEnvironmentAware_a408b00d,
-    typing_extensions.Protocol,
-):
-    '''(experimental) Indicates that this resource can be referenced as a RobotApplication.
-
-    :stability: experimental
-    '''
-
-    @builtins.property
-    @jsii.member(jsii_name="robotApplicationRef")
-    def robot_application_ref(self) -> "RobotApplicationReference":
-        '''(experimental) A reference to a RobotApplication resource.
-
-        :stability: experimental
-        '''
-        ...
-
-
-class _IRobotApplicationRefProxy(
-    jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
-    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
-):
-    '''(experimental) Indicates that this resource can be referenced as a RobotApplication.
-
-    :stability: experimental
-    '''
-
-    __jsii_type__: typing.ClassVar[str] = "aws-cdk-lib.aws_robomaker.IRobotApplicationRef"
-
-    @builtins.property
-    @jsii.member(jsii_name="robotApplicationRef")
-    def robot_application_ref(self) -> "RobotApplicationReference":
-        '''(experimental) A reference to a RobotApplication resource.
-
-        :stability: experimental
-        '''
-        return typing.cast("RobotApplicationReference", jsii.get(self, "robotApplicationRef"))
-
-# Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
-typing.cast(typing.Any, IRobotApplicationRef).__jsii_proxy_class__ = lambda : _IRobotApplicationRefProxy
-
-
-@jsii.interface(jsii_type="aws-cdk-lib.aws_robomaker.IRobotApplicationVersionRef")
-class IRobotApplicationVersionRef(
-    _constructs_77d1e7e8.IConstruct,
-    _IEnvironmentAware_a408b00d,
-    typing_extensions.Protocol,
-):
-    '''(experimental) Indicates that this resource can be referenced as a RobotApplicationVersion.
-
-    :stability: experimental
-    '''
-
-    @builtins.property
-    @jsii.member(jsii_name="robotApplicationVersionRef")
-    def robot_application_version_ref(self) -> "RobotApplicationVersionReference":
-        '''(experimental) A reference to a RobotApplicationVersion resource.
-
-        :stability: experimental
-        '''
-        ...
-
-
-class _IRobotApplicationVersionRefProxy(
-    jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
-    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
-):
-    '''(experimental) Indicates that this resource can be referenced as a RobotApplicationVersion.
-
-    :stability: experimental
-    '''
-
-    __jsii_type__: typing.ClassVar[str] = "aws-cdk-lib.aws_robomaker.IRobotApplicationVersionRef"
-
-    @builtins.property
-    @jsii.member(jsii_name="robotApplicationVersionRef")
-    def robot_application_version_ref(self) -> "RobotApplicationVersionReference":
-        '''(experimental) A reference to a RobotApplicationVersion resource.
-
-        :stability: experimental
-        '''
-        return typing.cast("RobotApplicationVersionReference", jsii.get(self, "robotApplicationVersionRef"))
-
-# Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
-typing.cast(typing.Any, IRobotApplicationVersionRef).__jsii_proxy_class__ = lambda : _IRobotApplicationVersionRefProxy
-
-
-@jsii.interface(jsii_type="aws-cdk-lib.aws_robomaker.IRobotRef")
-class IRobotRef(
-    _constructs_77d1e7e8.IConstruct,
-    _IEnvironmentAware_a408b00d,
-    typing_extensions.Protocol,
-):
-    '''(experimental) Indicates that this resource can be referenced as a Robot.
-
-    :stability: experimental
-    '''
-
-    @builtins.property
-    @jsii.member(jsii_name="robotRef")
-    def robot_ref(self) -> "RobotReference":
-        '''(experimental) A reference to a Robot resource.
-
-        :stability: experimental
-        '''
-        ...
-
-
-class _IRobotRefProxy(
-    jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
-    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
-):
-    '''(experimental) Indicates that this resource can be referenced as a Robot.
-
-    :stability: experimental
-    '''
-
-    __jsii_type__: typing.ClassVar[str] = "aws-cdk-lib.aws_robomaker.IRobotRef"
-
-    @builtins.property
-    @jsii.member(jsii_name="robotRef")
-    def robot_ref(self) -> "RobotReference":
-        '''(experimental) A reference to a Robot resource.
-
-        :stability: experimental
-        '''
-        return typing.cast("RobotReference", jsii.get(self, "robotRef"))
-
-# Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
-typing.cast(typing.Any, IRobotRef).__jsii_proxy_class__ = lambda : _IRobotRefProxy
-
-
-@jsii.interface(jsii_type="aws-cdk-lib.aws_robomaker.ISimulationApplicationRef")
-class ISimulationApplicationRef(
-    _constructs_77d1e7e8.IConstruct,
-    _IEnvironmentAware_a408b00d,
-    typing_extensions.Protocol,
-):
-    '''(experimental) Indicates that this resource can be referenced as a SimulationApplication.
-
-    :stability: experimental
-    '''
-
-    @builtins.property
-    @jsii.member(jsii_name="simulationApplicationRef")
-    def simulation_application_ref(self) -> "SimulationApplicationReference":
-        '''(experimental) A reference to a SimulationApplication resource.
-
-        :stability: experimental
-        '''
-        ...
-
-
-class _ISimulationApplicationRefProxy(
-    jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
-    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
-):
-    '''(experimental) Indicates that this resource can be referenced as a SimulationApplication.
-
-    :stability: experimental
-    '''
-
-    __jsii_type__: typing.ClassVar[str] = "aws-cdk-lib.aws_robomaker.ISimulationApplicationRef"
-
-    @builtins.property
-    @jsii.member(jsii_name="simulationApplicationRef")
-    def simulation_application_ref(self) -> "SimulationApplicationReference":
-        '''(experimental) A reference to a SimulationApplication resource.
-
-        :stability: experimental
-        '''
-        return typing.cast("SimulationApplicationReference", jsii.get(self, "simulationApplicationRef"))
-
-# Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
-typing.cast(typing.Any, ISimulationApplicationRef).__jsii_proxy_class__ = lambda : _ISimulationApplicationRefProxy
-
-
-@jsii.interface(jsii_type="aws-cdk-lib.aws_robomaker.ISimulationApplicationVersionRef")
-class ISimulationApplicationVersionRef(
-    _constructs_77d1e7e8.IConstruct,
-    _IEnvironmentAware_a408b00d,
-    typing_extensions.Protocol,
-):
-    '''(experimental) Indicates that this resource can be referenced as a SimulationApplicationVersion.
-
-    :stability: experimental
-    '''
-
-    @builtins.property
-    @jsii.member(jsii_name="simulationApplicationVersionRef")
-    def simulation_application_version_ref(
-        self,
-    ) -> "SimulationApplicationVersionReference":
-        '''(experimental) A reference to a SimulationApplicationVersion resource.
-
-        :stability: experimental
-        '''
-        ...
-
-
-class _ISimulationApplicationVersionRefProxy(
-    jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
-    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
-):
-    '''(experimental) Indicates that this resource can be referenced as a SimulationApplicationVersion.
-
-    :stability: experimental
-    '''
-
-    __jsii_type__: typing.ClassVar[str] = "aws-cdk-lib.aws_robomaker.ISimulationApplicationVersionRef"
-
-    @builtins.property
-    @jsii.member(jsii_name="simulationApplicationVersionRef")
-    def simulation_application_version_ref(
-        self,
-    ) -> "SimulationApplicationVersionReference":
-        '''(experimental) A reference to a SimulationApplicationVersion resource.
-
-        :stability: experimental
-        '''
-        return typing.cast("SimulationApplicationVersionReference", jsii.get(self, "simulationApplicationVersionRef"))
-
-# Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
-typing.cast(typing.Any, ISimulationApplicationVersionRef).__jsii_proxy_class__ = lambda : _ISimulationApplicationVersionRefProxy
-
-
-@jsii.data_type(
-    jsii_type="aws-cdk-lib.aws_robomaker.RobotApplicationReference",
-    jsii_struct_bases=[],
-    name_mapping={"robot_application_arn": "robotApplicationArn"},
-)
-class RobotApplicationReference:
-    def __init__(self, *, robot_application_arn: builtins.str) -> None:
-        '''A reference to a RobotApplication resource.
-
-        :param robot_application_arn: The Arn of the RobotApplication resource.
-
-        :exampleMetadata: fixture=_generated
-
-        Example::
-
-            # The code below shows an example of how to instantiate this type.
-            # The values are placeholders you should change.
-            from aws_cdk import aws_robomaker as robomaker
-            
-            robot_application_reference = robomaker.RobotApplicationReference(
-                robot_application_arn="robotApplicationArn"
-            )
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__db03662405a914899bf41942355695d6363224fa85a3888cbf3ee6b28b05a7a6)
-            check_type(argname="argument robot_application_arn", value=robot_application_arn, expected_type=type_hints["robot_application_arn"])
-        self._values: typing.Dict[builtins.str, typing.Any] = {
-            "robot_application_arn": robot_application_arn,
-        }
-
-    @builtins.property
-    def robot_application_arn(self) -> builtins.str:
-        '''The Arn of the RobotApplication resource.'''
-        result = self._values.get("robot_application_arn")
-        assert result is not None, "Required property 'robot_application_arn' is missing"
-        return typing.cast(builtins.str, result)
-
-    def __eq__(self, rhs: typing.Any) -> builtins.bool:
-        return isinstance(rhs, self.__class__) and rhs._values == self._values
-
-    def __ne__(self, rhs: typing.Any) -> builtins.bool:
-        return not (rhs == self)
-
-    def __repr__(self) -> str:
-        return "RobotApplicationReference(%s)" % ", ".join(
-            k + "=" + repr(v) for k, v in self._values.items()
-        )
-
-
-@jsii.data_type(
-    jsii_type="aws-cdk-lib.aws_robomaker.RobotApplicationVersionReference",
-    jsii_struct_bases=[],
-    name_mapping={"robot_application_version_arn": "robotApplicationVersionArn"},
-)
-class RobotApplicationVersionReference:
-    def __init__(self, *, robot_application_version_arn: builtins.str) -> None:
-        '''A reference to a RobotApplicationVersion resource.
-
-        :param robot_application_version_arn: The Arn of the RobotApplicationVersion resource.
-
-        :exampleMetadata: fixture=_generated
-
-        Example::
-
-            # The code below shows an example of how to instantiate this type.
-            # The values are placeholders you should change.
-            from aws_cdk import aws_robomaker as robomaker
-            
-            robot_application_version_reference = robomaker.RobotApplicationVersionReference(
-                robot_application_version_arn="robotApplicationVersionArn"
-            )
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__2581172e9884824fdcf7c2be93180fdee4cb954e90ce6eda86cf27e9c8dd0891)
-            check_type(argname="argument robot_application_version_arn", value=robot_application_version_arn, expected_type=type_hints["robot_application_version_arn"])
-        self._values: typing.Dict[builtins.str, typing.Any] = {
-            "robot_application_version_arn": robot_application_version_arn,
-        }
-
-    @builtins.property
-    def robot_application_version_arn(self) -> builtins.str:
-        '''The Arn of the RobotApplicationVersion resource.'''
-        result = self._values.get("robot_application_version_arn")
-        assert result is not None, "Required property 'robot_application_version_arn' is missing"
-        return typing.cast(builtins.str, result)
-
-    def __eq__(self, rhs: typing.Any) -> builtins.bool:
-        return isinstance(rhs, self.__class__) and rhs._values == self._values
-
-    def __ne__(self, rhs: typing.Any) -> builtins.bool:
-        return not (rhs == self)
-
-    def __repr__(self) -> str:
-        return "RobotApplicationVersionReference(%s)" % ", ".join(
-            k + "=" + repr(v) for k, v in self._values.items()
-        )
-
-
-@jsii.data_type(
-    jsii_type="aws-cdk-lib.aws_robomaker.RobotReference",
-    jsii_struct_bases=[],
-    name_mapping={"robot_arn": "robotArn"},
-)
-class RobotReference:
-    def __init__(self, *, robot_arn: builtins.str) -> None:
-        '''A reference to a Robot resource.
-
-        :param robot_arn: The Arn of the Robot resource.
-
-        :exampleMetadata: fixture=_generated
-
-        Example::
-
-            # The code below shows an example of how to instantiate this type.
-            # The values are placeholders you should change.
-            from aws_cdk import aws_robomaker as robomaker
-            
-            robot_reference = robomaker.RobotReference(
-                robot_arn="robotArn"
-            )
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__a336b45c03081f68b1c6f77689d0d3d3c76a112bcbae5d90ebd50a2f873ef455)
-            check_type(argname="argument robot_arn", value=robot_arn, expected_type=type_hints["robot_arn"])
-        self._values: typing.Dict[builtins.str, typing.Any] = {
-            "robot_arn": robot_arn,
-        }
-
-    @builtins.property
-    def robot_arn(self) -> builtins.str:
-        '''The Arn of the Robot resource.'''
-        result = self._values.get("robot_arn")
-        assert result is not None, "Required property 'robot_arn' is missing"
-        return typing.cast(builtins.str, result)
-
-    def __eq__(self, rhs: typing.Any) -> builtins.bool:
-        return isinstance(rhs, self.__class__) and rhs._values == self._values
-
-    def __ne__(self, rhs: typing.Any) -> builtins.bool:
-        return not (rhs == self)
-
-    def __repr__(self) -> str:
-        return "RobotReference(%s)" % ", ".join(
-            k + "=" + repr(v) for k, v in self._values.items()
-        )
-
-
-@jsii.data_type(
-    jsii_type="aws-cdk-lib.aws_robomaker.SimulationApplicationReference",
-    jsii_struct_bases=[],
-    name_mapping={"simulation_application_arn": "simulationApplicationArn"},
-)
-class SimulationApplicationReference:
-    def __init__(self, *, simulation_application_arn: builtins.str) -> None:
-        '''A reference to a SimulationApplication resource.
-
-        :param simulation_application_arn: The Arn of the SimulationApplication resource.
-
-        :exampleMetadata: fixture=_generated
-
-        Example::
-
-            # The code below shows an example of how to instantiate this type.
-            # The values are placeholders you should change.
-            from aws_cdk import aws_robomaker as robomaker
-            
-            simulation_application_reference = robomaker.SimulationApplicationReference(
-                simulation_application_arn="simulationApplicationArn"
-            )
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__c8af6a0be0ecb9e33a57bbd568075e3432df120bc0e183eb37de4ca827b2013c)
-            check_type(argname="argument simulation_application_arn", value=simulation_application_arn, expected_type=type_hints["simulation_application_arn"])
-        self._values: typing.Dict[builtins.str, typing.Any] = {
-            "simulation_application_arn": simulation_application_arn,
-        }
-
-    @builtins.property
-    def simulation_application_arn(self) -> builtins.str:
-        '''The Arn of the SimulationApplication resource.'''
-        result = self._values.get("simulation_application_arn")
-        assert result is not None, "Required property 'simulation_application_arn' is missing"
-        return typing.cast(builtins.str, result)
-
-    def __eq__(self, rhs: typing.Any) -> builtins.bool:
-        return isinstance(rhs, self.__class__) and rhs._values == self._values
-
-    def __ne__(self, rhs: typing.Any) -> builtins.bool:
-        return not (rhs == self)
-
-    def __repr__(self) -> str:
-        return "SimulationApplicationReference(%s)" % ", ".join(
-            k + "=" + repr(v) for k, v in self._values.items()
-        )
-
-
-@jsii.data_type(
-    jsii_type="aws-cdk-lib.aws_robomaker.SimulationApplicationVersionReference",
-    jsii_struct_bases=[],
-    name_mapping={
-        "simulation_application_version_arn": "simulationApplicationVersionArn",
-    },
-)
-class SimulationApplicationVersionReference:
-    def __init__(self, *, simulation_application_version_arn: builtins.str) -> None:
-        '''A reference to a SimulationApplicationVersion resource.
-
-        :param simulation_application_version_arn: The Arn of the SimulationApplicationVersion resource.
-
-        :exampleMetadata: fixture=_generated
-
-        Example::
-
-            # The code below shows an example of how to instantiate this type.
-            # The values are placeholders you should change.
-            from aws_cdk import aws_robomaker as robomaker
-            
-            simulation_application_version_reference = robomaker.SimulationApplicationVersionReference(
-                simulation_application_version_arn="simulationApplicationVersionArn"
-            )
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__b7affacf6ad6eeb2ffb6110635ad43d32ee831b495f21e67ea7704866f874243)
-            check_type(argname="argument simulation_application_version_arn", value=simulation_application_version_arn, expected_type=type_hints["simulation_application_version_arn"])
-        self._values: typing.Dict[builtins.str, typing.Any] = {
-            "simulation_application_version_arn": simulation_application_version_arn,
-        }
-
-    @builtins.property
-    def simulation_application_version_arn(self) -> builtins.str:
-        '''The Arn of the SimulationApplicationVersion resource.'''
-        result = self._values.get("simulation_application_version_arn")
-        assert result is not None, "Required property 'simulation_application_version_arn' is missing"
-        return typing.cast(builtins.str, result)
-
-    def __eq__(self, rhs: typing.Any) -> builtins.bool:
-        return isinstance(rhs, self.__class__) and rhs._values == self._values
-
-    def __ne__(self, rhs: typing.Any) -> builtins.bool:
-        return not (rhs == self)
-
-    def __repr__(self) -> str:
-        return "SimulationApplicationVersionReference(%s)" % ", ".join(
-            k + "=" + repr(v) for k, v in self._values.items()
-        )
-
-
-@jsii.implements(_IInspectable_c2943556, IFleetRef, _ITaggable_36806126)
-class CfnFleet(
-    _CfnResource_9df397a6,
-    metaclass=jsii.JSIIMeta,
-    jsii_type="aws-cdk-lib.aws_robomaker.CfnFleet",
-):
-    '''.. epigraph::
-
-   The following resource is now deprecated.
-
-    This resource can no longer be provisioned via stack create or update operations, and should not be included in your stack templates.
-    .. epigraph::
-
-       We recommend migrating to AWS IoT Greengrass Version 2. For more information, see `Support Changes: May 2, 2022 <https://docs.aws.amazon.com/robomaker/latest/dg/chapter-support-policy.html#software-support-policy-may2022>`_ in the *AWS RoboMaker Developer Guide* .
-
-    The ``AWS::RoboMaker::Fleet`` resource creates an AWS RoboMaker fleet. Fleets contain robots and can receive deployments.
-
-    :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-robomaker-fleet.html
-    :cloudformationResource: AWS::RoboMaker::Fleet
-    :exampleMetadata: fixture=_generated
-
-    Example::
-
-        # The code below shows an example of how to instantiate this type.
-        # The values are placeholders you should change.
-        from aws_cdk import aws_robomaker as robomaker
-        
-        cfn_fleet = robomaker.CfnFleet(self, "MyCfnFleet",
-            name="name",
-            tags={
-                "tags_key": "tags"
-            }
-        )
-    '''
-
-    def __init__(
-        self,
-        scope: _constructs_77d1e7e8.Construct,
-        id: builtins.str,
-        *,
-        name: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
-    ) -> None:
-        '''
-        :param scope: Scope in which this resource is defined.
-        :param id: Construct identifier for this resource (unique in its scope).
-        :param name: The name of the fleet.
-        :param tags: The list of all tags added to the fleet.
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__4cf67028db50fbc82ea8f4501fdb4ee36d1ed66bd90e1e13e635239c75a407a8)
-            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
-            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
-        props = CfnFleetProps(name=name, tags=tags)
-
-        jsii.create(self.__class__, self, [scope, id, props])
-
-    @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
-        '''Examines the CloudFormation resource and discloses attributes.
-
-        :param inspector: tree inspector to collect and process attributes.
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__79e824f817a2c25a6f542667057e9a4525e47750a2d9bc44f093375b07e8d178)
-            check_type(argname="argument inspector", value=inspector, expected_type=type_hints["inspector"])
-        return typing.cast(None, jsii.invoke(self, "inspect", [inspector]))
-
-    @jsii.member(jsii_name="renderProperties")
-    def _render_properties(
-        self,
-        props: typing.Mapping[builtins.str, typing.Any],
-    ) -> typing.Mapping[builtins.str, typing.Any]:
-        '''
-        :param props: -
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__195f1c8f4daafc0d71dbb26762ed99292b6f283831024397d9845964e6edd9c6)
-            check_type(argname="argument props", value=props, expected_type=type_hints["props"])
-        return typing.cast(typing.Mapping[builtins.str, typing.Any], jsii.invoke(self, "renderProperties", [props]))
-
-    @jsii.python.classproperty
-    @jsii.member(jsii_name="CFN_RESOURCE_TYPE_NAME")
-    def CFN_RESOURCE_TYPE_NAME(cls) -> builtins.str:
-        '''The CloudFormation resource type name for this resource class.'''
-        return typing.cast(builtins.str, jsii.sget(cls, "CFN_RESOURCE_TYPE_NAME"))
-
-    @builtins.property
-    @jsii.member(jsii_name="attrArn")
-    def attr_arn(self) -> builtins.str:
-        '''The Amazon Resource Name (ARN) of the fleet, such as ``arn:aws:robomaker:us-west-2:123456789012:deployment-fleet/MyFleet/1539894765711`` .
-
-        :cloudformationAttribute: Arn
-        '''
-        return typing.cast(builtins.str, jsii.get(self, "attrArn"))
-
-    @builtins.property
-    @jsii.member(jsii_name="cfnProperties")
-    def _cfn_properties(self) -> typing.Mapping[builtins.str, typing.Any]:
-        return typing.cast(typing.Mapping[builtins.str, typing.Any], jsii.get(self, "cfnProperties"))
-
-    @builtins.property
-    @jsii.member(jsii_name="fleetRef")
-    def fleet_ref(self) -> FleetReference:
-        '''A reference to a Fleet resource.'''
-        return typing.cast(FleetReference, jsii.get(self, "fleetRef"))
-
-    @builtins.property
-    @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
-        '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
-
-    @builtins.property
-    @jsii.member(jsii_name="name")
-    def name(self) -> typing.Optional[builtins.str]:
-        '''The name of the fleet.'''
-        return typing.cast(typing.Optional[builtins.str], jsii.get(self, "name"))
-
-    @name.setter
-    def name(self, value: typing.Optional[builtins.str]) -> None:
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__fb2b0f115fd155ec1867ebdfab524eabaa919c39920655bedef657815f3fe35b)
-            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
-        jsii.set(self, "name", value) # pyright: ignore[reportArgumentType]
-
-    @builtins.property
-    @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.Mapping[builtins.str, builtins.str]]:
-        '''The list of all tags added to the fleet.'''
-        return typing.cast(typing.Optional[typing.Mapping[builtins.str, builtins.str]], jsii.get(self, "tagsRaw"))
-
-    @tags_raw.setter
-    def tags_raw(
-        self,
-        value: typing.Optional[typing.Mapping[builtins.str, builtins.str]],
-    ) -> None:
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__a4a9d74f73ceaf3ae033517a44602efdc6fd84668be6992907ba5276fd26df0c)
-            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
-        jsii.set(self, "tagsRaw", value) # pyright: ignore[reportArgumentType]
-
-
-@jsii.implements(_IInspectable_c2943556, IRobotRef, _ITaggable_36806126)
+@jsii.implements(_IInspectable_c2943556, _IRobotRef_1acaea37, _ITaggable_36806126)
 class CfnRobot(
     _CfnResource_9df397a6,
     metaclass=jsii.JSIIMeta,
@@ -1547,7 +350,8 @@ class CfnRobot(
         name: typing.Optional[builtins.str] = None,
         tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
     ) -> None:
-        '''
+        '''Create a new ``AWS::RoboMaker::Robot``.
+
         :param scope: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
         :param architecture: The architecture of the robot.
@@ -1616,9 +420,9 @@ class CfnRobot(
 
     @builtins.property
     @jsii.member(jsii_name="robotRef")
-    def robot_ref(self) -> RobotReference:
+    def robot_ref(self) -> _RobotReference_472e1f1f:
         '''A reference to a Robot resource.'''
-        return typing.cast(RobotReference, jsii.get(self, "robotRef"))
+        return typing.cast(_RobotReference_472e1f1f, jsii.get(self, "robotRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
@@ -1695,7 +499,7 @@ class CfnRobot(
         jsii.set(self, "tagsRaw", value) # pyright: ignore[reportArgumentType]
 
 
-@jsii.implements(_IInspectable_c2943556, IRobotApplicationRef, _ITaggable_36806126)
+@jsii.implements(_IInspectable_c2943556, _IRobotApplicationRef_4ff8e56d, _ITaggable_36806126)
 class CfnRobotApplication(
     _CfnResource_9df397a6,
     metaclass=jsii.JSIIMeta,
@@ -1748,7 +552,8 @@ class CfnRobotApplication(
         sources: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnRobotApplication.SourceConfigProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
     ) -> None:
-        '''
+        '''Create a new ``AWS::RoboMaker::RobotApplication``.
+
         :param scope: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
         :param robot_software_suite: The robot software suite used by the robot application.
@@ -1828,9 +633,9 @@ class CfnRobotApplication(
 
     @builtins.property
     @jsii.member(jsii_name="robotApplicationRef")
-    def robot_application_ref(self) -> RobotApplicationReference:
+    def robot_application_ref(self) -> _RobotApplicationReference_4c0805f6:
         '''A reference to a RobotApplication resource.'''
-        return typing.cast(RobotApplicationReference, jsii.get(self, "robotApplicationRef"))
+        return typing.cast(_RobotApplicationReference_4c0805f6, jsii.get(self, "robotApplicationRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
@@ -2097,7 +902,163 @@ class CfnRobotApplication(
             )
 
 
-@jsii.implements(_IInspectable_c2943556, IRobotApplicationVersionRef)
+@jsii.data_type(
+    jsii_type="aws-cdk-lib.aws_robomaker.CfnRobotApplicationProps",
+    jsii_struct_bases=[],
+    name_mapping={
+        "robot_software_suite": "robotSoftwareSuite",
+        "current_revision_id": "currentRevisionId",
+        "environment": "environment",
+        "name": "name",
+        "sources": "sources",
+        "tags": "tags",
+    },
+)
+class CfnRobotApplicationProps:
+    def __init__(
+        self,
+        *,
+        robot_software_suite: typing.Union[_IResolvable_da3f097b, typing.Union[CfnRobotApplication.RobotSoftwareSuiteProperty, typing.Dict[builtins.str, typing.Any]]],
+        current_revision_id: typing.Optional[builtins.str] = None,
+        environment: typing.Optional[builtins.str] = None,
+        name: typing.Optional[builtins.str] = None,
+        sources: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnRobotApplication.SourceConfigProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
+    ) -> None:
+        '''Properties for defining a ``CfnRobotApplication``.
+
+        :param robot_software_suite: The robot software suite used by the robot application.
+        :param current_revision_id: The current revision id.
+        :param environment: The environment of the robot application.
+        :param name: The name of the robot application.
+        :param sources: The sources of the robot application.
+        :param tags: A map that contains tag keys and tag values that are attached to the robot application.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-robomaker-robotapplication.html
+        :exampleMetadata: fixture=_generated
+
+        Example::
+
+            # The code below shows an example of how to instantiate this type.
+            # The values are placeholders you should change.
+            from aws_cdk import aws_robomaker as robomaker
+            
+            cfn_robot_application_props = robomaker.CfnRobotApplicationProps(
+                robot_software_suite=robomaker.CfnRobotApplication.RobotSoftwareSuiteProperty(
+                    name="name",
+            
+                    # the properties below are optional
+                    version="version"
+                ),
+            
+                # the properties below are optional
+                current_revision_id="currentRevisionId",
+                environment="environment",
+                name="name",
+                sources=[robomaker.CfnRobotApplication.SourceConfigProperty(
+                    architecture="architecture",
+                    s3_bucket="s3Bucket",
+                    s3_key="s3Key"
+                )],
+                tags={
+                    "tags_key": "tags"
+                }
+            )
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__52a4130d82e25da60f30538ac27bda30b72380a78b4ec426daeb7a4e2863826c)
+            check_type(argname="argument robot_software_suite", value=robot_software_suite, expected_type=type_hints["robot_software_suite"])
+            check_type(argname="argument current_revision_id", value=current_revision_id, expected_type=type_hints["current_revision_id"])
+            check_type(argname="argument environment", value=environment, expected_type=type_hints["environment"])
+            check_type(argname="argument name", value=name, expected_type=type_hints["name"])
+            check_type(argname="argument sources", value=sources, expected_type=type_hints["sources"])
+            check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
+        self._values: typing.Dict[builtins.str, typing.Any] = {
+            "robot_software_suite": robot_software_suite,
+        }
+        if current_revision_id is not None:
+            self._values["current_revision_id"] = current_revision_id
+        if environment is not None:
+            self._values["environment"] = environment
+        if name is not None:
+            self._values["name"] = name
+        if sources is not None:
+            self._values["sources"] = sources
+        if tags is not None:
+            self._values["tags"] = tags
+
+    @builtins.property
+    def robot_software_suite(
+        self,
+    ) -> typing.Union[_IResolvable_da3f097b, CfnRobotApplication.RobotSoftwareSuiteProperty]:
+        '''The robot software suite used by the robot application.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-robomaker-robotapplication.html#cfn-robomaker-robotapplication-robotsoftwaresuite
+        '''
+        result = self._values.get("robot_software_suite")
+        assert result is not None, "Required property 'robot_software_suite' is missing"
+        return typing.cast(typing.Union[_IResolvable_da3f097b, CfnRobotApplication.RobotSoftwareSuiteProperty], result)
+
+    @builtins.property
+    def current_revision_id(self) -> typing.Optional[builtins.str]:
+        '''The current revision id.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-robomaker-robotapplication.html#cfn-robomaker-robotapplication-currentrevisionid
+        '''
+        result = self._values.get("current_revision_id")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def environment(self) -> typing.Optional[builtins.str]:
+        '''The environment of the robot application.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-robomaker-robotapplication.html#cfn-robomaker-robotapplication-environment
+        '''
+        result = self._values.get("environment")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def name(self) -> typing.Optional[builtins.str]:
+        '''The name of the robot application.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-robomaker-robotapplication.html#cfn-robomaker-robotapplication-name
+        '''
+        result = self._values.get("name")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def sources(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnRobotApplication.SourceConfigProperty]]]]:
+        '''The sources of the robot application.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-robomaker-robotapplication.html#cfn-robomaker-robotapplication-sources
+        '''
+        result = self._values.get("sources")
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnRobotApplication.SourceConfigProperty]]]], result)
+
+    @builtins.property
+    def tags(self) -> typing.Optional[typing.Mapping[builtins.str, builtins.str]]:
+        '''A map that contains tag keys and tag values that are attached to the robot application.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-robomaker-robotapplication.html#cfn-robomaker-robotapplication-tags
+        '''
+        result = self._values.get("tags")
+        return typing.cast(typing.Optional[typing.Mapping[builtins.str, builtins.str]], result)
+
+    def __eq__(self, rhs: typing.Any) -> builtins.bool:
+        return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+    def __ne__(self, rhs: typing.Any) -> builtins.bool:
+        return not (rhs == self)
+
+    def __repr__(self) -> str:
+        return "CfnRobotApplicationProps(%s)" % ", ".join(
+            k + "=" + repr(v) for k, v in self._values.items()
+        )
+
+
+@jsii.implements(_IInspectable_c2943556, _IRobotApplicationVersionRef_0def63df)
 class CfnRobotApplicationVersion(
     _CfnResource_9df397a6,
     metaclass=jsii.JSIIMeta,
@@ -2131,7 +1092,8 @@ class CfnRobotApplicationVersion(
         application: builtins.str,
         current_revision_id: typing.Optional[builtins.str] = None,
     ) -> None:
-        '''
+        '''Create a new ``AWS::RoboMaker::RobotApplicationVersion``.
+
         :param scope: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
         :param application: The application information for the robot application.
@@ -2202,9 +1164,11 @@ class CfnRobotApplicationVersion(
 
     @builtins.property
     @jsii.member(jsii_name="robotApplicationVersionRef")
-    def robot_application_version_ref(self) -> RobotApplicationVersionReference:
+    def robot_application_version_ref(
+        self,
+    ) -> _RobotApplicationVersionReference_2f8b2a61:
         '''A reference to a RobotApplicationVersion resource.'''
-        return typing.cast(RobotApplicationVersionReference, jsii.get(self, "robotApplicationVersionRef"))
+        return typing.cast(_RobotApplicationVersionReference_2f8b2a61, jsii.get(self, "robotApplicationVersionRef"))
 
     @builtins.property
     @jsii.member(jsii_name="application")
@@ -2233,7 +1197,213 @@ class CfnRobotApplicationVersion(
         jsii.set(self, "currentRevisionId", value) # pyright: ignore[reportArgumentType]
 
 
-@jsii.implements(_IInspectable_c2943556, ISimulationApplicationRef, _ITaggable_36806126)
+@jsii.data_type(
+    jsii_type="aws-cdk-lib.aws_robomaker.CfnRobotApplicationVersionProps",
+    jsii_struct_bases=[],
+    name_mapping={
+        "application": "application",
+        "current_revision_id": "currentRevisionId",
+    },
+)
+class CfnRobotApplicationVersionProps:
+    def __init__(
+        self,
+        *,
+        application: builtins.str,
+        current_revision_id: typing.Optional[builtins.str] = None,
+    ) -> None:
+        '''Properties for defining a ``CfnRobotApplicationVersion``.
+
+        :param application: The application information for the robot application.
+        :param current_revision_id: The current revision id for the robot application. If you provide a value and it matches the latest revision ID, a new version will be created.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-robomaker-robotapplicationversion.html
+        :exampleMetadata: fixture=_generated
+
+        Example::
+
+            # The code below shows an example of how to instantiate this type.
+            # The values are placeholders you should change.
+            from aws_cdk import aws_robomaker as robomaker
+            
+            cfn_robot_application_version_props = robomaker.CfnRobotApplicationVersionProps(
+                application="application",
+            
+                # the properties below are optional
+                current_revision_id="currentRevisionId"
+            )
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__1ac07a372688198f4d1e1276b33a860cf9f2a1a35ffcb9183bd7e8544e85528a)
+            check_type(argname="argument application", value=application, expected_type=type_hints["application"])
+            check_type(argname="argument current_revision_id", value=current_revision_id, expected_type=type_hints["current_revision_id"])
+        self._values: typing.Dict[builtins.str, typing.Any] = {
+            "application": application,
+        }
+        if current_revision_id is not None:
+            self._values["current_revision_id"] = current_revision_id
+
+    @builtins.property
+    def application(self) -> builtins.str:
+        '''The application information for the robot application.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-robomaker-robotapplicationversion.html#cfn-robomaker-robotapplicationversion-application
+        '''
+        result = self._values.get("application")
+        assert result is not None, "Required property 'application' is missing"
+        return typing.cast(builtins.str, result)
+
+    @builtins.property
+    def current_revision_id(self) -> typing.Optional[builtins.str]:
+        '''The current revision id for the robot application.
+
+        If you provide a value and it matches the latest revision ID, a new version will be created.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-robomaker-robotapplicationversion.html#cfn-robomaker-robotapplicationversion-currentrevisionid
+        '''
+        result = self._values.get("current_revision_id")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    def __eq__(self, rhs: typing.Any) -> builtins.bool:
+        return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+    def __ne__(self, rhs: typing.Any) -> builtins.bool:
+        return not (rhs == self)
+
+    def __repr__(self) -> str:
+        return "CfnRobotApplicationVersionProps(%s)" % ", ".join(
+            k + "=" + repr(v) for k, v in self._values.items()
+        )
+
+
+@jsii.data_type(
+    jsii_type="aws-cdk-lib.aws_robomaker.CfnRobotProps",
+    jsii_struct_bases=[],
+    name_mapping={
+        "architecture": "architecture",
+        "greengrass_group_id": "greengrassGroupId",
+        "fleet": "fleet",
+        "name": "name",
+        "tags": "tags",
+    },
+)
+class CfnRobotProps:
+    def __init__(
+        self,
+        *,
+        architecture: builtins.str,
+        greengrass_group_id: builtins.str,
+        fleet: typing.Optional[builtins.str] = None,
+        name: typing.Optional[builtins.str] = None,
+        tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
+    ) -> None:
+        '''Properties for defining a ``CfnRobot``.
+
+        :param architecture: The architecture of the robot.
+        :param greengrass_group_id: The Greengrass group associated with the robot.
+        :param fleet: The Amazon Resource Name (ARN) of the fleet to which the robot will be registered.
+        :param name: The name of the robot.
+        :param tags: A map that contains tag keys and tag values that are attached to the robot.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-robomaker-robot.html
+        :exampleMetadata: fixture=_generated
+
+        Example::
+
+            # The code below shows an example of how to instantiate this type.
+            # The values are placeholders you should change.
+            from aws_cdk import aws_robomaker as robomaker
+            
+            cfn_robot_props = robomaker.CfnRobotProps(
+                architecture="architecture",
+                greengrass_group_id="greengrassGroupId",
+            
+                # the properties below are optional
+                fleet="fleet",
+                name="name",
+                tags={
+                    "tags_key": "tags"
+                }
+            )
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__fb8dba61a5cbbdf07aaff4068a7feeb8d793259512cbf888a9f053970335df52)
+            check_type(argname="argument architecture", value=architecture, expected_type=type_hints["architecture"])
+            check_type(argname="argument greengrass_group_id", value=greengrass_group_id, expected_type=type_hints["greengrass_group_id"])
+            check_type(argname="argument fleet", value=fleet, expected_type=type_hints["fleet"])
+            check_type(argname="argument name", value=name, expected_type=type_hints["name"])
+            check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
+        self._values: typing.Dict[builtins.str, typing.Any] = {
+            "architecture": architecture,
+            "greengrass_group_id": greengrass_group_id,
+        }
+        if fleet is not None:
+            self._values["fleet"] = fleet
+        if name is not None:
+            self._values["name"] = name
+        if tags is not None:
+            self._values["tags"] = tags
+
+    @builtins.property
+    def architecture(self) -> builtins.str:
+        '''The architecture of the robot.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-robomaker-robot.html#cfn-robomaker-robot-architecture
+        '''
+        result = self._values.get("architecture")
+        assert result is not None, "Required property 'architecture' is missing"
+        return typing.cast(builtins.str, result)
+
+    @builtins.property
+    def greengrass_group_id(self) -> builtins.str:
+        '''The Greengrass group associated with the robot.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-robomaker-robot.html#cfn-robomaker-robot-greengrassgroupid
+        '''
+        result = self._values.get("greengrass_group_id")
+        assert result is not None, "Required property 'greengrass_group_id' is missing"
+        return typing.cast(builtins.str, result)
+
+    @builtins.property
+    def fleet(self) -> typing.Optional[builtins.str]:
+        '''The Amazon Resource Name (ARN) of the fleet to which the robot will be registered.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-robomaker-robot.html#cfn-robomaker-robot-fleet
+        '''
+        result = self._values.get("fleet")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def name(self) -> typing.Optional[builtins.str]:
+        '''The name of the robot.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-robomaker-robot.html#cfn-robomaker-robot-name
+        '''
+        result = self._values.get("name")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def tags(self) -> typing.Optional[typing.Mapping[builtins.str, builtins.str]]:
+        '''A map that contains tag keys and tag values that are attached to the robot.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-robomaker-robot.html#cfn-robomaker-robot-tags
+        '''
+        result = self._values.get("tags")
+        return typing.cast(typing.Optional[typing.Mapping[builtins.str, builtins.str]], result)
+
+    def __eq__(self, rhs: typing.Any) -> builtins.bool:
+        return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+    def __ne__(self, rhs: typing.Any) -> builtins.bool:
+        return not (rhs == self)
+
+    def __repr__(self) -> str:
+        return "CfnRobotProps(%s)" % ", ".join(
+            k + "=" + repr(v) for k, v in self._values.items()
+        )
+
+
+@jsii.implements(_IInspectable_c2943556, _ISimulationApplicationRef_b0735a82, _ITaggable_36806126)
 class CfnSimulationApplication(
     _CfnResource_9df397a6,
     metaclass=jsii.JSIIMeta,
@@ -2298,7 +1468,8 @@ class CfnSimulationApplication(
         sources: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnSimulationApplication.SourceConfigProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
     ) -> None:
-        '''
+        '''Create a new ``AWS::RoboMaker::SimulationApplication``.
+
         :param scope: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
         :param robot_software_suite: The robot software suite used by the simulation application.
@@ -2382,9 +1553,9 @@ class CfnSimulationApplication(
 
     @builtins.property
     @jsii.member(jsii_name="simulationApplicationRef")
-    def simulation_application_ref(self) -> SimulationApplicationReference:
+    def simulation_application_ref(self) -> _SimulationApplicationReference_461b3c69:
         '''A reference to a SimulationApplication resource.'''
-        return typing.cast(SimulationApplicationReference, jsii.get(self, "simulationApplicationRef"))
+        return typing.cast(_SimulationApplicationReference_461b3c69, jsii.get(self, "simulationApplicationRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
@@ -2830,7 +2001,207 @@ class CfnSimulationApplication(
             )
 
 
-@jsii.implements(_IInspectable_c2943556, ISimulationApplicationVersionRef)
+@jsii.data_type(
+    jsii_type="aws-cdk-lib.aws_robomaker.CfnSimulationApplicationProps",
+    jsii_struct_bases=[],
+    name_mapping={
+        "robot_software_suite": "robotSoftwareSuite",
+        "simulation_software_suite": "simulationSoftwareSuite",
+        "current_revision_id": "currentRevisionId",
+        "environment": "environment",
+        "name": "name",
+        "rendering_engine": "renderingEngine",
+        "sources": "sources",
+        "tags": "tags",
+    },
+)
+class CfnSimulationApplicationProps:
+    def __init__(
+        self,
+        *,
+        robot_software_suite: typing.Union[_IResolvable_da3f097b, typing.Union[CfnSimulationApplication.RobotSoftwareSuiteProperty, typing.Dict[builtins.str, typing.Any]]],
+        simulation_software_suite: typing.Union[_IResolvable_da3f097b, typing.Union[CfnSimulationApplication.SimulationSoftwareSuiteProperty, typing.Dict[builtins.str, typing.Any]]],
+        current_revision_id: typing.Optional[builtins.str] = None,
+        environment: typing.Optional[builtins.str] = None,
+        name: typing.Optional[builtins.str] = None,
+        rendering_engine: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnSimulationApplication.RenderingEngineProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        sources: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnSimulationApplication.SourceConfigProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
+    ) -> None:
+        '''Properties for defining a ``CfnSimulationApplication``.
+
+        :param robot_software_suite: The robot software suite used by the simulation application.
+        :param simulation_software_suite: The simulation software suite used by the simulation application.
+        :param current_revision_id: The current revision id.
+        :param environment: The environment of the simulation application.
+        :param name: The name of the simulation application.
+        :param rendering_engine: The rendering engine for the simulation application.
+        :param sources: The sources of the simulation application.
+        :param tags: A map that contains tag keys and tag values that are attached to the simulation application.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-robomaker-simulationapplication.html
+        :exampleMetadata: fixture=_generated
+
+        Example::
+
+            # The code below shows an example of how to instantiate this type.
+            # The values are placeholders you should change.
+            from aws_cdk import aws_robomaker as robomaker
+            
+            cfn_simulation_application_props = robomaker.CfnSimulationApplicationProps(
+                robot_software_suite=robomaker.CfnSimulationApplication.RobotSoftwareSuiteProperty(
+                    name="name",
+            
+                    # the properties below are optional
+                    version="version"
+                ),
+                simulation_software_suite=robomaker.CfnSimulationApplication.SimulationSoftwareSuiteProperty(
+                    name="name",
+            
+                    # the properties below are optional
+                    version="version"
+                ),
+            
+                # the properties below are optional
+                current_revision_id="currentRevisionId",
+                environment="environment",
+                name="name",
+                rendering_engine=robomaker.CfnSimulationApplication.RenderingEngineProperty(
+                    name="name",
+                    version="version"
+                ),
+                sources=[robomaker.CfnSimulationApplication.SourceConfigProperty(
+                    architecture="architecture",
+                    s3_bucket="s3Bucket",
+                    s3_key="s3Key"
+                )],
+                tags={
+                    "tags_key": "tags"
+                }
+            )
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__a4fc5092e924ca6ac9045b6bf857cc7c5e8af28f105a1752b871bed705eac2ca)
+            check_type(argname="argument robot_software_suite", value=robot_software_suite, expected_type=type_hints["robot_software_suite"])
+            check_type(argname="argument simulation_software_suite", value=simulation_software_suite, expected_type=type_hints["simulation_software_suite"])
+            check_type(argname="argument current_revision_id", value=current_revision_id, expected_type=type_hints["current_revision_id"])
+            check_type(argname="argument environment", value=environment, expected_type=type_hints["environment"])
+            check_type(argname="argument name", value=name, expected_type=type_hints["name"])
+            check_type(argname="argument rendering_engine", value=rendering_engine, expected_type=type_hints["rendering_engine"])
+            check_type(argname="argument sources", value=sources, expected_type=type_hints["sources"])
+            check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
+        self._values: typing.Dict[builtins.str, typing.Any] = {
+            "robot_software_suite": robot_software_suite,
+            "simulation_software_suite": simulation_software_suite,
+        }
+        if current_revision_id is not None:
+            self._values["current_revision_id"] = current_revision_id
+        if environment is not None:
+            self._values["environment"] = environment
+        if name is not None:
+            self._values["name"] = name
+        if rendering_engine is not None:
+            self._values["rendering_engine"] = rendering_engine
+        if sources is not None:
+            self._values["sources"] = sources
+        if tags is not None:
+            self._values["tags"] = tags
+
+    @builtins.property
+    def robot_software_suite(
+        self,
+    ) -> typing.Union[_IResolvable_da3f097b, CfnSimulationApplication.RobotSoftwareSuiteProperty]:
+        '''The robot software suite used by the simulation application.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-robomaker-simulationapplication.html#cfn-robomaker-simulationapplication-robotsoftwaresuite
+        '''
+        result = self._values.get("robot_software_suite")
+        assert result is not None, "Required property 'robot_software_suite' is missing"
+        return typing.cast(typing.Union[_IResolvable_da3f097b, CfnSimulationApplication.RobotSoftwareSuiteProperty], result)
+
+    @builtins.property
+    def simulation_software_suite(
+        self,
+    ) -> typing.Union[_IResolvable_da3f097b, CfnSimulationApplication.SimulationSoftwareSuiteProperty]:
+        '''The simulation software suite used by the simulation application.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-robomaker-simulationapplication.html#cfn-robomaker-simulationapplication-simulationsoftwaresuite
+        '''
+        result = self._values.get("simulation_software_suite")
+        assert result is not None, "Required property 'simulation_software_suite' is missing"
+        return typing.cast(typing.Union[_IResolvable_da3f097b, CfnSimulationApplication.SimulationSoftwareSuiteProperty], result)
+
+    @builtins.property
+    def current_revision_id(self) -> typing.Optional[builtins.str]:
+        '''The current revision id.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-robomaker-simulationapplication.html#cfn-robomaker-simulationapplication-currentrevisionid
+        '''
+        result = self._values.get("current_revision_id")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def environment(self) -> typing.Optional[builtins.str]:
+        '''The environment of the simulation application.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-robomaker-simulationapplication.html#cfn-robomaker-simulationapplication-environment
+        '''
+        result = self._values.get("environment")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def name(self) -> typing.Optional[builtins.str]:
+        '''The name of the simulation application.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-robomaker-simulationapplication.html#cfn-robomaker-simulationapplication-name
+        '''
+        result = self._values.get("name")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def rendering_engine(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnSimulationApplication.RenderingEngineProperty]]:
+        '''The rendering engine for the simulation application.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-robomaker-simulationapplication.html#cfn-robomaker-simulationapplication-renderingengine
+        '''
+        result = self._values.get("rendering_engine")
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnSimulationApplication.RenderingEngineProperty]], result)
+
+    @builtins.property
+    def sources(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnSimulationApplication.SourceConfigProperty]]]]:
+        '''The sources of the simulation application.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-robomaker-simulationapplication.html#cfn-robomaker-simulationapplication-sources
+        '''
+        result = self._values.get("sources")
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnSimulationApplication.SourceConfigProperty]]]], result)
+
+    @builtins.property
+    def tags(self) -> typing.Optional[typing.Mapping[builtins.str, builtins.str]]:
+        '''A map that contains tag keys and tag values that are attached to the simulation application.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-robomaker-simulationapplication.html#cfn-robomaker-simulationapplication-tags
+        '''
+        result = self._values.get("tags")
+        return typing.cast(typing.Optional[typing.Mapping[builtins.str, builtins.str]], result)
+
+    def __eq__(self, rhs: typing.Any) -> builtins.bool:
+        return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+    def __ne__(self, rhs: typing.Any) -> builtins.bool:
+        return not (rhs == self)
+
+    def __repr__(self) -> str:
+        return "CfnSimulationApplicationProps(%s)" % ", ".join(
+            k + "=" + repr(v) for k, v in self._values.items()
+        )
+
+
+@jsii.implements(_IInspectable_c2943556, _ISimulationApplicationVersionRef_aa56ccfe)
 class CfnSimulationApplicationVersion(
     _CfnResource_9df397a6,
     metaclass=jsii.JSIIMeta,
@@ -2864,7 +2235,8 @@ class CfnSimulationApplicationVersion(
         application: builtins.str,
         current_revision_id: typing.Optional[builtins.str] = None,
     ) -> None:
-        '''
+        '''Create a new ``AWS::RoboMaker::SimulationApplicationVersion``.
+
         :param scope: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
         :param application: The application information for the simulation application.
@@ -2937,9 +2309,9 @@ class CfnSimulationApplicationVersion(
     @jsii.member(jsii_name="simulationApplicationVersionRef")
     def simulation_application_version_ref(
         self,
-    ) -> SimulationApplicationVersionReference:
+    ) -> _SimulationApplicationVersionReference_c1423217:
         '''A reference to a SimulationApplicationVersion resource.'''
-        return typing.cast(SimulationApplicationVersionReference, jsii.get(self, "simulationApplicationVersionRef"))
+        return typing.cast(_SimulationApplicationVersionReference_c1423217, jsii.get(self, "simulationApplicationVersionRef"))
 
     @builtins.property
     @jsii.member(jsii_name="application")
@@ -2968,6 +2340,85 @@ class CfnSimulationApplicationVersion(
         jsii.set(self, "currentRevisionId", value) # pyright: ignore[reportArgumentType]
 
 
+@jsii.data_type(
+    jsii_type="aws-cdk-lib.aws_robomaker.CfnSimulationApplicationVersionProps",
+    jsii_struct_bases=[],
+    name_mapping={
+        "application": "application",
+        "current_revision_id": "currentRevisionId",
+    },
+)
+class CfnSimulationApplicationVersionProps:
+    def __init__(
+        self,
+        *,
+        application: builtins.str,
+        current_revision_id: typing.Optional[builtins.str] = None,
+    ) -> None:
+        '''Properties for defining a ``CfnSimulationApplicationVersion``.
+
+        :param application: The application information for the simulation application.
+        :param current_revision_id: The current revision id for the simulation application. If you provide a value and it matches the latest revision ID, a new version will be created.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-robomaker-simulationapplicationversion.html
+        :exampleMetadata: fixture=_generated
+
+        Example::
+
+            # The code below shows an example of how to instantiate this type.
+            # The values are placeholders you should change.
+            from aws_cdk import aws_robomaker as robomaker
+            
+            cfn_simulation_application_version_props = robomaker.CfnSimulationApplicationVersionProps(
+                application="application",
+            
+                # the properties below are optional
+                current_revision_id="currentRevisionId"
+            )
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__33d944589c147bd94eb24d591728491c11d414786b189bb1a955add8599bfacf)
+            check_type(argname="argument application", value=application, expected_type=type_hints["application"])
+            check_type(argname="argument current_revision_id", value=current_revision_id, expected_type=type_hints["current_revision_id"])
+        self._values: typing.Dict[builtins.str, typing.Any] = {
+            "application": application,
+        }
+        if current_revision_id is not None:
+            self._values["current_revision_id"] = current_revision_id
+
+    @builtins.property
+    def application(self) -> builtins.str:
+        '''The application information for the simulation application.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-robomaker-simulationapplicationversion.html#cfn-robomaker-simulationapplicationversion-application
+        '''
+        result = self._values.get("application")
+        assert result is not None, "Required property 'application' is missing"
+        return typing.cast(builtins.str, result)
+
+    @builtins.property
+    def current_revision_id(self) -> typing.Optional[builtins.str]:
+        '''The current revision id for the simulation application.
+
+        If you provide a value and it matches the latest revision ID, a new version will be created.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-robomaker-simulationapplicationversion.html#cfn-robomaker-simulationapplicationversion-currentrevisionid
+        '''
+        result = self._values.get("current_revision_id")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    def __eq__(self, rhs: typing.Any) -> builtins.bool:
+        return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+    def __ne__(self, rhs: typing.Any) -> builtins.bool:
+        return not (rhs == self)
+
+    def __repr__(self) -> str:
+        return "CfnSimulationApplicationVersionProps(%s)" % ", ".join(
+            k + "=" + repr(v) for k, v in self._values.items()
+        )
+
+
 __all__ = [
     "CfnFleet",
     "CfnFleetProps",
@@ -2981,124 +2432,9 @@ __all__ = [
     "CfnSimulationApplicationProps",
     "CfnSimulationApplicationVersion",
     "CfnSimulationApplicationVersionProps",
-    "FleetReference",
-    "IFleetRef",
-    "IRobotApplicationRef",
-    "IRobotApplicationVersionRef",
-    "IRobotRef",
-    "ISimulationApplicationRef",
-    "ISimulationApplicationVersionRef",
-    "RobotApplicationReference",
-    "RobotApplicationVersionReference",
-    "RobotReference",
-    "SimulationApplicationReference",
-    "SimulationApplicationVersionReference",
 ]
 
 publication.publish()
-
-def _typecheckingstub__f5c8fc3b81304b565bf3da303dec523f47216f807e13ba1e0ddcc46ceb848df8(
-    *,
-    name: typing.Optional[builtins.str] = None,
-    tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
-) -> None:
-    """Type checking stubs"""
-    pass
-
-def _typecheckingstub__52a4130d82e25da60f30538ac27bda30b72380a78b4ec426daeb7a4e2863826c(
-    *,
-    robot_software_suite: typing.Union[_IResolvable_da3f097b, typing.Union[CfnRobotApplication.RobotSoftwareSuiteProperty, typing.Dict[builtins.str, typing.Any]]],
-    current_revision_id: typing.Optional[builtins.str] = None,
-    environment: typing.Optional[builtins.str] = None,
-    name: typing.Optional[builtins.str] = None,
-    sources: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnRobotApplication.SourceConfigProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
-    tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
-) -> None:
-    """Type checking stubs"""
-    pass
-
-def _typecheckingstub__1ac07a372688198f4d1e1276b33a860cf9f2a1a35ffcb9183bd7e8544e85528a(
-    *,
-    application: builtins.str,
-    current_revision_id: typing.Optional[builtins.str] = None,
-) -> None:
-    """Type checking stubs"""
-    pass
-
-def _typecheckingstub__fb8dba61a5cbbdf07aaff4068a7feeb8d793259512cbf888a9f053970335df52(
-    *,
-    architecture: builtins.str,
-    greengrass_group_id: builtins.str,
-    fleet: typing.Optional[builtins.str] = None,
-    name: typing.Optional[builtins.str] = None,
-    tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
-) -> None:
-    """Type checking stubs"""
-    pass
-
-def _typecheckingstub__a4fc5092e924ca6ac9045b6bf857cc7c5e8af28f105a1752b871bed705eac2ca(
-    *,
-    robot_software_suite: typing.Union[_IResolvable_da3f097b, typing.Union[CfnSimulationApplication.RobotSoftwareSuiteProperty, typing.Dict[builtins.str, typing.Any]]],
-    simulation_software_suite: typing.Union[_IResolvable_da3f097b, typing.Union[CfnSimulationApplication.SimulationSoftwareSuiteProperty, typing.Dict[builtins.str, typing.Any]]],
-    current_revision_id: typing.Optional[builtins.str] = None,
-    environment: typing.Optional[builtins.str] = None,
-    name: typing.Optional[builtins.str] = None,
-    rendering_engine: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnSimulationApplication.RenderingEngineProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-    sources: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnSimulationApplication.SourceConfigProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
-    tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
-) -> None:
-    """Type checking stubs"""
-    pass
-
-def _typecheckingstub__33d944589c147bd94eb24d591728491c11d414786b189bb1a955add8599bfacf(
-    *,
-    application: builtins.str,
-    current_revision_id: typing.Optional[builtins.str] = None,
-) -> None:
-    """Type checking stubs"""
-    pass
-
-def _typecheckingstub__0784df1cec659bae3368e1c022df8a0f8130d857c7ab90ac768b11c2ffe3b1d9(
-    *,
-    fleet_arn: builtins.str,
-) -> None:
-    """Type checking stubs"""
-    pass
-
-def _typecheckingstub__db03662405a914899bf41942355695d6363224fa85a3888cbf3ee6b28b05a7a6(
-    *,
-    robot_application_arn: builtins.str,
-) -> None:
-    """Type checking stubs"""
-    pass
-
-def _typecheckingstub__2581172e9884824fdcf7c2be93180fdee4cb954e90ce6eda86cf27e9c8dd0891(
-    *,
-    robot_application_version_arn: builtins.str,
-) -> None:
-    """Type checking stubs"""
-    pass
-
-def _typecheckingstub__a336b45c03081f68b1c6f77689d0d3d3c76a112bcbae5d90ebd50a2f873ef455(
-    *,
-    robot_arn: builtins.str,
-) -> None:
-    """Type checking stubs"""
-    pass
-
-def _typecheckingstub__c8af6a0be0ecb9e33a57bbd568075e3432df120bc0e183eb37de4ca827b2013c(
-    *,
-    simulation_application_arn: builtins.str,
-) -> None:
-    """Type checking stubs"""
-    pass
-
-def _typecheckingstub__b7affacf6ad6eeb2ffb6110635ad43d32ee831b495f21e67ea7704866f874243(
-    *,
-    simulation_application_version_arn: builtins.str,
-) -> None:
-    """Type checking stubs"""
-    pass
 
 def _typecheckingstub__4cf67028db50fbc82ea8f4501fdb4ee36d1ed66bd90e1e13e635239c75a407a8(
     scope: _constructs_77d1e7e8.Construct,
@@ -3130,6 +2466,14 @@ def _typecheckingstub__fb2b0f115fd155ec1867ebdfab524eabaa919c39920655bedef657815
 
 def _typecheckingstub__a4a9d74f73ceaf3ae033517a44602efdc6fd84668be6992907ba5276fd26df0c(
     value: typing.Optional[typing.Mapping[builtins.str, builtins.str]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__f5c8fc3b81304b565bf3da303dec523f47216f807e13ba1e0ddcc46ceb848df8(
+    *,
+    name: typing.Optional[builtins.str] = None,
+    tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -3268,6 +2612,18 @@ def _typecheckingstub__4e42633c14584fa1496504e90fc71f70fc9e79eb18701f96962e855cd
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__52a4130d82e25da60f30538ac27bda30b72380a78b4ec426daeb7a4e2863826c(
+    *,
+    robot_software_suite: typing.Union[_IResolvable_da3f097b, typing.Union[CfnRobotApplication.RobotSoftwareSuiteProperty, typing.Dict[builtins.str, typing.Any]]],
+    current_revision_id: typing.Optional[builtins.str] = None,
+    environment: typing.Optional[builtins.str] = None,
+    name: typing.Optional[builtins.str] = None,
+    sources: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnRobotApplication.SourceConfigProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+    tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__bcd53a9dcf33d743031271af0ba72420a6333fce186b7796423fce7cf2a11edd(
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
@@ -3298,6 +2654,25 @@ def _typecheckingstub__2d3b0a1f324aaccd7abc5e6810329e257f4a7cd3179c5afcaf2b8abd6
 
 def _typecheckingstub__4a12b8570cf31b8187dcb0dd326c52f7ca4075a70971d81e139f25383d48acad(
     value: typing.Optional[builtins.str],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__1ac07a372688198f4d1e1276b33a860cf9f2a1a35ffcb9183bd7e8544e85528a(
+    *,
+    application: builtins.str,
+    current_revision_id: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__fb8dba61a5cbbdf07aaff4068a7feeb8d793259512cbf888a9f053970335df52(
+    *,
+    architecture: builtins.str,
+    greengrass_group_id: builtins.str,
+    fleet: typing.Optional[builtins.str] = None,
+    name: typing.Optional[builtins.str] = None,
+    tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -3411,6 +2786,20 @@ def _typecheckingstub__4112adca6d32fda1641015d764412ce99d316d904ecd3983541c923ad
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__a4fc5092e924ca6ac9045b6bf857cc7c5e8af28f105a1752b871bed705eac2ca(
+    *,
+    robot_software_suite: typing.Union[_IResolvable_da3f097b, typing.Union[CfnSimulationApplication.RobotSoftwareSuiteProperty, typing.Dict[builtins.str, typing.Any]]],
+    simulation_software_suite: typing.Union[_IResolvable_da3f097b, typing.Union[CfnSimulationApplication.SimulationSoftwareSuiteProperty, typing.Dict[builtins.str, typing.Any]]],
+    current_revision_id: typing.Optional[builtins.str] = None,
+    environment: typing.Optional[builtins.str] = None,
+    name: typing.Optional[builtins.str] = None,
+    rendering_engine: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnSimulationApplication.RenderingEngineProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    sources: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnSimulationApplication.SourceConfigProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+    tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__b488a5e64a5298aa8517c15f71537daeb5f5871632b79431660409e31044cdbc(
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
@@ -3445,5 +2834,10 @@ def _typecheckingstub__b4436c869d1e97db1310a07c8709c1c39527703571128932c8cdb4b5b
     """Type checking stubs"""
     pass
 
-for cls in [IFleetRef, IRobotApplicationRef, IRobotApplicationVersionRef, IRobotRef, ISimulationApplicationRef, ISimulationApplicationVersionRef]:
-    typing.cast(typing.Any, cls).__protocol_attrs__ = typing.cast(typing.Any, cls).__protocol_attrs__ - set(['__jsii_proxy_class__', '__jsii_type__'])
+def _typecheckingstub__33d944589c147bd94eb24d591728491c11d414786b189bb1a955add8599bfacf(
+    *,
+    application: builtins.str,
+    current_revision_id: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass

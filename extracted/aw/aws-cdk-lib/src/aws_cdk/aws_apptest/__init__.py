@@ -70,330 +70,19 @@ from .._jsii import *
 import constructs as _constructs_77d1e7e8
 from .. import (
     CfnResource as _CfnResource_9df397a6,
-    IEnvironmentAware as _IEnvironmentAware_a408b00d,
     IInspectable as _IInspectable_c2943556,
     IResolvable as _IResolvable_da3f097b,
     ITaggableV2 as _ITaggableV2_4e6798f8,
     TagManager as _TagManager_0a598cb3,
     TreeInspector as _TreeInspector_488e0dd5,
 )
-
-
-@jsii.data_type(
-    jsii_type="aws-cdk-lib.aws_apptest.CfnTestCaseProps",
-    jsii_struct_bases=[],
-    name_mapping={
-        "name": "name",
-        "steps": "steps",
-        "description": "description",
-        "tags": "tags",
-    },
+from ..interfaces.aws_apptest import (
+    ITestCaseRef as _ITestCaseRef_0a7c2b60,
+    TestCaseReference as _TestCaseReference_239c1fad,
 )
-class CfnTestCaseProps:
-    def __init__(
-        self,
-        *,
-        name: builtins.str,
-        steps: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTestCase.StepProperty", typing.Dict[builtins.str, typing.Any]]]]],
-        description: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
-    ) -> None:
-        '''Properties for defining a ``CfnTestCase``.
-
-        :param name: The name of the test case.
-        :param steps: The steps in the test case.
-        :param description: The description of the test case.
-        :param tags: The specified tags of the test case.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apptest-testcase.html
-        :exampleMetadata: fixture=_generated
-
-        Example::
-
-            # The code below shows an example of how to instantiate this type.
-            # The values are placeholders you should change.
-            from aws_cdk import aws_apptest as apptest
-            
-            cfn_test_case_props = apptest.CfnTestCaseProps(
-                name="name",
-                steps=[apptest.CfnTestCase.StepProperty(
-                    action=apptest.CfnTestCase.StepActionProperty(
-                        compare_action=apptest.CfnTestCase.CompareActionProperty(
-                            input=apptest.CfnTestCase.InputProperty(
-                                file=apptest.CfnTestCase.InputFileProperty(
-                                    file_metadata=apptest.CfnTestCase.FileMetadataProperty(
-                                        database_cdc=apptest.CfnTestCase.DatabaseCDCProperty(
-                                            source_metadata=apptest.CfnTestCase.SourceDatabaseMetadataProperty(
-                                                capture_tool="captureTool",
-                                                type="type"
-                                            ),
-                                            target_metadata=apptest.CfnTestCase.TargetDatabaseMetadataProperty(
-                                                capture_tool="captureTool",
-                                                type="type"
-                                            )
-                                        ),
-                                        data_sets=[apptest.CfnTestCase.DataSetProperty(
-                                            ccsid="ccsid",
-                                            format="format",
-                                            length=123,
-                                            name="name",
-                                            type="type"
-                                        )]
-                                    ),
-                                    source_location="sourceLocation",
-                                    target_location="targetLocation"
-                                )
-                            ),
-            
-                            # the properties below are optional
-                            output=apptest.CfnTestCase.OutputProperty(
-                                file=apptest.CfnTestCase.OutputFileProperty(
-                                    file_location="fileLocation"
-                                )
-                            )
-                        ),
-                        mainframe_action=apptest.CfnTestCase.MainframeActionProperty(
-                            action_type=apptest.CfnTestCase.MainframeActionTypeProperty(
-                                batch=apptest.CfnTestCase.BatchProperty(
-                                    batch_job_name="batchJobName",
-            
-                                    # the properties below are optional
-                                    batch_job_parameters={
-                                        "batch_job_parameters_key": "batchJobParameters"
-                                    },
-                                    export_data_set_names=["exportDataSetNames"]
-                                ),
-                                tn3270=apptest.CfnTestCase.TN3270Property(
-                                    script=apptest.CfnTestCase.ScriptProperty(
-                                        script_location="scriptLocation",
-                                        type="type"
-                                    ),
-            
-                                    # the properties below are optional
-                                    export_data_set_names=["exportDataSetNames"]
-                                )
-                            ),
-                            resource="resource",
-            
-                            # the properties below are optional
-                            properties=apptest.CfnTestCase.MainframeActionPropertiesProperty(
-                                dms_task_arn="dmsTaskArn"
-                            )
-                        ),
-                        resource_action=apptest.CfnTestCase.ResourceActionProperty(
-                            cloud_formation_action=apptest.CfnTestCase.CloudFormationActionProperty(
-                                resource="resource",
-            
-                                # the properties below are optional
-                                action_type="actionType"
-                            ),
-                            m2_managed_application_action=apptest.CfnTestCase.M2ManagedApplicationActionProperty(
-                                action_type="actionType",
-                                resource="resource",
-            
-                                # the properties below are optional
-                                properties=apptest.CfnTestCase.M2ManagedActionPropertiesProperty(
-                                    force_stop=False,
-                                    import_data_set_location="importDataSetLocation"
-                                )
-                            ),
-                            m2_non_managed_application_action=apptest.CfnTestCase.M2NonManagedApplicationActionProperty(
-                                action_type="actionType",
-                                resource="resource"
-                            )
-                        )
-                    ),
-                    name="name",
-            
-                    # the properties below are optional
-                    description="description"
-                )],
-            
-                # the properties below are optional
-                description="description",
-                tags={
-                    "tags_key": "tags"
-                }
-            )
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__0102711c9306b53678129775395001b31372e5a003401d98d2cae036d61dc66b)
-            check_type(argname="argument name", value=name, expected_type=type_hints["name"])
-            check_type(argname="argument steps", value=steps, expected_type=type_hints["steps"])
-            check_type(argname="argument description", value=description, expected_type=type_hints["description"])
-            check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
-        self._values: typing.Dict[builtins.str, typing.Any] = {
-            "name": name,
-            "steps": steps,
-        }
-        if description is not None:
-            self._values["description"] = description
-        if tags is not None:
-            self._values["tags"] = tags
-
-    @builtins.property
-    def name(self) -> builtins.str:
-        '''The name of the test case.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apptest-testcase.html#cfn-apptest-testcase-name
-        '''
-        result = self._values.get("name")
-        assert result is not None, "Required property 'name' is missing"
-        return typing.cast(builtins.str, result)
-
-    @builtins.property
-    def steps(
-        self,
-    ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnTestCase.StepProperty"]]]:
-        '''The steps in the test case.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apptest-testcase.html#cfn-apptest-testcase-steps
-        '''
-        result = self._values.get("steps")
-        assert result is not None, "Required property 'steps' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnTestCase.StepProperty"]]], result)
-
-    @builtins.property
-    def description(self) -> typing.Optional[builtins.str]:
-        '''The description of the test case.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apptest-testcase.html#cfn-apptest-testcase-description
-        '''
-        result = self._values.get("description")
-        return typing.cast(typing.Optional[builtins.str], result)
-
-    @builtins.property
-    def tags(self) -> typing.Optional[typing.Mapping[builtins.str, builtins.str]]:
-        '''The specified tags of the test case.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apptest-testcase.html#cfn-apptest-testcase-tags
-        '''
-        result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.Mapping[builtins.str, builtins.str]], result)
-
-    def __eq__(self, rhs: typing.Any) -> builtins.bool:
-        return isinstance(rhs, self.__class__) and rhs._values == self._values
-
-    def __ne__(self, rhs: typing.Any) -> builtins.bool:
-        return not (rhs == self)
-
-    def __repr__(self) -> str:
-        return "CfnTestCaseProps(%s)" % ", ".join(
-            k + "=" + repr(v) for k, v in self._values.items()
-        )
 
 
-@jsii.interface(jsii_type="aws-cdk-lib.aws_apptest.ITestCaseRef")
-class ITestCaseRef(
-    _constructs_77d1e7e8.IConstruct,
-    _IEnvironmentAware_a408b00d,
-    typing_extensions.Protocol,
-):
-    '''(experimental) Indicates that this resource can be referenced as a TestCase.
-
-    :stability: experimental
-    '''
-
-    @builtins.property
-    @jsii.member(jsii_name="testCaseRef")
-    def test_case_ref(self) -> "TestCaseReference":
-        '''(experimental) A reference to a TestCase resource.
-
-        :stability: experimental
-        '''
-        ...
-
-
-class _ITestCaseRefProxy(
-    jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
-    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
-):
-    '''(experimental) Indicates that this resource can be referenced as a TestCase.
-
-    :stability: experimental
-    '''
-
-    __jsii_type__: typing.ClassVar[str] = "aws-cdk-lib.aws_apptest.ITestCaseRef"
-
-    @builtins.property
-    @jsii.member(jsii_name="testCaseRef")
-    def test_case_ref(self) -> "TestCaseReference":
-        '''(experimental) A reference to a TestCase resource.
-
-        :stability: experimental
-        '''
-        return typing.cast("TestCaseReference", jsii.get(self, "testCaseRef"))
-
-# Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
-typing.cast(typing.Any, ITestCaseRef).__jsii_proxy_class__ = lambda : _ITestCaseRefProxy
-
-
-@jsii.data_type(
-    jsii_type="aws-cdk-lib.aws_apptest.TestCaseReference",
-    jsii_struct_bases=[],
-    name_mapping={"test_case_arn": "testCaseArn", "test_case_id": "testCaseId"},
-)
-class TestCaseReference:
-    def __init__(
-        self,
-        *,
-        test_case_arn: builtins.str,
-        test_case_id: builtins.str,
-    ) -> None:
-        '''A reference to a TestCase resource.
-
-        :param test_case_arn: The ARN of the TestCase resource.
-        :param test_case_id: The TestCaseId of the TestCase resource.
-
-        :exampleMetadata: fixture=_generated
-
-        Example::
-
-            # The code below shows an example of how to instantiate this type.
-            # The values are placeholders you should change.
-            from aws_cdk import aws_apptest as apptest
-            
-            test_case_reference = apptest.TestCaseReference(
-                test_case_arn="testCaseArn",
-                test_case_id="testCaseId"
-            )
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__b3abad88c56f451b3dd723258c781776703376ae9e1cae68c198da5f93c07128)
-            check_type(argname="argument test_case_arn", value=test_case_arn, expected_type=type_hints["test_case_arn"])
-            check_type(argname="argument test_case_id", value=test_case_id, expected_type=type_hints["test_case_id"])
-        self._values: typing.Dict[builtins.str, typing.Any] = {
-            "test_case_arn": test_case_arn,
-            "test_case_id": test_case_id,
-        }
-
-    @builtins.property
-    def test_case_arn(self) -> builtins.str:
-        '''The ARN of the TestCase resource.'''
-        result = self._values.get("test_case_arn")
-        assert result is not None, "Required property 'test_case_arn' is missing"
-        return typing.cast(builtins.str, result)
-
-    @builtins.property
-    def test_case_id(self) -> builtins.str:
-        '''The TestCaseId of the TestCase resource.'''
-        result = self._values.get("test_case_id")
-        assert result is not None, "Required property 'test_case_id' is missing"
-        return typing.cast(builtins.str, result)
-
-    def __eq__(self, rhs: typing.Any) -> builtins.bool:
-        return isinstance(rhs, self.__class__) and rhs._values == self._values
-
-    def __ne__(self, rhs: typing.Any) -> builtins.bool:
-        return not (rhs == self)
-
-    def __repr__(self) -> str:
-        return "TestCaseReference(%s)" % ", ".join(
-            k + "=" + repr(v) for k, v in self._values.items()
-        )
-
-
-@jsii.implements(_IInspectable_c2943556, ITestCaseRef, _ITaggableV2_4e6798f8)
+@jsii.implements(_IInspectable_c2943556, _ITestCaseRef_0a7c2b60, _ITaggableV2_4e6798f8)
 class CfnTestCase(
     _CfnResource_9df397a6,
     metaclass=jsii.JSIIMeta,
@@ -526,7 +215,8 @@ class CfnTestCase(
         description: typing.Optional[builtins.str] = None,
         tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
     ) -> None:
-        '''
+        '''Create a new ``AWS::AppTest::TestCase``.
+
         :param scope: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
         :param name: The name of the test case.
@@ -551,7 +241,7 @@ class CfnTestCase(
         scope: _constructs_77d1e7e8.Construct,
         id: builtins.str,
         arn: builtins.str,
-    ) -> ITestCaseRef:
+    ) -> _ITestCaseRef_0a7c2b60:
         '''Creates a new ITestCaseRef from an ARN.
 
         :param scope: -
@@ -563,7 +253,7 @@ class CfnTestCase(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
-        return typing.cast(ITestCaseRef, jsii.sinvoke(cls, "fromTestCaseArn", [scope, id, arn]))
+        return typing.cast(_ITestCaseRef_0a7c2b60, jsii.sinvoke(cls, "fromTestCaseArn", [scope, id, arn]))
 
     @jsii.member(jsii_name="fromTestCaseId")
     @builtins.classmethod
@@ -572,7 +262,7 @@ class CfnTestCase(
         scope: _constructs_77d1e7e8.Construct,
         id: builtins.str,
         test_case_id: builtins.str,
-    ) -> ITestCaseRef:
+    ) -> _ITestCaseRef_0a7c2b60:
         '''Creates a new ITestCaseRef from a testCaseId.
 
         :param scope: -
@@ -584,7 +274,7 @@ class CfnTestCase(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument test_case_id", value=test_case_id, expected_type=type_hints["test_case_id"])
-        return typing.cast(ITestCaseRef, jsii.sinvoke(cls, "fromTestCaseId", [scope, id, test_case_id]))
+        return typing.cast(_ITestCaseRef_0a7c2b60, jsii.sinvoke(cls, "fromTestCaseId", [scope, id, test_case_id]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -691,9 +381,9 @@ class CfnTestCase(
 
     @builtins.property
     @jsii.member(jsii_name="testCaseRef")
-    def test_case_ref(self) -> TestCaseReference:
+    def test_case_ref(self) -> _TestCaseReference_239c1fad:
         '''A reference to a TestCase resource.'''
-        return typing.cast(TestCaseReference, jsii.get(self, "testCaseRef"))
+        return typing.cast(_TestCaseReference_239c1fad, jsii.get(self, "testCaseRef"))
 
     @builtins.property
     @jsii.member(jsii_name="name")
@@ -2952,32 +2642,216 @@ class CfnTestCase(
             )
 
 
+@jsii.data_type(
+    jsii_type="aws-cdk-lib.aws_apptest.CfnTestCaseProps",
+    jsii_struct_bases=[],
+    name_mapping={
+        "name": "name",
+        "steps": "steps",
+        "description": "description",
+        "tags": "tags",
+    },
+)
+class CfnTestCaseProps:
+    def __init__(
+        self,
+        *,
+        name: builtins.str,
+        steps: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTestCase.StepProperty, typing.Dict[builtins.str, typing.Any]]]]],
+        description: typing.Optional[builtins.str] = None,
+        tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
+    ) -> None:
+        '''Properties for defining a ``CfnTestCase``.
+
+        :param name: The name of the test case.
+        :param steps: The steps in the test case.
+        :param description: The description of the test case.
+        :param tags: The specified tags of the test case.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apptest-testcase.html
+        :exampleMetadata: fixture=_generated
+
+        Example::
+
+            # The code below shows an example of how to instantiate this type.
+            # The values are placeholders you should change.
+            from aws_cdk import aws_apptest as apptest
+            
+            cfn_test_case_props = apptest.CfnTestCaseProps(
+                name="name",
+                steps=[apptest.CfnTestCase.StepProperty(
+                    action=apptest.CfnTestCase.StepActionProperty(
+                        compare_action=apptest.CfnTestCase.CompareActionProperty(
+                            input=apptest.CfnTestCase.InputProperty(
+                                file=apptest.CfnTestCase.InputFileProperty(
+                                    file_metadata=apptest.CfnTestCase.FileMetadataProperty(
+                                        database_cdc=apptest.CfnTestCase.DatabaseCDCProperty(
+                                            source_metadata=apptest.CfnTestCase.SourceDatabaseMetadataProperty(
+                                                capture_tool="captureTool",
+                                                type="type"
+                                            ),
+                                            target_metadata=apptest.CfnTestCase.TargetDatabaseMetadataProperty(
+                                                capture_tool="captureTool",
+                                                type="type"
+                                            )
+                                        ),
+                                        data_sets=[apptest.CfnTestCase.DataSetProperty(
+                                            ccsid="ccsid",
+                                            format="format",
+                                            length=123,
+                                            name="name",
+                                            type="type"
+                                        )]
+                                    ),
+                                    source_location="sourceLocation",
+                                    target_location="targetLocation"
+                                )
+                            ),
+            
+                            # the properties below are optional
+                            output=apptest.CfnTestCase.OutputProperty(
+                                file=apptest.CfnTestCase.OutputFileProperty(
+                                    file_location="fileLocation"
+                                )
+                            )
+                        ),
+                        mainframe_action=apptest.CfnTestCase.MainframeActionProperty(
+                            action_type=apptest.CfnTestCase.MainframeActionTypeProperty(
+                                batch=apptest.CfnTestCase.BatchProperty(
+                                    batch_job_name="batchJobName",
+            
+                                    # the properties below are optional
+                                    batch_job_parameters={
+                                        "batch_job_parameters_key": "batchJobParameters"
+                                    },
+                                    export_data_set_names=["exportDataSetNames"]
+                                ),
+                                tn3270=apptest.CfnTestCase.TN3270Property(
+                                    script=apptest.CfnTestCase.ScriptProperty(
+                                        script_location="scriptLocation",
+                                        type="type"
+                                    ),
+            
+                                    # the properties below are optional
+                                    export_data_set_names=["exportDataSetNames"]
+                                )
+                            ),
+                            resource="resource",
+            
+                            # the properties below are optional
+                            properties=apptest.CfnTestCase.MainframeActionPropertiesProperty(
+                                dms_task_arn="dmsTaskArn"
+                            )
+                        ),
+                        resource_action=apptest.CfnTestCase.ResourceActionProperty(
+                            cloud_formation_action=apptest.CfnTestCase.CloudFormationActionProperty(
+                                resource="resource",
+            
+                                # the properties below are optional
+                                action_type="actionType"
+                            ),
+                            m2_managed_application_action=apptest.CfnTestCase.M2ManagedApplicationActionProperty(
+                                action_type="actionType",
+                                resource="resource",
+            
+                                # the properties below are optional
+                                properties=apptest.CfnTestCase.M2ManagedActionPropertiesProperty(
+                                    force_stop=False,
+                                    import_data_set_location="importDataSetLocation"
+                                )
+                            ),
+                            m2_non_managed_application_action=apptest.CfnTestCase.M2NonManagedApplicationActionProperty(
+                                action_type="actionType",
+                                resource="resource"
+                            )
+                        )
+                    ),
+                    name="name",
+            
+                    # the properties below are optional
+                    description="description"
+                )],
+            
+                # the properties below are optional
+                description="description",
+                tags={
+                    "tags_key": "tags"
+                }
+            )
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__0102711c9306b53678129775395001b31372e5a003401d98d2cae036d61dc66b)
+            check_type(argname="argument name", value=name, expected_type=type_hints["name"])
+            check_type(argname="argument steps", value=steps, expected_type=type_hints["steps"])
+            check_type(argname="argument description", value=description, expected_type=type_hints["description"])
+            check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
+        self._values: typing.Dict[builtins.str, typing.Any] = {
+            "name": name,
+            "steps": steps,
+        }
+        if description is not None:
+            self._values["description"] = description
+        if tags is not None:
+            self._values["tags"] = tags
+
+    @builtins.property
+    def name(self) -> builtins.str:
+        '''The name of the test case.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apptest-testcase.html#cfn-apptest-testcase-name
+        '''
+        result = self._values.get("name")
+        assert result is not None, "Required property 'name' is missing"
+        return typing.cast(builtins.str, result)
+
+    @builtins.property
+    def steps(
+        self,
+    ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnTestCase.StepProperty]]]:
+        '''The steps in the test case.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apptest-testcase.html#cfn-apptest-testcase-steps
+        '''
+        result = self._values.get("steps")
+        assert result is not None, "Required property 'steps' is missing"
+        return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnTestCase.StepProperty]]], result)
+
+    @builtins.property
+    def description(self) -> typing.Optional[builtins.str]:
+        '''The description of the test case.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apptest-testcase.html#cfn-apptest-testcase-description
+        '''
+        result = self._values.get("description")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def tags(self) -> typing.Optional[typing.Mapping[builtins.str, builtins.str]]:
+        '''The specified tags of the test case.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apptest-testcase.html#cfn-apptest-testcase-tags
+        '''
+        result = self._values.get("tags")
+        return typing.cast(typing.Optional[typing.Mapping[builtins.str, builtins.str]], result)
+
+    def __eq__(self, rhs: typing.Any) -> builtins.bool:
+        return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+    def __ne__(self, rhs: typing.Any) -> builtins.bool:
+        return not (rhs == self)
+
+    def __repr__(self) -> str:
+        return "CfnTestCaseProps(%s)" % ", ".join(
+            k + "=" + repr(v) for k, v in self._values.items()
+        )
+
+
 __all__ = [
     "CfnTestCase",
     "CfnTestCaseProps",
-    "ITestCaseRef",
-    "TestCaseReference",
 ]
 
 publication.publish()
-
-def _typecheckingstub__0102711c9306b53678129775395001b31372e5a003401d98d2cae036d61dc66b(
-    *,
-    name: builtins.str,
-    steps: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTestCase.StepProperty, typing.Dict[builtins.str, typing.Any]]]]],
-    description: typing.Optional[builtins.str] = None,
-    tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
-) -> None:
-    """Type checking stubs"""
-    pass
-
-def _typecheckingstub__b3abad88c56f451b3dd723258c781776703376ae9e1cae68c198da5f93c07128(
-    *,
-    test_case_arn: builtins.str,
-    test_case_id: builtins.str,
-) -> None:
-    """Type checking stubs"""
-    pass
 
 def _typecheckingstub__b54328fdade9df4505a5f85498cf53fc62e7fc59a222ac471d1a63974ed7f0a5(
     scope: _constructs_77d1e7e8.Construct,
@@ -3241,5 +3115,12 @@ def _typecheckingstub__4f4c770ea457b4cd91039dd6060ef58f0f4231406f81979b98062ec9b
     """Type checking stubs"""
     pass
 
-for cls in [ITestCaseRef]:
-    typing.cast(typing.Any, cls).__protocol_attrs__ = typing.cast(typing.Any, cls).__protocol_attrs__ - set(['__jsii_proxy_class__', '__jsii_type__'])
+def _typecheckingstub__0102711c9306b53678129775395001b31372e5a003401d98d2cae036d61dc66b(
+    *,
+    name: builtins.str,
+    steps: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTestCase.StepProperty, typing.Dict[builtins.str, typing.Any]]]]],
+    description: typing.Optional[builtins.str] = None,
+    tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass

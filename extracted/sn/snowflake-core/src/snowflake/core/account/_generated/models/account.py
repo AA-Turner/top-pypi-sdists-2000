@@ -33,7 +33,7 @@ class Account(BaseModel):
     name : str
         A Snowflake object identifier. If the identifier contains spaces or special characters, the entire string must be enclosed in double quotes. Identifiers enclosed in double quotes are also case-sensitive.
     edition : str
-        Snowflake Edition of the account.
+        Snowflake Edition of the account. Possible values to use when creating an account include STANDARD, ENTERPRISE, and BUSINESS_CRITICAL.
     admin_name : str
         Name of the account administrator.
     email : str
@@ -229,12 +229,6 @@ class Account(BaseModel):
     def name_validate_regular_expression(cls, v):
         if not re.match(r"""^\"([^\"]|\"\")+\"|[a-zA-Z_][a-zA-Z0-9_$]*$""", v):
             raise ValueError(r"""must validate the regular expression /^"([^"]|"")+"|[a-zA-Z_][a-zA-Z0-9_$]*$/""")
-        return v
-
-    @field_validator("edition")
-    def edition_validate_enum(cls, v):
-        if v not in ("STANDARD", "ENTERPRISE", "BUSINESS_CRITICAL"):
-            raise ValueError("must validate the enum values ('STANDARD','ENTERPRISE','BUSINESS_CRITICAL')")
         return v
 
     class Config:
@@ -436,7 +430,7 @@ class AccountModel:
         name : str
             A Snowflake object identifier. If the identifier contains spaces or special characters, the entire string must be enclosed in double quotes. Identifiers enclosed in double quotes are also case-sensitive.
         edition : str
-            Snowflake Edition of the account.
+            Snowflake Edition of the account. Possible values to use when creating an account include STANDARD, ENTERPRISE, and BUSINESS_CRITICAL.
         admin_name : str
             Name of the account administrator.
         email : str

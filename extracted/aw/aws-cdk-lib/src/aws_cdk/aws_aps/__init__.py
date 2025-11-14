@@ -61,7 +61,6 @@ import constructs as _constructs_77d1e7e8
 from .. import (
     CfnResource as _CfnResource_9df397a6,
     CfnTag as _CfnTag_f6864754,
-    IEnvironmentAware as _IEnvironmentAware_a408b00d,
     IInspectable as _IInspectable_c2943556,
     IResolvable as _IResolvable_da3f097b,
     ITaggable as _ITaggable_36806126,
@@ -69,55 +68,713 @@ from .. import (
     TagManager as _TagManager_0a598cb3,
     TreeInspector as _TreeInspector_488e0dd5,
 )
-
-
-@jsii.data_type(
-    jsii_type="aws-cdk-lib.aws_aps.AnomalyDetectorReference",
-    jsii_struct_bases=[],
-    name_mapping={"anomaly_detector_arn": "anomalyDetectorArn"},
+from ..interfaces.aws_aps import (
+    AnomalyDetectorReference as _AnomalyDetectorReference_1ffc0c63,
+    IAnomalyDetectorRef as _IAnomalyDetectorRef_fef2b996,
+    IResourcePolicyRef as _IResourcePolicyRef_1aa7c1a2,
+    IRuleGroupsNamespaceRef as _IRuleGroupsNamespaceRef_7b589be9,
+    IScraperRef as _IScraperRef_2b17ef67,
+    IWorkspaceRef as _IWorkspaceRef_d8b2b588,
+    ResourcePolicyReference as _ResourcePolicyReference_162e786c,
+    RuleGroupsNamespaceReference as _RuleGroupsNamespaceReference_9d4673a3,
+    ScraperReference as _ScraperReference_c6b43df1,
+    WorkspaceReference as _WorkspaceReference_4f6a6126,
 )
-class AnomalyDetectorReference:
-    def __init__(self, *, anomaly_detector_arn: builtins.str) -> None:
-        '''A reference to a AnomalyDetector resource.
 
-        :param anomaly_detector_arn: The Arn of the AnomalyDetector resource.
 
-        :exampleMetadata: fixture=_generated
+@jsii.implements(_IInspectable_c2943556, _IAnomalyDetectorRef_fef2b996, _ITaggableV2_4e6798f8)
+class CfnAnomalyDetector(
+    _CfnResource_9df397a6,
+    metaclass=jsii.JSIIMeta,
+    jsii_type="aws-cdk-lib.aws_aps.CfnAnomalyDetector",
+):
+    '''Anomaly detection uses the Random Cut Forest algorithm for time-series analysis.
 
-        Example::
+    The anomaly detector analyzes Amazon Managed Service for Prometheus metrics to identify unusual patterns and behaviors.
 
-            # The code below shows an example of how to instantiate this type.
-            # The values are placeholders you should change.
-            from aws_cdk import aws_aps as aps
-            
-            anomaly_detector_reference = aps.AnomalyDetectorReference(
-                anomaly_detector_arn="anomalyDetectorArn"
-            )
+    :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-aps-anomalydetector.html
+    :cloudformationResource: AWS::APS::AnomalyDetector
+    :exampleMetadata: fixture=_generated
+
+    Example::
+
+        # The code below shows an example of how to instantiate this type.
+        # The values are placeholders you should change.
+        from aws_cdk import aws_aps as aps
+        
+        cfn_anomaly_detector = aps.CfnAnomalyDetector(self, "MyCfnAnomalyDetector",
+            alias="alias",
+            configuration=aps.CfnAnomalyDetector.AnomalyDetectorConfigurationProperty(
+                random_cut_forest=aps.CfnAnomalyDetector.RandomCutForestConfigurationProperty(
+                    query="query",
+        
+                    # the properties below are optional
+                    ignore_near_expected_from_above=aps.CfnAnomalyDetector.IgnoreNearExpectedProperty(
+                        amount=123,
+                        ratio=123
+                    ),
+                    ignore_near_expected_from_below=aps.CfnAnomalyDetector.IgnoreNearExpectedProperty(
+                        amount=123,
+                        ratio=123
+                    ),
+                    sample_size=123,
+                    shingle_size=123
+                )
+            ),
+            workspace="workspace",
+        
+            # the properties below are optional
+            evaluation_interval_in_seconds=123,
+            labels=[aps.CfnAnomalyDetector.LabelProperty(
+                key="key",
+                value="value"
+            )],
+            missing_data_action=aps.CfnAnomalyDetector.MissingDataActionProperty(
+                mark_as_anomaly=False,
+                skip=False
+            ),
+            tags=[CfnTag(
+                key="key",
+                value="value"
+            )]
+        )
+    '''
+
+    def __init__(
+        self,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        *,
+        alias: builtins.str,
+        configuration: typing.Union[_IResolvable_da3f097b, typing.Union["CfnAnomalyDetector.AnomalyDetectorConfigurationProperty", typing.Dict[builtins.str, typing.Any]]],
+        workspace: builtins.str,
+        evaluation_interval_in_seconds: typing.Optional[jsii.Number] = None,
+        labels: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnAnomalyDetector.LabelProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        missing_data_action: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnAnomalyDetector.MissingDataActionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+    ) -> None:
+        '''Create a new ``AWS::APS::AnomalyDetector``.
+
+        :param scope: Scope in which this resource is defined.
+        :param id: Construct identifier for this resource (unique in its scope).
+        :param alias: The user-friendly name of the anomaly detector.
+        :param configuration: The algorithm configuration of the anomaly detector.
+        :param workspace: An Amazon Managed Service for Prometheus workspace is a logical and isolated Prometheus server dedicated to ingesting, storing, and querying your Prometheus-compatible metrics.
+        :param evaluation_interval_in_seconds: The frequency, in seconds, at which the anomaly detector evaluates metrics. Default: - 60
+        :param labels: The Amazon Managed Service for Prometheus metric labels associated with the anomaly detector.
+        :param missing_data_action: The action taken when data is missing during evaluation.
+        :param tags: The tags applied to the anomaly detector.
         '''
         if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__d8f087ddf091d7802928e5eb9ae2c35d5aea0cb5cb3e0d1494e32ce693f67efa)
-            check_type(argname="argument anomaly_detector_arn", value=anomaly_detector_arn, expected_type=type_hints["anomaly_detector_arn"])
-        self._values: typing.Dict[builtins.str, typing.Any] = {
-            "anomaly_detector_arn": anomaly_detector_arn,
-        }
+            type_hints = typing.get_type_hints(_typecheckingstub__58b3184629f18780da9f7c9eb2f8acdbdbb5190c9fc3ae41fdbbe34341ba0f26)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+        props = CfnAnomalyDetectorProps(
+            alias=alias,
+            configuration=configuration,
+            workspace=workspace,
+            evaluation_interval_in_seconds=evaluation_interval_in_seconds,
+            labels=labels,
+            missing_data_action=missing_data_action,
+            tags=tags,
+        )
+
+        jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="inspect")
+    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+        '''Examines the CloudFormation resource and discloses attributes.
+
+        :param inspector: tree inspector to collect and process attributes.
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__36a9fa3c67c466703717001e2774dacca3fa612b6ec02f8b6361ad6736da0ec7)
+            check_type(argname="argument inspector", value=inspector, expected_type=type_hints["inspector"])
+        return typing.cast(None, jsii.invoke(self, "inspect", [inspector]))
+
+    @jsii.member(jsii_name="renderProperties")
+    def _render_properties(
+        self,
+        props: typing.Mapping[builtins.str, typing.Any],
+    ) -> typing.Mapping[builtins.str, typing.Any]:
+        '''
+        :param props: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__1edc3473fdf33536207faf87047c2bef23ac4e4aecad53d1e0338308f0e5ab91)
+            check_type(argname="argument props", value=props, expected_type=type_hints["props"])
+        return typing.cast(typing.Mapping[builtins.str, typing.Any], jsii.invoke(self, "renderProperties", [props]))
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="CFN_RESOURCE_TYPE_NAME")
+    def CFN_RESOURCE_TYPE_NAME(cls) -> builtins.str:
+        '''The CloudFormation resource type name for this resource class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "CFN_RESOURCE_TYPE_NAME"))
 
     @builtins.property
-    def anomaly_detector_arn(self) -> builtins.str:
-        '''The Arn of the AnomalyDetector resource.'''
-        result = self._values.get("anomaly_detector_arn")
-        assert result is not None, "Required property 'anomaly_detector_arn' is missing"
-        return typing.cast(builtins.str, result)
+    @jsii.member(jsii_name="anomalyDetectorRef")
+    def anomaly_detector_ref(self) -> _AnomalyDetectorReference_1ffc0c63:
+        '''A reference to a AnomalyDetector resource.'''
+        return typing.cast(_AnomalyDetectorReference_1ffc0c63, jsii.get(self, "anomalyDetectorRef"))
 
-    def __eq__(self, rhs: typing.Any) -> builtins.bool:
-        return isinstance(rhs, self.__class__) and rhs._values == self._values
+    @builtins.property
+    @jsii.member(jsii_name="attrArn")
+    def attr_arn(self) -> builtins.str:
+        '''The Amazon Resource Name (ARN) of the anomaly detector.
 
-    def __ne__(self, rhs: typing.Any) -> builtins.bool:
-        return not (rhs == self)
+        :cloudformationAttribute: Arn
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrArn"))
 
-    def __repr__(self) -> str:
-        return "AnomalyDetectorReference(%s)" % ", ".join(
-            k + "=" + repr(v) for k, v in self._values.items()
-        )
+    @builtins.property
+    @jsii.member(jsii_name="cdkTagManager")
+    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+        '''Tag Manager which manages the tags for this resource.'''
+        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+
+    @builtins.property
+    @jsii.member(jsii_name="cfnProperties")
+    def _cfn_properties(self) -> typing.Mapping[builtins.str, typing.Any]:
+        return typing.cast(typing.Mapping[builtins.str, typing.Any], jsii.get(self, "cfnProperties"))
+
+    @builtins.property
+    @jsii.member(jsii_name="alias")
+    def alias(self) -> builtins.str:
+        '''The user-friendly name of the anomaly detector.'''
+        return typing.cast(builtins.str, jsii.get(self, "alias"))
+
+    @alias.setter
+    def alias(self, value: builtins.str) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__fe3aa1b72ccc7677675b2ae76ae8e5e1dfd2146dae8eba7520a981184cdf780d)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "alias", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="configuration")
+    def configuration(
+        self,
+    ) -> typing.Union[_IResolvable_da3f097b, "CfnAnomalyDetector.AnomalyDetectorConfigurationProperty"]:
+        '''The algorithm configuration of the anomaly detector.'''
+        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnAnomalyDetector.AnomalyDetectorConfigurationProperty"], jsii.get(self, "configuration"))
+
+    @configuration.setter
+    def configuration(
+        self,
+        value: typing.Union[_IResolvable_da3f097b, "CfnAnomalyDetector.AnomalyDetectorConfigurationProperty"],
+    ) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__1394fe6b497d7add7f3c437f746b83234bfd1714418b007d2ca77fcaf2e486fa)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "configuration", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="workspace")
+    def workspace(self) -> builtins.str:
+        '''An Amazon Managed Service for Prometheus workspace is a logical and isolated Prometheus server dedicated to ingesting, storing, and querying your Prometheus-compatible metrics.'''
+        return typing.cast(builtins.str, jsii.get(self, "workspace"))
+
+    @workspace.setter
+    def workspace(self, value: builtins.str) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__51d01d3c64410491a2005087b379e01fe1749ffd4be8e8dae194b7cc8e5e19b8)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "workspace", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="evaluationIntervalInSeconds")
+    def evaluation_interval_in_seconds(self) -> typing.Optional[jsii.Number]:
+        '''The frequency, in seconds, at which the anomaly detector evaluates metrics.'''
+        return typing.cast(typing.Optional[jsii.Number], jsii.get(self, "evaluationIntervalInSeconds"))
+
+    @evaluation_interval_in_seconds.setter
+    def evaluation_interval_in_seconds(
+        self,
+        value: typing.Optional[jsii.Number],
+    ) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__ce3cb5189478c72429dee4d6fa1ed9635e537559491f15b775c279a89020cb75)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "evaluationIntervalInSeconds", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="labels")
+    def labels(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnAnomalyDetector.LabelProperty"]]]]:
+        '''The Amazon Managed Service for Prometheus metric labels associated with the anomaly detector.'''
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnAnomalyDetector.LabelProperty"]]]], jsii.get(self, "labels"))
+
+    @labels.setter
+    def labels(
+        self,
+        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnAnomalyDetector.LabelProperty"]]]],
+    ) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__0d15555eb30ee6b4decc1dba71c708714ce1a7f00e658c2ce9c617f35dbea119)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "labels", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="missingDataAction")
+    def missing_data_action(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAnomalyDetector.MissingDataActionProperty"]]:
+        '''The action taken when data is missing during evaluation.'''
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAnomalyDetector.MissingDataActionProperty"]], jsii.get(self, "missingDataAction"))
+
+    @missing_data_action.setter
+    def missing_data_action(
+        self,
+        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAnomalyDetector.MissingDataActionProperty"]],
+    ) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__e639ced06e0101ba2e1108f2a5748e988f60e8c6ecadbb32ca0f2dc6162a53e8)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "missingDataAction", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="tags")
+    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+        '''The tags applied to the anomaly detector.'''
+        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tags"))
+
+    @tags.setter
+    def tags(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__dc8b42c0f027d8c1c104a6037d9c3752efbfb2ae169c30d63f35dee5bad63b3f)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "tags", value) # pyright: ignore[reportArgumentType]
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_aps.CfnAnomalyDetector.AnomalyDetectorConfigurationProperty",
+        jsii_struct_bases=[],
+        name_mapping={"random_cut_forest": "randomCutForest"},
+    )
+    class AnomalyDetectorConfigurationProperty:
+        def __init__(
+            self,
+            *,
+            random_cut_forest: typing.Union[_IResolvable_da3f097b, typing.Union["CfnAnomalyDetector.RandomCutForestConfigurationProperty", typing.Dict[builtins.str, typing.Any]]],
+        ) -> None:
+            '''The configuration for the anomaly detection algorithm.
+
+            :param random_cut_forest: The Random Cut Forest algorithm configuration for anomaly detection.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-aps-anomalydetector-anomalydetectorconfiguration.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_aps as aps
+                
+                anomaly_detector_configuration_property = aps.CfnAnomalyDetector.AnomalyDetectorConfigurationProperty(
+                    random_cut_forest=aps.CfnAnomalyDetector.RandomCutForestConfigurationProperty(
+                        query="query",
+                
+                        # the properties below are optional
+                        ignore_near_expected_from_above=aps.CfnAnomalyDetector.IgnoreNearExpectedProperty(
+                            amount=123,
+                            ratio=123
+                        ),
+                        ignore_near_expected_from_below=aps.CfnAnomalyDetector.IgnoreNearExpectedProperty(
+                            amount=123,
+                            ratio=123
+                        ),
+                        sample_size=123,
+                        shingle_size=123
+                    )
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__aca672630a5e19c23bb68b82c63c873a7687610464d166cef0da5d6cde142082)
+                check_type(argname="argument random_cut_forest", value=random_cut_forest, expected_type=type_hints["random_cut_forest"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "random_cut_forest": random_cut_forest,
+            }
+
+        @builtins.property
+        def random_cut_forest(
+            self,
+        ) -> typing.Union[_IResolvable_da3f097b, "CfnAnomalyDetector.RandomCutForestConfigurationProperty"]:
+            '''The Random Cut Forest algorithm configuration for anomaly detection.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-aps-anomalydetector-anomalydetectorconfiguration.html#cfn-aps-anomalydetector-anomalydetectorconfiguration-randomcutforest
+            '''
+            result = self._values.get("random_cut_forest")
+            assert result is not None, "Required property 'random_cut_forest' is missing"
+            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnAnomalyDetector.RandomCutForestConfigurationProperty"], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "AnomalyDetectorConfigurationProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_aps.CfnAnomalyDetector.IgnoreNearExpectedProperty",
+        jsii_struct_bases=[],
+        name_mapping={"amount": "amount", "ratio": "ratio"},
+    )
+    class IgnoreNearExpectedProperty:
+        def __init__(
+            self,
+            *,
+            amount: typing.Optional[jsii.Number] = None,
+            ratio: typing.Optional[jsii.Number] = None,
+        ) -> None:
+            '''Configuration for threshold settings that determine when values near expected values should be ignored during anomaly detection.
+
+            :param amount: The absolute amount by which values can differ from expected values before being considered anomalous.
+            :param ratio: The ratio by which values can differ from expected values before being considered anomalous.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-aps-anomalydetector-ignorenearexpected.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_aps as aps
+                
+                ignore_near_expected_property = aps.CfnAnomalyDetector.IgnoreNearExpectedProperty(
+                    amount=123,
+                    ratio=123
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__e3e1cf276ea5a24efc7ebe9d526fad4e86dd66a3f55ea5a0dcb3a617b8d62dff)
+                check_type(argname="argument amount", value=amount, expected_type=type_hints["amount"])
+                check_type(argname="argument ratio", value=ratio, expected_type=type_hints["ratio"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if amount is not None:
+                self._values["amount"] = amount
+            if ratio is not None:
+                self._values["ratio"] = ratio
+
+        @builtins.property
+        def amount(self) -> typing.Optional[jsii.Number]:
+            '''The absolute amount by which values can differ from expected values before being considered anomalous.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-aps-anomalydetector-ignorenearexpected.html#cfn-aps-anomalydetector-ignorenearexpected-amount
+            '''
+            result = self._values.get("amount")
+            return typing.cast(typing.Optional[jsii.Number], result)
+
+        @builtins.property
+        def ratio(self) -> typing.Optional[jsii.Number]:
+            '''The ratio by which values can differ from expected values before being considered anomalous.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-aps-anomalydetector-ignorenearexpected.html#cfn-aps-anomalydetector-ignorenearexpected-ratio
+            '''
+            result = self._values.get("ratio")
+            return typing.cast(typing.Optional[jsii.Number], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "IgnoreNearExpectedProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_aps.CfnAnomalyDetector.LabelProperty",
+        jsii_struct_bases=[],
+        name_mapping={"key": "key", "value": "value"},
+    )
+    class LabelProperty:
+        def __init__(self, *, key: builtins.str, value: builtins.str) -> None:
+            '''The Amazon Managed Service for Prometheus metric labels associated with the anomaly detector.
+
+            :param key: The key of the label.
+            :param value: The value for this label.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-aps-anomalydetector-label.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_aps as aps
+                
+                label_property = aps.CfnAnomalyDetector.LabelProperty(
+                    key="key",
+                    value="value"
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__3f784d604d60c49dd5fb567dcfedcd9d16e2ce47ba899589a373c9322818035a)
+                check_type(argname="argument key", value=key, expected_type=type_hints["key"])
+                check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "key": key,
+                "value": value,
+            }
+
+        @builtins.property
+        def key(self) -> builtins.str:
+            '''The key of the label.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-aps-anomalydetector-label.html#cfn-aps-anomalydetector-label-key
+            '''
+            result = self._values.get("key")
+            assert result is not None, "Required property 'key' is missing"
+            return typing.cast(builtins.str, result)
+
+        @builtins.property
+        def value(self) -> builtins.str:
+            '''The value for this label.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-aps-anomalydetector-label.html#cfn-aps-anomalydetector-label-value
+            '''
+            result = self._values.get("value")
+            assert result is not None, "Required property 'value' is missing"
+            return typing.cast(builtins.str, result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "LabelProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_aps.CfnAnomalyDetector.MissingDataActionProperty",
+        jsii_struct_bases=[],
+        name_mapping={"mark_as_anomaly": "markAsAnomaly", "skip": "skip"},
+    )
+    class MissingDataActionProperty:
+        def __init__(
+            self,
+            *,
+            mark_as_anomaly: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            skip: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        ) -> None:
+            '''Specifies the action to take when data is missing during anomaly detection evaluation.
+
+            :param mark_as_anomaly: Marks missing data points as anomalies.
+            :param skip: Skips evaluation when data is missing.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-aps-anomalydetector-missingdataaction.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_aps as aps
+                
+                missing_data_action_property = aps.CfnAnomalyDetector.MissingDataActionProperty(
+                    mark_as_anomaly=False,
+                    skip=False
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__e5b8457b72ba87aa14000e26b68e021fa4b19e4e88f3a022910dcd18542039d0)
+                check_type(argname="argument mark_as_anomaly", value=mark_as_anomaly, expected_type=type_hints["mark_as_anomaly"])
+                check_type(argname="argument skip", value=skip, expected_type=type_hints["skip"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if mark_as_anomaly is not None:
+                self._values["mark_as_anomaly"] = mark_as_anomaly
+            if skip is not None:
+                self._values["skip"] = skip
+
+        @builtins.property
+        def mark_as_anomaly(
+            self,
+        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+            '''Marks missing data points as anomalies.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-aps-anomalydetector-missingdataaction.html#cfn-aps-anomalydetector-missingdataaction-markasanomaly
+            '''
+            result = self._values.get("mark_as_anomaly")
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+
+        @builtins.property
+        def skip(
+            self,
+        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+            '''Skips evaluation when data is missing.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-aps-anomalydetector-missingdataaction.html#cfn-aps-anomalydetector-missingdataaction-skip
+            '''
+            result = self._values.get("skip")
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "MissingDataActionProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_aps.CfnAnomalyDetector.RandomCutForestConfigurationProperty",
+        jsii_struct_bases=[],
+        name_mapping={
+            "query": "query",
+            "ignore_near_expected_from_above": "ignoreNearExpectedFromAbove",
+            "ignore_near_expected_from_below": "ignoreNearExpectedFromBelow",
+            "sample_size": "sampleSize",
+            "shingle_size": "shingleSize",
+        },
+    )
+    class RandomCutForestConfigurationProperty:
+        def __init__(
+            self,
+            *,
+            query: builtins.str,
+            ignore_near_expected_from_above: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnAnomalyDetector.IgnoreNearExpectedProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            ignore_near_expected_from_below: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnAnomalyDetector.IgnoreNearExpectedProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            sample_size: typing.Optional[jsii.Number] = None,
+            shingle_size: typing.Optional[jsii.Number] = None,
+        ) -> None:
+            '''Configuration for the Random Cut Forest algorithm used for anomaly detection in time-series data.
+
+            :param query: The Prometheus query used to retrieve the time-series data for anomaly detection. .. epigraph:: Random Cut Forest queries must be wrapped by a supported PromQL aggregation operator. For more information, see `Aggregation operators <https://docs.aws.amazon.com/https://prometheus.io/docs/prometheus/latest/querying/operators/#aggregation-operators>`_ on the *Prometheus docs* website. *Supported PromQL aggregation operators* : ``avg`` , ``count`` , ``group`` , ``max`` , ``min`` , ``quantile`` , ``stddev`` , ``stdvar`` , and ``sum`` .
+            :param ignore_near_expected_from_above: Configuration for ignoring values that are near expected values from above during anomaly detection.
+            :param ignore_near_expected_from_below: Configuration for ignoring values that are near expected values from below during anomaly detection.
+            :param sample_size: The number of data points sampled from the input stream for the Random Cut Forest algorithm. The default number is 256 consecutive data points. Default: - 256
+            :param shingle_size: The number of consecutive data points used to create a shingle for the Random Cut Forest algorithm. The default number is 8 consecutive data points. Default: - 8
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-aps-anomalydetector-randomcutforestconfiguration.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_aps as aps
+                
+                random_cut_forest_configuration_property = aps.CfnAnomalyDetector.RandomCutForestConfigurationProperty(
+                    query="query",
+                
+                    # the properties below are optional
+                    ignore_near_expected_from_above=aps.CfnAnomalyDetector.IgnoreNearExpectedProperty(
+                        amount=123,
+                        ratio=123
+                    ),
+                    ignore_near_expected_from_below=aps.CfnAnomalyDetector.IgnoreNearExpectedProperty(
+                        amount=123,
+                        ratio=123
+                    ),
+                    sample_size=123,
+                    shingle_size=123
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__83993f42a131a948093792cb8cd7b4f710c6b4dffce6b17f386497f1cbe514ea)
+                check_type(argname="argument query", value=query, expected_type=type_hints["query"])
+                check_type(argname="argument ignore_near_expected_from_above", value=ignore_near_expected_from_above, expected_type=type_hints["ignore_near_expected_from_above"])
+                check_type(argname="argument ignore_near_expected_from_below", value=ignore_near_expected_from_below, expected_type=type_hints["ignore_near_expected_from_below"])
+                check_type(argname="argument sample_size", value=sample_size, expected_type=type_hints["sample_size"])
+                check_type(argname="argument shingle_size", value=shingle_size, expected_type=type_hints["shingle_size"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "query": query,
+            }
+            if ignore_near_expected_from_above is not None:
+                self._values["ignore_near_expected_from_above"] = ignore_near_expected_from_above
+            if ignore_near_expected_from_below is not None:
+                self._values["ignore_near_expected_from_below"] = ignore_near_expected_from_below
+            if sample_size is not None:
+                self._values["sample_size"] = sample_size
+            if shingle_size is not None:
+                self._values["shingle_size"] = shingle_size
+
+        @builtins.property
+        def query(self) -> builtins.str:
+            '''The Prometheus query used to retrieve the time-series data for anomaly detection.
+
+            .. epigraph::
+
+               Random Cut Forest queries must be wrapped by a supported PromQL aggregation operator. For more information, see `Aggregation operators <https://docs.aws.amazon.com/https://prometheus.io/docs/prometheus/latest/querying/operators/#aggregation-operators>`_ on the *Prometheus docs* website.
+
+               *Supported PromQL aggregation operators* : ``avg`` , ``count`` , ``group`` , ``max`` , ``min`` , ``quantile`` , ``stddev`` , ``stdvar`` , and ``sum`` .
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-aps-anomalydetector-randomcutforestconfiguration.html#cfn-aps-anomalydetector-randomcutforestconfiguration-query
+            '''
+            result = self._values.get("query")
+            assert result is not None, "Required property 'query' is missing"
+            return typing.cast(builtins.str, result)
+
+        @builtins.property
+        def ignore_near_expected_from_above(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAnomalyDetector.IgnoreNearExpectedProperty"]]:
+            '''Configuration for ignoring values that are near expected values from above during anomaly detection.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-aps-anomalydetector-randomcutforestconfiguration.html#cfn-aps-anomalydetector-randomcutforestconfiguration-ignorenearexpectedfromabove
+            '''
+            result = self._values.get("ignore_near_expected_from_above")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAnomalyDetector.IgnoreNearExpectedProperty"]], result)
+
+        @builtins.property
+        def ignore_near_expected_from_below(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAnomalyDetector.IgnoreNearExpectedProperty"]]:
+            '''Configuration for ignoring values that are near expected values from below during anomaly detection.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-aps-anomalydetector-randomcutforestconfiguration.html#cfn-aps-anomalydetector-randomcutforestconfiguration-ignorenearexpectedfrombelow
+            '''
+            result = self._values.get("ignore_near_expected_from_below")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAnomalyDetector.IgnoreNearExpectedProperty"]], result)
+
+        @builtins.property
+        def sample_size(self) -> typing.Optional[jsii.Number]:
+            '''The number of data points sampled from the input stream for the Random Cut Forest algorithm.
+
+            The default number is 256 consecutive data points.
+
+            :default: - 256
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-aps-anomalydetector-randomcutforestconfiguration.html#cfn-aps-anomalydetector-randomcutforestconfiguration-samplesize
+            '''
+            result = self._values.get("sample_size")
+            return typing.cast(typing.Optional[jsii.Number], result)
+
+        @builtins.property
+        def shingle_size(self) -> typing.Optional[jsii.Number]:
+            '''The number of consecutive data points used to create a shingle for the Random Cut Forest algorithm.
+
+            The default number is 8 consecutive data points.
+
+            :default: - 8
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-aps-anomalydetector-randomcutforestconfiguration.html#cfn-aps-anomalydetector-randomcutforestconfiguration-shinglesize
+            '''
+            result = self._values.get("shingle_size")
+            return typing.cast(typing.Optional[jsii.Number], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "RandomCutForestConfigurationProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
 
 
 @jsii.data_type(
@@ -138,22 +795,22 @@ class CfnAnomalyDetectorProps:
         self,
         *,
         alias: builtins.str,
-        configuration: typing.Union[_IResolvable_da3f097b, typing.Union["CfnAnomalyDetector.AnomalyDetectorConfigurationProperty", typing.Dict[builtins.str, typing.Any]]],
+        configuration: typing.Union[_IResolvable_da3f097b, typing.Union[CfnAnomalyDetector.AnomalyDetectorConfigurationProperty, typing.Dict[builtins.str, typing.Any]]],
         workspace: builtins.str,
         evaluation_interval_in_seconds: typing.Optional[jsii.Number] = None,
-        labels: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnAnomalyDetector.LabelProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        missing_data_action: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnAnomalyDetector.MissingDataActionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        labels: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAnomalyDetector.LabelProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        missing_data_action: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAnomalyDetector.MissingDataActionProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnAnomalyDetector``.
 
-        :param alias: The AnomalyDetector alias.
-        :param configuration: 
+        :param alias: The user-friendly name of the anomaly detector.
+        :param configuration: The algorithm configuration of the anomaly detector.
         :param workspace: An Amazon Managed Service for Prometheus workspace is a logical and isolated Prometheus server dedicated to ingesting, storing, and querying your Prometheus-compatible metrics.
-        :param evaluation_interval_in_seconds: The AnomalyDetector period of detection and metric generation. Default: - 60
-        :param labels: An array of key-value pairs to provide meta-data.
-        :param missing_data_action: 
-        :param tags: An array of key-value pairs to apply to this resource.
+        :param evaluation_interval_in_seconds: The frequency, in seconds, at which the anomaly detector evaluates metrics. Default: - 60
+        :param labels: The Amazon Managed Service for Prometheus metric labels associated with the anomaly detector.
+        :param missing_data_action: The action taken when data is missing during evaluation.
+        :param tags: The tags applied to the anomaly detector.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-aps-anomalydetector.html
         :exampleMetadata: fixture=_generated
@@ -226,7 +883,7 @@ class CfnAnomalyDetectorProps:
 
     @builtins.property
     def alias(self) -> builtins.str:
-        '''The AnomalyDetector alias.
+        '''The user-friendly name of the anomaly detector.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-aps-anomalydetector.html#cfn-aps-anomalydetector-alias
         '''
@@ -237,13 +894,14 @@ class CfnAnomalyDetectorProps:
     @builtins.property
     def configuration(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, "CfnAnomalyDetector.AnomalyDetectorConfigurationProperty"]:
-        '''
+    ) -> typing.Union[_IResolvable_da3f097b, CfnAnomalyDetector.AnomalyDetectorConfigurationProperty]:
+        '''The algorithm configuration of the anomaly detector.
+
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-aps-anomalydetector.html#cfn-aps-anomalydetector-configuration
         '''
         result = self._values.get("configuration")
         assert result is not None, "Required property 'configuration' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnAnomalyDetector.AnomalyDetectorConfigurationProperty"], result)
+        return typing.cast(typing.Union[_IResolvable_da3f097b, CfnAnomalyDetector.AnomalyDetectorConfigurationProperty], result)
 
     @builtins.property
     def workspace(self) -> builtins.str:
@@ -257,7 +915,7 @@ class CfnAnomalyDetectorProps:
 
     @builtins.property
     def evaluation_interval_in_seconds(self) -> typing.Optional[jsii.Number]:
-        '''The AnomalyDetector period of detection and metric generation.
+        '''The frequency, in seconds, at which the anomaly detector evaluates metrics.
 
         :default: - 60
 
@@ -269,27 +927,28 @@ class CfnAnomalyDetectorProps:
     @builtins.property
     def labels(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnAnomalyDetector.LabelProperty"]]]]:
-        '''An array of key-value pairs to provide meta-data.
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnAnomalyDetector.LabelProperty]]]]:
+        '''The Amazon Managed Service for Prometheus metric labels associated with the anomaly detector.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-aps-anomalydetector.html#cfn-aps-anomalydetector-labels
         '''
         result = self._values.get("labels")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnAnomalyDetector.LabelProperty"]]]], result)
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnAnomalyDetector.LabelProperty]]]], result)
 
     @builtins.property
     def missing_data_action(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAnomalyDetector.MissingDataActionProperty"]]:
-        '''
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnAnomalyDetector.MissingDataActionProperty]]:
+        '''The action taken when data is missing during evaluation.
+
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-aps-anomalydetector.html#cfn-aps-anomalydetector-missingdataaction
         '''
         result = self._values.get("missing_data_action")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAnomalyDetector.MissingDataActionProperty"]], result)
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnAnomalyDetector.MissingDataActionProperty]], result)
 
     @builtins.property
     def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
-        '''An array of key-value pairs to apply to this resource.
+        '''The tags applied to the anomaly detector.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-aps-anomalydetector.html#cfn-aps-anomalydetector-tags
         '''
@@ -306,6 +965,129 @@ class CfnAnomalyDetectorProps:
         return "CfnAnomalyDetectorProps(%s)" % ", ".join(
             k + "=" + repr(v) for k, v in self._values.items()
         )
+
+
+@jsii.implements(_IInspectable_c2943556, _IResourcePolicyRef_1aa7c1a2)
+class CfnResourcePolicy(
+    _CfnResource_9df397a6,
+    metaclass=jsii.JSIIMeta,
+    jsii_type="aws-cdk-lib.aws_aps.CfnResourcePolicy",
+):
+    '''Use resource-based policies to grant permissions to other AWS accounts or services to access your workspace.
+
+    Only Prometheus-compatible APIs can be used for workspace sharing. You can add non-Prometheus-compatible APIs to the policy, but they will be ignored. For more information, see `Prometheus-compatible APIs <https://docs.aws.amazon.com/prometheus/latest/userguide/AMP-APIReference-Prometheus-Compatible-Apis.html>`_ in the *Amazon Managed Service for Prometheus User Guide* .
+
+    If your workspace uses customer-managed AWS KMS keys for encryption, you must grant the principals in your resource-based policy access to those AWS KMS keys. You can do this by creating AWS KMS grants. For more information, see `CreateGrant <https://docs.aws.amazon.com/kms/latest/APIReference/API_CreateGrant.html>`_ in the *AWS KMS API Reference* and `Encryption at rest <https://docs.aws.amazon.com/prometheus/latest/userguide/encryption-at-rest-Amazon-Service-Prometheus.html>`_ in the *Amazon Managed Service for Prometheus User Guide* .
+
+    For more information about working with IAM , see `Using Amazon Managed Service for Prometheus with IAM <https://docs.aws.amazon.com/prometheus/latest/userguide/security_iam_service-with-iam.html>`_ in the *Amazon Managed Service for Prometheus User Guide* .
+
+    :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-aps-resourcepolicy.html
+    :cloudformationResource: AWS::APS::ResourcePolicy
+    :exampleMetadata: fixture=_generated
+
+    Example::
+
+        # The code below shows an example of how to instantiate this type.
+        # The values are placeholders you should change.
+        from aws_cdk import aws_aps as aps
+        
+        cfn_resource_policy = aps.CfnResourcePolicy(self, "MyCfnResourcePolicy",
+            policy_document="policyDocument",
+            workspace_arn="workspaceArn"
+        )
+    '''
+
+    def __init__(
+        self,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        *,
+        policy_document: builtins.str,
+        workspace_arn: builtins.str,
+    ) -> None:
+        '''Create a new ``AWS::APS::ResourcePolicy``.
+
+        :param scope: Scope in which this resource is defined.
+        :param id: Construct identifier for this resource (unique in its scope).
+        :param policy_document: The JSON to use as the Resource-based Policy.
+        :param workspace_arn: An ARN identifying a Workspace.
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__54f89d9ee1d6d400f40f83801fe40dee056ce969e9e0501ca1390285aab7cb82)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+        props = CfnResourcePolicyProps(
+            policy_document=policy_document, workspace_arn=workspace_arn
+        )
+
+        jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="inspect")
+    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+        '''Examines the CloudFormation resource and discloses attributes.
+
+        :param inspector: tree inspector to collect and process attributes.
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__7fd684bb5425ae9b9586530c2118e55043226673b8740171d3f7c2b1fbd03b3d)
+            check_type(argname="argument inspector", value=inspector, expected_type=type_hints["inspector"])
+        return typing.cast(None, jsii.invoke(self, "inspect", [inspector]))
+
+    @jsii.member(jsii_name="renderProperties")
+    def _render_properties(
+        self,
+        props: typing.Mapping[builtins.str, typing.Any],
+    ) -> typing.Mapping[builtins.str, typing.Any]:
+        '''
+        :param props: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__96c6a584b0420e6cc37e76ad4b000bc6d8f4137f577bf7075b4ec87bab8717d9)
+            check_type(argname="argument props", value=props, expected_type=type_hints["props"])
+        return typing.cast(typing.Mapping[builtins.str, typing.Any], jsii.invoke(self, "renderProperties", [props]))
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="CFN_RESOURCE_TYPE_NAME")
+    def CFN_RESOURCE_TYPE_NAME(cls) -> builtins.str:
+        '''The CloudFormation resource type name for this resource class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "CFN_RESOURCE_TYPE_NAME"))
+
+    @builtins.property
+    @jsii.member(jsii_name="cfnProperties")
+    def _cfn_properties(self) -> typing.Mapping[builtins.str, typing.Any]:
+        return typing.cast(typing.Mapping[builtins.str, typing.Any], jsii.get(self, "cfnProperties"))
+
+    @builtins.property
+    @jsii.member(jsii_name="resourcePolicyRef")
+    def resource_policy_ref(self) -> _ResourcePolicyReference_162e786c:
+        '''A reference to a ResourcePolicy resource.'''
+        return typing.cast(_ResourcePolicyReference_162e786c, jsii.get(self, "resourcePolicyRef"))
+
+    @builtins.property
+    @jsii.member(jsii_name="policyDocument")
+    def policy_document(self) -> builtins.str:
+        '''The JSON to use as the Resource-based Policy.'''
+        return typing.cast(builtins.str, jsii.get(self, "policyDocument"))
+
+    @policy_document.setter
+    def policy_document(self, value: builtins.str) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__d726921aa53fc43f461134d2df5d60edb5d56b4fa67ef6e4e82d305af7b7eba5)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "policyDocument", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="workspaceArn")
+    def workspace_arn(self) -> builtins.str:
+        '''An ARN identifying a Workspace.'''
+        return typing.cast(builtins.str, jsii.get(self, "workspaceArn"))
+
+    @workspace_arn.setter
+    def workspace_arn(self, value: builtins.str) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__2f020f5d54f91c35f0b4332b16391ef6561cfc07a46cc5fc1e48d4acdb82a4b8)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "workspaceArn", value) # pyright: ignore[reportArgumentType]
 
 
 @jsii.data_type(
@@ -381,6 +1163,179 @@ class CfnResourcePolicyProps:
         return "CfnResourcePolicyProps(%s)" % ", ".join(
             k + "=" + repr(v) for k, v in self._values.items()
         )
+
+
+@jsii.implements(_IInspectable_c2943556, _IRuleGroupsNamespaceRef_7b589be9, _ITaggable_36806126)
+class CfnRuleGroupsNamespace(
+    _CfnResource_9df397a6,
+    metaclass=jsii.JSIIMeta,
+    jsii_type="aws-cdk-lib.aws_aps.CfnRuleGroupsNamespace",
+):
+    '''The definition of a rule groups namespace in an Amazon Managed Service for Prometheus workspace.
+
+    A rule groups namespace is associated with exactly one rules file. A workspace can have multiple rule groups namespaces. For more information about rules files, see `Creating a rules file <https://docs.aws.amazon.com/prometheus/latest/userguide/AMP-ruler-rulesfile.html>`_ , in the *Amazon Managed Service for Prometheus User Guide* .
+
+    :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-aps-rulegroupsnamespace.html
+    :cloudformationResource: AWS::APS::RuleGroupsNamespace
+    :exampleMetadata: fixture=_generated
+
+    Example::
+
+        # The code below shows an example of how to instantiate this type.
+        # The values are placeholders you should change.
+        from aws_cdk import aws_aps as aps
+        
+        cfn_rule_groups_namespace = aps.CfnRuleGroupsNamespace(self, "MyCfnRuleGroupsNamespace",
+            data="data",
+            name="name",
+            workspace="workspace",
+        
+            # the properties below are optional
+            tags=[CfnTag(
+                key="key",
+                value="value"
+            )]
+        )
+    '''
+
+    def __init__(
+        self,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        *,
+        data: builtins.str,
+        name: builtins.str,
+        workspace: builtins.str,
+        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+    ) -> None:
+        '''Create a new ``AWS::APS::RuleGroupsNamespace``.
+
+        :param scope: Scope in which this resource is defined.
+        :param id: Construct identifier for this resource (unique in its scope).
+        :param data: The rules file used in the namespace. For more details about the rules file, see `Creating a rules file <https://docs.aws.amazon.com/prometheus/latest/userguide/AMP-ruler-rulesfile.html>`_ in the *Amazon Managed Service for Prometheus User Guide* .
+        :param name: The name of the rule groups namespace.
+        :param workspace: The ID of the workspace to add the rule groups namespace.
+        :param tags: The list of tag keys and values that are associated with the rule groups namespace.
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__02d681a4d4a1e9d9052c98f45bf8b21257e825ee8185b30ea4b6f887fc7416b1)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+        props = CfnRuleGroupsNamespaceProps(
+            data=data, name=name, workspace=workspace, tags=tags
+        )
+
+        jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="inspect")
+    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+        '''Examines the CloudFormation resource and discloses attributes.
+
+        :param inspector: tree inspector to collect and process attributes.
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__f066376b2a4b15a103f9a01bca66f252615381ddc55bd5508262712fd03eec2d)
+            check_type(argname="argument inspector", value=inspector, expected_type=type_hints["inspector"])
+        return typing.cast(None, jsii.invoke(self, "inspect", [inspector]))
+
+    @jsii.member(jsii_name="renderProperties")
+    def _render_properties(
+        self,
+        props: typing.Mapping[builtins.str, typing.Any],
+    ) -> typing.Mapping[builtins.str, typing.Any]:
+        '''
+        :param props: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__501ad912878791d9cc1a45e52a9642fb0747f4ddf4482708286f9bfde7e036de)
+            check_type(argname="argument props", value=props, expected_type=type_hints["props"])
+        return typing.cast(typing.Mapping[builtins.str, typing.Any], jsii.invoke(self, "renderProperties", [props]))
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="CFN_RESOURCE_TYPE_NAME")
+    def CFN_RESOURCE_TYPE_NAME(cls) -> builtins.str:
+        '''The CloudFormation resource type name for this resource class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "CFN_RESOURCE_TYPE_NAME"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrArn")
+    def attr_arn(self) -> builtins.str:
+        '''The ARN of the rule groups namespace.
+
+        For example, ``arn:aws:aps:<region>:123456789012:rulegroupsnamespace/ws-example1-1234-abcd-5678-ef90abcd1234/rulesfile1`` .
+
+        :cloudformationAttribute: Arn
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrArn"))
+
+    @builtins.property
+    @jsii.member(jsii_name="cfnProperties")
+    def _cfn_properties(self) -> typing.Mapping[builtins.str, typing.Any]:
+        return typing.cast(typing.Mapping[builtins.str, typing.Any], jsii.get(self, "cfnProperties"))
+
+    @builtins.property
+    @jsii.member(jsii_name="ruleGroupsNamespaceRef")
+    def rule_groups_namespace_ref(self) -> _RuleGroupsNamespaceReference_9d4673a3:
+        '''A reference to a RuleGroupsNamespace resource.'''
+        return typing.cast(_RuleGroupsNamespaceReference_9d4673a3, jsii.get(self, "ruleGroupsNamespaceRef"))
+
+    @builtins.property
+    @jsii.member(jsii_name="tags")
+    def tags(self) -> _TagManager_0a598cb3:
+        '''Tag Manager which manages the tags for this resource.'''
+        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+
+    @builtins.property
+    @jsii.member(jsii_name="data")
+    def data(self) -> builtins.str:
+        '''The rules file used in the namespace.'''
+        return typing.cast(builtins.str, jsii.get(self, "data"))
+
+    @data.setter
+    def data(self, value: builtins.str) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__327e955bc86deb15923357f0f050e077304b8dbbb2c9baba9d84a13c5d7b695d)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "data", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="name")
+    def name(self) -> builtins.str:
+        '''The name of the rule groups namespace.'''
+        return typing.cast(builtins.str, jsii.get(self, "name"))
+
+    @name.setter
+    def name(self, value: builtins.str) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__6f3851e1fa5b758763dff1a85515e41a8c57e1b4da81b2e677f003890944957f)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "name", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="workspace")
+    def workspace(self) -> builtins.str:
+        '''The ID of the workspace to add the rule groups namespace.'''
+        return typing.cast(builtins.str, jsii.get(self, "workspace"))
+
+    @workspace.setter
+    def workspace(self, value: builtins.str) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__f899db17dfa1e1837e2b90cca5f83f23f67ca015116201811ad84d044e9ebe95)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "workspace", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="tagsRaw")
+    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+        '''The list of tag keys and values that are associated with the rule groups namespace.'''
+        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+
+    @tags_raw.setter
+    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__d9af819e60d52c87c9369e4854d0dfc8d4917db97219839fbc11cf2bdad55659)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "tagsRaw", value) # pyright: ignore[reportArgumentType]
 
 
 @jsii.data_type(
@@ -497,1790 +1452,7 @@ class CfnRuleGroupsNamespaceProps:
         )
 
 
-@jsii.data_type(
-    jsii_type="aws-cdk-lib.aws_aps.CfnScraperProps",
-    jsii_struct_bases=[],
-    name_mapping={
-        "destination": "destination",
-        "scrape_configuration": "scrapeConfiguration",
-        "source": "source",
-        "alias": "alias",
-        "role_configuration": "roleConfiguration",
-        "scraper_logging_configuration": "scraperLoggingConfiguration",
-        "tags": "tags",
-    },
-)
-class CfnScraperProps:
-    def __init__(
-        self,
-        *,
-        destination: typing.Union[_IResolvable_da3f097b, typing.Union["CfnScraper.DestinationProperty", typing.Dict[builtins.str, typing.Any]]],
-        scrape_configuration: typing.Union[_IResolvable_da3f097b, typing.Union["CfnScraper.ScrapeConfigurationProperty", typing.Dict[builtins.str, typing.Any]]],
-        source: typing.Union[_IResolvable_da3f097b, typing.Union["CfnScraper.SourceProperty", typing.Dict[builtins.str, typing.Any]]],
-        alias: typing.Optional[builtins.str] = None,
-        role_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnScraper.RoleConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        scraper_logging_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnScraper.ScraperLoggingConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-    ) -> None:
-        '''Properties for defining a ``CfnScraper``.
-
-        :param destination: The Amazon Managed Service for Prometheus workspace the scraper sends metrics to.
-        :param scrape_configuration: The configuration in use by the scraper.
-        :param source: The Amazon EKS cluster from which the scraper collects metrics.
-        :param alias: An optional user-assigned scraper alias.
-        :param role_configuration: The role configuration in an Amazon Managed Service for Prometheus scraper.
-        :param scraper_logging_configuration: The definition of logging configuration in an Amazon Managed Service for Prometheus workspace.
-        :param tags: (Optional) The list of tag keys and values associated with the scraper.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-aps-scraper.html
-        :exampleMetadata: fixture=_generated
-
-        Example::
-
-            # The code below shows an example of how to instantiate this type.
-            # The values are placeholders you should change.
-            from aws_cdk import aws_aps as aps
-            
-            cfn_scraper_props = aps.CfnScraperProps(
-                destination=aps.CfnScraper.DestinationProperty(
-                    amp_configuration=aps.CfnScraper.AmpConfigurationProperty(
-                        workspace_arn="workspaceArn"
-                    )
-                ),
-                scrape_configuration=aps.CfnScraper.ScrapeConfigurationProperty(
-                    configuration_blob="configurationBlob"
-                ),
-                source=aps.CfnScraper.SourceProperty(
-                    eks_configuration=aps.CfnScraper.EksConfigurationProperty(
-                        cluster_arn="clusterArn",
-                        subnet_ids=["subnetIds"],
-            
-                        # the properties below are optional
-                        security_group_ids=["securityGroupIds"]
-                    )
-                ),
-            
-                # the properties below are optional
-                alias="alias",
-                role_configuration=aps.CfnScraper.RoleConfigurationProperty(
-                    source_role_arn="sourceRoleArn",
-                    target_role_arn="targetRoleArn"
-                ),
-                scraper_logging_configuration=aps.CfnScraper.ScraperLoggingConfigurationProperty(
-                    logging_destination=aps.CfnScraper.ScraperLoggingDestinationProperty(
-                        cloud_watch_logs=aps.CfnScraper.CloudWatchLogDestinationProperty(
-                            log_group_arn="logGroupArn"
-                        )
-                    ),
-                    scraper_components=[aps.CfnScraper.ScraperComponentProperty(
-                        type="type",
-            
-                        # the properties below are optional
-                        config=aps.CfnScraper.ComponentConfigProperty(
-                            options={
-                                "options_key": "options"
-                            }
-                        )
-                    )]
-                ),
-                tags=[CfnTag(
-                    key="key",
-                    value="value"
-                )]
-            )
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__f302dfc2aa92636b313e32f5d91a0ccfd79ebde0259b977f6291d4c8329455d7)
-            check_type(argname="argument destination", value=destination, expected_type=type_hints["destination"])
-            check_type(argname="argument scrape_configuration", value=scrape_configuration, expected_type=type_hints["scrape_configuration"])
-            check_type(argname="argument source", value=source, expected_type=type_hints["source"])
-            check_type(argname="argument alias", value=alias, expected_type=type_hints["alias"])
-            check_type(argname="argument role_configuration", value=role_configuration, expected_type=type_hints["role_configuration"])
-            check_type(argname="argument scraper_logging_configuration", value=scraper_logging_configuration, expected_type=type_hints["scraper_logging_configuration"])
-            check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
-        self._values: typing.Dict[builtins.str, typing.Any] = {
-            "destination": destination,
-            "scrape_configuration": scrape_configuration,
-            "source": source,
-        }
-        if alias is not None:
-            self._values["alias"] = alias
-        if role_configuration is not None:
-            self._values["role_configuration"] = role_configuration
-        if scraper_logging_configuration is not None:
-            self._values["scraper_logging_configuration"] = scraper_logging_configuration
-        if tags is not None:
-            self._values["tags"] = tags
-
-    @builtins.property
-    def destination(
-        self,
-    ) -> typing.Union[_IResolvable_da3f097b, "CfnScraper.DestinationProperty"]:
-        '''The Amazon Managed Service for Prometheus workspace the scraper sends metrics to.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-aps-scraper.html#cfn-aps-scraper-destination
-        '''
-        result = self._values.get("destination")
-        assert result is not None, "Required property 'destination' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnScraper.DestinationProperty"], result)
-
-    @builtins.property
-    def scrape_configuration(
-        self,
-    ) -> typing.Union[_IResolvable_da3f097b, "CfnScraper.ScrapeConfigurationProperty"]:
-        '''The configuration in use by the scraper.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-aps-scraper.html#cfn-aps-scraper-scrapeconfiguration
-        '''
-        result = self._values.get("scrape_configuration")
-        assert result is not None, "Required property 'scrape_configuration' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnScraper.ScrapeConfigurationProperty"], result)
-
-    @builtins.property
-    def source(
-        self,
-    ) -> typing.Union[_IResolvable_da3f097b, "CfnScraper.SourceProperty"]:
-        '''The Amazon EKS cluster from which the scraper collects metrics.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-aps-scraper.html#cfn-aps-scraper-source
-        '''
-        result = self._values.get("source")
-        assert result is not None, "Required property 'source' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnScraper.SourceProperty"], result)
-
-    @builtins.property
-    def alias(self) -> typing.Optional[builtins.str]:
-        '''An optional user-assigned scraper alias.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-aps-scraper.html#cfn-aps-scraper-alias
-        '''
-        result = self._values.get("alias")
-        return typing.cast(typing.Optional[builtins.str], result)
-
-    @builtins.property
-    def role_configuration(
-        self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnScraper.RoleConfigurationProperty"]]:
-        '''The role configuration in an Amazon Managed Service for Prometheus scraper.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-aps-scraper.html#cfn-aps-scraper-roleconfiguration
-        '''
-        result = self._values.get("role_configuration")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnScraper.RoleConfigurationProperty"]], result)
-
-    @builtins.property
-    def scraper_logging_configuration(
-        self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnScraper.ScraperLoggingConfigurationProperty"]]:
-        '''The definition of logging configuration in an Amazon Managed Service for Prometheus workspace.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-aps-scraper.html#cfn-aps-scraper-scraperloggingconfiguration
-        '''
-        result = self._values.get("scraper_logging_configuration")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnScraper.ScraperLoggingConfigurationProperty"]], result)
-
-    @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
-        '''(Optional) The list of tag keys and values associated with the scraper.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-aps-scraper.html#cfn-aps-scraper-tags
-        '''
-        result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
-
-    def __eq__(self, rhs: typing.Any) -> builtins.bool:
-        return isinstance(rhs, self.__class__) and rhs._values == self._values
-
-    def __ne__(self, rhs: typing.Any) -> builtins.bool:
-        return not (rhs == self)
-
-    def __repr__(self) -> str:
-        return "CfnScraperProps(%s)" % ", ".join(
-            k + "=" + repr(v) for k, v in self._values.items()
-        )
-
-
-@jsii.data_type(
-    jsii_type="aws-cdk-lib.aws_aps.CfnWorkspaceProps",
-    jsii_struct_bases=[],
-    name_mapping={
-        "alert_manager_definition": "alertManagerDefinition",
-        "alias": "alias",
-        "kms_key_arn": "kmsKeyArn",
-        "logging_configuration": "loggingConfiguration",
-        "query_logging_configuration": "queryLoggingConfiguration",
-        "tags": "tags",
-        "workspace_configuration": "workspaceConfiguration",
-    },
-)
-class CfnWorkspaceProps:
-    def __init__(
-        self,
-        *,
-        alert_manager_definition: typing.Optional[builtins.str] = None,
-        alias: typing.Optional[builtins.str] = None,
-        kms_key_arn: typing.Optional[builtins.str] = None,
-        logging_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnWorkspace.LoggingConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        query_logging_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnWorkspace.QueryLoggingConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-        workspace_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnWorkspace.WorkspaceConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-    ) -> None:
-        '''Properties for defining a ``CfnWorkspace``.
-
-        :param alert_manager_definition: The alert manager definition, a YAML configuration for the alert manager in your Amazon Managed Service for Prometheus workspace. For details about the alert manager definition, see `Creating an alert manager configuration files <https://docs.aws.amazon.com/prometheus/latest/userguide/AMP-alertmanager-config.html>`_ in the *Amazon Managed Service for Prometheus User Guide* . The following example shows part of a CloudFormation YAML file with an embedded alert manager definition (following the ``- |-`` ). ``Workspace: Type: AWS::APS::Workspace .... Properties: .... AlertManagerDefinition: Fn::Sub: - |- alertmanager_config: | templates: - 'default_template' route: receiver: example-sns receivers: - name: example-sns sns_configs: - topic_arn: 'arn:aws:sns:${AWS::Region}:${AWS::AccountId}:${TopicName}' -``
-        :param alias: The alias that is assigned to this workspace to help identify it. It does not need to be unique.
-        :param kms_key_arn: (optional) The ARN for a customer managed AWS KMS key to use for encrypting data within your workspace. For more information about using your own key in your workspace, see `Encryption at rest <https://docs.aws.amazon.com/prometheus/latest/userguide/encryption-at-rest-Amazon-Service-Prometheus.html>`_ in the *Amazon Managed Service for Prometheus User Guide* .
-        :param logging_configuration: Contains information about the logging configuration for the workspace.
-        :param query_logging_configuration: The definition of logging configuration in an Amazon Managed Service for Prometheus workspace.
-        :param tags: The list of tag keys and values that are associated with the workspace.
-        :param workspace_configuration: Use this structure to define label sets and the ingestion limits for time series that match label sets, and to specify the retention period of the workspace.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-aps-workspace.html
-        :exampleMetadata: fixture=_generated
-
-        Example::
-
-            # The code below shows an example of how to instantiate this type.
-            # The values are placeholders you should change.
-            from aws_cdk import aws_aps as aps
-            
-            cfn_workspace_props = aps.CfnWorkspaceProps(
-                alert_manager_definition="alertManagerDefinition",
-                alias="alias",
-                kms_key_arn="kmsKeyArn",
-                logging_configuration=aps.CfnWorkspace.LoggingConfigurationProperty(
-                    log_group_arn="logGroupArn"
-                ),
-                query_logging_configuration=aps.CfnWorkspace.QueryLoggingConfigurationProperty(
-                    destinations=[aps.CfnWorkspace.LoggingDestinationProperty(
-                        cloud_watch_logs=aps.CfnWorkspace.CloudWatchLogDestinationProperty(
-                            log_group_arn="logGroupArn"
-                        ),
-                        filters=aps.CfnWorkspace.LoggingFilterProperty(
-                            qsp_threshold=123
-                        )
-                    )]
-                ),
-                tags=[CfnTag(
-                    key="key",
-                    value="value"
-                )],
-                workspace_configuration=aps.CfnWorkspace.WorkspaceConfigurationProperty(
-                    limits_per_label_sets=[aps.CfnWorkspace.LimitsPerLabelSetProperty(
-                        label_set=[aps.CfnWorkspace.LabelProperty(
-                            name="name",
-                            value="value"
-                        )],
-                        limits=aps.CfnWorkspace.LimitsPerLabelSetEntryProperty(
-                            max_series=123
-                        )
-                    )],
-                    retention_period_in_days=123
-                )
-            )
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__98e95bd874171795b8c6f6104e5fee9fa1d8f50cb6e1edc6d2cc01a77eb0f50a)
-            check_type(argname="argument alert_manager_definition", value=alert_manager_definition, expected_type=type_hints["alert_manager_definition"])
-            check_type(argname="argument alias", value=alias, expected_type=type_hints["alias"])
-            check_type(argname="argument kms_key_arn", value=kms_key_arn, expected_type=type_hints["kms_key_arn"])
-            check_type(argname="argument logging_configuration", value=logging_configuration, expected_type=type_hints["logging_configuration"])
-            check_type(argname="argument query_logging_configuration", value=query_logging_configuration, expected_type=type_hints["query_logging_configuration"])
-            check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
-            check_type(argname="argument workspace_configuration", value=workspace_configuration, expected_type=type_hints["workspace_configuration"])
-        self._values: typing.Dict[builtins.str, typing.Any] = {}
-        if alert_manager_definition is not None:
-            self._values["alert_manager_definition"] = alert_manager_definition
-        if alias is not None:
-            self._values["alias"] = alias
-        if kms_key_arn is not None:
-            self._values["kms_key_arn"] = kms_key_arn
-        if logging_configuration is not None:
-            self._values["logging_configuration"] = logging_configuration
-        if query_logging_configuration is not None:
-            self._values["query_logging_configuration"] = query_logging_configuration
-        if tags is not None:
-            self._values["tags"] = tags
-        if workspace_configuration is not None:
-            self._values["workspace_configuration"] = workspace_configuration
-
-    @builtins.property
-    def alert_manager_definition(self) -> typing.Optional[builtins.str]:
-        '''The alert manager definition, a YAML configuration for the alert manager in your Amazon Managed Service for Prometheus workspace.
-
-        For details about the alert manager definition, see `Creating an alert manager configuration files <https://docs.aws.amazon.com/prometheus/latest/userguide/AMP-alertmanager-config.html>`_ in the *Amazon Managed Service for Prometheus User Guide* .
-
-        The following example shows part of a CloudFormation YAML file with an embedded alert manager definition (following the ``- |-`` ).
-
-        ``Workspace: Type: AWS::APS::Workspace .... Properties: .... AlertManagerDefinition: Fn::Sub: - |- alertmanager_config: | templates: - 'default_template' route: receiver: example-sns receivers: - name: example-sns sns_configs: - topic_arn: 'arn:aws:sns:${AWS::Region}:${AWS::AccountId}:${TopicName}' -``
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-aps-workspace.html#cfn-aps-workspace-alertmanagerdefinition
-        '''
-        result = self._values.get("alert_manager_definition")
-        return typing.cast(typing.Optional[builtins.str], result)
-
-    @builtins.property
-    def alias(self) -> typing.Optional[builtins.str]:
-        '''The alias that is assigned to this workspace to help identify it.
-
-        It does not need to be unique.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-aps-workspace.html#cfn-aps-workspace-alias
-        '''
-        result = self._values.get("alias")
-        return typing.cast(typing.Optional[builtins.str], result)
-
-    @builtins.property
-    def kms_key_arn(self) -> typing.Optional[builtins.str]:
-        '''(optional) The ARN for a customer managed AWS KMS key to use for encrypting data within your workspace.
-
-        For more information about using your own key in your workspace, see `Encryption at rest <https://docs.aws.amazon.com/prometheus/latest/userguide/encryption-at-rest-Amazon-Service-Prometheus.html>`_ in the *Amazon Managed Service for Prometheus User Guide* .
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-aps-workspace.html#cfn-aps-workspace-kmskeyarn
-        '''
-        result = self._values.get("kms_key_arn")
-        return typing.cast(typing.Optional[builtins.str], result)
-
-    @builtins.property
-    def logging_configuration(
-        self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnWorkspace.LoggingConfigurationProperty"]]:
-        '''Contains information about the logging configuration for the workspace.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-aps-workspace.html#cfn-aps-workspace-loggingconfiguration
-        '''
-        result = self._values.get("logging_configuration")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnWorkspace.LoggingConfigurationProperty"]], result)
-
-    @builtins.property
-    def query_logging_configuration(
-        self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnWorkspace.QueryLoggingConfigurationProperty"]]:
-        '''The definition of logging configuration in an Amazon Managed Service for Prometheus workspace.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-aps-workspace.html#cfn-aps-workspace-queryloggingconfiguration
-        '''
-        result = self._values.get("query_logging_configuration")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnWorkspace.QueryLoggingConfigurationProperty"]], result)
-
-    @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
-        '''The list of tag keys and values that are associated with the workspace.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-aps-workspace.html#cfn-aps-workspace-tags
-        '''
-        result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
-
-    @builtins.property
-    def workspace_configuration(
-        self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnWorkspace.WorkspaceConfigurationProperty"]]:
-        '''Use this structure to define label sets and the ingestion limits for time series that match label sets, and to specify the retention period of the workspace.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-aps-workspace.html#cfn-aps-workspace-workspaceconfiguration
-        '''
-        result = self._values.get("workspace_configuration")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnWorkspace.WorkspaceConfigurationProperty"]], result)
-
-    def __eq__(self, rhs: typing.Any) -> builtins.bool:
-        return isinstance(rhs, self.__class__) and rhs._values == self._values
-
-    def __ne__(self, rhs: typing.Any) -> builtins.bool:
-        return not (rhs == self)
-
-    def __repr__(self) -> str:
-        return "CfnWorkspaceProps(%s)" % ", ".join(
-            k + "=" + repr(v) for k, v in self._values.items()
-        )
-
-
-@jsii.interface(jsii_type="aws-cdk-lib.aws_aps.IAnomalyDetectorRef")
-class IAnomalyDetectorRef(
-    _constructs_77d1e7e8.IConstruct,
-    _IEnvironmentAware_a408b00d,
-    typing_extensions.Protocol,
-):
-    '''(experimental) Indicates that this resource can be referenced as a AnomalyDetector.
-
-    :stability: experimental
-    '''
-
-    @builtins.property
-    @jsii.member(jsii_name="anomalyDetectorRef")
-    def anomaly_detector_ref(self) -> AnomalyDetectorReference:
-        '''(experimental) A reference to a AnomalyDetector resource.
-
-        :stability: experimental
-        '''
-        ...
-
-
-class _IAnomalyDetectorRefProxy(
-    jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
-    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
-):
-    '''(experimental) Indicates that this resource can be referenced as a AnomalyDetector.
-
-    :stability: experimental
-    '''
-
-    __jsii_type__: typing.ClassVar[str] = "aws-cdk-lib.aws_aps.IAnomalyDetectorRef"
-
-    @builtins.property
-    @jsii.member(jsii_name="anomalyDetectorRef")
-    def anomaly_detector_ref(self) -> AnomalyDetectorReference:
-        '''(experimental) A reference to a AnomalyDetector resource.
-
-        :stability: experimental
-        '''
-        return typing.cast(AnomalyDetectorReference, jsii.get(self, "anomalyDetectorRef"))
-
-# Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
-typing.cast(typing.Any, IAnomalyDetectorRef).__jsii_proxy_class__ = lambda : _IAnomalyDetectorRefProxy
-
-
-@jsii.interface(jsii_type="aws-cdk-lib.aws_aps.IResourcePolicyRef")
-class IResourcePolicyRef(
-    _constructs_77d1e7e8.IConstruct,
-    _IEnvironmentAware_a408b00d,
-    typing_extensions.Protocol,
-):
-    '''(experimental) Indicates that this resource can be referenced as a ResourcePolicy.
-
-    :stability: experimental
-    '''
-
-    @builtins.property
-    @jsii.member(jsii_name="resourcePolicyRef")
-    def resource_policy_ref(self) -> "ResourcePolicyReference":
-        '''(experimental) A reference to a ResourcePolicy resource.
-
-        :stability: experimental
-        '''
-        ...
-
-
-class _IResourcePolicyRefProxy(
-    jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
-    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
-):
-    '''(experimental) Indicates that this resource can be referenced as a ResourcePolicy.
-
-    :stability: experimental
-    '''
-
-    __jsii_type__: typing.ClassVar[str] = "aws-cdk-lib.aws_aps.IResourcePolicyRef"
-
-    @builtins.property
-    @jsii.member(jsii_name="resourcePolicyRef")
-    def resource_policy_ref(self) -> "ResourcePolicyReference":
-        '''(experimental) A reference to a ResourcePolicy resource.
-
-        :stability: experimental
-        '''
-        return typing.cast("ResourcePolicyReference", jsii.get(self, "resourcePolicyRef"))
-
-# Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
-typing.cast(typing.Any, IResourcePolicyRef).__jsii_proxy_class__ = lambda : _IResourcePolicyRefProxy
-
-
-@jsii.interface(jsii_type="aws-cdk-lib.aws_aps.IRuleGroupsNamespaceRef")
-class IRuleGroupsNamespaceRef(
-    _constructs_77d1e7e8.IConstruct,
-    _IEnvironmentAware_a408b00d,
-    typing_extensions.Protocol,
-):
-    '''(experimental) Indicates that this resource can be referenced as a RuleGroupsNamespace.
-
-    :stability: experimental
-    '''
-
-    @builtins.property
-    @jsii.member(jsii_name="ruleGroupsNamespaceRef")
-    def rule_groups_namespace_ref(self) -> "RuleGroupsNamespaceReference":
-        '''(experimental) A reference to a RuleGroupsNamespace resource.
-
-        :stability: experimental
-        '''
-        ...
-
-
-class _IRuleGroupsNamespaceRefProxy(
-    jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
-    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
-):
-    '''(experimental) Indicates that this resource can be referenced as a RuleGroupsNamespace.
-
-    :stability: experimental
-    '''
-
-    __jsii_type__: typing.ClassVar[str] = "aws-cdk-lib.aws_aps.IRuleGroupsNamespaceRef"
-
-    @builtins.property
-    @jsii.member(jsii_name="ruleGroupsNamespaceRef")
-    def rule_groups_namespace_ref(self) -> "RuleGroupsNamespaceReference":
-        '''(experimental) A reference to a RuleGroupsNamespace resource.
-
-        :stability: experimental
-        '''
-        return typing.cast("RuleGroupsNamespaceReference", jsii.get(self, "ruleGroupsNamespaceRef"))
-
-# Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
-typing.cast(typing.Any, IRuleGroupsNamespaceRef).__jsii_proxy_class__ = lambda : _IRuleGroupsNamespaceRefProxy
-
-
-@jsii.interface(jsii_type="aws-cdk-lib.aws_aps.IScraperRef")
-class IScraperRef(
-    _constructs_77d1e7e8.IConstruct,
-    _IEnvironmentAware_a408b00d,
-    typing_extensions.Protocol,
-):
-    '''(experimental) Indicates that this resource can be referenced as a Scraper.
-
-    :stability: experimental
-    '''
-
-    @builtins.property
-    @jsii.member(jsii_name="scraperRef")
-    def scraper_ref(self) -> "ScraperReference":
-        '''(experimental) A reference to a Scraper resource.
-
-        :stability: experimental
-        '''
-        ...
-
-
-class _IScraperRefProxy(
-    jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
-    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
-):
-    '''(experimental) Indicates that this resource can be referenced as a Scraper.
-
-    :stability: experimental
-    '''
-
-    __jsii_type__: typing.ClassVar[str] = "aws-cdk-lib.aws_aps.IScraperRef"
-
-    @builtins.property
-    @jsii.member(jsii_name="scraperRef")
-    def scraper_ref(self) -> "ScraperReference":
-        '''(experimental) A reference to a Scraper resource.
-
-        :stability: experimental
-        '''
-        return typing.cast("ScraperReference", jsii.get(self, "scraperRef"))
-
-# Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
-typing.cast(typing.Any, IScraperRef).__jsii_proxy_class__ = lambda : _IScraperRefProxy
-
-
-@jsii.interface(jsii_type="aws-cdk-lib.aws_aps.IWorkspaceRef")
-class IWorkspaceRef(
-    _constructs_77d1e7e8.IConstruct,
-    _IEnvironmentAware_a408b00d,
-    typing_extensions.Protocol,
-):
-    '''(experimental) Indicates that this resource can be referenced as a Workspace.
-
-    :stability: experimental
-    '''
-
-    @builtins.property
-    @jsii.member(jsii_name="workspaceRef")
-    def workspace_ref(self) -> "WorkspaceReference":
-        '''(experimental) A reference to a Workspace resource.
-
-        :stability: experimental
-        '''
-        ...
-
-
-class _IWorkspaceRefProxy(
-    jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
-    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
-):
-    '''(experimental) Indicates that this resource can be referenced as a Workspace.
-
-    :stability: experimental
-    '''
-
-    __jsii_type__: typing.ClassVar[str] = "aws-cdk-lib.aws_aps.IWorkspaceRef"
-
-    @builtins.property
-    @jsii.member(jsii_name="workspaceRef")
-    def workspace_ref(self) -> "WorkspaceReference":
-        '''(experimental) A reference to a Workspace resource.
-
-        :stability: experimental
-        '''
-        return typing.cast("WorkspaceReference", jsii.get(self, "workspaceRef"))
-
-# Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
-typing.cast(typing.Any, IWorkspaceRef).__jsii_proxy_class__ = lambda : _IWorkspaceRefProxy
-
-
-@jsii.data_type(
-    jsii_type="aws-cdk-lib.aws_aps.ResourcePolicyReference",
-    jsii_struct_bases=[],
-    name_mapping={"workspace_arn": "workspaceArn"},
-)
-class ResourcePolicyReference:
-    def __init__(self, *, workspace_arn: builtins.str) -> None:
-        '''A reference to a ResourcePolicy resource.
-
-        :param workspace_arn: The WorkspaceArn of the ResourcePolicy resource.
-
-        :exampleMetadata: fixture=_generated
-
-        Example::
-
-            # The code below shows an example of how to instantiate this type.
-            # The values are placeholders you should change.
-            from aws_cdk import aws_aps as aps
-            
-            resource_policy_reference = aps.ResourcePolicyReference(
-                workspace_arn="workspaceArn"
-            )
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__e4dbac0a5137da3d0f209a15168185193d0f20c786a3f891fbd553cb9c449a06)
-            check_type(argname="argument workspace_arn", value=workspace_arn, expected_type=type_hints["workspace_arn"])
-        self._values: typing.Dict[builtins.str, typing.Any] = {
-            "workspace_arn": workspace_arn,
-        }
-
-    @builtins.property
-    def workspace_arn(self) -> builtins.str:
-        '''The WorkspaceArn of the ResourcePolicy resource.'''
-        result = self._values.get("workspace_arn")
-        assert result is not None, "Required property 'workspace_arn' is missing"
-        return typing.cast(builtins.str, result)
-
-    def __eq__(self, rhs: typing.Any) -> builtins.bool:
-        return isinstance(rhs, self.__class__) and rhs._values == self._values
-
-    def __ne__(self, rhs: typing.Any) -> builtins.bool:
-        return not (rhs == self)
-
-    def __repr__(self) -> str:
-        return "ResourcePolicyReference(%s)" % ", ".join(
-            k + "=" + repr(v) for k, v in self._values.items()
-        )
-
-
-@jsii.data_type(
-    jsii_type="aws-cdk-lib.aws_aps.RuleGroupsNamespaceReference",
-    jsii_struct_bases=[],
-    name_mapping={"rule_groups_namespace_arn": "ruleGroupsNamespaceArn"},
-)
-class RuleGroupsNamespaceReference:
-    def __init__(self, *, rule_groups_namespace_arn: builtins.str) -> None:
-        '''A reference to a RuleGroupsNamespace resource.
-
-        :param rule_groups_namespace_arn: The Arn of the RuleGroupsNamespace resource.
-
-        :exampleMetadata: fixture=_generated
-
-        Example::
-
-            # The code below shows an example of how to instantiate this type.
-            # The values are placeholders you should change.
-            from aws_cdk import aws_aps as aps
-            
-            rule_groups_namespace_reference = aps.RuleGroupsNamespaceReference(
-                rule_groups_namespace_arn="ruleGroupsNamespaceArn"
-            )
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__b0c92540ac1210bf274d7f5f6e632c06d0a3cafee0e16e47eb2965b3f150ccf4)
-            check_type(argname="argument rule_groups_namespace_arn", value=rule_groups_namespace_arn, expected_type=type_hints["rule_groups_namespace_arn"])
-        self._values: typing.Dict[builtins.str, typing.Any] = {
-            "rule_groups_namespace_arn": rule_groups_namespace_arn,
-        }
-
-    @builtins.property
-    def rule_groups_namespace_arn(self) -> builtins.str:
-        '''The Arn of the RuleGroupsNamespace resource.'''
-        result = self._values.get("rule_groups_namespace_arn")
-        assert result is not None, "Required property 'rule_groups_namespace_arn' is missing"
-        return typing.cast(builtins.str, result)
-
-    def __eq__(self, rhs: typing.Any) -> builtins.bool:
-        return isinstance(rhs, self.__class__) and rhs._values == self._values
-
-    def __ne__(self, rhs: typing.Any) -> builtins.bool:
-        return not (rhs == self)
-
-    def __repr__(self) -> str:
-        return "RuleGroupsNamespaceReference(%s)" % ", ".join(
-            k + "=" + repr(v) for k, v in self._values.items()
-        )
-
-
-@jsii.data_type(
-    jsii_type="aws-cdk-lib.aws_aps.ScraperReference",
-    jsii_struct_bases=[],
-    name_mapping={"scraper_arn": "scraperArn"},
-)
-class ScraperReference:
-    def __init__(self, *, scraper_arn: builtins.str) -> None:
-        '''A reference to a Scraper resource.
-
-        :param scraper_arn: The Arn of the Scraper resource.
-
-        :exampleMetadata: fixture=_generated
-
-        Example::
-
-            # The code below shows an example of how to instantiate this type.
-            # The values are placeholders you should change.
-            from aws_cdk import aws_aps as aps
-            
-            scraper_reference = aps.ScraperReference(
-                scraper_arn="scraperArn"
-            )
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__374a5fc232eb102ac8a6793598055a5f55853e59ffcefdb5264aa89a04f77bb4)
-            check_type(argname="argument scraper_arn", value=scraper_arn, expected_type=type_hints["scraper_arn"])
-        self._values: typing.Dict[builtins.str, typing.Any] = {
-            "scraper_arn": scraper_arn,
-        }
-
-    @builtins.property
-    def scraper_arn(self) -> builtins.str:
-        '''The Arn of the Scraper resource.'''
-        result = self._values.get("scraper_arn")
-        assert result is not None, "Required property 'scraper_arn' is missing"
-        return typing.cast(builtins.str, result)
-
-    def __eq__(self, rhs: typing.Any) -> builtins.bool:
-        return isinstance(rhs, self.__class__) and rhs._values == self._values
-
-    def __ne__(self, rhs: typing.Any) -> builtins.bool:
-        return not (rhs == self)
-
-    def __repr__(self) -> str:
-        return "ScraperReference(%s)" % ", ".join(
-            k + "=" + repr(v) for k, v in self._values.items()
-        )
-
-
-@jsii.data_type(
-    jsii_type="aws-cdk-lib.aws_aps.WorkspaceReference",
-    jsii_struct_bases=[],
-    name_mapping={"workspace_arn": "workspaceArn"},
-)
-class WorkspaceReference:
-    def __init__(self, *, workspace_arn: builtins.str) -> None:
-        '''A reference to a Workspace resource.
-
-        :param workspace_arn: The Arn of the Workspace resource.
-
-        :exampleMetadata: fixture=_generated
-
-        Example::
-
-            # The code below shows an example of how to instantiate this type.
-            # The values are placeholders you should change.
-            from aws_cdk import aws_aps as aps
-            
-            workspace_reference = aps.WorkspaceReference(
-                workspace_arn="workspaceArn"
-            )
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__aa321cfca0087100b6387ec771252167e8e12904e76c51b3da5c058ba6c23f46)
-            check_type(argname="argument workspace_arn", value=workspace_arn, expected_type=type_hints["workspace_arn"])
-        self._values: typing.Dict[builtins.str, typing.Any] = {
-            "workspace_arn": workspace_arn,
-        }
-
-    @builtins.property
-    def workspace_arn(self) -> builtins.str:
-        '''The Arn of the Workspace resource.'''
-        result = self._values.get("workspace_arn")
-        assert result is not None, "Required property 'workspace_arn' is missing"
-        return typing.cast(builtins.str, result)
-
-    def __eq__(self, rhs: typing.Any) -> builtins.bool:
-        return isinstance(rhs, self.__class__) and rhs._values == self._values
-
-    def __ne__(self, rhs: typing.Any) -> builtins.bool:
-        return not (rhs == self)
-
-    def __repr__(self) -> str:
-        return "WorkspaceReference(%s)" % ", ".join(
-            k + "=" + repr(v) for k, v in self._values.items()
-        )
-
-
-@jsii.implements(_IInspectable_c2943556, IAnomalyDetectorRef, _ITaggableV2_4e6798f8)
-class CfnAnomalyDetector(
-    _CfnResource_9df397a6,
-    metaclass=jsii.JSIIMeta,
-    jsii_type="aws-cdk-lib.aws_aps.CfnAnomalyDetector",
-):
-    '''AnomalyDetector schema for cloudformation.
-
-    :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-aps-anomalydetector.html
-    :cloudformationResource: AWS::APS::AnomalyDetector
-    :exampleMetadata: fixture=_generated
-
-    Example::
-
-        # The code below shows an example of how to instantiate this type.
-        # The values are placeholders you should change.
-        from aws_cdk import aws_aps as aps
-        
-        cfn_anomaly_detector = aps.CfnAnomalyDetector(self, "MyCfnAnomalyDetector",
-            alias="alias",
-            configuration=aps.CfnAnomalyDetector.AnomalyDetectorConfigurationProperty(
-                random_cut_forest=aps.CfnAnomalyDetector.RandomCutForestConfigurationProperty(
-                    query="query",
-        
-                    # the properties below are optional
-                    ignore_near_expected_from_above=aps.CfnAnomalyDetector.IgnoreNearExpectedProperty(
-                        amount=123,
-                        ratio=123
-                    ),
-                    ignore_near_expected_from_below=aps.CfnAnomalyDetector.IgnoreNearExpectedProperty(
-                        amount=123,
-                        ratio=123
-                    ),
-                    sample_size=123,
-                    shingle_size=123
-                )
-            ),
-            workspace="workspace",
-        
-            # the properties below are optional
-            evaluation_interval_in_seconds=123,
-            labels=[aps.CfnAnomalyDetector.LabelProperty(
-                key="key",
-                value="value"
-            )],
-            missing_data_action=aps.CfnAnomalyDetector.MissingDataActionProperty(
-                mark_as_anomaly=False,
-                skip=False
-            ),
-            tags=[CfnTag(
-                key="key",
-                value="value"
-            )]
-        )
-    '''
-
-    def __init__(
-        self,
-        scope: _constructs_77d1e7e8.Construct,
-        id: builtins.str,
-        *,
-        alias: builtins.str,
-        configuration: typing.Union[_IResolvable_da3f097b, typing.Union["CfnAnomalyDetector.AnomalyDetectorConfigurationProperty", typing.Dict[builtins.str, typing.Any]]],
-        workspace: builtins.str,
-        evaluation_interval_in_seconds: typing.Optional[jsii.Number] = None,
-        labels: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnAnomalyDetector.LabelProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        missing_data_action: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnAnomalyDetector.MissingDataActionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-    ) -> None:
-        '''
-        :param scope: Scope in which this resource is defined.
-        :param id: Construct identifier for this resource (unique in its scope).
-        :param alias: The AnomalyDetector alias.
-        :param configuration: 
-        :param workspace: An Amazon Managed Service for Prometheus workspace is a logical and isolated Prometheus server dedicated to ingesting, storing, and querying your Prometheus-compatible metrics.
-        :param evaluation_interval_in_seconds: The AnomalyDetector period of detection and metric generation. Default: - 60
-        :param labels: An array of key-value pairs to provide meta-data.
-        :param missing_data_action: 
-        :param tags: An array of key-value pairs to apply to this resource.
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__58b3184629f18780da9f7c9eb2f8acdbdbb5190c9fc3ae41fdbbe34341ba0f26)
-            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
-            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
-        props = CfnAnomalyDetectorProps(
-            alias=alias,
-            configuration=configuration,
-            workspace=workspace,
-            evaluation_interval_in_seconds=evaluation_interval_in_seconds,
-            labels=labels,
-            missing_data_action=missing_data_action,
-            tags=tags,
-        )
-
-        jsii.create(self.__class__, self, [scope, id, props])
-
-    @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
-        '''Examines the CloudFormation resource and discloses attributes.
-
-        :param inspector: tree inspector to collect and process attributes.
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__36a9fa3c67c466703717001e2774dacca3fa612b6ec02f8b6361ad6736da0ec7)
-            check_type(argname="argument inspector", value=inspector, expected_type=type_hints["inspector"])
-        return typing.cast(None, jsii.invoke(self, "inspect", [inspector]))
-
-    @jsii.member(jsii_name="renderProperties")
-    def _render_properties(
-        self,
-        props: typing.Mapping[builtins.str, typing.Any],
-    ) -> typing.Mapping[builtins.str, typing.Any]:
-        '''
-        :param props: -
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__1edc3473fdf33536207faf87047c2bef23ac4e4aecad53d1e0338308f0e5ab91)
-            check_type(argname="argument props", value=props, expected_type=type_hints["props"])
-        return typing.cast(typing.Mapping[builtins.str, typing.Any], jsii.invoke(self, "renderProperties", [props]))
-
-    @jsii.python.classproperty
-    @jsii.member(jsii_name="CFN_RESOURCE_TYPE_NAME")
-    def CFN_RESOURCE_TYPE_NAME(cls) -> builtins.str:
-        '''The CloudFormation resource type name for this resource class.'''
-        return typing.cast(builtins.str, jsii.sget(cls, "CFN_RESOURCE_TYPE_NAME"))
-
-    @builtins.property
-    @jsii.member(jsii_name="anomalyDetectorRef")
-    def anomaly_detector_ref(self) -> AnomalyDetectorReference:
-        '''A reference to a AnomalyDetector resource.'''
-        return typing.cast(AnomalyDetectorReference, jsii.get(self, "anomalyDetectorRef"))
-
-    @builtins.property
-    @jsii.member(jsii_name="attrArn")
-    def attr_arn(self) -> builtins.str:
-        '''The AnomalyDetector ARN.
-
-        :cloudformationAttribute: Arn
-        '''
-        return typing.cast(builtins.str, jsii.get(self, "attrArn"))
-
-    @builtins.property
-    @jsii.member(jsii_name="cdkTagManager")
-    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
-        '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
-
-    @builtins.property
-    @jsii.member(jsii_name="cfnProperties")
-    def _cfn_properties(self) -> typing.Mapping[builtins.str, typing.Any]:
-        return typing.cast(typing.Mapping[builtins.str, typing.Any], jsii.get(self, "cfnProperties"))
-
-    @builtins.property
-    @jsii.member(jsii_name="alias")
-    def alias(self) -> builtins.str:
-        '''The AnomalyDetector alias.'''
-        return typing.cast(builtins.str, jsii.get(self, "alias"))
-
-    @alias.setter
-    def alias(self, value: builtins.str) -> None:
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__fe3aa1b72ccc7677675b2ae76ae8e5e1dfd2146dae8eba7520a981184cdf780d)
-            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
-        jsii.set(self, "alias", value) # pyright: ignore[reportArgumentType]
-
-    @builtins.property
-    @jsii.member(jsii_name="configuration")
-    def configuration(
-        self,
-    ) -> typing.Union[_IResolvable_da3f097b, "CfnAnomalyDetector.AnomalyDetectorConfigurationProperty"]:
-        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnAnomalyDetector.AnomalyDetectorConfigurationProperty"], jsii.get(self, "configuration"))
-
-    @configuration.setter
-    def configuration(
-        self,
-        value: typing.Union[_IResolvable_da3f097b, "CfnAnomalyDetector.AnomalyDetectorConfigurationProperty"],
-    ) -> None:
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__1394fe6b497d7add7f3c437f746b83234bfd1714418b007d2ca77fcaf2e486fa)
-            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
-        jsii.set(self, "configuration", value) # pyright: ignore[reportArgumentType]
-
-    @builtins.property
-    @jsii.member(jsii_name="workspace")
-    def workspace(self) -> builtins.str:
-        '''An Amazon Managed Service for Prometheus workspace is a logical and isolated Prometheus server dedicated to ingesting, storing, and querying your Prometheus-compatible metrics.'''
-        return typing.cast(builtins.str, jsii.get(self, "workspace"))
-
-    @workspace.setter
-    def workspace(self, value: builtins.str) -> None:
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__51d01d3c64410491a2005087b379e01fe1749ffd4be8e8dae194b7cc8e5e19b8)
-            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
-        jsii.set(self, "workspace", value) # pyright: ignore[reportArgumentType]
-
-    @builtins.property
-    @jsii.member(jsii_name="evaluationIntervalInSeconds")
-    def evaluation_interval_in_seconds(self) -> typing.Optional[jsii.Number]:
-        '''The AnomalyDetector period of detection and metric generation.'''
-        return typing.cast(typing.Optional[jsii.Number], jsii.get(self, "evaluationIntervalInSeconds"))
-
-    @evaluation_interval_in_seconds.setter
-    def evaluation_interval_in_seconds(
-        self,
-        value: typing.Optional[jsii.Number],
-    ) -> None:
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__ce3cb5189478c72429dee4d6fa1ed9635e537559491f15b775c279a89020cb75)
-            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
-        jsii.set(self, "evaluationIntervalInSeconds", value) # pyright: ignore[reportArgumentType]
-
-    @builtins.property
-    @jsii.member(jsii_name="labels")
-    def labels(
-        self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnAnomalyDetector.LabelProperty"]]]]:
-        '''An array of key-value pairs to provide meta-data.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnAnomalyDetector.LabelProperty"]]]], jsii.get(self, "labels"))
-
-    @labels.setter
-    def labels(
-        self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnAnomalyDetector.LabelProperty"]]]],
-    ) -> None:
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__0d15555eb30ee6b4decc1dba71c708714ce1a7f00e658c2ce9c617f35dbea119)
-            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
-        jsii.set(self, "labels", value) # pyright: ignore[reportArgumentType]
-
-    @builtins.property
-    @jsii.member(jsii_name="missingDataAction")
-    def missing_data_action(
-        self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAnomalyDetector.MissingDataActionProperty"]]:
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAnomalyDetector.MissingDataActionProperty"]], jsii.get(self, "missingDataAction"))
-
-    @missing_data_action.setter
-    def missing_data_action(
-        self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAnomalyDetector.MissingDataActionProperty"]],
-    ) -> None:
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__e639ced06e0101ba2e1108f2a5748e988f60e8c6ecadbb32ca0f2dc6162a53e8)
-            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
-        jsii.set(self, "missingDataAction", value) # pyright: ignore[reportArgumentType]
-
-    @builtins.property
-    @jsii.member(jsii_name="tags")
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
-        '''An array of key-value pairs to apply to this resource.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tags"))
-
-    @tags.setter
-    def tags(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__dc8b42c0f027d8c1c104a6037d9c3752efbfb2ae169c30d63f35dee5bad63b3f)
-            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
-        jsii.set(self, "tags", value) # pyright: ignore[reportArgumentType]
-
-    @jsii.data_type(
-        jsii_type="aws-cdk-lib.aws_aps.CfnAnomalyDetector.AnomalyDetectorConfigurationProperty",
-        jsii_struct_bases=[],
-        name_mapping={"random_cut_forest": "randomCutForest"},
-    )
-    class AnomalyDetectorConfigurationProperty:
-        def __init__(
-            self,
-            *,
-            random_cut_forest: typing.Union[_IResolvable_da3f097b, typing.Union["CfnAnomalyDetector.RandomCutForestConfigurationProperty", typing.Dict[builtins.str, typing.Any]]],
-        ) -> None:
-            '''
-            :param random_cut_forest: 
-
-            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-aps-anomalydetector-anomalydetectorconfiguration.html
-            :exampleMetadata: fixture=_generated
-
-            Example::
-
-                # The code below shows an example of how to instantiate this type.
-                # The values are placeholders you should change.
-                from aws_cdk import aws_aps as aps
-                
-                anomaly_detector_configuration_property = aps.CfnAnomalyDetector.AnomalyDetectorConfigurationProperty(
-                    random_cut_forest=aps.CfnAnomalyDetector.RandomCutForestConfigurationProperty(
-                        query="query",
-                
-                        # the properties below are optional
-                        ignore_near_expected_from_above=aps.CfnAnomalyDetector.IgnoreNearExpectedProperty(
-                            amount=123,
-                            ratio=123
-                        ),
-                        ignore_near_expected_from_below=aps.CfnAnomalyDetector.IgnoreNearExpectedProperty(
-                            amount=123,
-                            ratio=123
-                        ),
-                        sample_size=123,
-                        shingle_size=123
-                    )
-                )
-            '''
-            if __debug__:
-                type_hints = typing.get_type_hints(_typecheckingstub__aca672630a5e19c23bb68b82c63c873a7687610464d166cef0da5d6cde142082)
-                check_type(argname="argument random_cut_forest", value=random_cut_forest, expected_type=type_hints["random_cut_forest"])
-            self._values: typing.Dict[builtins.str, typing.Any] = {
-                "random_cut_forest": random_cut_forest,
-            }
-
-        @builtins.property
-        def random_cut_forest(
-            self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnAnomalyDetector.RandomCutForestConfigurationProperty"]:
-            '''
-            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-aps-anomalydetector-anomalydetectorconfiguration.html#cfn-aps-anomalydetector-anomalydetectorconfiguration-randomcutforest
-            '''
-            result = self._values.get("random_cut_forest")
-            assert result is not None, "Required property 'random_cut_forest' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnAnomalyDetector.RandomCutForestConfigurationProperty"], result)
-
-        def __eq__(self, rhs: typing.Any) -> builtins.bool:
-            return isinstance(rhs, self.__class__) and rhs._values == self._values
-
-        def __ne__(self, rhs: typing.Any) -> builtins.bool:
-            return not (rhs == self)
-
-        def __repr__(self) -> str:
-            return "AnomalyDetectorConfigurationProperty(%s)" % ", ".join(
-                k + "=" + repr(v) for k, v in self._values.items()
-            )
-
-    @jsii.data_type(
-        jsii_type="aws-cdk-lib.aws_aps.CfnAnomalyDetector.IgnoreNearExpectedProperty",
-        jsii_struct_bases=[],
-        name_mapping={"amount": "amount", "ratio": "ratio"},
-    )
-    class IgnoreNearExpectedProperty:
-        def __init__(
-            self,
-            *,
-            amount: typing.Optional[jsii.Number] = None,
-            ratio: typing.Optional[jsii.Number] = None,
-        ) -> None:
-            '''
-            :param amount: 
-            :param ratio: 
-
-            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-aps-anomalydetector-ignorenearexpected.html
-            :exampleMetadata: fixture=_generated
-
-            Example::
-
-                # The code below shows an example of how to instantiate this type.
-                # The values are placeholders you should change.
-                from aws_cdk import aws_aps as aps
-                
-                ignore_near_expected_property = aps.CfnAnomalyDetector.IgnoreNearExpectedProperty(
-                    amount=123,
-                    ratio=123
-                )
-            '''
-            if __debug__:
-                type_hints = typing.get_type_hints(_typecheckingstub__e3e1cf276ea5a24efc7ebe9d526fad4e86dd66a3f55ea5a0dcb3a617b8d62dff)
-                check_type(argname="argument amount", value=amount, expected_type=type_hints["amount"])
-                check_type(argname="argument ratio", value=ratio, expected_type=type_hints["ratio"])
-            self._values: typing.Dict[builtins.str, typing.Any] = {}
-            if amount is not None:
-                self._values["amount"] = amount
-            if ratio is not None:
-                self._values["ratio"] = ratio
-
-        @builtins.property
-        def amount(self) -> typing.Optional[jsii.Number]:
-            '''
-            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-aps-anomalydetector-ignorenearexpected.html#cfn-aps-anomalydetector-ignorenearexpected-amount
-            '''
-            result = self._values.get("amount")
-            return typing.cast(typing.Optional[jsii.Number], result)
-
-        @builtins.property
-        def ratio(self) -> typing.Optional[jsii.Number]:
-            '''
-            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-aps-anomalydetector-ignorenearexpected.html#cfn-aps-anomalydetector-ignorenearexpected-ratio
-            '''
-            result = self._values.get("ratio")
-            return typing.cast(typing.Optional[jsii.Number], result)
-
-        def __eq__(self, rhs: typing.Any) -> builtins.bool:
-            return isinstance(rhs, self.__class__) and rhs._values == self._values
-
-        def __ne__(self, rhs: typing.Any) -> builtins.bool:
-            return not (rhs == self)
-
-        def __repr__(self) -> str:
-            return "IgnoreNearExpectedProperty(%s)" % ", ".join(
-                k + "=" + repr(v) for k, v in self._values.items()
-            )
-
-    @jsii.data_type(
-        jsii_type="aws-cdk-lib.aws_aps.CfnAnomalyDetector.LabelProperty",
-        jsii_struct_bases=[],
-        name_mapping={"key": "key", "value": "value"},
-    )
-    class LabelProperty:
-        def __init__(self, *, key: builtins.str, value: builtins.str) -> None:
-            '''A key-value pair to provide meta-data and multi-dimensional data analysis for filtering and aggregation.
-
-            :param key: The key name of the tag. You can specify a value that is 1 to 128 Unicode characters in length and cannot be prefixed with aws:. You can use any of the following characters: the set of Unicode letters, digits, whitespace, _, ., /, =, +, and -.
-            :param value: The value for the tag. You can specify a value that is 0 to 256 Unicode characters in length and cannot be prefixed with aws:. You can use any of the following characters: the set of Unicode letters, digits, whitespace, _, ., /, =, +, and -.
-
-            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-aps-anomalydetector-label.html
-            :exampleMetadata: fixture=_generated
-
-            Example::
-
-                # The code below shows an example of how to instantiate this type.
-                # The values are placeholders you should change.
-                from aws_cdk import aws_aps as aps
-                
-                label_property = aps.CfnAnomalyDetector.LabelProperty(
-                    key="key",
-                    value="value"
-                )
-            '''
-            if __debug__:
-                type_hints = typing.get_type_hints(_typecheckingstub__3f784d604d60c49dd5fb567dcfedcd9d16e2ce47ba899589a373c9322818035a)
-                check_type(argname="argument key", value=key, expected_type=type_hints["key"])
-                check_type(argname="argument value", value=value, expected_type=type_hints["value"])
-            self._values: typing.Dict[builtins.str, typing.Any] = {
-                "key": key,
-                "value": value,
-            }
-
-        @builtins.property
-        def key(self) -> builtins.str:
-            '''The key name of the tag.
-
-            You can specify a value that is 1 to 128 Unicode characters in length and cannot be prefixed with aws:. You can use any of the following characters: the set of Unicode letters, digits, whitespace, _, ., /, =, +, and -.
-
-            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-aps-anomalydetector-label.html#cfn-aps-anomalydetector-label-key
-            '''
-            result = self._values.get("key")
-            assert result is not None, "Required property 'key' is missing"
-            return typing.cast(builtins.str, result)
-
-        @builtins.property
-        def value(self) -> builtins.str:
-            '''The value for the tag.
-
-            You can specify a value that is 0 to 256 Unicode characters in length and cannot be prefixed with aws:. You can use any of the following characters: the set of Unicode letters, digits, whitespace, _, ., /, =, +, and -.
-
-            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-aps-anomalydetector-label.html#cfn-aps-anomalydetector-label-value
-            '''
-            result = self._values.get("value")
-            assert result is not None, "Required property 'value' is missing"
-            return typing.cast(builtins.str, result)
-
-        def __eq__(self, rhs: typing.Any) -> builtins.bool:
-            return isinstance(rhs, self.__class__) and rhs._values == self._values
-
-        def __ne__(self, rhs: typing.Any) -> builtins.bool:
-            return not (rhs == self)
-
-        def __repr__(self) -> str:
-            return "LabelProperty(%s)" % ", ".join(
-                k + "=" + repr(v) for k, v in self._values.items()
-            )
-
-    @jsii.data_type(
-        jsii_type="aws-cdk-lib.aws_aps.CfnAnomalyDetector.MissingDataActionProperty",
-        jsii_struct_bases=[],
-        name_mapping={"mark_as_anomaly": "markAsAnomaly", "skip": "skip"},
-    )
-    class MissingDataActionProperty:
-        def __init__(
-            self,
-            *,
-            mark_as_anomaly: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            skip: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        ) -> None:
-            '''
-            :param mark_as_anomaly: 
-            :param skip: 
-
-            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-aps-anomalydetector-missingdataaction.html
-            :exampleMetadata: fixture=_generated
-
-            Example::
-
-                # The code below shows an example of how to instantiate this type.
-                # The values are placeholders you should change.
-                from aws_cdk import aws_aps as aps
-                
-                missing_data_action_property = aps.CfnAnomalyDetector.MissingDataActionProperty(
-                    mark_as_anomaly=False,
-                    skip=False
-                )
-            '''
-            if __debug__:
-                type_hints = typing.get_type_hints(_typecheckingstub__e5b8457b72ba87aa14000e26b68e021fa4b19e4e88f3a022910dcd18542039d0)
-                check_type(argname="argument mark_as_anomaly", value=mark_as_anomaly, expected_type=type_hints["mark_as_anomaly"])
-                check_type(argname="argument skip", value=skip, expected_type=type_hints["skip"])
-            self._values: typing.Dict[builtins.str, typing.Any] = {}
-            if mark_as_anomaly is not None:
-                self._values["mark_as_anomaly"] = mark_as_anomaly
-            if skip is not None:
-                self._values["skip"] = skip
-
-        @builtins.property
-        def mark_as_anomaly(
-            self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
-            '''
-            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-aps-anomalydetector-missingdataaction.html#cfn-aps-anomalydetector-missingdataaction-markasanomaly
-            '''
-            result = self._values.get("mark_as_anomaly")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
-
-        @builtins.property
-        def skip(
-            self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
-            '''
-            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-aps-anomalydetector-missingdataaction.html#cfn-aps-anomalydetector-missingdataaction-skip
-            '''
-            result = self._values.get("skip")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
-
-        def __eq__(self, rhs: typing.Any) -> builtins.bool:
-            return isinstance(rhs, self.__class__) and rhs._values == self._values
-
-        def __ne__(self, rhs: typing.Any) -> builtins.bool:
-            return not (rhs == self)
-
-        def __repr__(self) -> str:
-            return "MissingDataActionProperty(%s)" % ", ".join(
-                k + "=" + repr(v) for k, v in self._values.items()
-            )
-
-    @jsii.data_type(
-        jsii_type="aws-cdk-lib.aws_aps.CfnAnomalyDetector.RandomCutForestConfigurationProperty",
-        jsii_struct_bases=[],
-        name_mapping={
-            "query": "query",
-            "ignore_near_expected_from_above": "ignoreNearExpectedFromAbove",
-            "ignore_near_expected_from_below": "ignoreNearExpectedFromBelow",
-            "sample_size": "sampleSize",
-            "shingle_size": "shingleSize",
-        },
-    )
-    class RandomCutForestConfigurationProperty:
-        def __init__(
-            self,
-            *,
-            query: builtins.str,
-            ignore_near_expected_from_above: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnAnomalyDetector.IgnoreNearExpectedProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            ignore_near_expected_from_below: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnAnomalyDetector.IgnoreNearExpectedProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            sample_size: typing.Optional[jsii.Number] = None,
-            shingle_size: typing.Optional[jsii.Number] = None,
-        ) -> None:
-            '''
-            :param query: 
-            :param ignore_near_expected_from_above: 
-            :param ignore_near_expected_from_below: 
-            :param sample_size: Default: - 256
-            :param shingle_size: Default: - 8
-
-            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-aps-anomalydetector-randomcutforestconfiguration.html
-            :exampleMetadata: fixture=_generated
-
-            Example::
-
-                # The code below shows an example of how to instantiate this type.
-                # The values are placeholders you should change.
-                from aws_cdk import aws_aps as aps
-                
-                random_cut_forest_configuration_property = aps.CfnAnomalyDetector.RandomCutForestConfigurationProperty(
-                    query="query",
-                
-                    # the properties below are optional
-                    ignore_near_expected_from_above=aps.CfnAnomalyDetector.IgnoreNearExpectedProperty(
-                        amount=123,
-                        ratio=123
-                    ),
-                    ignore_near_expected_from_below=aps.CfnAnomalyDetector.IgnoreNearExpectedProperty(
-                        amount=123,
-                        ratio=123
-                    ),
-                    sample_size=123,
-                    shingle_size=123
-                )
-            '''
-            if __debug__:
-                type_hints = typing.get_type_hints(_typecheckingstub__83993f42a131a948093792cb8cd7b4f710c6b4dffce6b17f386497f1cbe514ea)
-                check_type(argname="argument query", value=query, expected_type=type_hints["query"])
-                check_type(argname="argument ignore_near_expected_from_above", value=ignore_near_expected_from_above, expected_type=type_hints["ignore_near_expected_from_above"])
-                check_type(argname="argument ignore_near_expected_from_below", value=ignore_near_expected_from_below, expected_type=type_hints["ignore_near_expected_from_below"])
-                check_type(argname="argument sample_size", value=sample_size, expected_type=type_hints["sample_size"])
-                check_type(argname="argument shingle_size", value=shingle_size, expected_type=type_hints["shingle_size"])
-            self._values: typing.Dict[builtins.str, typing.Any] = {
-                "query": query,
-            }
-            if ignore_near_expected_from_above is not None:
-                self._values["ignore_near_expected_from_above"] = ignore_near_expected_from_above
-            if ignore_near_expected_from_below is not None:
-                self._values["ignore_near_expected_from_below"] = ignore_near_expected_from_below
-            if sample_size is not None:
-                self._values["sample_size"] = sample_size
-            if shingle_size is not None:
-                self._values["shingle_size"] = shingle_size
-
-        @builtins.property
-        def query(self) -> builtins.str:
-            '''
-            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-aps-anomalydetector-randomcutforestconfiguration.html#cfn-aps-anomalydetector-randomcutforestconfiguration-query
-            '''
-            result = self._values.get("query")
-            assert result is not None, "Required property 'query' is missing"
-            return typing.cast(builtins.str, result)
-
-        @builtins.property
-        def ignore_near_expected_from_above(
-            self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAnomalyDetector.IgnoreNearExpectedProperty"]]:
-            '''
-            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-aps-anomalydetector-randomcutforestconfiguration.html#cfn-aps-anomalydetector-randomcutforestconfiguration-ignorenearexpectedfromabove
-            '''
-            result = self._values.get("ignore_near_expected_from_above")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAnomalyDetector.IgnoreNearExpectedProperty"]], result)
-
-        @builtins.property
-        def ignore_near_expected_from_below(
-            self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAnomalyDetector.IgnoreNearExpectedProperty"]]:
-            '''
-            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-aps-anomalydetector-randomcutforestconfiguration.html#cfn-aps-anomalydetector-randomcutforestconfiguration-ignorenearexpectedfrombelow
-            '''
-            result = self._values.get("ignore_near_expected_from_below")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAnomalyDetector.IgnoreNearExpectedProperty"]], result)
-
-        @builtins.property
-        def sample_size(self) -> typing.Optional[jsii.Number]:
-            '''
-            :default: - 256
-
-            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-aps-anomalydetector-randomcutforestconfiguration.html#cfn-aps-anomalydetector-randomcutforestconfiguration-samplesize
-            '''
-            result = self._values.get("sample_size")
-            return typing.cast(typing.Optional[jsii.Number], result)
-
-        @builtins.property
-        def shingle_size(self) -> typing.Optional[jsii.Number]:
-            '''
-            :default: - 8
-
-            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-aps-anomalydetector-randomcutforestconfiguration.html#cfn-aps-anomalydetector-randomcutforestconfiguration-shinglesize
-            '''
-            result = self._values.get("shingle_size")
-            return typing.cast(typing.Optional[jsii.Number], result)
-
-        def __eq__(self, rhs: typing.Any) -> builtins.bool:
-            return isinstance(rhs, self.__class__) and rhs._values == self._values
-
-        def __ne__(self, rhs: typing.Any) -> builtins.bool:
-            return not (rhs == self)
-
-        def __repr__(self) -> str:
-            return "RandomCutForestConfigurationProperty(%s)" % ", ".join(
-                k + "=" + repr(v) for k, v in self._values.items()
-            )
-
-
-@jsii.implements(_IInspectable_c2943556, IResourcePolicyRef)
-class CfnResourcePolicy(
-    _CfnResource_9df397a6,
-    metaclass=jsii.JSIIMeta,
-    jsii_type="aws-cdk-lib.aws_aps.CfnResourcePolicy",
-):
-    '''Use resource-based policies to grant permissions to other AWS accounts or services to access your workspace.
-
-    Only Prometheus-compatible APIs can be used for workspace sharing. You can add non-Prometheus-compatible APIs to the policy, but they will be ignored. For more information, see `Prometheus-compatible APIs <https://docs.aws.amazon.com/prometheus/latest/userguide/AMP-APIReference-Prometheus-Compatible-Apis.html>`_ in the *Amazon Managed Service for Prometheus User Guide* .
-
-    If your workspace uses customer-managed AWS KMS keys for encryption, you must grant the principals in your resource-based policy access to those AWS KMS keys. You can do this by creating AWS KMS grants. For more information, see `CreateGrant <https://docs.aws.amazon.com/kms/latest/APIReference/API_CreateGrant.html>`_ in the *AWS KMS API Reference* and `Encryption at rest <https://docs.aws.amazon.com/prometheus/latest/userguide/encryption-at-rest-Amazon-Service-Prometheus.html>`_ in the *Amazon Managed Service for Prometheus User Guide* .
-
-    For more information about working with IAM , see `Using Amazon Managed Service for Prometheus with IAM <https://docs.aws.amazon.com/prometheus/latest/userguide/security_iam_service-with-iam.html>`_ in the *Amazon Managed Service for Prometheus User Guide* .
-
-    :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-aps-resourcepolicy.html
-    :cloudformationResource: AWS::APS::ResourcePolicy
-    :exampleMetadata: fixture=_generated
-
-    Example::
-
-        # The code below shows an example of how to instantiate this type.
-        # The values are placeholders you should change.
-        from aws_cdk import aws_aps as aps
-        
-        cfn_resource_policy = aps.CfnResourcePolicy(self, "MyCfnResourcePolicy",
-            policy_document="policyDocument",
-            workspace_arn="workspaceArn"
-        )
-    '''
-
-    def __init__(
-        self,
-        scope: _constructs_77d1e7e8.Construct,
-        id: builtins.str,
-        *,
-        policy_document: builtins.str,
-        workspace_arn: builtins.str,
-    ) -> None:
-        '''
-        :param scope: Scope in which this resource is defined.
-        :param id: Construct identifier for this resource (unique in its scope).
-        :param policy_document: The JSON to use as the Resource-based Policy.
-        :param workspace_arn: An ARN identifying a Workspace.
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__54f89d9ee1d6d400f40f83801fe40dee056ce969e9e0501ca1390285aab7cb82)
-            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
-            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
-        props = CfnResourcePolicyProps(
-            policy_document=policy_document, workspace_arn=workspace_arn
-        )
-
-        jsii.create(self.__class__, self, [scope, id, props])
-
-    @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
-        '''Examines the CloudFormation resource and discloses attributes.
-
-        :param inspector: tree inspector to collect and process attributes.
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__7fd684bb5425ae9b9586530c2118e55043226673b8740171d3f7c2b1fbd03b3d)
-            check_type(argname="argument inspector", value=inspector, expected_type=type_hints["inspector"])
-        return typing.cast(None, jsii.invoke(self, "inspect", [inspector]))
-
-    @jsii.member(jsii_name="renderProperties")
-    def _render_properties(
-        self,
-        props: typing.Mapping[builtins.str, typing.Any],
-    ) -> typing.Mapping[builtins.str, typing.Any]:
-        '''
-        :param props: -
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__96c6a584b0420e6cc37e76ad4b000bc6d8f4137f577bf7075b4ec87bab8717d9)
-            check_type(argname="argument props", value=props, expected_type=type_hints["props"])
-        return typing.cast(typing.Mapping[builtins.str, typing.Any], jsii.invoke(self, "renderProperties", [props]))
-
-    @jsii.python.classproperty
-    @jsii.member(jsii_name="CFN_RESOURCE_TYPE_NAME")
-    def CFN_RESOURCE_TYPE_NAME(cls) -> builtins.str:
-        '''The CloudFormation resource type name for this resource class.'''
-        return typing.cast(builtins.str, jsii.sget(cls, "CFN_RESOURCE_TYPE_NAME"))
-
-    @builtins.property
-    @jsii.member(jsii_name="cfnProperties")
-    def _cfn_properties(self) -> typing.Mapping[builtins.str, typing.Any]:
-        return typing.cast(typing.Mapping[builtins.str, typing.Any], jsii.get(self, "cfnProperties"))
-
-    @builtins.property
-    @jsii.member(jsii_name="resourcePolicyRef")
-    def resource_policy_ref(self) -> ResourcePolicyReference:
-        '''A reference to a ResourcePolicy resource.'''
-        return typing.cast(ResourcePolicyReference, jsii.get(self, "resourcePolicyRef"))
-
-    @builtins.property
-    @jsii.member(jsii_name="policyDocument")
-    def policy_document(self) -> builtins.str:
-        '''The JSON to use as the Resource-based Policy.'''
-        return typing.cast(builtins.str, jsii.get(self, "policyDocument"))
-
-    @policy_document.setter
-    def policy_document(self, value: builtins.str) -> None:
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__d726921aa53fc43f461134d2df5d60edb5d56b4fa67ef6e4e82d305af7b7eba5)
-            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
-        jsii.set(self, "policyDocument", value) # pyright: ignore[reportArgumentType]
-
-    @builtins.property
-    @jsii.member(jsii_name="workspaceArn")
-    def workspace_arn(self) -> builtins.str:
-        '''An ARN identifying a Workspace.'''
-        return typing.cast(builtins.str, jsii.get(self, "workspaceArn"))
-
-    @workspace_arn.setter
-    def workspace_arn(self, value: builtins.str) -> None:
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__2f020f5d54f91c35f0b4332b16391ef6561cfc07a46cc5fc1e48d4acdb82a4b8)
-            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
-        jsii.set(self, "workspaceArn", value) # pyright: ignore[reportArgumentType]
-
-
-@jsii.implements(_IInspectable_c2943556, IRuleGroupsNamespaceRef, _ITaggable_36806126)
-class CfnRuleGroupsNamespace(
-    _CfnResource_9df397a6,
-    metaclass=jsii.JSIIMeta,
-    jsii_type="aws-cdk-lib.aws_aps.CfnRuleGroupsNamespace",
-):
-    '''The definition of a rule groups namespace in an Amazon Managed Service for Prometheus workspace.
-
-    A rule groups namespace is associated with exactly one rules file. A workspace can have multiple rule groups namespaces. For more information about rules files, see `Creating a rules file <https://docs.aws.amazon.com/prometheus/latest/userguide/AMP-ruler-rulesfile.html>`_ , in the *Amazon Managed Service for Prometheus User Guide* .
-
-    :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-aps-rulegroupsnamespace.html
-    :cloudformationResource: AWS::APS::RuleGroupsNamespace
-    :exampleMetadata: fixture=_generated
-
-    Example::
-
-        # The code below shows an example of how to instantiate this type.
-        # The values are placeholders you should change.
-        from aws_cdk import aws_aps as aps
-        
-        cfn_rule_groups_namespace = aps.CfnRuleGroupsNamespace(self, "MyCfnRuleGroupsNamespace",
-            data="data",
-            name="name",
-            workspace="workspace",
-        
-            # the properties below are optional
-            tags=[CfnTag(
-                key="key",
-                value="value"
-            )]
-        )
-    '''
-
-    def __init__(
-        self,
-        scope: _constructs_77d1e7e8.Construct,
-        id: builtins.str,
-        *,
-        data: builtins.str,
-        name: builtins.str,
-        workspace: builtins.str,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-    ) -> None:
-        '''
-        :param scope: Scope in which this resource is defined.
-        :param id: Construct identifier for this resource (unique in its scope).
-        :param data: The rules file used in the namespace. For more details about the rules file, see `Creating a rules file <https://docs.aws.amazon.com/prometheus/latest/userguide/AMP-ruler-rulesfile.html>`_ in the *Amazon Managed Service for Prometheus User Guide* .
-        :param name: The name of the rule groups namespace.
-        :param workspace: The ID of the workspace to add the rule groups namespace.
-        :param tags: The list of tag keys and values that are associated with the rule groups namespace.
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__02d681a4d4a1e9d9052c98f45bf8b21257e825ee8185b30ea4b6f887fc7416b1)
-            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
-            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
-        props = CfnRuleGroupsNamespaceProps(
-            data=data, name=name, workspace=workspace, tags=tags
-        )
-
-        jsii.create(self.__class__, self, [scope, id, props])
-
-    @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
-        '''Examines the CloudFormation resource and discloses attributes.
-
-        :param inspector: tree inspector to collect and process attributes.
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__f066376b2a4b15a103f9a01bca66f252615381ddc55bd5508262712fd03eec2d)
-            check_type(argname="argument inspector", value=inspector, expected_type=type_hints["inspector"])
-        return typing.cast(None, jsii.invoke(self, "inspect", [inspector]))
-
-    @jsii.member(jsii_name="renderProperties")
-    def _render_properties(
-        self,
-        props: typing.Mapping[builtins.str, typing.Any],
-    ) -> typing.Mapping[builtins.str, typing.Any]:
-        '''
-        :param props: -
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__501ad912878791d9cc1a45e52a9642fb0747f4ddf4482708286f9bfde7e036de)
-            check_type(argname="argument props", value=props, expected_type=type_hints["props"])
-        return typing.cast(typing.Mapping[builtins.str, typing.Any], jsii.invoke(self, "renderProperties", [props]))
-
-    @jsii.python.classproperty
-    @jsii.member(jsii_name="CFN_RESOURCE_TYPE_NAME")
-    def CFN_RESOURCE_TYPE_NAME(cls) -> builtins.str:
-        '''The CloudFormation resource type name for this resource class.'''
-        return typing.cast(builtins.str, jsii.sget(cls, "CFN_RESOURCE_TYPE_NAME"))
-
-    @builtins.property
-    @jsii.member(jsii_name="attrArn")
-    def attr_arn(self) -> builtins.str:
-        '''The ARN of the rule groups namespace.
-
-        For example, ``arn:aws:aps:<region>:123456789012:rulegroupsnamespace/ws-example1-1234-abcd-5678-ef90abcd1234/rulesfile1`` .
-
-        :cloudformationAttribute: Arn
-        '''
-        return typing.cast(builtins.str, jsii.get(self, "attrArn"))
-
-    @builtins.property
-    @jsii.member(jsii_name="cfnProperties")
-    def _cfn_properties(self) -> typing.Mapping[builtins.str, typing.Any]:
-        return typing.cast(typing.Mapping[builtins.str, typing.Any], jsii.get(self, "cfnProperties"))
-
-    @builtins.property
-    @jsii.member(jsii_name="ruleGroupsNamespaceRef")
-    def rule_groups_namespace_ref(self) -> RuleGroupsNamespaceReference:
-        '''A reference to a RuleGroupsNamespace resource.'''
-        return typing.cast(RuleGroupsNamespaceReference, jsii.get(self, "ruleGroupsNamespaceRef"))
-
-    @builtins.property
-    @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
-        '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
-
-    @builtins.property
-    @jsii.member(jsii_name="data")
-    def data(self) -> builtins.str:
-        '''The rules file used in the namespace.'''
-        return typing.cast(builtins.str, jsii.get(self, "data"))
-
-    @data.setter
-    def data(self, value: builtins.str) -> None:
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__327e955bc86deb15923357f0f050e077304b8dbbb2c9baba9d84a13c5d7b695d)
-            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
-        jsii.set(self, "data", value) # pyright: ignore[reportArgumentType]
-
-    @builtins.property
-    @jsii.member(jsii_name="name")
-    def name(self) -> builtins.str:
-        '''The name of the rule groups namespace.'''
-        return typing.cast(builtins.str, jsii.get(self, "name"))
-
-    @name.setter
-    def name(self, value: builtins.str) -> None:
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__6f3851e1fa5b758763dff1a85515e41a8c57e1b4da81b2e677f003890944957f)
-            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
-        jsii.set(self, "name", value) # pyright: ignore[reportArgumentType]
-
-    @builtins.property
-    @jsii.member(jsii_name="workspace")
-    def workspace(self) -> builtins.str:
-        '''The ID of the workspace to add the rule groups namespace.'''
-        return typing.cast(builtins.str, jsii.get(self, "workspace"))
-
-    @workspace.setter
-    def workspace(self, value: builtins.str) -> None:
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__f899db17dfa1e1837e2b90cca5f83f23f67ca015116201811ad84d044e9ebe95)
-            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
-        jsii.set(self, "workspace", value) # pyright: ignore[reportArgumentType]
-
-    @builtins.property
-    @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
-        '''The list of tag keys and values that are associated with the rule groups namespace.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
-
-    @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__d9af819e60d52c87c9369e4854d0dfc8d4917db97219839fbc11cf2bdad55659)
-            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
-        jsii.set(self, "tagsRaw", value) # pyright: ignore[reportArgumentType]
-
-
-@jsii.implements(_IInspectable_c2943556, IScraperRef, _ITaggableV2_4e6798f8)
+@jsii.implements(_IInspectable_c2943556, _IScraperRef_2b17ef67, _ITaggableV2_4e6798f8)
 class CfnScraper(
     _CfnResource_9df397a6,
     metaclass=jsii.JSIIMeta,
@@ -2369,7 +1541,8 @@ class CfnScraper(
         scraper_logging_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnScraper.ScraperLoggingConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
-        '''
+        '''Create a new ``AWS::APS::Scraper``.
+
         :param scope: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
         :param destination: The Amazon Managed Service for Prometheus workspace the scraper sends metrics to.
@@ -2472,9 +1645,9 @@ class CfnScraper(
 
     @builtins.property
     @jsii.member(jsii_name="scraperRef")
-    def scraper_ref(self) -> ScraperReference:
+    def scraper_ref(self) -> _ScraperReference_c6b43df1:
         '''A reference to a Scraper resource.'''
-        return typing.cast(ScraperReference, jsii.get(self, "scraperRef"))
+        return typing.cast(_ScraperReference_c6b43df1, jsii.get(self, "scraperRef"))
 
     @builtins.property
     @jsii.member(jsii_name="destination")
@@ -3330,7 +2503,208 @@ class CfnScraper(
             )
 
 
-@jsii.implements(_IInspectable_c2943556, IWorkspaceRef, _ITaggable_36806126)
+@jsii.data_type(
+    jsii_type="aws-cdk-lib.aws_aps.CfnScraperProps",
+    jsii_struct_bases=[],
+    name_mapping={
+        "destination": "destination",
+        "scrape_configuration": "scrapeConfiguration",
+        "source": "source",
+        "alias": "alias",
+        "role_configuration": "roleConfiguration",
+        "scraper_logging_configuration": "scraperLoggingConfiguration",
+        "tags": "tags",
+    },
+)
+class CfnScraperProps:
+    def __init__(
+        self,
+        *,
+        destination: typing.Union[_IResolvable_da3f097b, typing.Union[CfnScraper.DestinationProperty, typing.Dict[builtins.str, typing.Any]]],
+        scrape_configuration: typing.Union[_IResolvable_da3f097b, typing.Union[CfnScraper.ScrapeConfigurationProperty, typing.Dict[builtins.str, typing.Any]]],
+        source: typing.Union[_IResolvable_da3f097b, typing.Union[CfnScraper.SourceProperty, typing.Dict[builtins.str, typing.Any]]],
+        alias: typing.Optional[builtins.str] = None,
+        role_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnScraper.RoleConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        scraper_logging_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnScraper.ScraperLoggingConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+    ) -> None:
+        '''Properties for defining a ``CfnScraper``.
+
+        :param destination: The Amazon Managed Service for Prometheus workspace the scraper sends metrics to.
+        :param scrape_configuration: The configuration in use by the scraper.
+        :param source: The Amazon EKS cluster from which the scraper collects metrics.
+        :param alias: An optional user-assigned scraper alias.
+        :param role_configuration: The role configuration in an Amazon Managed Service for Prometheus scraper.
+        :param scraper_logging_configuration: The definition of logging configuration in an Amazon Managed Service for Prometheus workspace.
+        :param tags: (Optional) The list of tag keys and values associated with the scraper.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-aps-scraper.html
+        :exampleMetadata: fixture=_generated
+
+        Example::
+
+            # The code below shows an example of how to instantiate this type.
+            # The values are placeholders you should change.
+            from aws_cdk import aws_aps as aps
+            
+            cfn_scraper_props = aps.CfnScraperProps(
+                destination=aps.CfnScraper.DestinationProperty(
+                    amp_configuration=aps.CfnScraper.AmpConfigurationProperty(
+                        workspace_arn="workspaceArn"
+                    )
+                ),
+                scrape_configuration=aps.CfnScraper.ScrapeConfigurationProperty(
+                    configuration_blob="configurationBlob"
+                ),
+                source=aps.CfnScraper.SourceProperty(
+                    eks_configuration=aps.CfnScraper.EksConfigurationProperty(
+                        cluster_arn="clusterArn",
+                        subnet_ids=["subnetIds"],
+            
+                        # the properties below are optional
+                        security_group_ids=["securityGroupIds"]
+                    )
+                ),
+            
+                # the properties below are optional
+                alias="alias",
+                role_configuration=aps.CfnScraper.RoleConfigurationProperty(
+                    source_role_arn="sourceRoleArn",
+                    target_role_arn="targetRoleArn"
+                ),
+                scraper_logging_configuration=aps.CfnScraper.ScraperLoggingConfigurationProperty(
+                    logging_destination=aps.CfnScraper.ScraperLoggingDestinationProperty(
+                        cloud_watch_logs=aps.CfnScraper.CloudWatchLogDestinationProperty(
+                            log_group_arn="logGroupArn"
+                        )
+                    ),
+                    scraper_components=[aps.CfnScraper.ScraperComponentProperty(
+                        type="type",
+            
+                        # the properties below are optional
+                        config=aps.CfnScraper.ComponentConfigProperty(
+                            options={
+                                "options_key": "options"
+                            }
+                        )
+                    )]
+                ),
+                tags=[CfnTag(
+                    key="key",
+                    value="value"
+                )]
+            )
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__f302dfc2aa92636b313e32f5d91a0ccfd79ebde0259b977f6291d4c8329455d7)
+            check_type(argname="argument destination", value=destination, expected_type=type_hints["destination"])
+            check_type(argname="argument scrape_configuration", value=scrape_configuration, expected_type=type_hints["scrape_configuration"])
+            check_type(argname="argument source", value=source, expected_type=type_hints["source"])
+            check_type(argname="argument alias", value=alias, expected_type=type_hints["alias"])
+            check_type(argname="argument role_configuration", value=role_configuration, expected_type=type_hints["role_configuration"])
+            check_type(argname="argument scraper_logging_configuration", value=scraper_logging_configuration, expected_type=type_hints["scraper_logging_configuration"])
+            check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
+        self._values: typing.Dict[builtins.str, typing.Any] = {
+            "destination": destination,
+            "scrape_configuration": scrape_configuration,
+            "source": source,
+        }
+        if alias is not None:
+            self._values["alias"] = alias
+        if role_configuration is not None:
+            self._values["role_configuration"] = role_configuration
+        if scraper_logging_configuration is not None:
+            self._values["scraper_logging_configuration"] = scraper_logging_configuration
+        if tags is not None:
+            self._values["tags"] = tags
+
+    @builtins.property
+    def destination(
+        self,
+    ) -> typing.Union[_IResolvable_da3f097b, CfnScraper.DestinationProperty]:
+        '''The Amazon Managed Service for Prometheus workspace the scraper sends metrics to.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-aps-scraper.html#cfn-aps-scraper-destination
+        '''
+        result = self._values.get("destination")
+        assert result is not None, "Required property 'destination' is missing"
+        return typing.cast(typing.Union[_IResolvable_da3f097b, CfnScraper.DestinationProperty], result)
+
+    @builtins.property
+    def scrape_configuration(
+        self,
+    ) -> typing.Union[_IResolvable_da3f097b, CfnScraper.ScrapeConfigurationProperty]:
+        '''The configuration in use by the scraper.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-aps-scraper.html#cfn-aps-scraper-scrapeconfiguration
+        '''
+        result = self._values.get("scrape_configuration")
+        assert result is not None, "Required property 'scrape_configuration' is missing"
+        return typing.cast(typing.Union[_IResolvable_da3f097b, CfnScraper.ScrapeConfigurationProperty], result)
+
+    @builtins.property
+    def source(self) -> typing.Union[_IResolvable_da3f097b, CfnScraper.SourceProperty]:
+        '''The Amazon EKS cluster from which the scraper collects metrics.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-aps-scraper.html#cfn-aps-scraper-source
+        '''
+        result = self._values.get("source")
+        assert result is not None, "Required property 'source' is missing"
+        return typing.cast(typing.Union[_IResolvable_da3f097b, CfnScraper.SourceProperty], result)
+
+    @builtins.property
+    def alias(self) -> typing.Optional[builtins.str]:
+        '''An optional user-assigned scraper alias.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-aps-scraper.html#cfn-aps-scraper-alias
+        '''
+        result = self._values.get("alias")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def role_configuration(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnScraper.RoleConfigurationProperty]]:
+        '''The role configuration in an Amazon Managed Service for Prometheus scraper.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-aps-scraper.html#cfn-aps-scraper-roleconfiguration
+        '''
+        result = self._values.get("role_configuration")
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnScraper.RoleConfigurationProperty]], result)
+
+    @builtins.property
+    def scraper_logging_configuration(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnScraper.ScraperLoggingConfigurationProperty]]:
+        '''The definition of logging configuration in an Amazon Managed Service for Prometheus workspace.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-aps-scraper.html#cfn-aps-scraper-scraperloggingconfiguration
+        '''
+        result = self._values.get("scraper_logging_configuration")
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnScraper.ScraperLoggingConfigurationProperty]], result)
+
+    @builtins.property
+    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+        '''(Optional) The list of tag keys and values associated with the scraper.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-aps-scraper.html#cfn-aps-scraper-tags
+        '''
+        result = self._values.get("tags")
+        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+
+    def __eq__(self, rhs: typing.Any) -> builtins.bool:
+        return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+    def __ne__(self, rhs: typing.Any) -> builtins.bool:
+        return not (rhs == self)
+
+    def __repr__(self) -> str:
+        return "CfnScraperProps(%s)" % ", ".join(
+            k + "=" + repr(v) for k, v in self._values.items()
+        )
+
+
+@jsii.implements(_IInspectable_c2943556, _IWorkspaceRef_d8b2b588, _ITaggable_36806126)
 class CfnWorkspace(
     _CfnResource_9df397a6,
     metaclass=jsii.JSIIMeta,
@@ -3397,7 +2771,8 @@ class CfnWorkspace(
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
         workspace_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnWorkspace.WorkspaceConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
-        '''
+        '''Create a new ``AWS::APS::Workspace``.
+
         :param scope: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
         :param alert_manager_definition: The alert manager definition, a YAML configuration for the alert manager in your Amazon Managed Service for Prometheus workspace. For details about the alert manager definition, see `Creating an alert manager configuration files <https://docs.aws.amazon.com/prometheus/latest/userguide/AMP-alertmanager-config.html>`_ in the *Amazon Managed Service for Prometheus User Guide* . The following example shows part of a CloudFormation YAML file with an embedded alert manager definition (following the ``- |-`` ). ``Workspace: Type: AWS::APS::Workspace .... Properties: .... AlertManagerDefinition: Fn::Sub: - |- alertmanager_config: | templates: - 'default_template' route: receiver: example-sns receivers: - name: example-sns sns_configs: - topic_arn: 'arn:aws:sns:${AWS::Region}:${AWS::AccountId}:${TopicName}' -``
@@ -3500,9 +2875,9 @@ class CfnWorkspace(
 
     @builtins.property
     @jsii.member(jsii_name="workspaceRef")
-    def workspace_ref(self) -> WorkspaceReference:
+    def workspace_ref(self) -> _WorkspaceReference_4f6a6126:
         '''A reference to a Workspace resource.'''
-        return typing.cast(WorkspaceReference, jsii.get(self, "workspaceRef"))
+        return typing.cast(_WorkspaceReference_4f6a6126, jsii.get(self, "workspaceRef"))
 
     @builtins.property
     @jsii.member(jsii_name="alertManagerDefinition")
@@ -4214,8 +3589,202 @@ class CfnWorkspace(
             )
 
 
+@jsii.data_type(
+    jsii_type="aws-cdk-lib.aws_aps.CfnWorkspaceProps",
+    jsii_struct_bases=[],
+    name_mapping={
+        "alert_manager_definition": "alertManagerDefinition",
+        "alias": "alias",
+        "kms_key_arn": "kmsKeyArn",
+        "logging_configuration": "loggingConfiguration",
+        "query_logging_configuration": "queryLoggingConfiguration",
+        "tags": "tags",
+        "workspace_configuration": "workspaceConfiguration",
+    },
+)
+class CfnWorkspaceProps:
+    def __init__(
+        self,
+        *,
+        alert_manager_definition: typing.Optional[builtins.str] = None,
+        alias: typing.Optional[builtins.str] = None,
+        kms_key_arn: typing.Optional[builtins.str] = None,
+        logging_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnWorkspace.LoggingConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        query_logging_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnWorkspace.QueryLoggingConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        workspace_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnWorkspace.WorkspaceConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    ) -> None:
+        '''Properties for defining a ``CfnWorkspace``.
+
+        :param alert_manager_definition: The alert manager definition, a YAML configuration for the alert manager in your Amazon Managed Service for Prometheus workspace. For details about the alert manager definition, see `Creating an alert manager configuration files <https://docs.aws.amazon.com/prometheus/latest/userguide/AMP-alertmanager-config.html>`_ in the *Amazon Managed Service for Prometheus User Guide* . The following example shows part of a CloudFormation YAML file with an embedded alert manager definition (following the ``- |-`` ). ``Workspace: Type: AWS::APS::Workspace .... Properties: .... AlertManagerDefinition: Fn::Sub: - |- alertmanager_config: | templates: - 'default_template' route: receiver: example-sns receivers: - name: example-sns sns_configs: - topic_arn: 'arn:aws:sns:${AWS::Region}:${AWS::AccountId}:${TopicName}' -``
+        :param alias: The alias that is assigned to this workspace to help identify it. It does not need to be unique.
+        :param kms_key_arn: (optional) The ARN for a customer managed AWS KMS key to use for encrypting data within your workspace. For more information about using your own key in your workspace, see `Encryption at rest <https://docs.aws.amazon.com/prometheus/latest/userguide/encryption-at-rest-Amazon-Service-Prometheus.html>`_ in the *Amazon Managed Service for Prometheus User Guide* .
+        :param logging_configuration: Contains information about the logging configuration for the workspace.
+        :param query_logging_configuration: The definition of logging configuration in an Amazon Managed Service for Prometheus workspace.
+        :param tags: The list of tag keys and values that are associated with the workspace.
+        :param workspace_configuration: Use this structure to define label sets and the ingestion limits for time series that match label sets, and to specify the retention period of the workspace.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-aps-workspace.html
+        :exampleMetadata: fixture=_generated
+
+        Example::
+
+            # The code below shows an example of how to instantiate this type.
+            # The values are placeholders you should change.
+            from aws_cdk import aws_aps as aps
+            
+            cfn_workspace_props = aps.CfnWorkspaceProps(
+                alert_manager_definition="alertManagerDefinition",
+                alias="alias",
+                kms_key_arn="kmsKeyArn",
+                logging_configuration=aps.CfnWorkspace.LoggingConfigurationProperty(
+                    log_group_arn="logGroupArn"
+                ),
+                query_logging_configuration=aps.CfnWorkspace.QueryLoggingConfigurationProperty(
+                    destinations=[aps.CfnWorkspace.LoggingDestinationProperty(
+                        cloud_watch_logs=aps.CfnWorkspace.CloudWatchLogDestinationProperty(
+                            log_group_arn="logGroupArn"
+                        ),
+                        filters=aps.CfnWorkspace.LoggingFilterProperty(
+                            qsp_threshold=123
+                        )
+                    )]
+                ),
+                tags=[CfnTag(
+                    key="key",
+                    value="value"
+                )],
+                workspace_configuration=aps.CfnWorkspace.WorkspaceConfigurationProperty(
+                    limits_per_label_sets=[aps.CfnWorkspace.LimitsPerLabelSetProperty(
+                        label_set=[aps.CfnWorkspace.LabelProperty(
+                            name="name",
+                            value="value"
+                        )],
+                        limits=aps.CfnWorkspace.LimitsPerLabelSetEntryProperty(
+                            max_series=123
+                        )
+                    )],
+                    retention_period_in_days=123
+                )
+            )
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__98e95bd874171795b8c6f6104e5fee9fa1d8f50cb6e1edc6d2cc01a77eb0f50a)
+            check_type(argname="argument alert_manager_definition", value=alert_manager_definition, expected_type=type_hints["alert_manager_definition"])
+            check_type(argname="argument alias", value=alias, expected_type=type_hints["alias"])
+            check_type(argname="argument kms_key_arn", value=kms_key_arn, expected_type=type_hints["kms_key_arn"])
+            check_type(argname="argument logging_configuration", value=logging_configuration, expected_type=type_hints["logging_configuration"])
+            check_type(argname="argument query_logging_configuration", value=query_logging_configuration, expected_type=type_hints["query_logging_configuration"])
+            check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
+            check_type(argname="argument workspace_configuration", value=workspace_configuration, expected_type=type_hints["workspace_configuration"])
+        self._values: typing.Dict[builtins.str, typing.Any] = {}
+        if alert_manager_definition is not None:
+            self._values["alert_manager_definition"] = alert_manager_definition
+        if alias is not None:
+            self._values["alias"] = alias
+        if kms_key_arn is not None:
+            self._values["kms_key_arn"] = kms_key_arn
+        if logging_configuration is not None:
+            self._values["logging_configuration"] = logging_configuration
+        if query_logging_configuration is not None:
+            self._values["query_logging_configuration"] = query_logging_configuration
+        if tags is not None:
+            self._values["tags"] = tags
+        if workspace_configuration is not None:
+            self._values["workspace_configuration"] = workspace_configuration
+
+    @builtins.property
+    def alert_manager_definition(self) -> typing.Optional[builtins.str]:
+        '''The alert manager definition, a YAML configuration for the alert manager in your Amazon Managed Service for Prometheus workspace.
+
+        For details about the alert manager definition, see `Creating an alert manager configuration files <https://docs.aws.amazon.com/prometheus/latest/userguide/AMP-alertmanager-config.html>`_ in the *Amazon Managed Service for Prometheus User Guide* .
+
+        The following example shows part of a CloudFormation YAML file with an embedded alert manager definition (following the ``- |-`` ).
+
+        ``Workspace: Type: AWS::APS::Workspace .... Properties: .... AlertManagerDefinition: Fn::Sub: - |- alertmanager_config: | templates: - 'default_template' route: receiver: example-sns receivers: - name: example-sns sns_configs: - topic_arn: 'arn:aws:sns:${AWS::Region}:${AWS::AccountId}:${TopicName}' -``
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-aps-workspace.html#cfn-aps-workspace-alertmanagerdefinition
+        '''
+        result = self._values.get("alert_manager_definition")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def alias(self) -> typing.Optional[builtins.str]:
+        '''The alias that is assigned to this workspace to help identify it.
+
+        It does not need to be unique.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-aps-workspace.html#cfn-aps-workspace-alias
+        '''
+        result = self._values.get("alias")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def kms_key_arn(self) -> typing.Optional[builtins.str]:
+        '''(optional) The ARN for a customer managed AWS KMS key to use for encrypting data within your workspace.
+
+        For more information about using your own key in your workspace, see `Encryption at rest <https://docs.aws.amazon.com/prometheus/latest/userguide/encryption-at-rest-Amazon-Service-Prometheus.html>`_ in the *Amazon Managed Service for Prometheus User Guide* .
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-aps-workspace.html#cfn-aps-workspace-kmskeyarn
+        '''
+        result = self._values.get("kms_key_arn")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def logging_configuration(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnWorkspace.LoggingConfigurationProperty]]:
+        '''Contains information about the logging configuration for the workspace.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-aps-workspace.html#cfn-aps-workspace-loggingconfiguration
+        '''
+        result = self._values.get("logging_configuration")
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnWorkspace.LoggingConfigurationProperty]], result)
+
+    @builtins.property
+    def query_logging_configuration(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnWorkspace.QueryLoggingConfigurationProperty]]:
+        '''The definition of logging configuration in an Amazon Managed Service for Prometheus workspace.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-aps-workspace.html#cfn-aps-workspace-queryloggingconfiguration
+        '''
+        result = self._values.get("query_logging_configuration")
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnWorkspace.QueryLoggingConfigurationProperty]], result)
+
+    @builtins.property
+    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+        '''The list of tag keys and values that are associated with the workspace.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-aps-workspace.html#cfn-aps-workspace-tags
+        '''
+        result = self._values.get("tags")
+        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+
+    @builtins.property
+    def workspace_configuration(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnWorkspace.WorkspaceConfigurationProperty]]:
+        '''Use this structure to define label sets and the ingestion limits for time series that match label sets, and to specify the retention period of the workspace.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-aps-workspace.html#cfn-aps-workspace-workspaceconfiguration
+        '''
+        result = self._values.get("workspace_configuration")
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnWorkspace.WorkspaceConfigurationProperty]], result)
+
+    def __eq__(self, rhs: typing.Any) -> builtins.bool:
+        return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+    def __ne__(self, rhs: typing.Any) -> builtins.bool:
+        return not (rhs == self)
+
+    def __repr__(self) -> str:
+        return "CfnWorkspaceProps(%s)" % ", ".join(
+            k + "=" + repr(v) for k, v in self._values.items()
+        )
+
+
 __all__ = [
-    "AnomalyDetectorReference",
     "CfnAnomalyDetector",
     "CfnAnomalyDetectorProps",
     "CfnResourcePolicy",
@@ -4226,110 +3795,9 @@ __all__ = [
     "CfnScraperProps",
     "CfnWorkspace",
     "CfnWorkspaceProps",
-    "IAnomalyDetectorRef",
-    "IResourcePolicyRef",
-    "IRuleGroupsNamespaceRef",
-    "IScraperRef",
-    "IWorkspaceRef",
-    "ResourcePolicyReference",
-    "RuleGroupsNamespaceReference",
-    "ScraperReference",
-    "WorkspaceReference",
 ]
 
 publication.publish()
-
-def _typecheckingstub__d8f087ddf091d7802928e5eb9ae2c35d5aea0cb5cb3e0d1494e32ce693f67efa(
-    *,
-    anomaly_detector_arn: builtins.str,
-) -> None:
-    """Type checking stubs"""
-    pass
-
-def _typecheckingstub__be017a909bcb870b1880c9bb2c099abc51df504e0f9199ca315deb7fa50b9d6b(
-    *,
-    alias: builtins.str,
-    configuration: typing.Union[_IResolvable_da3f097b, typing.Union[CfnAnomalyDetector.AnomalyDetectorConfigurationProperty, typing.Dict[builtins.str, typing.Any]]],
-    workspace: builtins.str,
-    evaluation_interval_in_seconds: typing.Optional[jsii.Number] = None,
-    labels: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAnomalyDetector.LabelProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
-    missing_data_action: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAnomalyDetector.MissingDataActionProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-    tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-) -> None:
-    """Type checking stubs"""
-    pass
-
-def _typecheckingstub__bb05747fc90b1776c66fd40ec5d261399f93ac6b367fc973d5df8b912bd30997(
-    *,
-    policy_document: builtins.str,
-    workspace_arn: builtins.str,
-) -> None:
-    """Type checking stubs"""
-    pass
-
-def _typecheckingstub__3ba9f13df78597d09b62adc5501ac56c5fedca3215c115e02cb7e3be9e440366(
-    *,
-    data: builtins.str,
-    name: builtins.str,
-    workspace: builtins.str,
-    tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-) -> None:
-    """Type checking stubs"""
-    pass
-
-def _typecheckingstub__f302dfc2aa92636b313e32f5d91a0ccfd79ebde0259b977f6291d4c8329455d7(
-    *,
-    destination: typing.Union[_IResolvable_da3f097b, typing.Union[CfnScraper.DestinationProperty, typing.Dict[builtins.str, typing.Any]]],
-    scrape_configuration: typing.Union[_IResolvable_da3f097b, typing.Union[CfnScraper.ScrapeConfigurationProperty, typing.Dict[builtins.str, typing.Any]]],
-    source: typing.Union[_IResolvable_da3f097b, typing.Union[CfnScraper.SourceProperty, typing.Dict[builtins.str, typing.Any]]],
-    alias: typing.Optional[builtins.str] = None,
-    role_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnScraper.RoleConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-    scraper_logging_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnScraper.ScraperLoggingConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-    tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-) -> None:
-    """Type checking stubs"""
-    pass
-
-def _typecheckingstub__98e95bd874171795b8c6f6104e5fee9fa1d8f50cb6e1edc6d2cc01a77eb0f50a(
-    *,
-    alert_manager_definition: typing.Optional[builtins.str] = None,
-    alias: typing.Optional[builtins.str] = None,
-    kms_key_arn: typing.Optional[builtins.str] = None,
-    logging_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnWorkspace.LoggingConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-    query_logging_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnWorkspace.QueryLoggingConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-    tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-    workspace_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnWorkspace.WorkspaceConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-) -> None:
-    """Type checking stubs"""
-    pass
-
-def _typecheckingstub__e4dbac0a5137da3d0f209a15168185193d0f20c786a3f891fbd553cb9c449a06(
-    *,
-    workspace_arn: builtins.str,
-) -> None:
-    """Type checking stubs"""
-    pass
-
-def _typecheckingstub__b0c92540ac1210bf274d7f5f6e632c06d0a3cafee0e16e47eb2965b3f150ccf4(
-    *,
-    rule_groups_namespace_arn: builtins.str,
-) -> None:
-    """Type checking stubs"""
-    pass
-
-def _typecheckingstub__374a5fc232eb102ac8a6793598055a5f55853e59ffcefdb5264aa89a04f77bb4(
-    *,
-    scraper_arn: builtins.str,
-) -> None:
-    """Type checking stubs"""
-    pass
-
-def _typecheckingstub__aa321cfca0087100b6387ec771252167e8e12904e76c51b3da5c058ba6c23f46(
-    *,
-    workspace_arn: builtins.str,
-) -> None:
-    """Type checking stubs"""
-    pass
 
 def _typecheckingstub__58b3184629f18780da9f7c9eb2f8acdbdbb5190c9fc3ae41fdbbe34341ba0f26(
     scope: _constructs_77d1e7e8.Construct,
@@ -4442,6 +3910,19 @@ def _typecheckingstub__83993f42a131a948093792cb8cd7b4f710c6b4dffce6b17f386497f1c
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__be017a909bcb870b1880c9bb2c099abc51df504e0f9199ca315deb7fa50b9d6b(
+    *,
+    alias: builtins.str,
+    configuration: typing.Union[_IResolvable_da3f097b, typing.Union[CfnAnomalyDetector.AnomalyDetectorConfigurationProperty, typing.Dict[builtins.str, typing.Any]]],
+    workspace: builtins.str,
+    evaluation_interval_in_seconds: typing.Optional[jsii.Number] = None,
+    labels: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAnomalyDetector.LabelProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+    missing_data_action: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAnomalyDetector.MissingDataActionProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__54f89d9ee1d6d400f40f83801fe40dee056ce969e9e0501ca1390285aab7cb82(
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
@@ -4472,6 +3953,14 @@ def _typecheckingstub__d726921aa53fc43f461134d2df5d60edb5d56b4fa67ef6e4e82d305af
 
 def _typecheckingstub__2f020f5d54f91c35f0b4332b16391ef6561cfc07a46cc5fc1e48d4acdb82a4b8(
     value: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__bb05747fc90b1776c66fd40ec5d261399f93ac6b367fc973d5df8b912bd30997(
+    *,
+    policy_document: builtins.str,
+    workspace_arn: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -4520,6 +4009,16 @@ def _typecheckingstub__f899db17dfa1e1837e2b90cca5f83f23f67ca015116201811ad84d044
 
 def _typecheckingstub__d9af819e60d52c87c9369e4854d0dfc8d4917db97219839fbc11cf2bdad55659(
     value: typing.Optional[typing.List[_CfnTag_f6864754]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__3ba9f13df78597d09b62adc5501ac56c5fedca3215c115e02cb7e3be9e440366(
+    *,
+    data: builtins.str,
+    name: builtins.str,
+    workspace: builtins.str,
+    tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -4675,6 +4174,19 @@ def _typecheckingstub__655e83ac40d7d6fcc3362aa2c25fcfadc0beb5744ef393de105d7d152
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__f302dfc2aa92636b313e32f5d91a0ccfd79ebde0259b977f6291d4c8329455d7(
+    *,
+    destination: typing.Union[_IResolvable_da3f097b, typing.Union[CfnScraper.DestinationProperty, typing.Dict[builtins.str, typing.Any]]],
+    scrape_configuration: typing.Union[_IResolvable_da3f097b, typing.Union[CfnScraper.ScrapeConfigurationProperty, typing.Dict[builtins.str, typing.Any]]],
+    source: typing.Union[_IResolvable_da3f097b, typing.Union[CfnScraper.SourceProperty, typing.Dict[builtins.str, typing.Any]]],
+    alias: typing.Optional[builtins.str] = None,
+    role_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnScraper.RoleConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    scraper_logging_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnScraper.ScraperLoggingConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__0d7d4de6c2c3c0a6cc1f746f35f29f98344da5c5d59e48a9d1e788ab80e3ef9b(
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
@@ -4811,5 +4323,15 @@ def _typecheckingstub__8d8bd4b9a39be1594ef4681992e92f89f24816c775c0e0c40e340be13
     """Type checking stubs"""
     pass
 
-for cls in [IAnomalyDetectorRef, IResourcePolicyRef, IRuleGroupsNamespaceRef, IScraperRef, IWorkspaceRef]:
-    typing.cast(typing.Any, cls).__protocol_attrs__ = typing.cast(typing.Any, cls).__protocol_attrs__ - set(['__jsii_proxy_class__', '__jsii_type__'])
+def _typecheckingstub__98e95bd874171795b8c6f6104e5fee9fa1d8f50cb6e1edc6d2cc01a77eb0f50a(
+    *,
+    alert_manager_definition: typing.Optional[builtins.str] = None,
+    alias: typing.Optional[builtins.str] = None,
+    kms_key_arn: typing.Optional[builtins.str] = None,
+    logging_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnWorkspace.LoggingConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    query_logging_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnWorkspace.QueryLoggingConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+    workspace_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnWorkspace.WorkspaceConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass

@@ -13,6 +13,7 @@ from fsspec.asyn import sync
 from upath._stat import UPathStatResult
 from upath.core import UPath
 from upath.types import JoinablePathLike
+from upath.types import StatResultType
 
 if TYPE_CHECKING:
     from typing import Literal
@@ -64,7 +65,14 @@ class HTTPPath(UPath):
         sr = urlsplit(super().path)
         return sr._replace(path=sr.path or "/").geturl()
 
-    def is_file(self) -> bool:
+    def is_file(self, *, follow_symlinks: bool = True) -> bool:
+        if not follow_symlinks:
+            warnings.warn(
+                f"{type(self).__name__}.is_file(follow_symlinks=False):"
+                " is currently ignored.",
+                UserWarning,
+                stacklevel=2,
+            )
         try:
             next(super().iterdir())
         except (StopIteration, NotADirectoryError):
@@ -74,7 +82,14 @@ class HTTPPath(UPath):
         else:
             return False
 
-    def is_dir(self) -> bool:
+    def is_dir(self, *, follow_symlinks: bool = True) -> bool:
+        if not follow_symlinks:
+            warnings.warn(
+                f"{type(self).__name__}.is_dir(follow_symlinks=False):"
+                " is currently ignored.",
+                UserWarning,
+                stacklevel=2,
+            )
         try:
             next(super().iterdir())
         except (StopIteration, NotADirectoryError):
@@ -84,7 +99,7 @@ class HTTPPath(UPath):
         else:
             return True
 
-    def stat(self, follow_symlinks: bool = True) -> UPathStatResult:
+    def stat(self, follow_symlinks: bool = True) -> StatResultType:
         if not follow_symlinks:
             warnings.warn(
                 f"{type(self).__name__}.stat(follow_symlinks=False):"

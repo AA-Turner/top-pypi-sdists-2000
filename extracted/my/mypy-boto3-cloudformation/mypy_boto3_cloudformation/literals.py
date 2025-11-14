@@ -25,6 +25,8 @@ else:
 __all__ = (
     "AccountFilterTypeType",
     "AccountGateStatusType",
+    "AnnotationSeverityLevelType",
+    "AnnotationStatusType",
     "AttributeChangeTypeType",
     "CallAsType",
     "CapabilityType",
@@ -56,6 +58,7 @@ __all__ = (
     "HookFailureModeType",
     "HookInvocationPointType",
     "HookStatusType",
+    "HookTargetActionType",
     "HookTargetTypeType",
     "IdentityProviderType",
     "ListChangeSetsPaginatorName",
@@ -138,6 +141,8 @@ __all__ = (
 
 AccountFilterTypeType = Literal["DIFFERENCE", "INTERSECTION", "NONE", "UNION"]
 AccountGateStatusType = Literal["FAILED", "SKIPPED", "SUCCEEDED"]
+AnnotationSeverityLevelType = Literal["CRITICAL", "HIGH", "INFORMATIONAL", "LOW", "MEDIUM"]
+AnnotationStatusType = Literal["FAILED", "PASSED", "SKIPPED"]
 AttributeChangeTypeType = Literal["Add", "Modify", "Remove"]
 CallAsType = Literal["DELEGATED_ADMIN", "SELF"]
 CapabilityType = Literal["CAPABILITY_AUTO_EXPAND", "CAPABILITY_IAM", "CAPABILITY_NAMED_IAM"]
@@ -221,6 +226,7 @@ HookInvocationPointType = Literal["PRE_PROVISION"]
 HookStatusType = Literal[
     "HOOK_COMPLETE_FAILED", "HOOK_COMPLETE_SUCCEEDED", "HOOK_FAILED", "HOOK_IN_PROGRESS"
 ]
+HookTargetActionType = Literal["CREATE", "DELETE", "IMPORT", "UPDATE"]
 HookTargetTypeType = Literal["RESOURCE"]
 IdentityProviderType = Literal["AWS_Marketplace", "Bitbucket", "GitHub"]
 ListChangeSetsPaginatorName = Literal["list_change_sets"]
@@ -423,7 +429,6 @@ ServiceName = Literal[
     "apprunner",
     "appstream",
     "appsync",
-    "apptest",
     "arc-region-switch",
     "arc-zonal-shift",
     "artifact",
@@ -591,7 +596,6 @@ ServiceName = Literal[
     "iotdeviceadvisor",
     "iotevents",
     "iotevents-data",
-    "iotfleethub",
     "iotfleetwise",
     "iotsecuretunneling",
     "iotsitewise",
@@ -630,8 +634,6 @@ ServiceName = Literal[
     "location",
     "logs",
     "lookoutequipment",
-    "lookoutmetrics",
-    "lookoutvision",
     "m2",
     "machinelearning",
     "macie2",
@@ -706,8 +708,6 @@ ServiceName = Literal[
     "qapps",
     "qbusiness",
     "qconnect",
-    "qldb",
-    "qldb-session",
     "quicksight",
     "ram",
     "rbin",
@@ -722,7 +722,6 @@ ServiceName = Literal[
     "resource-explorer-2",
     "resource-groups",
     "resourcegroupstaggingapi",
-    "robomaker",
     "rolesanywhere",
     "route53",
     "route53-recovery-cluster",

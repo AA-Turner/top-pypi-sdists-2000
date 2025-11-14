@@ -23,7 +23,6 @@ setup(
     description="The GraphQL frontend to python dagster.",
     url="https://github.com/dagster-io/dagster/tree/master/python_modules/dagster-graphql",
     classifiers=[
-        "Programming Language :: Python :: 3.9",
         "Programming Language :: Python :: 3.10",
         "Programming Language :: Python :: 3.11",
         "Programming Language :: Python :: 3.12",
@@ -33,9 +32,9 @@ setup(
     ],
     packages=find_packages(exclude=["dagster_graphql_tests*"]),
     include_package_data=True,
-    python_requires=">=3.9,<3.14",
+    python_requires=">=3.10,<3.14",
     install_requires=[
-        "dagster==1.12.1",
+        "dagster==1.12.2",
         "graphene>=3,<4",
         "gql[requests]>=3,<4",
         "requests",

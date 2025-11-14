@@ -11,6 +11,14 @@ sys.modules["pyspark.sql"] = Mock()
 sys.modules["pyspark.sql.connect"] = Mock()
 sys.modules["pyspark.sql.connect.session"] = Mock()
 sys.modules["pyspark.sql.connect.client"] = Mock()
+sys.modules["aws_embedded_metrics"] = Mock()
+sys.modules["aws_embedded_metrics.sinks"] = Mock()
+sys.modules["aws_embedded_metrics.sinks.stdout_sink"] = Mock()
+sys.modules["aws_embedded_metrics.logger"] = Mock()
+sys.modules["aws_embedded_metrics.logger.metrics_logger"] = Mock()
+sys.modules["aws_embedded_metrics.logger.metrics_context"] = Mock()
+sys.modules["aws_embedded_metrics.environment"] = Mock()
+sys.modules["aws_embedded_metrics.environment.local_environment"] = Mock()
 
 # Mock Project class before any imports to prevent Domain ID error
 with patch("sagemaker_studio.Project"):

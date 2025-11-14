@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: testcontainers
-Version: 4.13.2
+Version: 4.13.3
 Summary: Python library for throwaway instances of anything that can run in a Docker container
 License: Apache-2.0
 License-File: LICENSE.txt
@@ -9,7 +9,7 @@ Author: Sergey Pirogov
 Author-email: automationremarks@gmail.com
 Maintainer: Balint Bartha
 Maintainer-email: totallyzen@users.noreply.github.com
-Requires-Python: >=3.9.2,<4.0
+Requires-Python: >=3.9.2
 Classifier: Intended Audience :: Developers
 Classifier: Intended Audience :: Information Technology
 Classifier: License :: OSI Approved :: Apache Software License
@@ -76,7 +76,6 @@ Requires-Dist: bcrypt ; extra == "registry"
 Requires-Dist: boto3 ; extra == "aws" or extra == "localstack"
 Requires-Dist: cassandra-driver (==3.29.1) ; extra == "scylla"
 Requires-Dist: chromadb-client (>=1.0.0,<2.0.0) ; extra == "chroma"
-Requires-Dist: clickhouse-driver ; extra == "clickhouse"
 Requires-Dist: cryptography ; extra == "mailpit" or extra == "sftp"
 Requires-Dist: docker
 Requires-Dist: google-cloud-datastore (>=2) ; extra == "google"
@@ -90,16 +89,16 @@ Requires-Dist: minio ; extra == "minio"
 Requires-Dist: nats-py ; extra == "nats"
 Requires-Dist: neo4j ; extra == "neo4j"
 Requires-Dist: openfga-sdk ; (python_version >= "3.10") and (extra == "openfga")
-Requires-Dist: opensearch-py ; extra == "opensearch"
-Requires-Dist: oracledb ; extra == "oracle" or extra == "oracle-free"
+Requires-Dist: opensearch-py ; (python_version < "4.0") and (extra == "opensearch")
+Requires-Dist: oracledb (>=3.4.1) ; extra == "oracle" or extra == "oracle-free"
 Requires-Dist: pika ; extra == "rabbitmq"
 Requires-Dist: pymongo ; extra == "mongodb"
-Requires-Dist: pymssql ; (platform_machine != "arm64" or python_version >= "3.10") and (extra == "mssql")
+Requires-Dist: pymssql (>=2.3.9) ; (platform_machine != "arm64" or python_version >= "3.10") and (extra == "mssql")
 Requires-Dist: pymysql[rsa] ; extra == "mysql"
 Requires-Dist: python-arango (>=7.8,<8.0) ; extra == "arangodb"
 Requires-Dist: python-dotenv
 Requires-Dist: python-keycloak ; extra == "keycloak"
-Requires-Dist: pyyaml ; extra == "k3s"
+Requires-Dist: pyyaml (>=6.0.3) ; extra == "k3s"
 Requires-Dist: qdrant-client ; extra == "qdrant"
 Requires-Dist: redis ; extra == "generic" or extra == "redis"
 Requires-Dist: selenium ; extra == "selenium"

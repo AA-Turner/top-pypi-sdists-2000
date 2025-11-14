@@ -70,449 +70,21 @@ from .._jsii import *
 import constructs as _constructs_77d1e7e8
 from .. import (
     CfnResource as _CfnResource_9df397a6,
-    IEnvironmentAware as _IEnvironmentAware_a408b00d,
     IInspectable as _IInspectable_c2943556,
     IResolvable as _IResolvable_da3f097b,
     ITaggableV2 as _ITaggableV2_4e6798f8,
     TagManager as _TagManager_0a598cb3,
     TreeInspector as _TreeInspector_488e0dd5,
 )
-
-
-@jsii.data_type(
-    jsii_type="aws-cdk-lib.aws_ssmquicksetup.CfnConfigurationManagerProps",
-    jsii_struct_bases=[],
-    name_mapping={
-        "configuration_definitions": "configurationDefinitions",
-        "description": "description",
-        "name": "name",
-        "tags": "tags",
-    },
+from ..interfaces.aws_ssmquicksetup import (
+    ConfigurationManagerReference as _ConfigurationManagerReference_09310beb,
+    IConfigurationManagerRef as _IConfigurationManagerRef_376cbf9f,
+    ILifecycleAutomationRef as _ILifecycleAutomationRef_c65ba80f,
+    LifecycleAutomationReference as _LifecycleAutomationReference_bf9c6785,
 )
-class CfnConfigurationManagerProps:
-    def __init__(
-        self,
-        *,
-        configuration_definitions: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnConfigurationManager.ConfigurationDefinitionProperty", typing.Dict[builtins.str, typing.Any]]]]],
-        description: typing.Optional[builtins.str] = None,
-        name: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
-    ) -> None:
-        '''Properties for defining a ``CfnConfigurationManager``.
 
-        :param configuration_definitions: The definition of the Quick Setup configuration that the configuration manager deploys.
-        :param description: The description of the configuration.
-        :param name: The name of the configuration.
-        :param tags: Key-value pairs of metadata to assign to the configuration manager.
 
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ssmquicksetup-configurationmanager.html
-        :exampleMetadata: fixture=_generated
-
-        Example::
-
-            # The code below shows an example of how to instantiate this type.
-            # The values are placeholders you should change.
-            from aws_cdk import aws_ssmquicksetup as ssmquicksetup
-            
-            cfn_configuration_manager_props = ssmquicksetup.CfnConfigurationManagerProps(
-                configuration_definitions=[ssmquicksetup.CfnConfigurationManager.ConfigurationDefinitionProperty(
-                    parameters={
-                        "parameters_key": "parameters"
-                    },
-                    type="type",
-            
-                    # the properties below are optional
-                    id="id",
-                    local_deployment_administration_role_arn="localDeploymentAdministrationRoleArn",
-                    local_deployment_execution_role_name="localDeploymentExecutionRoleName",
-                    type_version="typeVersion"
-                )],
-            
-                # the properties below are optional
-                description="description",
-                name="name",
-                tags={
-                    "tags_key": "tags"
-                }
-            )
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__0bd2e12c3bb5f4087218fbe0db9640c52d608411ab3980220b7dd2ff438750e0)
-            check_type(argname="argument configuration_definitions", value=configuration_definitions, expected_type=type_hints["configuration_definitions"])
-            check_type(argname="argument description", value=description, expected_type=type_hints["description"])
-            check_type(argname="argument name", value=name, expected_type=type_hints["name"])
-            check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
-        self._values: typing.Dict[builtins.str, typing.Any] = {
-            "configuration_definitions": configuration_definitions,
-        }
-        if description is not None:
-            self._values["description"] = description
-        if name is not None:
-            self._values["name"] = name
-        if tags is not None:
-            self._values["tags"] = tags
-
-    @builtins.property
-    def configuration_definitions(
-        self,
-    ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnConfigurationManager.ConfigurationDefinitionProperty"]]]:
-        '''The definition of the Quick Setup configuration that the configuration manager deploys.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ssmquicksetup-configurationmanager.html#cfn-ssmquicksetup-configurationmanager-configurationdefinitions
-        '''
-        result = self._values.get("configuration_definitions")
-        assert result is not None, "Required property 'configuration_definitions' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnConfigurationManager.ConfigurationDefinitionProperty"]]], result)
-
-    @builtins.property
-    def description(self) -> typing.Optional[builtins.str]:
-        '''The description of the configuration.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ssmquicksetup-configurationmanager.html#cfn-ssmquicksetup-configurationmanager-description
-        '''
-        result = self._values.get("description")
-        return typing.cast(typing.Optional[builtins.str], result)
-
-    @builtins.property
-    def name(self) -> typing.Optional[builtins.str]:
-        '''The name of the configuration.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ssmquicksetup-configurationmanager.html#cfn-ssmquicksetup-configurationmanager-name
-        '''
-        result = self._values.get("name")
-        return typing.cast(typing.Optional[builtins.str], result)
-
-    @builtins.property
-    def tags(self) -> typing.Optional[typing.Mapping[builtins.str, builtins.str]]:
-        '''Key-value pairs of metadata to assign to the configuration manager.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ssmquicksetup-configurationmanager.html#cfn-ssmquicksetup-configurationmanager-tags
-        '''
-        result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.Mapping[builtins.str, builtins.str]], result)
-
-    def __eq__(self, rhs: typing.Any) -> builtins.bool:
-        return isinstance(rhs, self.__class__) and rhs._values == self._values
-
-    def __ne__(self, rhs: typing.Any) -> builtins.bool:
-        return not (rhs == self)
-
-    def __repr__(self) -> str:
-        return "CfnConfigurationManagerProps(%s)" % ", ".join(
-            k + "=" + repr(v) for k, v in self._values.items()
-        )
-
-
-@jsii.data_type(
-    jsii_type="aws-cdk-lib.aws_ssmquicksetup.CfnLifecycleAutomationProps",
-    jsii_struct_bases=[],
-    name_mapping={
-        "automation_document": "automationDocument",
-        "automation_parameters": "automationParameters",
-        "resource_key": "resourceKey",
-        "tags": "tags",
-    },
-)
-class CfnLifecycleAutomationProps:
-    def __init__(
-        self,
-        *,
-        automation_document: builtins.str,
-        automation_parameters: typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Sequence[builtins.str]]],
-        resource_key: builtins.str,
-        tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
-    ) -> None:
-        '''Properties for defining a ``CfnLifecycleAutomation``.
-
-        :param automation_document: The name of the SSM Automation document to execute in response to AWS CloudFormation lifecycle events (CREATE, UPDATE, DELETE).
-        :param automation_parameters: A map of key-value parameters passed to the Automation document during execution. Each parameter name maps to a list of values, even for single values. Parameters can include configuration-specific values for your automation workflow.
-        :param resource_key: A unique identifier used for generating the SSM Association name. This ensures uniqueness when multiple lifecycle automation resources exist in the same stack.
-        :param tags: Tags applied to the underlying SSM Association created by this resource. Tags help identify and organize automation executions.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ssmquicksetup-lifecycleautomation.html
-        :exampleMetadata: fixture=_generated
-
-        Example::
-
-            # The code below shows an example of how to instantiate this type.
-            # The values are placeholders you should change.
-            from aws_cdk import aws_ssmquicksetup as ssmquicksetup
-            
-            cfn_lifecycle_automation_props = ssmquicksetup.CfnLifecycleAutomationProps(
-                automation_document="automationDocument",
-                automation_parameters={
-                    "automation_parameters_key": ["automationParameters"]
-                },
-                resource_key="resourceKey",
-            
-                # the properties below are optional
-                tags={
-                    "tags_key": "tags"
-                }
-            )
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__79199d718c2b2c172a1d7d84b00e0168a3213bd466a48735b8cbd4b538315455)
-            check_type(argname="argument automation_document", value=automation_document, expected_type=type_hints["automation_document"])
-            check_type(argname="argument automation_parameters", value=automation_parameters, expected_type=type_hints["automation_parameters"])
-            check_type(argname="argument resource_key", value=resource_key, expected_type=type_hints["resource_key"])
-            check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
-        self._values: typing.Dict[builtins.str, typing.Any] = {
-            "automation_document": automation_document,
-            "automation_parameters": automation_parameters,
-            "resource_key": resource_key,
-        }
-        if tags is not None:
-            self._values["tags"] = tags
-
-    @builtins.property
-    def automation_document(self) -> builtins.str:
-        '''The name of the SSM Automation document to execute in response to AWS CloudFormation lifecycle events (CREATE, UPDATE, DELETE).
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ssmquicksetup-lifecycleautomation.html#cfn-ssmquicksetup-lifecycleautomation-automationdocument
-        '''
-        result = self._values.get("automation_document")
-        assert result is not None, "Required property 'automation_document' is missing"
-        return typing.cast(builtins.str, result)
-
-    @builtins.property
-    def automation_parameters(
-        self,
-    ) -> typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.List[builtins.str]]]:
-        '''A map of key-value parameters passed to the Automation document during execution.
-
-        Each parameter name maps to a list of values, even for single values. Parameters can include configuration-specific values for your automation workflow.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ssmquicksetup-lifecycleautomation.html#cfn-ssmquicksetup-lifecycleautomation-automationparameters
-        '''
-        result = self._values.get("automation_parameters")
-        assert result is not None, "Required property 'automation_parameters' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.List[builtins.str]]], result)
-
-    @builtins.property
-    def resource_key(self) -> builtins.str:
-        '''A unique identifier used for generating the SSM Association name.
-
-        This ensures uniqueness when multiple lifecycle automation resources exist in the same stack.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ssmquicksetup-lifecycleautomation.html#cfn-ssmquicksetup-lifecycleautomation-resourcekey
-        '''
-        result = self._values.get("resource_key")
-        assert result is not None, "Required property 'resource_key' is missing"
-        return typing.cast(builtins.str, result)
-
-    @builtins.property
-    def tags(self) -> typing.Optional[typing.Mapping[builtins.str, builtins.str]]:
-        '''Tags applied to the underlying SSM Association created by this resource.
-
-        Tags help identify and organize automation executions.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ssmquicksetup-lifecycleautomation.html#cfn-ssmquicksetup-lifecycleautomation-tags
-        '''
-        result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.Mapping[builtins.str, builtins.str]], result)
-
-    def __eq__(self, rhs: typing.Any) -> builtins.bool:
-        return isinstance(rhs, self.__class__) and rhs._values == self._values
-
-    def __ne__(self, rhs: typing.Any) -> builtins.bool:
-        return not (rhs == self)
-
-    def __repr__(self) -> str:
-        return "CfnLifecycleAutomationProps(%s)" % ", ".join(
-            k + "=" + repr(v) for k, v in self._values.items()
-        )
-
-
-@jsii.data_type(
-    jsii_type="aws-cdk-lib.aws_ssmquicksetup.ConfigurationManagerReference",
-    jsii_struct_bases=[],
-    name_mapping={"manager_arn": "managerArn"},
-)
-class ConfigurationManagerReference:
-    def __init__(self, *, manager_arn: builtins.str) -> None:
-        '''A reference to a ConfigurationManager resource.
-
-        :param manager_arn: The ManagerArn of the ConfigurationManager resource.
-
-        :exampleMetadata: fixture=_generated
-
-        Example::
-
-            # The code below shows an example of how to instantiate this type.
-            # The values are placeholders you should change.
-            from aws_cdk import aws_ssmquicksetup as ssmquicksetup
-            
-            configuration_manager_reference = ssmquicksetup.ConfigurationManagerReference(
-                manager_arn="managerArn"
-            )
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__605416c7622c4d2af93037d22c1a25b719cc761f49f957bc94aea7a182cf18ca)
-            check_type(argname="argument manager_arn", value=manager_arn, expected_type=type_hints["manager_arn"])
-        self._values: typing.Dict[builtins.str, typing.Any] = {
-            "manager_arn": manager_arn,
-        }
-
-    @builtins.property
-    def manager_arn(self) -> builtins.str:
-        '''The ManagerArn of the ConfigurationManager resource.'''
-        result = self._values.get("manager_arn")
-        assert result is not None, "Required property 'manager_arn' is missing"
-        return typing.cast(builtins.str, result)
-
-    def __eq__(self, rhs: typing.Any) -> builtins.bool:
-        return isinstance(rhs, self.__class__) and rhs._values == self._values
-
-    def __ne__(self, rhs: typing.Any) -> builtins.bool:
-        return not (rhs == self)
-
-    def __repr__(self) -> str:
-        return "ConfigurationManagerReference(%s)" % ", ".join(
-            k + "=" + repr(v) for k, v in self._values.items()
-        )
-
-
-@jsii.interface(jsii_type="aws-cdk-lib.aws_ssmquicksetup.IConfigurationManagerRef")
-class IConfigurationManagerRef(
-    _constructs_77d1e7e8.IConstruct,
-    _IEnvironmentAware_a408b00d,
-    typing_extensions.Protocol,
-):
-    '''(experimental) Indicates that this resource can be referenced as a ConfigurationManager.
-
-    :stability: experimental
-    '''
-
-    @builtins.property
-    @jsii.member(jsii_name="configurationManagerRef")
-    def configuration_manager_ref(self) -> ConfigurationManagerReference:
-        '''(experimental) A reference to a ConfigurationManager resource.
-
-        :stability: experimental
-        '''
-        ...
-
-
-class _IConfigurationManagerRefProxy(
-    jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
-    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
-):
-    '''(experimental) Indicates that this resource can be referenced as a ConfigurationManager.
-
-    :stability: experimental
-    '''
-
-    __jsii_type__: typing.ClassVar[str] = "aws-cdk-lib.aws_ssmquicksetup.IConfigurationManagerRef"
-
-    @builtins.property
-    @jsii.member(jsii_name="configurationManagerRef")
-    def configuration_manager_ref(self) -> ConfigurationManagerReference:
-        '''(experimental) A reference to a ConfigurationManager resource.
-
-        :stability: experimental
-        '''
-        return typing.cast(ConfigurationManagerReference, jsii.get(self, "configurationManagerRef"))
-
-# Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
-typing.cast(typing.Any, IConfigurationManagerRef).__jsii_proxy_class__ = lambda : _IConfigurationManagerRefProxy
-
-
-@jsii.interface(jsii_type="aws-cdk-lib.aws_ssmquicksetup.ILifecycleAutomationRef")
-class ILifecycleAutomationRef(
-    _constructs_77d1e7e8.IConstruct,
-    _IEnvironmentAware_a408b00d,
-    typing_extensions.Protocol,
-):
-    '''(experimental) Indicates that this resource can be referenced as a LifecycleAutomation.
-
-    :stability: experimental
-    '''
-
-    @builtins.property
-    @jsii.member(jsii_name="lifecycleAutomationRef")
-    def lifecycle_automation_ref(self) -> "LifecycleAutomationReference":
-        '''(experimental) A reference to a LifecycleAutomation resource.
-
-        :stability: experimental
-        '''
-        ...
-
-
-class _ILifecycleAutomationRefProxy(
-    jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
-    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
-):
-    '''(experimental) Indicates that this resource can be referenced as a LifecycleAutomation.
-
-    :stability: experimental
-    '''
-
-    __jsii_type__: typing.ClassVar[str] = "aws-cdk-lib.aws_ssmquicksetup.ILifecycleAutomationRef"
-
-    @builtins.property
-    @jsii.member(jsii_name="lifecycleAutomationRef")
-    def lifecycle_automation_ref(self) -> "LifecycleAutomationReference":
-        '''(experimental) A reference to a LifecycleAutomation resource.
-
-        :stability: experimental
-        '''
-        return typing.cast("LifecycleAutomationReference", jsii.get(self, "lifecycleAutomationRef"))
-
-# Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
-typing.cast(typing.Any, ILifecycleAutomationRef).__jsii_proxy_class__ = lambda : _ILifecycleAutomationRefProxy
-
-
-@jsii.data_type(
-    jsii_type="aws-cdk-lib.aws_ssmquicksetup.LifecycleAutomationReference",
-    jsii_struct_bases=[],
-    name_mapping={"association_id": "associationId"},
-)
-class LifecycleAutomationReference:
-    def __init__(self, *, association_id: builtins.str) -> None:
-        '''A reference to a LifecycleAutomation resource.
-
-        :param association_id: The AssociationId of the LifecycleAutomation resource.
-
-        :exampleMetadata: fixture=_generated
-
-        Example::
-
-            # The code below shows an example of how to instantiate this type.
-            # The values are placeholders you should change.
-            from aws_cdk import aws_ssmquicksetup as ssmquicksetup
-            
-            lifecycle_automation_reference = ssmquicksetup.LifecycleAutomationReference(
-                association_id="associationId"
-            )
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__3ee89d89706a6e2c7f4f0e1ea57af408844dd20f0d22fb4ea042d2b6d6b608e2)
-            check_type(argname="argument association_id", value=association_id, expected_type=type_hints["association_id"])
-        self._values: typing.Dict[builtins.str, typing.Any] = {
-            "association_id": association_id,
-        }
-
-    @builtins.property
-    def association_id(self) -> builtins.str:
-        '''The AssociationId of the LifecycleAutomation resource.'''
-        result = self._values.get("association_id")
-        assert result is not None, "Required property 'association_id' is missing"
-        return typing.cast(builtins.str, result)
-
-    def __eq__(self, rhs: typing.Any) -> builtins.bool:
-        return isinstance(rhs, self.__class__) and rhs._values == self._values
-
-    def __ne__(self, rhs: typing.Any) -> builtins.bool:
-        return not (rhs == self)
-
-    def __repr__(self) -> str:
-        return "LifecycleAutomationReference(%s)" % ", ".join(
-            k + "=" + repr(v) for k, v in self._values.items()
-        )
-
-
-@jsii.implements(_IInspectable_c2943556, IConfigurationManagerRef, _ITaggableV2_4e6798f8)
+@jsii.implements(_IInspectable_c2943556, _IConfigurationManagerRef_376cbf9f, _ITaggableV2_4e6798f8)
 class CfnConfigurationManager(
     _CfnResource_9df397a6,
     metaclass=jsii.JSIIMeta,
@@ -565,7 +137,8 @@ class CfnConfigurationManager(
         name: typing.Optional[builtins.str] = None,
         tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
     ) -> None:
-        '''
+        '''Create a new ``AWS::SSMQuickSetup::ConfigurationManager``.
+
         :param scope: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
         :param configuration_definitions: The definition of the Quick Setup configuration that the configuration manager deploys.
@@ -667,9 +240,9 @@ class CfnConfigurationManager(
 
     @builtins.property
     @jsii.member(jsii_name="configurationManagerRef")
-    def configuration_manager_ref(self) -> ConfigurationManagerReference:
+    def configuration_manager_ref(self) -> _ConfigurationManagerReference_09310beb:
         '''A reference to a ConfigurationManager resource.'''
-        return typing.cast(ConfigurationManagerReference, jsii.get(self, "configurationManagerRef"))
+        return typing.cast(_ConfigurationManagerReference_09310beb, jsii.get(self, "configurationManagerRef"))
 
     @builtins.property
     @jsii.member(jsii_name="configurationDefinitions")
@@ -1219,7 +792,131 @@ class CfnConfigurationManager(
             )
 
 
-@jsii.implements(_IInspectable_c2943556, ILifecycleAutomationRef, _ITaggableV2_4e6798f8)
+@jsii.data_type(
+    jsii_type="aws-cdk-lib.aws_ssmquicksetup.CfnConfigurationManagerProps",
+    jsii_struct_bases=[],
+    name_mapping={
+        "configuration_definitions": "configurationDefinitions",
+        "description": "description",
+        "name": "name",
+        "tags": "tags",
+    },
+)
+class CfnConfigurationManagerProps:
+    def __init__(
+        self,
+        *,
+        configuration_definitions: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnConfigurationManager.ConfigurationDefinitionProperty, typing.Dict[builtins.str, typing.Any]]]]],
+        description: typing.Optional[builtins.str] = None,
+        name: typing.Optional[builtins.str] = None,
+        tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
+    ) -> None:
+        '''Properties for defining a ``CfnConfigurationManager``.
+
+        :param configuration_definitions: The definition of the Quick Setup configuration that the configuration manager deploys.
+        :param description: The description of the configuration.
+        :param name: The name of the configuration.
+        :param tags: Key-value pairs of metadata to assign to the configuration manager.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ssmquicksetup-configurationmanager.html
+        :exampleMetadata: fixture=_generated
+
+        Example::
+
+            # The code below shows an example of how to instantiate this type.
+            # The values are placeholders you should change.
+            from aws_cdk import aws_ssmquicksetup as ssmquicksetup
+            
+            cfn_configuration_manager_props = ssmquicksetup.CfnConfigurationManagerProps(
+                configuration_definitions=[ssmquicksetup.CfnConfigurationManager.ConfigurationDefinitionProperty(
+                    parameters={
+                        "parameters_key": "parameters"
+                    },
+                    type="type",
+            
+                    # the properties below are optional
+                    id="id",
+                    local_deployment_administration_role_arn="localDeploymentAdministrationRoleArn",
+                    local_deployment_execution_role_name="localDeploymentExecutionRoleName",
+                    type_version="typeVersion"
+                )],
+            
+                # the properties below are optional
+                description="description",
+                name="name",
+                tags={
+                    "tags_key": "tags"
+                }
+            )
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__0bd2e12c3bb5f4087218fbe0db9640c52d608411ab3980220b7dd2ff438750e0)
+            check_type(argname="argument configuration_definitions", value=configuration_definitions, expected_type=type_hints["configuration_definitions"])
+            check_type(argname="argument description", value=description, expected_type=type_hints["description"])
+            check_type(argname="argument name", value=name, expected_type=type_hints["name"])
+            check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
+        self._values: typing.Dict[builtins.str, typing.Any] = {
+            "configuration_definitions": configuration_definitions,
+        }
+        if description is not None:
+            self._values["description"] = description
+        if name is not None:
+            self._values["name"] = name
+        if tags is not None:
+            self._values["tags"] = tags
+
+    @builtins.property
+    def configuration_definitions(
+        self,
+    ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnConfigurationManager.ConfigurationDefinitionProperty]]]:
+        '''The definition of the Quick Setup configuration that the configuration manager deploys.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ssmquicksetup-configurationmanager.html#cfn-ssmquicksetup-configurationmanager-configurationdefinitions
+        '''
+        result = self._values.get("configuration_definitions")
+        assert result is not None, "Required property 'configuration_definitions' is missing"
+        return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnConfigurationManager.ConfigurationDefinitionProperty]]], result)
+
+    @builtins.property
+    def description(self) -> typing.Optional[builtins.str]:
+        '''The description of the configuration.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ssmquicksetup-configurationmanager.html#cfn-ssmquicksetup-configurationmanager-description
+        '''
+        result = self._values.get("description")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def name(self) -> typing.Optional[builtins.str]:
+        '''The name of the configuration.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ssmquicksetup-configurationmanager.html#cfn-ssmquicksetup-configurationmanager-name
+        '''
+        result = self._values.get("name")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def tags(self) -> typing.Optional[typing.Mapping[builtins.str, builtins.str]]:
+        '''Key-value pairs of metadata to assign to the configuration manager.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ssmquicksetup-configurationmanager.html#cfn-ssmquicksetup-configurationmanager-tags
+        '''
+        result = self._values.get("tags")
+        return typing.cast(typing.Optional[typing.Mapping[builtins.str, builtins.str]], result)
+
+    def __eq__(self, rhs: typing.Any) -> builtins.bool:
+        return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+    def __ne__(self, rhs: typing.Any) -> builtins.bool:
+        return not (rhs == self)
+
+    def __repr__(self) -> str:
+        return "CfnConfigurationManagerProps(%s)" % ", ".join(
+            k + "=" + repr(v) for k, v in self._values.items()
+        )
+
+
+@jsii.implements(_IInspectable_c2943556, _ILifecycleAutomationRef_c65ba80f, _ITaggableV2_4e6798f8)
 class CfnLifecycleAutomation(
     _CfnResource_9df397a6,
     metaclass=jsii.JSIIMeta,
@@ -1263,7 +960,8 @@ class CfnLifecycleAutomation(
         resource_key: builtins.str,
         tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
     ) -> None:
-        '''
+        '''Create a new ``AWS::SSMQuickSetup::LifecycleAutomation``.
+
         :param scope: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
         :param automation_document: The name of the SSM Automation document to execute in response to AWS CloudFormation lifecycle events (CREATE, UPDATE, DELETE).
@@ -1336,9 +1034,9 @@ class CfnLifecycleAutomation(
 
     @builtins.property
     @jsii.member(jsii_name="lifecycleAutomationRef")
-    def lifecycle_automation_ref(self) -> LifecycleAutomationReference:
+    def lifecycle_automation_ref(self) -> _LifecycleAutomationReference_bf9c6785:
         '''A reference to a LifecycleAutomation resource.'''
-        return typing.cast(LifecycleAutomationReference, jsii.get(self, "lifecycleAutomationRef"))
+        return typing.cast(_LifecycleAutomationReference_bf9c6785, jsii.get(self, "lifecycleAutomationRef"))
 
     @builtins.property
     @jsii.member(jsii_name="automationDocument")
@@ -1401,52 +1099,135 @@ class CfnLifecycleAutomation(
         jsii.set(self, "tags", value) # pyright: ignore[reportArgumentType]
 
 
+@jsii.data_type(
+    jsii_type="aws-cdk-lib.aws_ssmquicksetup.CfnLifecycleAutomationProps",
+    jsii_struct_bases=[],
+    name_mapping={
+        "automation_document": "automationDocument",
+        "automation_parameters": "automationParameters",
+        "resource_key": "resourceKey",
+        "tags": "tags",
+    },
+)
+class CfnLifecycleAutomationProps:
+    def __init__(
+        self,
+        *,
+        automation_document: builtins.str,
+        automation_parameters: typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Sequence[builtins.str]]],
+        resource_key: builtins.str,
+        tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
+    ) -> None:
+        '''Properties for defining a ``CfnLifecycleAutomation``.
+
+        :param automation_document: The name of the SSM Automation document to execute in response to AWS CloudFormation lifecycle events (CREATE, UPDATE, DELETE).
+        :param automation_parameters: A map of key-value parameters passed to the Automation document during execution. Each parameter name maps to a list of values, even for single values. Parameters can include configuration-specific values for your automation workflow.
+        :param resource_key: A unique identifier used for generating the SSM Association name. This ensures uniqueness when multiple lifecycle automation resources exist in the same stack.
+        :param tags: Tags applied to the underlying SSM Association created by this resource. Tags help identify and organize automation executions.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ssmquicksetup-lifecycleautomation.html
+        :exampleMetadata: fixture=_generated
+
+        Example::
+
+            # The code below shows an example of how to instantiate this type.
+            # The values are placeholders you should change.
+            from aws_cdk import aws_ssmquicksetup as ssmquicksetup
+            
+            cfn_lifecycle_automation_props = ssmquicksetup.CfnLifecycleAutomationProps(
+                automation_document="automationDocument",
+                automation_parameters={
+                    "automation_parameters_key": ["automationParameters"]
+                },
+                resource_key="resourceKey",
+            
+                # the properties below are optional
+                tags={
+                    "tags_key": "tags"
+                }
+            )
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__79199d718c2b2c172a1d7d84b00e0168a3213bd466a48735b8cbd4b538315455)
+            check_type(argname="argument automation_document", value=automation_document, expected_type=type_hints["automation_document"])
+            check_type(argname="argument automation_parameters", value=automation_parameters, expected_type=type_hints["automation_parameters"])
+            check_type(argname="argument resource_key", value=resource_key, expected_type=type_hints["resource_key"])
+            check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
+        self._values: typing.Dict[builtins.str, typing.Any] = {
+            "automation_document": automation_document,
+            "automation_parameters": automation_parameters,
+            "resource_key": resource_key,
+        }
+        if tags is not None:
+            self._values["tags"] = tags
+
+    @builtins.property
+    def automation_document(self) -> builtins.str:
+        '''The name of the SSM Automation document to execute in response to AWS CloudFormation lifecycle events (CREATE, UPDATE, DELETE).
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ssmquicksetup-lifecycleautomation.html#cfn-ssmquicksetup-lifecycleautomation-automationdocument
+        '''
+        result = self._values.get("automation_document")
+        assert result is not None, "Required property 'automation_document' is missing"
+        return typing.cast(builtins.str, result)
+
+    @builtins.property
+    def automation_parameters(
+        self,
+    ) -> typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.List[builtins.str]]]:
+        '''A map of key-value parameters passed to the Automation document during execution.
+
+        Each parameter name maps to a list of values, even for single values. Parameters can include configuration-specific values for your automation workflow.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ssmquicksetup-lifecycleautomation.html#cfn-ssmquicksetup-lifecycleautomation-automationparameters
+        '''
+        result = self._values.get("automation_parameters")
+        assert result is not None, "Required property 'automation_parameters' is missing"
+        return typing.cast(typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.List[builtins.str]]], result)
+
+    @builtins.property
+    def resource_key(self) -> builtins.str:
+        '''A unique identifier used for generating the SSM Association name.
+
+        This ensures uniqueness when multiple lifecycle automation resources exist in the same stack.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ssmquicksetup-lifecycleautomation.html#cfn-ssmquicksetup-lifecycleautomation-resourcekey
+        '''
+        result = self._values.get("resource_key")
+        assert result is not None, "Required property 'resource_key' is missing"
+        return typing.cast(builtins.str, result)
+
+    @builtins.property
+    def tags(self) -> typing.Optional[typing.Mapping[builtins.str, builtins.str]]:
+        '''Tags applied to the underlying SSM Association created by this resource.
+
+        Tags help identify and organize automation executions.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ssmquicksetup-lifecycleautomation.html#cfn-ssmquicksetup-lifecycleautomation-tags
+        '''
+        result = self._values.get("tags")
+        return typing.cast(typing.Optional[typing.Mapping[builtins.str, builtins.str]], result)
+
+    def __eq__(self, rhs: typing.Any) -> builtins.bool:
+        return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+    def __ne__(self, rhs: typing.Any) -> builtins.bool:
+        return not (rhs == self)
+
+    def __repr__(self) -> str:
+        return "CfnLifecycleAutomationProps(%s)" % ", ".join(
+            k + "=" + repr(v) for k, v in self._values.items()
+        )
+
+
 __all__ = [
     "CfnConfigurationManager",
     "CfnConfigurationManagerProps",
     "CfnLifecycleAutomation",
     "CfnLifecycleAutomationProps",
-    "ConfigurationManagerReference",
-    "IConfigurationManagerRef",
-    "ILifecycleAutomationRef",
-    "LifecycleAutomationReference",
 ]
 
 publication.publish()
-
-def _typecheckingstub__0bd2e12c3bb5f4087218fbe0db9640c52d608411ab3980220b7dd2ff438750e0(
-    *,
-    configuration_definitions: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnConfigurationManager.ConfigurationDefinitionProperty, typing.Dict[builtins.str, typing.Any]]]]],
-    description: typing.Optional[builtins.str] = None,
-    name: typing.Optional[builtins.str] = None,
-    tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
-) -> None:
-    """Type checking stubs"""
-    pass
-
-def _typecheckingstub__79199d718c2b2c172a1d7d84b00e0168a3213bd466a48735b8cbd4b538315455(
-    *,
-    automation_document: builtins.str,
-    automation_parameters: typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Sequence[builtins.str]]],
-    resource_key: builtins.str,
-    tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
-) -> None:
-    """Type checking stubs"""
-    pass
-
-def _typecheckingstub__605416c7622c4d2af93037d22c1a25b719cc761f49f957bc94aea7a182cf18ca(
-    *,
-    manager_arn: builtins.str,
-) -> None:
-    """Type checking stubs"""
-    pass
-
-def _typecheckingstub__3ee89d89706a6e2c7f4f0e1ea57af408844dd20f0d22fb4ea042d2b6d6b608e2(
-    *,
-    association_id: builtins.str,
-) -> None:
-    """Type checking stubs"""
-    pass
 
 def _typecheckingstub__12a9f65dcaf9bde5bcf296a113eb81107c3f8fa3375cf583d296e98f6c35b8bc(
     scope: _constructs_77d1e7e8.Construct,
@@ -1519,6 +1300,16 @@ def _typecheckingstub__0a15d3717729affa2b751047a4b5b72469d29c10060f85ac60b65e8bc
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__0bd2e12c3bb5f4087218fbe0db9640c52d608411ab3980220b7dd2ff438750e0(
+    *,
+    configuration_definitions: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnConfigurationManager.ConfigurationDefinitionProperty, typing.Dict[builtins.str, typing.Any]]]]],
+    description: typing.Optional[builtins.str] = None,
+    name: typing.Optional[builtins.str] = None,
+    tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__c274d30b541ddefe9caa5141a1a8e43de7216c46c089f1fdae60d544955044c1(
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
@@ -1567,5 +1358,12 @@ def _typecheckingstub__281612b8a25a7f26b4f0331e29ea2ded32674afc0ad11cfc1baedf75e
     """Type checking stubs"""
     pass
 
-for cls in [IConfigurationManagerRef, ILifecycleAutomationRef]:
-    typing.cast(typing.Any, cls).__protocol_attrs__ = typing.cast(typing.Any, cls).__protocol_attrs__ - set(['__jsii_proxy_class__', '__jsii_type__'])
+def _typecheckingstub__79199d718c2b2c172a1d7d84b00e0168a3213bd466a48735b8cbd4b538315455(
+    *,
+    automation_document: builtins.str,
+    automation_parameters: typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Sequence[builtins.str]]],
+    resource_key: builtins.str,
+    tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass

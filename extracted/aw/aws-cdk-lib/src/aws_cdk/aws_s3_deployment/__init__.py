@@ -679,14 +679,12 @@ from .. import (
     Size as _Size_7b441c34,
     SymlinkFollowMode as _SymlinkFollowMode_047ec1f6,
 )
-from ..aws_cloudfront import IDistributionRef as _IDistributionRef_ca11229b
 from ..aws_ec2 import (
     ISecurityGroup as _ISecurityGroup_acf8a799,
     IVpc as _IVpc_f30d5663,
     SubnetSelection as _SubnetSelection_e57d76df,
 )
 from ..aws_iam import IGrantable as _IGrantable_71c4f5de, IRole as _IRole_235f5d8e
-from ..aws_kms import IKeyRef as _IKeyRef_1e82344b
 from ..aws_logs import (
     ILogGroup as _ILogGroup_3c4fa718, RetentionDays as _RetentionDays_070f99f0
 )
@@ -694,6 +692,8 @@ from ..aws_s3 import (
     BucketAccessControl as _BucketAccessControl_466c7e1b, IBucket as _IBucket_42e086fd
 )
 from ..aws_s3_assets import AssetOptions as _AssetOptions_2aa69621
+from ..interfaces.aws_cloudfront import IDistributionRef as _IDistributionRef_36fd2094
+from ..interfaces.aws_kms import IKeyRef as _IKeyRef_d4fc6ef3
 
 
 class BucketDeployment(
@@ -737,7 +737,7 @@ class BucketDeployment(
         content_language: typing.Optional[builtins.str] = None,
         content_type: typing.Optional[builtins.str] = None,
         destination_key_prefix: typing.Optional[builtins.str] = None,
-        distribution: typing.Optional[_IDistributionRef_ca11229b] = None,
+        distribution: typing.Optional[_IDistributionRef_36fd2094] = None,
         distribution_paths: typing.Optional[typing.Sequence[builtins.str]] = None,
         ephemeral_storage_size: typing.Optional[_Size_7b441c34] = None,
         exclude: typing.Optional[typing.Sequence[builtins.str]] = None,
@@ -967,7 +967,7 @@ class BucketDeploymentProps:
         content_language: typing.Optional[builtins.str] = None,
         content_type: typing.Optional[builtins.str] = None,
         destination_key_prefix: typing.Optional[builtins.str] = None,
-        distribution: typing.Optional[_IDistributionRef_ca11229b] = None,
+        distribution: typing.Optional[_IDistributionRef_36fd2094] = None,
         distribution_paths: typing.Optional[typing.Sequence[builtins.str]] = None,
         ephemeral_storage_size: typing.Optional[_Size_7b441c34] = None,
         exclude: typing.Optional[typing.Sequence[builtins.str]] = None,
@@ -1256,7 +1256,7 @@ class BucketDeploymentProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def distribution(self) -> typing.Optional[_IDistributionRef_ca11229b]:
+    def distribution(self) -> typing.Optional[_IDistributionRef_36fd2094]:
         '''The CloudFront distribution using the destination bucket as an origin.
 
         Files in the distribution's edge caches will be invalidated after
@@ -1265,7 +1265,7 @@ class BucketDeploymentProps:
         :default: - No invalidation occurs
         '''
         result = self._values.get("distribution")
-        return typing.cast(typing.Optional[_IDistributionRef_ca11229b], result)
+        return typing.cast(typing.Optional[_IDistributionRef_36fd2094], result)
 
     @builtins.property
     def distribution_paths(self) -> typing.Optional[typing.List[builtins.str]]:
@@ -2227,7 +2227,7 @@ class Source(metaclass=jsii.JSIIMeta, jsii_type="aws-cdk-lib.aws_s3_deployment.S
         deploy_time: typing.Optional[builtins.bool] = None,
         display_name: typing.Optional[builtins.str] = None,
         readers: typing.Optional[typing.Sequence[_IGrantable_71c4f5de]] = None,
-        source_kms_key: typing.Optional[_IKeyRef_1e82344b] = None,
+        source_kms_key: typing.Optional[_IKeyRef_d4fc6ef3] = None,
         asset_hash: typing.Optional[builtins.str] = None,
         asset_hash_type: typing.Optional[_AssetHashType_05b67f2d] = None,
         bundling: typing.Optional[typing.Union[_BundlingOptions_588cc936, typing.Dict[builtins.str, typing.Any]]] = None,
@@ -2613,7 +2613,7 @@ def _typecheckingstub__2544491e92aa50a255b927ef16b9cde2961eae48803afca3b5d1105bf
     content_language: typing.Optional[builtins.str] = None,
     content_type: typing.Optional[builtins.str] = None,
     destination_key_prefix: typing.Optional[builtins.str] = None,
-    distribution: typing.Optional[_IDistributionRef_ca11229b] = None,
+    distribution: typing.Optional[_IDistributionRef_36fd2094] = None,
     distribution_paths: typing.Optional[typing.Sequence[builtins.str]] = None,
     ephemeral_storage_size: typing.Optional[_Size_7b441c34] = None,
     exclude: typing.Optional[typing.Sequence[builtins.str]] = None,
@@ -2660,7 +2660,7 @@ def _typecheckingstub__cbabf07e8b4adfb2b2058c075c4f35512ebc580f80a6db9bf13e90589
     content_language: typing.Optional[builtins.str] = None,
     content_type: typing.Optional[builtins.str] = None,
     destination_key_prefix: typing.Optional[builtins.str] = None,
-    distribution: typing.Optional[_IDistributionRef_ca11229b] = None,
+    distribution: typing.Optional[_IDistributionRef_36fd2094] = None,
     distribution_paths: typing.Optional[typing.Sequence[builtins.str]] = None,
     ephemeral_storage_size: typing.Optional[_Size_7b441c34] = None,
     exclude: typing.Optional[typing.Sequence[builtins.str]] = None,
@@ -2779,7 +2779,7 @@ def _typecheckingstub__fc877c69568cee7364ec77003356fc6818118602dda64adf3dbf38ff7
     deploy_time: typing.Optional[builtins.bool] = None,
     display_name: typing.Optional[builtins.str] = None,
     readers: typing.Optional[typing.Sequence[_IGrantable_71c4f5de]] = None,
-    source_kms_key: typing.Optional[_IKeyRef_1e82344b] = None,
+    source_kms_key: typing.Optional[_IKeyRef_d4fc6ef3] = None,
     asset_hash: typing.Optional[builtins.str] = None,
     asset_hash_type: typing.Optional[_AssetHashType_05b67f2d] = None,
     bundling: typing.Optional[typing.Union[_BundlingOptions_588cc936, typing.Dict[builtins.str, typing.Any]]] = None,

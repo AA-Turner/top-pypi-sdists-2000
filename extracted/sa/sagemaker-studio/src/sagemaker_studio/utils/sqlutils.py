@@ -1,7 +1,11 @@
+import logging
 from typing import Any, Dict, List, Optional, Union
 
 from sagemaker_studio.connections.helper_factory import HelperFactory
 from sagemaker_studio.project import Project
+
+logger = logging.getLogger()
+logger.info("Importing sqlutils")
 
 _project = None
 _duckdb = None
@@ -82,7 +86,7 @@ def get_engine(
         )
 
     sql_helper = HelperFactory.get_sql_helper(connection.type)
-    connection_config = sql_helper.to_sql_config(connection)
+    connection_config = sql_helper.to_sql_config(connection, **kwargs)
 
     return sql_executor.create_engine(connection.type, connection_config)
 
@@ -119,3 +123,6 @@ def _ensure_sql_executor():
 
         _sql_executor = SqlExecutor()
     return _sql_executor
+
+
+logger.info("Finished importing sqlutils")

@@ -60,7 +60,6 @@ from .._jsii import *
 import constructs as _constructs_77d1e7e8
 from .. import (
     CfnResource as _CfnResource_9df397a6,
-    IEnvironmentAware as _IEnvironmentAware_a408b00d,
     IInspectable as _IInspectable_c2943556,
     IResolvable as _IResolvable_da3f097b,
     ITaggable as _ITaggable_36806126,
@@ -68,2264 +67,25 @@ from .. import (
     TagManager as _TagManager_0a598cb3,
     TreeInspector as _TreeInspector_488e0dd5,
 )
-
-
-@jsii.data_type(
-    jsii_type="aws-cdk-lib.aws_omics.AnnotationStoreReference",
-    jsii_struct_bases=[],
-    name_mapping={"annotation_store_name": "annotationStoreName"},
+from ..interfaces.aws_omics import (
+    AnnotationStoreReference as _AnnotationStoreReference_bb5ff456,
+    IAnnotationStoreRef as _IAnnotationStoreRef_c33c98b4,
+    IReferenceStoreRef as _IReferenceStoreRef_e44b493e,
+    IRunGroupRef as _IRunGroupRef_937b5363,
+    ISequenceStoreRef as _ISequenceStoreRef_d8ce7b6b,
+    IVariantStoreRef as _IVariantStoreRef_49e3cae7,
+    IWorkflowRef as _IWorkflowRef_c34b3fa1,
+    IWorkflowVersionRef as _IWorkflowVersionRef_8e877e7d,
+    ReferenceStoreReference as _ReferenceStoreReference_0fa98700,
+    RunGroupReference as _RunGroupReference_d14ed290,
+    SequenceStoreReference as _SequenceStoreReference_12ae1dcf,
+    VariantStoreReference as _VariantStoreReference_494e1db9,
+    WorkflowReference as _WorkflowReference_d2d5c008,
+    WorkflowVersionReference as _WorkflowVersionReference_1d5421a4,
 )
-class AnnotationStoreReference:
-    def __init__(self, *, annotation_store_name: builtins.str) -> None:
-        '''A reference to a AnnotationStore resource.
 
-        :param annotation_store_name: The Name of the AnnotationStore resource.
 
-        :exampleMetadata: fixture=_generated
-
-        Example::
-
-            # The code below shows an example of how to instantiate this type.
-            # The values are placeholders you should change.
-            from aws_cdk import aws_omics as omics
-            
-            annotation_store_reference = omics.AnnotationStoreReference(
-                annotation_store_name="annotationStoreName"
-            )
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__4c36830adec7d315de2e911ac2128197a6d438149befb894176863a8017d43e2)
-            check_type(argname="argument annotation_store_name", value=annotation_store_name, expected_type=type_hints["annotation_store_name"])
-        self._values: typing.Dict[builtins.str, typing.Any] = {
-            "annotation_store_name": annotation_store_name,
-        }
-
-    @builtins.property
-    def annotation_store_name(self) -> builtins.str:
-        '''The Name of the AnnotationStore resource.'''
-        result = self._values.get("annotation_store_name")
-        assert result is not None, "Required property 'annotation_store_name' is missing"
-        return typing.cast(builtins.str, result)
-
-    def __eq__(self, rhs: typing.Any) -> builtins.bool:
-        return isinstance(rhs, self.__class__) and rhs._values == self._values
-
-    def __ne__(self, rhs: typing.Any) -> builtins.bool:
-        return not (rhs == self)
-
-    def __repr__(self) -> str:
-        return "AnnotationStoreReference(%s)" % ", ".join(
-            k + "=" + repr(v) for k, v in self._values.items()
-        )
-
-
-@jsii.data_type(
-    jsii_type="aws-cdk-lib.aws_omics.CfnAnnotationStoreProps",
-    jsii_struct_bases=[],
-    name_mapping={
-        "name": "name",
-        "store_format": "storeFormat",
-        "description": "description",
-        "reference": "reference",
-        "sse_config": "sseConfig",
-        "store_options": "storeOptions",
-        "tags": "tags",
-    },
-)
-class CfnAnnotationStoreProps:
-    def __init__(
-        self,
-        *,
-        name: builtins.str,
-        store_format: builtins.str,
-        description: typing.Optional[builtins.str] = None,
-        reference: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnAnnotationStore.ReferenceItemProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        sse_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnAnnotationStore.SseConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        store_options: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnAnnotationStore.StoreOptionsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
-    ) -> None:
-        '''Properties for defining a ``CfnAnnotationStore``.
-
-        :param name: The name of the Annotation Store.
-        :param store_format: The annotation file format of the store.
-        :param description: A description for the store.
-        :param reference: The genome reference for the store's annotations.
-        :param sse_config: The store's server-side encryption (SSE) settings.
-        :param store_options: File parsing options for the annotation store.
-        :param tags: Tags for the store.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-annotationstore.html
-        :exampleMetadata: fixture=_generated
-
-        Example::
-
-            # The code below shows an example of how to instantiate this type.
-            # The values are placeholders you should change.
-            from aws_cdk import aws_omics as omics
-            
-            # schema: Any
-            
-            cfn_annotation_store_props = omics.CfnAnnotationStoreProps(
-                name="name",
-                store_format="storeFormat",
-            
-                # the properties below are optional
-                description="description",
-                reference=omics.CfnAnnotationStore.ReferenceItemProperty(
-                    reference_arn="referenceArn"
-                ),
-                sse_config=omics.CfnAnnotationStore.SseConfigProperty(
-                    type="type",
-            
-                    # the properties below are optional
-                    key_arn="keyArn"
-                ),
-                store_options=omics.CfnAnnotationStore.StoreOptionsProperty(
-                    tsv_store_options=omics.CfnAnnotationStore.TsvStoreOptionsProperty(
-                        annotation_type="annotationType",
-                        format_to_header={
-                            "format_to_header_key": "formatToHeader"
-                        },
-                        schema=schema
-                    )
-                ),
-                tags={
-                    "tags_key": "tags"
-                }
-            )
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__db27a54e4b1e96ecf8263cf950eaa96b8620641082ddea726be734d30e205831)
-            check_type(argname="argument name", value=name, expected_type=type_hints["name"])
-            check_type(argname="argument store_format", value=store_format, expected_type=type_hints["store_format"])
-            check_type(argname="argument description", value=description, expected_type=type_hints["description"])
-            check_type(argname="argument reference", value=reference, expected_type=type_hints["reference"])
-            check_type(argname="argument sse_config", value=sse_config, expected_type=type_hints["sse_config"])
-            check_type(argname="argument store_options", value=store_options, expected_type=type_hints["store_options"])
-            check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
-        self._values: typing.Dict[builtins.str, typing.Any] = {
-            "name": name,
-            "store_format": store_format,
-        }
-        if description is not None:
-            self._values["description"] = description
-        if reference is not None:
-            self._values["reference"] = reference
-        if sse_config is not None:
-            self._values["sse_config"] = sse_config
-        if store_options is not None:
-            self._values["store_options"] = store_options
-        if tags is not None:
-            self._values["tags"] = tags
-
-    @builtins.property
-    def name(self) -> builtins.str:
-        '''The name of the Annotation Store.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-annotationstore.html#cfn-omics-annotationstore-name
-        '''
-        result = self._values.get("name")
-        assert result is not None, "Required property 'name' is missing"
-        return typing.cast(builtins.str, result)
-
-    @builtins.property
-    def store_format(self) -> builtins.str:
-        '''The annotation file format of the store.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-annotationstore.html#cfn-omics-annotationstore-storeformat
-        '''
-        result = self._values.get("store_format")
-        assert result is not None, "Required property 'store_format' is missing"
-        return typing.cast(builtins.str, result)
-
-    @builtins.property
-    def description(self) -> typing.Optional[builtins.str]:
-        '''A description for the store.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-annotationstore.html#cfn-omics-annotationstore-description
-        '''
-        result = self._values.get("description")
-        return typing.cast(typing.Optional[builtins.str], result)
-
-    @builtins.property
-    def reference(
-        self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAnnotationStore.ReferenceItemProperty"]]:
-        '''The genome reference for the store's annotations.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-annotationstore.html#cfn-omics-annotationstore-reference
-        '''
-        result = self._values.get("reference")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAnnotationStore.ReferenceItemProperty"]], result)
-
-    @builtins.property
-    def sse_config(
-        self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAnnotationStore.SseConfigProperty"]]:
-        '''The store's server-side encryption (SSE) settings.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-annotationstore.html#cfn-omics-annotationstore-sseconfig
-        '''
-        result = self._values.get("sse_config")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAnnotationStore.SseConfigProperty"]], result)
-
-    @builtins.property
-    def store_options(
-        self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAnnotationStore.StoreOptionsProperty"]]:
-        '''File parsing options for the annotation store.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-annotationstore.html#cfn-omics-annotationstore-storeoptions
-        '''
-        result = self._values.get("store_options")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAnnotationStore.StoreOptionsProperty"]], result)
-
-    @builtins.property
-    def tags(self) -> typing.Optional[typing.Mapping[builtins.str, builtins.str]]:
-        '''Tags for the store.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-annotationstore.html#cfn-omics-annotationstore-tags
-        '''
-        result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.Mapping[builtins.str, builtins.str]], result)
-
-    def __eq__(self, rhs: typing.Any) -> builtins.bool:
-        return isinstance(rhs, self.__class__) and rhs._values == self._values
-
-    def __ne__(self, rhs: typing.Any) -> builtins.bool:
-        return not (rhs == self)
-
-    def __repr__(self) -> str:
-        return "CfnAnnotationStoreProps(%s)" % ", ".join(
-            k + "=" + repr(v) for k, v in self._values.items()
-        )
-
-
-@jsii.data_type(
-    jsii_type="aws-cdk-lib.aws_omics.CfnReferenceStoreProps",
-    jsii_struct_bases=[],
-    name_mapping={
-        "name": "name",
-        "description": "description",
-        "sse_config": "sseConfig",
-        "tags": "tags",
-    },
-)
-class CfnReferenceStoreProps:
-    def __init__(
-        self,
-        *,
-        name: builtins.str,
-        description: typing.Optional[builtins.str] = None,
-        sse_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnReferenceStore.SseConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
-    ) -> None:
-        '''Properties for defining a ``CfnReferenceStore``.
-
-        :param name: A name for the store.
-        :param description: A description for the store.
-        :param sse_config: Server-side encryption (SSE) settings for the store.
-        :param tags: Tags for the store.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-referencestore.html
-        :exampleMetadata: fixture=_generated
-
-        Example::
-
-            # The code below shows an example of how to instantiate this type.
-            # The values are placeholders you should change.
-            from aws_cdk import aws_omics as omics
-            
-            cfn_reference_store_props = omics.CfnReferenceStoreProps(
-                name="name",
-            
-                # the properties below are optional
-                description="description",
-                sse_config=omics.CfnReferenceStore.SseConfigProperty(
-                    type="type",
-            
-                    # the properties below are optional
-                    key_arn="keyArn"
-                ),
-                tags={
-                    "tags_key": "tags"
-                }
-            )
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__1fa5ddefbb60b1902a7a8a0da56893c57cde7f27eb458a6b71907aad7ac2b4ca)
-            check_type(argname="argument name", value=name, expected_type=type_hints["name"])
-            check_type(argname="argument description", value=description, expected_type=type_hints["description"])
-            check_type(argname="argument sse_config", value=sse_config, expected_type=type_hints["sse_config"])
-            check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
-        self._values: typing.Dict[builtins.str, typing.Any] = {
-            "name": name,
-        }
-        if description is not None:
-            self._values["description"] = description
-        if sse_config is not None:
-            self._values["sse_config"] = sse_config
-        if tags is not None:
-            self._values["tags"] = tags
-
-    @builtins.property
-    def name(self) -> builtins.str:
-        '''A name for the store.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-referencestore.html#cfn-omics-referencestore-name
-        '''
-        result = self._values.get("name")
-        assert result is not None, "Required property 'name' is missing"
-        return typing.cast(builtins.str, result)
-
-    @builtins.property
-    def description(self) -> typing.Optional[builtins.str]:
-        '''A description for the store.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-referencestore.html#cfn-omics-referencestore-description
-        '''
-        result = self._values.get("description")
-        return typing.cast(typing.Optional[builtins.str], result)
-
-    @builtins.property
-    def sse_config(
-        self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnReferenceStore.SseConfigProperty"]]:
-        '''Server-side encryption (SSE) settings for the store.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-referencestore.html#cfn-omics-referencestore-sseconfig
-        '''
-        result = self._values.get("sse_config")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnReferenceStore.SseConfigProperty"]], result)
-
-    @builtins.property
-    def tags(self) -> typing.Optional[typing.Mapping[builtins.str, builtins.str]]:
-        '''Tags for the store.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-referencestore.html#cfn-omics-referencestore-tags
-        '''
-        result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.Mapping[builtins.str, builtins.str]], result)
-
-    def __eq__(self, rhs: typing.Any) -> builtins.bool:
-        return isinstance(rhs, self.__class__) and rhs._values == self._values
-
-    def __ne__(self, rhs: typing.Any) -> builtins.bool:
-        return not (rhs == self)
-
-    def __repr__(self) -> str:
-        return "CfnReferenceStoreProps(%s)" % ", ".join(
-            k + "=" + repr(v) for k, v in self._values.items()
-        )
-
-
-@jsii.data_type(
-    jsii_type="aws-cdk-lib.aws_omics.CfnRunGroupProps",
-    jsii_struct_bases=[],
-    name_mapping={
-        "max_cpus": "maxCpus",
-        "max_duration": "maxDuration",
-        "max_gpus": "maxGpus",
-        "max_runs": "maxRuns",
-        "name": "name",
-        "tags": "tags",
-    },
-)
-class CfnRunGroupProps:
-    def __init__(
-        self,
-        *,
-        max_cpus: typing.Optional[jsii.Number] = None,
-        max_duration: typing.Optional[jsii.Number] = None,
-        max_gpus: typing.Optional[jsii.Number] = None,
-        max_runs: typing.Optional[jsii.Number] = None,
-        name: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
-    ) -> None:
-        '''Properties for defining a ``CfnRunGroup``.
-
-        :param max_cpus: The group's maximum CPU count setting.
-        :param max_duration: The group's maximum duration setting in minutes.
-        :param max_gpus: The maximum GPUs that can be used by a run group.
-        :param max_runs: The group's maximum concurrent run setting.
-        :param name: The group's name.
-        :param tags: Tags for the group.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-rungroup.html
-        :exampleMetadata: fixture=_generated
-
-        Example::
-
-            # The code below shows an example of how to instantiate this type.
-            # The values are placeholders you should change.
-            from aws_cdk import aws_omics as omics
-            
-            cfn_run_group_props = omics.CfnRunGroupProps(
-                max_cpus=123,
-                max_duration=123,
-                max_gpus=123,
-                max_runs=123,
-                name="name",
-                tags={
-                    "tags_key": "tags"
-                }
-            )
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__0687d84f98238d006185c8fc00317ac96c5244d8d1b550e56fda04cb4eca97f9)
-            check_type(argname="argument max_cpus", value=max_cpus, expected_type=type_hints["max_cpus"])
-            check_type(argname="argument max_duration", value=max_duration, expected_type=type_hints["max_duration"])
-            check_type(argname="argument max_gpus", value=max_gpus, expected_type=type_hints["max_gpus"])
-            check_type(argname="argument max_runs", value=max_runs, expected_type=type_hints["max_runs"])
-            check_type(argname="argument name", value=name, expected_type=type_hints["name"])
-            check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
-        self._values: typing.Dict[builtins.str, typing.Any] = {}
-        if max_cpus is not None:
-            self._values["max_cpus"] = max_cpus
-        if max_duration is not None:
-            self._values["max_duration"] = max_duration
-        if max_gpus is not None:
-            self._values["max_gpus"] = max_gpus
-        if max_runs is not None:
-            self._values["max_runs"] = max_runs
-        if name is not None:
-            self._values["name"] = name
-        if tags is not None:
-            self._values["tags"] = tags
-
-    @builtins.property
-    def max_cpus(self) -> typing.Optional[jsii.Number]:
-        '''The group's maximum CPU count setting.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-rungroup.html#cfn-omics-rungroup-maxcpus
-        '''
-        result = self._values.get("max_cpus")
-        return typing.cast(typing.Optional[jsii.Number], result)
-
-    @builtins.property
-    def max_duration(self) -> typing.Optional[jsii.Number]:
-        '''The group's maximum duration setting in minutes.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-rungroup.html#cfn-omics-rungroup-maxduration
-        '''
-        result = self._values.get("max_duration")
-        return typing.cast(typing.Optional[jsii.Number], result)
-
-    @builtins.property
-    def max_gpus(self) -> typing.Optional[jsii.Number]:
-        '''The maximum GPUs that can be used by a run group.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-rungroup.html#cfn-omics-rungroup-maxgpus
-        '''
-        result = self._values.get("max_gpus")
-        return typing.cast(typing.Optional[jsii.Number], result)
-
-    @builtins.property
-    def max_runs(self) -> typing.Optional[jsii.Number]:
-        '''The group's maximum concurrent run setting.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-rungroup.html#cfn-omics-rungroup-maxruns
-        '''
-        result = self._values.get("max_runs")
-        return typing.cast(typing.Optional[jsii.Number], result)
-
-    @builtins.property
-    def name(self) -> typing.Optional[builtins.str]:
-        '''The group's name.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-rungroup.html#cfn-omics-rungroup-name
-        '''
-        result = self._values.get("name")
-        return typing.cast(typing.Optional[builtins.str], result)
-
-    @builtins.property
-    def tags(self) -> typing.Optional[typing.Mapping[builtins.str, builtins.str]]:
-        '''Tags for the group.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-rungroup.html#cfn-omics-rungroup-tags
-        '''
-        result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.Mapping[builtins.str, builtins.str]], result)
-
-    def __eq__(self, rhs: typing.Any) -> builtins.bool:
-        return isinstance(rhs, self.__class__) and rhs._values == self._values
-
-    def __ne__(self, rhs: typing.Any) -> builtins.bool:
-        return not (rhs == self)
-
-    def __repr__(self) -> str:
-        return "CfnRunGroupProps(%s)" % ", ".join(
-            k + "=" + repr(v) for k, v in self._values.items()
-        )
-
-
-@jsii.data_type(
-    jsii_type="aws-cdk-lib.aws_omics.CfnSequenceStoreProps",
-    jsii_struct_bases=[],
-    name_mapping={
-        "name": "name",
-        "access_log_location": "accessLogLocation",
-        "description": "description",
-        "e_tag_algorithm_family": "eTagAlgorithmFamily",
-        "fallback_location": "fallbackLocation",
-        "propagated_set_level_tags": "propagatedSetLevelTags",
-        "s3_access_policy": "s3AccessPolicy",
-        "sse_config": "sseConfig",
-        "tags": "tags",
-    },
-)
-class CfnSequenceStoreProps:
-    def __init__(
-        self,
-        *,
-        name: builtins.str,
-        access_log_location: typing.Optional[builtins.str] = None,
-        description: typing.Optional[builtins.str] = None,
-        e_tag_algorithm_family: typing.Optional[builtins.str] = None,
-        fallback_location: typing.Optional[builtins.str] = None,
-        propagated_set_level_tags: typing.Optional[typing.Sequence[builtins.str]] = None,
-        s3_access_policy: typing.Any = None,
-        sse_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnSequenceStore.SseConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
-    ) -> None:
-        '''Properties for defining a ``CfnSequenceStore``.
-
-        :param name: A name for the store.
-        :param access_log_location: Location of the access logs.
-        :param description: A description for the store.
-        :param e_tag_algorithm_family: The algorithm family of the ETag.
-        :param fallback_location: An S3 location that is used to store files that have failed a direct upload.
-        :param propagated_set_level_tags: The tags keys to propagate to the S3 objects associated with read sets in the sequence store.
-        :param s3_access_policy: The resource policy that controls S3 access on the store.
-        :param sse_config: Server-side encryption (SSE) settings for the store.
-        :param tags: Tags for the store.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-sequencestore.html
-        :exampleMetadata: fixture=_generated
-
-        Example::
-
-            # The code below shows an example of how to instantiate this type.
-            # The values are placeholders you should change.
-            from aws_cdk import aws_omics as omics
-            
-            # s3_access_policy: Any
-            
-            cfn_sequence_store_props = omics.CfnSequenceStoreProps(
-                name="name",
-            
-                # the properties below are optional
-                access_log_location="accessLogLocation",
-                description="description",
-                e_tag_algorithm_family="eTagAlgorithmFamily",
-                fallback_location="fallbackLocation",
-                propagated_set_level_tags=["propagatedSetLevelTags"],
-                s3_access_policy=s3_access_policy,
-                sse_config=omics.CfnSequenceStore.SseConfigProperty(
-                    type="type",
-            
-                    # the properties below are optional
-                    key_arn="keyArn"
-                ),
-                tags={
-                    "tags_key": "tags"
-                }
-            )
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__c912afa5be2bea750b085186b08f53bd688bc0a1dd08b1f1c6951a21015380fc)
-            check_type(argname="argument name", value=name, expected_type=type_hints["name"])
-            check_type(argname="argument access_log_location", value=access_log_location, expected_type=type_hints["access_log_location"])
-            check_type(argname="argument description", value=description, expected_type=type_hints["description"])
-            check_type(argname="argument e_tag_algorithm_family", value=e_tag_algorithm_family, expected_type=type_hints["e_tag_algorithm_family"])
-            check_type(argname="argument fallback_location", value=fallback_location, expected_type=type_hints["fallback_location"])
-            check_type(argname="argument propagated_set_level_tags", value=propagated_set_level_tags, expected_type=type_hints["propagated_set_level_tags"])
-            check_type(argname="argument s3_access_policy", value=s3_access_policy, expected_type=type_hints["s3_access_policy"])
-            check_type(argname="argument sse_config", value=sse_config, expected_type=type_hints["sse_config"])
-            check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
-        self._values: typing.Dict[builtins.str, typing.Any] = {
-            "name": name,
-        }
-        if access_log_location is not None:
-            self._values["access_log_location"] = access_log_location
-        if description is not None:
-            self._values["description"] = description
-        if e_tag_algorithm_family is not None:
-            self._values["e_tag_algorithm_family"] = e_tag_algorithm_family
-        if fallback_location is not None:
-            self._values["fallback_location"] = fallback_location
-        if propagated_set_level_tags is not None:
-            self._values["propagated_set_level_tags"] = propagated_set_level_tags
-        if s3_access_policy is not None:
-            self._values["s3_access_policy"] = s3_access_policy
-        if sse_config is not None:
-            self._values["sse_config"] = sse_config
-        if tags is not None:
-            self._values["tags"] = tags
-
-    @builtins.property
-    def name(self) -> builtins.str:
-        '''A name for the store.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-sequencestore.html#cfn-omics-sequencestore-name
-        '''
-        result = self._values.get("name")
-        assert result is not None, "Required property 'name' is missing"
-        return typing.cast(builtins.str, result)
-
-    @builtins.property
-    def access_log_location(self) -> typing.Optional[builtins.str]:
-        '''Location of the access logs.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-sequencestore.html#cfn-omics-sequencestore-accessloglocation
-        '''
-        result = self._values.get("access_log_location")
-        return typing.cast(typing.Optional[builtins.str], result)
-
-    @builtins.property
-    def description(self) -> typing.Optional[builtins.str]:
-        '''A description for the store.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-sequencestore.html#cfn-omics-sequencestore-description
-        '''
-        result = self._values.get("description")
-        return typing.cast(typing.Optional[builtins.str], result)
-
-    @builtins.property
-    def e_tag_algorithm_family(self) -> typing.Optional[builtins.str]:
-        '''The algorithm family of the ETag.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-sequencestore.html#cfn-omics-sequencestore-etagalgorithmfamily
-        '''
-        result = self._values.get("e_tag_algorithm_family")
-        return typing.cast(typing.Optional[builtins.str], result)
-
-    @builtins.property
-    def fallback_location(self) -> typing.Optional[builtins.str]:
-        '''An S3 location that is used to store files that have failed a direct upload.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-sequencestore.html#cfn-omics-sequencestore-fallbacklocation
-        '''
-        result = self._values.get("fallback_location")
-        return typing.cast(typing.Optional[builtins.str], result)
-
-    @builtins.property
-    def propagated_set_level_tags(self) -> typing.Optional[typing.List[builtins.str]]:
-        '''The tags keys to propagate to the S3 objects associated with read sets in the sequence store.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-sequencestore.html#cfn-omics-sequencestore-propagatedsetleveltags
-        '''
-        result = self._values.get("propagated_set_level_tags")
-        return typing.cast(typing.Optional[typing.List[builtins.str]], result)
-
-    @builtins.property
-    def s3_access_policy(self) -> typing.Any:
-        '''The resource policy that controls S3 access on the store.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-sequencestore.html#cfn-omics-sequencestore-s3accesspolicy
-        '''
-        result = self._values.get("s3_access_policy")
-        return typing.cast(typing.Any, result)
-
-    @builtins.property
-    def sse_config(
-        self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnSequenceStore.SseConfigProperty"]]:
-        '''Server-side encryption (SSE) settings for the store.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-sequencestore.html#cfn-omics-sequencestore-sseconfig
-        '''
-        result = self._values.get("sse_config")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnSequenceStore.SseConfigProperty"]], result)
-
-    @builtins.property
-    def tags(self) -> typing.Optional[typing.Mapping[builtins.str, builtins.str]]:
-        '''Tags for the store.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-sequencestore.html#cfn-omics-sequencestore-tags
-        '''
-        result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.Mapping[builtins.str, builtins.str]], result)
-
-    def __eq__(self, rhs: typing.Any) -> builtins.bool:
-        return isinstance(rhs, self.__class__) and rhs._values == self._values
-
-    def __ne__(self, rhs: typing.Any) -> builtins.bool:
-        return not (rhs == self)
-
-    def __repr__(self) -> str:
-        return "CfnSequenceStoreProps(%s)" % ", ".join(
-            k + "=" + repr(v) for k, v in self._values.items()
-        )
-
-
-@jsii.data_type(
-    jsii_type="aws-cdk-lib.aws_omics.CfnVariantStoreProps",
-    jsii_struct_bases=[],
-    name_mapping={
-        "name": "name",
-        "reference": "reference",
-        "description": "description",
-        "sse_config": "sseConfig",
-        "tags": "tags",
-    },
-)
-class CfnVariantStoreProps:
-    def __init__(
-        self,
-        *,
-        name: builtins.str,
-        reference: typing.Union[_IResolvable_da3f097b, typing.Union["CfnVariantStore.ReferenceItemProperty", typing.Dict[builtins.str, typing.Any]]],
-        description: typing.Optional[builtins.str] = None,
-        sse_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnVariantStore.SseConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
-    ) -> None:
-        '''Properties for defining a ``CfnVariantStore``.
-
-        :param name: A name for the store.
-        :param reference: The genome reference for the store's variants.
-        :param description: A description for the store.
-        :param sse_config: Server-side encryption (SSE) settings for the store.
-        :param tags: Tags for the store.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-variantstore.html
-        :exampleMetadata: fixture=_generated
-
-        Example::
-
-            # The code below shows an example of how to instantiate this type.
-            # The values are placeholders you should change.
-            from aws_cdk import aws_omics as omics
-            
-            cfn_variant_store_props = omics.CfnVariantStoreProps(
-                name="name",
-                reference=omics.CfnVariantStore.ReferenceItemProperty(
-                    reference_arn="referenceArn"
-                ),
-            
-                # the properties below are optional
-                description="description",
-                sse_config=omics.CfnVariantStore.SseConfigProperty(
-                    type="type",
-            
-                    # the properties below are optional
-                    key_arn="keyArn"
-                ),
-                tags={
-                    "tags_key": "tags"
-                }
-            )
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__9cee3839b5919ab156aab54490277c559d790311fd9ea2b761f99373fdb7eaec)
-            check_type(argname="argument name", value=name, expected_type=type_hints["name"])
-            check_type(argname="argument reference", value=reference, expected_type=type_hints["reference"])
-            check_type(argname="argument description", value=description, expected_type=type_hints["description"])
-            check_type(argname="argument sse_config", value=sse_config, expected_type=type_hints["sse_config"])
-            check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
-        self._values: typing.Dict[builtins.str, typing.Any] = {
-            "name": name,
-            "reference": reference,
-        }
-        if description is not None:
-            self._values["description"] = description
-        if sse_config is not None:
-            self._values["sse_config"] = sse_config
-        if tags is not None:
-            self._values["tags"] = tags
-
-    @builtins.property
-    def name(self) -> builtins.str:
-        '''A name for the store.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-variantstore.html#cfn-omics-variantstore-name
-        '''
-        result = self._values.get("name")
-        assert result is not None, "Required property 'name' is missing"
-        return typing.cast(builtins.str, result)
-
-    @builtins.property
-    def reference(
-        self,
-    ) -> typing.Union[_IResolvable_da3f097b, "CfnVariantStore.ReferenceItemProperty"]:
-        '''The genome reference for the store's variants.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-variantstore.html#cfn-omics-variantstore-reference
-        '''
-        result = self._values.get("reference")
-        assert result is not None, "Required property 'reference' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnVariantStore.ReferenceItemProperty"], result)
-
-    @builtins.property
-    def description(self) -> typing.Optional[builtins.str]:
-        '''A description for the store.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-variantstore.html#cfn-omics-variantstore-description
-        '''
-        result = self._values.get("description")
-        return typing.cast(typing.Optional[builtins.str], result)
-
-    @builtins.property
-    def sse_config(
-        self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVariantStore.SseConfigProperty"]]:
-        '''Server-side encryption (SSE) settings for the store.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-variantstore.html#cfn-omics-variantstore-sseconfig
-        '''
-        result = self._values.get("sse_config")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVariantStore.SseConfigProperty"]], result)
-
-    @builtins.property
-    def tags(self) -> typing.Optional[typing.Mapping[builtins.str, builtins.str]]:
-        '''Tags for the store.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-variantstore.html#cfn-omics-variantstore-tags
-        '''
-        result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.Mapping[builtins.str, builtins.str]], result)
-
-    def __eq__(self, rhs: typing.Any) -> builtins.bool:
-        return isinstance(rhs, self.__class__) and rhs._values == self._values
-
-    def __ne__(self, rhs: typing.Any) -> builtins.bool:
-        return not (rhs == self)
-
-    def __repr__(self) -> str:
-        return "CfnVariantStoreProps(%s)" % ", ".join(
-            k + "=" + repr(v) for k, v in self._values.items()
-        )
-
-
-@jsii.data_type(
-    jsii_type="aws-cdk-lib.aws_omics.CfnWorkflowProps",
-    jsii_struct_bases=[],
-    name_mapping={
-        "accelerators": "accelerators",
-        "container_registry_map": "containerRegistryMap",
-        "container_registry_map_uri": "containerRegistryMapUri",
-        "definition_repository": "definitionRepository",
-        "definition_uri": "definitionUri",
-        "description": "description",
-        "engine": "engine",
-        "main": "main",
-        "name": "name",
-        "parameter_template": "parameterTemplate",
-        "parameter_template_path": "parameterTemplatePath",
-        "readme_markdown": "readmeMarkdown",
-        "readme_path": "readmePath",
-        "readme_uri": "readmeUri",
-        "storage_capacity": "storageCapacity",
-        "storage_type": "storageType",
-        "tags": "tags",
-        "workflow_bucket_owner_id": "workflowBucketOwnerId",
-    },
-)
-class CfnWorkflowProps:
-    def __init__(
-        self,
-        *,
-        accelerators: typing.Optional[builtins.str] = None,
-        container_registry_map: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnWorkflow.ContainerRegistryMapProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        container_registry_map_uri: typing.Optional[builtins.str] = None,
-        definition_repository: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnWorkflow.DefinitionRepositoryProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        definition_uri: typing.Optional[builtins.str] = None,
-        description: typing.Optional[builtins.str] = None,
-        engine: typing.Optional[builtins.str] = None,
-        main: typing.Optional[builtins.str] = None,
-        name: typing.Optional[builtins.str] = None,
-        parameter_template: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[_IResolvable_da3f097b, typing.Union["CfnWorkflow.WorkflowParameterProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        parameter_template_path: typing.Optional[builtins.str] = None,
-        readme_markdown: typing.Optional[builtins.str] = None,
-        readme_path: typing.Optional[builtins.str] = None,
-        readme_uri: typing.Optional[builtins.str] = None,
-        storage_capacity: typing.Optional[jsii.Number] = None,
-        storage_type: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
-        workflow_bucket_owner_id: typing.Optional[builtins.str] = None,
-    ) -> None:
-        '''Properties for defining a ``CfnWorkflow``.
-
-        :param accelerators: 
-        :param container_registry_map: Use a container registry map to specify mappings between the ECR private repository and one or more upstream registries. For more information, see `Container images <https://docs.aws.amazon.com/omics/latest/dev/workflows-ecr.html>`_ in the *AWS HealthOmics User Guide* .
-        :param container_registry_map_uri: 
-        :param definition_repository: Contains information about a source code repository that hosts the workflow definition files.
-        :param definition_uri: The URI of a definition for the workflow.
-        :param description: The parameter's description.
-        :param engine: An engine for the workflow.
-        :param main: The path of the main definition file for the workflow.
-        :param name: The workflow's name.
-        :param parameter_template: The workflow's parameter template.
-        :param parameter_template_path: Path to the primary workflow parameter template JSON file inside the repository.
-        :param readme_markdown: The markdown content for the workflow's README file. This provides documentation and usage information for users of the workflow.
-        :param readme_path: The path to the workflow README markdown file within the repository. This file provides documentation and usage information for the workflow. If not specified, the README.md file from the root directory of the repository will be used.
-        :param readme_uri: The S3 URI of the README file for the workflow. This file provides documentation and usage information for the workflow. The S3 URI must begin with s3://USER-OWNED-BUCKET/. The requester must have access to the S3 bucket and object. The max README content length is 500 KiB.
-        :param storage_capacity: The default static storage capacity (in gibibytes) for runs that use this workflow or workflow version. The ``storageCapacity`` can be overwritten at run time. The storage capacity is not required for runs with a ``DYNAMIC`` storage type.
-        :param storage_type: 
-        :param tags: Tags for the workflow.
-        :param workflow_bucket_owner_id: Optional workflow bucket owner ID to verify the workflow bucket.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-workflow.html
-        :exampleMetadata: fixture=_generated
-
-        Example::
-
-            # The code below shows an example of how to instantiate this type.
-            # The values are placeholders you should change.
-            from aws_cdk import aws_omics as omics
-            
-            cfn_workflow_props = omics.CfnWorkflowProps(
-                accelerators="accelerators",
-                container_registry_map=omics.CfnWorkflow.ContainerRegistryMapProperty(
-                    image_mappings=[omics.CfnWorkflow.ImageMappingProperty(
-                        destination_image="destinationImage",
-                        source_image="sourceImage"
-                    )],
-                    registry_mappings=[omics.CfnWorkflow.RegistryMappingProperty(
-                        ecr_account_id="ecrAccountId",
-                        ecr_repository_prefix="ecrRepositoryPrefix",
-                        upstream_registry_url="upstreamRegistryUrl",
-                        upstream_repository_prefix="upstreamRepositoryPrefix"
-                    )]
-                ),
-                container_registry_map_uri="containerRegistryMapUri",
-                definition_repository=omics.CfnWorkflow.DefinitionRepositoryProperty(
-                    connection_arn="connectionArn",
-                    exclude_file_patterns=["excludeFilePatterns"],
-                    full_repository_id="fullRepositoryId",
-                    source_reference=omics.CfnWorkflow.SourceReferenceProperty(
-                        type="type",
-                        value="value"
-                    )
-                ),
-                definition_uri="definitionUri",
-                description="description",
-                engine="engine",
-                main="main",
-                name="name",
-                parameter_template={
-                    "parameter_template_key": omics.CfnWorkflow.WorkflowParameterProperty(
-                        description="description",
-                        optional=False
-                    )
-                },
-                parameter_template_path="parameterTemplatePath",
-                readme_markdown="readmeMarkdown",
-                readme_path="readmePath",
-                readme_uri="readmeUri",
-                storage_capacity=123,
-                storage_type="storageType",
-                tags={
-                    "tags_key": "tags"
-                },
-                workflow_bucket_owner_id="workflowBucketOwnerId"
-            )
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__09bedca50200dd06a4bbe4bb6135e76dacff76287249f3d28b8f285f8205f173)
-            check_type(argname="argument accelerators", value=accelerators, expected_type=type_hints["accelerators"])
-            check_type(argname="argument container_registry_map", value=container_registry_map, expected_type=type_hints["container_registry_map"])
-            check_type(argname="argument container_registry_map_uri", value=container_registry_map_uri, expected_type=type_hints["container_registry_map_uri"])
-            check_type(argname="argument definition_repository", value=definition_repository, expected_type=type_hints["definition_repository"])
-            check_type(argname="argument definition_uri", value=definition_uri, expected_type=type_hints["definition_uri"])
-            check_type(argname="argument description", value=description, expected_type=type_hints["description"])
-            check_type(argname="argument engine", value=engine, expected_type=type_hints["engine"])
-            check_type(argname="argument main", value=main, expected_type=type_hints["main"])
-            check_type(argname="argument name", value=name, expected_type=type_hints["name"])
-            check_type(argname="argument parameter_template", value=parameter_template, expected_type=type_hints["parameter_template"])
-            check_type(argname="argument parameter_template_path", value=parameter_template_path, expected_type=type_hints["parameter_template_path"])
-            check_type(argname="argument readme_markdown", value=readme_markdown, expected_type=type_hints["readme_markdown"])
-            check_type(argname="argument readme_path", value=readme_path, expected_type=type_hints["readme_path"])
-            check_type(argname="argument readme_uri", value=readme_uri, expected_type=type_hints["readme_uri"])
-            check_type(argname="argument storage_capacity", value=storage_capacity, expected_type=type_hints["storage_capacity"])
-            check_type(argname="argument storage_type", value=storage_type, expected_type=type_hints["storage_type"])
-            check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
-            check_type(argname="argument workflow_bucket_owner_id", value=workflow_bucket_owner_id, expected_type=type_hints["workflow_bucket_owner_id"])
-        self._values: typing.Dict[builtins.str, typing.Any] = {}
-        if accelerators is not None:
-            self._values["accelerators"] = accelerators
-        if container_registry_map is not None:
-            self._values["container_registry_map"] = container_registry_map
-        if container_registry_map_uri is not None:
-            self._values["container_registry_map_uri"] = container_registry_map_uri
-        if definition_repository is not None:
-            self._values["definition_repository"] = definition_repository
-        if definition_uri is not None:
-            self._values["definition_uri"] = definition_uri
-        if description is not None:
-            self._values["description"] = description
-        if engine is not None:
-            self._values["engine"] = engine
-        if main is not None:
-            self._values["main"] = main
-        if name is not None:
-            self._values["name"] = name
-        if parameter_template is not None:
-            self._values["parameter_template"] = parameter_template
-        if parameter_template_path is not None:
-            self._values["parameter_template_path"] = parameter_template_path
-        if readme_markdown is not None:
-            self._values["readme_markdown"] = readme_markdown
-        if readme_path is not None:
-            self._values["readme_path"] = readme_path
-        if readme_uri is not None:
-            self._values["readme_uri"] = readme_uri
-        if storage_capacity is not None:
-            self._values["storage_capacity"] = storage_capacity
-        if storage_type is not None:
-            self._values["storage_type"] = storage_type
-        if tags is not None:
-            self._values["tags"] = tags
-        if workflow_bucket_owner_id is not None:
-            self._values["workflow_bucket_owner_id"] = workflow_bucket_owner_id
-
-    @builtins.property
-    def accelerators(self) -> typing.Optional[builtins.str]:
-        '''
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-workflow.html#cfn-omics-workflow-accelerators
-        '''
-        result = self._values.get("accelerators")
-        return typing.cast(typing.Optional[builtins.str], result)
-
-    @builtins.property
-    def container_registry_map(
-        self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnWorkflow.ContainerRegistryMapProperty"]]:
-        '''Use a container registry map to specify mappings between the ECR private repository and one or more upstream registries.
-
-        For more information, see `Container images <https://docs.aws.amazon.com/omics/latest/dev/workflows-ecr.html>`_ in the *AWS HealthOmics User Guide* .
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-workflow.html#cfn-omics-workflow-containerregistrymap
-        '''
-        result = self._values.get("container_registry_map")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnWorkflow.ContainerRegistryMapProperty"]], result)
-
-    @builtins.property
-    def container_registry_map_uri(self) -> typing.Optional[builtins.str]:
-        '''
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-workflow.html#cfn-omics-workflow-containerregistrymapuri
-        '''
-        result = self._values.get("container_registry_map_uri")
-        return typing.cast(typing.Optional[builtins.str], result)
-
-    @builtins.property
-    def definition_repository(
-        self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnWorkflow.DefinitionRepositoryProperty"]]:
-        '''Contains information about a source code repository that hosts the workflow definition files.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-workflow.html#cfn-omics-workflow-definitionrepository
-        '''
-        result = self._values.get("definition_repository")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnWorkflow.DefinitionRepositoryProperty"]], result)
-
-    @builtins.property
-    def definition_uri(self) -> typing.Optional[builtins.str]:
-        '''The URI of a definition for the workflow.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-workflow.html#cfn-omics-workflow-definitionuri
-        '''
-        result = self._values.get("definition_uri")
-        return typing.cast(typing.Optional[builtins.str], result)
-
-    @builtins.property
-    def description(self) -> typing.Optional[builtins.str]:
-        '''The parameter's description.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-workflow.html#cfn-omics-workflow-description
-        '''
-        result = self._values.get("description")
-        return typing.cast(typing.Optional[builtins.str], result)
-
-    @builtins.property
-    def engine(self) -> typing.Optional[builtins.str]:
-        '''An engine for the workflow.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-workflow.html#cfn-omics-workflow-engine
-        '''
-        result = self._values.get("engine")
-        return typing.cast(typing.Optional[builtins.str], result)
-
-    @builtins.property
-    def main(self) -> typing.Optional[builtins.str]:
-        '''The path of the main definition file for the workflow.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-workflow.html#cfn-omics-workflow-main
-        '''
-        result = self._values.get("main")
-        return typing.cast(typing.Optional[builtins.str], result)
-
-    @builtins.property
-    def name(self) -> typing.Optional[builtins.str]:
-        '''The workflow's name.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-workflow.html#cfn-omics-workflow-name
-        '''
-        result = self._values.get("name")
-        return typing.cast(typing.Optional[builtins.str], result)
-
-    @builtins.property
-    def parameter_template(
-        self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[_IResolvable_da3f097b, "CfnWorkflow.WorkflowParameterProperty"]]]]:
-        '''The workflow's parameter template.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-workflow.html#cfn-omics-workflow-parametertemplate
-        '''
-        result = self._values.get("parameter_template")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[_IResolvable_da3f097b, "CfnWorkflow.WorkflowParameterProperty"]]]], result)
-
-    @builtins.property
-    def parameter_template_path(self) -> typing.Optional[builtins.str]:
-        '''Path to the primary workflow parameter template JSON file inside the repository.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-workflow.html#cfn-omics-workflow-parametertemplatepath
-        '''
-        result = self._values.get("parameter_template_path")
-        return typing.cast(typing.Optional[builtins.str], result)
-
-    @builtins.property
-    def readme_markdown(self) -> typing.Optional[builtins.str]:
-        '''The markdown content for the workflow's README file.
-
-        This provides documentation and usage information for users of the workflow.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-workflow.html#cfn-omics-workflow-readmemarkdown
-        '''
-        result = self._values.get("readme_markdown")
-        return typing.cast(typing.Optional[builtins.str], result)
-
-    @builtins.property
-    def readme_path(self) -> typing.Optional[builtins.str]:
-        '''The path to the workflow README markdown file within the repository.
-
-        This file provides documentation and usage information for the workflow. If not specified, the README.md file from the root directory of the repository will be used.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-workflow.html#cfn-omics-workflow-readmepath
-        '''
-        result = self._values.get("readme_path")
-        return typing.cast(typing.Optional[builtins.str], result)
-
-    @builtins.property
-    def readme_uri(self) -> typing.Optional[builtins.str]:
-        '''The S3 URI of the README file for the workflow.
-
-        This file provides documentation and usage information for the workflow. The S3 URI must begin with s3://USER-OWNED-BUCKET/. The requester must have access to the S3 bucket and object. The max README content length is 500 KiB.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-workflow.html#cfn-omics-workflow-readmeuri
-        '''
-        result = self._values.get("readme_uri")
-        return typing.cast(typing.Optional[builtins.str], result)
-
-    @builtins.property
-    def storage_capacity(self) -> typing.Optional[jsii.Number]:
-        '''The default static storage capacity (in gibibytes) for runs that use this workflow or workflow version.
-
-        The ``storageCapacity`` can be overwritten at run time. The storage capacity is not required for runs with a ``DYNAMIC`` storage type.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-workflow.html#cfn-omics-workflow-storagecapacity
-        '''
-        result = self._values.get("storage_capacity")
-        return typing.cast(typing.Optional[jsii.Number], result)
-
-    @builtins.property
-    def storage_type(self) -> typing.Optional[builtins.str]:
-        '''
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-workflow.html#cfn-omics-workflow-storagetype
-        '''
-        result = self._values.get("storage_type")
-        return typing.cast(typing.Optional[builtins.str], result)
-
-    @builtins.property
-    def tags(self) -> typing.Optional[typing.Mapping[builtins.str, builtins.str]]:
-        '''Tags for the workflow.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-workflow.html#cfn-omics-workflow-tags
-        '''
-        result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.Mapping[builtins.str, builtins.str]], result)
-
-    @builtins.property
-    def workflow_bucket_owner_id(self) -> typing.Optional[builtins.str]:
-        '''Optional workflow bucket owner ID to verify the workflow bucket.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-workflow.html#cfn-omics-workflow-workflowbucketownerid
-        '''
-        result = self._values.get("workflow_bucket_owner_id")
-        return typing.cast(typing.Optional[builtins.str], result)
-
-    def __eq__(self, rhs: typing.Any) -> builtins.bool:
-        return isinstance(rhs, self.__class__) and rhs._values == self._values
-
-    def __ne__(self, rhs: typing.Any) -> builtins.bool:
-        return not (rhs == self)
-
-    def __repr__(self) -> str:
-        return "CfnWorkflowProps(%s)" % ", ".join(
-            k + "=" + repr(v) for k, v in self._values.items()
-        )
-
-
-@jsii.data_type(
-    jsii_type="aws-cdk-lib.aws_omics.CfnWorkflowVersionProps",
-    jsii_struct_bases=[],
-    name_mapping={
-        "version_name": "versionName",
-        "workflow_id": "workflowId",
-        "accelerators": "accelerators",
-        "container_registry_map": "containerRegistryMap",
-        "container_registry_map_uri": "containerRegistryMapUri",
-        "definition_repository": "definitionRepository",
-        "definition_uri": "definitionUri",
-        "description": "description",
-        "engine": "engine",
-        "main": "main",
-        "parameter_template": "parameterTemplate",
-        "parameter_template_path": "parameterTemplatePath",
-        "readme_markdown": "readmeMarkdown",
-        "readme_path": "readmePath",
-        "readme_uri": "readmeUri",
-        "storage_capacity": "storageCapacity",
-        "storage_type": "storageType",
-        "tags": "tags",
-        "workflow_bucket_owner_id": "workflowBucketOwnerId",
-    },
-)
-class CfnWorkflowVersionProps:
-    def __init__(
-        self,
-        *,
-        version_name: builtins.str,
-        workflow_id: builtins.str,
-        accelerators: typing.Optional[builtins.str] = None,
-        container_registry_map: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnWorkflowVersion.ContainerRegistryMapProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        container_registry_map_uri: typing.Optional[builtins.str] = None,
-        definition_repository: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnWorkflowVersion.DefinitionRepositoryProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        definition_uri: typing.Optional[builtins.str] = None,
-        description: typing.Optional[builtins.str] = None,
-        engine: typing.Optional[builtins.str] = None,
-        main: typing.Optional[builtins.str] = None,
-        parameter_template: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[_IResolvable_da3f097b, typing.Union["CfnWorkflowVersion.WorkflowParameterProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        parameter_template_path: typing.Optional[builtins.str] = None,
-        readme_markdown: typing.Optional[builtins.str] = None,
-        readme_path: typing.Optional[builtins.str] = None,
-        readme_uri: typing.Optional[builtins.str] = None,
-        storage_capacity: typing.Optional[jsii.Number] = None,
-        storage_type: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
-        workflow_bucket_owner_id: typing.Optional[builtins.str] = None,
-    ) -> None:
-        '''Properties for defining a ``CfnWorkflowVersion``.
-
-        :param version_name: The name of the workflow version.
-        :param workflow_id: The workflow's ID.
-        :param accelerators: 
-        :param container_registry_map: Use a container registry map to specify mappings between the ECR private repository and one or more upstream registries. For more information, see `Container images <https://docs.aws.amazon.com/omics/latest/dev/workflows-ecr.html>`_ in the *AWS HealthOmics User Guide* .
-        :param container_registry_map_uri: 
-        :param definition_repository: Contains information about a source code repository that hosts the workflow definition files.
-        :param definition_uri: 
-        :param description: The description of the workflow version.
-        :param engine: 
-        :param main: 
-        :param parameter_template: 
-        :param parameter_template_path: Path to the primary workflow parameter template JSON file inside the repository.
-        :param readme_markdown: The markdown content for the workflow's README file. This provides documentation and usage information for users of the workflow.
-        :param readme_path: The path to the workflow README markdown file within the repository. This file provides documentation and usage information for the workflow. If not specified, the README.md file from the root directory of the repository will be used.
-        :param readme_uri: The S3 URI of the README file for the workflow. This file provides documentation and usage information for the workflow. The S3 URI must begin with s3://USER-OWNED-BUCKET/. The requester must have access to the S3 bucket and object. The max README content length is 500 KiB.
-        :param storage_capacity: 
-        :param storage_type: 
-        :param tags: A map of resource tags.
-        :param workflow_bucket_owner_id: 
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-workflowversion.html
-        :exampleMetadata: fixture=_generated
-
-        Example::
-
-            # The code below shows an example of how to instantiate this type.
-            # The values are placeholders you should change.
-            from aws_cdk import aws_omics as omics
-            
-            cfn_workflow_version_props = omics.CfnWorkflowVersionProps(
-                version_name="versionName",
-                workflow_id="workflowId",
-            
-                # the properties below are optional
-                accelerators="accelerators",
-                container_registry_map=omics.CfnWorkflowVersion.ContainerRegistryMapProperty(
-                    image_mappings=[omics.CfnWorkflowVersion.ImageMappingProperty(
-                        destination_image="destinationImage",
-                        source_image="sourceImage"
-                    )],
-                    registry_mappings=[omics.CfnWorkflowVersion.RegistryMappingProperty(
-                        ecr_account_id="ecrAccountId",
-                        ecr_repository_prefix="ecrRepositoryPrefix",
-                        upstream_registry_url="upstreamRegistryUrl",
-                        upstream_repository_prefix="upstreamRepositoryPrefix"
-                    )]
-                ),
-                container_registry_map_uri="containerRegistryMapUri",
-                definition_repository=omics.CfnWorkflowVersion.DefinitionRepositoryProperty(
-                    connection_arn="connectionArn",
-                    exclude_file_patterns=["excludeFilePatterns"],
-                    full_repository_id="fullRepositoryId",
-                    source_reference=omics.CfnWorkflowVersion.SourceReferenceProperty(
-                        type="type",
-                        value="value"
-                    )
-                ),
-                definition_uri="definitionUri",
-                description="description",
-                engine="engine",
-                main="main",
-                parameter_template={
-                    "parameter_template_key": omics.CfnWorkflowVersion.WorkflowParameterProperty(
-                        description="description",
-                        optional=False
-                    )
-                },
-                parameter_template_path="parameterTemplatePath",
-                readme_markdown="readmeMarkdown",
-                readme_path="readmePath",
-                readme_uri="readmeUri",
-                storage_capacity=123,
-                storage_type="storageType",
-                tags={
-                    "tags_key": "tags"
-                },
-                workflow_bucket_owner_id="workflowBucketOwnerId"
-            )
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__32259ddc7b7d888918efaf09deb63ba780f3721ec1da9ea606ed8100a4b9fb3e)
-            check_type(argname="argument version_name", value=version_name, expected_type=type_hints["version_name"])
-            check_type(argname="argument workflow_id", value=workflow_id, expected_type=type_hints["workflow_id"])
-            check_type(argname="argument accelerators", value=accelerators, expected_type=type_hints["accelerators"])
-            check_type(argname="argument container_registry_map", value=container_registry_map, expected_type=type_hints["container_registry_map"])
-            check_type(argname="argument container_registry_map_uri", value=container_registry_map_uri, expected_type=type_hints["container_registry_map_uri"])
-            check_type(argname="argument definition_repository", value=definition_repository, expected_type=type_hints["definition_repository"])
-            check_type(argname="argument definition_uri", value=definition_uri, expected_type=type_hints["definition_uri"])
-            check_type(argname="argument description", value=description, expected_type=type_hints["description"])
-            check_type(argname="argument engine", value=engine, expected_type=type_hints["engine"])
-            check_type(argname="argument main", value=main, expected_type=type_hints["main"])
-            check_type(argname="argument parameter_template", value=parameter_template, expected_type=type_hints["parameter_template"])
-            check_type(argname="argument parameter_template_path", value=parameter_template_path, expected_type=type_hints["parameter_template_path"])
-            check_type(argname="argument readme_markdown", value=readme_markdown, expected_type=type_hints["readme_markdown"])
-            check_type(argname="argument readme_path", value=readme_path, expected_type=type_hints["readme_path"])
-            check_type(argname="argument readme_uri", value=readme_uri, expected_type=type_hints["readme_uri"])
-            check_type(argname="argument storage_capacity", value=storage_capacity, expected_type=type_hints["storage_capacity"])
-            check_type(argname="argument storage_type", value=storage_type, expected_type=type_hints["storage_type"])
-            check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
-            check_type(argname="argument workflow_bucket_owner_id", value=workflow_bucket_owner_id, expected_type=type_hints["workflow_bucket_owner_id"])
-        self._values: typing.Dict[builtins.str, typing.Any] = {
-            "version_name": version_name,
-            "workflow_id": workflow_id,
-        }
-        if accelerators is not None:
-            self._values["accelerators"] = accelerators
-        if container_registry_map is not None:
-            self._values["container_registry_map"] = container_registry_map
-        if container_registry_map_uri is not None:
-            self._values["container_registry_map_uri"] = container_registry_map_uri
-        if definition_repository is not None:
-            self._values["definition_repository"] = definition_repository
-        if definition_uri is not None:
-            self._values["definition_uri"] = definition_uri
-        if description is not None:
-            self._values["description"] = description
-        if engine is not None:
-            self._values["engine"] = engine
-        if main is not None:
-            self._values["main"] = main
-        if parameter_template is not None:
-            self._values["parameter_template"] = parameter_template
-        if parameter_template_path is not None:
-            self._values["parameter_template_path"] = parameter_template_path
-        if readme_markdown is not None:
-            self._values["readme_markdown"] = readme_markdown
-        if readme_path is not None:
-            self._values["readme_path"] = readme_path
-        if readme_uri is not None:
-            self._values["readme_uri"] = readme_uri
-        if storage_capacity is not None:
-            self._values["storage_capacity"] = storage_capacity
-        if storage_type is not None:
-            self._values["storage_type"] = storage_type
-        if tags is not None:
-            self._values["tags"] = tags
-        if workflow_bucket_owner_id is not None:
-            self._values["workflow_bucket_owner_id"] = workflow_bucket_owner_id
-
-    @builtins.property
-    def version_name(self) -> builtins.str:
-        '''The name of the workflow version.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-workflowversion.html#cfn-omics-workflowversion-versionname
-        '''
-        result = self._values.get("version_name")
-        assert result is not None, "Required property 'version_name' is missing"
-        return typing.cast(builtins.str, result)
-
-    @builtins.property
-    def workflow_id(self) -> builtins.str:
-        '''The workflow's ID.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-workflowversion.html#cfn-omics-workflowversion-workflowid
-        '''
-        result = self._values.get("workflow_id")
-        assert result is not None, "Required property 'workflow_id' is missing"
-        return typing.cast(builtins.str, result)
-
-    @builtins.property
-    def accelerators(self) -> typing.Optional[builtins.str]:
-        '''
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-workflowversion.html#cfn-omics-workflowversion-accelerators
-        '''
-        result = self._values.get("accelerators")
-        return typing.cast(typing.Optional[builtins.str], result)
-
-    @builtins.property
-    def container_registry_map(
-        self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnWorkflowVersion.ContainerRegistryMapProperty"]]:
-        '''Use a container registry map to specify mappings between the ECR private repository and one or more upstream registries.
-
-        For more information, see `Container images <https://docs.aws.amazon.com/omics/latest/dev/workflows-ecr.html>`_ in the *AWS HealthOmics User Guide* .
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-workflowversion.html#cfn-omics-workflowversion-containerregistrymap
-        '''
-        result = self._values.get("container_registry_map")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnWorkflowVersion.ContainerRegistryMapProperty"]], result)
-
-    @builtins.property
-    def container_registry_map_uri(self) -> typing.Optional[builtins.str]:
-        '''
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-workflowversion.html#cfn-omics-workflowversion-containerregistrymapuri
-        '''
-        result = self._values.get("container_registry_map_uri")
-        return typing.cast(typing.Optional[builtins.str], result)
-
-    @builtins.property
-    def definition_repository(
-        self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnWorkflowVersion.DefinitionRepositoryProperty"]]:
-        '''Contains information about a source code repository that hosts the workflow definition files.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-workflowversion.html#cfn-omics-workflowversion-definitionrepository
-        '''
-        result = self._values.get("definition_repository")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnWorkflowVersion.DefinitionRepositoryProperty"]], result)
-
-    @builtins.property
-    def definition_uri(self) -> typing.Optional[builtins.str]:
-        '''
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-workflowversion.html#cfn-omics-workflowversion-definitionuri
-        '''
-        result = self._values.get("definition_uri")
-        return typing.cast(typing.Optional[builtins.str], result)
-
-    @builtins.property
-    def description(self) -> typing.Optional[builtins.str]:
-        '''The description of the workflow version.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-workflowversion.html#cfn-omics-workflowversion-description
-        '''
-        result = self._values.get("description")
-        return typing.cast(typing.Optional[builtins.str], result)
-
-    @builtins.property
-    def engine(self) -> typing.Optional[builtins.str]:
-        '''
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-workflowversion.html#cfn-omics-workflowversion-engine
-        '''
-        result = self._values.get("engine")
-        return typing.cast(typing.Optional[builtins.str], result)
-
-    @builtins.property
-    def main(self) -> typing.Optional[builtins.str]:
-        '''
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-workflowversion.html#cfn-omics-workflowversion-main
-        '''
-        result = self._values.get("main")
-        return typing.cast(typing.Optional[builtins.str], result)
-
-    @builtins.property
-    def parameter_template(
-        self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[_IResolvable_da3f097b, "CfnWorkflowVersion.WorkflowParameterProperty"]]]]:
-        '''
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-workflowversion.html#cfn-omics-workflowversion-parametertemplate
-        '''
-        result = self._values.get("parameter_template")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[_IResolvable_da3f097b, "CfnWorkflowVersion.WorkflowParameterProperty"]]]], result)
-
-    @builtins.property
-    def parameter_template_path(self) -> typing.Optional[builtins.str]:
-        '''Path to the primary workflow parameter template JSON file inside the repository.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-workflowversion.html#cfn-omics-workflowversion-parametertemplatepath
-        '''
-        result = self._values.get("parameter_template_path")
-        return typing.cast(typing.Optional[builtins.str], result)
-
-    @builtins.property
-    def readme_markdown(self) -> typing.Optional[builtins.str]:
-        '''The markdown content for the workflow's README file.
-
-        This provides documentation and usage information for users of the workflow.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-workflowversion.html#cfn-omics-workflowversion-readmemarkdown
-        '''
-        result = self._values.get("readme_markdown")
-        return typing.cast(typing.Optional[builtins.str], result)
-
-    @builtins.property
-    def readme_path(self) -> typing.Optional[builtins.str]:
-        '''The path to the workflow README markdown file within the repository.
-
-        This file provides documentation and usage information for the workflow. If not specified, the README.md file from the root directory of the repository will be used.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-workflowversion.html#cfn-omics-workflowversion-readmepath
-        '''
-        result = self._values.get("readme_path")
-        return typing.cast(typing.Optional[builtins.str], result)
-
-    @builtins.property
-    def readme_uri(self) -> typing.Optional[builtins.str]:
-        '''The S3 URI of the README file for the workflow.
-
-        This file provides documentation and usage information for the workflow. The S3 URI must begin with s3://USER-OWNED-BUCKET/. The requester must have access to the S3 bucket and object. The max README content length is 500 KiB.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-workflowversion.html#cfn-omics-workflowversion-readmeuri
-        '''
-        result = self._values.get("readme_uri")
-        return typing.cast(typing.Optional[builtins.str], result)
-
-    @builtins.property
-    def storage_capacity(self) -> typing.Optional[jsii.Number]:
-        '''
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-workflowversion.html#cfn-omics-workflowversion-storagecapacity
-        '''
-        result = self._values.get("storage_capacity")
-        return typing.cast(typing.Optional[jsii.Number], result)
-
-    @builtins.property
-    def storage_type(self) -> typing.Optional[builtins.str]:
-        '''
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-workflowversion.html#cfn-omics-workflowversion-storagetype
-        '''
-        result = self._values.get("storage_type")
-        return typing.cast(typing.Optional[builtins.str], result)
-
-    @builtins.property
-    def tags(self) -> typing.Optional[typing.Mapping[builtins.str, builtins.str]]:
-        '''A map of resource tags.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-workflowversion.html#cfn-omics-workflowversion-tags
-        '''
-        result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.Mapping[builtins.str, builtins.str]], result)
-
-    @builtins.property
-    def workflow_bucket_owner_id(self) -> typing.Optional[builtins.str]:
-        '''
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-workflowversion.html#cfn-omics-workflowversion-workflowbucketownerid
-        '''
-        result = self._values.get("workflow_bucket_owner_id")
-        return typing.cast(typing.Optional[builtins.str], result)
-
-    def __eq__(self, rhs: typing.Any) -> builtins.bool:
-        return isinstance(rhs, self.__class__) and rhs._values == self._values
-
-    def __ne__(self, rhs: typing.Any) -> builtins.bool:
-        return not (rhs == self)
-
-    def __repr__(self) -> str:
-        return "CfnWorkflowVersionProps(%s)" % ", ".join(
-            k + "=" + repr(v) for k, v in self._values.items()
-        )
-
-
-@jsii.interface(jsii_type="aws-cdk-lib.aws_omics.IAnnotationStoreRef")
-class IAnnotationStoreRef(
-    _constructs_77d1e7e8.IConstruct,
-    _IEnvironmentAware_a408b00d,
-    typing_extensions.Protocol,
-):
-    '''(experimental) Indicates that this resource can be referenced as a AnnotationStore.
-
-    :stability: experimental
-    '''
-
-    @builtins.property
-    @jsii.member(jsii_name="annotationStoreRef")
-    def annotation_store_ref(self) -> AnnotationStoreReference:
-        '''(experimental) A reference to a AnnotationStore resource.
-
-        :stability: experimental
-        '''
-        ...
-
-
-class _IAnnotationStoreRefProxy(
-    jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
-    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
-):
-    '''(experimental) Indicates that this resource can be referenced as a AnnotationStore.
-
-    :stability: experimental
-    '''
-
-    __jsii_type__: typing.ClassVar[str] = "aws-cdk-lib.aws_omics.IAnnotationStoreRef"
-
-    @builtins.property
-    @jsii.member(jsii_name="annotationStoreRef")
-    def annotation_store_ref(self) -> AnnotationStoreReference:
-        '''(experimental) A reference to a AnnotationStore resource.
-
-        :stability: experimental
-        '''
-        return typing.cast(AnnotationStoreReference, jsii.get(self, "annotationStoreRef"))
-
-# Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
-typing.cast(typing.Any, IAnnotationStoreRef).__jsii_proxy_class__ = lambda : _IAnnotationStoreRefProxy
-
-
-@jsii.interface(jsii_type="aws-cdk-lib.aws_omics.IReferenceStoreRef")
-class IReferenceStoreRef(
-    _constructs_77d1e7e8.IConstruct,
-    _IEnvironmentAware_a408b00d,
-    typing_extensions.Protocol,
-):
-    '''(experimental) Indicates that this resource can be referenced as a ReferenceStore.
-
-    :stability: experimental
-    '''
-
-    @builtins.property
-    @jsii.member(jsii_name="referenceStoreRef")
-    def reference_store_ref(self) -> "ReferenceStoreReference":
-        '''(experimental) A reference to a ReferenceStore resource.
-
-        :stability: experimental
-        '''
-        ...
-
-
-class _IReferenceStoreRefProxy(
-    jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
-    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
-):
-    '''(experimental) Indicates that this resource can be referenced as a ReferenceStore.
-
-    :stability: experimental
-    '''
-
-    __jsii_type__: typing.ClassVar[str] = "aws-cdk-lib.aws_omics.IReferenceStoreRef"
-
-    @builtins.property
-    @jsii.member(jsii_name="referenceStoreRef")
-    def reference_store_ref(self) -> "ReferenceStoreReference":
-        '''(experimental) A reference to a ReferenceStore resource.
-
-        :stability: experimental
-        '''
-        return typing.cast("ReferenceStoreReference", jsii.get(self, "referenceStoreRef"))
-
-# Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
-typing.cast(typing.Any, IReferenceStoreRef).__jsii_proxy_class__ = lambda : _IReferenceStoreRefProxy
-
-
-@jsii.interface(jsii_type="aws-cdk-lib.aws_omics.IRunGroupRef")
-class IRunGroupRef(
-    _constructs_77d1e7e8.IConstruct,
-    _IEnvironmentAware_a408b00d,
-    typing_extensions.Protocol,
-):
-    '''(experimental) Indicates that this resource can be referenced as a RunGroup.
-
-    :stability: experimental
-    '''
-
-    @builtins.property
-    @jsii.member(jsii_name="runGroupRef")
-    def run_group_ref(self) -> "RunGroupReference":
-        '''(experimental) A reference to a RunGroup resource.
-
-        :stability: experimental
-        '''
-        ...
-
-
-class _IRunGroupRefProxy(
-    jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
-    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
-):
-    '''(experimental) Indicates that this resource can be referenced as a RunGroup.
-
-    :stability: experimental
-    '''
-
-    __jsii_type__: typing.ClassVar[str] = "aws-cdk-lib.aws_omics.IRunGroupRef"
-
-    @builtins.property
-    @jsii.member(jsii_name="runGroupRef")
-    def run_group_ref(self) -> "RunGroupReference":
-        '''(experimental) A reference to a RunGroup resource.
-
-        :stability: experimental
-        '''
-        return typing.cast("RunGroupReference", jsii.get(self, "runGroupRef"))
-
-# Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
-typing.cast(typing.Any, IRunGroupRef).__jsii_proxy_class__ = lambda : _IRunGroupRefProxy
-
-
-@jsii.interface(jsii_type="aws-cdk-lib.aws_omics.ISequenceStoreRef")
-class ISequenceStoreRef(
-    _constructs_77d1e7e8.IConstruct,
-    _IEnvironmentAware_a408b00d,
-    typing_extensions.Protocol,
-):
-    '''(experimental) Indicates that this resource can be referenced as a SequenceStore.
-
-    :stability: experimental
-    '''
-
-    @builtins.property
-    @jsii.member(jsii_name="sequenceStoreRef")
-    def sequence_store_ref(self) -> "SequenceStoreReference":
-        '''(experimental) A reference to a SequenceStore resource.
-
-        :stability: experimental
-        '''
-        ...
-
-
-class _ISequenceStoreRefProxy(
-    jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
-    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
-):
-    '''(experimental) Indicates that this resource can be referenced as a SequenceStore.
-
-    :stability: experimental
-    '''
-
-    __jsii_type__: typing.ClassVar[str] = "aws-cdk-lib.aws_omics.ISequenceStoreRef"
-
-    @builtins.property
-    @jsii.member(jsii_name="sequenceStoreRef")
-    def sequence_store_ref(self) -> "SequenceStoreReference":
-        '''(experimental) A reference to a SequenceStore resource.
-
-        :stability: experimental
-        '''
-        return typing.cast("SequenceStoreReference", jsii.get(self, "sequenceStoreRef"))
-
-# Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
-typing.cast(typing.Any, ISequenceStoreRef).__jsii_proxy_class__ = lambda : _ISequenceStoreRefProxy
-
-
-@jsii.interface(jsii_type="aws-cdk-lib.aws_omics.IVariantStoreRef")
-class IVariantStoreRef(
-    _constructs_77d1e7e8.IConstruct,
-    _IEnvironmentAware_a408b00d,
-    typing_extensions.Protocol,
-):
-    '''(experimental) Indicates that this resource can be referenced as a VariantStore.
-
-    :stability: experimental
-    '''
-
-    @builtins.property
-    @jsii.member(jsii_name="variantStoreRef")
-    def variant_store_ref(self) -> "VariantStoreReference":
-        '''(experimental) A reference to a VariantStore resource.
-
-        :stability: experimental
-        '''
-        ...
-
-
-class _IVariantStoreRefProxy(
-    jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
-    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
-):
-    '''(experimental) Indicates that this resource can be referenced as a VariantStore.
-
-    :stability: experimental
-    '''
-
-    __jsii_type__: typing.ClassVar[str] = "aws-cdk-lib.aws_omics.IVariantStoreRef"
-
-    @builtins.property
-    @jsii.member(jsii_name="variantStoreRef")
-    def variant_store_ref(self) -> "VariantStoreReference":
-        '''(experimental) A reference to a VariantStore resource.
-
-        :stability: experimental
-        '''
-        return typing.cast("VariantStoreReference", jsii.get(self, "variantStoreRef"))
-
-# Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
-typing.cast(typing.Any, IVariantStoreRef).__jsii_proxy_class__ = lambda : _IVariantStoreRefProxy
-
-
-@jsii.interface(jsii_type="aws-cdk-lib.aws_omics.IWorkflowRef")
-class IWorkflowRef(
-    _constructs_77d1e7e8.IConstruct,
-    _IEnvironmentAware_a408b00d,
-    typing_extensions.Protocol,
-):
-    '''(experimental) Indicates that this resource can be referenced as a Workflow.
-
-    :stability: experimental
-    '''
-
-    @builtins.property
-    @jsii.member(jsii_name="workflowRef")
-    def workflow_ref(self) -> "WorkflowReference":
-        '''(experimental) A reference to a Workflow resource.
-
-        :stability: experimental
-        '''
-        ...
-
-
-class _IWorkflowRefProxy(
-    jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
-    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
-):
-    '''(experimental) Indicates that this resource can be referenced as a Workflow.
-
-    :stability: experimental
-    '''
-
-    __jsii_type__: typing.ClassVar[str] = "aws-cdk-lib.aws_omics.IWorkflowRef"
-
-    @builtins.property
-    @jsii.member(jsii_name="workflowRef")
-    def workflow_ref(self) -> "WorkflowReference":
-        '''(experimental) A reference to a Workflow resource.
-
-        :stability: experimental
-        '''
-        return typing.cast("WorkflowReference", jsii.get(self, "workflowRef"))
-
-# Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
-typing.cast(typing.Any, IWorkflowRef).__jsii_proxy_class__ = lambda : _IWorkflowRefProxy
-
-
-@jsii.interface(jsii_type="aws-cdk-lib.aws_omics.IWorkflowVersionRef")
-class IWorkflowVersionRef(
-    _constructs_77d1e7e8.IConstruct,
-    _IEnvironmentAware_a408b00d,
-    typing_extensions.Protocol,
-):
-    '''(experimental) Indicates that this resource can be referenced as a WorkflowVersion.
-
-    :stability: experimental
-    '''
-
-    @builtins.property
-    @jsii.member(jsii_name="workflowVersionRef")
-    def workflow_version_ref(self) -> "WorkflowVersionReference":
-        '''(experimental) A reference to a WorkflowVersion resource.
-
-        :stability: experimental
-        '''
-        ...
-
-
-class _IWorkflowVersionRefProxy(
-    jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
-    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
-):
-    '''(experimental) Indicates that this resource can be referenced as a WorkflowVersion.
-
-    :stability: experimental
-    '''
-
-    __jsii_type__: typing.ClassVar[str] = "aws-cdk-lib.aws_omics.IWorkflowVersionRef"
-
-    @builtins.property
-    @jsii.member(jsii_name="workflowVersionRef")
-    def workflow_version_ref(self) -> "WorkflowVersionReference":
-        '''(experimental) A reference to a WorkflowVersion resource.
-
-        :stability: experimental
-        '''
-        return typing.cast("WorkflowVersionReference", jsii.get(self, "workflowVersionRef"))
-
-# Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
-typing.cast(typing.Any, IWorkflowVersionRef).__jsii_proxy_class__ = lambda : _IWorkflowVersionRefProxy
-
-
-@jsii.data_type(
-    jsii_type="aws-cdk-lib.aws_omics.ReferenceStoreReference",
-    jsii_struct_bases=[],
-    name_mapping={
-        "reference_store_arn": "referenceStoreArn",
-        "reference_store_id": "referenceStoreId",
-    },
-)
-class ReferenceStoreReference:
-    def __init__(
-        self,
-        *,
-        reference_store_arn: builtins.str,
-        reference_store_id: builtins.str,
-    ) -> None:
-        '''A reference to a ReferenceStore resource.
-
-        :param reference_store_arn: The ARN of the ReferenceStore resource.
-        :param reference_store_id: The ReferenceStoreId of the ReferenceStore resource.
-
-        :exampleMetadata: fixture=_generated
-
-        Example::
-
-            # The code below shows an example of how to instantiate this type.
-            # The values are placeholders you should change.
-            from aws_cdk import aws_omics as omics
-            
-            reference_store_reference = omics.ReferenceStoreReference(
-                reference_store_arn="referenceStoreArn",
-                reference_store_id="referenceStoreId"
-            )
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__8f6a15283491fed7e44f381b4eec157f5884a81c62ee49da55b6eda0e0ae536e)
-            check_type(argname="argument reference_store_arn", value=reference_store_arn, expected_type=type_hints["reference_store_arn"])
-            check_type(argname="argument reference_store_id", value=reference_store_id, expected_type=type_hints["reference_store_id"])
-        self._values: typing.Dict[builtins.str, typing.Any] = {
-            "reference_store_arn": reference_store_arn,
-            "reference_store_id": reference_store_id,
-        }
-
-    @builtins.property
-    def reference_store_arn(self) -> builtins.str:
-        '''The ARN of the ReferenceStore resource.'''
-        result = self._values.get("reference_store_arn")
-        assert result is not None, "Required property 'reference_store_arn' is missing"
-        return typing.cast(builtins.str, result)
-
-    @builtins.property
-    def reference_store_id(self) -> builtins.str:
-        '''The ReferenceStoreId of the ReferenceStore resource.'''
-        result = self._values.get("reference_store_id")
-        assert result is not None, "Required property 'reference_store_id' is missing"
-        return typing.cast(builtins.str, result)
-
-    def __eq__(self, rhs: typing.Any) -> builtins.bool:
-        return isinstance(rhs, self.__class__) and rhs._values == self._values
-
-    def __ne__(self, rhs: typing.Any) -> builtins.bool:
-        return not (rhs == self)
-
-    def __repr__(self) -> str:
-        return "ReferenceStoreReference(%s)" % ", ".join(
-            k + "=" + repr(v) for k, v in self._values.items()
-        )
-
-
-@jsii.data_type(
-    jsii_type="aws-cdk-lib.aws_omics.RunGroupReference",
-    jsii_struct_bases=[],
-    name_mapping={"run_group_arn": "runGroupArn", "run_group_id": "runGroupId"},
-)
-class RunGroupReference:
-    def __init__(
-        self,
-        *,
-        run_group_arn: builtins.str,
-        run_group_id: builtins.str,
-    ) -> None:
-        '''A reference to a RunGroup resource.
-
-        :param run_group_arn: The ARN of the RunGroup resource.
-        :param run_group_id: The Id of the RunGroup resource.
-
-        :exampleMetadata: fixture=_generated
-
-        Example::
-
-            # The code below shows an example of how to instantiate this type.
-            # The values are placeholders you should change.
-            from aws_cdk import aws_omics as omics
-            
-            run_group_reference = omics.RunGroupReference(
-                run_group_arn="runGroupArn",
-                run_group_id="runGroupId"
-            )
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__601a2412ee421f1baffa9520640c396c6ae27fc0e2bf149bf080e949b24134f0)
-            check_type(argname="argument run_group_arn", value=run_group_arn, expected_type=type_hints["run_group_arn"])
-            check_type(argname="argument run_group_id", value=run_group_id, expected_type=type_hints["run_group_id"])
-        self._values: typing.Dict[builtins.str, typing.Any] = {
-            "run_group_arn": run_group_arn,
-            "run_group_id": run_group_id,
-        }
-
-    @builtins.property
-    def run_group_arn(self) -> builtins.str:
-        '''The ARN of the RunGroup resource.'''
-        result = self._values.get("run_group_arn")
-        assert result is not None, "Required property 'run_group_arn' is missing"
-        return typing.cast(builtins.str, result)
-
-    @builtins.property
-    def run_group_id(self) -> builtins.str:
-        '''The Id of the RunGroup resource.'''
-        result = self._values.get("run_group_id")
-        assert result is not None, "Required property 'run_group_id' is missing"
-        return typing.cast(builtins.str, result)
-
-    def __eq__(self, rhs: typing.Any) -> builtins.bool:
-        return isinstance(rhs, self.__class__) and rhs._values == self._values
-
-    def __ne__(self, rhs: typing.Any) -> builtins.bool:
-        return not (rhs == self)
-
-    def __repr__(self) -> str:
-        return "RunGroupReference(%s)" % ", ".join(
-            k + "=" + repr(v) for k, v in self._values.items()
-        )
-
-
-@jsii.data_type(
-    jsii_type="aws-cdk-lib.aws_omics.SequenceStoreReference",
-    jsii_struct_bases=[],
-    name_mapping={
-        "sequence_store_arn": "sequenceStoreArn",
-        "sequence_store_id": "sequenceStoreId",
-    },
-)
-class SequenceStoreReference:
-    def __init__(
-        self,
-        *,
-        sequence_store_arn: builtins.str,
-        sequence_store_id: builtins.str,
-    ) -> None:
-        '''A reference to a SequenceStore resource.
-
-        :param sequence_store_arn: The ARN of the SequenceStore resource.
-        :param sequence_store_id: The SequenceStoreId of the SequenceStore resource.
-
-        :exampleMetadata: fixture=_generated
-
-        Example::
-
-            # The code below shows an example of how to instantiate this type.
-            # The values are placeholders you should change.
-            from aws_cdk import aws_omics as omics
-            
-            sequence_store_reference = omics.SequenceStoreReference(
-                sequence_store_arn="sequenceStoreArn",
-                sequence_store_id="sequenceStoreId"
-            )
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__ba18b6f0fa1651182c341640ca1a07ef753b6cfd89f1ff0b632e616fe41153a9)
-            check_type(argname="argument sequence_store_arn", value=sequence_store_arn, expected_type=type_hints["sequence_store_arn"])
-            check_type(argname="argument sequence_store_id", value=sequence_store_id, expected_type=type_hints["sequence_store_id"])
-        self._values: typing.Dict[builtins.str, typing.Any] = {
-            "sequence_store_arn": sequence_store_arn,
-            "sequence_store_id": sequence_store_id,
-        }
-
-    @builtins.property
-    def sequence_store_arn(self) -> builtins.str:
-        '''The ARN of the SequenceStore resource.'''
-        result = self._values.get("sequence_store_arn")
-        assert result is not None, "Required property 'sequence_store_arn' is missing"
-        return typing.cast(builtins.str, result)
-
-    @builtins.property
-    def sequence_store_id(self) -> builtins.str:
-        '''The SequenceStoreId of the SequenceStore resource.'''
-        result = self._values.get("sequence_store_id")
-        assert result is not None, "Required property 'sequence_store_id' is missing"
-        return typing.cast(builtins.str, result)
-
-    def __eq__(self, rhs: typing.Any) -> builtins.bool:
-        return isinstance(rhs, self.__class__) and rhs._values == self._values
-
-    def __ne__(self, rhs: typing.Any) -> builtins.bool:
-        return not (rhs == self)
-
-    def __repr__(self) -> str:
-        return "SequenceStoreReference(%s)" % ", ".join(
-            k + "=" + repr(v) for k, v in self._values.items()
-        )
-
-
-@jsii.data_type(
-    jsii_type="aws-cdk-lib.aws_omics.VariantStoreReference",
-    jsii_struct_bases=[],
-    name_mapping={"variant_store_name": "variantStoreName"},
-)
-class VariantStoreReference:
-    def __init__(self, *, variant_store_name: builtins.str) -> None:
-        '''A reference to a VariantStore resource.
-
-        :param variant_store_name: The Name of the VariantStore resource.
-
-        :exampleMetadata: fixture=_generated
-
-        Example::
-
-            # The code below shows an example of how to instantiate this type.
-            # The values are placeholders you should change.
-            from aws_cdk import aws_omics as omics
-            
-            variant_store_reference = omics.VariantStoreReference(
-                variant_store_name="variantStoreName"
-            )
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__faf2c8433ca959c70ba0b6a43eb824dbc0731648fbd5b862b5fd45439658a092)
-            check_type(argname="argument variant_store_name", value=variant_store_name, expected_type=type_hints["variant_store_name"])
-        self._values: typing.Dict[builtins.str, typing.Any] = {
-            "variant_store_name": variant_store_name,
-        }
-
-    @builtins.property
-    def variant_store_name(self) -> builtins.str:
-        '''The Name of the VariantStore resource.'''
-        result = self._values.get("variant_store_name")
-        assert result is not None, "Required property 'variant_store_name' is missing"
-        return typing.cast(builtins.str, result)
-
-    def __eq__(self, rhs: typing.Any) -> builtins.bool:
-        return isinstance(rhs, self.__class__) and rhs._values == self._values
-
-    def __ne__(self, rhs: typing.Any) -> builtins.bool:
-        return not (rhs == self)
-
-    def __repr__(self) -> str:
-        return "VariantStoreReference(%s)" % ", ".join(
-            k + "=" + repr(v) for k, v in self._values.items()
-        )
-
-
-@jsii.data_type(
-    jsii_type="aws-cdk-lib.aws_omics.WorkflowReference",
-    jsii_struct_bases=[],
-    name_mapping={"workflow_arn": "workflowArn", "workflow_id": "workflowId"},
-)
-class WorkflowReference:
-    def __init__(
-        self,
-        *,
-        workflow_arn: builtins.str,
-        workflow_id: builtins.str,
-    ) -> None:
-        '''A reference to a Workflow resource.
-
-        :param workflow_arn: The ARN of the Workflow resource.
-        :param workflow_id: The Id of the Workflow resource.
-
-        :exampleMetadata: fixture=_generated
-
-        Example::
-
-            # The code below shows an example of how to instantiate this type.
-            # The values are placeholders you should change.
-            from aws_cdk import aws_omics as omics
-            
-            workflow_reference = omics.WorkflowReference(
-                workflow_arn="workflowArn",
-                workflow_id="workflowId"
-            )
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__f7313503e66532f32044f2f88b65913abef6d13ec20f687c5e45af4cb68f8640)
-            check_type(argname="argument workflow_arn", value=workflow_arn, expected_type=type_hints["workflow_arn"])
-            check_type(argname="argument workflow_id", value=workflow_id, expected_type=type_hints["workflow_id"])
-        self._values: typing.Dict[builtins.str, typing.Any] = {
-            "workflow_arn": workflow_arn,
-            "workflow_id": workflow_id,
-        }
-
-    @builtins.property
-    def workflow_arn(self) -> builtins.str:
-        '''The ARN of the Workflow resource.'''
-        result = self._values.get("workflow_arn")
-        assert result is not None, "Required property 'workflow_arn' is missing"
-        return typing.cast(builtins.str, result)
-
-    @builtins.property
-    def workflow_id(self) -> builtins.str:
-        '''The Id of the Workflow resource.'''
-        result = self._values.get("workflow_id")
-        assert result is not None, "Required property 'workflow_id' is missing"
-        return typing.cast(builtins.str, result)
-
-    def __eq__(self, rhs: typing.Any) -> builtins.bool:
-        return isinstance(rhs, self.__class__) and rhs._values == self._values
-
-    def __ne__(self, rhs: typing.Any) -> builtins.bool:
-        return not (rhs == self)
-
-    def __repr__(self) -> str:
-        return "WorkflowReference(%s)" % ", ".join(
-            k + "=" + repr(v) for k, v in self._values.items()
-        )
-
-
-@jsii.data_type(
-    jsii_type="aws-cdk-lib.aws_omics.WorkflowVersionReference",
-    jsii_struct_bases=[],
-    name_mapping={"workflow_version_arn": "workflowVersionArn"},
-)
-class WorkflowVersionReference:
-    def __init__(self, *, workflow_version_arn: builtins.str) -> None:
-        '''A reference to a WorkflowVersion resource.
-
-        :param workflow_version_arn: The Arn of the WorkflowVersion resource.
-
-        :exampleMetadata: fixture=_generated
-
-        Example::
-
-            # The code below shows an example of how to instantiate this type.
-            # The values are placeholders you should change.
-            from aws_cdk import aws_omics as omics
-            
-            workflow_version_reference = omics.WorkflowVersionReference(
-                workflow_version_arn="workflowVersionArn"
-            )
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__02d54e70a948e2828814519534c80bb9cf5713a2fe86b3cd71241b9cba0bb1c4)
-            check_type(argname="argument workflow_version_arn", value=workflow_version_arn, expected_type=type_hints["workflow_version_arn"])
-        self._values: typing.Dict[builtins.str, typing.Any] = {
-            "workflow_version_arn": workflow_version_arn,
-        }
-
-    @builtins.property
-    def workflow_version_arn(self) -> builtins.str:
-        '''The Arn of the WorkflowVersion resource.'''
-        result = self._values.get("workflow_version_arn")
-        assert result is not None, "Required property 'workflow_version_arn' is missing"
-        return typing.cast(builtins.str, result)
-
-    def __eq__(self, rhs: typing.Any) -> builtins.bool:
-        return isinstance(rhs, self.__class__) and rhs._values == self._values
-
-    def __ne__(self, rhs: typing.Any) -> builtins.bool:
-        return not (rhs == self)
-
-    def __repr__(self) -> str:
-        return "WorkflowVersionReference(%s)" % ", ".join(
-            k + "=" + repr(v) for k, v in self._values.items()
-        )
-
-
-@jsii.implements(_IInspectable_c2943556, IAnnotationStoreRef, _ITaggable_36806126)
+@jsii.implements(_IInspectable_c2943556, _IAnnotationStoreRef_c33c98b4, _ITaggable_36806126)
 class CfnAnnotationStore(
     _CfnResource_9df397a6,
     metaclass=jsii.JSIIMeta,
@@ -2333,9 +93,9 @@ class CfnAnnotationStore(
 ):
     '''.. epigraph::
 
-   AWS HealthOmics variant stores and annotation stores will no longer be open to new customers starting November 7, 2025.
+   AWS HealthOmics variant stores and annotation stores are no longer open to new customers.
 
-    If you would like to use variant stores or annotation stores, sign up prior to that date. Existing customers can continue to use the service as normal. For more information, see `AWS HealthOmics variant store and annotation store availability change <https://docs.aws.amazon.com/omics/latest/dev/variant-store-availability-change.html>`_ .
+    Existing customers can continue to use the service as normal. For more information, see `AWS HealthOmics variant store and annotation store availability change <https://docs.aws.amazon.com/omics/latest/dev/variant-store-availability-change.html>`_ .
 
     Creates an annotation store.
 
@@ -2394,7 +154,8 @@ class CfnAnnotationStore(
         store_options: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnAnnotationStore.StoreOptionsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
     ) -> None:
-        '''
+        '''Create a new ``AWS::Omics::AnnotationStore``.
+
         :param scope: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
         :param name: The name of the Annotation Store.
@@ -2428,7 +189,7 @@ class CfnAnnotationStore(
         scope: _constructs_77d1e7e8.Construct,
         id: builtins.str,
         annotation_store_name: builtins.str,
-    ) -> IAnnotationStoreRef:
+    ) -> _IAnnotationStoreRef_c33c98b4:
         '''Creates a new IAnnotationStoreRef from a annotationStoreName.
 
         :param scope: -
@@ -2440,7 +201,7 @@ class CfnAnnotationStore(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument annotation_store_name", value=annotation_store_name, expected_type=type_hints["annotation_store_name"])
-        return typing.cast(IAnnotationStoreRef, jsii.sinvoke(cls, "fromAnnotationStoreName", [scope, id, annotation_store_name]))
+        return typing.cast(_IAnnotationStoreRef_c33c98b4, jsii.sinvoke(cls, "fromAnnotationStoreName", [scope, id, annotation_store_name]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -2474,9 +235,9 @@ class CfnAnnotationStore(
 
     @builtins.property
     @jsii.member(jsii_name="annotationStoreRef")
-    def annotation_store_ref(self) -> AnnotationStoreReference:
+    def annotation_store_ref(self) -> _AnnotationStoreReference_bb5ff456:
         '''A reference to a AnnotationStore resource.'''
-        return typing.cast(AnnotationStoreReference, jsii.get(self, "annotationStoreRef"))
+        return typing.cast(_AnnotationStoreReference_bb5ff456, jsii.get(self, "annotationStoreRef"))
 
     @builtins.property
     @jsii.member(jsii_name="attrCreationTime")
@@ -2948,7 +709,189 @@ class CfnAnnotationStore(
             )
 
 
-@jsii.implements(_IInspectable_c2943556, IReferenceStoreRef, _ITaggable_36806126)
+@jsii.data_type(
+    jsii_type="aws-cdk-lib.aws_omics.CfnAnnotationStoreProps",
+    jsii_struct_bases=[],
+    name_mapping={
+        "name": "name",
+        "store_format": "storeFormat",
+        "description": "description",
+        "reference": "reference",
+        "sse_config": "sseConfig",
+        "store_options": "storeOptions",
+        "tags": "tags",
+    },
+)
+class CfnAnnotationStoreProps:
+    def __init__(
+        self,
+        *,
+        name: builtins.str,
+        store_format: builtins.str,
+        description: typing.Optional[builtins.str] = None,
+        reference: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAnnotationStore.ReferenceItemProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        sse_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAnnotationStore.SseConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        store_options: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAnnotationStore.StoreOptionsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
+    ) -> None:
+        '''Properties for defining a ``CfnAnnotationStore``.
+
+        :param name: The name of the Annotation Store.
+        :param store_format: The annotation file format of the store.
+        :param description: A description for the store.
+        :param reference: The genome reference for the store's annotations.
+        :param sse_config: The store's server-side encryption (SSE) settings.
+        :param store_options: File parsing options for the annotation store.
+        :param tags: Tags for the store.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-annotationstore.html
+        :exampleMetadata: fixture=_generated
+
+        Example::
+
+            # The code below shows an example of how to instantiate this type.
+            # The values are placeholders you should change.
+            from aws_cdk import aws_omics as omics
+            
+            # schema: Any
+            
+            cfn_annotation_store_props = omics.CfnAnnotationStoreProps(
+                name="name",
+                store_format="storeFormat",
+            
+                # the properties below are optional
+                description="description",
+                reference=omics.CfnAnnotationStore.ReferenceItemProperty(
+                    reference_arn="referenceArn"
+                ),
+                sse_config=omics.CfnAnnotationStore.SseConfigProperty(
+                    type="type",
+            
+                    # the properties below are optional
+                    key_arn="keyArn"
+                ),
+                store_options=omics.CfnAnnotationStore.StoreOptionsProperty(
+                    tsv_store_options=omics.CfnAnnotationStore.TsvStoreOptionsProperty(
+                        annotation_type="annotationType",
+                        format_to_header={
+                            "format_to_header_key": "formatToHeader"
+                        },
+                        schema=schema
+                    )
+                ),
+                tags={
+                    "tags_key": "tags"
+                }
+            )
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__db27a54e4b1e96ecf8263cf950eaa96b8620641082ddea726be734d30e205831)
+            check_type(argname="argument name", value=name, expected_type=type_hints["name"])
+            check_type(argname="argument store_format", value=store_format, expected_type=type_hints["store_format"])
+            check_type(argname="argument description", value=description, expected_type=type_hints["description"])
+            check_type(argname="argument reference", value=reference, expected_type=type_hints["reference"])
+            check_type(argname="argument sse_config", value=sse_config, expected_type=type_hints["sse_config"])
+            check_type(argname="argument store_options", value=store_options, expected_type=type_hints["store_options"])
+            check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
+        self._values: typing.Dict[builtins.str, typing.Any] = {
+            "name": name,
+            "store_format": store_format,
+        }
+        if description is not None:
+            self._values["description"] = description
+        if reference is not None:
+            self._values["reference"] = reference
+        if sse_config is not None:
+            self._values["sse_config"] = sse_config
+        if store_options is not None:
+            self._values["store_options"] = store_options
+        if tags is not None:
+            self._values["tags"] = tags
+
+    @builtins.property
+    def name(self) -> builtins.str:
+        '''The name of the Annotation Store.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-annotationstore.html#cfn-omics-annotationstore-name
+        '''
+        result = self._values.get("name")
+        assert result is not None, "Required property 'name' is missing"
+        return typing.cast(builtins.str, result)
+
+    @builtins.property
+    def store_format(self) -> builtins.str:
+        '''The annotation file format of the store.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-annotationstore.html#cfn-omics-annotationstore-storeformat
+        '''
+        result = self._values.get("store_format")
+        assert result is not None, "Required property 'store_format' is missing"
+        return typing.cast(builtins.str, result)
+
+    @builtins.property
+    def description(self) -> typing.Optional[builtins.str]:
+        '''A description for the store.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-annotationstore.html#cfn-omics-annotationstore-description
+        '''
+        result = self._values.get("description")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def reference(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnAnnotationStore.ReferenceItemProperty]]:
+        '''The genome reference for the store's annotations.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-annotationstore.html#cfn-omics-annotationstore-reference
+        '''
+        result = self._values.get("reference")
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnAnnotationStore.ReferenceItemProperty]], result)
+
+    @builtins.property
+    def sse_config(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnAnnotationStore.SseConfigProperty]]:
+        '''The store's server-side encryption (SSE) settings.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-annotationstore.html#cfn-omics-annotationstore-sseconfig
+        '''
+        result = self._values.get("sse_config")
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnAnnotationStore.SseConfigProperty]], result)
+
+    @builtins.property
+    def store_options(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnAnnotationStore.StoreOptionsProperty]]:
+        '''File parsing options for the annotation store.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-annotationstore.html#cfn-omics-annotationstore-storeoptions
+        '''
+        result = self._values.get("store_options")
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnAnnotationStore.StoreOptionsProperty]], result)
+
+    @builtins.property
+    def tags(self) -> typing.Optional[typing.Mapping[builtins.str, builtins.str]]:
+        '''Tags for the store.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-annotationstore.html#cfn-omics-annotationstore-tags
+        '''
+        result = self._values.get("tags")
+        return typing.cast(typing.Optional[typing.Mapping[builtins.str, builtins.str]], result)
+
+    def __eq__(self, rhs: typing.Any) -> builtins.bool:
+        return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+    def __ne__(self, rhs: typing.Any) -> builtins.bool:
+        return not (rhs == self)
+
+    def __repr__(self) -> str:
+        return "CfnAnnotationStoreProps(%s)" % ", ".join(
+            k + "=" + repr(v) for k, v in self._values.items()
+        )
+
+
+@jsii.implements(_IInspectable_c2943556, _IReferenceStoreRef_e44b493e, _ITaggable_36806126)
 class CfnReferenceStore(
     _CfnResource_9df397a6,
     metaclass=jsii.JSIIMeta,
@@ -2993,7 +936,8 @@ class CfnReferenceStore(
         sse_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnReferenceStore.SseConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
     ) -> None:
-        '''
+        '''Create a new ``AWS::Omics::ReferenceStore``.
+
         :param scope: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
         :param name: A name for the store.
@@ -3018,7 +962,7 @@ class CfnReferenceStore(
         scope: _constructs_77d1e7e8.Construct,
         id: builtins.str,
         arn: builtins.str,
-    ) -> IReferenceStoreRef:
+    ) -> _IReferenceStoreRef_e44b493e:
         '''Creates a new IReferenceStoreRef from an ARN.
 
         :param scope: -
@@ -3030,7 +974,7 @@ class CfnReferenceStore(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
-        return typing.cast(IReferenceStoreRef, jsii.sinvoke(cls, "fromReferenceStoreArn", [scope, id, arn]))
+        return typing.cast(_IReferenceStoreRef_e44b493e, jsii.sinvoke(cls, "fromReferenceStoreArn", [scope, id, arn]))
 
     @jsii.member(jsii_name="fromReferenceStoreId")
     @builtins.classmethod
@@ -3039,7 +983,7 @@ class CfnReferenceStore(
         scope: _constructs_77d1e7e8.Construct,
         id: builtins.str,
         reference_store_id: builtins.str,
-    ) -> IReferenceStoreRef:
+    ) -> _IReferenceStoreRef_e44b493e:
         '''Creates a new IReferenceStoreRef from a referenceStoreId.
 
         :param scope: -
@@ -3051,7 +995,7 @@ class CfnReferenceStore(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument reference_store_id", value=reference_store_id, expected_type=type_hints["reference_store_id"])
-        return typing.cast(IReferenceStoreRef, jsii.sinvoke(cls, "fromReferenceStoreId", [scope, id, reference_store_id]))
+        return typing.cast(_IReferenceStoreRef_e44b493e, jsii.sinvoke(cls, "fromReferenceStoreId", [scope, id, reference_store_id]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -3117,9 +1061,9 @@ class CfnReferenceStore(
 
     @builtins.property
     @jsii.member(jsii_name="referenceStoreRef")
-    def reference_store_ref(self) -> ReferenceStoreReference:
+    def reference_store_ref(self) -> _ReferenceStoreReference_0fa98700:
         '''A reference to a ReferenceStore resource.'''
-        return typing.cast(ReferenceStoreReference, jsii.get(self, "referenceStoreRef"))
+        return typing.cast(_ReferenceStoreReference_0fa98700, jsii.get(self, "referenceStoreRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
@@ -3261,7 +1205,125 @@ class CfnReferenceStore(
             )
 
 
-@jsii.implements(_IInspectable_c2943556, IRunGroupRef, _ITaggable_36806126)
+@jsii.data_type(
+    jsii_type="aws-cdk-lib.aws_omics.CfnReferenceStoreProps",
+    jsii_struct_bases=[],
+    name_mapping={
+        "name": "name",
+        "description": "description",
+        "sse_config": "sseConfig",
+        "tags": "tags",
+    },
+)
+class CfnReferenceStoreProps:
+    def __init__(
+        self,
+        *,
+        name: builtins.str,
+        description: typing.Optional[builtins.str] = None,
+        sse_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnReferenceStore.SseConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
+    ) -> None:
+        '''Properties for defining a ``CfnReferenceStore``.
+
+        :param name: A name for the store.
+        :param description: A description for the store.
+        :param sse_config: Server-side encryption (SSE) settings for the store.
+        :param tags: Tags for the store.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-referencestore.html
+        :exampleMetadata: fixture=_generated
+
+        Example::
+
+            # The code below shows an example of how to instantiate this type.
+            # The values are placeholders you should change.
+            from aws_cdk import aws_omics as omics
+            
+            cfn_reference_store_props = omics.CfnReferenceStoreProps(
+                name="name",
+            
+                # the properties below are optional
+                description="description",
+                sse_config=omics.CfnReferenceStore.SseConfigProperty(
+                    type="type",
+            
+                    # the properties below are optional
+                    key_arn="keyArn"
+                ),
+                tags={
+                    "tags_key": "tags"
+                }
+            )
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__1fa5ddefbb60b1902a7a8a0da56893c57cde7f27eb458a6b71907aad7ac2b4ca)
+            check_type(argname="argument name", value=name, expected_type=type_hints["name"])
+            check_type(argname="argument description", value=description, expected_type=type_hints["description"])
+            check_type(argname="argument sse_config", value=sse_config, expected_type=type_hints["sse_config"])
+            check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
+        self._values: typing.Dict[builtins.str, typing.Any] = {
+            "name": name,
+        }
+        if description is not None:
+            self._values["description"] = description
+        if sse_config is not None:
+            self._values["sse_config"] = sse_config
+        if tags is not None:
+            self._values["tags"] = tags
+
+    @builtins.property
+    def name(self) -> builtins.str:
+        '''A name for the store.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-referencestore.html#cfn-omics-referencestore-name
+        '''
+        result = self._values.get("name")
+        assert result is not None, "Required property 'name' is missing"
+        return typing.cast(builtins.str, result)
+
+    @builtins.property
+    def description(self) -> typing.Optional[builtins.str]:
+        '''A description for the store.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-referencestore.html#cfn-omics-referencestore-description
+        '''
+        result = self._values.get("description")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def sse_config(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnReferenceStore.SseConfigProperty]]:
+        '''Server-side encryption (SSE) settings for the store.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-referencestore.html#cfn-omics-referencestore-sseconfig
+        '''
+        result = self._values.get("sse_config")
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnReferenceStore.SseConfigProperty]], result)
+
+    @builtins.property
+    def tags(self) -> typing.Optional[typing.Mapping[builtins.str, builtins.str]]:
+        '''Tags for the store.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-referencestore.html#cfn-omics-referencestore-tags
+        '''
+        result = self._values.get("tags")
+        return typing.cast(typing.Optional[typing.Mapping[builtins.str, builtins.str]], result)
+
+    def __eq__(self, rhs: typing.Any) -> builtins.bool:
+        return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+    def __ne__(self, rhs: typing.Any) -> builtins.bool:
+        return not (rhs == self)
+
+    def __repr__(self) -> str:
+        return "CfnReferenceStoreProps(%s)" % ", ".join(
+            k + "=" + repr(v) for k, v in self._values.items()
+        )
+
+
+@jsii.implements(_IInspectable_c2943556, _IRunGroupRef_937b5363, _ITaggable_36806126)
 class CfnRunGroup(
     _CfnResource_9df397a6,
     metaclass=jsii.JSIIMeta,
@@ -3305,7 +1367,8 @@ class CfnRunGroup(
         name: typing.Optional[builtins.str] = None,
         tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
     ) -> None:
-        '''
+        '''Create a new ``AWS::Omics::RunGroup``.
+
         :param scope: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
         :param max_cpus: The group's maximum CPU count setting.
@@ -3394,9 +1457,9 @@ class CfnRunGroup(
 
     @builtins.property
     @jsii.member(jsii_name="runGroupRef")
-    def run_group_ref(self) -> RunGroupReference:
+    def run_group_ref(self) -> _RunGroupReference_d14ed290:
         '''A reference to a RunGroup resource.'''
-        return typing.cast(RunGroupReference, jsii.get(self, "runGroupRef"))
+        return typing.cast(_RunGroupReference_d14ed290, jsii.get(self, "runGroupRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
@@ -3486,7 +1549,147 @@ class CfnRunGroup(
         jsii.set(self, "tagsRaw", value) # pyright: ignore[reportArgumentType]
 
 
-@jsii.implements(_IInspectable_c2943556, ISequenceStoreRef, _ITaggable_36806126)
+@jsii.data_type(
+    jsii_type="aws-cdk-lib.aws_omics.CfnRunGroupProps",
+    jsii_struct_bases=[],
+    name_mapping={
+        "max_cpus": "maxCpus",
+        "max_duration": "maxDuration",
+        "max_gpus": "maxGpus",
+        "max_runs": "maxRuns",
+        "name": "name",
+        "tags": "tags",
+    },
+)
+class CfnRunGroupProps:
+    def __init__(
+        self,
+        *,
+        max_cpus: typing.Optional[jsii.Number] = None,
+        max_duration: typing.Optional[jsii.Number] = None,
+        max_gpus: typing.Optional[jsii.Number] = None,
+        max_runs: typing.Optional[jsii.Number] = None,
+        name: typing.Optional[builtins.str] = None,
+        tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
+    ) -> None:
+        '''Properties for defining a ``CfnRunGroup``.
+
+        :param max_cpus: The group's maximum CPU count setting.
+        :param max_duration: The group's maximum duration setting in minutes.
+        :param max_gpus: The maximum GPUs that can be used by a run group.
+        :param max_runs: The group's maximum concurrent run setting.
+        :param name: The group's name.
+        :param tags: Tags for the group.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-rungroup.html
+        :exampleMetadata: fixture=_generated
+
+        Example::
+
+            # The code below shows an example of how to instantiate this type.
+            # The values are placeholders you should change.
+            from aws_cdk import aws_omics as omics
+            
+            cfn_run_group_props = omics.CfnRunGroupProps(
+                max_cpus=123,
+                max_duration=123,
+                max_gpus=123,
+                max_runs=123,
+                name="name",
+                tags={
+                    "tags_key": "tags"
+                }
+            )
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__0687d84f98238d006185c8fc00317ac96c5244d8d1b550e56fda04cb4eca97f9)
+            check_type(argname="argument max_cpus", value=max_cpus, expected_type=type_hints["max_cpus"])
+            check_type(argname="argument max_duration", value=max_duration, expected_type=type_hints["max_duration"])
+            check_type(argname="argument max_gpus", value=max_gpus, expected_type=type_hints["max_gpus"])
+            check_type(argname="argument max_runs", value=max_runs, expected_type=type_hints["max_runs"])
+            check_type(argname="argument name", value=name, expected_type=type_hints["name"])
+            check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
+        self._values: typing.Dict[builtins.str, typing.Any] = {}
+        if max_cpus is not None:
+            self._values["max_cpus"] = max_cpus
+        if max_duration is not None:
+            self._values["max_duration"] = max_duration
+        if max_gpus is not None:
+            self._values["max_gpus"] = max_gpus
+        if max_runs is not None:
+            self._values["max_runs"] = max_runs
+        if name is not None:
+            self._values["name"] = name
+        if tags is not None:
+            self._values["tags"] = tags
+
+    @builtins.property
+    def max_cpus(self) -> typing.Optional[jsii.Number]:
+        '''The group's maximum CPU count setting.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-rungroup.html#cfn-omics-rungroup-maxcpus
+        '''
+        result = self._values.get("max_cpus")
+        return typing.cast(typing.Optional[jsii.Number], result)
+
+    @builtins.property
+    def max_duration(self) -> typing.Optional[jsii.Number]:
+        '''The group's maximum duration setting in minutes.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-rungroup.html#cfn-omics-rungroup-maxduration
+        '''
+        result = self._values.get("max_duration")
+        return typing.cast(typing.Optional[jsii.Number], result)
+
+    @builtins.property
+    def max_gpus(self) -> typing.Optional[jsii.Number]:
+        '''The maximum GPUs that can be used by a run group.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-rungroup.html#cfn-omics-rungroup-maxgpus
+        '''
+        result = self._values.get("max_gpus")
+        return typing.cast(typing.Optional[jsii.Number], result)
+
+    @builtins.property
+    def max_runs(self) -> typing.Optional[jsii.Number]:
+        '''The group's maximum concurrent run setting.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-rungroup.html#cfn-omics-rungroup-maxruns
+        '''
+        result = self._values.get("max_runs")
+        return typing.cast(typing.Optional[jsii.Number], result)
+
+    @builtins.property
+    def name(self) -> typing.Optional[builtins.str]:
+        '''The group's name.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-rungroup.html#cfn-omics-rungroup-name
+        '''
+        result = self._values.get("name")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def tags(self) -> typing.Optional[typing.Mapping[builtins.str, builtins.str]]:
+        '''Tags for the group.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-rungroup.html#cfn-omics-rungroup-tags
+        '''
+        result = self._values.get("tags")
+        return typing.cast(typing.Optional[typing.Mapping[builtins.str, builtins.str]], result)
+
+    def __eq__(self, rhs: typing.Any) -> builtins.bool:
+        return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+    def __ne__(self, rhs: typing.Any) -> builtins.bool:
+        return not (rhs == self)
+
+    def __repr__(self) -> str:
+        return "CfnRunGroupProps(%s)" % ", ".join(
+            k + "=" + repr(v) for k, v in self._values.items()
+        )
+
+
+@jsii.implements(_IInspectable_c2943556, _ISequenceStoreRef_d8ce7b6b, _ITaggable_36806126)
 class CfnSequenceStore(
     _CfnResource_9df397a6,
     metaclass=jsii.JSIIMeta,
@@ -3543,7 +1746,8 @@ class CfnSequenceStore(
         sse_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnSequenceStore.SseConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
     ) -> None:
-        '''
+        '''Create a new ``AWS::Omics::SequenceStore``.
+
         :param scope: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
         :param name: A name for the store.
@@ -3581,7 +1785,7 @@ class CfnSequenceStore(
         scope: _constructs_77d1e7e8.Construct,
         id: builtins.str,
         arn: builtins.str,
-    ) -> ISequenceStoreRef:
+    ) -> _ISequenceStoreRef_d8ce7b6b:
         '''Creates a new ISequenceStoreRef from an ARN.
 
         :param scope: -
@@ -3593,7 +1797,7 @@ class CfnSequenceStore(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
-        return typing.cast(ISequenceStoreRef, jsii.sinvoke(cls, "fromSequenceStoreArn", [scope, id, arn]))
+        return typing.cast(_ISequenceStoreRef_d8ce7b6b, jsii.sinvoke(cls, "fromSequenceStoreArn", [scope, id, arn]))
 
     @jsii.member(jsii_name="fromSequenceStoreId")
     @builtins.classmethod
@@ -3602,7 +1806,7 @@ class CfnSequenceStore(
         scope: _constructs_77d1e7e8.Construct,
         id: builtins.str,
         sequence_store_id: builtins.str,
-    ) -> ISequenceStoreRef:
+    ) -> _ISequenceStoreRef_d8ce7b6b:
         '''Creates a new ISequenceStoreRef from a sequenceStoreId.
 
         :param scope: -
@@ -3614,7 +1818,7 @@ class CfnSequenceStore(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument sequence_store_id", value=sequence_store_id, expected_type=type_hints["sequence_store_id"])
-        return typing.cast(ISequenceStoreRef, jsii.sinvoke(cls, "fromSequenceStoreId", [scope, id, sequence_store_id]))
+        return typing.cast(_ISequenceStoreRef_d8ce7b6b, jsii.sinvoke(cls, "fromSequenceStoreId", [scope, id, sequence_store_id]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -3725,9 +1929,9 @@ class CfnSequenceStore(
 
     @builtins.property
     @jsii.member(jsii_name="sequenceStoreRef")
-    def sequence_store_ref(self) -> SequenceStoreReference:
+    def sequence_store_ref(self) -> _SequenceStoreReference_12ae1dcf:
         '''A reference to a SequenceStore resource.'''
-        return typing.cast(SequenceStoreReference, jsii.get(self, "sequenceStoreRef"))
+        return typing.cast(_SequenceStoreReference_12ae1dcf, jsii.get(self, "sequenceStoreRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
@@ -3937,7 +2141,207 @@ class CfnSequenceStore(
             )
 
 
-@jsii.implements(_IInspectable_c2943556, IVariantStoreRef, _ITaggable_36806126)
+@jsii.data_type(
+    jsii_type="aws-cdk-lib.aws_omics.CfnSequenceStoreProps",
+    jsii_struct_bases=[],
+    name_mapping={
+        "name": "name",
+        "access_log_location": "accessLogLocation",
+        "description": "description",
+        "e_tag_algorithm_family": "eTagAlgorithmFamily",
+        "fallback_location": "fallbackLocation",
+        "propagated_set_level_tags": "propagatedSetLevelTags",
+        "s3_access_policy": "s3AccessPolicy",
+        "sse_config": "sseConfig",
+        "tags": "tags",
+    },
+)
+class CfnSequenceStoreProps:
+    def __init__(
+        self,
+        *,
+        name: builtins.str,
+        access_log_location: typing.Optional[builtins.str] = None,
+        description: typing.Optional[builtins.str] = None,
+        e_tag_algorithm_family: typing.Optional[builtins.str] = None,
+        fallback_location: typing.Optional[builtins.str] = None,
+        propagated_set_level_tags: typing.Optional[typing.Sequence[builtins.str]] = None,
+        s3_access_policy: typing.Any = None,
+        sse_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnSequenceStore.SseConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
+    ) -> None:
+        '''Properties for defining a ``CfnSequenceStore``.
+
+        :param name: A name for the store.
+        :param access_log_location: Location of the access logs.
+        :param description: A description for the store.
+        :param e_tag_algorithm_family: The algorithm family of the ETag.
+        :param fallback_location: An S3 location that is used to store files that have failed a direct upload.
+        :param propagated_set_level_tags: The tags keys to propagate to the S3 objects associated with read sets in the sequence store.
+        :param s3_access_policy: The resource policy that controls S3 access on the store.
+        :param sse_config: Server-side encryption (SSE) settings for the store.
+        :param tags: Tags for the store.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-sequencestore.html
+        :exampleMetadata: fixture=_generated
+
+        Example::
+
+            # The code below shows an example of how to instantiate this type.
+            # The values are placeholders you should change.
+            from aws_cdk import aws_omics as omics
+            
+            # s3_access_policy: Any
+            
+            cfn_sequence_store_props = omics.CfnSequenceStoreProps(
+                name="name",
+            
+                # the properties below are optional
+                access_log_location="accessLogLocation",
+                description="description",
+                e_tag_algorithm_family="eTagAlgorithmFamily",
+                fallback_location="fallbackLocation",
+                propagated_set_level_tags=["propagatedSetLevelTags"],
+                s3_access_policy=s3_access_policy,
+                sse_config=omics.CfnSequenceStore.SseConfigProperty(
+                    type="type",
+            
+                    # the properties below are optional
+                    key_arn="keyArn"
+                ),
+                tags={
+                    "tags_key": "tags"
+                }
+            )
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__c912afa5be2bea750b085186b08f53bd688bc0a1dd08b1f1c6951a21015380fc)
+            check_type(argname="argument name", value=name, expected_type=type_hints["name"])
+            check_type(argname="argument access_log_location", value=access_log_location, expected_type=type_hints["access_log_location"])
+            check_type(argname="argument description", value=description, expected_type=type_hints["description"])
+            check_type(argname="argument e_tag_algorithm_family", value=e_tag_algorithm_family, expected_type=type_hints["e_tag_algorithm_family"])
+            check_type(argname="argument fallback_location", value=fallback_location, expected_type=type_hints["fallback_location"])
+            check_type(argname="argument propagated_set_level_tags", value=propagated_set_level_tags, expected_type=type_hints["propagated_set_level_tags"])
+            check_type(argname="argument s3_access_policy", value=s3_access_policy, expected_type=type_hints["s3_access_policy"])
+            check_type(argname="argument sse_config", value=sse_config, expected_type=type_hints["sse_config"])
+            check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
+        self._values: typing.Dict[builtins.str, typing.Any] = {
+            "name": name,
+        }
+        if access_log_location is not None:
+            self._values["access_log_location"] = access_log_location
+        if description is not None:
+            self._values["description"] = description
+        if e_tag_algorithm_family is not None:
+            self._values["e_tag_algorithm_family"] = e_tag_algorithm_family
+        if fallback_location is not None:
+            self._values["fallback_location"] = fallback_location
+        if propagated_set_level_tags is not None:
+            self._values["propagated_set_level_tags"] = propagated_set_level_tags
+        if s3_access_policy is not None:
+            self._values["s3_access_policy"] = s3_access_policy
+        if sse_config is not None:
+            self._values["sse_config"] = sse_config
+        if tags is not None:
+            self._values["tags"] = tags
+
+    @builtins.property
+    def name(self) -> builtins.str:
+        '''A name for the store.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-sequencestore.html#cfn-omics-sequencestore-name
+        '''
+        result = self._values.get("name")
+        assert result is not None, "Required property 'name' is missing"
+        return typing.cast(builtins.str, result)
+
+    @builtins.property
+    def access_log_location(self) -> typing.Optional[builtins.str]:
+        '''Location of the access logs.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-sequencestore.html#cfn-omics-sequencestore-accessloglocation
+        '''
+        result = self._values.get("access_log_location")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def description(self) -> typing.Optional[builtins.str]:
+        '''A description for the store.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-sequencestore.html#cfn-omics-sequencestore-description
+        '''
+        result = self._values.get("description")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def e_tag_algorithm_family(self) -> typing.Optional[builtins.str]:
+        '''The algorithm family of the ETag.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-sequencestore.html#cfn-omics-sequencestore-etagalgorithmfamily
+        '''
+        result = self._values.get("e_tag_algorithm_family")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def fallback_location(self) -> typing.Optional[builtins.str]:
+        '''An S3 location that is used to store files that have failed a direct upload.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-sequencestore.html#cfn-omics-sequencestore-fallbacklocation
+        '''
+        result = self._values.get("fallback_location")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def propagated_set_level_tags(self) -> typing.Optional[typing.List[builtins.str]]:
+        '''The tags keys to propagate to the S3 objects associated with read sets in the sequence store.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-sequencestore.html#cfn-omics-sequencestore-propagatedsetleveltags
+        '''
+        result = self._values.get("propagated_set_level_tags")
+        return typing.cast(typing.Optional[typing.List[builtins.str]], result)
+
+    @builtins.property
+    def s3_access_policy(self) -> typing.Any:
+        '''The resource policy that controls S3 access on the store.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-sequencestore.html#cfn-omics-sequencestore-s3accesspolicy
+        '''
+        result = self._values.get("s3_access_policy")
+        return typing.cast(typing.Any, result)
+
+    @builtins.property
+    def sse_config(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnSequenceStore.SseConfigProperty]]:
+        '''Server-side encryption (SSE) settings for the store.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-sequencestore.html#cfn-omics-sequencestore-sseconfig
+        '''
+        result = self._values.get("sse_config")
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnSequenceStore.SseConfigProperty]], result)
+
+    @builtins.property
+    def tags(self) -> typing.Optional[typing.Mapping[builtins.str, builtins.str]]:
+        '''Tags for the store.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-sequencestore.html#cfn-omics-sequencestore-tags
+        '''
+        result = self._values.get("tags")
+        return typing.cast(typing.Optional[typing.Mapping[builtins.str, builtins.str]], result)
+
+    def __eq__(self, rhs: typing.Any) -> builtins.bool:
+        return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+    def __ne__(self, rhs: typing.Any) -> builtins.bool:
+        return not (rhs == self)
+
+    def __repr__(self) -> str:
+        return "CfnSequenceStoreProps(%s)" % ", ".join(
+            k + "=" + repr(v) for k, v in self._values.items()
+        )
+
+
+@jsii.implements(_IInspectable_c2943556, _IVariantStoreRef_49e3cae7, _ITaggable_36806126)
 class CfnVariantStore(
     _CfnResource_9df397a6,
     metaclass=jsii.JSIIMeta,
@@ -3986,7 +2390,8 @@ class CfnVariantStore(
         sse_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnVariantStore.SseConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
     ) -> None:
-        '''
+        '''Create a new ``AWS::Omics::VariantStore``.
+
         :param scope: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
         :param name: A name for the store.
@@ -4016,7 +2421,7 @@ class CfnVariantStore(
         scope: _constructs_77d1e7e8.Construct,
         id: builtins.str,
         variant_store_name: builtins.str,
-    ) -> IVariantStoreRef:
+    ) -> _IVariantStoreRef_49e3cae7:
         '''Creates a new IVariantStoreRef from a variantStoreName.
 
         :param scope: -
@@ -4028,7 +2433,7 @@ class CfnVariantStore(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument variant_store_name", value=variant_store_name, expected_type=type_hints["variant_store_name"])
-        return typing.cast(IVariantStoreRef, jsii.sinvoke(cls, "fromVariantStoreName", [scope, id, variant_store_name]))
+        return typing.cast(_IVariantStoreRef_49e3cae7, jsii.sinvoke(cls, "fromVariantStoreName", [scope, id, variant_store_name]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -4136,9 +2541,9 @@ class CfnVariantStore(
 
     @builtins.property
     @jsii.member(jsii_name="variantStoreRef")
-    def variant_store_ref(self) -> VariantStoreReference:
+    def variant_store_ref(self) -> _VariantStoreReference_494e1db9:
         '''A reference to a VariantStore resource.'''
-        return typing.cast(VariantStoreReference, jsii.get(self, "variantStoreRef"))
+        return typing.cast(_VariantStoreReference_494e1db9, jsii.get(self, "variantStoreRef"))
 
     @builtins.property
     @jsii.member(jsii_name="name")
@@ -4344,7 +2749,145 @@ class CfnVariantStore(
             )
 
 
-@jsii.implements(_IInspectable_c2943556, IWorkflowRef, _ITaggable_36806126)
+@jsii.data_type(
+    jsii_type="aws-cdk-lib.aws_omics.CfnVariantStoreProps",
+    jsii_struct_bases=[],
+    name_mapping={
+        "name": "name",
+        "reference": "reference",
+        "description": "description",
+        "sse_config": "sseConfig",
+        "tags": "tags",
+    },
+)
+class CfnVariantStoreProps:
+    def __init__(
+        self,
+        *,
+        name: builtins.str,
+        reference: typing.Union[_IResolvable_da3f097b, typing.Union[CfnVariantStore.ReferenceItemProperty, typing.Dict[builtins.str, typing.Any]]],
+        description: typing.Optional[builtins.str] = None,
+        sse_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnVariantStore.SseConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
+    ) -> None:
+        '''Properties for defining a ``CfnVariantStore``.
+
+        :param name: A name for the store.
+        :param reference: The genome reference for the store's variants.
+        :param description: A description for the store.
+        :param sse_config: Server-side encryption (SSE) settings for the store.
+        :param tags: Tags for the store.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-variantstore.html
+        :exampleMetadata: fixture=_generated
+
+        Example::
+
+            # The code below shows an example of how to instantiate this type.
+            # The values are placeholders you should change.
+            from aws_cdk import aws_omics as omics
+            
+            cfn_variant_store_props = omics.CfnVariantStoreProps(
+                name="name",
+                reference=omics.CfnVariantStore.ReferenceItemProperty(
+                    reference_arn="referenceArn"
+                ),
+            
+                # the properties below are optional
+                description="description",
+                sse_config=omics.CfnVariantStore.SseConfigProperty(
+                    type="type",
+            
+                    # the properties below are optional
+                    key_arn="keyArn"
+                ),
+                tags={
+                    "tags_key": "tags"
+                }
+            )
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__9cee3839b5919ab156aab54490277c559d790311fd9ea2b761f99373fdb7eaec)
+            check_type(argname="argument name", value=name, expected_type=type_hints["name"])
+            check_type(argname="argument reference", value=reference, expected_type=type_hints["reference"])
+            check_type(argname="argument description", value=description, expected_type=type_hints["description"])
+            check_type(argname="argument sse_config", value=sse_config, expected_type=type_hints["sse_config"])
+            check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
+        self._values: typing.Dict[builtins.str, typing.Any] = {
+            "name": name,
+            "reference": reference,
+        }
+        if description is not None:
+            self._values["description"] = description
+        if sse_config is not None:
+            self._values["sse_config"] = sse_config
+        if tags is not None:
+            self._values["tags"] = tags
+
+    @builtins.property
+    def name(self) -> builtins.str:
+        '''A name for the store.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-variantstore.html#cfn-omics-variantstore-name
+        '''
+        result = self._values.get("name")
+        assert result is not None, "Required property 'name' is missing"
+        return typing.cast(builtins.str, result)
+
+    @builtins.property
+    def reference(
+        self,
+    ) -> typing.Union[_IResolvable_da3f097b, CfnVariantStore.ReferenceItemProperty]:
+        '''The genome reference for the store's variants.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-variantstore.html#cfn-omics-variantstore-reference
+        '''
+        result = self._values.get("reference")
+        assert result is not None, "Required property 'reference' is missing"
+        return typing.cast(typing.Union[_IResolvable_da3f097b, CfnVariantStore.ReferenceItemProperty], result)
+
+    @builtins.property
+    def description(self) -> typing.Optional[builtins.str]:
+        '''A description for the store.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-variantstore.html#cfn-omics-variantstore-description
+        '''
+        result = self._values.get("description")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def sse_config(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnVariantStore.SseConfigProperty]]:
+        '''Server-side encryption (SSE) settings for the store.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-variantstore.html#cfn-omics-variantstore-sseconfig
+        '''
+        result = self._values.get("sse_config")
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnVariantStore.SseConfigProperty]], result)
+
+    @builtins.property
+    def tags(self) -> typing.Optional[typing.Mapping[builtins.str, builtins.str]]:
+        '''Tags for the store.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-variantstore.html#cfn-omics-variantstore-tags
+        '''
+        result = self._values.get("tags")
+        return typing.cast(typing.Optional[typing.Mapping[builtins.str, builtins.str]], result)
+
+    def __eq__(self, rhs: typing.Any) -> builtins.bool:
+        return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+    def __ne__(self, rhs: typing.Any) -> builtins.bool:
+        return not (rhs == self)
+
+    def __repr__(self) -> str:
+        return "CfnVariantStoreProps(%s)" % ", ".join(
+            k + "=" + repr(v) for k, v in self._values.items()
+        )
+
+
+@jsii.implements(_IInspectable_c2943556, _IWorkflowRef_c34b3fa1, _ITaggable_36806126)
 class CfnWorkflow(
     _CfnResource_9df397a6,
     metaclass=jsii.JSIIMeta,
@@ -4442,7 +2985,8 @@ class CfnWorkflow(
         tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         workflow_bucket_owner_id: typing.Optional[builtins.str] = None,
     ) -> None:
-        '''
+        '''Create a new ``AWS::Omics::Workflow``.
+
         :param scope: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
         :param accelerators: 
@@ -4587,9 +3131,9 @@ class CfnWorkflow(
 
     @builtins.property
     @jsii.member(jsii_name="workflowRef")
-    def workflow_ref(self) -> WorkflowReference:
+    def workflow_ref(self) -> _WorkflowReference_d2d5c008:
         '''A reference to a Workflow resource.'''
-        return typing.cast(WorkflowReference, jsii.get(self, "workflowRef"))
+        return typing.cast(_WorkflowReference_d2d5c008, jsii.get(self, "workflowRef"))
 
     @builtins.property
     @jsii.member(jsii_name="accelerators")
@@ -5362,7 +3906,376 @@ class CfnWorkflow(
             )
 
 
-@jsii.implements(_IInspectable_c2943556, IWorkflowVersionRef, _ITaggableV2_4e6798f8)
+@jsii.data_type(
+    jsii_type="aws-cdk-lib.aws_omics.CfnWorkflowProps",
+    jsii_struct_bases=[],
+    name_mapping={
+        "accelerators": "accelerators",
+        "container_registry_map": "containerRegistryMap",
+        "container_registry_map_uri": "containerRegistryMapUri",
+        "definition_repository": "definitionRepository",
+        "definition_uri": "definitionUri",
+        "description": "description",
+        "engine": "engine",
+        "main": "main",
+        "name": "name",
+        "parameter_template": "parameterTemplate",
+        "parameter_template_path": "parameterTemplatePath",
+        "readme_markdown": "readmeMarkdown",
+        "readme_path": "readmePath",
+        "readme_uri": "readmeUri",
+        "storage_capacity": "storageCapacity",
+        "storage_type": "storageType",
+        "tags": "tags",
+        "workflow_bucket_owner_id": "workflowBucketOwnerId",
+    },
+)
+class CfnWorkflowProps:
+    def __init__(
+        self,
+        *,
+        accelerators: typing.Optional[builtins.str] = None,
+        container_registry_map: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnWorkflow.ContainerRegistryMapProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        container_registry_map_uri: typing.Optional[builtins.str] = None,
+        definition_repository: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnWorkflow.DefinitionRepositoryProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        definition_uri: typing.Optional[builtins.str] = None,
+        description: typing.Optional[builtins.str] = None,
+        engine: typing.Optional[builtins.str] = None,
+        main: typing.Optional[builtins.str] = None,
+        name: typing.Optional[builtins.str] = None,
+        parameter_template: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[_IResolvable_da3f097b, typing.Union[CfnWorkflow.WorkflowParameterProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        parameter_template_path: typing.Optional[builtins.str] = None,
+        readme_markdown: typing.Optional[builtins.str] = None,
+        readme_path: typing.Optional[builtins.str] = None,
+        readme_uri: typing.Optional[builtins.str] = None,
+        storage_capacity: typing.Optional[jsii.Number] = None,
+        storage_type: typing.Optional[builtins.str] = None,
+        tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
+        workflow_bucket_owner_id: typing.Optional[builtins.str] = None,
+    ) -> None:
+        '''Properties for defining a ``CfnWorkflow``.
+
+        :param accelerators: 
+        :param container_registry_map: Use a container registry map to specify mappings between the ECR private repository and one or more upstream registries. For more information, see `Container images <https://docs.aws.amazon.com/omics/latest/dev/workflows-ecr.html>`_ in the *AWS HealthOmics User Guide* .
+        :param container_registry_map_uri: 
+        :param definition_repository: Contains information about a source code repository that hosts the workflow definition files.
+        :param definition_uri: The URI of a definition for the workflow.
+        :param description: The parameter's description.
+        :param engine: An engine for the workflow.
+        :param main: The path of the main definition file for the workflow.
+        :param name: The workflow's name.
+        :param parameter_template: The workflow's parameter template.
+        :param parameter_template_path: Path to the primary workflow parameter template JSON file inside the repository.
+        :param readme_markdown: The markdown content for the workflow's README file. This provides documentation and usage information for users of the workflow.
+        :param readme_path: The path to the workflow README markdown file within the repository. This file provides documentation and usage information for the workflow. If not specified, the README.md file from the root directory of the repository will be used.
+        :param readme_uri: The S3 URI of the README file for the workflow. This file provides documentation and usage information for the workflow. The S3 URI must begin with s3://USER-OWNED-BUCKET/. The requester must have access to the S3 bucket and object. The max README content length is 500 KiB.
+        :param storage_capacity: The default static storage capacity (in gibibytes) for runs that use this workflow or workflow version. The ``storageCapacity`` can be overwritten at run time. The storage capacity is not required for runs with a ``DYNAMIC`` storage type.
+        :param storage_type: 
+        :param tags: Tags for the workflow.
+        :param workflow_bucket_owner_id: Optional workflow bucket owner ID to verify the workflow bucket.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-workflow.html
+        :exampleMetadata: fixture=_generated
+
+        Example::
+
+            # The code below shows an example of how to instantiate this type.
+            # The values are placeholders you should change.
+            from aws_cdk import aws_omics as omics
+            
+            cfn_workflow_props = omics.CfnWorkflowProps(
+                accelerators="accelerators",
+                container_registry_map=omics.CfnWorkflow.ContainerRegistryMapProperty(
+                    image_mappings=[omics.CfnWorkflow.ImageMappingProperty(
+                        destination_image="destinationImage",
+                        source_image="sourceImage"
+                    )],
+                    registry_mappings=[omics.CfnWorkflow.RegistryMappingProperty(
+                        ecr_account_id="ecrAccountId",
+                        ecr_repository_prefix="ecrRepositoryPrefix",
+                        upstream_registry_url="upstreamRegistryUrl",
+                        upstream_repository_prefix="upstreamRepositoryPrefix"
+                    )]
+                ),
+                container_registry_map_uri="containerRegistryMapUri",
+                definition_repository=omics.CfnWorkflow.DefinitionRepositoryProperty(
+                    connection_arn="connectionArn",
+                    exclude_file_patterns=["excludeFilePatterns"],
+                    full_repository_id="fullRepositoryId",
+                    source_reference=omics.CfnWorkflow.SourceReferenceProperty(
+                        type="type",
+                        value="value"
+                    )
+                ),
+                definition_uri="definitionUri",
+                description="description",
+                engine="engine",
+                main="main",
+                name="name",
+                parameter_template={
+                    "parameter_template_key": omics.CfnWorkflow.WorkflowParameterProperty(
+                        description="description",
+                        optional=False
+                    )
+                },
+                parameter_template_path="parameterTemplatePath",
+                readme_markdown="readmeMarkdown",
+                readme_path="readmePath",
+                readme_uri="readmeUri",
+                storage_capacity=123,
+                storage_type="storageType",
+                tags={
+                    "tags_key": "tags"
+                },
+                workflow_bucket_owner_id="workflowBucketOwnerId"
+            )
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__09bedca50200dd06a4bbe4bb6135e76dacff76287249f3d28b8f285f8205f173)
+            check_type(argname="argument accelerators", value=accelerators, expected_type=type_hints["accelerators"])
+            check_type(argname="argument container_registry_map", value=container_registry_map, expected_type=type_hints["container_registry_map"])
+            check_type(argname="argument container_registry_map_uri", value=container_registry_map_uri, expected_type=type_hints["container_registry_map_uri"])
+            check_type(argname="argument definition_repository", value=definition_repository, expected_type=type_hints["definition_repository"])
+            check_type(argname="argument definition_uri", value=definition_uri, expected_type=type_hints["definition_uri"])
+            check_type(argname="argument description", value=description, expected_type=type_hints["description"])
+            check_type(argname="argument engine", value=engine, expected_type=type_hints["engine"])
+            check_type(argname="argument main", value=main, expected_type=type_hints["main"])
+            check_type(argname="argument name", value=name, expected_type=type_hints["name"])
+            check_type(argname="argument parameter_template", value=parameter_template, expected_type=type_hints["parameter_template"])
+            check_type(argname="argument parameter_template_path", value=parameter_template_path, expected_type=type_hints["parameter_template_path"])
+            check_type(argname="argument readme_markdown", value=readme_markdown, expected_type=type_hints["readme_markdown"])
+            check_type(argname="argument readme_path", value=readme_path, expected_type=type_hints["readme_path"])
+            check_type(argname="argument readme_uri", value=readme_uri, expected_type=type_hints["readme_uri"])
+            check_type(argname="argument storage_capacity", value=storage_capacity, expected_type=type_hints["storage_capacity"])
+            check_type(argname="argument storage_type", value=storage_type, expected_type=type_hints["storage_type"])
+            check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
+            check_type(argname="argument workflow_bucket_owner_id", value=workflow_bucket_owner_id, expected_type=type_hints["workflow_bucket_owner_id"])
+        self._values: typing.Dict[builtins.str, typing.Any] = {}
+        if accelerators is not None:
+            self._values["accelerators"] = accelerators
+        if container_registry_map is not None:
+            self._values["container_registry_map"] = container_registry_map
+        if container_registry_map_uri is not None:
+            self._values["container_registry_map_uri"] = container_registry_map_uri
+        if definition_repository is not None:
+            self._values["definition_repository"] = definition_repository
+        if definition_uri is not None:
+            self._values["definition_uri"] = definition_uri
+        if description is not None:
+            self._values["description"] = description
+        if engine is not None:
+            self._values["engine"] = engine
+        if main is not None:
+            self._values["main"] = main
+        if name is not None:
+            self._values["name"] = name
+        if parameter_template is not None:
+            self._values["parameter_template"] = parameter_template
+        if parameter_template_path is not None:
+            self._values["parameter_template_path"] = parameter_template_path
+        if readme_markdown is not None:
+            self._values["readme_markdown"] = readme_markdown
+        if readme_path is not None:
+            self._values["readme_path"] = readme_path
+        if readme_uri is not None:
+            self._values["readme_uri"] = readme_uri
+        if storage_capacity is not None:
+            self._values["storage_capacity"] = storage_capacity
+        if storage_type is not None:
+            self._values["storage_type"] = storage_type
+        if tags is not None:
+            self._values["tags"] = tags
+        if workflow_bucket_owner_id is not None:
+            self._values["workflow_bucket_owner_id"] = workflow_bucket_owner_id
+
+    @builtins.property
+    def accelerators(self) -> typing.Optional[builtins.str]:
+        '''
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-workflow.html#cfn-omics-workflow-accelerators
+        '''
+        result = self._values.get("accelerators")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def container_registry_map(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnWorkflow.ContainerRegistryMapProperty]]:
+        '''Use a container registry map to specify mappings between the ECR private repository and one or more upstream registries.
+
+        For more information, see `Container images <https://docs.aws.amazon.com/omics/latest/dev/workflows-ecr.html>`_ in the *AWS HealthOmics User Guide* .
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-workflow.html#cfn-omics-workflow-containerregistrymap
+        '''
+        result = self._values.get("container_registry_map")
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnWorkflow.ContainerRegistryMapProperty]], result)
+
+    @builtins.property
+    def container_registry_map_uri(self) -> typing.Optional[builtins.str]:
+        '''
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-workflow.html#cfn-omics-workflow-containerregistrymapuri
+        '''
+        result = self._values.get("container_registry_map_uri")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def definition_repository(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnWorkflow.DefinitionRepositoryProperty]]:
+        '''Contains information about a source code repository that hosts the workflow definition files.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-workflow.html#cfn-omics-workflow-definitionrepository
+        '''
+        result = self._values.get("definition_repository")
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnWorkflow.DefinitionRepositoryProperty]], result)
+
+    @builtins.property
+    def definition_uri(self) -> typing.Optional[builtins.str]:
+        '''The URI of a definition for the workflow.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-workflow.html#cfn-omics-workflow-definitionuri
+        '''
+        result = self._values.get("definition_uri")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def description(self) -> typing.Optional[builtins.str]:
+        '''The parameter's description.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-workflow.html#cfn-omics-workflow-description
+        '''
+        result = self._values.get("description")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def engine(self) -> typing.Optional[builtins.str]:
+        '''An engine for the workflow.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-workflow.html#cfn-omics-workflow-engine
+        '''
+        result = self._values.get("engine")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def main(self) -> typing.Optional[builtins.str]:
+        '''The path of the main definition file for the workflow.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-workflow.html#cfn-omics-workflow-main
+        '''
+        result = self._values.get("main")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def name(self) -> typing.Optional[builtins.str]:
+        '''The workflow's name.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-workflow.html#cfn-omics-workflow-name
+        '''
+        result = self._values.get("name")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def parameter_template(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[_IResolvable_da3f097b, CfnWorkflow.WorkflowParameterProperty]]]]:
+        '''The workflow's parameter template.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-workflow.html#cfn-omics-workflow-parametertemplate
+        '''
+        result = self._values.get("parameter_template")
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[_IResolvable_da3f097b, CfnWorkflow.WorkflowParameterProperty]]]], result)
+
+    @builtins.property
+    def parameter_template_path(self) -> typing.Optional[builtins.str]:
+        '''Path to the primary workflow parameter template JSON file inside the repository.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-workflow.html#cfn-omics-workflow-parametertemplatepath
+        '''
+        result = self._values.get("parameter_template_path")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def readme_markdown(self) -> typing.Optional[builtins.str]:
+        '''The markdown content for the workflow's README file.
+
+        This provides documentation and usage information for users of the workflow.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-workflow.html#cfn-omics-workflow-readmemarkdown
+        '''
+        result = self._values.get("readme_markdown")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def readme_path(self) -> typing.Optional[builtins.str]:
+        '''The path to the workflow README markdown file within the repository.
+
+        This file provides documentation and usage information for the workflow. If not specified, the README.md file from the root directory of the repository will be used.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-workflow.html#cfn-omics-workflow-readmepath
+        '''
+        result = self._values.get("readme_path")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def readme_uri(self) -> typing.Optional[builtins.str]:
+        '''The S3 URI of the README file for the workflow.
+
+        This file provides documentation and usage information for the workflow. The S3 URI must begin with s3://USER-OWNED-BUCKET/. The requester must have access to the S3 bucket and object. The max README content length is 500 KiB.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-workflow.html#cfn-omics-workflow-readmeuri
+        '''
+        result = self._values.get("readme_uri")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def storage_capacity(self) -> typing.Optional[jsii.Number]:
+        '''The default static storage capacity (in gibibytes) for runs that use this workflow or workflow version.
+
+        The ``storageCapacity`` can be overwritten at run time. The storage capacity is not required for runs with a ``DYNAMIC`` storage type.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-workflow.html#cfn-omics-workflow-storagecapacity
+        '''
+        result = self._values.get("storage_capacity")
+        return typing.cast(typing.Optional[jsii.Number], result)
+
+    @builtins.property
+    def storage_type(self) -> typing.Optional[builtins.str]:
+        '''
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-workflow.html#cfn-omics-workflow-storagetype
+        '''
+        result = self._values.get("storage_type")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def tags(self) -> typing.Optional[typing.Mapping[builtins.str, builtins.str]]:
+        '''Tags for the workflow.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-workflow.html#cfn-omics-workflow-tags
+        '''
+        result = self._values.get("tags")
+        return typing.cast(typing.Optional[typing.Mapping[builtins.str, builtins.str]], result)
+
+    @builtins.property
+    def workflow_bucket_owner_id(self) -> typing.Optional[builtins.str]:
+        '''Optional workflow bucket owner ID to verify the workflow bucket.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-workflow.html#cfn-omics-workflow-workflowbucketownerid
+        '''
+        result = self._values.get("workflow_bucket_owner_id")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    def __eq__(self, rhs: typing.Any) -> builtins.bool:
+        return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+    def __ne__(self, rhs: typing.Any) -> builtins.bool:
+        return not (rhs == self)
+
+    def __repr__(self) -> str:
+        return "CfnWorkflowProps(%s)" % ", ".join(
+            k + "=" + repr(v) for k, v in self._values.items()
+        )
+
+
+@jsii.implements(_IInspectable_c2943556, _IWorkflowVersionRef_8e877e7d, _ITaggableV2_4e6798f8)
 class CfnWorkflowVersion(
     _CfnResource_9df397a6,
     metaclass=jsii.JSIIMeta,
@@ -5465,7 +4378,8 @@ class CfnWorkflowVersion(
         tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         workflow_bucket_owner_id: typing.Optional[builtins.str] = None,
     ) -> None:
-        '''
+        '''Create a new ``AWS::Omics::WorkflowVersion``.
+
         :param scope: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
         :param version_name: The name of the workflow version.
@@ -5603,9 +4517,9 @@ class CfnWorkflowVersion(
 
     @builtins.property
     @jsii.member(jsii_name="workflowVersionRef")
-    def workflow_version_ref(self) -> WorkflowVersionReference:
+    def workflow_version_ref(self) -> _WorkflowVersionReference_1d5421a4:
         '''A reference to a WorkflowVersion resource.'''
-        return typing.cast(WorkflowVersionReference, jsii.get(self, "workflowVersionRef"))
+        return typing.cast(_WorkflowVersionReference_1d5421a4, jsii.get(self, "workflowVersionRef"))
 
     @builtins.property
     @jsii.member(jsii_name="versionName")
@@ -6385,8 +5299,387 @@ class CfnWorkflowVersion(
             )
 
 
+@jsii.data_type(
+    jsii_type="aws-cdk-lib.aws_omics.CfnWorkflowVersionProps",
+    jsii_struct_bases=[],
+    name_mapping={
+        "version_name": "versionName",
+        "workflow_id": "workflowId",
+        "accelerators": "accelerators",
+        "container_registry_map": "containerRegistryMap",
+        "container_registry_map_uri": "containerRegistryMapUri",
+        "definition_repository": "definitionRepository",
+        "definition_uri": "definitionUri",
+        "description": "description",
+        "engine": "engine",
+        "main": "main",
+        "parameter_template": "parameterTemplate",
+        "parameter_template_path": "parameterTemplatePath",
+        "readme_markdown": "readmeMarkdown",
+        "readme_path": "readmePath",
+        "readme_uri": "readmeUri",
+        "storage_capacity": "storageCapacity",
+        "storage_type": "storageType",
+        "tags": "tags",
+        "workflow_bucket_owner_id": "workflowBucketOwnerId",
+    },
+)
+class CfnWorkflowVersionProps:
+    def __init__(
+        self,
+        *,
+        version_name: builtins.str,
+        workflow_id: builtins.str,
+        accelerators: typing.Optional[builtins.str] = None,
+        container_registry_map: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnWorkflowVersion.ContainerRegistryMapProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        container_registry_map_uri: typing.Optional[builtins.str] = None,
+        definition_repository: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnWorkflowVersion.DefinitionRepositoryProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        definition_uri: typing.Optional[builtins.str] = None,
+        description: typing.Optional[builtins.str] = None,
+        engine: typing.Optional[builtins.str] = None,
+        main: typing.Optional[builtins.str] = None,
+        parameter_template: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[_IResolvable_da3f097b, typing.Union[CfnWorkflowVersion.WorkflowParameterProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        parameter_template_path: typing.Optional[builtins.str] = None,
+        readme_markdown: typing.Optional[builtins.str] = None,
+        readme_path: typing.Optional[builtins.str] = None,
+        readme_uri: typing.Optional[builtins.str] = None,
+        storage_capacity: typing.Optional[jsii.Number] = None,
+        storage_type: typing.Optional[builtins.str] = None,
+        tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
+        workflow_bucket_owner_id: typing.Optional[builtins.str] = None,
+    ) -> None:
+        '''Properties for defining a ``CfnWorkflowVersion``.
+
+        :param version_name: The name of the workflow version.
+        :param workflow_id: The workflow's ID.
+        :param accelerators: 
+        :param container_registry_map: Use a container registry map to specify mappings between the ECR private repository and one or more upstream registries. For more information, see `Container images <https://docs.aws.amazon.com/omics/latest/dev/workflows-ecr.html>`_ in the *AWS HealthOmics User Guide* .
+        :param container_registry_map_uri: 
+        :param definition_repository: Contains information about a source code repository that hosts the workflow definition files.
+        :param definition_uri: 
+        :param description: The description of the workflow version.
+        :param engine: 
+        :param main: 
+        :param parameter_template: 
+        :param parameter_template_path: Path to the primary workflow parameter template JSON file inside the repository.
+        :param readme_markdown: The markdown content for the workflow's README file. This provides documentation and usage information for users of the workflow.
+        :param readme_path: The path to the workflow README markdown file within the repository. This file provides documentation and usage information for the workflow. If not specified, the README.md file from the root directory of the repository will be used.
+        :param readme_uri: The S3 URI of the README file for the workflow. This file provides documentation and usage information for the workflow. The S3 URI must begin with s3://USER-OWNED-BUCKET/. The requester must have access to the S3 bucket and object. The max README content length is 500 KiB.
+        :param storage_capacity: 
+        :param storage_type: 
+        :param tags: A map of resource tags.
+        :param workflow_bucket_owner_id: 
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-workflowversion.html
+        :exampleMetadata: fixture=_generated
+
+        Example::
+
+            # The code below shows an example of how to instantiate this type.
+            # The values are placeholders you should change.
+            from aws_cdk import aws_omics as omics
+            
+            cfn_workflow_version_props = omics.CfnWorkflowVersionProps(
+                version_name="versionName",
+                workflow_id="workflowId",
+            
+                # the properties below are optional
+                accelerators="accelerators",
+                container_registry_map=omics.CfnWorkflowVersion.ContainerRegistryMapProperty(
+                    image_mappings=[omics.CfnWorkflowVersion.ImageMappingProperty(
+                        destination_image="destinationImage",
+                        source_image="sourceImage"
+                    )],
+                    registry_mappings=[omics.CfnWorkflowVersion.RegistryMappingProperty(
+                        ecr_account_id="ecrAccountId",
+                        ecr_repository_prefix="ecrRepositoryPrefix",
+                        upstream_registry_url="upstreamRegistryUrl",
+                        upstream_repository_prefix="upstreamRepositoryPrefix"
+                    )]
+                ),
+                container_registry_map_uri="containerRegistryMapUri",
+                definition_repository=omics.CfnWorkflowVersion.DefinitionRepositoryProperty(
+                    connection_arn="connectionArn",
+                    exclude_file_patterns=["excludeFilePatterns"],
+                    full_repository_id="fullRepositoryId",
+                    source_reference=omics.CfnWorkflowVersion.SourceReferenceProperty(
+                        type="type",
+                        value="value"
+                    )
+                ),
+                definition_uri="definitionUri",
+                description="description",
+                engine="engine",
+                main="main",
+                parameter_template={
+                    "parameter_template_key": omics.CfnWorkflowVersion.WorkflowParameterProperty(
+                        description="description",
+                        optional=False
+                    )
+                },
+                parameter_template_path="parameterTemplatePath",
+                readme_markdown="readmeMarkdown",
+                readme_path="readmePath",
+                readme_uri="readmeUri",
+                storage_capacity=123,
+                storage_type="storageType",
+                tags={
+                    "tags_key": "tags"
+                },
+                workflow_bucket_owner_id="workflowBucketOwnerId"
+            )
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__32259ddc7b7d888918efaf09deb63ba780f3721ec1da9ea606ed8100a4b9fb3e)
+            check_type(argname="argument version_name", value=version_name, expected_type=type_hints["version_name"])
+            check_type(argname="argument workflow_id", value=workflow_id, expected_type=type_hints["workflow_id"])
+            check_type(argname="argument accelerators", value=accelerators, expected_type=type_hints["accelerators"])
+            check_type(argname="argument container_registry_map", value=container_registry_map, expected_type=type_hints["container_registry_map"])
+            check_type(argname="argument container_registry_map_uri", value=container_registry_map_uri, expected_type=type_hints["container_registry_map_uri"])
+            check_type(argname="argument definition_repository", value=definition_repository, expected_type=type_hints["definition_repository"])
+            check_type(argname="argument definition_uri", value=definition_uri, expected_type=type_hints["definition_uri"])
+            check_type(argname="argument description", value=description, expected_type=type_hints["description"])
+            check_type(argname="argument engine", value=engine, expected_type=type_hints["engine"])
+            check_type(argname="argument main", value=main, expected_type=type_hints["main"])
+            check_type(argname="argument parameter_template", value=parameter_template, expected_type=type_hints["parameter_template"])
+            check_type(argname="argument parameter_template_path", value=parameter_template_path, expected_type=type_hints["parameter_template_path"])
+            check_type(argname="argument readme_markdown", value=readme_markdown, expected_type=type_hints["readme_markdown"])
+            check_type(argname="argument readme_path", value=readme_path, expected_type=type_hints["readme_path"])
+            check_type(argname="argument readme_uri", value=readme_uri, expected_type=type_hints["readme_uri"])
+            check_type(argname="argument storage_capacity", value=storage_capacity, expected_type=type_hints["storage_capacity"])
+            check_type(argname="argument storage_type", value=storage_type, expected_type=type_hints["storage_type"])
+            check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
+            check_type(argname="argument workflow_bucket_owner_id", value=workflow_bucket_owner_id, expected_type=type_hints["workflow_bucket_owner_id"])
+        self._values: typing.Dict[builtins.str, typing.Any] = {
+            "version_name": version_name,
+            "workflow_id": workflow_id,
+        }
+        if accelerators is not None:
+            self._values["accelerators"] = accelerators
+        if container_registry_map is not None:
+            self._values["container_registry_map"] = container_registry_map
+        if container_registry_map_uri is not None:
+            self._values["container_registry_map_uri"] = container_registry_map_uri
+        if definition_repository is not None:
+            self._values["definition_repository"] = definition_repository
+        if definition_uri is not None:
+            self._values["definition_uri"] = definition_uri
+        if description is not None:
+            self._values["description"] = description
+        if engine is not None:
+            self._values["engine"] = engine
+        if main is not None:
+            self._values["main"] = main
+        if parameter_template is not None:
+            self._values["parameter_template"] = parameter_template
+        if parameter_template_path is not None:
+            self._values["parameter_template_path"] = parameter_template_path
+        if readme_markdown is not None:
+            self._values["readme_markdown"] = readme_markdown
+        if readme_path is not None:
+            self._values["readme_path"] = readme_path
+        if readme_uri is not None:
+            self._values["readme_uri"] = readme_uri
+        if storage_capacity is not None:
+            self._values["storage_capacity"] = storage_capacity
+        if storage_type is not None:
+            self._values["storage_type"] = storage_type
+        if tags is not None:
+            self._values["tags"] = tags
+        if workflow_bucket_owner_id is not None:
+            self._values["workflow_bucket_owner_id"] = workflow_bucket_owner_id
+
+    @builtins.property
+    def version_name(self) -> builtins.str:
+        '''The name of the workflow version.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-workflowversion.html#cfn-omics-workflowversion-versionname
+        '''
+        result = self._values.get("version_name")
+        assert result is not None, "Required property 'version_name' is missing"
+        return typing.cast(builtins.str, result)
+
+    @builtins.property
+    def workflow_id(self) -> builtins.str:
+        '''The workflow's ID.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-workflowversion.html#cfn-omics-workflowversion-workflowid
+        '''
+        result = self._values.get("workflow_id")
+        assert result is not None, "Required property 'workflow_id' is missing"
+        return typing.cast(builtins.str, result)
+
+    @builtins.property
+    def accelerators(self) -> typing.Optional[builtins.str]:
+        '''
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-workflowversion.html#cfn-omics-workflowversion-accelerators
+        '''
+        result = self._values.get("accelerators")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def container_registry_map(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnWorkflowVersion.ContainerRegistryMapProperty]]:
+        '''Use a container registry map to specify mappings between the ECR private repository and one or more upstream registries.
+
+        For more information, see `Container images <https://docs.aws.amazon.com/omics/latest/dev/workflows-ecr.html>`_ in the *AWS HealthOmics User Guide* .
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-workflowversion.html#cfn-omics-workflowversion-containerregistrymap
+        '''
+        result = self._values.get("container_registry_map")
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnWorkflowVersion.ContainerRegistryMapProperty]], result)
+
+    @builtins.property
+    def container_registry_map_uri(self) -> typing.Optional[builtins.str]:
+        '''
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-workflowversion.html#cfn-omics-workflowversion-containerregistrymapuri
+        '''
+        result = self._values.get("container_registry_map_uri")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def definition_repository(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnWorkflowVersion.DefinitionRepositoryProperty]]:
+        '''Contains information about a source code repository that hosts the workflow definition files.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-workflowversion.html#cfn-omics-workflowversion-definitionrepository
+        '''
+        result = self._values.get("definition_repository")
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnWorkflowVersion.DefinitionRepositoryProperty]], result)
+
+    @builtins.property
+    def definition_uri(self) -> typing.Optional[builtins.str]:
+        '''
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-workflowversion.html#cfn-omics-workflowversion-definitionuri
+        '''
+        result = self._values.get("definition_uri")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def description(self) -> typing.Optional[builtins.str]:
+        '''The description of the workflow version.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-workflowversion.html#cfn-omics-workflowversion-description
+        '''
+        result = self._values.get("description")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def engine(self) -> typing.Optional[builtins.str]:
+        '''
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-workflowversion.html#cfn-omics-workflowversion-engine
+        '''
+        result = self._values.get("engine")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def main(self) -> typing.Optional[builtins.str]:
+        '''
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-workflowversion.html#cfn-omics-workflowversion-main
+        '''
+        result = self._values.get("main")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def parameter_template(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[_IResolvable_da3f097b, CfnWorkflowVersion.WorkflowParameterProperty]]]]:
+        '''
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-workflowversion.html#cfn-omics-workflowversion-parametertemplate
+        '''
+        result = self._values.get("parameter_template")
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[_IResolvable_da3f097b, CfnWorkflowVersion.WorkflowParameterProperty]]]], result)
+
+    @builtins.property
+    def parameter_template_path(self) -> typing.Optional[builtins.str]:
+        '''Path to the primary workflow parameter template JSON file inside the repository.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-workflowversion.html#cfn-omics-workflowversion-parametertemplatepath
+        '''
+        result = self._values.get("parameter_template_path")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def readme_markdown(self) -> typing.Optional[builtins.str]:
+        '''The markdown content for the workflow's README file.
+
+        This provides documentation and usage information for users of the workflow.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-workflowversion.html#cfn-omics-workflowversion-readmemarkdown
+        '''
+        result = self._values.get("readme_markdown")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def readme_path(self) -> typing.Optional[builtins.str]:
+        '''The path to the workflow README markdown file within the repository.
+
+        This file provides documentation and usage information for the workflow. If not specified, the README.md file from the root directory of the repository will be used.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-workflowversion.html#cfn-omics-workflowversion-readmepath
+        '''
+        result = self._values.get("readme_path")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def readme_uri(self) -> typing.Optional[builtins.str]:
+        '''The S3 URI of the README file for the workflow.
+
+        This file provides documentation and usage information for the workflow. The S3 URI must begin with s3://USER-OWNED-BUCKET/. The requester must have access to the S3 bucket and object. The max README content length is 500 KiB.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-workflowversion.html#cfn-omics-workflowversion-readmeuri
+        '''
+        result = self._values.get("readme_uri")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def storage_capacity(self) -> typing.Optional[jsii.Number]:
+        '''
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-workflowversion.html#cfn-omics-workflowversion-storagecapacity
+        '''
+        result = self._values.get("storage_capacity")
+        return typing.cast(typing.Optional[jsii.Number], result)
+
+    @builtins.property
+    def storage_type(self) -> typing.Optional[builtins.str]:
+        '''
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-workflowversion.html#cfn-omics-workflowversion-storagetype
+        '''
+        result = self._values.get("storage_type")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def tags(self) -> typing.Optional[typing.Mapping[builtins.str, builtins.str]]:
+        '''A map of resource tags.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-workflowversion.html#cfn-omics-workflowversion-tags
+        '''
+        result = self._values.get("tags")
+        return typing.cast(typing.Optional[typing.Mapping[builtins.str, builtins.str]], result)
+
+    @builtins.property
+    def workflow_bucket_owner_id(self) -> typing.Optional[builtins.str]:
+        '''
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-workflowversion.html#cfn-omics-workflowversion-workflowbucketownerid
+        '''
+        result = self._values.get("workflow_bucket_owner_id")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    def __eq__(self, rhs: typing.Any) -> builtins.bool:
+        return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+    def __ne__(self, rhs: typing.Any) -> builtins.bool:
+        return not (rhs == self)
+
+    def __repr__(self) -> str:
+        return "CfnWorkflowVersionProps(%s)" % ", ".join(
+            k + "=" + repr(v) for k, v in self._values.items()
+        )
+
+
 __all__ = [
-    "AnnotationStoreReference",
     "CfnAnnotationStore",
     "CfnAnnotationStoreProps",
     "CfnReferenceStore",
@@ -6401,185 +5694,9 @@ __all__ = [
     "CfnWorkflowProps",
     "CfnWorkflowVersion",
     "CfnWorkflowVersionProps",
-    "IAnnotationStoreRef",
-    "IReferenceStoreRef",
-    "IRunGroupRef",
-    "ISequenceStoreRef",
-    "IVariantStoreRef",
-    "IWorkflowRef",
-    "IWorkflowVersionRef",
-    "ReferenceStoreReference",
-    "RunGroupReference",
-    "SequenceStoreReference",
-    "VariantStoreReference",
-    "WorkflowReference",
-    "WorkflowVersionReference",
 ]
 
 publication.publish()
-
-def _typecheckingstub__4c36830adec7d315de2e911ac2128197a6d438149befb894176863a8017d43e2(
-    *,
-    annotation_store_name: builtins.str,
-) -> None:
-    """Type checking stubs"""
-    pass
-
-def _typecheckingstub__db27a54e4b1e96ecf8263cf950eaa96b8620641082ddea726be734d30e205831(
-    *,
-    name: builtins.str,
-    store_format: builtins.str,
-    description: typing.Optional[builtins.str] = None,
-    reference: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAnnotationStore.ReferenceItemProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-    sse_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAnnotationStore.SseConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-    store_options: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAnnotationStore.StoreOptionsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-    tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
-) -> None:
-    """Type checking stubs"""
-    pass
-
-def _typecheckingstub__1fa5ddefbb60b1902a7a8a0da56893c57cde7f27eb458a6b71907aad7ac2b4ca(
-    *,
-    name: builtins.str,
-    description: typing.Optional[builtins.str] = None,
-    sse_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnReferenceStore.SseConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-    tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
-) -> None:
-    """Type checking stubs"""
-    pass
-
-def _typecheckingstub__0687d84f98238d006185c8fc00317ac96c5244d8d1b550e56fda04cb4eca97f9(
-    *,
-    max_cpus: typing.Optional[jsii.Number] = None,
-    max_duration: typing.Optional[jsii.Number] = None,
-    max_gpus: typing.Optional[jsii.Number] = None,
-    max_runs: typing.Optional[jsii.Number] = None,
-    name: typing.Optional[builtins.str] = None,
-    tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
-) -> None:
-    """Type checking stubs"""
-    pass
-
-def _typecheckingstub__c912afa5be2bea750b085186b08f53bd688bc0a1dd08b1f1c6951a21015380fc(
-    *,
-    name: builtins.str,
-    access_log_location: typing.Optional[builtins.str] = None,
-    description: typing.Optional[builtins.str] = None,
-    e_tag_algorithm_family: typing.Optional[builtins.str] = None,
-    fallback_location: typing.Optional[builtins.str] = None,
-    propagated_set_level_tags: typing.Optional[typing.Sequence[builtins.str]] = None,
-    s3_access_policy: typing.Any = None,
-    sse_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnSequenceStore.SseConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-    tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
-) -> None:
-    """Type checking stubs"""
-    pass
-
-def _typecheckingstub__9cee3839b5919ab156aab54490277c559d790311fd9ea2b761f99373fdb7eaec(
-    *,
-    name: builtins.str,
-    reference: typing.Union[_IResolvable_da3f097b, typing.Union[CfnVariantStore.ReferenceItemProperty, typing.Dict[builtins.str, typing.Any]]],
-    description: typing.Optional[builtins.str] = None,
-    sse_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnVariantStore.SseConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-    tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
-) -> None:
-    """Type checking stubs"""
-    pass
-
-def _typecheckingstub__09bedca50200dd06a4bbe4bb6135e76dacff76287249f3d28b8f285f8205f173(
-    *,
-    accelerators: typing.Optional[builtins.str] = None,
-    container_registry_map: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnWorkflow.ContainerRegistryMapProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-    container_registry_map_uri: typing.Optional[builtins.str] = None,
-    definition_repository: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnWorkflow.DefinitionRepositoryProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-    definition_uri: typing.Optional[builtins.str] = None,
-    description: typing.Optional[builtins.str] = None,
-    engine: typing.Optional[builtins.str] = None,
-    main: typing.Optional[builtins.str] = None,
-    name: typing.Optional[builtins.str] = None,
-    parameter_template: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[_IResolvable_da3f097b, typing.Union[CfnWorkflow.WorkflowParameterProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
-    parameter_template_path: typing.Optional[builtins.str] = None,
-    readme_markdown: typing.Optional[builtins.str] = None,
-    readme_path: typing.Optional[builtins.str] = None,
-    readme_uri: typing.Optional[builtins.str] = None,
-    storage_capacity: typing.Optional[jsii.Number] = None,
-    storage_type: typing.Optional[builtins.str] = None,
-    tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
-    workflow_bucket_owner_id: typing.Optional[builtins.str] = None,
-) -> None:
-    """Type checking stubs"""
-    pass
-
-def _typecheckingstub__32259ddc7b7d888918efaf09deb63ba780f3721ec1da9ea606ed8100a4b9fb3e(
-    *,
-    version_name: builtins.str,
-    workflow_id: builtins.str,
-    accelerators: typing.Optional[builtins.str] = None,
-    container_registry_map: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnWorkflowVersion.ContainerRegistryMapProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-    container_registry_map_uri: typing.Optional[builtins.str] = None,
-    definition_repository: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnWorkflowVersion.DefinitionRepositoryProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-    definition_uri: typing.Optional[builtins.str] = None,
-    description: typing.Optional[builtins.str] = None,
-    engine: typing.Optional[builtins.str] = None,
-    main: typing.Optional[builtins.str] = None,
-    parameter_template: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[_IResolvable_da3f097b, typing.Union[CfnWorkflowVersion.WorkflowParameterProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
-    parameter_template_path: typing.Optional[builtins.str] = None,
-    readme_markdown: typing.Optional[builtins.str] = None,
-    readme_path: typing.Optional[builtins.str] = None,
-    readme_uri: typing.Optional[builtins.str] = None,
-    storage_capacity: typing.Optional[jsii.Number] = None,
-    storage_type: typing.Optional[builtins.str] = None,
-    tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
-    workflow_bucket_owner_id: typing.Optional[builtins.str] = None,
-) -> None:
-    """Type checking stubs"""
-    pass
-
-def _typecheckingstub__8f6a15283491fed7e44f381b4eec157f5884a81c62ee49da55b6eda0e0ae536e(
-    *,
-    reference_store_arn: builtins.str,
-    reference_store_id: builtins.str,
-) -> None:
-    """Type checking stubs"""
-    pass
-
-def _typecheckingstub__601a2412ee421f1baffa9520640c396c6ae27fc0e2bf149bf080e949b24134f0(
-    *,
-    run_group_arn: builtins.str,
-    run_group_id: builtins.str,
-) -> None:
-    """Type checking stubs"""
-    pass
-
-def _typecheckingstub__ba18b6f0fa1651182c341640ca1a07ef753b6cfd89f1ff0b632e616fe41153a9(
-    *,
-    sequence_store_arn: builtins.str,
-    sequence_store_id: builtins.str,
-) -> None:
-    """Type checking stubs"""
-    pass
-
-def _typecheckingstub__faf2c8433ca959c70ba0b6a43eb824dbc0731648fbd5b862b5fd45439658a092(
-    *,
-    variant_store_name: builtins.str,
-) -> None:
-    """Type checking stubs"""
-    pass
-
-def _typecheckingstub__f7313503e66532f32044f2f88b65913abef6d13ec20f687c5e45af4cb68f8640(
-    *,
-    workflow_arn: builtins.str,
-    workflow_id: builtins.str,
-) -> None:
-    """Type checking stubs"""
-    pass
-
-def _typecheckingstub__02d54e70a948e2828814519534c80bb9cf5713a2fe86b3cd71241b9cba0bb1c4(
-    *,
-    workflow_version_arn: builtins.str,
-) -> None:
-    """Type checking stubs"""
-    pass
 
 def _typecheckingstub__ba5dcb906702f10b4a247a16c504ec605912264b052a73f0ae664d93bee73764(
     scope: _constructs_77d1e7e8.Construct,
@@ -6689,6 +5806,19 @@ def _typecheckingstub__14b0c73be5d34083c239713770a8134020bc8cab75d4b0a1a82a28463
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__db27a54e4b1e96ecf8263cf950eaa96b8620641082ddea726be734d30e205831(
+    *,
+    name: builtins.str,
+    store_format: builtins.str,
+    description: typing.Optional[builtins.str] = None,
+    reference: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAnnotationStore.ReferenceItemProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    sse_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAnnotationStore.SseConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    store_options: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAnnotationStore.StoreOptionsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__e38c503967033ff76d3e45880727cc62a1df749cb0aac8298f6d06d14d6e3320(
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
@@ -6761,6 +5891,16 @@ def _typecheckingstub__a277036a5a95a03f8b276d47ec8bcb3f25bf4f304bc5ee7452d8472c7
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__1fa5ddefbb60b1902a7a8a0da56893c57cde7f27eb458a6b71907aad7ac2b4ca(
+    *,
+    name: builtins.str,
+    description: typing.Optional[builtins.str] = None,
+    sse_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnReferenceStore.SseConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__5d92bdf2175b79063decd2ff3bbf2745e423b61fa98f3bf6b832b7632771b7e8(
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
@@ -6819,6 +5959,18 @@ def _typecheckingstub__14846c448c724a5e0421b3370cbf6d8071cc9d1d1f7f635d8b528b854
 
 def _typecheckingstub__f64a1ae8ed7c7141ee2c0e9f12df462d424e227637fb190daac9751a95f18d1a(
     value: typing.Optional[typing.Mapping[builtins.str, builtins.str]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__0687d84f98238d006185c8fc00317ac96c5244d8d1b550e56fda04cb4eca97f9(
+    *,
+    max_cpus: typing.Optional[jsii.Number] = None,
+    max_duration: typing.Optional[jsii.Number] = None,
+    max_gpus: typing.Optional[jsii.Number] = None,
+    max_runs: typing.Optional[jsii.Number] = None,
+    name: typing.Optional[builtins.str] = None,
+    tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -6930,6 +6082,21 @@ def _typecheckingstub__16d14d56ac16dd0c8b7ee5046e40e324719a67cf46d9a70bdf176e614
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__c912afa5be2bea750b085186b08f53bd688bc0a1dd08b1f1c6951a21015380fc(
+    *,
+    name: builtins.str,
+    access_log_location: typing.Optional[builtins.str] = None,
+    description: typing.Optional[builtins.str] = None,
+    e_tag_algorithm_family: typing.Optional[builtins.str] = None,
+    fallback_location: typing.Optional[builtins.str] = None,
+    propagated_set_level_tags: typing.Optional[typing.Sequence[builtins.str]] = None,
+    s3_access_policy: typing.Any = None,
+    sse_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnSequenceStore.SseConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__6d38872c12590b13122bc23c110efd40d1aa8369a37e1015fcc0ee2529e01904(
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
@@ -7004,6 +6171,17 @@ def _typecheckingstub__151f006e709dbecd4ae7c2469b6d65397d70b22812c239977c3f33944
     *,
     type: builtins.str,
     key_arn: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__9cee3839b5919ab156aab54490277c559d790311fd9ea2b761f99373fdb7eaec(
+    *,
+    name: builtins.str,
+    reference: typing.Union[_IResolvable_da3f097b, typing.Union[CfnVariantStore.ReferenceItemProperty, typing.Dict[builtins.str, typing.Any]]],
+    description: typing.Optional[builtins.str] = None,
+    sse_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnVariantStore.SseConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -7202,6 +6380,30 @@ def _typecheckingstub__beb0e924d2102ff644fd2da920cdd60f013b66e8285db8ffc0ce774a6
     *,
     description: typing.Optional[builtins.str] = None,
     optional: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__09bedca50200dd06a4bbe4bb6135e76dacff76287249f3d28b8f285f8205f173(
+    *,
+    accelerators: typing.Optional[builtins.str] = None,
+    container_registry_map: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnWorkflow.ContainerRegistryMapProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    container_registry_map_uri: typing.Optional[builtins.str] = None,
+    definition_repository: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnWorkflow.DefinitionRepositoryProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    definition_uri: typing.Optional[builtins.str] = None,
+    description: typing.Optional[builtins.str] = None,
+    engine: typing.Optional[builtins.str] = None,
+    main: typing.Optional[builtins.str] = None,
+    name: typing.Optional[builtins.str] = None,
+    parameter_template: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[_IResolvable_da3f097b, typing.Union[CfnWorkflow.WorkflowParameterProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+    parameter_template_path: typing.Optional[builtins.str] = None,
+    readme_markdown: typing.Optional[builtins.str] = None,
+    readme_path: typing.Optional[builtins.str] = None,
+    readme_uri: typing.Optional[builtins.str] = None,
+    storage_capacity: typing.Optional[jsii.Number] = None,
+    storage_type: typing.Optional[builtins.str] = None,
+    tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
+    workflow_bucket_owner_id: typing.Optional[builtins.str] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -7411,5 +6613,27 @@ def _typecheckingstub__3d434101b6df92e22ac3acf923cd7bb4105c1a82dad119b383839a4f1
     """Type checking stubs"""
     pass
 
-for cls in [IAnnotationStoreRef, IReferenceStoreRef, IRunGroupRef, ISequenceStoreRef, IVariantStoreRef, IWorkflowRef, IWorkflowVersionRef]:
-    typing.cast(typing.Any, cls).__protocol_attrs__ = typing.cast(typing.Any, cls).__protocol_attrs__ - set(['__jsii_proxy_class__', '__jsii_type__'])
+def _typecheckingstub__32259ddc7b7d888918efaf09deb63ba780f3721ec1da9ea606ed8100a4b9fb3e(
+    *,
+    version_name: builtins.str,
+    workflow_id: builtins.str,
+    accelerators: typing.Optional[builtins.str] = None,
+    container_registry_map: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnWorkflowVersion.ContainerRegistryMapProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    container_registry_map_uri: typing.Optional[builtins.str] = None,
+    definition_repository: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnWorkflowVersion.DefinitionRepositoryProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    definition_uri: typing.Optional[builtins.str] = None,
+    description: typing.Optional[builtins.str] = None,
+    engine: typing.Optional[builtins.str] = None,
+    main: typing.Optional[builtins.str] = None,
+    parameter_template: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[_IResolvable_da3f097b, typing.Union[CfnWorkflowVersion.WorkflowParameterProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+    parameter_template_path: typing.Optional[builtins.str] = None,
+    readme_markdown: typing.Optional[builtins.str] = None,
+    readme_path: typing.Optional[builtins.str] = None,
+    readme_uri: typing.Optional[builtins.str] = None,
+    storage_capacity: typing.Optional[jsii.Number] = None,
+    storage_type: typing.Optional[builtins.str] = None,
+    tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
+    workflow_bucket_owner_id: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass

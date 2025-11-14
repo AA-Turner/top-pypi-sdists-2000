@@ -61,211 +61,19 @@ import constructs as _constructs_77d1e7e8
 from .. import (
     CfnResource as _CfnResource_9df397a6,
     CfnTag as _CfnTag_f6864754,
-    IEnvironmentAware as _IEnvironmentAware_a408b00d,
     IInspectable as _IInspectable_c2943556,
     IResolvable as _IResolvable_da3f097b,
     ITaggable as _ITaggable_36806126,
     TagManager as _TagManager_0a598cb3,
     TreeInspector as _TreeInspector_488e0dd5,
 )
-
-
-@jsii.data_type(
-    jsii_type="aws-cdk-lib.aws_iotcoredeviceadvisor.CfnSuiteDefinitionProps",
-    jsii_struct_bases=[],
-    name_mapping={
-        "suite_definition_configuration": "suiteDefinitionConfiguration",
-        "tags": "tags",
-    },
+from ..interfaces.aws_iotcoredeviceadvisor import (
+    ISuiteDefinitionRef as _ISuiteDefinitionRef_45c0f8ee,
+    SuiteDefinitionReference as _SuiteDefinitionReference_f107a9a2,
 )
-class CfnSuiteDefinitionProps:
-    def __init__(
-        self,
-        *,
-        suite_definition_configuration: typing.Any,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-    ) -> None:
-        '''Properties for defining a ``CfnSuiteDefinition``.
-
-        :param suite_definition_configuration: Gets the suite definition configuration.
-        :param tags: Metadata that can be used to manage the the Suite Definition.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iotcoredeviceadvisor-suitedefinition.html
-        :exampleMetadata: fixture=_generated
-
-        Example::
-
-            # The code below shows an example of how to instantiate this type.
-            # The values are placeholders you should change.
-            from aws_cdk import aws_iotcoredeviceadvisor as iotcoredeviceadvisor
-            
-            # suite_definition_configuration: Any
-            
-            cfn_suite_definition_props = iotcoredeviceadvisor.CfnSuiteDefinitionProps(
-                suite_definition_configuration=suite_definition_configuration,
-            
-                # the properties below are optional
-                tags=[CfnTag(
-                    key="key",
-                    value="value"
-                )]
-            )
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__1a1bf45ec004a9aea8096b474c6edc62abc371cd3d6adc9e0f1362e1053a1891)
-            check_type(argname="argument suite_definition_configuration", value=suite_definition_configuration, expected_type=type_hints["suite_definition_configuration"])
-            check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
-        self._values: typing.Dict[builtins.str, typing.Any] = {
-            "suite_definition_configuration": suite_definition_configuration,
-        }
-        if tags is not None:
-            self._values["tags"] = tags
-
-    @builtins.property
-    def suite_definition_configuration(self) -> typing.Any:
-        '''Gets the suite definition configuration.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iotcoredeviceadvisor-suitedefinition.html#cfn-iotcoredeviceadvisor-suitedefinition-suitedefinitionconfiguration
-        '''
-        result = self._values.get("suite_definition_configuration")
-        assert result is not None, "Required property 'suite_definition_configuration' is missing"
-        return typing.cast(typing.Any, result)
-
-    @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
-        '''Metadata that can be used to manage the the Suite Definition.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iotcoredeviceadvisor-suitedefinition.html#cfn-iotcoredeviceadvisor-suitedefinition-tags
-        '''
-        result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
-
-    def __eq__(self, rhs: typing.Any) -> builtins.bool:
-        return isinstance(rhs, self.__class__) and rhs._values == self._values
-
-    def __ne__(self, rhs: typing.Any) -> builtins.bool:
-        return not (rhs == self)
-
-    def __repr__(self) -> str:
-        return "CfnSuiteDefinitionProps(%s)" % ", ".join(
-            k + "=" + repr(v) for k, v in self._values.items()
-        )
 
 
-@jsii.interface(jsii_type="aws-cdk-lib.aws_iotcoredeviceadvisor.ISuiteDefinitionRef")
-class ISuiteDefinitionRef(
-    _constructs_77d1e7e8.IConstruct,
-    _IEnvironmentAware_a408b00d,
-    typing_extensions.Protocol,
-):
-    '''(experimental) Indicates that this resource can be referenced as a SuiteDefinition.
-
-    :stability: experimental
-    '''
-
-    @builtins.property
-    @jsii.member(jsii_name="suiteDefinitionRef")
-    def suite_definition_ref(self) -> "SuiteDefinitionReference":
-        '''(experimental) A reference to a SuiteDefinition resource.
-
-        :stability: experimental
-        '''
-        ...
-
-
-class _ISuiteDefinitionRefProxy(
-    jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
-    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
-):
-    '''(experimental) Indicates that this resource can be referenced as a SuiteDefinition.
-
-    :stability: experimental
-    '''
-
-    __jsii_type__: typing.ClassVar[str] = "aws-cdk-lib.aws_iotcoredeviceadvisor.ISuiteDefinitionRef"
-
-    @builtins.property
-    @jsii.member(jsii_name="suiteDefinitionRef")
-    def suite_definition_ref(self) -> "SuiteDefinitionReference":
-        '''(experimental) A reference to a SuiteDefinition resource.
-
-        :stability: experimental
-        '''
-        return typing.cast("SuiteDefinitionReference", jsii.get(self, "suiteDefinitionRef"))
-
-# Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
-typing.cast(typing.Any, ISuiteDefinitionRef).__jsii_proxy_class__ = lambda : _ISuiteDefinitionRefProxy
-
-
-@jsii.data_type(
-    jsii_type="aws-cdk-lib.aws_iotcoredeviceadvisor.SuiteDefinitionReference",
-    jsii_struct_bases=[],
-    name_mapping={
-        "suite_definition_arn": "suiteDefinitionArn",
-        "suite_definition_id": "suiteDefinitionId",
-    },
-)
-class SuiteDefinitionReference:
-    def __init__(
-        self,
-        *,
-        suite_definition_arn: builtins.str,
-        suite_definition_id: builtins.str,
-    ) -> None:
-        '''A reference to a SuiteDefinition resource.
-
-        :param suite_definition_arn: The ARN of the SuiteDefinition resource.
-        :param suite_definition_id: The SuiteDefinitionId of the SuiteDefinition resource.
-
-        :exampleMetadata: fixture=_generated
-
-        Example::
-
-            # The code below shows an example of how to instantiate this type.
-            # The values are placeholders you should change.
-            from aws_cdk import aws_iotcoredeviceadvisor as iotcoredeviceadvisor
-            
-            suite_definition_reference = iotcoredeviceadvisor.SuiteDefinitionReference(
-                suite_definition_arn="suiteDefinitionArn",
-                suite_definition_id="suiteDefinitionId"
-            )
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__77eb8a336ca8ea3ffd78aafea87febe408350ad461754f13478a1b2f1a43fabe)
-            check_type(argname="argument suite_definition_arn", value=suite_definition_arn, expected_type=type_hints["suite_definition_arn"])
-            check_type(argname="argument suite_definition_id", value=suite_definition_id, expected_type=type_hints["suite_definition_id"])
-        self._values: typing.Dict[builtins.str, typing.Any] = {
-            "suite_definition_arn": suite_definition_arn,
-            "suite_definition_id": suite_definition_id,
-        }
-
-    @builtins.property
-    def suite_definition_arn(self) -> builtins.str:
-        '''The ARN of the SuiteDefinition resource.'''
-        result = self._values.get("suite_definition_arn")
-        assert result is not None, "Required property 'suite_definition_arn' is missing"
-        return typing.cast(builtins.str, result)
-
-    @builtins.property
-    def suite_definition_id(self) -> builtins.str:
-        '''The SuiteDefinitionId of the SuiteDefinition resource.'''
-        result = self._values.get("suite_definition_id")
-        assert result is not None, "Required property 'suite_definition_id' is missing"
-        return typing.cast(builtins.str, result)
-
-    def __eq__(self, rhs: typing.Any) -> builtins.bool:
-        return isinstance(rhs, self.__class__) and rhs._values == self._values
-
-    def __ne__(self, rhs: typing.Any) -> builtins.bool:
-        return not (rhs == self)
-
-    def __repr__(self) -> str:
-        return "SuiteDefinitionReference(%s)" % ", ".join(
-            k + "=" + repr(v) for k, v in self._values.items()
-        )
-
-
-@jsii.implements(_IInspectable_c2943556, ISuiteDefinitionRef, _ITaggable_36806126)
+@jsii.implements(_IInspectable_c2943556, _ISuiteDefinitionRef_45c0f8ee, _ITaggable_36806126)
 class CfnSuiteDefinition(
     _CfnResource_9df397a6,
     metaclass=jsii.JSIIMeta,
@@ -306,7 +114,8 @@ class CfnSuiteDefinition(
         suite_definition_configuration: typing.Any,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
-        '''
+        '''Create a new ``AWS::IoTCoreDeviceAdvisor::SuiteDefinition``.
+
         :param scope: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
         :param suite_definition_configuration: Gets the suite definition configuration.
@@ -329,7 +138,7 @@ class CfnSuiteDefinition(
         scope: _constructs_77d1e7e8.Construct,
         id: builtins.str,
         arn: builtins.str,
-    ) -> ISuiteDefinitionRef:
+    ) -> _ISuiteDefinitionRef_45c0f8ee:
         '''Creates a new ISuiteDefinitionRef from an ARN.
 
         :param scope: -
@@ -341,7 +150,7 @@ class CfnSuiteDefinition(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
-        return typing.cast(ISuiteDefinitionRef, jsii.sinvoke(cls, "fromSuiteDefinitionArn", [scope, id, arn]))
+        return typing.cast(_ISuiteDefinitionRef_45c0f8ee, jsii.sinvoke(cls, "fromSuiteDefinitionArn", [scope, id, arn]))
 
     @jsii.member(jsii_name="fromSuiteDefinitionId")
     @builtins.classmethod
@@ -350,7 +159,7 @@ class CfnSuiteDefinition(
         scope: _constructs_77d1e7e8.Construct,
         id: builtins.str,
         suite_definition_id: builtins.str,
-    ) -> ISuiteDefinitionRef:
+    ) -> _ISuiteDefinitionRef_45c0f8ee:
         '''Creates a new ISuiteDefinitionRef from a suiteDefinitionId.
 
         :param scope: -
@@ -362,7 +171,7 @@ class CfnSuiteDefinition(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument suite_definition_id", value=suite_definition_id, expected_type=type_hints["suite_definition_id"])
-        return typing.cast(ISuiteDefinitionRef, jsii.sinvoke(cls, "fromSuiteDefinitionId", [scope, id, suite_definition_id]))
+        return typing.cast(_ISuiteDefinitionRef_45c0f8ee, jsii.sinvoke(cls, "fromSuiteDefinitionId", [scope, id, suite_definition_id]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -428,9 +237,9 @@ class CfnSuiteDefinition(
 
     @builtins.property
     @jsii.member(jsii_name="suiteDefinitionRef")
-    def suite_definition_ref(self) -> SuiteDefinitionReference:
+    def suite_definition_ref(self) -> _SuiteDefinitionReference_f107a9a2:
         '''A reference to a SuiteDefinition resource.'''
-        return typing.cast(SuiteDefinitionReference, jsii.get(self, "suiteDefinitionRef"))
+        return typing.cast(_SuiteDefinitionReference_f107a9a2, jsii.get(self, "suiteDefinitionRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
@@ -706,30 +515,94 @@ class CfnSuiteDefinition(
             )
 
 
+@jsii.data_type(
+    jsii_type="aws-cdk-lib.aws_iotcoredeviceadvisor.CfnSuiteDefinitionProps",
+    jsii_struct_bases=[],
+    name_mapping={
+        "suite_definition_configuration": "suiteDefinitionConfiguration",
+        "tags": "tags",
+    },
+)
+class CfnSuiteDefinitionProps:
+    def __init__(
+        self,
+        *,
+        suite_definition_configuration: typing.Any,
+        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+    ) -> None:
+        '''Properties for defining a ``CfnSuiteDefinition``.
+
+        :param suite_definition_configuration: Gets the suite definition configuration.
+        :param tags: Metadata that can be used to manage the the Suite Definition.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iotcoredeviceadvisor-suitedefinition.html
+        :exampleMetadata: fixture=_generated
+
+        Example::
+
+            # The code below shows an example of how to instantiate this type.
+            # The values are placeholders you should change.
+            from aws_cdk import aws_iotcoredeviceadvisor as iotcoredeviceadvisor
+            
+            # suite_definition_configuration: Any
+            
+            cfn_suite_definition_props = iotcoredeviceadvisor.CfnSuiteDefinitionProps(
+                suite_definition_configuration=suite_definition_configuration,
+            
+                # the properties below are optional
+                tags=[CfnTag(
+                    key="key",
+                    value="value"
+                )]
+            )
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__1a1bf45ec004a9aea8096b474c6edc62abc371cd3d6adc9e0f1362e1053a1891)
+            check_type(argname="argument suite_definition_configuration", value=suite_definition_configuration, expected_type=type_hints["suite_definition_configuration"])
+            check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
+        self._values: typing.Dict[builtins.str, typing.Any] = {
+            "suite_definition_configuration": suite_definition_configuration,
+        }
+        if tags is not None:
+            self._values["tags"] = tags
+
+    @builtins.property
+    def suite_definition_configuration(self) -> typing.Any:
+        '''Gets the suite definition configuration.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iotcoredeviceadvisor-suitedefinition.html#cfn-iotcoredeviceadvisor-suitedefinition-suitedefinitionconfiguration
+        '''
+        result = self._values.get("suite_definition_configuration")
+        assert result is not None, "Required property 'suite_definition_configuration' is missing"
+        return typing.cast(typing.Any, result)
+
+    @builtins.property
+    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+        '''Metadata that can be used to manage the the Suite Definition.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iotcoredeviceadvisor-suitedefinition.html#cfn-iotcoredeviceadvisor-suitedefinition-tags
+        '''
+        result = self._values.get("tags")
+        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+
+    def __eq__(self, rhs: typing.Any) -> builtins.bool:
+        return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+    def __ne__(self, rhs: typing.Any) -> builtins.bool:
+        return not (rhs == self)
+
+    def __repr__(self) -> str:
+        return "CfnSuiteDefinitionProps(%s)" % ", ".join(
+            k + "=" + repr(v) for k, v in self._values.items()
+        )
+
+
 __all__ = [
     "CfnSuiteDefinition",
     "CfnSuiteDefinitionProps",
-    "ISuiteDefinitionRef",
-    "SuiteDefinitionReference",
 ]
 
 publication.publish()
-
-def _typecheckingstub__1a1bf45ec004a9aea8096b474c6edc62abc371cd3d6adc9e0f1362e1053a1891(
-    *,
-    suite_definition_configuration: typing.Any,
-    tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-) -> None:
-    """Type checking stubs"""
-    pass
-
-def _typecheckingstub__77eb8a336ca8ea3ffd78aafea87febe408350ad461754f13478a1b2f1a43fabe(
-    *,
-    suite_definition_arn: builtins.str,
-    suite_definition_id: builtins.str,
-) -> None:
-    """Type checking stubs"""
-    pass
 
 def _typecheckingstub__945861bb0ea34e6da34c3c8b60ba3b233f881a73cecd8fa75200bae6d1751207(
     scope: _constructs_77d1e7e8.Construct,
@@ -800,5 +673,10 @@ def _typecheckingstub__ca9dfe56a34afc7e2b0f82879e2d57319c1c636afc88023fc9e530655
     """Type checking stubs"""
     pass
 
-for cls in [ISuiteDefinitionRef]:
-    typing.cast(typing.Any, cls).__protocol_attrs__ = typing.cast(typing.Any, cls).__protocol_attrs__ - set(['__jsii_proxy_class__', '__jsii_type__'])
+def _typecheckingstub__1a1bf45ec004a9aea8096b474c6edc62abc371cd3d6adc9e0f1362e1053a1891(
+    *,
+    suite_definition_configuration: typing.Any,
+    tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass

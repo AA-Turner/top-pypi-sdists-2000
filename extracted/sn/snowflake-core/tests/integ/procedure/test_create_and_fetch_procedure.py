@@ -388,7 +388,7 @@ def test_create_python_proc(procedures, anaconda_package_available):
         arguments=[],
         return_type=ReturnDataType(datatype="VARCHAR"),
         language_config=PythonFunction(
-            runtime_version="3.9", handler="handler", packages=["snowflake-snowpark-python"]
+            runtime_version="3.13", handler="handler", packages=["snowflake-snowpark-python"]
         ),
         body="""def handler(session):
                                 return 'str'
@@ -409,7 +409,7 @@ def test_create_python_proc(procedures, anaconda_package_available):
         ],
         return_type=ReturnDataType(datatype="VARCHAR"),
         language_config=PythonFunction(
-            runtime_version="3.9", handler="handler", packages=["snowflake-snowpark-python"]
+            runtime_version="3.13", handler="handler", packages=["snowflake-snowpark-python"]
         ),
         body="""def handler(session, arr, vari):
                                 print(arr)
@@ -426,7 +426,7 @@ def test_create_python_proc(procedures, anaconda_package_available):
         ]
         assert proc_fetch_result.return_type == ReturnDataType(datatype="VARCHAR", nullable=True)
         assert proc_fetch_result.language_config == PythonFunction(
-            runtime_version="3.9",
+            runtime_version="3.13",
             handler="handler",
             packages=["snowflake-snowpark-python"],
             imports=[],
@@ -453,7 +453,7 @@ def test_create_python_proc(procedures, anaconda_package_available):
             ]
         ),
         language_config=PythonFunction(
-            runtime_version="3.9", handler="handler", packages=["snowflake-snowpark-python"]
+            runtime_version="3.13", handler="handler", packages=["snowflake-snowpark-python"]
         ),
         body="""def handler(session, num1, varchar1, arr1, object1):
                                 print(arr1)
@@ -478,7 +478,7 @@ def test_create_python_proc(procedures, anaconda_package_available):
             ]
         )
         assert proc_fetch_result.language_config == PythonFunction(
-            runtime_version="3.9",
+            runtime_version="3.13",
             handler="handler",
             packages=["snowflake-snowpark-python"],
             imports=[],
@@ -495,7 +495,7 @@ def test_create_python_proc(procedures, anaconda_package_available):
         return_type=ReturnTable(
             column_list=[ColumnType(name="symbol", datatype="VARCHAR"), ColumnType(name="price", datatype="NUMBER")]
         ),
-        language_config=PythonFunction(runtime_version="3.9", handler="run", packages=["snowflake-snowpark-python"]),
+        language_config=PythonFunction(runtime_version="3.13", handler="run", packages=["snowflake-snowpark-python"]),
         body="""from snowflake.snowpark import Session
 from snowflake.snowpark.functions import col, sum
 
@@ -525,7 +525,7 @@ def run(session: Session, symbol: str):
             column_list=[ColumnType(name="SYMBOL", datatype="VARCHAR"), ColumnType(name="PRICE", datatype="NUMBER")]
         )
         assert proc_fetch_result.language_config == PythonFunction(
-            runtime_version="3.9",
+            runtime_version="3.13",
             handler="run",
             packages=["snowflake-snowpark-python"],
             imports=[],
@@ -657,7 +657,7 @@ def test_create_procedure_or_replace(procedures):
         arguments=[],
         return_type=ReturnDataType(datatype="VARCHAR"),
         language_config=PythonFunction(
-            runtime_version="3.9", handler="handler", packages=["snowflake-snowpark-python"]
+            runtime_version="3.13", handler="handler", packages=["snowflake-snowpark-python"]
         ),
         body="""def handler(session):
                     return 'str'
@@ -668,7 +668,7 @@ def test_create_procedure_or_replace(procedures):
         arguments=[],
         return_type=ReturnDataType(datatype="NUMBER"),
         language_config=PythonFunction(
-            runtime_version="3.9", handler="handler", packages=["snowflake-snowpark-python"]
+            runtime_version="3.13", handler="handler", packages=["snowflake-snowpark-python"]
         ),
         body="""def handler(session):
                             return 'str'
@@ -695,7 +695,7 @@ def test_create_procedure_error_if_exists(procedures):
         arguments=[],
         return_type=ReturnDataType(datatype="VARCHAR"),
         language_config=PythonFunction(
-            runtime_version="3.9", handler="handler", packages=["snowflake-snowpark-python"]
+            runtime_version="3.13", handler="handler", packages=["snowflake-snowpark-python"]
         ),
         body="""def handler(session):
                     return 'str'
@@ -707,7 +707,7 @@ def test_create_procedure_error_if_exists(procedures):
         arguments=[],
         return_type=ReturnDataType(datatype="VARCHAR"),
         language_config=PythonFunction(
-            runtime_version="3.9", handler="handler", packages=["snowflake-snowpark-python"]
+            runtime_version="3.13", handler="handler", packages=["snowflake-snowpark-python"]
         ),
         body="""def handler(session):
                         return 'str'
@@ -728,7 +728,7 @@ def test_create_procedure_if_not_exists(procedures):
         arguments=[],
         return_type=ReturnDataType(datatype="VARCHAR"),
         language_config=PythonFunction(
-            runtime_version="3.9", handler="handler", packages=["snowflake-snowpark-python"]
+            runtime_version="3.13", handler="handler", packages=["snowflake-snowpark-python"]
         ),
         body="""def handler(session):
                         return 'str'
@@ -740,7 +740,7 @@ def test_create_procedure_if_not_exists(procedures):
         arguments=[],
         return_type=ReturnDataType(datatype="NUMBER"),
         language_config=PythonFunction(
-            runtime_version="3.9", handler="handler", packages=["snowflake-snowpark-python"]
+            runtime_version="3.13", handler="handler", packages=["snowflake-snowpark-python"]
         ),
         body="""def handler(session):
                             return 'str'

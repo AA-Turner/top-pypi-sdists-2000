@@ -16,6 +16,9 @@ if typing.TYPE_CHECKING:
     from snowflake.snowpark import Row, Session
 
 
+MASKED_VALUE = "********"
+
+
 def random_object_name() -> str:
     return random_string(8, prefix="test_object_")
 

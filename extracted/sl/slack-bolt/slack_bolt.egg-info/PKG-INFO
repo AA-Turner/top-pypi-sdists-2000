@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: slack_bolt
-Version: 1.26.0
+Version: 1.27.0
 Summary: The Bolt Framework for Python
 Home-page: https://github.com/slackapi/bolt-python
 Author: Slack Technologies, LLC
@@ -14,13 +14,14 @@ Classifier: Programming Language :: Python :: 3.10
 Classifier: Programming Language :: Python :: 3.11
 Classifier: Programming Language :: Python :: 3.12
 Classifier: Programming Language :: Python :: 3.13
+Classifier: Programming Language :: Python :: 3.14
 Classifier: Programming Language :: Python :: Implementation :: CPython
 Classifier: License :: OSI Approved :: MIT License
 Classifier: Operating System :: OS Independent
 Requires-Python: >=3.7
 Description-Content-Type: text/markdown
 License-File: LICENSE
-Requires-Dist: slack_sdk<4,>=3.37.0
+Requires-Dist: slack_sdk<4,>=3.38.0
 Dynamic: license-file
 
 <h1 align="center">Bolt <img src="https://docs.slack.dev/img/logos/bolt-py-logo.svg" alt="Bolt logo" width="32"/> for Python</h1>

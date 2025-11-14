@@ -61,78 +61,257 @@ import constructs as _constructs_77d1e7e8
 from .. import (
     CfnResource as _CfnResource_9df397a6,
     CfnTag as _CfnTag_f6864754,
-    IEnvironmentAware as _IEnvironmentAware_a408b00d,
     IInspectable as _IInspectable_c2943556,
     IResolvable as _IResolvable_da3f097b,
     ITaggable as _ITaggable_36806126,
     TagManager as _TagManager_0a598cb3,
     TreeInspector as _TreeInspector_488e0dd5,
 )
-
-
-@jsii.data_type(
-    jsii_type="aws-cdk-lib.aws_managedblockchain.AccessorReference",
-    jsii_struct_bases=[],
-    name_mapping={"accessor_arn": "accessorArn", "accessor_id": "accessorId"},
+from ..interfaces.aws_managedblockchain import (
+    AccessorReference as _AccessorReference_b1253e7e,
+    IAccessorRef as _IAccessorRef_6ea8c0bb,
+    IMemberRef as _IMemberRef_eb79b2aa,
+    INodeRef as _INodeRef_c51264f7,
+    MemberReference as _MemberReference_b28a4bbd,
+    NodeReference as _NodeReference_7fb78253,
 )
-class AccessorReference:
+
+
+@jsii.implements(_IInspectable_c2943556, _IAccessorRef_6ea8c0bb, _ITaggable_36806126)
+class CfnAccessor(
+    _CfnResource_9df397a6,
+    metaclass=jsii.JSIIMeta,
+    jsii_type="aws-cdk-lib.aws_managedblockchain.CfnAccessor",
+):
+    '''Creates a new accessor for use with Amazon Managed Blockchain service that supports token based access.
+
+    The accessor contains information required for token based access.
+
+    :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-managedblockchain-accessor.html
+    :cloudformationResource: AWS::ManagedBlockchain::Accessor
+    :exampleMetadata: fixture=_generated
+
+    Example::
+
+        # The code below shows an example of how to instantiate this type.
+        # The values are placeholders you should change.
+        from aws_cdk import aws_managedblockchain as managedblockchain
+        
+        cfn_accessor = managedblockchain.CfnAccessor(self, "MyCfnAccessor",
+            accessor_type="accessorType",
+        
+            # the properties below are optional
+            network_type="networkType",
+            tags=[CfnTag(
+                key="key",
+                value="value"
+            )]
+        )
+    '''
+
     def __init__(
         self,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
         *,
-        accessor_arn: builtins.str,
-        accessor_id: builtins.str,
+        accessor_type: builtins.str,
+        network_type: typing.Optional[builtins.str] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
-        '''A reference to a Accessor resource.
+        '''Create a new ``AWS::ManagedBlockchain::Accessor``.
 
-        :param accessor_arn: The ARN of the Accessor resource.
-        :param accessor_id: The Id of the Accessor resource.
-
-        :exampleMetadata: fixture=_generated
-
-        Example::
-
-            # The code below shows an example of how to instantiate this type.
-            # The values are placeholders you should change.
-            from aws_cdk import aws_managedblockchain as managedblockchain
-            
-            accessor_reference = managedblockchain.AccessorReference(
-                accessor_arn="accessorArn",
-                accessor_id="accessorId"
-            )
+        :param scope: Scope in which this resource is defined.
+        :param id: Construct identifier for this resource (unique in its scope).
+        :param accessor_type: The type of the accessor. .. epigraph:: Currently, accessor type is restricted to ``BILLING_TOKEN`` .
+        :param network_type: The blockchain network that the ``Accessor`` token is created for. .. epigraph:: We recommend using the appropriate ``networkType`` value for the blockchain network that you are creating the ``Accessor`` token for. You cannot use the value ``ETHEREUM_MAINNET_AND_GOERLI`` to specify a ``networkType`` for your Accessor token. The default value of ``ETHEREUM_MAINNET_AND_GOERLI`` is only applied: - when the ``CreateAccessor`` action does not set a ``networkType`` . - to all existing ``Accessor`` tokens that were created before the ``networkType`` property was introduced.
+        :param tags: The tags assigned to the Accessor. For more information about tags, see `Tagging Resources <https://docs.aws.amazon.com/managed-blockchain/latest/ethereum-dev/tagging-resources.html>`_ in the *Amazon Managed Blockchain Ethereum Developer Guide* , or `Tagging Resources <https://docs.aws.amazon.com/managed-blockchain/latest/hyperledger-fabric-dev/tagging-resources.html>`_ in the *Amazon Managed Blockchain Hyperledger Fabric Developer Guide* .
         '''
         if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__62cd2c268da77c1141fbe8bba37ef976403cd2a5ac5d5bb4c7386a10566d8778)
-            check_type(argname="argument accessor_arn", value=accessor_arn, expected_type=type_hints["accessor_arn"])
-            check_type(argname="argument accessor_id", value=accessor_id, expected_type=type_hints["accessor_id"])
-        self._values: typing.Dict[builtins.str, typing.Any] = {
-            "accessor_arn": accessor_arn,
-            "accessor_id": accessor_id,
-        }
-
-    @builtins.property
-    def accessor_arn(self) -> builtins.str:
-        '''The ARN of the Accessor resource.'''
-        result = self._values.get("accessor_arn")
-        assert result is not None, "Required property 'accessor_arn' is missing"
-        return typing.cast(builtins.str, result)
-
-    @builtins.property
-    def accessor_id(self) -> builtins.str:
-        '''The Id of the Accessor resource.'''
-        result = self._values.get("accessor_id")
-        assert result is not None, "Required property 'accessor_id' is missing"
-        return typing.cast(builtins.str, result)
-
-    def __eq__(self, rhs: typing.Any) -> builtins.bool:
-        return isinstance(rhs, self.__class__) and rhs._values == self._values
-
-    def __ne__(self, rhs: typing.Any) -> builtins.bool:
-        return not (rhs == self)
-
-    def __repr__(self) -> str:
-        return "AccessorReference(%s)" % ", ".join(
-            k + "=" + repr(v) for k, v in self._values.items()
+            type_hints = typing.get_type_hints(_typecheckingstub__d7fae27137bea89baceda53b3dc015adf08084fe0dc7addf5f6ceece106c4e98)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+        props = CfnAccessorProps(
+            accessor_type=accessor_type, network_type=network_type, tags=tags
         )
+
+        jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="fromAccessorArn")
+    @builtins.classmethod
+    def from_accessor_arn(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        arn: builtins.str,
+    ) -> _IAccessorRef_6ea8c0bb:
+        '''Creates a new IAccessorRef from an ARN.
+
+        :param scope: -
+        :param id: -
+        :param arn: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__18014559eefd9327a42c84c5955cef0a421d0c4fa24df7d1efd5782023c267c1)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
+        return typing.cast(_IAccessorRef_6ea8c0bb, jsii.sinvoke(cls, "fromAccessorArn", [scope, id, arn]))
+
+    @jsii.member(jsii_name="fromAccessorId")
+    @builtins.classmethod
+    def from_accessor_id(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        accessor_id: builtins.str,
+    ) -> _IAccessorRef_6ea8c0bb:
+        '''Creates a new IAccessorRef from a accessorId.
+
+        :param scope: -
+        :param id: -
+        :param accessor_id: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__000563a5f642669e02e4a434645050e993d4c6550cb58d65714fdb2561b76338)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument accessor_id", value=accessor_id, expected_type=type_hints["accessor_id"])
+        return typing.cast(_IAccessorRef_6ea8c0bb, jsii.sinvoke(cls, "fromAccessorId", [scope, id, accessor_id]))
+
+    @jsii.member(jsii_name="inspect")
+    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+        '''Examines the CloudFormation resource and discloses attributes.
+
+        :param inspector: tree inspector to collect and process attributes.
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__5153df6ae42b13ade5f6af5da4867255659df0827b4417004b7a82730c0859b9)
+            check_type(argname="argument inspector", value=inspector, expected_type=type_hints["inspector"])
+        return typing.cast(None, jsii.invoke(self, "inspect", [inspector]))
+
+    @jsii.member(jsii_name="renderProperties")
+    def _render_properties(
+        self,
+        props: typing.Mapping[builtins.str, typing.Any],
+    ) -> typing.Mapping[builtins.str, typing.Any]:
+        '''
+        :param props: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__cf45e744d1073e04bf260ac0e246b67106c9252520e66af089bcd62cd5981e1d)
+            check_type(argname="argument props", value=props, expected_type=type_hints["props"])
+        return typing.cast(typing.Mapping[builtins.str, typing.Any], jsii.invoke(self, "renderProperties", [props]))
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="CFN_RESOURCE_TYPE_NAME")
+    def CFN_RESOURCE_TYPE_NAME(cls) -> builtins.str:
+        '''The CloudFormation resource type name for this resource class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "CFN_RESOURCE_TYPE_NAME"))
+
+    @builtins.property
+    @jsii.member(jsii_name="accessorRef")
+    def accessor_ref(self) -> _AccessorReference_b1253e7e:
+        '''A reference to a Accessor resource.'''
+        return typing.cast(_AccessorReference_b1253e7e, jsii.get(self, "accessorRef"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrArn")
+    def attr_arn(self) -> builtins.str:
+        '''The Amazon Resource Name (ARN) of the accessor.
+
+        For more information about ARNs and their format, see `Amazon Resource Names (ARNs) <https://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html>`_ in the *AWS General Reference* .
+
+        :cloudformationAttribute: Arn
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrArn"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrBillingToken")
+    def attr_billing_token(self) -> builtins.str:
+        '''The billing token is a property of the accessor.
+
+        Use this token to make Ethereum API calls to your Ethereum node. The billing token is used to track your accessor object for billing Ethereum API requests made to your Ethereum nodes.
+
+        :cloudformationAttribute: BillingToken
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrBillingToken"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrCreationDate")
+    def attr_creation_date(self) -> builtins.str:
+        '''The creation date and time of the accessor.
+
+        :cloudformationAttribute: CreationDate
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrCreationDate"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrId")
+    def attr_id(self) -> builtins.str:
+        '''The unique identifier of the accessor.
+
+        :cloudformationAttribute: Id
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrId"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrStatus")
+    def attr_status(self) -> builtins.str:
+        '''The current status of the accessor.
+
+        :cloudformationAttribute: Status
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrStatus"))
+
+    @builtins.property
+    @jsii.member(jsii_name="cfnProperties")
+    def _cfn_properties(self) -> typing.Mapping[builtins.str, typing.Any]:
+        return typing.cast(typing.Mapping[builtins.str, typing.Any], jsii.get(self, "cfnProperties"))
+
+    @builtins.property
+    @jsii.member(jsii_name="tags")
+    def tags(self) -> _TagManager_0a598cb3:
+        '''Tag Manager which manages the tags for this resource.'''
+        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+
+    @builtins.property
+    @jsii.member(jsii_name="accessorType")
+    def accessor_type(self) -> builtins.str:
+        '''The type of the accessor.'''
+        return typing.cast(builtins.str, jsii.get(self, "accessorType"))
+
+    @accessor_type.setter
+    def accessor_type(self, value: builtins.str) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__5f365afcb88911500be6e93d816f42644c24c17bcb5b2575a6c29211d979af24)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "accessorType", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="networkType")
+    def network_type(self) -> typing.Optional[builtins.str]:
+        '''The blockchain network that the ``Accessor`` token is created for.'''
+        return typing.cast(typing.Optional[builtins.str], jsii.get(self, "networkType"))
+
+    @network_type.setter
+    def network_type(self, value: typing.Optional[builtins.str]) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__ebcc19a367c52e96e151064284bb60e46304b8fba8b14490f920328c2750009b)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "networkType", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="tagsRaw")
+    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+        '''The tags assigned to the Accessor.'''
+        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+
+    @tags_raw.setter
+    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__d00a94224f7b2053cf776b7c92b3c8493560dc542f67879e3e30b42f708eead5)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "tagsRaw", value) # pyright: ignore[reportArgumentType]
 
 
 @jsii.data_type(
@@ -246,734 +425,7 @@ class CfnAccessorProps:
         )
 
 
-@jsii.data_type(
-    jsii_type="aws-cdk-lib.aws_managedblockchain.CfnMemberProps",
-    jsii_struct_bases=[],
-    name_mapping={
-        "member_configuration": "memberConfiguration",
-        "invitation_id": "invitationId",
-        "network_configuration": "networkConfiguration",
-        "network_id": "networkId",
-    },
-)
-class CfnMemberProps:
-    def __init__(
-        self,
-        *,
-        member_configuration: typing.Union[_IResolvable_da3f097b, typing.Union["CfnMember.MemberConfigurationProperty", typing.Dict[builtins.str, typing.Any]]],
-        invitation_id: typing.Optional[builtins.str] = None,
-        network_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnMember.NetworkConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        network_id: typing.Optional[builtins.str] = None,
-    ) -> None:
-        '''Properties for defining a ``CfnMember``.
-
-        :param member_configuration: Configuration properties of the member.
-        :param invitation_id: The unique identifier of the invitation to join the network sent to the account that creates the member.
-        :param network_configuration: Configuration properties of the network to which the member belongs.
-        :param network_id: The unique identifier of the network to which the member belongs.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-managedblockchain-member.html
-        :exampleMetadata: fixture=_generated
-
-        Example::
-
-            # The code below shows an example of how to instantiate this type.
-            # The values are placeholders you should change.
-            from aws_cdk import aws_managedblockchain as managedblockchain
-            
-            cfn_member_props = managedblockchain.CfnMemberProps(
-                member_configuration=managedblockchain.CfnMember.MemberConfigurationProperty(
-                    name="name",
-            
-                    # the properties below are optional
-                    description="description",
-                    member_framework_configuration=managedblockchain.CfnMember.MemberFrameworkConfigurationProperty(
-                        member_fabric_configuration=managedblockchain.CfnMember.MemberFabricConfigurationProperty(
-                            admin_password="adminPassword",
-                            admin_username="adminUsername"
-                        )
-                    )
-                ),
-            
-                # the properties below are optional
-                invitation_id="invitationId",
-                network_configuration=managedblockchain.CfnMember.NetworkConfigurationProperty(
-                    framework="framework",
-                    framework_version="frameworkVersion",
-                    name="name",
-                    voting_policy=managedblockchain.CfnMember.VotingPolicyProperty(
-                        approval_threshold_policy=managedblockchain.CfnMember.ApprovalThresholdPolicyProperty(
-                            proposal_duration_in_hours=123,
-                            threshold_comparator="thresholdComparator",
-                            threshold_percentage=123
-                        )
-                    ),
-            
-                    # the properties below are optional
-                    description="description",
-                    network_framework_configuration=managedblockchain.CfnMember.NetworkFrameworkConfigurationProperty(
-                        network_fabric_configuration=managedblockchain.CfnMember.NetworkFabricConfigurationProperty(
-                            edition="edition"
-                        )
-                    )
-                ),
-                network_id="networkId"
-            )
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__e66a18793d1c75e230157cc8b1b1b82fe1269a8b280b51df9b9f4c5c751dea9c)
-            check_type(argname="argument member_configuration", value=member_configuration, expected_type=type_hints["member_configuration"])
-            check_type(argname="argument invitation_id", value=invitation_id, expected_type=type_hints["invitation_id"])
-            check_type(argname="argument network_configuration", value=network_configuration, expected_type=type_hints["network_configuration"])
-            check_type(argname="argument network_id", value=network_id, expected_type=type_hints["network_id"])
-        self._values: typing.Dict[builtins.str, typing.Any] = {
-            "member_configuration": member_configuration,
-        }
-        if invitation_id is not None:
-            self._values["invitation_id"] = invitation_id
-        if network_configuration is not None:
-            self._values["network_configuration"] = network_configuration
-        if network_id is not None:
-            self._values["network_id"] = network_id
-
-    @builtins.property
-    def member_configuration(
-        self,
-    ) -> typing.Union[_IResolvable_da3f097b, "CfnMember.MemberConfigurationProperty"]:
-        '''Configuration properties of the member.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-managedblockchain-member.html#cfn-managedblockchain-member-memberconfiguration
-        '''
-        result = self._values.get("member_configuration")
-        assert result is not None, "Required property 'member_configuration' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnMember.MemberConfigurationProperty"], result)
-
-    @builtins.property
-    def invitation_id(self) -> typing.Optional[builtins.str]:
-        '''The unique identifier of the invitation to join the network sent to the account that creates the member.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-managedblockchain-member.html#cfn-managedblockchain-member-invitationid
-        '''
-        result = self._values.get("invitation_id")
-        return typing.cast(typing.Optional[builtins.str], result)
-
-    @builtins.property
-    def network_configuration(
-        self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnMember.NetworkConfigurationProperty"]]:
-        '''Configuration properties of the network to which the member belongs.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-managedblockchain-member.html#cfn-managedblockchain-member-networkconfiguration
-        '''
-        result = self._values.get("network_configuration")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnMember.NetworkConfigurationProperty"]], result)
-
-    @builtins.property
-    def network_id(self) -> typing.Optional[builtins.str]:
-        '''The unique identifier of the network to which the member belongs.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-managedblockchain-member.html#cfn-managedblockchain-member-networkid
-        '''
-        result = self._values.get("network_id")
-        return typing.cast(typing.Optional[builtins.str], result)
-
-    def __eq__(self, rhs: typing.Any) -> builtins.bool:
-        return isinstance(rhs, self.__class__) and rhs._values == self._values
-
-    def __ne__(self, rhs: typing.Any) -> builtins.bool:
-        return not (rhs == self)
-
-    def __repr__(self) -> str:
-        return "CfnMemberProps(%s)" % ", ".join(
-            k + "=" + repr(v) for k, v in self._values.items()
-        )
-
-
-@jsii.data_type(
-    jsii_type="aws-cdk-lib.aws_managedblockchain.CfnNodeProps",
-    jsii_struct_bases=[],
-    name_mapping={
-        "network_id": "networkId",
-        "node_configuration": "nodeConfiguration",
-        "member_id": "memberId",
-    },
-)
-class CfnNodeProps:
-    def __init__(
-        self,
-        *,
-        network_id: builtins.str,
-        node_configuration: typing.Union[_IResolvable_da3f097b, typing.Union["CfnNode.NodeConfigurationProperty", typing.Dict[builtins.str, typing.Any]]],
-        member_id: typing.Optional[builtins.str] = None,
-    ) -> None:
-        '''Properties for defining a ``CfnNode``.
-
-        :param network_id: The unique identifier of the network for the node. Ethereum public networks have the following ``NetworkId`` s: - ``n-ethereum-mainnet``
-        :param node_configuration: Configuration properties of a peer node.
-        :param member_id: The unique identifier of the member to which the node belongs. Applies only to Hyperledger Fabric.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-managedblockchain-node.html
-        :exampleMetadata: fixture=_generated
-
-        Example::
-
-            # The code below shows an example of how to instantiate this type.
-            # The values are placeholders you should change.
-            from aws_cdk import aws_managedblockchain as managedblockchain
-            
-            cfn_node_props = managedblockchain.CfnNodeProps(
-                network_id="networkId",
-                node_configuration=managedblockchain.CfnNode.NodeConfigurationProperty(
-                    availability_zone="availabilityZone",
-                    instance_type="instanceType"
-                ),
-            
-                # the properties below are optional
-                member_id="memberId"
-            )
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__06cdf753357136b8f6ace00b35f059256fbc98e2c163d6c1eee33fcfacb0e64b)
-            check_type(argname="argument network_id", value=network_id, expected_type=type_hints["network_id"])
-            check_type(argname="argument node_configuration", value=node_configuration, expected_type=type_hints["node_configuration"])
-            check_type(argname="argument member_id", value=member_id, expected_type=type_hints["member_id"])
-        self._values: typing.Dict[builtins.str, typing.Any] = {
-            "network_id": network_id,
-            "node_configuration": node_configuration,
-        }
-        if member_id is not None:
-            self._values["member_id"] = member_id
-
-    @builtins.property
-    def network_id(self) -> builtins.str:
-        '''The unique identifier of the network for the node.
-
-        Ethereum public networks have the following ``NetworkId`` s:
-
-        - ``n-ethereum-mainnet``
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-managedblockchain-node.html#cfn-managedblockchain-node-networkid
-        '''
-        result = self._values.get("network_id")
-        assert result is not None, "Required property 'network_id' is missing"
-        return typing.cast(builtins.str, result)
-
-    @builtins.property
-    def node_configuration(
-        self,
-    ) -> typing.Union[_IResolvable_da3f097b, "CfnNode.NodeConfigurationProperty"]:
-        '''Configuration properties of a peer node.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-managedblockchain-node.html#cfn-managedblockchain-node-nodeconfiguration
-        '''
-        result = self._values.get("node_configuration")
-        assert result is not None, "Required property 'node_configuration' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnNode.NodeConfigurationProperty"], result)
-
-    @builtins.property
-    def member_id(self) -> typing.Optional[builtins.str]:
-        '''The unique identifier of the member to which the node belongs.
-
-        Applies only to Hyperledger Fabric.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-managedblockchain-node.html#cfn-managedblockchain-node-memberid
-        '''
-        result = self._values.get("member_id")
-        return typing.cast(typing.Optional[builtins.str], result)
-
-    def __eq__(self, rhs: typing.Any) -> builtins.bool:
-        return isinstance(rhs, self.__class__) and rhs._values == self._values
-
-    def __ne__(self, rhs: typing.Any) -> builtins.bool:
-        return not (rhs == self)
-
-    def __repr__(self) -> str:
-        return "CfnNodeProps(%s)" % ", ".join(
-            k + "=" + repr(v) for k, v in self._values.items()
-        )
-
-
-@jsii.interface(jsii_type="aws-cdk-lib.aws_managedblockchain.IAccessorRef")
-class IAccessorRef(
-    _constructs_77d1e7e8.IConstruct,
-    _IEnvironmentAware_a408b00d,
-    typing_extensions.Protocol,
-):
-    '''(experimental) Indicates that this resource can be referenced as a Accessor.
-
-    :stability: experimental
-    '''
-
-    @builtins.property
-    @jsii.member(jsii_name="accessorRef")
-    def accessor_ref(self) -> AccessorReference:
-        '''(experimental) A reference to a Accessor resource.
-
-        :stability: experimental
-        '''
-        ...
-
-
-class _IAccessorRefProxy(
-    jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
-    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
-):
-    '''(experimental) Indicates that this resource can be referenced as a Accessor.
-
-    :stability: experimental
-    '''
-
-    __jsii_type__: typing.ClassVar[str] = "aws-cdk-lib.aws_managedblockchain.IAccessorRef"
-
-    @builtins.property
-    @jsii.member(jsii_name="accessorRef")
-    def accessor_ref(self) -> AccessorReference:
-        '''(experimental) A reference to a Accessor resource.
-
-        :stability: experimental
-        '''
-        return typing.cast(AccessorReference, jsii.get(self, "accessorRef"))
-
-# Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
-typing.cast(typing.Any, IAccessorRef).__jsii_proxy_class__ = lambda : _IAccessorRefProxy
-
-
-@jsii.interface(jsii_type="aws-cdk-lib.aws_managedblockchain.IMemberRef")
-class IMemberRef(
-    _constructs_77d1e7e8.IConstruct,
-    _IEnvironmentAware_a408b00d,
-    typing_extensions.Protocol,
-):
-    '''(experimental) Indicates that this resource can be referenced as a Member.
-
-    :stability: experimental
-    '''
-
-    @builtins.property
-    @jsii.member(jsii_name="memberRef")
-    def member_ref(self) -> "MemberReference":
-        '''(experimental) A reference to a Member resource.
-
-        :stability: experimental
-        '''
-        ...
-
-
-class _IMemberRefProxy(
-    jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
-    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
-):
-    '''(experimental) Indicates that this resource can be referenced as a Member.
-
-    :stability: experimental
-    '''
-
-    __jsii_type__: typing.ClassVar[str] = "aws-cdk-lib.aws_managedblockchain.IMemberRef"
-
-    @builtins.property
-    @jsii.member(jsii_name="memberRef")
-    def member_ref(self) -> "MemberReference":
-        '''(experimental) A reference to a Member resource.
-
-        :stability: experimental
-        '''
-        return typing.cast("MemberReference", jsii.get(self, "memberRef"))
-
-# Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
-typing.cast(typing.Any, IMemberRef).__jsii_proxy_class__ = lambda : _IMemberRefProxy
-
-
-@jsii.interface(jsii_type="aws-cdk-lib.aws_managedblockchain.INodeRef")
-class INodeRef(
-    _constructs_77d1e7e8.IConstruct,
-    _IEnvironmentAware_a408b00d,
-    typing_extensions.Protocol,
-):
-    '''(experimental) Indicates that this resource can be referenced as a Node.
-
-    :stability: experimental
-    '''
-
-    @builtins.property
-    @jsii.member(jsii_name="nodeRef")
-    def node_ref(self) -> "NodeReference":
-        '''(experimental) A reference to a Node resource.
-
-        :stability: experimental
-        '''
-        ...
-
-
-class _INodeRefProxy(
-    jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
-    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
-):
-    '''(experimental) Indicates that this resource can be referenced as a Node.
-
-    :stability: experimental
-    '''
-
-    __jsii_type__: typing.ClassVar[str] = "aws-cdk-lib.aws_managedblockchain.INodeRef"
-
-    @builtins.property
-    @jsii.member(jsii_name="nodeRef")
-    def node_ref(self) -> "NodeReference":
-        '''(experimental) A reference to a Node resource.
-
-        :stability: experimental
-        '''
-        return typing.cast("NodeReference", jsii.get(self, "nodeRef"))
-
-# Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
-typing.cast(typing.Any, INodeRef).__jsii_proxy_class__ = lambda : _INodeRefProxy
-
-
-@jsii.data_type(
-    jsii_type="aws-cdk-lib.aws_managedblockchain.MemberReference",
-    jsii_struct_bases=[],
-    name_mapping={"member_id": "memberId"},
-)
-class MemberReference:
-    def __init__(self, *, member_id: builtins.str) -> None:
-        '''A reference to a Member resource.
-
-        :param member_id: The MemberId of the Member resource.
-
-        :exampleMetadata: fixture=_generated
-
-        Example::
-
-            # The code below shows an example of how to instantiate this type.
-            # The values are placeholders you should change.
-            from aws_cdk import aws_managedblockchain as managedblockchain
-            
-            member_reference = managedblockchain.MemberReference(
-                member_id="memberId"
-            )
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__c863c4217e17f6650af03ef464e59617f0e5834b5ce880c8d22214606b9812a3)
-            check_type(argname="argument member_id", value=member_id, expected_type=type_hints["member_id"])
-        self._values: typing.Dict[builtins.str, typing.Any] = {
-            "member_id": member_id,
-        }
-
-    @builtins.property
-    def member_id(self) -> builtins.str:
-        '''The MemberId of the Member resource.'''
-        result = self._values.get("member_id")
-        assert result is not None, "Required property 'member_id' is missing"
-        return typing.cast(builtins.str, result)
-
-    def __eq__(self, rhs: typing.Any) -> builtins.bool:
-        return isinstance(rhs, self.__class__) and rhs._values == self._values
-
-    def __ne__(self, rhs: typing.Any) -> builtins.bool:
-        return not (rhs == self)
-
-    def __repr__(self) -> str:
-        return "MemberReference(%s)" % ", ".join(
-            k + "=" + repr(v) for k, v in self._values.items()
-        )
-
-
-@jsii.data_type(
-    jsii_type="aws-cdk-lib.aws_managedblockchain.NodeReference",
-    jsii_struct_bases=[],
-    name_mapping={"node_arn": "nodeArn", "node_id": "nodeId"},
-)
-class NodeReference:
-    def __init__(self, *, node_arn: builtins.str, node_id: builtins.str) -> None:
-        '''A reference to a Node resource.
-
-        :param node_arn: The ARN of the Node resource.
-        :param node_id: The NodeId of the Node resource.
-
-        :exampleMetadata: fixture=_generated
-
-        Example::
-
-            # The code below shows an example of how to instantiate this type.
-            # The values are placeholders you should change.
-            from aws_cdk import aws_managedblockchain as managedblockchain
-            
-            node_reference = managedblockchain.NodeReference(
-                node_arn="nodeArn",
-                node_id="nodeId"
-            )
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__bbdb55c8c16c107068228ab81e1dce920c6f295112eb36e962b8875e56dd3e06)
-            check_type(argname="argument node_arn", value=node_arn, expected_type=type_hints["node_arn"])
-            check_type(argname="argument node_id", value=node_id, expected_type=type_hints["node_id"])
-        self._values: typing.Dict[builtins.str, typing.Any] = {
-            "node_arn": node_arn,
-            "node_id": node_id,
-        }
-
-    @builtins.property
-    def node_arn(self) -> builtins.str:
-        '''The ARN of the Node resource.'''
-        result = self._values.get("node_arn")
-        assert result is not None, "Required property 'node_arn' is missing"
-        return typing.cast(builtins.str, result)
-
-    @builtins.property
-    def node_id(self) -> builtins.str:
-        '''The NodeId of the Node resource.'''
-        result = self._values.get("node_id")
-        assert result is not None, "Required property 'node_id' is missing"
-        return typing.cast(builtins.str, result)
-
-    def __eq__(self, rhs: typing.Any) -> builtins.bool:
-        return isinstance(rhs, self.__class__) and rhs._values == self._values
-
-    def __ne__(self, rhs: typing.Any) -> builtins.bool:
-        return not (rhs == self)
-
-    def __repr__(self) -> str:
-        return "NodeReference(%s)" % ", ".join(
-            k + "=" + repr(v) for k, v in self._values.items()
-        )
-
-
-@jsii.implements(_IInspectable_c2943556, IAccessorRef, _ITaggable_36806126)
-class CfnAccessor(
-    _CfnResource_9df397a6,
-    metaclass=jsii.JSIIMeta,
-    jsii_type="aws-cdk-lib.aws_managedblockchain.CfnAccessor",
-):
-    '''Creates a new accessor for use with Amazon Managed Blockchain service that supports token based access.
-
-    The accessor contains information required for token based access.
-
-    :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-managedblockchain-accessor.html
-    :cloudformationResource: AWS::ManagedBlockchain::Accessor
-    :exampleMetadata: fixture=_generated
-
-    Example::
-
-        # The code below shows an example of how to instantiate this type.
-        # The values are placeholders you should change.
-        from aws_cdk import aws_managedblockchain as managedblockchain
-        
-        cfn_accessor = managedblockchain.CfnAccessor(self, "MyCfnAccessor",
-            accessor_type="accessorType",
-        
-            # the properties below are optional
-            network_type="networkType",
-            tags=[CfnTag(
-                key="key",
-                value="value"
-            )]
-        )
-    '''
-
-    def __init__(
-        self,
-        scope: _constructs_77d1e7e8.Construct,
-        id: builtins.str,
-        *,
-        accessor_type: builtins.str,
-        network_type: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-    ) -> None:
-        '''
-        :param scope: Scope in which this resource is defined.
-        :param id: Construct identifier for this resource (unique in its scope).
-        :param accessor_type: The type of the accessor. .. epigraph:: Currently, accessor type is restricted to ``BILLING_TOKEN`` .
-        :param network_type: The blockchain network that the ``Accessor`` token is created for. .. epigraph:: We recommend using the appropriate ``networkType`` value for the blockchain network that you are creating the ``Accessor`` token for. You cannot use the value ``ETHEREUM_MAINNET_AND_GOERLI`` to specify a ``networkType`` for your Accessor token. The default value of ``ETHEREUM_MAINNET_AND_GOERLI`` is only applied: - when the ``CreateAccessor`` action does not set a ``networkType`` . - to all existing ``Accessor`` tokens that were created before the ``networkType`` property was introduced.
-        :param tags: The tags assigned to the Accessor. For more information about tags, see `Tagging Resources <https://docs.aws.amazon.com/managed-blockchain/latest/ethereum-dev/tagging-resources.html>`_ in the *Amazon Managed Blockchain Ethereum Developer Guide* , or `Tagging Resources <https://docs.aws.amazon.com/managed-blockchain/latest/hyperledger-fabric-dev/tagging-resources.html>`_ in the *Amazon Managed Blockchain Hyperledger Fabric Developer Guide* .
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__d7fae27137bea89baceda53b3dc015adf08084fe0dc7addf5f6ceece106c4e98)
-            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
-            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
-        props = CfnAccessorProps(
-            accessor_type=accessor_type, network_type=network_type, tags=tags
-        )
-
-        jsii.create(self.__class__, self, [scope, id, props])
-
-    @jsii.member(jsii_name="fromAccessorArn")
-    @builtins.classmethod
-    def from_accessor_arn(
-        cls,
-        scope: _constructs_77d1e7e8.Construct,
-        id: builtins.str,
-        arn: builtins.str,
-    ) -> IAccessorRef:
-        '''Creates a new IAccessorRef from an ARN.
-
-        :param scope: -
-        :param id: -
-        :param arn: -
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__18014559eefd9327a42c84c5955cef0a421d0c4fa24df7d1efd5782023c267c1)
-            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
-            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
-            check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
-        return typing.cast(IAccessorRef, jsii.sinvoke(cls, "fromAccessorArn", [scope, id, arn]))
-
-    @jsii.member(jsii_name="fromAccessorId")
-    @builtins.classmethod
-    def from_accessor_id(
-        cls,
-        scope: _constructs_77d1e7e8.Construct,
-        id: builtins.str,
-        accessor_id: builtins.str,
-    ) -> IAccessorRef:
-        '''Creates a new IAccessorRef from a accessorId.
-
-        :param scope: -
-        :param id: -
-        :param accessor_id: -
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__000563a5f642669e02e4a434645050e993d4c6550cb58d65714fdb2561b76338)
-            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
-            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
-            check_type(argname="argument accessor_id", value=accessor_id, expected_type=type_hints["accessor_id"])
-        return typing.cast(IAccessorRef, jsii.sinvoke(cls, "fromAccessorId", [scope, id, accessor_id]))
-
-    @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
-        '''Examines the CloudFormation resource and discloses attributes.
-
-        :param inspector: tree inspector to collect and process attributes.
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__5153df6ae42b13ade5f6af5da4867255659df0827b4417004b7a82730c0859b9)
-            check_type(argname="argument inspector", value=inspector, expected_type=type_hints["inspector"])
-        return typing.cast(None, jsii.invoke(self, "inspect", [inspector]))
-
-    @jsii.member(jsii_name="renderProperties")
-    def _render_properties(
-        self,
-        props: typing.Mapping[builtins.str, typing.Any],
-    ) -> typing.Mapping[builtins.str, typing.Any]:
-        '''
-        :param props: -
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__cf45e744d1073e04bf260ac0e246b67106c9252520e66af089bcd62cd5981e1d)
-            check_type(argname="argument props", value=props, expected_type=type_hints["props"])
-        return typing.cast(typing.Mapping[builtins.str, typing.Any], jsii.invoke(self, "renderProperties", [props]))
-
-    @jsii.python.classproperty
-    @jsii.member(jsii_name="CFN_RESOURCE_TYPE_NAME")
-    def CFN_RESOURCE_TYPE_NAME(cls) -> builtins.str:
-        '''The CloudFormation resource type name for this resource class.'''
-        return typing.cast(builtins.str, jsii.sget(cls, "CFN_RESOURCE_TYPE_NAME"))
-
-    @builtins.property
-    @jsii.member(jsii_name="accessorRef")
-    def accessor_ref(self) -> AccessorReference:
-        '''A reference to a Accessor resource.'''
-        return typing.cast(AccessorReference, jsii.get(self, "accessorRef"))
-
-    @builtins.property
-    @jsii.member(jsii_name="attrArn")
-    def attr_arn(self) -> builtins.str:
-        '''The Amazon Resource Name (ARN) of the accessor.
-
-        For more information about ARNs and their format, see `Amazon Resource Names (ARNs) <https://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html>`_ in the *AWS General Reference* .
-
-        :cloudformationAttribute: Arn
-        '''
-        return typing.cast(builtins.str, jsii.get(self, "attrArn"))
-
-    @builtins.property
-    @jsii.member(jsii_name="attrBillingToken")
-    def attr_billing_token(self) -> builtins.str:
-        '''The billing token is a property of the accessor.
-
-        Use this token to make Ethereum API calls to your Ethereum node. The billing token is used to track your accessor object for billing Ethereum API requests made to your Ethereum nodes.
-
-        :cloudformationAttribute: BillingToken
-        '''
-        return typing.cast(builtins.str, jsii.get(self, "attrBillingToken"))
-
-    @builtins.property
-    @jsii.member(jsii_name="attrCreationDate")
-    def attr_creation_date(self) -> builtins.str:
-        '''The creation date and time of the accessor.
-
-        :cloudformationAttribute: CreationDate
-        '''
-        return typing.cast(builtins.str, jsii.get(self, "attrCreationDate"))
-
-    @builtins.property
-    @jsii.member(jsii_name="attrId")
-    def attr_id(self) -> builtins.str:
-        '''The unique identifier of the accessor.
-
-        :cloudformationAttribute: Id
-        '''
-        return typing.cast(builtins.str, jsii.get(self, "attrId"))
-
-    @builtins.property
-    @jsii.member(jsii_name="attrStatus")
-    def attr_status(self) -> builtins.str:
-        '''The current status of the accessor.
-
-        :cloudformationAttribute: Status
-        '''
-        return typing.cast(builtins.str, jsii.get(self, "attrStatus"))
-
-    @builtins.property
-    @jsii.member(jsii_name="cfnProperties")
-    def _cfn_properties(self) -> typing.Mapping[builtins.str, typing.Any]:
-        return typing.cast(typing.Mapping[builtins.str, typing.Any], jsii.get(self, "cfnProperties"))
-
-    @builtins.property
-    @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
-        '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
-
-    @builtins.property
-    @jsii.member(jsii_name="accessorType")
-    def accessor_type(self) -> builtins.str:
-        '''The type of the accessor.'''
-        return typing.cast(builtins.str, jsii.get(self, "accessorType"))
-
-    @accessor_type.setter
-    def accessor_type(self, value: builtins.str) -> None:
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__5f365afcb88911500be6e93d816f42644c24c17bcb5b2575a6c29211d979af24)
-            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
-        jsii.set(self, "accessorType", value) # pyright: ignore[reportArgumentType]
-
-    @builtins.property
-    @jsii.member(jsii_name="networkType")
-    def network_type(self) -> typing.Optional[builtins.str]:
-        '''The blockchain network that the ``Accessor`` token is created for.'''
-        return typing.cast(typing.Optional[builtins.str], jsii.get(self, "networkType"))
-
-    @network_type.setter
-    def network_type(self, value: typing.Optional[builtins.str]) -> None:
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__ebcc19a367c52e96e151064284bb60e46304b8fba8b14490f920328c2750009b)
-            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
-        jsii.set(self, "networkType", value) # pyright: ignore[reportArgumentType]
-
-    @builtins.property
-    @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
-        '''The tags assigned to the Accessor.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
-
-    @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__d00a94224f7b2053cf776b7c92b3c8493560dc542f67879e3e30b42f708eead5)
-            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
-        jsii.set(self, "tagsRaw", value) # pyright: ignore[reportArgumentType]
-
-
-@jsii.implements(_IInspectable_c2943556, IMemberRef)
+@jsii.implements(_IInspectable_c2943556, _IMemberRef_eb79b2aa)
 class CfnMember(
     _CfnResource_9df397a6,
     metaclass=jsii.JSIIMeta,
@@ -1043,7 +495,8 @@ class CfnMember(
         network_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnMember.NetworkConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         network_id: typing.Optional[builtins.str] = None,
     ) -> None:
-        '''
+        '''Create a new ``AWS::ManagedBlockchain::Member``.
+
         :param scope: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
         :param member_configuration: Configuration properties of the member.
@@ -1071,7 +524,7 @@ class CfnMember(
         scope: _constructs_77d1e7e8.Construct,
         id: builtins.str,
         member_id: builtins.str,
-    ) -> IMemberRef:
+    ) -> _IMemberRef_eb79b2aa:
         '''Creates a new IMemberRef from a memberId.
 
         :param scope: -
@@ -1083,7 +536,7 @@ class CfnMember(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument member_id", value=member_id, expected_type=type_hints["member_id"])
-        return typing.cast(IMemberRef, jsii.sinvoke(cls, "fromMemberId", [scope, id, member_id]))
+        return typing.cast(_IMemberRef_eb79b2aa, jsii.sinvoke(cls, "fromMemberId", [scope, id, member_id]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -1140,9 +593,9 @@ class CfnMember(
 
     @builtins.property
     @jsii.member(jsii_name="memberRef")
-    def member_ref(self) -> MemberReference:
+    def member_ref(self) -> _MemberReference_b28a4bbd:
         '''A reference to a Member resource.'''
-        return typing.cast(MemberReference, jsii.get(self, "memberRef"))
+        return typing.cast(_MemberReference_b28a4bbd, jsii.get(self, "memberRef"))
 
     @builtins.property
     @jsii.member(jsii_name="memberConfiguration")
@@ -1874,7 +1327,150 @@ class CfnMember(
             )
 
 
-@jsii.implements(_IInspectable_c2943556, INodeRef)
+@jsii.data_type(
+    jsii_type="aws-cdk-lib.aws_managedblockchain.CfnMemberProps",
+    jsii_struct_bases=[],
+    name_mapping={
+        "member_configuration": "memberConfiguration",
+        "invitation_id": "invitationId",
+        "network_configuration": "networkConfiguration",
+        "network_id": "networkId",
+    },
+)
+class CfnMemberProps:
+    def __init__(
+        self,
+        *,
+        member_configuration: typing.Union[_IResolvable_da3f097b, typing.Union[CfnMember.MemberConfigurationProperty, typing.Dict[builtins.str, typing.Any]]],
+        invitation_id: typing.Optional[builtins.str] = None,
+        network_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnMember.NetworkConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        network_id: typing.Optional[builtins.str] = None,
+    ) -> None:
+        '''Properties for defining a ``CfnMember``.
+
+        :param member_configuration: Configuration properties of the member.
+        :param invitation_id: The unique identifier of the invitation to join the network sent to the account that creates the member.
+        :param network_configuration: Configuration properties of the network to which the member belongs.
+        :param network_id: The unique identifier of the network to which the member belongs.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-managedblockchain-member.html
+        :exampleMetadata: fixture=_generated
+
+        Example::
+
+            # The code below shows an example of how to instantiate this type.
+            # The values are placeholders you should change.
+            from aws_cdk import aws_managedblockchain as managedblockchain
+            
+            cfn_member_props = managedblockchain.CfnMemberProps(
+                member_configuration=managedblockchain.CfnMember.MemberConfigurationProperty(
+                    name="name",
+            
+                    # the properties below are optional
+                    description="description",
+                    member_framework_configuration=managedblockchain.CfnMember.MemberFrameworkConfigurationProperty(
+                        member_fabric_configuration=managedblockchain.CfnMember.MemberFabricConfigurationProperty(
+                            admin_password="adminPassword",
+                            admin_username="adminUsername"
+                        )
+                    )
+                ),
+            
+                # the properties below are optional
+                invitation_id="invitationId",
+                network_configuration=managedblockchain.CfnMember.NetworkConfigurationProperty(
+                    framework="framework",
+                    framework_version="frameworkVersion",
+                    name="name",
+                    voting_policy=managedblockchain.CfnMember.VotingPolicyProperty(
+                        approval_threshold_policy=managedblockchain.CfnMember.ApprovalThresholdPolicyProperty(
+                            proposal_duration_in_hours=123,
+                            threshold_comparator="thresholdComparator",
+                            threshold_percentage=123
+                        )
+                    ),
+            
+                    # the properties below are optional
+                    description="description",
+                    network_framework_configuration=managedblockchain.CfnMember.NetworkFrameworkConfigurationProperty(
+                        network_fabric_configuration=managedblockchain.CfnMember.NetworkFabricConfigurationProperty(
+                            edition="edition"
+                        )
+                    )
+                ),
+                network_id="networkId"
+            )
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__e66a18793d1c75e230157cc8b1b1b82fe1269a8b280b51df9b9f4c5c751dea9c)
+            check_type(argname="argument member_configuration", value=member_configuration, expected_type=type_hints["member_configuration"])
+            check_type(argname="argument invitation_id", value=invitation_id, expected_type=type_hints["invitation_id"])
+            check_type(argname="argument network_configuration", value=network_configuration, expected_type=type_hints["network_configuration"])
+            check_type(argname="argument network_id", value=network_id, expected_type=type_hints["network_id"])
+        self._values: typing.Dict[builtins.str, typing.Any] = {
+            "member_configuration": member_configuration,
+        }
+        if invitation_id is not None:
+            self._values["invitation_id"] = invitation_id
+        if network_configuration is not None:
+            self._values["network_configuration"] = network_configuration
+        if network_id is not None:
+            self._values["network_id"] = network_id
+
+    @builtins.property
+    def member_configuration(
+        self,
+    ) -> typing.Union[_IResolvable_da3f097b, CfnMember.MemberConfigurationProperty]:
+        '''Configuration properties of the member.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-managedblockchain-member.html#cfn-managedblockchain-member-memberconfiguration
+        '''
+        result = self._values.get("member_configuration")
+        assert result is not None, "Required property 'member_configuration' is missing"
+        return typing.cast(typing.Union[_IResolvable_da3f097b, CfnMember.MemberConfigurationProperty], result)
+
+    @builtins.property
+    def invitation_id(self) -> typing.Optional[builtins.str]:
+        '''The unique identifier of the invitation to join the network sent to the account that creates the member.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-managedblockchain-member.html#cfn-managedblockchain-member-invitationid
+        '''
+        result = self._values.get("invitation_id")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def network_configuration(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnMember.NetworkConfigurationProperty]]:
+        '''Configuration properties of the network to which the member belongs.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-managedblockchain-member.html#cfn-managedblockchain-member-networkconfiguration
+        '''
+        result = self._values.get("network_configuration")
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnMember.NetworkConfigurationProperty]], result)
+
+    @builtins.property
+    def network_id(self) -> typing.Optional[builtins.str]:
+        '''The unique identifier of the network to which the member belongs.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-managedblockchain-member.html#cfn-managedblockchain-member-networkid
+        '''
+        result = self._values.get("network_id")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    def __eq__(self, rhs: typing.Any) -> builtins.bool:
+        return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+    def __ne__(self, rhs: typing.Any) -> builtins.bool:
+        return not (rhs == self)
+
+    def __repr__(self) -> str:
+        return "CfnMemberProps(%s)" % ", ".join(
+            k + "=" + repr(v) for k, v in self._values.items()
+        )
+
+
+@jsii.implements(_IInspectable_c2943556, _INodeRef_c51264f7)
 class CfnNode(
     _CfnResource_9df397a6,
     metaclass=jsii.JSIIMeta,
@@ -1915,7 +1511,8 @@ class CfnNode(
         node_configuration: typing.Union[_IResolvable_da3f097b, typing.Union["CfnNode.NodeConfigurationProperty", typing.Dict[builtins.str, typing.Any]]],
         member_id: typing.Optional[builtins.str] = None,
     ) -> None:
-        '''
+        '''Create a new ``AWS::ManagedBlockchain::Node``.
+
         :param scope: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
         :param network_id: The unique identifier of the network for the node. Ethereum public networks have the following ``NetworkId`` s: - ``n-ethereum-mainnet``
@@ -1941,7 +1538,7 @@ class CfnNode(
         scope: _constructs_77d1e7e8.Construct,
         id: builtins.str,
         arn: builtins.str,
-    ) -> INodeRef:
+    ) -> _INodeRef_c51264f7:
         '''Creates a new INodeRef from an ARN.
 
         :param scope: -
@@ -1953,7 +1550,7 @@ class CfnNode(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
-        return typing.cast(INodeRef, jsii.sinvoke(cls, "fromNodeArn", [scope, id, arn]))
+        return typing.cast(_INodeRef_c51264f7, jsii.sinvoke(cls, "fromNodeArn", [scope, id, arn]))
 
     @jsii.member(jsii_name="fromNodeId")
     @builtins.classmethod
@@ -1962,7 +1559,7 @@ class CfnNode(
         scope: _constructs_77d1e7e8.Construct,
         id: builtins.str,
         node_id: builtins.str,
-    ) -> INodeRef:
+    ) -> _INodeRef_c51264f7:
         '''Creates a new INodeRef from a nodeId.
 
         :param scope: -
@@ -1974,7 +1571,7 @@ class CfnNode(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument node_id", value=node_id, expected_type=type_hints["node_id"])
-        return typing.cast(INodeRef, jsii.sinvoke(cls, "fromNodeId", [scope, id, node_id]))
+        return typing.cast(_INodeRef_c51264f7, jsii.sinvoke(cls, "fromNodeId", [scope, id, node_id]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -2051,9 +1648,9 @@ class CfnNode(
 
     @builtins.property
     @jsii.member(jsii_name="nodeRef")
-    def node_ref(self) -> NodeReference:
+    def node_ref(self) -> _NodeReference_7fb78253:
         '''A reference to a Node resource.'''
-        return typing.cast(NodeReference, jsii.get(self, "nodeRef"))
+        return typing.cast(_NodeReference_7fb78253, jsii.get(self, "nodeRef"))
 
     @builtins.property
     @jsii.member(jsii_name="networkId")
@@ -2176,73 +1773,120 @@ class CfnNode(
             )
 
 
+@jsii.data_type(
+    jsii_type="aws-cdk-lib.aws_managedblockchain.CfnNodeProps",
+    jsii_struct_bases=[],
+    name_mapping={
+        "network_id": "networkId",
+        "node_configuration": "nodeConfiguration",
+        "member_id": "memberId",
+    },
+)
+class CfnNodeProps:
+    def __init__(
+        self,
+        *,
+        network_id: builtins.str,
+        node_configuration: typing.Union[_IResolvable_da3f097b, typing.Union[CfnNode.NodeConfigurationProperty, typing.Dict[builtins.str, typing.Any]]],
+        member_id: typing.Optional[builtins.str] = None,
+    ) -> None:
+        '''Properties for defining a ``CfnNode``.
+
+        :param network_id: The unique identifier of the network for the node. Ethereum public networks have the following ``NetworkId`` s: - ``n-ethereum-mainnet``
+        :param node_configuration: Configuration properties of a peer node.
+        :param member_id: The unique identifier of the member to which the node belongs. Applies only to Hyperledger Fabric.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-managedblockchain-node.html
+        :exampleMetadata: fixture=_generated
+
+        Example::
+
+            # The code below shows an example of how to instantiate this type.
+            # The values are placeholders you should change.
+            from aws_cdk import aws_managedblockchain as managedblockchain
+            
+            cfn_node_props = managedblockchain.CfnNodeProps(
+                network_id="networkId",
+                node_configuration=managedblockchain.CfnNode.NodeConfigurationProperty(
+                    availability_zone="availabilityZone",
+                    instance_type="instanceType"
+                ),
+            
+                # the properties below are optional
+                member_id="memberId"
+            )
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__06cdf753357136b8f6ace00b35f059256fbc98e2c163d6c1eee33fcfacb0e64b)
+            check_type(argname="argument network_id", value=network_id, expected_type=type_hints["network_id"])
+            check_type(argname="argument node_configuration", value=node_configuration, expected_type=type_hints["node_configuration"])
+            check_type(argname="argument member_id", value=member_id, expected_type=type_hints["member_id"])
+        self._values: typing.Dict[builtins.str, typing.Any] = {
+            "network_id": network_id,
+            "node_configuration": node_configuration,
+        }
+        if member_id is not None:
+            self._values["member_id"] = member_id
+
+    @builtins.property
+    def network_id(self) -> builtins.str:
+        '''The unique identifier of the network for the node.
+
+        Ethereum public networks have the following ``NetworkId`` s:
+
+        - ``n-ethereum-mainnet``
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-managedblockchain-node.html#cfn-managedblockchain-node-networkid
+        '''
+        result = self._values.get("network_id")
+        assert result is not None, "Required property 'network_id' is missing"
+        return typing.cast(builtins.str, result)
+
+    @builtins.property
+    def node_configuration(
+        self,
+    ) -> typing.Union[_IResolvable_da3f097b, CfnNode.NodeConfigurationProperty]:
+        '''Configuration properties of a peer node.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-managedblockchain-node.html#cfn-managedblockchain-node-nodeconfiguration
+        '''
+        result = self._values.get("node_configuration")
+        assert result is not None, "Required property 'node_configuration' is missing"
+        return typing.cast(typing.Union[_IResolvable_da3f097b, CfnNode.NodeConfigurationProperty], result)
+
+    @builtins.property
+    def member_id(self) -> typing.Optional[builtins.str]:
+        '''The unique identifier of the member to which the node belongs.
+
+        Applies only to Hyperledger Fabric.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-managedblockchain-node.html#cfn-managedblockchain-node-memberid
+        '''
+        result = self._values.get("member_id")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    def __eq__(self, rhs: typing.Any) -> builtins.bool:
+        return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+    def __ne__(self, rhs: typing.Any) -> builtins.bool:
+        return not (rhs == self)
+
+    def __repr__(self) -> str:
+        return "CfnNodeProps(%s)" % ", ".join(
+            k + "=" + repr(v) for k, v in self._values.items()
+        )
+
+
 __all__ = [
-    "AccessorReference",
     "CfnAccessor",
     "CfnAccessorProps",
     "CfnMember",
     "CfnMemberProps",
     "CfnNode",
     "CfnNodeProps",
-    "IAccessorRef",
-    "IMemberRef",
-    "INodeRef",
-    "MemberReference",
-    "NodeReference",
 ]
 
 publication.publish()
-
-def _typecheckingstub__62cd2c268da77c1141fbe8bba37ef976403cd2a5ac5d5bb4c7386a10566d8778(
-    *,
-    accessor_arn: builtins.str,
-    accessor_id: builtins.str,
-) -> None:
-    """Type checking stubs"""
-    pass
-
-def _typecheckingstub__3924b13245ef775193266263be34e02070f7b9a94ed734a446b67796d28e6199(
-    *,
-    accessor_type: builtins.str,
-    network_type: typing.Optional[builtins.str] = None,
-    tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-) -> None:
-    """Type checking stubs"""
-    pass
-
-def _typecheckingstub__e66a18793d1c75e230157cc8b1b1b82fe1269a8b280b51df9b9f4c5c751dea9c(
-    *,
-    member_configuration: typing.Union[_IResolvable_da3f097b, typing.Union[CfnMember.MemberConfigurationProperty, typing.Dict[builtins.str, typing.Any]]],
-    invitation_id: typing.Optional[builtins.str] = None,
-    network_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnMember.NetworkConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-    network_id: typing.Optional[builtins.str] = None,
-) -> None:
-    """Type checking stubs"""
-    pass
-
-def _typecheckingstub__06cdf753357136b8f6ace00b35f059256fbc98e2c163d6c1eee33fcfacb0e64b(
-    *,
-    network_id: builtins.str,
-    node_configuration: typing.Union[_IResolvable_da3f097b, typing.Union[CfnNode.NodeConfigurationProperty, typing.Dict[builtins.str, typing.Any]]],
-    member_id: typing.Optional[builtins.str] = None,
-) -> None:
-    """Type checking stubs"""
-    pass
-
-def _typecheckingstub__c863c4217e17f6650af03ef464e59617f0e5834b5ce880c8d22214606b9812a3(
-    *,
-    member_id: builtins.str,
-) -> None:
-    """Type checking stubs"""
-    pass
-
-def _typecheckingstub__bbdb55c8c16c107068228ab81e1dce920c6f295112eb36e962b8875e56dd3e06(
-    *,
-    node_arn: builtins.str,
-    node_id: builtins.str,
-) -> None:
-    """Type checking stubs"""
-    pass
 
 def _typecheckingstub__d7fae27137bea89baceda53b3dc015adf08084fe0dc7addf5f6ceece106c4e98(
     scope: _constructs_77d1e7e8.Construct,
@@ -2297,6 +1941,15 @@ def _typecheckingstub__ebcc19a367c52e96e151064284bb60e46304b8fba8b14490f920328c2
 
 def _typecheckingstub__d00a94224f7b2053cf776b7c92b3c8493560dc542f67879e3e30b42f708eead5(
     value: typing.Optional[typing.List[_CfnTag_f6864754]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__3924b13245ef775193266263be34e02070f7b9a94ed734a446b67796d28e6199(
+    *,
+    accessor_type: builtins.str,
+    network_type: typing.Optional[builtins.str] = None,
+    tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -2423,6 +2076,16 @@ def _typecheckingstub__c68c8e4a9368be2e89a33105aa99ab4212e33852ff178527742919731
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__e66a18793d1c75e230157cc8b1b1b82fe1269a8b280b51df9b9f4c5c751dea9c(
+    *,
+    member_configuration: typing.Union[_IResolvable_da3f097b, typing.Union[CfnMember.MemberConfigurationProperty, typing.Dict[builtins.str, typing.Any]]],
+    invitation_id: typing.Optional[builtins.str] = None,
+    network_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnMember.NetworkConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    network_id: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__48dbd6ef5c42666453e84796d418e81144be49dedf064e93bf40d44fb4dc0cab(
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
@@ -2488,5 +2151,11 @@ def _typecheckingstub__17aa04ca4abfb63493c324177d7e99bb4c80136ba0c4e225db7ff9fd5
     """Type checking stubs"""
     pass
 
-for cls in [IAccessorRef, IMemberRef, INodeRef]:
-    typing.cast(typing.Any, cls).__protocol_attrs__ = typing.cast(typing.Any, cls).__protocol_attrs__ - set(['__jsii_proxy_class__', '__jsii_type__'])
+def _typecheckingstub__06cdf753357136b8f6ace00b35f059256fbc98e2c163d6c1eee33fcfacb0e64b(
+    *,
+    network_id: builtins.str,
+    node_configuration: typing.Union[_IResolvable_da3f097b, typing.Union[CfnNode.NodeConfigurationProperty, typing.Dict[builtins.str, typing.Any]]],
+    member_id: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass

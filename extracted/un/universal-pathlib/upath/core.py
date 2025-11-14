@@ -44,10 +44,17 @@ from upath.types import JoinablePathLike
 from upath.types import PathInfo
 from upath.types import ReadablePath
 from upath.types import ReadablePathLike
+from upath.types import StatResultType
 from upath.types import SupportsPathLike
 from upath.types import UPathParser
 from upath.types import WritablePath
 from upath.types import WritablePathLike
+
+if sys.version_info >= (3, 13):
+    from pathlib import UnsupportedOperation
+else:
+    UnsupportedOperation = NotImplementedError
+    """Raised when an unsupported operation is called on a path object."""
 
 if TYPE_CHECKING:
     import upath.implementations as _uimpl
@@ -63,7 +70,10 @@ if TYPE_CHECKING:
     _MT = TypeVar("_MT")
     _WT = TypeVar("_WT", bound="WritablePath")
 
-__all__ = ["UPath"]
+__all__ = [
+    "UPath",
+    "UnsupportedOperation",
+]
 
 _FSSPEC_HAS_WORKING_GLOB = None
 
@@ -103,7 +113,14 @@ def _buffering2blocksize(mode: str, buffering: int) -> int | None:
 
 
 def _raise_unsupported(cls_name: str, method: str) -> NoReturn:
-    raise NotImplementedError(f"{cls_name}.{method}() is unsupported")
+    raise UnsupportedOperation(f"{cls_name}.{method}() is unsupported")
+
+
+class _IncompatibleProtocolError(TypeError, ValueError):
+    """switch to TypeError for incompatible protocols in a backward compatible way.
+
+    !!! Do not use this exception directly !!!
+    """
 
 
 class _UPathMeta(ABCMeta):
@@ -311,7 +328,7 @@ class _UPathMixin(metaclass=_UPathMeta):
                 # For relative paths, we need to resolve to absolute path
                 current_dir = self.cwd()  # type: ignore[attr-defined]
             except NotImplementedError:
-                raise NotImplementedError(
+                raise UnsupportedOperation(
                     f"fsspec paths can not be relative and"
                     f" {type(self).__name__}.cwd() is unsupported"
                 ) from None
@@ -380,8 +397,6 @@ class _UPathMixin(metaclass=_UPathMeta):
     ) -> AbstractFileSystem:
         """Instantiate the filesystem_spec filesystem class"""
         fs_cls = get_filesystem_class(protocol)
-        so_dct = fs_cls._get_kwargs_from_urls(urlpath)
-        so_dct.update(storage_options)
         return fs_cls(**storage_options)
 
     # === upath.UPath constructor =====================================
@@ -409,11 +424,16 @@ class _UPathMixin(metaclass=_UPathMeta):
             protocol = storage_options.pop("scheme")
 
         # determine the protocol
-        pth_protocol = get_upath_protocol(
-            args[0] if args else "",
-            protocol=protocol,
-            storage_options=storage_options,
-        )
+        try:
+            pth_protocol = get_upath_protocol(
+                args[0] if args else "",
+                protocol=protocol,
+                storage_options=storage_options,
+            )
+        except ValueError as e:
+            if "incompatible with" in str(e):
+                raise _IncompatibleProtocolError(str(e)) from e
+            raise
         # determine which UPath subclass to dispatch to
         upath_cls: type[UPath] | None
         if cls._protocol_dispatch or cls._protocol_dispatch is None:
@@ -1247,6 +1267,14 @@ class UPath(_UPathMixin, WritablePath, ReadablePath):
             target = self.with_segments(target_dir, name)
         return self.move(target)
 
+    def _copy_from(
+        self,
+        source: ReadablePath,
+        follow_symlinks: bool = True,
+        **kwargs: Any,
+    ) -> None:
+        return super()._copy_from(source, follow_symlinks)
+
     # --- WritablePath attributes -------------------------------------
 
     def symlink_to(
@@ -1366,7 +1394,7 @@ class UPath(_UPathMixin, WritablePath, ReadablePath):
         self,
         *,
         follow_symlinks: bool = True,
-    ) -> UPathStatResult:
+    ) -> StatResultType:
         """
         Return the result of the stat() system call on this path, like
         os.stat() does.
@@ -1390,7 +1418,7 @@ class UPath(_UPathMixin, WritablePath, ReadablePath):
             )
         return UPathStatResult.from_info(self.fs.info(self.path))
 
-    def lstat(self) -> UPathStatResult:
+    def lstat(self) -> StatResultType:
         return self.stat(follow_symlinks=False)
 
     def chmod(self, mode: int, *, follow_symlinks: bool = True) -> None:
@@ -1404,18 +1432,39 @@ class UPath(_UPathMixin, WritablePath, ReadablePath):
         ----
         For fsspec filesystems follow_symlinks is currently ignored.
         """
+        if not follow_symlinks:
+            warnings.warn(
+                f"{type(self).__name__}.exists() follow_symlinks=False"
+                " is currently ignored.",
+                UserWarning,
+                stacklevel=2,
+            )
         return self.fs.exists(self.path)
 
-    def is_dir(self) -> bool:
+    def is_dir(self, *, follow_symlinks: bool = True) -> bool:
         """
         Whether this path is a directory.
         """
+        if not follow_symlinks:
+            warnings.warn(
+                f"{type(self).__name__}.is_dir() follow_symlinks=False"
+                " is currently ignored.",
+                UserWarning,
+                stacklevel=2,
+            )
         return self.fs.isdir(self.path)
 
-    def is_file(self) -> bool:
+    def is_file(self, *, follow_symlinks: bool = True) -> bool:
         """
         Whether this path is a regular file.
         """
+        if not follow_symlinks:
+            warnings.warn(
+                f"{type(self).__name__}.is_file() follow_symlinks=False"
+                " is currently ignored.",
+                UserWarning,
+                stacklevel=2,
+            )
         return self.fs.isfile(self.path)
 
     def is_mount(self) -> bool:
@@ -1513,20 +1562,20 @@ class UPath(_UPathMixin, WritablePath, ReadablePath):
         self,
         pattern: str,
         *,
-        case_sensitive: bool = UNSET_DEFAULT,
-        recurse_symlinks: bool = UNSET_DEFAULT,
+        case_sensitive: bool | None = None,
+        recurse_symlinks: bool = False,
     ) -> Iterator[Self]:
         """Iterate over this subtree and yield all existing files (of any
         kind, including directories) matching the given relative pattern."""
-        if case_sensitive is not UNSET_DEFAULT:
+        if case_sensitive is not None:
             warnings.warn(
                 "UPath.glob(): case_sensitive is currently ignored.",
                 UserWarning,
                 stacklevel=2,
             )
-        if recurse_symlinks is not UNSET_DEFAULT:
+        if recurse_symlinks:
             warnings.warn(
-                "UPath.glob(): recurse_symlinks is currently ignored.",
+                "UPath.glob(): recurse_symlinks=True is currently ignored.",
                 UserWarning,
                 stacklevel=2,
             )
@@ -1543,22 +1592,22 @@ class UPath(_UPathMixin, WritablePath, ReadablePath):
         self,
         pattern: str,
         *,
-        case_sensitive: bool = UNSET_DEFAULT,
-        recurse_symlinks: bool = UNSET_DEFAULT,
+        case_sensitive: bool | None = None,
+        recurse_symlinks: bool = False,
     ) -> Iterator[Self]:
         """Recursively yield all existing files (of any kind, including
         directories) matching the given relative pattern, anywhere in
         this subtree.
         """
-        if case_sensitive is not UNSET_DEFAULT:
+        if case_sensitive is not None:
             warnings.warn(
                 "UPath.glob(): case_sensitive is currently ignored.",
                 UserWarning,
                 stacklevel=2,
             )
-        if recurse_symlinks is not UNSET_DEFAULT:
+        if recurse_symlinks:
             warnings.warn(
-                "UPath.glob(): recurse_symlinks is currently ignored.",
+                "UPath.glob(): recurse_symlinks=True is currently ignored.",
                 UserWarning,
                 stacklevel=2,
             )
@@ -1588,10 +1637,10 @@ class UPath(_UPathMixin, WritablePath, ReadablePath):
                         seen.add(name)
                         yield self.joinpath(name)
 
-    def owner(self) -> str:
+    def owner(self, *, follow_symlinks: bool = True) -> str:
         _raise_unsupported(type(self).__name__, "owner")
 
-    def group(self) -> str:
+    def group(self, *, follow_symlinks: bool = True) -> str:
         _raise_unsupported(type(self).__name__, "group")
 
     def absolute(self) -> Self:
@@ -1971,13 +2020,45 @@ class UPath(_UPathMixin, WritablePath, ReadablePath):
         return self == other or other in self.parents
 
     def hardlink_to(self, target: ReadablePathLike) -> None:
-        raise NotImplementedError
+        _raise_unsupported(type(self).__name__, "hardlink_to")
 
-    def match(self, pattern: str) -> bool:
-        # fixme: hacky emulation of match. needs tests...
-        if not pattern:
+    def full_match(
+        self,
+        pattern: str | SupportsPathLike,
+        *,
+        case_sensitive: bool | None = None,
+    ) -> bool:
+        """Match this path against the provided glob-style pattern.
+        Return True if matching is successful, False otherwise.
+        """
+        if case_sensitive is not None:
+            warnings.warn(
+                f"{type(self).__name__}.full_match(): case_sensitive"
+                " is currently ignored.",
+                UserWarning,
+                stacklevel=2,
+            )
+        return super().full_match(str(pattern))
+
+    def match(
+        self,
+        path_pattern: str | SupportsPathLike,
+        *,
+        case_sensitive: bool | None = None,
+    ) -> bool:
+        """Match this path against the provided non-recursive glob-style pattern.
+        Return True if matching is successful, False otherwise.
+        """
+        path_pattern = str(path_pattern)
+        if not path_pattern:
             raise ValueError("pattern cannot be empty")
-        return self.full_match(pattern.replace("**", "*"))
+        if case_sensitive is not None:
+            warnings.warn(
+                f"{type(self).__name__}.match(): case_sensitive is currently ignored.",
+                UserWarning,
+                stacklevel=2,
+            )
+        return self.full_match(path_pattern.replace("**", "*"))
 
     @classmethod
     def __get_pydantic_core_schema__(

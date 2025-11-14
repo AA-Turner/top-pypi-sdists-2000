@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: dagster
-Version: 1.12.1
+Version: 1.12.2
 Summary: Dagster is an orchestration platform for the development, production, and observation of data assets.
 Author: Dagster Labs
 Author-email: hello@dagsterlabs.com
@@ -20,7 +20,6 @@ Classifier: Environment :: Console
 Classifier: Environment :: Web Environment
 Classifier: Intended Audience :: Developers
 Classifier: Intended Audience :: System Administrators
-Classifier: Programming Language :: Python :: 3.9
 Classifier: Programming Language :: Python :: 3.10
 Classifier: Programming Language :: Python :: 3.11
 Classifier: Programming Language :: Python :: 3.12
@@ -29,7 +28,7 @@ Classifier: License :: OSI Approved :: Apache Software License
 Classifier: Topic :: System :: Monitoring
 Classifier: Topic :: Software Development :: Libraries :: Application Frameworks
 Classifier: Operating System :: OS Independent
-Requires-Python: >=3.9,<3.14
+Requires-Python: >=3.10,<3.14
 Description-Content-Type: text/markdown
 License-File: LICENSE
 Requires-Dist: click<9.0,>=5.0
@@ -60,8 +59,8 @@ Requires-Dist: universal_pathlib; python_version < "3.12"
 Requires-Dist: universal_pathlib>=0.2.0; python_version >= "3.12"
 Requires-Dist: rich
 Requires-Dist: filelock
-Requires-Dist: dagster-pipes==1.12.1
-Requires-Dist: dagster-shared==1.12.1
+Requires-Dist: dagster-pipes==1.12.2
+Requires-Dist: dagster-shared==1.12.2
 Requires-Dist: antlr4-python3-runtime
 Provides-Extra: docker
 Requires-Dist: docker; extra == "docker"

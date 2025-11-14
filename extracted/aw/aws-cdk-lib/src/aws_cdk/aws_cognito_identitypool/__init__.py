@@ -415,10 +415,10 @@ from ..aws_cognito import (
     IUserPool as _IUserPool_1f1029e2,
     IUserPoolClient as _IUserPoolClient_75623ba4,
 )
-from ..aws_iam import (
-    IOIDCProviderRef as _IOIDCProviderRef_3a3d0e6d,
-    IRole as _IRole_235f5d8e,
-    ISAMLProviderRef as _ISAMLProviderRef_8ee7fc41,
+from ..aws_iam import IRole as _IRole_235f5d8e
+from ..interfaces.aws_iam import (
+    IOIDCProviderRef as _IOIDCProviderRef_a866c7c8,
+    ISAMLProviderRef as _ISAMLProviderRef_6e369856,
 )
 
 
@@ -873,8 +873,8 @@ class IdentityPoolAuthenticationProviders:
         custom_provider: typing.Optional[builtins.str] = None,
         facebook: typing.Optional[typing.Union["IdentityPoolFacebookLoginProvider", typing.Dict[builtins.str, typing.Any]]] = None,
         google: typing.Optional[typing.Union["IdentityPoolGoogleLoginProvider", typing.Dict[builtins.str, typing.Any]]] = None,
-        open_id_connect_providers: typing.Optional[typing.Sequence[_IOIDCProviderRef_3a3d0e6d]] = None,
-        saml_providers: typing.Optional[typing.Sequence[_ISAMLProviderRef_8ee7fc41]] = None,
+        open_id_connect_providers: typing.Optional[typing.Sequence[_IOIDCProviderRef_a866c7c8]] = None,
+        saml_providers: typing.Optional[typing.Sequence[_ISAMLProviderRef_6e369856]] = None,
         twitter: typing.Optional[typing.Union["IdentityPoolTwitterLoginProvider", typing.Dict[builtins.str, typing.Any]]] = None,
         user_pools: typing.Optional[typing.Sequence[IUserPoolAuthenticationProvider]] = None,
     ) -> None:
@@ -997,24 +997,24 @@ class IdentityPoolAuthenticationProviders:
     @builtins.property
     def open_id_connect_providers(
         self,
-    ) -> typing.Optional[typing.List[_IOIDCProviderRef_3a3d0e6d]]:
+    ) -> typing.Optional[typing.List[_IOIDCProviderRef_a866c7c8]]:
         '''The OpenIdConnect Provider associated with this Identity Pool.
 
         :default: - no OpenIdConnectProvider
         '''
         result = self._values.get("open_id_connect_providers")
-        return typing.cast(typing.Optional[typing.List[_IOIDCProviderRef_3a3d0e6d]], result)
+        return typing.cast(typing.Optional[typing.List[_IOIDCProviderRef_a866c7c8]], result)
 
     @builtins.property
     def saml_providers(
         self,
-    ) -> typing.Optional[typing.List[_ISAMLProviderRef_8ee7fc41]]:
+    ) -> typing.Optional[typing.List[_ISAMLProviderRef_6e369856]]:
         '''The Security Assertion Markup Language provider associated with this Identity Pool.
 
         :default: - no SamlProvider
         '''
         result = self._values.get("saml_providers")
-        return typing.cast(typing.Optional[typing.List[_ISAMLProviderRef_8ee7fc41]], result)
+        return typing.cast(typing.Optional[typing.List[_ISAMLProviderRef_6e369856]], result)
 
     @builtins.property
     def twitter(self) -> typing.Optional["IdentityPoolTwitterLoginProvider"]:
@@ -2197,8 +2197,8 @@ def _typecheckingstub__e5736f06974c68519c1ae6c3b7a96f6631b848c6e335b1b26878af428
     custom_provider: typing.Optional[builtins.str] = None,
     facebook: typing.Optional[typing.Union[IdentityPoolFacebookLoginProvider, typing.Dict[builtins.str, typing.Any]]] = None,
     google: typing.Optional[typing.Union[IdentityPoolGoogleLoginProvider, typing.Dict[builtins.str, typing.Any]]] = None,
-    open_id_connect_providers: typing.Optional[typing.Sequence[_IOIDCProviderRef_3a3d0e6d]] = None,
-    saml_providers: typing.Optional[typing.Sequence[_ISAMLProviderRef_8ee7fc41]] = None,
+    open_id_connect_providers: typing.Optional[typing.Sequence[_IOIDCProviderRef_a866c7c8]] = None,
+    saml_providers: typing.Optional[typing.Sequence[_ISAMLProviderRef_6e369856]] = None,
     twitter: typing.Optional[typing.Union[IdentityPoolTwitterLoginProvider, typing.Dict[builtins.str, typing.Any]]] = None,
     user_pools: typing.Optional[typing.Sequence[IUserPoolAuthenticationProvider]] = None,
 ) -> None:

@@ -19,6 +19,7 @@ Usage::
 from __future__ import annotations
 
 import sys
+from collections.abc import Mapping
 from typing import Any, overload
 
 from botocore.client import BaseClient, ClientMeta
@@ -130,12 +131,6 @@ from .type_defs import (
 )
 from .waiter import ImageScanCompleteWaiter, LifecyclePolicyPreviewCompleteWaiter
 
-if sys.version_info >= (3, 9):
-    from builtins import dict as Dict
-    from builtins import type as Type
-    from collections.abc import Mapping
-else:
-    from typing import Dict, Mapping, Type
 if sys.version_info >= (3, 12):
     from typing import Literal, Unpack
 else:
@@ -146,47 +141,47 @@ __all__ = ("ECRClient",)
 
 
 class Exceptions(BaseClientExceptions):
-    ClientError: Type[BotocoreClientError]
-    EmptyUploadException: Type[BotocoreClientError]
-    ImageAlreadyExistsException: Type[BotocoreClientError]
-    ImageDigestDoesNotMatchException: Type[BotocoreClientError]
-    ImageNotFoundException: Type[BotocoreClientError]
-    ImageTagAlreadyExistsException: Type[BotocoreClientError]
-    InvalidLayerException: Type[BotocoreClientError]
-    InvalidLayerPartException: Type[BotocoreClientError]
-    InvalidParameterException: Type[BotocoreClientError]
-    InvalidTagParameterException: Type[BotocoreClientError]
-    KmsException: Type[BotocoreClientError]
-    LayerAlreadyExistsException: Type[BotocoreClientError]
-    LayerInaccessibleException: Type[BotocoreClientError]
-    LayerPartTooSmallException: Type[BotocoreClientError]
-    LayersNotFoundException: Type[BotocoreClientError]
-    LifecyclePolicyNotFoundException: Type[BotocoreClientError]
-    LifecyclePolicyPreviewInProgressException: Type[BotocoreClientError]
-    LifecyclePolicyPreviewNotFoundException: Type[BotocoreClientError]
-    LimitExceededException: Type[BotocoreClientError]
-    PullThroughCacheRuleAlreadyExistsException: Type[BotocoreClientError]
-    PullThroughCacheRuleNotFoundException: Type[BotocoreClientError]
-    ReferencedImagesNotFoundException: Type[BotocoreClientError]
-    RegistryPolicyNotFoundException: Type[BotocoreClientError]
-    RepositoryAlreadyExistsException: Type[BotocoreClientError]
-    RepositoryNotEmptyException: Type[BotocoreClientError]
-    RepositoryNotFoundException: Type[BotocoreClientError]
-    RepositoryPolicyNotFoundException: Type[BotocoreClientError]
-    ScanNotFoundException: Type[BotocoreClientError]
-    SecretNotFoundException: Type[BotocoreClientError]
-    ServerException: Type[BotocoreClientError]
-    TemplateAlreadyExistsException: Type[BotocoreClientError]
-    TemplateNotFoundException: Type[BotocoreClientError]
-    TooManyTagsException: Type[BotocoreClientError]
-    UnableToAccessSecretException: Type[BotocoreClientError]
-    UnableToDecryptSecretValueException: Type[BotocoreClientError]
-    UnableToGetUpstreamImageException: Type[BotocoreClientError]
-    UnableToGetUpstreamLayerException: Type[BotocoreClientError]
-    UnsupportedImageTypeException: Type[BotocoreClientError]
-    UnsupportedUpstreamRegistryException: Type[BotocoreClientError]
-    UploadNotFoundException: Type[BotocoreClientError]
-    ValidationException: Type[BotocoreClientError]
+    ClientError: type[BotocoreClientError]
+    EmptyUploadException: type[BotocoreClientError]
+    ImageAlreadyExistsException: type[BotocoreClientError]
+    ImageDigestDoesNotMatchException: type[BotocoreClientError]
+    ImageNotFoundException: type[BotocoreClientError]
+    ImageTagAlreadyExistsException: type[BotocoreClientError]
+    InvalidLayerException: type[BotocoreClientError]
+    InvalidLayerPartException: type[BotocoreClientError]
+    InvalidParameterException: type[BotocoreClientError]
+    InvalidTagParameterException: type[BotocoreClientError]
+    KmsException: type[BotocoreClientError]
+    LayerAlreadyExistsException: type[BotocoreClientError]
+    LayerInaccessibleException: type[BotocoreClientError]
+    LayerPartTooSmallException: type[BotocoreClientError]
+    LayersNotFoundException: type[BotocoreClientError]
+    LifecyclePolicyNotFoundException: type[BotocoreClientError]
+    LifecyclePolicyPreviewInProgressException: type[BotocoreClientError]
+    LifecyclePolicyPreviewNotFoundException: type[BotocoreClientError]
+    LimitExceededException: type[BotocoreClientError]
+    PullThroughCacheRuleAlreadyExistsException: type[BotocoreClientError]
+    PullThroughCacheRuleNotFoundException: type[BotocoreClientError]
+    ReferencedImagesNotFoundException: type[BotocoreClientError]
+    RegistryPolicyNotFoundException: type[BotocoreClientError]
+    RepositoryAlreadyExistsException: type[BotocoreClientError]
+    RepositoryNotEmptyException: type[BotocoreClientError]
+    RepositoryNotFoundException: type[BotocoreClientError]
+    RepositoryPolicyNotFoundException: type[BotocoreClientError]
+    ScanNotFoundException: type[BotocoreClientError]
+    SecretNotFoundException: type[BotocoreClientError]
+    ServerException: type[BotocoreClientError]
+    TemplateAlreadyExistsException: type[BotocoreClientError]
+    TemplateNotFoundException: type[BotocoreClientError]
+    TooManyTagsException: type[BotocoreClientError]
+    UnableToAccessSecretException: type[BotocoreClientError]
+    UnableToDecryptSecretValueException: type[BotocoreClientError]
+    UnableToGetUpstreamImageException: type[BotocoreClientError]
+    UnableToGetUpstreamLayerException: type[BotocoreClientError]
+    UnsupportedImageTypeException: type[BotocoreClientError]
+    UnsupportedUpstreamRegistryException: type[BotocoreClientError]
+    UploadNotFoundException: type[BotocoreClientError]
+    ValidationException: type[BotocoreClientError]
 
 
 class ECRClient(BaseClient):
@@ -648,7 +643,7 @@ class ECRClient(BaseClient):
         [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_ecr/client/#start_lifecycle_policy_preview)
         """
 
-    def tag_resource(self, **kwargs: Unpack[TagResourceRequestTypeDef]) -> Dict[str, Any]:
+    def tag_resource(self, **kwargs: Unpack[TagResourceRequestTypeDef]) -> dict[str, Any]:
         """
         Adds specified tags to a resource with the specified ARN.
 
@@ -656,7 +651,7 @@ class ECRClient(BaseClient):
         [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_ecr/client/#tag_resource)
         """
 
-    def untag_resource(self, **kwargs: Unpack[UntagResourceRequestTypeDef]) -> Dict[str, Any]:
+    def untag_resource(self, **kwargs: Unpack[UntagResourceRequestTypeDef]) -> dict[str, Any]:
         """
         Deletes specified tags from a resource.
 

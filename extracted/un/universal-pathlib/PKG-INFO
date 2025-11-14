@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: universal_pathlib
-Version: 0.3.5
+Version: 0.3.6
 Summary: pathlib api extended to use fsspec backends
 Author-email: Andrew Fulton <andrewfulton9@gmail.com>
 Maintainer: Norman Rzepka
@@ -103,7 +103,7 @@ project as a dependency if you want to use it with `s3` and `http` filesystems:
 name = "myproject"
 requires-python = ">=3.9"
 dependencies = [
-    "universal_pathlib>=0.3.2",
+    "universal_pathlib>=0.3.6",
     "fsspec[s3,http]",
 ]
 ```

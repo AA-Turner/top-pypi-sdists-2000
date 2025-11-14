@@ -29,7 +29,7 @@ def test_create_and_fetch_python(user_defined_functions):
             name=user_defined_function_name,
             arguments=[],
             return_type=ReturnDataType(datatype="VARIANT"),
-            language_config=PythonFunction(runtime_version="3.9", packages=[], handler="udf"),
+            language_config=PythonFunction(runtime_version="3.13", packages=[], handler="udf"),
             body="""
 def udf():
     return {"key": "value"}
@@ -41,7 +41,7 @@ def udf():
         user_defined_function_handle = user_defined_function_created.fetch()
         assert user_defined_function_handle.name.upper() == user_defined_function_name.upper()
         assert user_defined_function_handle.return_type.datatype == "VARIANT"
-        assert user_defined_function_handle.language_config.runtime_version == "3.9"
+        assert user_defined_function_handle.language_config.runtime_version == "3.13"
         assert user_defined_function_handle.language_config.packages == []
         assert user_defined_function_handle.language_config.handler == "udf"
         assert (

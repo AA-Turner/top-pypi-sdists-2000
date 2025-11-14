@@ -7,7 +7,7 @@ from sagemaker_studio.connections.sql_helper.sql_helper import SqlHelper
 class PostgreSQLHelper(SqlHelper):
 
     @staticmethod
-    def to_sql_config(connection: Connection) -> Dict[str, Any]:
+    def to_sql_config(connection: Connection, **kwargs) -> Dict[str, Any]:
         """
         Transform Postgres connection data into SQL interface configuration.
 

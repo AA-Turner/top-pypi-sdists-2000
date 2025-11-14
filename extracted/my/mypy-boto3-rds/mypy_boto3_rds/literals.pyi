@@ -130,7 +130,7 @@ ClientPasswordAuthTypeType = Literal[
     "POSTGRES_SCRAM_SHA_256",
     "SQL_SERVER_AUTHENTICATION",
 ]
-ClusterScalabilityTypeType = Literal["limitless", "scaleout", "standard"]
+ClusterScalabilityTypeType = Literal["limitless", "standard"]
 CustomEngineVersionStatusType = Literal["available", "inactive", "inactive-except-restore"]
 DBClusterAvailableWaiterName = Literal["db_cluster_available"]
 DBClusterDeletedWaiterName = Literal["db_cluster_deleted"]
@@ -290,7 +290,6 @@ ServiceName = Literal[
     "apprunner",
     "appstream",
     "appsync",
-    "apptest",
     "arc-region-switch",
     "arc-zonal-shift",
     "artifact",
@@ -458,7 +457,6 @@ ServiceName = Literal[
     "iotdeviceadvisor",
     "iotevents",
     "iotevents-data",
-    "iotfleethub",
     "iotfleetwise",
     "iotsecuretunneling",
     "iotsitewise",
@@ -497,8 +495,6 @@ ServiceName = Literal[
     "location",
     "logs",
     "lookoutequipment",
-    "lookoutmetrics",
-    "lookoutvision",
     "m2",
     "machinelearning",
     "macie2",
@@ -573,8 +569,6 @@ ServiceName = Literal[
     "qapps",
     "qbusiness",
     "qconnect",
-    "qldb",
-    "qldb-session",
     "quicksight",
     "ram",
     "rbin",
@@ -589,7 +583,6 @@ ServiceName = Literal[
     "resource-explorer-2",
     "resource-groups",
     "resourcegroupstaggingapi",
-    "robomaker",
     "rolesanywhere",
     "route53",
     "route53-recovery-cluster",
@@ -598,6 +591,7 @@ ServiceName = Literal[
     "route53domains",
     "route53profiles",
     "route53resolver",
+    "rtbfabric",
     "rum",
     "s3",
     "s3control",

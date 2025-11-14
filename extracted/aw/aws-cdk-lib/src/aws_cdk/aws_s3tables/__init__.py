@@ -70,11 +70,153 @@ from .._jsii import *
 import constructs as _constructs_77d1e7e8
 from .. import (
     CfnResource as _CfnResource_9df397a6,
-    IEnvironmentAware as _IEnvironmentAware_a408b00d,
+    CfnTag as _CfnTag_f6864754,
     IInspectable as _IInspectable_c2943556,
     IResolvable as _IResolvable_da3f097b,
+    ITaggableV2 as _ITaggableV2_4e6798f8,
+    TagManager as _TagManager_0a598cb3,
     TreeInspector as _TreeInspector_488e0dd5,
 )
+from ..interfaces.aws_s3tables import (
+    INamespaceRef as _INamespaceRef_d181e3d7,
+    ITableBucketPolicyRef as _ITableBucketPolicyRef_3f1f8c44,
+    ITableBucketRef as _ITableBucketRef_26c8a832,
+    ITablePolicyRef as _ITablePolicyRef_0aed1a54,
+    ITableRef as _ITableRef_1d36a1c5,
+    NamespaceReference as _NamespaceReference_f0e554ce,
+    TableBucketPolicyReference as _TableBucketPolicyReference_a4627945,
+    TableBucketReference as _TableBucketReference_1fd2f743,
+    TablePolicyReference as _TablePolicyReference_a435d553,
+    TableReference as _TableReference_ab8e2ae7,
+)
+
+
+@jsii.implements(_IInspectable_c2943556, _INamespaceRef_d181e3d7)
+class CfnNamespace(
+    _CfnResource_9df397a6,
+    metaclass=jsii.JSIIMeta,
+    jsii_type="aws-cdk-lib.aws_s3tables.CfnNamespace",
+):
+    '''Creates a namespace.
+
+    A namespace is a logical grouping of tables within your table bucket, which you can use to organize tables. For more information, see `Create a namespace <https://docs.aws.amazon.com/AmazonS3/latest/userguide/s3-tables-namespace-create.html>`_ in the *Amazon Simple Storage Service User Guide* .
+
+    - **Permissions** - You must have the ``s3tables:CreateNamespace`` permission to use this operation.
+    - **Cloud Development Kit** - To use S3 Tables AWS CDK constructs, add the ``@aws-cdk/aws-s3tables-alpha`` dependency with one of the following options:
+    - NPM: `npm i
+
+    :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-s3tables-namespace.html
+    :aws-cdk:
+
+    /aws-s3tables-alpha`
+
+    - Yarn: ``yarn add @aws-cdk/aws-s3tables-alpha``
+    :cloudformationResource: AWS::S3Tables::Namespace
+    :exampleMetadata: fixture=_generated
+
+    Example::
+
+        # The code below shows an example of how to instantiate this type.
+        # The values are placeholders you should change.
+        from aws_cdk import aws_s3tables as s3tables
+        
+        cfn_namespace = s3tables.CfnNamespace(self, "MyCfnNamespace",
+            namespace="namespace",
+            table_bucket_arn="tableBucketArn"
+        )
+    '''
+
+    def __init__(
+        self,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        *,
+        namespace: builtins.str,
+        table_bucket_arn: builtins.str,
+    ) -> None:
+        '''Create a new ``AWS::S3Tables::Namespace``.
+
+        :param scope: Scope in which this resource is defined.
+        :param id: Construct identifier for this resource (unique in its scope).
+        :param namespace: The name of the namespace.
+        :param table_bucket_arn: The Amazon Resource Name (ARN) of the table bucket to create the namespace in.
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__fd79dcff4893fe1cd3464c1f48689d2a01ad4a5eed6acfd35e21266683ab1f1c)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+        props = CfnNamespaceProps(
+            namespace=namespace, table_bucket_arn=table_bucket_arn
+        )
+
+        jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="inspect")
+    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+        '''Examines the CloudFormation resource and discloses attributes.
+
+        :param inspector: tree inspector to collect and process attributes.
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__0dae368df5e118b03066ac5fbad3765e81aa23b31a7288aa2bb824379578614f)
+            check_type(argname="argument inspector", value=inspector, expected_type=type_hints["inspector"])
+        return typing.cast(None, jsii.invoke(self, "inspect", [inspector]))
+
+    @jsii.member(jsii_name="renderProperties")
+    def _render_properties(
+        self,
+        props: typing.Mapping[builtins.str, typing.Any],
+    ) -> typing.Mapping[builtins.str, typing.Any]:
+        '''
+        :param props: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__2c772aad560ab6b4e840f54665ca3a18a9fcbf362512eb78423617db138b70b0)
+            check_type(argname="argument props", value=props, expected_type=type_hints["props"])
+        return typing.cast(typing.Mapping[builtins.str, typing.Any], jsii.invoke(self, "renderProperties", [props]))
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="CFN_RESOURCE_TYPE_NAME")
+    def CFN_RESOURCE_TYPE_NAME(cls) -> builtins.str:
+        '''The CloudFormation resource type name for this resource class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "CFN_RESOURCE_TYPE_NAME"))
+
+    @builtins.property
+    @jsii.member(jsii_name="cfnProperties")
+    def _cfn_properties(self) -> typing.Mapping[builtins.str, typing.Any]:
+        return typing.cast(typing.Mapping[builtins.str, typing.Any], jsii.get(self, "cfnProperties"))
+
+    @builtins.property
+    @jsii.member(jsii_name="namespaceRef")
+    def namespace_ref(self) -> _NamespaceReference_f0e554ce:
+        '''A reference to a Namespace resource.'''
+        return typing.cast(_NamespaceReference_f0e554ce, jsii.get(self, "namespaceRef"))
+
+    @builtins.property
+    @jsii.member(jsii_name="namespace")
+    def namespace(self) -> builtins.str:
+        '''The name of the namespace.'''
+        return typing.cast(builtins.str, jsii.get(self, "namespace"))
+
+    @namespace.setter
+    def namespace(self, value: builtins.str) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__083038783d9a592008992f105965913f4b10d8bc23252afb9a929c22e7cebd06)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "namespace", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="tableBucketArn")
+    def table_bucket_arn(self) -> builtins.str:
+        '''The Amazon Resource Name (ARN) of the table bucket to create the namespace in.'''
+        return typing.cast(builtins.str, jsii.get(self, "tableBucketArn"))
+
+    @table_bucket_arn.setter
+    def table_bucket_arn(self, value: builtins.str) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__8560b7f29623bc1f753b1cf34442c874c6958096b39accf37244c9341879fd81)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "tableBucketArn", value) # pyright: ignore[reportArgumentType]
 
 
 @jsii.data_type(
@@ -149,1072 +291,7 @@ class CfnNamespaceProps:
         )
 
 
-@jsii.data_type(
-    jsii_type="aws-cdk-lib.aws_s3tables.CfnTableBucketPolicyProps",
-    jsii_struct_bases=[],
-    name_mapping={
-        "resource_policy": "resourcePolicy",
-        "table_bucket_arn": "tableBucketArn",
-    },
-)
-class CfnTableBucketPolicyProps:
-    def __init__(
-        self,
-        *,
-        resource_policy: typing.Any,
-        table_bucket_arn: builtins.str,
-    ) -> None:
-        '''Properties for defining a ``CfnTableBucketPolicy``.
-
-        :param resource_policy: The bucket policy JSON for the table bucket.
-        :param table_bucket_arn: The Amazon Resource Name (ARN) of the table bucket.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-s3tables-tablebucketpolicy.html
-        :exampleMetadata: fixture=_generated
-
-        Example::
-
-            # The code below shows an example of how to instantiate this type.
-            # The values are placeholders you should change.
-            from aws_cdk import aws_s3tables as s3tables
-            
-            # resource_policy: Any
-            
-            cfn_table_bucket_policy_props = s3tables.CfnTableBucketPolicyProps(
-                resource_policy=resource_policy,
-                table_bucket_arn="tableBucketArn"
-            )
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__df8972559ed3d0ff90d01d70d1cf8f77869398b91f03a408d49a7b5bee0615a0)
-            check_type(argname="argument resource_policy", value=resource_policy, expected_type=type_hints["resource_policy"])
-            check_type(argname="argument table_bucket_arn", value=table_bucket_arn, expected_type=type_hints["table_bucket_arn"])
-        self._values: typing.Dict[builtins.str, typing.Any] = {
-            "resource_policy": resource_policy,
-            "table_bucket_arn": table_bucket_arn,
-        }
-
-    @builtins.property
-    def resource_policy(self) -> typing.Any:
-        '''The bucket policy JSON for the table bucket.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-s3tables-tablebucketpolicy.html#cfn-s3tables-tablebucketpolicy-resourcepolicy
-        '''
-        result = self._values.get("resource_policy")
-        assert result is not None, "Required property 'resource_policy' is missing"
-        return typing.cast(typing.Any, result)
-
-    @builtins.property
-    def table_bucket_arn(self) -> builtins.str:
-        '''The Amazon Resource Name (ARN) of the table bucket.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-s3tables-tablebucketpolicy.html#cfn-s3tables-tablebucketpolicy-tablebucketarn
-        '''
-        result = self._values.get("table_bucket_arn")
-        assert result is not None, "Required property 'table_bucket_arn' is missing"
-        return typing.cast(builtins.str, result)
-
-    def __eq__(self, rhs: typing.Any) -> builtins.bool:
-        return isinstance(rhs, self.__class__) and rhs._values == self._values
-
-    def __ne__(self, rhs: typing.Any) -> builtins.bool:
-        return not (rhs == self)
-
-    def __repr__(self) -> str:
-        return "CfnTableBucketPolicyProps(%s)" % ", ".join(
-            k + "=" + repr(v) for k, v in self._values.items()
-        )
-
-
-@jsii.data_type(
-    jsii_type="aws-cdk-lib.aws_s3tables.CfnTableBucketProps",
-    jsii_struct_bases=[],
-    name_mapping={
-        "table_bucket_name": "tableBucketName",
-        "encryption_configuration": "encryptionConfiguration",
-        "unreferenced_file_removal": "unreferencedFileRemoval",
-    },
-)
-class CfnTableBucketProps:
-    def __init__(
-        self,
-        *,
-        table_bucket_name: builtins.str,
-        encryption_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTableBucket.EncryptionConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        unreferenced_file_removal: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTableBucket.UnreferencedFileRemovalProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-    ) -> None:
-        '''Properties for defining a ``CfnTableBucket``.
-
-        :param table_bucket_name: The name for the table bucket.
-        :param encryption_configuration: Configuration specifying how data should be encrypted. This structure defines the encryption algorithm and optional KMS key to be used for server-side encryption.
-        :param unreferenced_file_removal: The unreferenced file removal settings for your table bucket. Unreferenced file removal identifies and deletes all objects that are not referenced by any table snapshots. For more information, see the `*Amazon S3 User Guide* <https://docs.aws.amazon.com/AmazonS3/latest/userguide/s3-table-buckets-maintenance.html>`_ .
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-s3tables-tablebucket.html
-        :exampleMetadata: fixture=_generated
-
-        Example::
-
-            # The code below shows an example of how to instantiate this type.
-            # The values are placeholders you should change.
-            from aws_cdk import aws_s3tables as s3tables
-            
-            cfn_table_bucket_props = s3tables.CfnTableBucketProps(
-                table_bucket_name="tableBucketName",
-            
-                # the properties below are optional
-                encryption_configuration=s3tables.CfnTableBucket.EncryptionConfigurationProperty(
-                    kms_key_arn="kmsKeyArn",
-                    sse_algorithm="sseAlgorithm"
-                ),
-                unreferenced_file_removal=s3tables.CfnTableBucket.UnreferencedFileRemovalProperty(
-                    noncurrent_days=123,
-                    status="status",
-                    unreferenced_days=123
-                )
-            )
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__6fb9342a13c0e9f7b21679814e793d7ccc0964ccfe53bc5e0916676b628d20f3)
-            check_type(argname="argument table_bucket_name", value=table_bucket_name, expected_type=type_hints["table_bucket_name"])
-            check_type(argname="argument encryption_configuration", value=encryption_configuration, expected_type=type_hints["encryption_configuration"])
-            check_type(argname="argument unreferenced_file_removal", value=unreferenced_file_removal, expected_type=type_hints["unreferenced_file_removal"])
-        self._values: typing.Dict[builtins.str, typing.Any] = {
-            "table_bucket_name": table_bucket_name,
-        }
-        if encryption_configuration is not None:
-            self._values["encryption_configuration"] = encryption_configuration
-        if unreferenced_file_removal is not None:
-            self._values["unreferenced_file_removal"] = unreferenced_file_removal
-
-    @builtins.property
-    def table_bucket_name(self) -> builtins.str:
-        '''The name for the table bucket.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-s3tables-tablebucket.html#cfn-s3tables-tablebucket-tablebucketname
-        '''
-        result = self._values.get("table_bucket_name")
-        assert result is not None, "Required property 'table_bucket_name' is missing"
-        return typing.cast(builtins.str, result)
-
-    @builtins.property
-    def encryption_configuration(
-        self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTableBucket.EncryptionConfigurationProperty"]]:
-        '''Configuration specifying how data should be encrypted.
-
-        This structure defines the encryption algorithm and optional KMS key to be used for server-side encryption.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-s3tables-tablebucket.html#cfn-s3tables-tablebucket-encryptionconfiguration
-        '''
-        result = self._values.get("encryption_configuration")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTableBucket.EncryptionConfigurationProperty"]], result)
-
-    @builtins.property
-    def unreferenced_file_removal(
-        self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTableBucket.UnreferencedFileRemovalProperty"]]:
-        '''The unreferenced file removal settings for your table bucket.
-
-        Unreferenced file removal identifies and deletes all objects that are not referenced by any table snapshots. For more information, see the `*Amazon S3 User Guide* <https://docs.aws.amazon.com/AmazonS3/latest/userguide/s3-table-buckets-maintenance.html>`_ .
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-s3tables-tablebucket.html#cfn-s3tables-tablebucket-unreferencedfileremoval
-        '''
-        result = self._values.get("unreferenced_file_removal")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTableBucket.UnreferencedFileRemovalProperty"]], result)
-
-    def __eq__(self, rhs: typing.Any) -> builtins.bool:
-        return isinstance(rhs, self.__class__) and rhs._values == self._values
-
-    def __ne__(self, rhs: typing.Any) -> builtins.bool:
-        return not (rhs == self)
-
-    def __repr__(self) -> str:
-        return "CfnTableBucketProps(%s)" % ", ".join(
-            k + "=" + repr(v) for k, v in self._values.items()
-        )
-
-
-@jsii.data_type(
-    jsii_type="aws-cdk-lib.aws_s3tables.CfnTablePolicyProps",
-    jsii_struct_bases=[],
-    name_mapping={"resource_policy": "resourcePolicy", "table_arn": "tableArn"},
-)
-class CfnTablePolicyProps:
-    def __init__(self, *, resource_policy: typing.Any, table_arn: builtins.str) -> None:
-        '''Properties for defining a ``CfnTablePolicy``.
-
-        :param resource_policy: The ``JSON`` that defines the policy.
-        :param table_arn: The Amazon Resource Name (ARN) of the table.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-s3tables-tablepolicy.html
-        :exampleMetadata: fixture=_generated
-
-        Example::
-
-            # The code below shows an example of how to instantiate this type.
-            # The values are placeholders you should change.
-            from aws_cdk import aws_s3tables as s3tables
-            
-            # resource_policy: Any
-            
-            cfn_table_policy_props = s3tables.CfnTablePolicyProps(
-                resource_policy=resource_policy,
-                table_arn="tableArn"
-            )
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__9e4efe8d2b5f3164478497385240c6eecce420e07f634572b7fac929a357ad5f)
-            check_type(argname="argument resource_policy", value=resource_policy, expected_type=type_hints["resource_policy"])
-            check_type(argname="argument table_arn", value=table_arn, expected_type=type_hints["table_arn"])
-        self._values: typing.Dict[builtins.str, typing.Any] = {
-            "resource_policy": resource_policy,
-            "table_arn": table_arn,
-        }
-
-    @builtins.property
-    def resource_policy(self) -> typing.Any:
-        '''The ``JSON`` that defines the policy.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-s3tables-tablepolicy.html#cfn-s3tables-tablepolicy-resourcepolicy
-        '''
-        result = self._values.get("resource_policy")
-        assert result is not None, "Required property 'resource_policy' is missing"
-        return typing.cast(typing.Any, result)
-
-    @builtins.property
-    def table_arn(self) -> builtins.str:
-        '''The Amazon Resource Name (ARN) of the table.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-s3tables-tablepolicy.html#cfn-s3tables-tablepolicy-tablearn
-        '''
-        result = self._values.get("table_arn")
-        assert result is not None, "Required property 'table_arn' is missing"
-        return typing.cast(builtins.str, result)
-
-    def __eq__(self, rhs: typing.Any) -> builtins.bool:
-        return isinstance(rhs, self.__class__) and rhs._values == self._values
-
-    def __ne__(self, rhs: typing.Any) -> builtins.bool:
-        return not (rhs == self)
-
-    def __repr__(self) -> str:
-        return "CfnTablePolicyProps(%s)" % ", ".join(
-            k + "=" + repr(v) for k, v in self._values.items()
-        )
-
-
-@jsii.data_type(
-    jsii_type="aws-cdk-lib.aws_s3tables.CfnTableProps",
-    jsii_struct_bases=[],
-    name_mapping={
-        "namespace": "namespace",
-        "open_table_format": "openTableFormat",
-        "table_bucket_arn": "tableBucketArn",
-        "table_name": "tableName",
-        "compaction": "compaction",
-        "iceberg_metadata": "icebergMetadata",
-        "snapshot_management": "snapshotManagement",
-        "without_metadata": "withoutMetadata",
-    },
-)
-class CfnTableProps:
-    def __init__(
-        self,
-        *,
-        namespace: builtins.str,
-        open_table_format: builtins.str,
-        table_bucket_arn: builtins.str,
-        table_name: builtins.str,
-        compaction: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTable.CompactionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        iceberg_metadata: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTable.IcebergMetadataProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        snapshot_management: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTable.SnapshotManagementProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        without_metadata: typing.Optional[builtins.str] = None,
-    ) -> None:
-        '''Properties for defining a ``CfnTable``.
-
-        :param namespace: The name of the namespace.
-        :param open_table_format: The format of the table.
-        :param table_bucket_arn: The Amazon Resource Name (ARN) of the table bucket to create the table in.
-        :param table_name: The name for the table.
-        :param compaction: Contains details about the compaction settings for an Iceberg table.
-        :param iceberg_metadata: Contains details about the metadata for an Iceberg table.
-        :param snapshot_management: Contains details about the Iceberg snapshot management settings for the table.
-        :param without_metadata: Indicates that you don't want to specify a schema for the table. This property is mutually exclusive to ``IcebergMetadata`` , and its only possible value is ``Yes`` .
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-s3tables-table.html
-        :exampleMetadata: fixture=_generated
-
-        Example::
-
-            # The code below shows an example of how to instantiate this type.
-            # The values are placeholders you should change.
-            from aws_cdk import aws_s3tables as s3tables
-            
-            cfn_table_props = s3tables.CfnTableProps(
-                namespace="namespace",
-                open_table_format="openTableFormat",
-                table_bucket_arn="tableBucketArn",
-                table_name="tableName",
-            
-                # the properties below are optional
-                compaction=s3tables.CfnTable.CompactionProperty(
-                    status="status",
-                    target_file_size_mb=123
-                ),
-                iceberg_metadata=s3tables.CfnTable.IcebergMetadataProperty(
-                    iceberg_schema=s3tables.CfnTable.IcebergSchemaProperty(
-                        schema_field_list=[s3tables.CfnTable.SchemaFieldProperty(
-                            name="name",
-                            type="type",
-            
-                            # the properties below are optional
-                            required=False
-                        )]
-                    )
-                ),
-                snapshot_management=s3tables.CfnTable.SnapshotManagementProperty(
-                    max_snapshot_age_hours=123,
-                    min_snapshots_to_keep=123,
-                    status="status"
-                ),
-                without_metadata="withoutMetadata"
-            )
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__6346a05fb3e021dceca566705037999fa06de23c2e117b37dcdd3e46838b7bc6)
-            check_type(argname="argument namespace", value=namespace, expected_type=type_hints["namespace"])
-            check_type(argname="argument open_table_format", value=open_table_format, expected_type=type_hints["open_table_format"])
-            check_type(argname="argument table_bucket_arn", value=table_bucket_arn, expected_type=type_hints["table_bucket_arn"])
-            check_type(argname="argument table_name", value=table_name, expected_type=type_hints["table_name"])
-            check_type(argname="argument compaction", value=compaction, expected_type=type_hints["compaction"])
-            check_type(argname="argument iceberg_metadata", value=iceberg_metadata, expected_type=type_hints["iceberg_metadata"])
-            check_type(argname="argument snapshot_management", value=snapshot_management, expected_type=type_hints["snapshot_management"])
-            check_type(argname="argument without_metadata", value=without_metadata, expected_type=type_hints["without_metadata"])
-        self._values: typing.Dict[builtins.str, typing.Any] = {
-            "namespace": namespace,
-            "open_table_format": open_table_format,
-            "table_bucket_arn": table_bucket_arn,
-            "table_name": table_name,
-        }
-        if compaction is not None:
-            self._values["compaction"] = compaction
-        if iceberg_metadata is not None:
-            self._values["iceberg_metadata"] = iceberg_metadata
-        if snapshot_management is not None:
-            self._values["snapshot_management"] = snapshot_management
-        if without_metadata is not None:
-            self._values["without_metadata"] = without_metadata
-
-    @builtins.property
-    def namespace(self) -> builtins.str:
-        '''The name of the namespace.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-s3tables-table.html#cfn-s3tables-table-namespace
-        '''
-        result = self._values.get("namespace")
-        assert result is not None, "Required property 'namespace' is missing"
-        return typing.cast(builtins.str, result)
-
-    @builtins.property
-    def open_table_format(self) -> builtins.str:
-        '''The format of the table.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-s3tables-table.html#cfn-s3tables-table-opentableformat
-        '''
-        result = self._values.get("open_table_format")
-        assert result is not None, "Required property 'open_table_format' is missing"
-        return typing.cast(builtins.str, result)
-
-    @builtins.property
-    def table_bucket_arn(self) -> builtins.str:
-        '''The Amazon Resource Name (ARN) of the table bucket to create the table in.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-s3tables-table.html#cfn-s3tables-table-tablebucketarn
-        '''
-        result = self._values.get("table_bucket_arn")
-        assert result is not None, "Required property 'table_bucket_arn' is missing"
-        return typing.cast(builtins.str, result)
-
-    @builtins.property
-    def table_name(self) -> builtins.str:
-        '''The name for the table.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-s3tables-table.html#cfn-s3tables-table-tablename
-        '''
-        result = self._values.get("table_name")
-        assert result is not None, "Required property 'table_name' is missing"
-        return typing.cast(builtins.str, result)
-
-    @builtins.property
-    def compaction(
-        self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTable.CompactionProperty"]]:
-        '''Contains details about the compaction settings for an Iceberg table.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-s3tables-table.html#cfn-s3tables-table-compaction
-        '''
-        result = self._values.get("compaction")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTable.CompactionProperty"]], result)
-
-    @builtins.property
-    def iceberg_metadata(
-        self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTable.IcebergMetadataProperty"]]:
-        '''Contains details about the metadata for an Iceberg table.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-s3tables-table.html#cfn-s3tables-table-icebergmetadata
-        '''
-        result = self._values.get("iceberg_metadata")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTable.IcebergMetadataProperty"]], result)
-
-    @builtins.property
-    def snapshot_management(
-        self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTable.SnapshotManagementProperty"]]:
-        '''Contains details about the Iceberg snapshot management settings for the table.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-s3tables-table.html#cfn-s3tables-table-snapshotmanagement
-        '''
-        result = self._values.get("snapshot_management")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTable.SnapshotManagementProperty"]], result)
-
-    @builtins.property
-    def without_metadata(self) -> typing.Optional[builtins.str]:
-        '''Indicates that you don't want to specify a schema for the table.
-
-        This property is mutually exclusive to ``IcebergMetadata`` , and its only possible value is ``Yes`` .
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-s3tables-table.html#cfn-s3tables-table-withoutmetadata
-        '''
-        result = self._values.get("without_metadata")
-        return typing.cast(typing.Optional[builtins.str], result)
-
-    def __eq__(self, rhs: typing.Any) -> builtins.bool:
-        return isinstance(rhs, self.__class__) and rhs._values == self._values
-
-    def __ne__(self, rhs: typing.Any) -> builtins.bool:
-        return not (rhs == self)
-
-    def __repr__(self) -> str:
-        return "CfnTableProps(%s)" % ", ".join(
-            k + "=" + repr(v) for k, v in self._values.items()
-        )
-
-
-@jsii.interface(jsii_type="aws-cdk-lib.aws_s3tables.INamespaceRef")
-class INamespaceRef(
-    _constructs_77d1e7e8.IConstruct,
-    _IEnvironmentAware_a408b00d,
-    typing_extensions.Protocol,
-):
-    '''(experimental) Indicates that this resource can be referenced as a Namespace.
-
-    :stability: experimental
-    '''
-
-    @builtins.property
-    @jsii.member(jsii_name="namespaceRef")
-    def namespace_ref(self) -> "NamespaceReference":
-        '''(experimental) A reference to a Namespace resource.
-
-        :stability: experimental
-        '''
-        ...
-
-
-class _INamespaceRefProxy(
-    jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
-    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
-):
-    '''(experimental) Indicates that this resource can be referenced as a Namespace.
-
-    :stability: experimental
-    '''
-
-    __jsii_type__: typing.ClassVar[str] = "aws-cdk-lib.aws_s3tables.INamespaceRef"
-
-    @builtins.property
-    @jsii.member(jsii_name="namespaceRef")
-    def namespace_ref(self) -> "NamespaceReference":
-        '''(experimental) A reference to a Namespace resource.
-
-        :stability: experimental
-        '''
-        return typing.cast("NamespaceReference", jsii.get(self, "namespaceRef"))
-
-# Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
-typing.cast(typing.Any, INamespaceRef).__jsii_proxy_class__ = lambda : _INamespaceRefProxy
-
-
-@jsii.interface(jsii_type="aws-cdk-lib.aws_s3tables.ITableBucketPolicyRef")
-class ITableBucketPolicyRef(
-    _constructs_77d1e7e8.IConstruct,
-    _IEnvironmentAware_a408b00d,
-    typing_extensions.Protocol,
-):
-    '''(experimental) Indicates that this resource can be referenced as a TableBucketPolicy.
-
-    :stability: experimental
-    '''
-
-    @builtins.property
-    @jsii.member(jsii_name="tableBucketPolicyRef")
-    def table_bucket_policy_ref(self) -> "TableBucketPolicyReference":
-        '''(experimental) A reference to a TableBucketPolicy resource.
-
-        :stability: experimental
-        '''
-        ...
-
-
-class _ITableBucketPolicyRefProxy(
-    jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
-    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
-):
-    '''(experimental) Indicates that this resource can be referenced as a TableBucketPolicy.
-
-    :stability: experimental
-    '''
-
-    __jsii_type__: typing.ClassVar[str] = "aws-cdk-lib.aws_s3tables.ITableBucketPolicyRef"
-
-    @builtins.property
-    @jsii.member(jsii_name="tableBucketPolicyRef")
-    def table_bucket_policy_ref(self) -> "TableBucketPolicyReference":
-        '''(experimental) A reference to a TableBucketPolicy resource.
-
-        :stability: experimental
-        '''
-        return typing.cast("TableBucketPolicyReference", jsii.get(self, "tableBucketPolicyRef"))
-
-# Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
-typing.cast(typing.Any, ITableBucketPolicyRef).__jsii_proxy_class__ = lambda : _ITableBucketPolicyRefProxy
-
-
-@jsii.interface(jsii_type="aws-cdk-lib.aws_s3tables.ITableBucketRef")
-class ITableBucketRef(
-    _constructs_77d1e7e8.IConstruct,
-    _IEnvironmentAware_a408b00d,
-    typing_extensions.Protocol,
-):
-    '''(experimental) Indicates that this resource can be referenced as a TableBucket.
-
-    :stability: experimental
-    '''
-
-    @builtins.property
-    @jsii.member(jsii_name="tableBucketRef")
-    def table_bucket_ref(self) -> "TableBucketReference":
-        '''(experimental) A reference to a TableBucket resource.
-
-        :stability: experimental
-        '''
-        ...
-
-
-class _ITableBucketRefProxy(
-    jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
-    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
-):
-    '''(experimental) Indicates that this resource can be referenced as a TableBucket.
-
-    :stability: experimental
-    '''
-
-    __jsii_type__: typing.ClassVar[str] = "aws-cdk-lib.aws_s3tables.ITableBucketRef"
-
-    @builtins.property
-    @jsii.member(jsii_name="tableBucketRef")
-    def table_bucket_ref(self) -> "TableBucketReference":
-        '''(experimental) A reference to a TableBucket resource.
-
-        :stability: experimental
-        '''
-        return typing.cast("TableBucketReference", jsii.get(self, "tableBucketRef"))
-
-# Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
-typing.cast(typing.Any, ITableBucketRef).__jsii_proxy_class__ = lambda : _ITableBucketRefProxy
-
-
-@jsii.interface(jsii_type="aws-cdk-lib.aws_s3tables.ITablePolicyRef")
-class ITablePolicyRef(
-    _constructs_77d1e7e8.IConstruct,
-    _IEnvironmentAware_a408b00d,
-    typing_extensions.Protocol,
-):
-    '''(experimental) Indicates that this resource can be referenced as a TablePolicy.
-
-    :stability: experimental
-    '''
-
-    @builtins.property
-    @jsii.member(jsii_name="tablePolicyRef")
-    def table_policy_ref(self) -> "TablePolicyReference":
-        '''(experimental) A reference to a TablePolicy resource.
-
-        :stability: experimental
-        '''
-        ...
-
-
-class _ITablePolicyRefProxy(
-    jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
-    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
-):
-    '''(experimental) Indicates that this resource can be referenced as a TablePolicy.
-
-    :stability: experimental
-    '''
-
-    __jsii_type__: typing.ClassVar[str] = "aws-cdk-lib.aws_s3tables.ITablePolicyRef"
-
-    @builtins.property
-    @jsii.member(jsii_name="tablePolicyRef")
-    def table_policy_ref(self) -> "TablePolicyReference":
-        '''(experimental) A reference to a TablePolicy resource.
-
-        :stability: experimental
-        '''
-        return typing.cast("TablePolicyReference", jsii.get(self, "tablePolicyRef"))
-
-# Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
-typing.cast(typing.Any, ITablePolicyRef).__jsii_proxy_class__ = lambda : _ITablePolicyRefProxy
-
-
-@jsii.interface(jsii_type="aws-cdk-lib.aws_s3tables.ITableRef")
-class ITableRef(
-    _constructs_77d1e7e8.IConstruct,
-    _IEnvironmentAware_a408b00d,
-    typing_extensions.Protocol,
-):
-    '''(experimental) Indicates that this resource can be referenced as a Table.
-
-    :stability: experimental
-    '''
-
-    @builtins.property
-    @jsii.member(jsii_name="tableRef")
-    def table_ref(self) -> "TableReference":
-        '''(experimental) A reference to a Table resource.
-
-        :stability: experimental
-        '''
-        ...
-
-
-class _ITableRefProxy(
-    jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
-    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
-):
-    '''(experimental) Indicates that this resource can be referenced as a Table.
-
-    :stability: experimental
-    '''
-
-    __jsii_type__: typing.ClassVar[str] = "aws-cdk-lib.aws_s3tables.ITableRef"
-
-    @builtins.property
-    @jsii.member(jsii_name="tableRef")
-    def table_ref(self) -> "TableReference":
-        '''(experimental) A reference to a Table resource.
-
-        :stability: experimental
-        '''
-        return typing.cast("TableReference", jsii.get(self, "tableRef"))
-
-# Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
-typing.cast(typing.Any, ITableRef).__jsii_proxy_class__ = lambda : _ITableRefProxy
-
-
-@jsii.data_type(
-    jsii_type="aws-cdk-lib.aws_s3tables.NamespaceReference",
-    jsii_struct_bases=[],
-    name_mapping={"namespace": "namespace", "table_bucket_arn": "tableBucketArn"},
-)
-class NamespaceReference:
-    def __init__(
-        self,
-        *,
-        namespace: builtins.str,
-        table_bucket_arn: builtins.str,
-    ) -> None:
-        '''A reference to a Namespace resource.
-
-        :param namespace: The Namespace of the Namespace resource.
-        :param table_bucket_arn: The TableBucketARN of the Namespace resource.
-
-        :exampleMetadata: fixture=_generated
-
-        Example::
-
-            # The code below shows an example of how to instantiate this type.
-            # The values are placeholders you should change.
-            from aws_cdk import aws_s3tables as s3tables
-            
-            namespace_reference = s3tables.NamespaceReference(
-                namespace="namespace",
-                table_bucket_arn="tableBucketArn"
-            )
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__e8554d333e8c8536b5f8509b15a706e6982555549403e0c7a05db02d526f4907)
-            check_type(argname="argument namespace", value=namespace, expected_type=type_hints["namespace"])
-            check_type(argname="argument table_bucket_arn", value=table_bucket_arn, expected_type=type_hints["table_bucket_arn"])
-        self._values: typing.Dict[builtins.str, typing.Any] = {
-            "namespace": namespace,
-            "table_bucket_arn": table_bucket_arn,
-        }
-
-    @builtins.property
-    def namespace(self) -> builtins.str:
-        '''The Namespace of the Namespace resource.'''
-        result = self._values.get("namespace")
-        assert result is not None, "Required property 'namespace' is missing"
-        return typing.cast(builtins.str, result)
-
-    @builtins.property
-    def table_bucket_arn(self) -> builtins.str:
-        '''The TableBucketARN of the Namespace resource.'''
-        result = self._values.get("table_bucket_arn")
-        assert result is not None, "Required property 'table_bucket_arn' is missing"
-        return typing.cast(builtins.str, result)
-
-    def __eq__(self, rhs: typing.Any) -> builtins.bool:
-        return isinstance(rhs, self.__class__) and rhs._values == self._values
-
-    def __ne__(self, rhs: typing.Any) -> builtins.bool:
-        return not (rhs == self)
-
-    def __repr__(self) -> str:
-        return "NamespaceReference(%s)" % ", ".join(
-            k + "=" + repr(v) for k, v in self._values.items()
-        )
-
-
-@jsii.data_type(
-    jsii_type="aws-cdk-lib.aws_s3tables.TableBucketPolicyReference",
-    jsii_struct_bases=[],
-    name_mapping={"table_bucket_arn": "tableBucketArn"},
-)
-class TableBucketPolicyReference:
-    def __init__(self, *, table_bucket_arn: builtins.str) -> None:
-        '''A reference to a TableBucketPolicy resource.
-
-        :param table_bucket_arn: The TableBucketARN of the TableBucketPolicy resource.
-
-        :exampleMetadata: fixture=_generated
-
-        Example::
-
-            # The code below shows an example of how to instantiate this type.
-            # The values are placeholders you should change.
-            from aws_cdk import aws_s3tables as s3tables
-            
-            table_bucket_policy_reference = s3tables.TableBucketPolicyReference(
-                table_bucket_arn="tableBucketArn"
-            )
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__e2cc8478c9b3fa0ad699cdfeb0a75ddd45cbe8c27c5dcb122ecf16fcd5a075eb)
-            check_type(argname="argument table_bucket_arn", value=table_bucket_arn, expected_type=type_hints["table_bucket_arn"])
-        self._values: typing.Dict[builtins.str, typing.Any] = {
-            "table_bucket_arn": table_bucket_arn,
-        }
-
-    @builtins.property
-    def table_bucket_arn(self) -> builtins.str:
-        '''The TableBucketARN of the TableBucketPolicy resource.'''
-        result = self._values.get("table_bucket_arn")
-        assert result is not None, "Required property 'table_bucket_arn' is missing"
-        return typing.cast(builtins.str, result)
-
-    def __eq__(self, rhs: typing.Any) -> builtins.bool:
-        return isinstance(rhs, self.__class__) and rhs._values == self._values
-
-    def __ne__(self, rhs: typing.Any) -> builtins.bool:
-        return not (rhs == self)
-
-    def __repr__(self) -> str:
-        return "TableBucketPolicyReference(%s)" % ", ".join(
-            k + "=" + repr(v) for k, v in self._values.items()
-        )
-
-
-@jsii.data_type(
-    jsii_type="aws-cdk-lib.aws_s3tables.TableBucketReference",
-    jsii_struct_bases=[],
-    name_mapping={"table_bucket_arn": "tableBucketArn"},
-)
-class TableBucketReference:
-    def __init__(self, *, table_bucket_arn: builtins.str) -> None:
-        '''A reference to a TableBucket resource.
-
-        :param table_bucket_arn: The TableBucketARN of the TableBucket resource.
-
-        :exampleMetadata: fixture=_generated
-
-        Example::
-
-            # The code below shows an example of how to instantiate this type.
-            # The values are placeholders you should change.
-            from aws_cdk import aws_s3tables as s3tables
-            
-            table_bucket_reference = s3tables.TableBucketReference(
-                table_bucket_arn="tableBucketArn"
-            )
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__a059d9dd0f4b7f8a044757737ebe3ab494a5ed9f63ce260c6600274c6f87f8bb)
-            check_type(argname="argument table_bucket_arn", value=table_bucket_arn, expected_type=type_hints["table_bucket_arn"])
-        self._values: typing.Dict[builtins.str, typing.Any] = {
-            "table_bucket_arn": table_bucket_arn,
-        }
-
-    @builtins.property
-    def table_bucket_arn(self) -> builtins.str:
-        '''The TableBucketARN of the TableBucket resource.'''
-        result = self._values.get("table_bucket_arn")
-        assert result is not None, "Required property 'table_bucket_arn' is missing"
-        return typing.cast(builtins.str, result)
-
-    def __eq__(self, rhs: typing.Any) -> builtins.bool:
-        return isinstance(rhs, self.__class__) and rhs._values == self._values
-
-    def __ne__(self, rhs: typing.Any) -> builtins.bool:
-        return not (rhs == self)
-
-    def __repr__(self) -> str:
-        return "TableBucketReference(%s)" % ", ".join(
-            k + "=" + repr(v) for k, v in self._values.items()
-        )
-
-
-@jsii.data_type(
-    jsii_type="aws-cdk-lib.aws_s3tables.TablePolicyReference",
-    jsii_struct_bases=[],
-    name_mapping={"table_arn": "tableArn"},
-)
-class TablePolicyReference:
-    def __init__(self, *, table_arn: builtins.str) -> None:
-        '''A reference to a TablePolicy resource.
-
-        :param table_arn: The TableARN of the TablePolicy resource.
-
-        :exampleMetadata: fixture=_generated
-
-        Example::
-
-            # The code below shows an example of how to instantiate this type.
-            # The values are placeholders you should change.
-            from aws_cdk import aws_s3tables as s3tables
-            
-            table_policy_reference = s3tables.TablePolicyReference(
-                table_arn="tableArn"
-            )
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__2edfae7aba9987b751c3ed512ab464f0488ceaa8b2ff1cbaa09628cfe9667359)
-            check_type(argname="argument table_arn", value=table_arn, expected_type=type_hints["table_arn"])
-        self._values: typing.Dict[builtins.str, typing.Any] = {
-            "table_arn": table_arn,
-        }
-
-    @builtins.property
-    def table_arn(self) -> builtins.str:
-        '''The TableARN of the TablePolicy resource.'''
-        result = self._values.get("table_arn")
-        assert result is not None, "Required property 'table_arn' is missing"
-        return typing.cast(builtins.str, result)
-
-    def __eq__(self, rhs: typing.Any) -> builtins.bool:
-        return isinstance(rhs, self.__class__) and rhs._values == self._values
-
-    def __ne__(self, rhs: typing.Any) -> builtins.bool:
-        return not (rhs == self)
-
-    def __repr__(self) -> str:
-        return "TablePolicyReference(%s)" % ", ".join(
-            k + "=" + repr(v) for k, v in self._values.items()
-        )
-
-
-@jsii.data_type(
-    jsii_type="aws-cdk-lib.aws_s3tables.TableReference",
-    jsii_struct_bases=[],
-    name_mapping={"table_arn": "tableArn"},
-)
-class TableReference:
-    def __init__(self, *, table_arn: builtins.str) -> None:
-        '''A reference to a Table resource.
-
-        :param table_arn: The TableARN of the Table resource.
-
-        :exampleMetadata: fixture=_generated
-
-        Example::
-
-            # The code below shows an example of how to instantiate this type.
-            # The values are placeholders you should change.
-            from aws_cdk import aws_s3tables as s3tables
-            
-            table_reference = s3tables.TableReference(
-                table_arn="tableArn"
-            )
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__ce28e4ab81f01958831a6bc82f8b67567e733953686255fc4c838a40bc131c0b)
-            check_type(argname="argument table_arn", value=table_arn, expected_type=type_hints["table_arn"])
-        self._values: typing.Dict[builtins.str, typing.Any] = {
-            "table_arn": table_arn,
-        }
-
-    @builtins.property
-    def table_arn(self) -> builtins.str:
-        '''The TableARN of the Table resource.'''
-        result = self._values.get("table_arn")
-        assert result is not None, "Required property 'table_arn' is missing"
-        return typing.cast(builtins.str, result)
-
-    def __eq__(self, rhs: typing.Any) -> builtins.bool:
-        return isinstance(rhs, self.__class__) and rhs._values == self._values
-
-    def __ne__(self, rhs: typing.Any) -> builtins.bool:
-        return not (rhs == self)
-
-    def __repr__(self) -> str:
-        return "TableReference(%s)" % ", ".join(
-            k + "=" + repr(v) for k, v in self._values.items()
-        )
-
-
-@jsii.implements(_IInspectable_c2943556, INamespaceRef)
-class CfnNamespace(
-    _CfnResource_9df397a6,
-    metaclass=jsii.JSIIMeta,
-    jsii_type="aws-cdk-lib.aws_s3tables.CfnNamespace",
-):
-    '''Creates a namespace.
-
-    A namespace is a logical grouping of tables within your table bucket, which you can use to organize tables. For more information, see `Create a namespace <https://docs.aws.amazon.com/AmazonS3/latest/userguide/s3-tables-namespace-create.html>`_ in the *Amazon Simple Storage Service User Guide* .
-
-    - **Permissions** - You must have the ``s3tables:CreateNamespace`` permission to use this operation.
-    - **Cloud Development Kit** - To use S3 Tables AWS CDK constructs, add the ``@aws-cdk/aws-s3tables-alpha`` dependency with one of the following options:
-    - NPM: `npm i
-
-    :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-s3tables-namespace.html
-    :aws-cdk:
-
-    /aws-s3tables-alpha`
-
-    - Yarn: ``yarn add @aws-cdk/aws-s3tables-alpha``
-    :cloudformationResource: AWS::S3Tables::Namespace
-    :exampleMetadata: fixture=_generated
-
-    Example::
-
-        # The code below shows an example of how to instantiate this type.
-        # The values are placeholders you should change.
-        from aws_cdk import aws_s3tables as s3tables
-        
-        cfn_namespace = s3tables.CfnNamespace(self, "MyCfnNamespace",
-            namespace="namespace",
-            table_bucket_arn="tableBucketArn"
-        )
-    '''
-
-    def __init__(
-        self,
-        scope: _constructs_77d1e7e8.Construct,
-        id: builtins.str,
-        *,
-        namespace: builtins.str,
-        table_bucket_arn: builtins.str,
-    ) -> None:
-        '''
-        :param scope: Scope in which this resource is defined.
-        :param id: Construct identifier for this resource (unique in its scope).
-        :param namespace: The name of the namespace.
-        :param table_bucket_arn: The Amazon Resource Name (ARN) of the table bucket to create the namespace in.
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__fd79dcff4893fe1cd3464c1f48689d2a01ad4a5eed6acfd35e21266683ab1f1c)
-            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
-            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
-        props = CfnNamespaceProps(
-            namespace=namespace, table_bucket_arn=table_bucket_arn
-        )
-
-        jsii.create(self.__class__, self, [scope, id, props])
-
-    @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
-        '''Examines the CloudFormation resource and discloses attributes.
-
-        :param inspector: tree inspector to collect and process attributes.
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__0dae368df5e118b03066ac5fbad3765e81aa23b31a7288aa2bb824379578614f)
-            check_type(argname="argument inspector", value=inspector, expected_type=type_hints["inspector"])
-        return typing.cast(None, jsii.invoke(self, "inspect", [inspector]))
-
-    @jsii.member(jsii_name="renderProperties")
-    def _render_properties(
-        self,
-        props: typing.Mapping[builtins.str, typing.Any],
-    ) -> typing.Mapping[builtins.str, typing.Any]:
-        '''
-        :param props: -
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__2c772aad560ab6b4e840f54665ca3a18a9fcbf362512eb78423617db138b70b0)
-            check_type(argname="argument props", value=props, expected_type=type_hints["props"])
-        return typing.cast(typing.Mapping[builtins.str, typing.Any], jsii.invoke(self, "renderProperties", [props]))
-
-    @jsii.python.classproperty
-    @jsii.member(jsii_name="CFN_RESOURCE_TYPE_NAME")
-    def CFN_RESOURCE_TYPE_NAME(cls) -> builtins.str:
-        '''The CloudFormation resource type name for this resource class.'''
-        return typing.cast(builtins.str, jsii.sget(cls, "CFN_RESOURCE_TYPE_NAME"))
-
-    @builtins.property
-    @jsii.member(jsii_name="cfnProperties")
-    def _cfn_properties(self) -> typing.Mapping[builtins.str, typing.Any]:
-        return typing.cast(typing.Mapping[builtins.str, typing.Any], jsii.get(self, "cfnProperties"))
-
-    @builtins.property
-    @jsii.member(jsii_name="namespaceRef")
-    def namespace_ref(self) -> NamespaceReference:
-        '''A reference to a Namespace resource.'''
-        return typing.cast(NamespaceReference, jsii.get(self, "namespaceRef"))
-
-    @builtins.property
-    @jsii.member(jsii_name="namespace")
-    def namespace(self) -> builtins.str:
-        '''The name of the namespace.'''
-        return typing.cast(builtins.str, jsii.get(self, "namespace"))
-
-    @namespace.setter
-    def namespace(self, value: builtins.str) -> None:
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__083038783d9a592008992f105965913f4b10d8bc23252afb9a929c22e7cebd06)
-            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
-        jsii.set(self, "namespace", value) # pyright: ignore[reportArgumentType]
-
-    @builtins.property
-    @jsii.member(jsii_name="tableBucketArn")
-    def table_bucket_arn(self) -> builtins.str:
-        '''The Amazon Resource Name (ARN) of the table bucket to create the namespace in.'''
-        return typing.cast(builtins.str, jsii.get(self, "tableBucketArn"))
-
-    @table_bucket_arn.setter
-    def table_bucket_arn(self, value: builtins.str) -> None:
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__8560b7f29623bc1f753b1cf34442c874c6958096b39accf37244c9341879fd81)
-            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
-        jsii.set(self, "tableBucketArn", value) # pyright: ignore[reportArgumentType]
-
-
-@jsii.implements(_IInspectable_c2943556, ITableRef)
+@jsii.implements(_IInspectable_c2943556, _ITableRef_1d36a1c5, _ITaggableV2_4e6798f8)
 class CfnTable(
     _CfnResource_9df397a6,
     metaclass=jsii.JSIIMeta,
@@ -1277,6 +354,10 @@ class CfnTable(
                 min_snapshots_to_keep=123,
                 status="status"
             ),
+            tags=[CfnTag(
+                key="key",
+                value="value"
+            )],
             without_metadata="withoutMetadata"
         )
     '''
@@ -1293,9 +374,11 @@ class CfnTable(
         compaction: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTable.CompactionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         iceberg_metadata: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTable.IcebergMetadataProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         snapshot_management: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTable.SnapshotManagementProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
         without_metadata: typing.Optional[builtins.str] = None,
     ) -> None:
-        '''
+        '''Create a new ``AWS::S3Tables::Table``.
+
         :param scope: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
         :param namespace: The name of the namespace.
@@ -1305,6 +388,7 @@ class CfnTable(
         :param compaction: Contains details about the compaction settings for an Iceberg table.
         :param iceberg_metadata: Contains details about the metadata for an Iceberg table.
         :param snapshot_management: Contains details about the Iceberg snapshot management settings for the table.
+        :param tags: User tags (key-value pairs) to associate with the table.
         :param without_metadata: Indicates that you don't want to specify a schema for the table. This property is mutually exclusive to ``IcebergMetadata`` , and its only possible value is ``Yes`` .
         '''
         if __debug__:
@@ -1319,6 +403,7 @@ class CfnTable(
             compaction=compaction,
             iceberg_metadata=iceberg_metadata,
             snapshot_management=snapshot_management,
+            tags=tags,
             without_metadata=without_metadata,
         )
 
@@ -1382,15 +467,21 @@ class CfnTable(
         return typing.cast(builtins.str, jsii.get(self, "attrWarehouseLocation"))
 
     @builtins.property
+    @jsii.member(jsii_name="cdkTagManager")
+    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+        '''Tag Manager which manages the tags for this resource.'''
+        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+
+    @builtins.property
     @jsii.member(jsii_name="cfnProperties")
     def _cfn_properties(self) -> typing.Mapping[builtins.str, typing.Any]:
         return typing.cast(typing.Mapping[builtins.str, typing.Any], jsii.get(self, "cfnProperties"))
 
     @builtins.property
     @jsii.member(jsii_name="tableRef")
-    def table_ref(self) -> TableReference:
+    def table_ref(self) -> _TableReference_ab8e2ae7:
         '''A reference to a Table resource.'''
-        return typing.cast(TableReference, jsii.get(self, "tableRef"))
+        return typing.cast(_TableReference_ab8e2ae7, jsii.get(self, "tableRef"))
 
     @builtins.property
     @jsii.member(jsii_name="namespace")
@@ -1497,6 +588,19 @@ class CfnTable(
             type_hints = typing.get_type_hints(_typecheckingstub__c6c432f4785ee47d59f072204756d42650b9fc3dd3e85a79139ab4f11fb72a43)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
         jsii.set(self, "snapshotManagement", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="tags")
+    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+        '''User tags (key-value pairs) to associate with the table.'''
+        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tags"))
+
+    @tags.setter
+    def tags(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__325161e5105ae7e0c745e5ef4817aaec57d30e105c6645c3b5269abbe859cdf2)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "tags", value) # pyright: ignore[reportArgumentType]
 
     @builtins.property
     @jsii.member(jsii_name="withoutMetadata")
@@ -1897,7 +1001,7 @@ class CfnTable(
             )
 
 
-@jsii.implements(_IInspectable_c2943556, ITableBucketRef)
+@jsii.implements(_IInspectable_c2943556, _ITableBucketRef_26c8a832, _ITaggableV2_4e6798f8)
 class CfnTableBucket(
     _CfnResource_9df397a6,
     metaclass=jsii.JSIIMeta,
@@ -1935,6 +1039,10 @@ class CfnTableBucket(
                 kms_key_arn="kmsKeyArn",
                 sse_algorithm="sseAlgorithm"
             ),
+            tags=[CfnTag(
+                key="key",
+                value="value"
+            )],
             unreferenced_file_removal=s3tables.CfnTableBucket.UnreferencedFileRemovalProperty(
                 noncurrent_days=123,
                 status="status",
@@ -1950,13 +1058,16 @@ class CfnTableBucket(
         *,
         table_bucket_name: builtins.str,
         encryption_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTableBucket.EncryptionConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
         unreferenced_file_removal: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTableBucket.UnreferencedFileRemovalProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
-        '''
+        '''Create a new ``AWS::S3Tables::TableBucket``.
+
         :param scope: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
         :param table_bucket_name: The name for the table bucket.
         :param encryption_configuration: Configuration specifying how data should be encrypted. This structure defines the encryption algorithm and optional KMS key to be used for server-side encryption.
+        :param tags: User tags (key-value pairs) to associate with the table bucket.
         :param unreferenced_file_removal: The unreferenced file removal settings for your table bucket. Unreferenced file removal identifies and deletes all objects that are not referenced by any table snapshots. For more information, see the `*Amazon S3 User Guide* <https://docs.aws.amazon.com/AmazonS3/latest/userguide/s3-table-buckets-maintenance.html>`_ .
         '''
         if __debug__:
@@ -1966,6 +1077,7 @@ class CfnTableBucket(
         props = CfnTableBucketProps(
             table_bucket_name=table_bucket_name,
             encryption_configuration=encryption_configuration,
+            tags=tags,
             unreferenced_file_removal=unreferenced_file_removal,
         )
 
@@ -2011,15 +1123,21 @@ class CfnTableBucket(
         return typing.cast(builtins.str, jsii.get(self, "attrTableBucketArn"))
 
     @builtins.property
+    @jsii.member(jsii_name="cdkTagManager")
+    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+        '''Tag Manager which manages the tags for this resource.'''
+        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+
+    @builtins.property
     @jsii.member(jsii_name="cfnProperties")
     def _cfn_properties(self) -> typing.Mapping[builtins.str, typing.Any]:
         return typing.cast(typing.Mapping[builtins.str, typing.Any], jsii.get(self, "cfnProperties"))
 
     @builtins.property
     @jsii.member(jsii_name="tableBucketRef")
-    def table_bucket_ref(self) -> TableBucketReference:
+    def table_bucket_ref(self) -> _TableBucketReference_1fd2f743:
         '''A reference to a TableBucket resource.'''
-        return typing.cast(TableBucketReference, jsii.get(self, "tableBucketRef"))
+        return typing.cast(_TableBucketReference_1fd2f743, jsii.get(self, "tableBucketRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tableBucketName")
@@ -2051,6 +1169,19 @@ class CfnTableBucket(
             type_hints = typing.get_type_hints(_typecheckingstub__61499f569b4e5dc20b99defd26e29c6e9b7761b6630e1adec9c20e97e099dd4a)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
         jsii.set(self, "encryptionConfiguration", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="tags")
+    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+        '''User tags (key-value pairs) to associate with the table bucket.'''
+        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tags"))
+
+    @tags.setter
+    def tags(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__3bd32e36df516fe785d94d21a1dc923e712becb1b93de4a82fa887f57a6b4823)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "tags", value) # pyright: ignore[reportArgumentType]
 
     @builtins.property
     @jsii.member(jsii_name="unreferencedFileRemoval")
@@ -2238,7 +1369,7 @@ class CfnTableBucket(
             )
 
 
-@jsii.implements(_IInspectable_c2943556, ITableBucketPolicyRef)
+@jsii.implements(_IInspectable_c2943556, _ITableBucketPolicyRef_3f1f8c44)
 class CfnTableBucketPolicy(
     _CfnResource_9df397a6,
     metaclass=jsii.JSIIMeta,
@@ -2283,7 +1414,8 @@ class CfnTableBucketPolicy(
         resource_policy: typing.Any,
         table_bucket_arn: builtins.str,
     ) -> None:
-        '''
+        '''Create a new ``AWS::S3Tables::TableBucketPolicy``.
+
         :param scope: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
         :param resource_policy: The bucket policy JSON for the table bucket.
@@ -2336,9 +1468,9 @@ class CfnTableBucketPolicy(
 
     @builtins.property
     @jsii.member(jsii_name="tableBucketPolicyRef")
-    def table_bucket_policy_ref(self) -> TableBucketPolicyReference:
+    def table_bucket_policy_ref(self) -> _TableBucketPolicyReference_a4627945:
         '''A reference to a TableBucketPolicy resource.'''
-        return typing.cast(TableBucketPolicyReference, jsii.get(self, "tableBucketPolicyRef"))
+        return typing.cast(_TableBucketPolicyReference_a4627945, jsii.get(self, "tableBucketPolicyRef"))
 
     @builtins.property
     @jsii.member(jsii_name="resourcePolicy")
@@ -2367,7 +1499,211 @@ class CfnTableBucketPolicy(
         jsii.set(self, "tableBucketArn", value) # pyright: ignore[reportArgumentType]
 
 
-@jsii.implements(_IInspectable_c2943556, ITablePolicyRef)
+@jsii.data_type(
+    jsii_type="aws-cdk-lib.aws_s3tables.CfnTableBucketPolicyProps",
+    jsii_struct_bases=[],
+    name_mapping={
+        "resource_policy": "resourcePolicy",
+        "table_bucket_arn": "tableBucketArn",
+    },
+)
+class CfnTableBucketPolicyProps:
+    def __init__(
+        self,
+        *,
+        resource_policy: typing.Any,
+        table_bucket_arn: builtins.str,
+    ) -> None:
+        '''Properties for defining a ``CfnTableBucketPolicy``.
+
+        :param resource_policy: The bucket policy JSON for the table bucket.
+        :param table_bucket_arn: The Amazon Resource Name (ARN) of the table bucket.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-s3tables-tablebucketpolicy.html
+        :exampleMetadata: fixture=_generated
+
+        Example::
+
+            # The code below shows an example of how to instantiate this type.
+            # The values are placeholders you should change.
+            from aws_cdk import aws_s3tables as s3tables
+            
+            # resource_policy: Any
+            
+            cfn_table_bucket_policy_props = s3tables.CfnTableBucketPolicyProps(
+                resource_policy=resource_policy,
+                table_bucket_arn="tableBucketArn"
+            )
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__df8972559ed3d0ff90d01d70d1cf8f77869398b91f03a408d49a7b5bee0615a0)
+            check_type(argname="argument resource_policy", value=resource_policy, expected_type=type_hints["resource_policy"])
+            check_type(argname="argument table_bucket_arn", value=table_bucket_arn, expected_type=type_hints["table_bucket_arn"])
+        self._values: typing.Dict[builtins.str, typing.Any] = {
+            "resource_policy": resource_policy,
+            "table_bucket_arn": table_bucket_arn,
+        }
+
+    @builtins.property
+    def resource_policy(self) -> typing.Any:
+        '''The bucket policy JSON for the table bucket.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-s3tables-tablebucketpolicy.html#cfn-s3tables-tablebucketpolicy-resourcepolicy
+        '''
+        result = self._values.get("resource_policy")
+        assert result is not None, "Required property 'resource_policy' is missing"
+        return typing.cast(typing.Any, result)
+
+    @builtins.property
+    def table_bucket_arn(self) -> builtins.str:
+        '''The Amazon Resource Name (ARN) of the table bucket.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-s3tables-tablebucketpolicy.html#cfn-s3tables-tablebucketpolicy-tablebucketarn
+        '''
+        result = self._values.get("table_bucket_arn")
+        assert result is not None, "Required property 'table_bucket_arn' is missing"
+        return typing.cast(builtins.str, result)
+
+    def __eq__(self, rhs: typing.Any) -> builtins.bool:
+        return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+    def __ne__(self, rhs: typing.Any) -> builtins.bool:
+        return not (rhs == self)
+
+    def __repr__(self) -> str:
+        return "CfnTableBucketPolicyProps(%s)" % ", ".join(
+            k + "=" + repr(v) for k, v in self._values.items()
+        )
+
+
+@jsii.data_type(
+    jsii_type="aws-cdk-lib.aws_s3tables.CfnTableBucketProps",
+    jsii_struct_bases=[],
+    name_mapping={
+        "table_bucket_name": "tableBucketName",
+        "encryption_configuration": "encryptionConfiguration",
+        "tags": "tags",
+        "unreferenced_file_removal": "unreferencedFileRemoval",
+    },
+)
+class CfnTableBucketProps:
+    def __init__(
+        self,
+        *,
+        table_bucket_name: builtins.str,
+        encryption_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTableBucket.EncryptionConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        unreferenced_file_removal: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTableBucket.UnreferencedFileRemovalProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    ) -> None:
+        '''Properties for defining a ``CfnTableBucket``.
+
+        :param table_bucket_name: The name for the table bucket.
+        :param encryption_configuration: Configuration specifying how data should be encrypted. This structure defines the encryption algorithm and optional KMS key to be used for server-side encryption.
+        :param tags: User tags (key-value pairs) to associate with the table bucket.
+        :param unreferenced_file_removal: The unreferenced file removal settings for your table bucket. Unreferenced file removal identifies and deletes all objects that are not referenced by any table snapshots. For more information, see the `*Amazon S3 User Guide* <https://docs.aws.amazon.com/AmazonS3/latest/userguide/s3-table-buckets-maintenance.html>`_ .
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-s3tables-tablebucket.html
+        :exampleMetadata: fixture=_generated
+
+        Example::
+
+            # The code below shows an example of how to instantiate this type.
+            # The values are placeholders you should change.
+            from aws_cdk import aws_s3tables as s3tables
+            
+            cfn_table_bucket_props = s3tables.CfnTableBucketProps(
+                table_bucket_name="tableBucketName",
+            
+                # the properties below are optional
+                encryption_configuration=s3tables.CfnTableBucket.EncryptionConfigurationProperty(
+                    kms_key_arn="kmsKeyArn",
+                    sse_algorithm="sseAlgorithm"
+                ),
+                tags=[CfnTag(
+                    key="key",
+                    value="value"
+                )],
+                unreferenced_file_removal=s3tables.CfnTableBucket.UnreferencedFileRemovalProperty(
+                    noncurrent_days=123,
+                    status="status",
+                    unreferenced_days=123
+                )
+            )
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__6fb9342a13c0e9f7b21679814e793d7ccc0964ccfe53bc5e0916676b628d20f3)
+            check_type(argname="argument table_bucket_name", value=table_bucket_name, expected_type=type_hints["table_bucket_name"])
+            check_type(argname="argument encryption_configuration", value=encryption_configuration, expected_type=type_hints["encryption_configuration"])
+            check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
+            check_type(argname="argument unreferenced_file_removal", value=unreferenced_file_removal, expected_type=type_hints["unreferenced_file_removal"])
+        self._values: typing.Dict[builtins.str, typing.Any] = {
+            "table_bucket_name": table_bucket_name,
+        }
+        if encryption_configuration is not None:
+            self._values["encryption_configuration"] = encryption_configuration
+        if tags is not None:
+            self._values["tags"] = tags
+        if unreferenced_file_removal is not None:
+            self._values["unreferenced_file_removal"] = unreferenced_file_removal
+
+    @builtins.property
+    def table_bucket_name(self) -> builtins.str:
+        '''The name for the table bucket.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-s3tables-tablebucket.html#cfn-s3tables-tablebucket-tablebucketname
+        '''
+        result = self._values.get("table_bucket_name")
+        assert result is not None, "Required property 'table_bucket_name' is missing"
+        return typing.cast(builtins.str, result)
+
+    @builtins.property
+    def encryption_configuration(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnTableBucket.EncryptionConfigurationProperty]]:
+        '''Configuration specifying how data should be encrypted.
+
+        This structure defines the encryption algorithm and optional KMS key to be used for server-side encryption.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-s3tables-tablebucket.html#cfn-s3tables-tablebucket-encryptionconfiguration
+        '''
+        result = self._values.get("encryption_configuration")
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnTableBucket.EncryptionConfigurationProperty]], result)
+
+    @builtins.property
+    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+        '''User tags (key-value pairs) to associate with the table bucket.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-s3tables-tablebucket.html#cfn-s3tables-tablebucket-tags
+        '''
+        result = self._values.get("tags")
+        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+
+    @builtins.property
+    def unreferenced_file_removal(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnTableBucket.UnreferencedFileRemovalProperty]]:
+        '''The unreferenced file removal settings for your table bucket.
+
+        Unreferenced file removal identifies and deletes all objects that are not referenced by any table snapshots. For more information, see the `*Amazon S3 User Guide* <https://docs.aws.amazon.com/AmazonS3/latest/userguide/s3-table-buckets-maintenance.html>`_ .
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-s3tables-tablebucket.html#cfn-s3tables-tablebucket-unreferencedfileremoval
+        '''
+        result = self._values.get("unreferenced_file_removal")
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnTableBucket.UnreferencedFileRemovalProperty]], result)
+
+    def __eq__(self, rhs: typing.Any) -> builtins.bool:
+        return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+    def __ne__(self, rhs: typing.Any) -> builtins.bool:
+        return not (rhs == self)
+
+    def __repr__(self) -> str:
+        return "CfnTableBucketProps(%s)" % ", ".join(
+            k + "=" + repr(v) for k, v in self._values.items()
+        )
+
+
+@jsii.implements(_IInspectable_c2943556, _ITablePolicyRef_0aed1a54)
 class CfnTablePolicy(
     _CfnResource_9df397a6,
     metaclass=jsii.JSIIMeta,
@@ -2412,7 +1748,8 @@ class CfnTablePolicy(
         resource_policy: typing.Any,
         table_arn: builtins.str,
     ) -> None:
-        '''
+        '''Create a new ``AWS::S3Tables::TablePolicy``.
+
         :param scope: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
         :param resource_policy: The ``JSON`` that defines the policy.
@@ -2492,9 +1829,9 @@ class CfnTablePolicy(
 
     @builtins.property
     @jsii.member(jsii_name="tablePolicyRef")
-    def table_policy_ref(self) -> TablePolicyReference:
+    def table_policy_ref(self) -> _TablePolicyReference_a435d553:
         '''A reference to a TablePolicy resource.'''
-        return typing.cast(TablePolicyReference, jsii.get(self, "tablePolicyRef"))
+        return typing.cast(_TablePolicyReference_a435d553, jsii.get(self, "tablePolicyRef"))
 
     @builtins.property
     @jsii.member(jsii_name="resourcePolicy")
@@ -2523,6 +1860,292 @@ class CfnTablePolicy(
         jsii.set(self, "tableArn", value) # pyright: ignore[reportArgumentType]
 
 
+@jsii.data_type(
+    jsii_type="aws-cdk-lib.aws_s3tables.CfnTablePolicyProps",
+    jsii_struct_bases=[],
+    name_mapping={"resource_policy": "resourcePolicy", "table_arn": "tableArn"},
+)
+class CfnTablePolicyProps:
+    def __init__(self, *, resource_policy: typing.Any, table_arn: builtins.str) -> None:
+        '''Properties for defining a ``CfnTablePolicy``.
+
+        :param resource_policy: The ``JSON`` that defines the policy.
+        :param table_arn: The Amazon Resource Name (ARN) of the table.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-s3tables-tablepolicy.html
+        :exampleMetadata: fixture=_generated
+
+        Example::
+
+            # The code below shows an example of how to instantiate this type.
+            # The values are placeholders you should change.
+            from aws_cdk import aws_s3tables as s3tables
+            
+            # resource_policy: Any
+            
+            cfn_table_policy_props = s3tables.CfnTablePolicyProps(
+                resource_policy=resource_policy,
+                table_arn="tableArn"
+            )
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__9e4efe8d2b5f3164478497385240c6eecce420e07f634572b7fac929a357ad5f)
+            check_type(argname="argument resource_policy", value=resource_policy, expected_type=type_hints["resource_policy"])
+            check_type(argname="argument table_arn", value=table_arn, expected_type=type_hints["table_arn"])
+        self._values: typing.Dict[builtins.str, typing.Any] = {
+            "resource_policy": resource_policy,
+            "table_arn": table_arn,
+        }
+
+    @builtins.property
+    def resource_policy(self) -> typing.Any:
+        '''The ``JSON`` that defines the policy.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-s3tables-tablepolicy.html#cfn-s3tables-tablepolicy-resourcepolicy
+        '''
+        result = self._values.get("resource_policy")
+        assert result is not None, "Required property 'resource_policy' is missing"
+        return typing.cast(typing.Any, result)
+
+    @builtins.property
+    def table_arn(self) -> builtins.str:
+        '''The Amazon Resource Name (ARN) of the table.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-s3tables-tablepolicy.html#cfn-s3tables-tablepolicy-tablearn
+        '''
+        result = self._values.get("table_arn")
+        assert result is not None, "Required property 'table_arn' is missing"
+        return typing.cast(builtins.str, result)
+
+    def __eq__(self, rhs: typing.Any) -> builtins.bool:
+        return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+    def __ne__(self, rhs: typing.Any) -> builtins.bool:
+        return not (rhs == self)
+
+    def __repr__(self) -> str:
+        return "CfnTablePolicyProps(%s)" % ", ".join(
+            k + "=" + repr(v) for k, v in self._values.items()
+        )
+
+
+@jsii.data_type(
+    jsii_type="aws-cdk-lib.aws_s3tables.CfnTableProps",
+    jsii_struct_bases=[],
+    name_mapping={
+        "namespace": "namespace",
+        "open_table_format": "openTableFormat",
+        "table_bucket_arn": "tableBucketArn",
+        "table_name": "tableName",
+        "compaction": "compaction",
+        "iceberg_metadata": "icebergMetadata",
+        "snapshot_management": "snapshotManagement",
+        "tags": "tags",
+        "without_metadata": "withoutMetadata",
+    },
+)
+class CfnTableProps:
+    def __init__(
+        self,
+        *,
+        namespace: builtins.str,
+        open_table_format: builtins.str,
+        table_bucket_arn: builtins.str,
+        table_name: builtins.str,
+        compaction: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTable.CompactionProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        iceberg_metadata: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTable.IcebergMetadataProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        snapshot_management: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTable.SnapshotManagementProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        without_metadata: typing.Optional[builtins.str] = None,
+    ) -> None:
+        '''Properties for defining a ``CfnTable``.
+
+        :param namespace: The name of the namespace.
+        :param open_table_format: The format of the table.
+        :param table_bucket_arn: The Amazon Resource Name (ARN) of the table bucket to create the table in.
+        :param table_name: The name for the table.
+        :param compaction: Contains details about the compaction settings for an Iceberg table.
+        :param iceberg_metadata: Contains details about the metadata for an Iceberg table.
+        :param snapshot_management: Contains details about the Iceberg snapshot management settings for the table.
+        :param tags: User tags (key-value pairs) to associate with the table.
+        :param without_metadata: Indicates that you don't want to specify a schema for the table. This property is mutually exclusive to ``IcebergMetadata`` , and its only possible value is ``Yes`` .
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-s3tables-table.html
+        :exampleMetadata: fixture=_generated
+
+        Example::
+
+            # The code below shows an example of how to instantiate this type.
+            # The values are placeholders you should change.
+            from aws_cdk import aws_s3tables as s3tables
+            
+            cfn_table_props = s3tables.CfnTableProps(
+                namespace="namespace",
+                open_table_format="openTableFormat",
+                table_bucket_arn="tableBucketArn",
+                table_name="tableName",
+            
+                # the properties below are optional
+                compaction=s3tables.CfnTable.CompactionProperty(
+                    status="status",
+                    target_file_size_mb=123
+                ),
+                iceberg_metadata=s3tables.CfnTable.IcebergMetadataProperty(
+                    iceberg_schema=s3tables.CfnTable.IcebergSchemaProperty(
+                        schema_field_list=[s3tables.CfnTable.SchemaFieldProperty(
+                            name="name",
+                            type="type",
+            
+                            # the properties below are optional
+                            required=False
+                        )]
+                    )
+                ),
+                snapshot_management=s3tables.CfnTable.SnapshotManagementProperty(
+                    max_snapshot_age_hours=123,
+                    min_snapshots_to_keep=123,
+                    status="status"
+                ),
+                tags=[CfnTag(
+                    key="key",
+                    value="value"
+                )],
+                without_metadata="withoutMetadata"
+            )
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__6346a05fb3e021dceca566705037999fa06de23c2e117b37dcdd3e46838b7bc6)
+            check_type(argname="argument namespace", value=namespace, expected_type=type_hints["namespace"])
+            check_type(argname="argument open_table_format", value=open_table_format, expected_type=type_hints["open_table_format"])
+            check_type(argname="argument table_bucket_arn", value=table_bucket_arn, expected_type=type_hints["table_bucket_arn"])
+            check_type(argname="argument table_name", value=table_name, expected_type=type_hints["table_name"])
+            check_type(argname="argument compaction", value=compaction, expected_type=type_hints["compaction"])
+            check_type(argname="argument iceberg_metadata", value=iceberg_metadata, expected_type=type_hints["iceberg_metadata"])
+            check_type(argname="argument snapshot_management", value=snapshot_management, expected_type=type_hints["snapshot_management"])
+            check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
+            check_type(argname="argument without_metadata", value=without_metadata, expected_type=type_hints["without_metadata"])
+        self._values: typing.Dict[builtins.str, typing.Any] = {
+            "namespace": namespace,
+            "open_table_format": open_table_format,
+            "table_bucket_arn": table_bucket_arn,
+            "table_name": table_name,
+        }
+        if compaction is not None:
+            self._values["compaction"] = compaction
+        if iceberg_metadata is not None:
+            self._values["iceberg_metadata"] = iceberg_metadata
+        if snapshot_management is not None:
+            self._values["snapshot_management"] = snapshot_management
+        if tags is not None:
+            self._values["tags"] = tags
+        if without_metadata is not None:
+            self._values["without_metadata"] = without_metadata
+
+    @builtins.property
+    def namespace(self) -> builtins.str:
+        '''The name of the namespace.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-s3tables-table.html#cfn-s3tables-table-namespace
+        '''
+        result = self._values.get("namespace")
+        assert result is not None, "Required property 'namespace' is missing"
+        return typing.cast(builtins.str, result)
+
+    @builtins.property
+    def open_table_format(self) -> builtins.str:
+        '''The format of the table.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-s3tables-table.html#cfn-s3tables-table-opentableformat
+        '''
+        result = self._values.get("open_table_format")
+        assert result is not None, "Required property 'open_table_format' is missing"
+        return typing.cast(builtins.str, result)
+
+    @builtins.property
+    def table_bucket_arn(self) -> builtins.str:
+        '''The Amazon Resource Name (ARN) of the table bucket to create the table in.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-s3tables-table.html#cfn-s3tables-table-tablebucketarn
+        '''
+        result = self._values.get("table_bucket_arn")
+        assert result is not None, "Required property 'table_bucket_arn' is missing"
+        return typing.cast(builtins.str, result)
+
+    @builtins.property
+    def table_name(self) -> builtins.str:
+        '''The name for the table.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-s3tables-table.html#cfn-s3tables-table-tablename
+        '''
+        result = self._values.get("table_name")
+        assert result is not None, "Required property 'table_name' is missing"
+        return typing.cast(builtins.str, result)
+
+    @builtins.property
+    def compaction(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnTable.CompactionProperty]]:
+        '''Contains details about the compaction settings for an Iceberg table.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-s3tables-table.html#cfn-s3tables-table-compaction
+        '''
+        result = self._values.get("compaction")
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnTable.CompactionProperty]], result)
+
+    @builtins.property
+    def iceberg_metadata(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnTable.IcebergMetadataProperty]]:
+        '''Contains details about the metadata for an Iceberg table.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-s3tables-table.html#cfn-s3tables-table-icebergmetadata
+        '''
+        result = self._values.get("iceberg_metadata")
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnTable.IcebergMetadataProperty]], result)
+
+    @builtins.property
+    def snapshot_management(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnTable.SnapshotManagementProperty]]:
+        '''Contains details about the Iceberg snapshot management settings for the table.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-s3tables-table.html#cfn-s3tables-table-snapshotmanagement
+        '''
+        result = self._values.get("snapshot_management")
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnTable.SnapshotManagementProperty]], result)
+
+    @builtins.property
+    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+        '''User tags (key-value pairs) to associate with the table.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-s3tables-table.html#cfn-s3tables-table-tags
+        '''
+        result = self._values.get("tags")
+        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+
+    @builtins.property
+    def without_metadata(self) -> typing.Optional[builtins.str]:
+        '''Indicates that you don't want to specify a schema for the table.
+
+        This property is mutually exclusive to ``IcebergMetadata`` , and its only possible value is ``Yes`` .
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-s3tables-table.html#cfn-s3tables-table-withoutmetadata
+        '''
+        result = self._values.get("without_metadata")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    def __eq__(self, rhs: typing.Any) -> builtins.bool:
+        return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+    def __ne__(self, rhs: typing.Any) -> builtins.bool:
+        return not (rhs == self)
+
+    def __repr__(self) -> str:
+        return "CfnTableProps(%s)" % ", ".join(
+            k + "=" + repr(v) for k, v in self._values.items()
+        )
+
+
 __all__ = [
     "CfnNamespace",
     "CfnNamespaceProps",
@@ -2534,102 +2157,9 @@ __all__ = [
     "CfnTablePolicy",
     "CfnTablePolicyProps",
     "CfnTableProps",
-    "INamespaceRef",
-    "ITableBucketPolicyRef",
-    "ITableBucketRef",
-    "ITablePolicyRef",
-    "ITableRef",
-    "NamespaceReference",
-    "TableBucketPolicyReference",
-    "TableBucketReference",
-    "TablePolicyReference",
-    "TableReference",
 ]
 
 publication.publish()
-
-def _typecheckingstub__5fdadc8758c9f96fac22200567c0d51cfd3e36c943cb9fa46e50cbf9abf25faf(
-    *,
-    namespace: builtins.str,
-    table_bucket_arn: builtins.str,
-) -> None:
-    """Type checking stubs"""
-    pass
-
-def _typecheckingstub__df8972559ed3d0ff90d01d70d1cf8f77869398b91f03a408d49a7b5bee0615a0(
-    *,
-    resource_policy: typing.Any,
-    table_bucket_arn: builtins.str,
-) -> None:
-    """Type checking stubs"""
-    pass
-
-def _typecheckingstub__6fb9342a13c0e9f7b21679814e793d7ccc0964ccfe53bc5e0916676b628d20f3(
-    *,
-    table_bucket_name: builtins.str,
-    encryption_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTableBucket.EncryptionConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-    unreferenced_file_removal: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTableBucket.UnreferencedFileRemovalProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-) -> None:
-    """Type checking stubs"""
-    pass
-
-def _typecheckingstub__9e4efe8d2b5f3164478497385240c6eecce420e07f634572b7fac929a357ad5f(
-    *,
-    resource_policy: typing.Any,
-    table_arn: builtins.str,
-) -> None:
-    """Type checking stubs"""
-    pass
-
-def _typecheckingstub__6346a05fb3e021dceca566705037999fa06de23c2e117b37dcdd3e46838b7bc6(
-    *,
-    namespace: builtins.str,
-    open_table_format: builtins.str,
-    table_bucket_arn: builtins.str,
-    table_name: builtins.str,
-    compaction: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTable.CompactionProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-    iceberg_metadata: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTable.IcebergMetadataProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-    snapshot_management: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTable.SnapshotManagementProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-    without_metadata: typing.Optional[builtins.str] = None,
-) -> None:
-    """Type checking stubs"""
-    pass
-
-def _typecheckingstub__e8554d333e8c8536b5f8509b15a706e6982555549403e0c7a05db02d526f4907(
-    *,
-    namespace: builtins.str,
-    table_bucket_arn: builtins.str,
-) -> None:
-    """Type checking stubs"""
-    pass
-
-def _typecheckingstub__e2cc8478c9b3fa0ad699cdfeb0a75ddd45cbe8c27c5dcb122ecf16fcd5a075eb(
-    *,
-    table_bucket_arn: builtins.str,
-) -> None:
-    """Type checking stubs"""
-    pass
-
-def _typecheckingstub__a059d9dd0f4b7f8a044757737ebe3ab494a5ed9f63ce260c6600274c6f87f8bb(
-    *,
-    table_bucket_arn: builtins.str,
-) -> None:
-    """Type checking stubs"""
-    pass
-
-def _typecheckingstub__2edfae7aba9987b751c3ed512ab464f0488ceaa8b2ff1cbaa09628cfe9667359(
-    *,
-    table_arn: builtins.str,
-) -> None:
-    """Type checking stubs"""
-    pass
-
-def _typecheckingstub__ce28e4ab81f01958831a6bc82f8b67567e733953686255fc4c838a40bc131c0b(
-    *,
-    table_arn: builtins.str,
-) -> None:
-    """Type checking stubs"""
-    pass
 
 def _typecheckingstub__fd79dcff4893fe1cd3464c1f48689d2a01ad4a5eed6acfd35e21266683ab1f1c(
     scope: _constructs_77d1e7e8.Construct,
@@ -2665,6 +2195,14 @@ def _typecheckingstub__8560b7f29623bc1f753b1cf34442c874c6958096b39accf37244c9341
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__5fdadc8758c9f96fac22200567c0d51cfd3e36c943cb9fa46e50cbf9abf25faf(
+    *,
+    namespace: builtins.str,
+    table_bucket_arn: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__9cb6d8b27037c33c46017d3b0b00b52a14bbd8c0a922c03aca7fff9e327b1420(
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
@@ -2676,6 +2214,7 @@ def _typecheckingstub__9cb6d8b27037c33c46017d3b0b00b52a14bbd8c0a922c03aca7fff9e3
     compaction: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTable.CompactionProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     iceberg_metadata: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTable.IcebergMetadataProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     snapshot_management: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTable.SnapshotManagementProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     without_metadata: typing.Optional[builtins.str] = None,
 ) -> None:
     """Type checking stubs"""
@@ -2735,6 +2274,12 @@ def _typecheckingstub__c6c432f4785ee47d59f072204756d42650b9fc3dd3e85a79139ab4f11
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__325161e5105ae7e0c745e5ef4817aaec57d30e105c6645c3b5269abbe859cdf2(
+    value: typing.Optional[typing.List[_CfnTag_f6864754]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__e5d21acaabd2bab58c6f59f334d1b06b0962eb6541244a042a933b5ce009a061(
     value: typing.Optional[builtins.str],
 ) -> None:
@@ -2787,6 +2332,7 @@ def _typecheckingstub__de433918cd34eecbcaab0e81b6a287f71a48dd308c2f4d42e07a0e19c
     *,
     table_bucket_name: builtins.str,
     encryption_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTableBucket.EncryptionConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     unreferenced_file_removal: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTableBucket.UnreferencedFileRemovalProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
 ) -> None:
     """Type checking stubs"""
@@ -2812,6 +2358,12 @@ def _typecheckingstub__42ef5079e6a92822a2e6ccbb91b02661f493a7d44dc79dfba0916840d
 
 def _typecheckingstub__61499f569b4e5dc20b99defd26e29c6e9b7761b6630e1adec9c20e97e099dd4a(
     value: typing.Optional[typing.Union[_IResolvable_da3f097b, CfnTableBucket.EncryptionConfigurationProperty]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__3bd32e36df516fe785d94d21a1dc923e712becb1b93de4a82fa887f57a6b4823(
+    value: typing.Optional[typing.List[_CfnTag_f6864754]],
 ) -> None:
     """Type checking stubs"""
     pass
@@ -2873,6 +2425,24 @@ def _typecheckingstub__9db770e8febae7602179359c1a5975b5ae8be6270348474fc3a1cca79
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__df8972559ed3d0ff90d01d70d1cf8f77869398b91f03a408d49a7b5bee0615a0(
+    *,
+    resource_policy: typing.Any,
+    table_bucket_arn: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__6fb9342a13c0e9f7b21679814e793d7ccc0964ccfe53bc5e0916676b628d20f3(
+    *,
+    table_bucket_name: builtins.str,
+    encryption_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTableBucket.EncryptionConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+    unreferenced_file_removal: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTableBucket.UnreferencedFileRemovalProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__a411c2784ec9f97ff20ac6b524d48b9d66affbbc6dde8cf88f11829983b62656(
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
@@ -2907,5 +2477,25 @@ def _typecheckingstub__87d38159ba1fcdcd6a78891e84e79fef3b2492c5066559f8f91cd5cc6
     """Type checking stubs"""
     pass
 
-for cls in [INamespaceRef, ITableBucketPolicyRef, ITableBucketRef, ITablePolicyRef, ITableRef]:
-    typing.cast(typing.Any, cls).__protocol_attrs__ = typing.cast(typing.Any, cls).__protocol_attrs__ - set(['__jsii_proxy_class__', '__jsii_type__'])
+def _typecheckingstub__9e4efe8d2b5f3164478497385240c6eecce420e07f634572b7fac929a357ad5f(
+    *,
+    resource_policy: typing.Any,
+    table_arn: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__6346a05fb3e021dceca566705037999fa06de23c2e117b37dcdd3e46838b7bc6(
+    *,
+    namespace: builtins.str,
+    open_table_format: builtins.str,
+    table_bucket_arn: builtins.str,
+    table_name: builtins.str,
+    compaction: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTable.CompactionProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    iceberg_metadata: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTable.IcebergMetadataProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    snapshot_management: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTable.SnapshotManagementProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+    without_metadata: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass

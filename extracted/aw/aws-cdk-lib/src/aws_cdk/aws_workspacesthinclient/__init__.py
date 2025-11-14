@@ -71,356 +71,19 @@ import constructs as _constructs_77d1e7e8
 from .. import (
     CfnResource as _CfnResource_9df397a6,
     CfnTag as _CfnTag_f6864754,
-    IEnvironmentAware as _IEnvironmentAware_a408b00d,
     IInspectable as _IInspectable_c2943556,
     IResolvable as _IResolvable_da3f097b,
     ITaggableV2 as _ITaggableV2_4e6798f8,
     TagManager as _TagManager_0a598cb3,
     TreeInspector as _TreeInspector_488e0dd5,
 )
-
-
-@jsii.data_type(
-    jsii_type="aws-cdk-lib.aws_workspacesthinclient.CfnEnvironmentProps",
-    jsii_struct_bases=[],
-    name_mapping={
-        "desktop_arn": "desktopArn",
-        "desired_software_set_id": "desiredSoftwareSetId",
-        "desktop_endpoint": "desktopEndpoint",
-        "device_creation_tags": "deviceCreationTags",
-        "kms_key_arn": "kmsKeyArn",
-        "maintenance_window": "maintenanceWindow",
-        "name": "name",
-        "software_set_update_mode": "softwareSetUpdateMode",
-        "software_set_update_schedule": "softwareSetUpdateSchedule",
-        "tags": "tags",
-    },
+from ..interfaces.aws_workspacesthinclient import (
+    EnvironmentReference as _EnvironmentReference_a4de5556,
+    IEnvironmentRef as _IEnvironmentRef_3a278cee,
 )
-class CfnEnvironmentProps:
-    def __init__(
-        self,
-        *,
-        desktop_arn: builtins.str,
-        desired_software_set_id: typing.Optional[builtins.str] = None,
-        desktop_endpoint: typing.Optional[builtins.str] = None,
-        device_creation_tags: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        kms_key_arn: typing.Optional[builtins.str] = None,
-        maintenance_window: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnEnvironment.MaintenanceWindowProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        name: typing.Optional[builtins.str] = None,
-        software_set_update_mode: typing.Optional[builtins.str] = None,
-        software_set_update_schedule: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-    ) -> None:
-        '''Properties for defining a ``CfnEnvironment``.
-
-        :param desktop_arn: The Amazon Resource Name (ARN) of the desktop to stream from Amazon WorkSpaces, WorkSpaces Secure Browser, or AppStream 2.0.
-        :param desired_software_set_id: The ID of the software set to apply.
-        :param desktop_endpoint: The URL for the identity provider login (only for environments that use AppStream 2.0).
-        :param device_creation_tags: An array of key-value pairs to apply to the newly created devices for this environment.
-        :param kms_key_arn: The Amazon Resource Name (ARN) of the AWS Key Management Service key used to encrypt the environment.
-        :param maintenance_window: A specification for a time window to apply software updates.
-        :param name: The name of the environment.
-        :param software_set_update_mode: An option to define which software updates to apply.
-        :param software_set_update_schedule: An option to define if software updates should be applied within a maintenance window.
-        :param tags: An array of key-value pairs to apply to this resource. For more information, see `Tag <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-resource-tags.html>`_ .
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-workspacesthinclient-environment.html
-        :exampleMetadata: fixture=_generated
-
-        Example::
-
-            # The code below shows an example of how to instantiate this type.
-            # The values are placeholders you should change.
-            from aws_cdk import aws_workspacesthinclient as workspacesthinclient
-            
-            cfn_environment_props = workspacesthinclient.CfnEnvironmentProps(
-                desktop_arn="desktopArn",
-            
-                # the properties below are optional
-                desired_software_set_id="desiredSoftwareSetId",
-                desktop_endpoint="desktopEndpoint",
-                device_creation_tags=[CfnTag(
-                    key="key",
-                    value="value"
-                )],
-                kms_key_arn="kmsKeyArn",
-                maintenance_window=workspacesthinclient.CfnEnvironment.MaintenanceWindowProperty(
-                    type="type",
-            
-                    # the properties below are optional
-                    apply_time_of="applyTimeOf",
-                    days_of_the_week=["daysOfTheWeek"],
-                    end_time_hour=123,
-                    end_time_minute=123,
-                    start_time_hour=123,
-                    start_time_minute=123
-                ),
-                name="name",
-                software_set_update_mode="softwareSetUpdateMode",
-                software_set_update_schedule="softwareSetUpdateSchedule",
-                tags=[CfnTag(
-                    key="key",
-                    value="value"
-                )]
-            )
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__d5ade8c81bf6b62d21c53769263cd25b48d66d29f3ae96ec22ac8fb14f2e4d33)
-            check_type(argname="argument desktop_arn", value=desktop_arn, expected_type=type_hints["desktop_arn"])
-            check_type(argname="argument desired_software_set_id", value=desired_software_set_id, expected_type=type_hints["desired_software_set_id"])
-            check_type(argname="argument desktop_endpoint", value=desktop_endpoint, expected_type=type_hints["desktop_endpoint"])
-            check_type(argname="argument device_creation_tags", value=device_creation_tags, expected_type=type_hints["device_creation_tags"])
-            check_type(argname="argument kms_key_arn", value=kms_key_arn, expected_type=type_hints["kms_key_arn"])
-            check_type(argname="argument maintenance_window", value=maintenance_window, expected_type=type_hints["maintenance_window"])
-            check_type(argname="argument name", value=name, expected_type=type_hints["name"])
-            check_type(argname="argument software_set_update_mode", value=software_set_update_mode, expected_type=type_hints["software_set_update_mode"])
-            check_type(argname="argument software_set_update_schedule", value=software_set_update_schedule, expected_type=type_hints["software_set_update_schedule"])
-            check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
-        self._values: typing.Dict[builtins.str, typing.Any] = {
-            "desktop_arn": desktop_arn,
-        }
-        if desired_software_set_id is not None:
-            self._values["desired_software_set_id"] = desired_software_set_id
-        if desktop_endpoint is not None:
-            self._values["desktop_endpoint"] = desktop_endpoint
-        if device_creation_tags is not None:
-            self._values["device_creation_tags"] = device_creation_tags
-        if kms_key_arn is not None:
-            self._values["kms_key_arn"] = kms_key_arn
-        if maintenance_window is not None:
-            self._values["maintenance_window"] = maintenance_window
-        if name is not None:
-            self._values["name"] = name
-        if software_set_update_mode is not None:
-            self._values["software_set_update_mode"] = software_set_update_mode
-        if software_set_update_schedule is not None:
-            self._values["software_set_update_schedule"] = software_set_update_schedule
-        if tags is not None:
-            self._values["tags"] = tags
-
-    @builtins.property
-    def desktop_arn(self) -> builtins.str:
-        '''The Amazon Resource Name (ARN) of the desktop to stream from Amazon WorkSpaces, WorkSpaces Secure Browser, or AppStream 2.0.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-workspacesthinclient-environment.html#cfn-workspacesthinclient-environment-desktoparn
-        '''
-        result = self._values.get("desktop_arn")
-        assert result is not None, "Required property 'desktop_arn' is missing"
-        return typing.cast(builtins.str, result)
-
-    @builtins.property
-    def desired_software_set_id(self) -> typing.Optional[builtins.str]:
-        '''The ID of the software set to apply.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-workspacesthinclient-environment.html#cfn-workspacesthinclient-environment-desiredsoftwaresetid
-        '''
-        result = self._values.get("desired_software_set_id")
-        return typing.cast(typing.Optional[builtins.str], result)
-
-    @builtins.property
-    def desktop_endpoint(self) -> typing.Optional[builtins.str]:
-        '''The URL for the identity provider login (only for environments that use AppStream 2.0).
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-workspacesthinclient-environment.html#cfn-workspacesthinclient-environment-desktopendpoint
-        '''
-        result = self._values.get("desktop_endpoint")
-        return typing.cast(typing.Optional[builtins.str], result)
-
-    @builtins.property
-    def device_creation_tags(
-        self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, _CfnTag_f6864754]]]]:
-        '''An array of key-value pairs to apply to the newly created devices for this environment.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-workspacesthinclient-environment.html#cfn-workspacesthinclient-environment-devicecreationtags
-        '''
-        result = self._values.get("device_creation_tags")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, _CfnTag_f6864754]]]], result)
-
-    @builtins.property
-    def kms_key_arn(self) -> typing.Optional[builtins.str]:
-        '''The Amazon Resource Name (ARN) of the AWS Key Management Service key used to encrypt the environment.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-workspacesthinclient-environment.html#cfn-workspacesthinclient-environment-kmskeyarn
-        '''
-        result = self._values.get("kms_key_arn")
-        return typing.cast(typing.Optional[builtins.str], result)
-
-    @builtins.property
-    def maintenance_window(
-        self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnEnvironment.MaintenanceWindowProperty"]]:
-        '''A specification for a time window to apply software updates.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-workspacesthinclient-environment.html#cfn-workspacesthinclient-environment-maintenancewindow
-        '''
-        result = self._values.get("maintenance_window")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnEnvironment.MaintenanceWindowProperty"]], result)
-
-    @builtins.property
-    def name(self) -> typing.Optional[builtins.str]:
-        '''The name of the environment.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-workspacesthinclient-environment.html#cfn-workspacesthinclient-environment-name
-        '''
-        result = self._values.get("name")
-        return typing.cast(typing.Optional[builtins.str], result)
-
-    @builtins.property
-    def software_set_update_mode(self) -> typing.Optional[builtins.str]:
-        '''An option to define which software updates to apply.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-workspacesthinclient-environment.html#cfn-workspacesthinclient-environment-softwaresetupdatemode
-        '''
-        result = self._values.get("software_set_update_mode")
-        return typing.cast(typing.Optional[builtins.str], result)
-
-    @builtins.property
-    def software_set_update_schedule(self) -> typing.Optional[builtins.str]:
-        '''An option to define if software updates should be applied within a maintenance window.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-workspacesthinclient-environment.html#cfn-workspacesthinclient-environment-softwaresetupdateschedule
-        '''
-        result = self._values.get("software_set_update_schedule")
-        return typing.cast(typing.Optional[builtins.str], result)
-
-    @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
-        '''An array of key-value pairs to apply to this resource.
-
-        For more information, see `Tag <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-resource-tags.html>`_ .
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-workspacesthinclient-environment.html#cfn-workspacesthinclient-environment-tags
-        '''
-        result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
-
-    def __eq__(self, rhs: typing.Any) -> builtins.bool:
-        return isinstance(rhs, self.__class__) and rhs._values == self._values
-
-    def __ne__(self, rhs: typing.Any) -> builtins.bool:
-        return not (rhs == self)
-
-    def __repr__(self) -> str:
-        return "CfnEnvironmentProps(%s)" % ", ".join(
-            k + "=" + repr(v) for k, v in self._values.items()
-        )
 
 
-@jsii.data_type(
-    jsii_type="aws-cdk-lib.aws_workspacesthinclient.EnvironmentReference",
-    jsii_struct_bases=[],
-    name_mapping={
-        "environment_arn": "environmentArn",
-        "environment_id": "environmentId",
-    },
-)
-class EnvironmentReference:
-    def __init__(
-        self,
-        *,
-        environment_arn: builtins.str,
-        environment_id: builtins.str,
-    ) -> None:
-        '''A reference to a Environment resource.
-
-        :param environment_arn: The ARN of the Environment resource.
-        :param environment_id: The Id of the Environment resource.
-
-        :exampleMetadata: fixture=_generated
-
-        Example::
-
-            # The code below shows an example of how to instantiate this type.
-            # The values are placeholders you should change.
-            from aws_cdk import aws_workspacesthinclient as workspacesthinclient
-            
-            environment_reference = workspacesthinclient.EnvironmentReference(
-                environment_arn="environmentArn",
-                environment_id="environmentId"
-            )
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__b0321c629babc3399d684a6cd7f0c17824d3609ffdee9b537a6911a5e268aa51)
-            check_type(argname="argument environment_arn", value=environment_arn, expected_type=type_hints["environment_arn"])
-            check_type(argname="argument environment_id", value=environment_id, expected_type=type_hints["environment_id"])
-        self._values: typing.Dict[builtins.str, typing.Any] = {
-            "environment_arn": environment_arn,
-            "environment_id": environment_id,
-        }
-
-    @builtins.property
-    def environment_arn(self) -> builtins.str:
-        '''The ARN of the Environment resource.'''
-        result = self._values.get("environment_arn")
-        assert result is not None, "Required property 'environment_arn' is missing"
-        return typing.cast(builtins.str, result)
-
-    @builtins.property
-    def environment_id(self) -> builtins.str:
-        '''The Id of the Environment resource.'''
-        result = self._values.get("environment_id")
-        assert result is not None, "Required property 'environment_id' is missing"
-        return typing.cast(builtins.str, result)
-
-    def __eq__(self, rhs: typing.Any) -> builtins.bool:
-        return isinstance(rhs, self.__class__) and rhs._values == self._values
-
-    def __ne__(self, rhs: typing.Any) -> builtins.bool:
-        return not (rhs == self)
-
-    def __repr__(self) -> str:
-        return "EnvironmentReference(%s)" % ", ".join(
-            k + "=" + repr(v) for k, v in self._values.items()
-        )
-
-
-@jsii.interface(jsii_type="aws-cdk-lib.aws_workspacesthinclient.IEnvironmentRef")
-class IEnvironmentRef(
-    _constructs_77d1e7e8.IConstruct,
-    _IEnvironmentAware_a408b00d,
-    typing_extensions.Protocol,
-):
-    '''(experimental) Indicates that this resource can be referenced as a Environment.
-
-    :stability: experimental
-    '''
-
-    @builtins.property
-    @jsii.member(jsii_name="environmentRef")
-    def environment_ref(self) -> EnvironmentReference:
-        '''(experimental) A reference to a Environment resource.
-
-        :stability: experimental
-        '''
-        ...
-
-
-class _IEnvironmentRefProxy(
-    jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
-    jsii.proxy_for(_IEnvironmentAware_a408b00d), # type: ignore[misc]
-):
-    '''(experimental) Indicates that this resource can be referenced as a Environment.
-
-    :stability: experimental
-    '''
-
-    __jsii_type__: typing.ClassVar[str] = "aws-cdk-lib.aws_workspacesthinclient.IEnvironmentRef"
-
-    @builtins.property
-    @jsii.member(jsii_name="environmentRef")
-    def environment_ref(self) -> EnvironmentReference:
-        '''(experimental) A reference to a Environment resource.
-
-        :stability: experimental
-        '''
-        return typing.cast(EnvironmentReference, jsii.get(self, "environmentRef"))
-
-# Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
-typing.cast(typing.Any, IEnvironmentRef).__jsii_proxy_class__ = lambda : _IEnvironmentRefProxy
-
-
-@jsii.implements(_IInspectable_c2943556, IEnvironmentRef, _ITaggableV2_4e6798f8)
+@jsii.implements(_IInspectable_c2943556, _IEnvironmentRef_3a278cee, _ITaggableV2_4e6798f8)
 class CfnEnvironment(
     _CfnResource_9df397a6,
     metaclass=jsii.JSIIMeta,
@@ -486,12 +149,13 @@ class CfnEnvironment(
         software_set_update_schedule: typing.Optional[builtins.str] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
-        '''
+        '''Create a new ``AWS::WorkSpacesThinClient::Environment``.
+
         :param scope: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
-        :param desktop_arn: The Amazon Resource Name (ARN) of the desktop to stream from Amazon WorkSpaces, WorkSpaces Secure Browser, or AppStream 2.0.
+        :param desktop_arn: The Amazon Resource Name (ARN) of the desktop to stream from Amazon WorkSpaces, WorkSpaces Secure Browser, or WorkSpaces Applications.
         :param desired_software_set_id: The ID of the software set to apply.
-        :param desktop_endpoint: The URL for the identity provider login (only for environments that use AppStream 2.0).
+        :param desktop_endpoint: The URL for the identity provider login (only for environments that use WorkSpaces Applications).
         :param device_creation_tags: An array of key-value pairs to apply to the newly created devices for this environment.
         :param kms_key_arn: The Amazon Resource Name (ARN) of the AWS Key Management Service key used to encrypt the environment.
         :param maintenance_window: A specification for a time window to apply software updates.
@@ -526,7 +190,7 @@ class CfnEnvironment(
         scope: _constructs_77d1e7e8.Construct,
         id: builtins.str,
         arn: builtins.str,
-    ) -> IEnvironmentRef:
+    ) -> _IEnvironmentRef_3a278cee:
         '''Creates a new IEnvironmentRef from an ARN.
 
         :param scope: -
@@ -538,7 +202,7 @@ class CfnEnvironment(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
-        return typing.cast(IEnvironmentRef, jsii.sinvoke(cls, "fromEnvironmentArn", [scope, id, arn]))
+        return typing.cast(_IEnvironmentRef_3a278cee, jsii.sinvoke(cls, "fromEnvironmentArn", [scope, id, arn]))
 
     @jsii.member(jsii_name="fromEnvironmentId")
     @builtins.classmethod
@@ -547,7 +211,7 @@ class CfnEnvironment(
         scope: _constructs_77d1e7e8.Construct,
         id: builtins.str,
         environment_id: builtins.str,
-    ) -> IEnvironmentRef:
+    ) -> _IEnvironmentRef_3a278cee:
         '''Creates a new IEnvironmentRef from a environmentId.
 
         :param scope: -
@@ -559,7 +223,7 @@ class CfnEnvironment(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument environment_id", value=environment_id, expected_type=type_hints["environment_id"])
-        return typing.cast(IEnvironmentRef, jsii.sinvoke(cls, "fromEnvironmentId", [scope, id, environment_id]))
+        return typing.cast(_IEnvironmentRef_3a278cee, jsii.sinvoke(cls, "fromEnvironmentId", [scope, id, environment_id]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -694,14 +358,14 @@ class CfnEnvironment(
 
     @builtins.property
     @jsii.member(jsii_name="environmentRef")
-    def environment_ref(self) -> EnvironmentReference:
+    def environment_ref(self) -> _EnvironmentReference_a4de5556:
         '''A reference to a Environment resource.'''
-        return typing.cast(EnvironmentReference, jsii.get(self, "environmentRef"))
+        return typing.cast(_EnvironmentReference_a4de5556, jsii.get(self, "environmentRef"))
 
     @builtins.property
     @jsii.member(jsii_name="desktopArn")
     def desktop_arn(self) -> builtins.str:
-        '''The Amazon Resource Name (ARN) of the desktop to stream from Amazon WorkSpaces, WorkSpaces Secure Browser, or AppStream 2.0.'''
+        '''The Amazon Resource Name (ARN) of the desktop to stream from Amazon WorkSpaces, WorkSpaces Secure Browser, or WorkSpaces Applications.'''
         return typing.cast(builtins.str, jsii.get(self, "desktopArn"))
 
     @desktop_arn.setter
@@ -727,7 +391,7 @@ class CfnEnvironment(
     @builtins.property
     @jsii.member(jsii_name="desktopEndpoint")
     def desktop_endpoint(self) -> typing.Optional[builtins.str]:
-        '''The URL for the identity provider login (only for environments that use AppStream 2.0).'''
+        '''The URL for the identity provider login (only for environments that use WorkSpaces Applications).'''
         return typing.cast(typing.Optional[builtins.str], jsii.get(self, "desktopEndpoint"))
 
     @desktop_endpoint.setter
@@ -998,38 +662,239 @@ class CfnEnvironment(
             )
 
 
+@jsii.data_type(
+    jsii_type="aws-cdk-lib.aws_workspacesthinclient.CfnEnvironmentProps",
+    jsii_struct_bases=[],
+    name_mapping={
+        "desktop_arn": "desktopArn",
+        "desired_software_set_id": "desiredSoftwareSetId",
+        "desktop_endpoint": "desktopEndpoint",
+        "device_creation_tags": "deviceCreationTags",
+        "kms_key_arn": "kmsKeyArn",
+        "maintenance_window": "maintenanceWindow",
+        "name": "name",
+        "software_set_update_mode": "softwareSetUpdateMode",
+        "software_set_update_schedule": "softwareSetUpdateSchedule",
+        "tags": "tags",
+    },
+)
+class CfnEnvironmentProps:
+    def __init__(
+        self,
+        *,
+        desktop_arn: builtins.str,
+        desired_software_set_id: typing.Optional[builtins.str] = None,
+        desktop_endpoint: typing.Optional[builtins.str] = None,
+        device_creation_tags: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        kms_key_arn: typing.Optional[builtins.str] = None,
+        maintenance_window: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnEnvironment.MaintenanceWindowProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        name: typing.Optional[builtins.str] = None,
+        software_set_update_mode: typing.Optional[builtins.str] = None,
+        software_set_update_schedule: typing.Optional[builtins.str] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+    ) -> None:
+        '''Properties for defining a ``CfnEnvironment``.
+
+        :param desktop_arn: The Amazon Resource Name (ARN) of the desktop to stream from Amazon WorkSpaces, WorkSpaces Secure Browser, or WorkSpaces Applications.
+        :param desired_software_set_id: The ID of the software set to apply.
+        :param desktop_endpoint: The URL for the identity provider login (only for environments that use WorkSpaces Applications).
+        :param device_creation_tags: An array of key-value pairs to apply to the newly created devices for this environment.
+        :param kms_key_arn: The Amazon Resource Name (ARN) of the AWS Key Management Service key used to encrypt the environment.
+        :param maintenance_window: A specification for a time window to apply software updates.
+        :param name: The name of the environment.
+        :param software_set_update_mode: An option to define which software updates to apply.
+        :param software_set_update_schedule: An option to define if software updates should be applied within a maintenance window.
+        :param tags: An array of key-value pairs to apply to this resource. For more information, see `Tag <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-resource-tags.html>`_ .
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-workspacesthinclient-environment.html
+        :exampleMetadata: fixture=_generated
+
+        Example::
+
+            # The code below shows an example of how to instantiate this type.
+            # The values are placeholders you should change.
+            from aws_cdk import aws_workspacesthinclient as workspacesthinclient
+            
+            cfn_environment_props = workspacesthinclient.CfnEnvironmentProps(
+                desktop_arn="desktopArn",
+            
+                # the properties below are optional
+                desired_software_set_id="desiredSoftwareSetId",
+                desktop_endpoint="desktopEndpoint",
+                device_creation_tags=[CfnTag(
+                    key="key",
+                    value="value"
+                )],
+                kms_key_arn="kmsKeyArn",
+                maintenance_window=workspacesthinclient.CfnEnvironment.MaintenanceWindowProperty(
+                    type="type",
+            
+                    # the properties below are optional
+                    apply_time_of="applyTimeOf",
+                    days_of_the_week=["daysOfTheWeek"],
+                    end_time_hour=123,
+                    end_time_minute=123,
+                    start_time_hour=123,
+                    start_time_minute=123
+                ),
+                name="name",
+                software_set_update_mode="softwareSetUpdateMode",
+                software_set_update_schedule="softwareSetUpdateSchedule",
+                tags=[CfnTag(
+                    key="key",
+                    value="value"
+                )]
+            )
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__d5ade8c81bf6b62d21c53769263cd25b48d66d29f3ae96ec22ac8fb14f2e4d33)
+            check_type(argname="argument desktop_arn", value=desktop_arn, expected_type=type_hints["desktop_arn"])
+            check_type(argname="argument desired_software_set_id", value=desired_software_set_id, expected_type=type_hints["desired_software_set_id"])
+            check_type(argname="argument desktop_endpoint", value=desktop_endpoint, expected_type=type_hints["desktop_endpoint"])
+            check_type(argname="argument device_creation_tags", value=device_creation_tags, expected_type=type_hints["device_creation_tags"])
+            check_type(argname="argument kms_key_arn", value=kms_key_arn, expected_type=type_hints["kms_key_arn"])
+            check_type(argname="argument maintenance_window", value=maintenance_window, expected_type=type_hints["maintenance_window"])
+            check_type(argname="argument name", value=name, expected_type=type_hints["name"])
+            check_type(argname="argument software_set_update_mode", value=software_set_update_mode, expected_type=type_hints["software_set_update_mode"])
+            check_type(argname="argument software_set_update_schedule", value=software_set_update_schedule, expected_type=type_hints["software_set_update_schedule"])
+            check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
+        self._values: typing.Dict[builtins.str, typing.Any] = {
+            "desktop_arn": desktop_arn,
+        }
+        if desired_software_set_id is not None:
+            self._values["desired_software_set_id"] = desired_software_set_id
+        if desktop_endpoint is not None:
+            self._values["desktop_endpoint"] = desktop_endpoint
+        if device_creation_tags is not None:
+            self._values["device_creation_tags"] = device_creation_tags
+        if kms_key_arn is not None:
+            self._values["kms_key_arn"] = kms_key_arn
+        if maintenance_window is not None:
+            self._values["maintenance_window"] = maintenance_window
+        if name is not None:
+            self._values["name"] = name
+        if software_set_update_mode is not None:
+            self._values["software_set_update_mode"] = software_set_update_mode
+        if software_set_update_schedule is not None:
+            self._values["software_set_update_schedule"] = software_set_update_schedule
+        if tags is not None:
+            self._values["tags"] = tags
+
+    @builtins.property
+    def desktop_arn(self) -> builtins.str:
+        '''The Amazon Resource Name (ARN) of the desktop to stream from Amazon WorkSpaces, WorkSpaces Secure Browser, or WorkSpaces Applications.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-workspacesthinclient-environment.html#cfn-workspacesthinclient-environment-desktoparn
+        '''
+        result = self._values.get("desktop_arn")
+        assert result is not None, "Required property 'desktop_arn' is missing"
+        return typing.cast(builtins.str, result)
+
+    @builtins.property
+    def desired_software_set_id(self) -> typing.Optional[builtins.str]:
+        '''The ID of the software set to apply.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-workspacesthinclient-environment.html#cfn-workspacesthinclient-environment-desiredsoftwaresetid
+        '''
+        result = self._values.get("desired_software_set_id")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def desktop_endpoint(self) -> typing.Optional[builtins.str]:
+        '''The URL for the identity provider login (only for environments that use WorkSpaces Applications).
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-workspacesthinclient-environment.html#cfn-workspacesthinclient-environment-desktopendpoint
+        '''
+        result = self._values.get("desktop_endpoint")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def device_creation_tags(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, _CfnTag_f6864754]]]]:
+        '''An array of key-value pairs to apply to the newly created devices for this environment.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-workspacesthinclient-environment.html#cfn-workspacesthinclient-environment-devicecreationtags
+        '''
+        result = self._values.get("device_creation_tags")
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, _CfnTag_f6864754]]]], result)
+
+    @builtins.property
+    def kms_key_arn(self) -> typing.Optional[builtins.str]:
+        '''The Amazon Resource Name (ARN) of the AWS Key Management Service key used to encrypt the environment.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-workspacesthinclient-environment.html#cfn-workspacesthinclient-environment-kmskeyarn
+        '''
+        result = self._values.get("kms_key_arn")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def maintenance_window(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnEnvironment.MaintenanceWindowProperty]]:
+        '''A specification for a time window to apply software updates.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-workspacesthinclient-environment.html#cfn-workspacesthinclient-environment-maintenancewindow
+        '''
+        result = self._values.get("maintenance_window")
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnEnvironment.MaintenanceWindowProperty]], result)
+
+    @builtins.property
+    def name(self) -> typing.Optional[builtins.str]:
+        '''The name of the environment.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-workspacesthinclient-environment.html#cfn-workspacesthinclient-environment-name
+        '''
+        result = self._values.get("name")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def software_set_update_mode(self) -> typing.Optional[builtins.str]:
+        '''An option to define which software updates to apply.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-workspacesthinclient-environment.html#cfn-workspacesthinclient-environment-softwaresetupdatemode
+        '''
+        result = self._values.get("software_set_update_mode")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def software_set_update_schedule(self) -> typing.Optional[builtins.str]:
+        '''An option to define if software updates should be applied within a maintenance window.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-workspacesthinclient-environment.html#cfn-workspacesthinclient-environment-softwaresetupdateschedule
+        '''
+        result = self._values.get("software_set_update_schedule")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+        '''An array of key-value pairs to apply to this resource.
+
+        For more information, see `Tag <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-resource-tags.html>`_ .
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-workspacesthinclient-environment.html#cfn-workspacesthinclient-environment-tags
+        '''
+        result = self._values.get("tags")
+        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+
+    def __eq__(self, rhs: typing.Any) -> builtins.bool:
+        return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+    def __ne__(self, rhs: typing.Any) -> builtins.bool:
+        return not (rhs == self)
+
+    def __repr__(self) -> str:
+        return "CfnEnvironmentProps(%s)" % ", ".join(
+            k + "=" + repr(v) for k, v in self._values.items()
+        )
+
+
 __all__ = [
     "CfnEnvironment",
     "CfnEnvironmentProps",
-    "EnvironmentReference",
-    "IEnvironmentRef",
 ]
 
 publication.publish()
-
-def _typecheckingstub__d5ade8c81bf6b62d21c53769263cd25b48d66d29f3ae96ec22ac8fb14f2e4d33(
-    *,
-    desktop_arn: builtins.str,
-    desired_software_set_id: typing.Optional[builtins.str] = None,
-    desktop_endpoint: typing.Optional[builtins.str] = None,
-    device_creation_tags: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]]]] = None,
-    kms_key_arn: typing.Optional[builtins.str] = None,
-    maintenance_window: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnEnvironment.MaintenanceWindowProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-    name: typing.Optional[builtins.str] = None,
-    software_set_update_mode: typing.Optional[builtins.str] = None,
-    software_set_update_schedule: typing.Optional[builtins.str] = None,
-    tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-) -> None:
-    """Type checking stubs"""
-    pass
-
-def _typecheckingstub__b0321c629babc3399d684a6cd7f0c17824d3609ffdee9b537a6911a5e268aa51(
-    *,
-    environment_arn: builtins.str,
-    environment_id: builtins.str,
-) -> None:
-    """Type checking stubs"""
-    pass
 
 def _typecheckingstub__71de71c28d2a60cf68cffac5043975f99ea7f8d1359578b88902be0ceae59226(
     scope: _constructs_77d1e7e8.Construct,
@@ -1150,5 +1015,18 @@ def _typecheckingstub__fdddfb66c374577593a886bb5769e5d1bf823db9017d1cedea143c7da
     """Type checking stubs"""
     pass
 
-for cls in [IEnvironmentRef]:
-    typing.cast(typing.Any, cls).__protocol_attrs__ = typing.cast(typing.Any, cls).__protocol_attrs__ - set(['__jsii_proxy_class__', '__jsii_type__'])
+def _typecheckingstub__d5ade8c81bf6b62d21c53769263cd25b48d66d29f3ae96ec22ac8fb14f2e4d33(
+    *,
+    desktop_arn: builtins.str,
+    desired_software_set_id: typing.Optional[builtins.str] = None,
+    desktop_endpoint: typing.Optional[builtins.str] = None,
+    device_creation_tags: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+    kms_key_arn: typing.Optional[builtins.str] = None,
+    maintenance_window: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnEnvironment.MaintenanceWindowProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    name: typing.Optional[builtins.str] = None,
+    software_set_update_mode: typing.Optional[builtins.str] = None,
+    software_set_update_schedule: typing.Optional[builtins.str] = None,
+    tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass

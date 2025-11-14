@@ -159,9 +159,21 @@ def extend_driver(
     # Extend the driver with new methods
     driver.default_find_element = driver.find_element
     driver.default_find_elements = driver.find_elements
+    driver.default_add_cookie = driver.add_cookie
+    driver.default_get_cookie = driver.get_cookie
+    driver.default_delete_cookie = driver.delete_cookie
+    driver.default_back = driver.back
+    driver.default_forward = driver.forward
+    driver.default_refresh = driver.refresh
     DM = sb_driver.DriverMethods(driver)
     driver.find_element = DM.find_element
     driver.find_elements = DM.find_elements
+    driver.add_cookie = DM.add_cookie
+    driver.get_cookie = DM.get_cookie
+    driver.delete_cookie = DM.delete_cookie
+    driver.back = DM.back
+    driver.forward = DM.forward
+    driver.refresh = DM.refresh
     driver.locator = DM.locator
     page = types.SimpleNamespace()
     page.open = DM.open_url
@@ -1410,14 +1422,10 @@ def _uc_gui_click_captcha(
                     and driver.is_element_present("%s div" % frame)
                 ):
                     frame = "%s div" % frame
-                elif (
-                    driver.is_element_present('[name*="cf-turnstile-"]')
-                    and driver.is_element_present("#challenge-form div > div")
-                ):
+                elif driver.is_element_present("#challenge-form div > div"):
                     frame = "#challenge-form div > div"
                 elif (
-                    driver.is_element_present('[name*="cf-turnstile-"]')
-                    and driver.is_element_present(
+                    driver.is_element_present(
                         '[style="display: grid;"] div div'
                     )
                 ):
@@ -1430,13 +1438,11 @@ def _uc_gui_click_captcha(
                 ):
                     frame = '.spacer + div div:not([class])'
                 elif (
-                    driver.is_element_present('[name*="cf-turnstile-"]')
-                    and driver.is_element_present(".spacer div:not([class])")
+                    driver.is_element_present(".spacer div:not([class])")
                 ):
                     frame = ".spacer div:not([class])"
                 elif (
-                    driver.is_element_present('script[src*="challenges.c"]')
-                    and driver.is_element_present(
+                    driver.is_element_present(
                         '[data-testid*="challenge-"] div'
                     )
                 ):

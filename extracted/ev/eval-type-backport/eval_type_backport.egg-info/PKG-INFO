@@ -1,6 +1,6 @@
-Metadata-Version: 2.1
+Metadata-Version: 2.4
 Name: eval_type_backport
-Version: 0.2.2
+Version: 0.3.0
 Summary: Like `typing._eval_type`, but lets older Python versions use newer typing features.
 Home-page: https://github.com/alexmojaki/eval_type_backport
 Author: Alex Hall
@@ -15,11 +15,13 @@ Classifier: Programming Language :: Python :: 3.10
 Classifier: Programming Language :: Python :: 3.11
 Classifier: Programming Language :: Python :: 3.12
 Classifier: Programming Language :: Python :: 3.13
+Classifier: Programming Language :: Python :: 3.14
 Requires-Python: >=3.8
 Description-Content-Type: text/markdown
 License-File: LICENSE.txt
 Provides-Extra: tests
 Requires-Dist: pytest; extra == "tests"
+Dynamic: license-file
 
 # eval_type_backport
 

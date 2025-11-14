@@ -2,11 +2,15 @@
 DataFrame utilities for reading tables from various catalog types.
 """
 
+import logging
 from typing import Optional
 
 import pandas as pd
 
 from sagemaker_studio.utils.sqlutils import _ensure_project
+
+logger = logging.getLogger()
+logger.info("Importing dataframeutils")
 
 
 def read_catalog_table(
@@ -405,3 +409,4 @@ def _patch_pandas():
 
 
 _patch_pandas()
+logger.info("Finished importing dataframeutils")

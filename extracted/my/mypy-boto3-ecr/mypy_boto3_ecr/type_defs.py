@@ -17,6 +17,7 @@ Usage::
 from __future__ import annotations
 
 import sys
+from collections.abc import Sequence
 from datetime import datetime
 from typing import IO, Any, Union
 
@@ -39,12 +40,6 @@ from .literals import (
     UpstreamRegistryType,
 )
 
-if sys.version_info >= (3, 9):
-    from builtins import dict as Dict
-    from builtins import list as List
-    from collections.abc import Sequence
-else:
-    from typing import Dict, List, Sequence
 if sys.version_info >= (3, 12):
     from typing import Literal, NotRequired, TypedDict
 else:
@@ -228,7 +223,7 @@ class AwsEcrContainerImageDetailsTypeDef(TypedDict):
     architecture: NotRequired[str]
     author: NotRequired[str]
     imageHash: NotRequired[str]
-    imageTags: NotRequired[List[str]]
+    imageTags: NotRequired[list[str]]
     platform: NotRequired[str]
     pushedAt: NotRequired[datetime]
     lastInUseAt: NotRequired[datetime]
@@ -259,7 +254,7 @@ class LayerTypeDef(TypedDict):
 class ResponseMetadataTypeDef(TypedDict):
     RequestId: str
     HTTPStatusCode: int
-    HTTPHeaders: Dict[str, str]
+    HTTPHeaders: dict[str, str]
     RetryAttempts: int
     HostId: NotRequired[str]
 
@@ -458,7 +453,7 @@ class GetRepositoryPolicyRequestTypeDef(TypedDict):
 class ImageScanFindingsSummaryTypeDef(TypedDict):
     imageScanCompletedAt: NotRequired[datetime]
     vulnerabilitySourceUpdatedAt: NotRequired[datetime]
-    findingSeverityCounts: NotRequired[Dict[FindingSeverityType, int]]
+    findingSeverityCounts: NotRequired[dict[FindingSeverityType, int]]
 
 
 class InitiateLayerUploadRequestTypeDef(TypedDict):
@@ -581,7 +576,7 @@ class ImageScanFindingTypeDef(TypedDict):
     description: NotRequired[str]
     uri: NotRequired[str]
     severity: NotRequired[FindingSeverityType]
-    attributes: NotRequired[List[AttributeTypeDef]]
+    attributes: NotRequired[list[AttributeTypeDef]]
 
 
 class ResourceDetailsTypeDef(TypedDict):
@@ -589,8 +584,8 @@ class ResourceDetailsTypeDef(TypedDict):
 
 
 class BatchCheckLayerAvailabilityResponseTypeDef(TypedDict):
-    layers: List[LayerTypeDef]
-    failures: List[LayerFailureTypeDef]
+    layers: list[LayerTypeDef]
+    failures: list[LayerFailureTypeDef]
     ResponseMetadata: ResponseMetadataTypeDef
 
 
@@ -653,7 +648,7 @@ class GetAccountSettingResponseTypeDef(TypedDict):
 
 
 class GetAuthorizationTokenResponseTypeDef(TypedDict):
-    authorizationData: List[AuthorizationDataTypeDef]
+    authorizationData: list[AuthorizationDataTypeDef]
     ResponseMetadata: ResponseMetadataTypeDef
 
 
@@ -796,7 +791,7 @@ class ImageTypeDef(TypedDict):
 
 
 class ListImagesResponseTypeDef(TypedDict):
-    imageIds: List[ImageIdentifierTypeDef]
+    imageIds: list[ImageIdentifierTypeDef]
     ResponseMetadata: ResponseMetadataTypeDef
     nextToken: NotRequired[str]
 
@@ -829,7 +824,7 @@ class PutImageTagMutabilityResponseTypeDef(TypedDict):
     registryId: str
     repositoryName: str
     imageTagMutability: ImageTagMutabilityType
-    imageTagMutabilityExclusionFilters: List[ImageTagMutabilityExclusionFilterTypeDef]
+    imageTagMutabilityExclusionFilters: list[ImageTagMutabilityExclusionFilterTypeDef]
     ResponseMetadata: ResponseMetadataTypeDef
 
 
@@ -851,7 +846,7 @@ class CreateRepositoryCreationTemplateRequestTypeDef(TypedDict):
 
 
 class ListTagsForResourceResponseTypeDef(TypedDict):
-    tags: List[TagTypeDef]
+    tags: list[TagTypeDef]
     ResponseMetadata: ResponseMetadataTypeDef
 
 
@@ -861,12 +856,12 @@ class RepositoryCreationTemplateTypeDef(TypedDict):
     encryptionConfiguration: NotRequired[
         EncryptionConfigurationForRepositoryCreationTemplateTypeDef
     ]
-    resourceTags: NotRequired[List[TagTypeDef]]
+    resourceTags: NotRequired[list[TagTypeDef]]
     imageTagMutability: NotRequired[ImageTagMutabilityType]
-    imageTagMutabilityExclusionFilters: NotRequired[List[ImageTagMutabilityExclusionFilterTypeDef]]
+    imageTagMutabilityExclusionFilters: NotRequired[list[ImageTagMutabilityExclusionFilterTypeDef]]
     repositoryPolicy: NotRequired[str]
     lifecyclePolicy: NotRequired[str]
-    appliedFor: NotRequired[List[RCTAppliedForType]]
+    appliedFor: NotRequired[list[RCTAppliedForType]]
     customRoleArn: NotRequired[str]
     createdAt: NotRequired[datetime]
     updatedAt: NotRequired[datetime]
@@ -926,13 +921,13 @@ class RepositoryTypeDef(TypedDict):
     repositoryUri: NotRequired[str]
     createdAt: NotRequired[datetime]
     imageTagMutability: NotRequired[ImageTagMutabilityType]
-    imageTagMutabilityExclusionFilters: NotRequired[List[ImageTagMutabilityExclusionFilterTypeDef]]
+    imageTagMutabilityExclusionFilters: NotRequired[list[ImageTagMutabilityExclusionFilterTypeDef]]
     imageScanningConfiguration: NotRequired[ImageScanningConfigurationTypeDef]
     encryptionConfiguration: NotRequired[EncryptionConfigurationTypeDef]
 
 
 class CvssScoreDetailsTypeDef(TypedDict):
-    adjustments: NotRequired[List[CvssScoreAdjustmentTypeDef]]
+    adjustments: NotRequired[list[CvssScoreAdjustmentTypeDef]]
     score: NotRequired[float]
     scoreSource: NotRequired[str]
     scoringVector: NotRequired[str]
@@ -942,7 +937,7 @@ class CvssScoreDetailsTypeDef(TypedDict):
 class DescribeImageReplicationStatusResponseTypeDef(TypedDict):
     repositoryName: str
     imageId: ImageIdentifierTypeDef
-    replicationStatuses: List[ImageReplicationStatusTypeDef]
+    replicationStatuses: list[ImageReplicationStatusTypeDef]
     ResponseMetadata: ResponseMetadataTypeDef
 
 
@@ -1011,7 +1006,7 @@ DescribeImagesRequestTypeDef = TypedDict(
 
 
 class DescribePullThroughCacheRulesResponseTypeDef(TypedDict):
-    pullThroughCacheRules: List[PullThroughCacheRuleTypeDef]
+    pullThroughCacheRules: list[PullThroughCacheRuleTypeDef]
     ResponseMetadata: ResponseMetadataTypeDef
     nextToken: NotRequired[str]
 
@@ -1055,7 +1050,7 @@ class ImageDetailTypeDef(TypedDict):
     registryId: NotRequired[str]
     repositoryName: NotRequired[str]
     imageDigest: NotRequired[str]
-    imageTags: NotRequired[List[str]]
+    imageTags: NotRequired[list[str]]
     imageSizeInBytes: NotRequired[int]
     imagePushedAt: NotRequired[datetime]
     imageScanStatus: NotRequired[ImageScanStatusTypeDef]
@@ -1066,7 +1061,7 @@ class ImageDetailTypeDef(TypedDict):
 
 
 class LifecyclePolicyPreviewResultTypeDef(TypedDict):
-    imageTags: NotRequired[List[str]]
+    imageTags: NotRequired[list[str]]
     imageDigest: NotRequired[str]
     imagePushedAt: NotRequired[datetime]
     action: NotRequired[LifecyclePolicyRuleActionTypeDef]
@@ -1095,16 +1090,16 @@ ListImagesRequestTypeDef = TypedDict(
 
 
 class PackageVulnerabilityDetailsTypeDef(TypedDict):
-    cvss: NotRequired[List[CvssScoreTypeDef]]
-    referenceUrls: NotRequired[List[str]]
-    relatedVulnerabilities: NotRequired[List[str]]
+    cvss: NotRequired[list[CvssScoreTypeDef]]
+    referenceUrls: NotRequired[list[str]]
+    relatedVulnerabilities: NotRequired[list[str]]
     source: NotRequired[str]
     sourceUrl: NotRequired[str]
     vendorCreatedAt: NotRequired[datetime]
     vendorSeverity: NotRequired[str]
     vendorUpdatedAt: NotRequired[datetime]
     vulnerabilityId: NotRequired[str]
-    vulnerablePackages: NotRequired[List[VulnerablePackageTypeDef]]
+    vulnerablePackages: NotRequired[list[VulnerablePackageTypeDef]]
 
 
 class RemediationTypeDef(TypedDict):
@@ -1113,7 +1108,7 @@ class RemediationTypeDef(TypedDict):
 
 class RegistryScanningRuleOutputTypeDef(TypedDict):
     scanFrequency: ScanFrequencyType
-    repositoryFilters: List[ScanningRepositoryFilterTypeDef]
+    repositoryFilters: list[ScanningRepositoryFilterTypeDef]
 
 
 class RegistryScanningRuleTypeDef(TypedDict):
@@ -1126,12 +1121,12 @@ class RepositoryScanningConfigurationTypeDef(TypedDict):
     repositoryName: NotRequired[str]
     scanOnPush: NotRequired[bool]
     scanFrequency: NotRequired[ScanFrequencyType]
-    appliedScanFilters: NotRequired[List[ScanningRepositoryFilterTypeDef]]
+    appliedScanFilters: NotRequired[list[ScanningRepositoryFilterTypeDef]]
 
 
 class ReplicationRuleOutputTypeDef(TypedDict):
-    destinations: List[ReplicationDestinationTypeDef]
-    repositoryFilters: NotRequired[List[RepositoryFilterTypeDef]]
+    destinations: list[ReplicationDestinationTypeDef]
+    repositoryFilters: NotRequired[list[RepositoryFilterTypeDef]]
 
 
 class ReplicationRuleTypeDef(TypedDict):
@@ -1144,21 +1139,21 @@ ResourceTypeDef = TypedDict(
     {
         "details": NotRequired[ResourceDetailsTypeDef],
         "id": NotRequired[str],
-        "tags": NotRequired[Dict[str, str]],
+        "tags": NotRequired[dict[str, str]],
         "type": NotRequired[str],
     },
 )
 
 
 class BatchDeleteImageResponseTypeDef(TypedDict):
-    imageIds: List[ImageIdentifierTypeDef]
-    failures: List[ImageFailureTypeDef]
+    imageIds: list[ImageIdentifierTypeDef]
+    failures: list[ImageFailureTypeDef]
     ResponseMetadata: ResponseMetadataTypeDef
 
 
 class BatchGetImageResponseTypeDef(TypedDict):
-    images: List[ImageTypeDef]
-    failures: List[ImageFailureTypeDef]
+    images: list[ImageTypeDef]
+    failures: list[ImageFailureTypeDef]
     ResponseMetadata: ResponseMetadataTypeDef
 
 
@@ -1181,7 +1176,7 @@ class DeleteRepositoryCreationTemplateResponseTypeDef(TypedDict):
 
 class DescribeRepositoryCreationTemplatesResponseTypeDef(TypedDict):
     registryId: str
-    repositoryCreationTemplates: List[RepositoryCreationTemplateTypeDef]
+    repositoryCreationTemplates: list[RepositoryCreationTemplateTypeDef]
     ResponseMetadata: ResponseMetadataTypeDef
     nextToken: NotRequired[str]
 
@@ -1203,7 +1198,7 @@ class DeleteRepositoryResponseTypeDef(TypedDict):
 
 
 class DescribeRepositoriesResponseTypeDef(TypedDict):
-    repositories: List[RepositoryTypeDef]
+    repositories: list[RepositoryTypeDef]
     ResponseMetadata: ResponseMetadataTypeDef
     nextToken: NotRequired[str]
 
@@ -1213,7 +1208,7 @@ class ScoreDetailsTypeDef(TypedDict):
 
 
 class DescribeImagesResponseTypeDef(TypedDict):
-    imageDetails: List[ImageDetailTypeDef]
+    imageDetails: list[ImageDetailTypeDef]
     ResponseMetadata: ResponseMetadataTypeDef
     nextToken: NotRequired[str]
 
@@ -1223,7 +1218,7 @@ class GetLifecyclePolicyPreviewResponseTypeDef(TypedDict):
     repositoryName: str
     lifecyclePolicyText: str
     status: LifecyclePolicyPreviewStatusType
-    previewResults: List[LifecyclePolicyPreviewResultTypeDef]
+    previewResults: list[LifecyclePolicyPreviewResultTypeDef]
     summary: LifecyclePolicyPreviewSummaryTypeDef
     ResponseMetadata: ResponseMetadataTypeDef
     nextToken: NotRequired[str]
@@ -1231,7 +1226,7 @@ class GetLifecyclePolicyPreviewResponseTypeDef(TypedDict):
 
 class RegistryScanningConfigurationTypeDef(TypedDict):
     scanType: NotRequired[ScanTypeType]
-    rules: NotRequired[List[RegistryScanningRuleOutputTypeDef]]
+    rules: NotRequired[list[RegistryScanningRuleOutputTypeDef]]
 
 
 RegistryScanningRuleUnionTypeDef = Union[
@@ -1240,13 +1235,13 @@ RegistryScanningRuleUnionTypeDef = Union[
 
 
 class BatchGetRepositoryScanningConfigurationResponseTypeDef(TypedDict):
-    scanningConfigurations: List[RepositoryScanningConfigurationTypeDef]
-    failures: List[RepositoryScanningConfigurationFailureTypeDef]
+    scanningConfigurations: list[RepositoryScanningConfigurationTypeDef]
+    failures: list[RepositoryScanningConfigurationFailureTypeDef]
     ResponseMetadata: ResponseMetadataTypeDef
 
 
 class ReplicationConfigurationOutputTypeDef(TypedDict):
-    rules: List[ReplicationRuleOutputTypeDef]
+    rules: list[ReplicationRuleOutputTypeDef]
 
 
 class ReplicationConfigurationTypeDef(TypedDict):
@@ -1263,7 +1258,7 @@ EnhancedImageScanFindingTypeDef = TypedDict(
         "lastObservedAt": NotRequired[datetime],
         "packageVulnerabilityDetails": NotRequired[PackageVulnerabilityDetailsTypeDef],
         "remediation": NotRequired[RemediationTypeDef],
-        "resources": NotRequired[List[ResourceTypeDef]],
+        "resources": NotRequired[list[ResourceTypeDef]],
         "score": NotRequired[float],
         "scoreDetails": NotRequired[ScoreDetailsTypeDef],
         "severity": NotRequired[str],
@@ -1312,9 +1307,9 @@ ReplicationConfigurationUnionTypeDef = Union[
 class ImageScanFindingsTypeDef(TypedDict):
     imageScanCompletedAt: NotRequired[datetime]
     vulnerabilitySourceUpdatedAt: NotRequired[datetime]
-    findingSeverityCounts: NotRequired[Dict[FindingSeverityType, int]]
-    findings: NotRequired[List[ImageScanFindingTypeDef]]
-    enhancedFindings: NotRequired[List[EnhancedImageScanFindingTypeDef]]
+    findingSeverityCounts: NotRequired[dict[FindingSeverityType, int]]
+    findings: NotRequired[list[ImageScanFindingTypeDef]]
+    enhancedFindings: NotRequired[list[EnhancedImageScanFindingTypeDef]]
 
 
 class PutReplicationConfigurationRequestTypeDef(TypedDict):
