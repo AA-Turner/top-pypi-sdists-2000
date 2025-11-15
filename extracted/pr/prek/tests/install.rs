@@ -70,7 +70,7 @@ fn install() -> anyhow::Result<()> {
     success: true
     exit_code: 0
     ----- stdout -----
-    Hook already exists at `.git/hooks/pre-commit`, move it to `.git/hooks/pre-commit.legacy`
+    Hook already exists at `.git/hooks/pre-commit`, moved it to `.git/hooks/pre-commit.legacy`
     prek installed at `.git/hooks/pre-commit`
     prek installed at `.git/hooks/post-commit`
 
@@ -631,6 +631,8 @@ fn workspace_install() -> anyhow::Result<()> {
     exit_code: 0
     ----- stdout -----
     prek installed at `../.git/hooks/pre-commit` for workspace `[TEMP_DIR]/project3`
+
+    hint: this hook installed for `[TEMP_DIR]/project3` only; run `prek install` from `[TEMP_DIR]/` to install for the entire repo.
 
     ----- stderr -----
     ");

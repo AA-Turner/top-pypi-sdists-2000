@@ -30,9 +30,9 @@ class FleetDeploymentConfigureCreateRequest(ModelNormal):
 
     def __init__(self_, data: FleetDeploymentConfigureCreate, **kwargs):
         """
-        Request payload for creating a new deployment.
+        Request payload for creating a new configuration deployment.
 
-        :param data: Data for creating a new deployment.
+        :param data: Data for creating a new configuration deployment.
         :type data: FleetDeploymentConfigureCreate
         """
         super().__init__(kwargs)

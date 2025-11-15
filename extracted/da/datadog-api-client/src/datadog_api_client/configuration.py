@@ -143,6 +143,13 @@ class Configuration:
     :type retry_backoff_factor: float
     :param max_retries: The maximum number of times a single request can be retried.
     :type max_retries: int
+    :param retry_policy: Custom retry policy instance (e.g., urllib3.util.Retry). If provided, this overrides
+        the default retry behavior and the enable_retry, retry_backoff_factor, and max_retries settings.
+    :type retry_policy: urllib3.util.Retry
+    :param delegated_auth_provider: The delegated authentication provider (e.g., 'aws' for AWS).
+    :type delegated_auth_provider: str
+    :param delegated_auth_org_uuid: The organization UUID for delegated authentication.
+    :type delegated_auth_org_uuid: str
     """
 
     def __init__(
@@ -170,6 +177,9 @@ class Configuration:
         enable_retry=False,
         retry_backoff_factor=2,
         max_retries=3,
+        retry_policy=None,
+        delegated_auth_provider=None,
+        delegated_auth_org_uuid=None,
     ):
         """Constructor."""
         self._base_path = "https://api.datadoghq.com" if host is None else host
@@ -232,37 +242,48 @@ class Configuration:
         self.enable_retry = enable_retry
         self.retry_backoff_factor = retry_backoff_factor
         self.max_retries = max_retries
+        self.retry_policy = retry_policy
 
         # Keep track of unstable operations
         self.unstable_operations = _UnstableOperations(
             {
                 "v2.cancel_fleet_deployment": False,
                 "v2.create_fleet_deployment_configure": False,
+                "v2.create_fleet_deployment_upgrade": False,
+                "v2.create_fleet_schedule": False,
+                "v2.delete_fleet_schedule": False,
                 "v2.get_fleet_deployment": False,
+                "v2.get_fleet_schedule": False,
+                "v2.list_fleet_agent_versions": False,
                 "v2.list_fleet_deployments": False,
+                "v2.list_fleet_schedules": False,
+                "v2.trigger_fleet_schedule": False,
+                "v2.update_fleet_schedule": False,
                 "v2.create_open_api": False,
                 "v2.delete_open_api": False,
                 "v2.get_open_api": False,
                 "v2.list_apis": False,
                 "v2.update_open_api": False,
-                "v2.cancel_historical_job": False,
+                "v2.cancel_threat_hunting_job": False,
                 "v2.convert_job_result_to_signal": False,
-                "v2.delete_historical_job": False,
+                "v2.delete_threat_hunting_job": False,
                 "v2.get_finding": False,
-                "v2.get_historical_job": False,
                 "v2.get_rule_version_history": False,
                 "v2.get_sbom": False,
+                "v2.get_secrets_rules": False,
                 "v2.get_security_monitoring_histsignal": False,
                 "v2.get_security_monitoring_histsignals_by_job_id": False,
+                "v2.get_threat_hunting_job": False,
                 "v2.list_assets_sbo_ms": False,
                 "v2.list_findings": False,
-                "v2.list_historical_jobs": False,
+                "v2.list_multiple_rulesets": False,
                 "v2.list_scanned_assets_metadata": False,
                 "v2.list_security_monitoring_histsignals": False,
+                "v2.list_threat_hunting_jobs": False,
                 "v2.list_vulnerabilities": False,
                 "v2.list_vulnerable_assets": False,
                 "v2.mute_findings": False,
-                "v2.run_historical_job": False,
+                "v2.run_threat_hunting_job": False,
                 "v2.search_security_monitoring_histsignals": False,
                 "v2.create_dataset": False,
                 "v2.delete_dataset": False,
@@ -316,6 +337,16 @@ class Configuration:
                 "v2.validate_existing_monitor_user_template": False,
                 "v2.validate_monitor_user_template": False,
                 "v2.list_role_templates": False,
+                "v2.create_connection": False,
+                "v2.delete_connection": False,
+                "v2.get_account_facet_info": False,
+                "v2.get_mapping": False,
+                "v2.get_user_facet_info": False,
+                "v2.list_connections": False,
+                "v2.query_accounts": False,
+                "v2.query_event_filtered_users": False,
+                "v2.query_users": False,
+                "v2.update_connection": False,
                 "v2.create_pipeline": False,
                 "v2.delete_pipeline": False,
                 "v2.get_pipeline": False,
@@ -344,6 +375,9 @@ class Configuration:
                 "v2.list_member_teams": False,
                 "v2.remove_member_team": False,
                 "v2.sync_teams": False,
+                "v2.create_team_connections": False,
+                "v2.delete_team_connections": False,
+                "v2.list_team_connections": False,
                 "v2.create_incident_team": False,
                 "v2.delete_incident_team": False,
                 "v2.get_incident_team": False,
@@ -352,6 +386,12 @@ class Configuration:
                 "v2.search_flaky_tests": False,
             }
         )
+
+        # Delegated token configuration
+        self.delegated_token_config = None
+        self.delegated_auth_provider = delegated_auth_provider
+        self.delegated_auth_org_uuid = delegated_auth_org_uuid
+        self._delegated_token_credentials = None
 
         # Load default values from environment
         if "DD_SITE" in os.environ:

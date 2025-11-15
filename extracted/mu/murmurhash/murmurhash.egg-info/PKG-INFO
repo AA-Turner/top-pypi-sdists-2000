@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: murmurhash
-Version: 1.0.14
+Version: 1.0.15
 Summary: Cython bindings for MurmurHash
 Home-page: https://github.com/explosion/murmurhash
 Author: Explosion

@@ -18210,6 +18210,7 @@ class Ec2InstanceConnectEndpointTypeDef(TypedDict):
     Tags: NotRequired[list[TagTypeDef]]
     IpAddressType: NotRequired[IpAddressTypeType]
     PublicDnsNames: NotRequired[InstanceConnectEndpointPublicDnsNamesTypeDef]
+    AvailabilityZoneId: NotRequired[str]
 
 
 class DescribeInstanceImageMetadataResultTypeDef(TypedDict):

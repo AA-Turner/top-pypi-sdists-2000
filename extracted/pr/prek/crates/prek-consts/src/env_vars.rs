@@ -21,6 +21,7 @@ impl EnvVars {
     pub const PREK_UV_SOURCE: &'static str = "PREK_UV_SOURCE";
     pub const PREK_NATIVE_TLS: &'static str = "PREK_NATIVE_TLS";
     pub const SSL_CERT_FILE: &'static str = "SSL_CERT_FILE";
+    pub const PREK_CONTAINER_RUNTIME: &'static str = "PREK_CONTAINER_RUNTIME";
 
     // PREK internal environment variables
     pub const PREK_INTERNAL__TEST_DIR: &'static str = "PREK_INTERNAL__TEST_DIR";
@@ -107,7 +108,7 @@ impl EnvVars {
     ///
     /// Adapted from Clap's `BoolishValueParser` which is dual licensed under the MIT and Apache-2.0.
     /// See `clap_builder/src/util/str_to_bool.rs`
-    pub fn parse_boolish(val: &str) -> Option<bool> {
+    fn parse_boolish(val: &str) -> Option<bool> {
         // True values are `y`, `yes`, `t`, `true`, `on`, and `1`.
         const TRUE_LITERALS: [&str; 6] = ["y", "yes", "t", "true", "on", "1"];
 

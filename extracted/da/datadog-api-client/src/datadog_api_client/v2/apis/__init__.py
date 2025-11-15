@@ -60,6 +60,7 @@ from datadog_api_client.v2.api.rum_api import RUMApi
 from datadog_api_client.v2.api.reference_tables_api import ReferenceTablesApi
 from datadog_api_client.v2.api.restriction_policies_api import RestrictionPoliciesApi
 from datadog_api_client.v2.api.roles_api import RolesApi
+from datadog_api_client.v2.api.rum_audience_management_api import RumAudienceManagementApi
 from datadog_api_client.v2.api.rum_metrics_api import RumMetricsApi
 from datadog_api_client.v2.api.rum_retention_filters_api import RumRetentionFiltersApi
 from datadog_api_client.v2.api.security_monitoring_api import SecurityMonitoringApi
@@ -74,6 +75,7 @@ from datadog_api_client.v2.api.spans_api import SpansApi
 from datadog_api_client.v2.api.spans_metrics_api import SpansMetricsApi
 from datadog_api_client.v2.api.static_analysis_api import StaticAnalysisApi
 from datadog_api_client.v2.api.synthetics_api import SyntheticsApi
+from datadog_api_client.v2.api.team_connections_api import TeamConnectionsApi
 from datadog_api_client.v2.api.teams_api import TeamsApi
 from datadog_api_client.v2.api.test_optimization_api import TestOptimizationApi
 from datadog_api_client.v2.api.usage_metering_api import UsageMeteringApi
@@ -144,6 +146,7 @@ __all__ = [
     "ReferenceTablesApi",
     "RestrictionPoliciesApi",
     "RolesApi",
+    "RumAudienceManagementApi",
     "RumMetricsApi",
     "RumRetentionFiltersApi",
     "SecurityMonitoringApi",
@@ -158,6 +161,7 @@ __all__ = [
     "SpansMetricsApi",
     "StaticAnalysisApi",
     "SyntheticsApi",
+    "TeamConnectionsApi",
     "TeamsApi",
     "TestOptimizationApi",
     "UsageMeteringApi",

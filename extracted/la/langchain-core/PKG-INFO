@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: langchain-core
-Version: 1.0.4
+Version: 1.0.5
 Summary: Building applications with LLMs through composability
 Project-URL: Homepage, https://docs.langchain.com/
 Project-URL: Documentation, https://reference.langchain.com/python/langchain_core/
@@ -56,7 +56,7 @@ The LangChain ecosystem is built on top of `langchain-core`. Some of the benefit
 
 ## 📖 Documentation
 
-For full documentation, see the [API reference](https://reference.langchain.com/python/langchain_core/).
+For full documentation, see the [API reference](https://reference.langchain.com/python/langchain_core/). For conceptual guides, tutorials, and examples on using LangChain, see the [LangChain Docs](https://docs.langchain.com/oss/python/langchain/overview).
 
 ## 📕 Releases & Versioning
 

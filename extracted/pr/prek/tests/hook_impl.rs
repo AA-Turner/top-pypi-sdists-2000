@@ -353,6 +353,8 @@ fn workspace_hook_impl_subdirectory() -> anyhow::Result<()> {
     ----- stdout -----
     prek installed at `../.git/hooks/pre-commit` for workspace `[TEMP_DIR]/project2`
 
+    hint: this hook installed for `[TEMP_DIR]/project2` only; run `prek install` from `[TEMP_DIR]/` to install for the entire repo.
+
     ----- stderr -----
     ");
 
@@ -420,6 +422,8 @@ fn workspace_hook_impl_worktree_subdirectory() -> anyhow::Result<()> {
     exit_code: 0
     ----- stdout -----
     prek installed at `../.git/hooks/pre-commit` for workspace `[TEMP_DIR]/project2`
+
+    hint: this hook installed for `[TEMP_DIR]/project2` only; run `prek install` from `[TEMP_DIR]/` to install for the entire repo.
 
     ----- stderr -----
     ");
@@ -507,7 +511,9 @@ fn workspace_hook_impl_no_project_found() -> anyhow::Result<()> {
     ----- stdout -----
 
     ----- stderr -----
-    error: No `.pre-commit-config.yaml` found in the current directory or parent directories in the repository
+    error: No `.pre-commit-config.yaml` found in the current directory or parent directories.
+
+    hint: If you just added one, rerun your command with the `--refresh` flag to rescan the workspace.
     - To temporarily silence this, run `PREK_ALLOW_NO_CONFIG=1 git ...`
     - To permanently silence this, install hooks with the `--allow-missing-config` flag
     - To uninstall hooks, run `prek uninstall`

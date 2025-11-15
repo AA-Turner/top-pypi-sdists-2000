@@ -34,7 +34,7 @@ class FleetDeploymentConfigureCreate(ModelNormal):
 
     def __init__(self_, attributes: FleetDeploymentConfigureAttributes, type: FleetDeploymentResourceType, **kwargs):
         """
-        Data for creating a new deployment.
+        Data for creating a new configuration deployment.
 
         :param attributes: Attributes for creating a new configuration deployment.
         :type attributes: FleetDeploymentConfigureAttributes

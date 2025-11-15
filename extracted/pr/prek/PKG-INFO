@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: prek
-Version: 0.2.13
+Version: 0.2.14
 Classifier: Development Status :: 2 - Pre-Alpha
 Classifier: Environment :: Console
 Classifier: Intended Audience :: Developers
@@ -80,7 +80,7 @@ On Linux and macOS:
 
 <!-- linux-standalone-install:start -->
 ```bash
-curl --proto '=https' --tlsv1.2 -LsSf https://github.com/j178/prek/releases/download/v0.2.13/prek-installer.sh | sh
+curl --proto '=https' --tlsv1.2 -LsSf https://github.com/j178/prek/releases/download/v0.2.14/prek-installer.sh | sh
 ```
 <!-- linux-standalone-install:end -->
 
@@ -88,7 +88,7 @@ On Windows:
 
 <!-- windows-standalone-install:start -->
 ```powershell
-powershell -ExecutionPolicy ByPass -c "irm https://github.com/j178/prek/releases/download/v0.2.13/prek-installer.ps1 | iex"
+powershell -ExecutionPolicy ByPass -c "irm https://github.com/j178/prek/releases/download/v0.2.14/prek-installer.ps1 | iex"
 ```
 <!-- windows-standalone-install:end -->
 
@@ -197,14 +197,16 @@ prek --version
 <summary>Nix</summary>
 
 <!-- nix-install:start -->
-prek is [available in Nix as `prek`](https://search.nixos.org/packages?channel=unstable&show=prek&query=prek).
+prek is available via [Nixpkgs](https://search.nixos.org/packages?channel=unstable&show=prek&query=prek).
 
 ```shell
 # Choose what's appropriate for your use case.
 # One-off in a shell:
 nix-shell -p prek
+
 # NixOS or non-NixOS without flakes:
 nix-env -iA nixos.prek
+
 # Non-NixOS with flakes:
 nix profile install nixpkgs#prek
 ```
@@ -216,13 +218,25 @@ nix profile install nixpkgs#prek
 <summary>Conda</summary>
 
 <!-- conda-forge-install:start -->
-prek is [available as `prek` via conda-forge](https://anaconda.org/conda-forge/prek).
+prek is available as `prek` via [conda-forge](https://anaconda.org/conda-forge/prek).
 
 ```shell
 conda install conda-forge::prek
 ```
 <!-- conda-forge-install:end -->
 
+</details>
+
+<details>
+<summary>Scoop (Windows)</summary>
+
+<!-- scoop-install:start -->
+prek is available via [Scoop](https://scoop.sh/#/apps?q=prek).
+
+```powershell
+scoop install main/prek
+```
+<!-- scoop-install:end -->
 </details>
 
 <details>
@@ -311,6 +325,9 @@ prek is pretty new, but it is already being used or recommend by some projects a
 - [kreuzberg](https://github.com/Goldziher/kreuzberg/pull/142)
 - [attrs](https://github.com/python-attrs/attrs/commit/c95b177682e76a63478d29d040f9cb36a8d31915#diff-ef2cef9f88b4fe09ca3082140e67f5ad34fb65fb6e228f119d3812261ae51449)
 - [FastMCP](https://github.com/jlowin/fastmcp/pull/2309)
+- [iceberg-python](https://github.com/apache/iceberg-python/pull/2533)
+- [msgspec](https://github.com/jcrist/msgspec/pull/918)
+- [humanize](https://github.com/python-humanize/humanize/pull/276)
 
 <!-- why:end -->
 

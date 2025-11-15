@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: cymem
-Version: 2.0.12
+Version: 2.0.13
 Summary: Manage calls to calloc/free through Cython
 Home-page: https://github.com/explosion/cymem
 Author: Matthew Honnibal
