@@ -385,6 +385,11 @@ class Terminal():
             cap.pattern for cap in self.caps.values()
             if cap.name not in CAPABILITIES_HORIZONTAL_DISTANCE)
         )
+        # Used with padd() to iterate horizontal caps
+        self._hdist_caps_named_compiled = re.compile('|'.join(
+            cap.named_pattern for cap in self.caps.values()
+            if cap.name in CAPABILITIES_HORIZONTAL_DISTANCE)
+        )
         # for tokenizer, the '.lastgroup' is the primary lookup key for
         # 'self.caps', unless 'MISMATCH'; then it is an unmatched character.
         self._caps_compiled_any = re.compile(
@@ -615,7 +620,7 @@ class Terminal():
             try:
                 if fd is not None:
                     return self._winsize(fd)
-            except (IOError, OSError, ValueError, TypeError):  # pylint: disable=overlapping-except
+            except (OSError, ValueError, TypeError):
                 pass
 
         return WINSZ(ws_row=int(os.getenv('LINES', '25')),
@@ -840,7 +845,7 @@ class Terminal():
         match = self._query_response('\x1b]11;?\x07', RE_GET_BGCOLOR_RESPONSE, timeout)
         return tuple(int(val, 16) for val in match.groups()) if match else (-1, -1, -1)
 
-    def get_device_attributes(self, timeout: Optional[float] = None,
+    def get_device_attributes(self, timeout: Optional[float] = 1,
                               force: bool = False) -> Optional[DeviceAttribute]:
         """
         Query the terminal's Device Attributes (DA1).
@@ -901,7 +906,7 @@ class Terminal():
 
         return result
 
-    def get_software_version(self, timeout: Optional[float] = None,
+    def get_software_version(self, timeout: Optional[float] = 1,
                              force: bool = False) -> Optional[SoftwareVersion]:
         """
         Query the terminal's software name and version using XTVERSION.
@@ -956,7 +961,7 @@ class Terminal():
         self._software_version_cache = SoftwareVersion.from_match(match)
         return self._software_version_cache
 
-    def does_sixel(self, timeout: Optional[float] = 1.0, force: bool = False) -> bool:
+    def does_sixel(self, timeout: Optional[float] = 1, force: bool = False) -> bool:
         """
         Query whether the terminal supports sixel graphics.
 
@@ -980,7 +985,7 @@ class Terminal():
         return da.supports_sixel if da is not None else False
 
     def get_dec_mode(self, mode: Union[int, _DecPrivateMode],
-                     timeout: float = 1.0, force: bool = False) -> DecModeResponse:
+                     timeout: float = 1, force: bool = False) -> DecModeResponse:
         """
         Query the state of a DEC Private Mode (DECRQM).
 
@@ -1078,7 +1083,7 @@ class Terminal():
 
     @contextlib.contextmanager
     def dec_modes_enabled(self, *modes: Union[int, _DecPrivateMode],
-                          timeout: Optional[float] = None) -> Generator[None, None, None]:
+                          timeout: Optional[float] = 1) -> Generator[None, None, None]:
         """
         Context manager for temporarily enabling DEC Private Modes.
 
@@ -1129,7 +1134,7 @@ class Terminal():
 
     @contextlib.contextmanager
     def dec_modes_disabled(self, *modes: Union[int, _DecPrivateMode],
-                           timeout: Optional[float] = None) -> Generator[None, None, None]:
+                           timeout: Optional[float] = 1) -> Generator[None, None, None]:
         """
         Context manager for temporarily disabling DEC Private Modes.
 
@@ -1452,68 +1457,91 @@ class Terminal():
         for mode_num in mode_numbers:
             self._dec_mode_cache[mode_num] = DecModeResponse.RESET
 
-    def get_sixel_height_and_width(self, timeout: Optional[float] = 1.0,
+    def get_sixel_height_and_width(self, timeout: Optional[float] = 1,
                                    force: bool = False) -> Tuple[int, int]:
-        # pylint: disable=too-many-return-statements
+        # pylint: disable=too-complex,too-many-branches
         """
         Query sixel graphics pixel dimensions.
 
         Returns the maximum height and width in pixels for sixel graphics
-        rendering. Tries XTSMGRAPHICS first, then validates or falls back to
-        XTWINOPS window size query if the terminal doesn't support XTSMGRAPHICS
-        or reports unrealistic dimensions.
+        rendering. Detection order (from most to least reliable):
+
+        1. XTWINOPS 16t (CSI 16 t) - Character cell size, multiplied by rows/cols
+        2. XTWINOPS 14t (CSI 14 t) - Text area size in pixels
+        3. XTSMGRAPHICS - Sixel graphics query
+        4. TIOCSWINSZ / In-band resize - System ioctl / event pixel dimensions
+
+        The cell-based calculation (method 1) is preferred because it accounts
+        for the actual drawable text area, excluding window margins and
+        decorations.
 
         When :attr:`is_a_tty` is False, no sequences are transmitted or response
         awaited, and ``(-1, -1)`` is returned without inquiry.
 
-        :arg float timeout: Timeout in seconds for both possible queries
+        :arg float timeout: Timeout in seconds for queries
         :arg bool force: Bypass cache and re-query the terminal
         :rtype: tuple
         :returns: ``(height, width)`` in pixels, or ``(-1, -1)`` if unsupported/timeout
         """
-        # Use preferred size cache from in-band resize notifications if available
-        # (unless force=True which requires re-querying)
+        # Try methods in order of reliability, as suggested by @j4james,
+        # https://github.com/pexpect/ptyprocess/issues/79#issuecomment-3498498155
+        # Split timeout evenly across the 3 query methods (16t, 14t, XTSMGRAPHICS)
+        # for the worst-case scenario that all three methods timeout.
+        third_timeout = timeout / 3 if timeout is not None else None
+
+        # 1. Try XTWINOPS 16t (character cell size) - most accurate
+        # Sticky failure: don't re-query if previously failed, unless force=True
+        if self._xtwinops_cell_cache == (-1, -1) and not force:
+            cell_result = (-1, -1)
+        elif self._xtwinops_cell_cache is not None and not force:
+            cell_result = self._xtwinops_cell_cache
+        else:
+            cell_result = self.get_cell_height_and_width(third_timeout, force)
+        if cell_result != (-1, -1):
+            cell_height, cell_width = cell_result
+            return (cell_height * self.height, cell_width * self.width)
+
+        # 2. Try XTWINOPS 14t (text area size) - widely supported
+        # Sticky failure: don't re-query if previously failed, unless force=True
+        if self._xtwinops_cache == (-1, -1) and not force:
+            result = (-1, -1)
+        elif self._xtwinops_cache is not None and not force:
+            result = self._xtwinops_cache
+        else:
+            result = self._xtwinops_cache = self._get_xtwinops_window_size(third_timeout)
+        if result != (-1, -1):
+            return result
+
+        # 3. Try XTSMGRAPHICS - sixel-specific query
+        # Sticky failure: don't re-query if previously failed, unless force=True
+        if self._xtsmgraphics_cache == (-1, -1) and not force:
+            result = (-1, -1)
+        elif self._xtsmgraphics_cache is not None and not force:
+            result = self._xtsmgraphics_cache
+        else:
+            result = self._xtsmgraphics_cache = self._get_xtsmgraphics(third_timeout)
+        if result != (-1, -1):
+            return result
+
+        # 4. Try TIOCSWINSZ pixel dimensions or cached in-band resize dimensions
+        # Check preferred size cache (from in-band resize notifications) if available
         if not force and self._preferred_size_cache is not None:
-            # Extract pixel dimensions from preferred cache
-            # Return them if they're non-zero (terminal supports pixel reporting)
             if (self._preferred_size_cache.ws_ypixel and
                     self._preferred_size_cache.ws_xpixel):
                 return (self._preferred_size_cache.ws_ypixel,
                         self._preferred_size_cache.ws_xpixel)
 
-        # Fast path: if both caches are populated (unless force=True), compute result from caches
-        if not force and self._xtsmgraphics_cache is not None and self._xtwinops_cache is not None:
-            # If XTSMGRAPHICS succeeded, use it
-            if self._xtsmgraphics_cache != (-1, -1):
-                return self._xtsmgraphics_cache
-            # Otherwise use XTWINOPS (even if it's (-1, -1))
-            return self._xtwinops_cache
+        # Fallback to direct TIOCSWINSZ query
+        if self.is_a_tty:
+            winsize = self._height_and_width()
+            if (0 < winsize.ws_ypixel <= 32000 and
+                    0 < winsize.ws_xpixel <= 32000):
+                return (winsize.ws_ypixel, winsize.ws_xpixel)
 
-        # Try XTSMGRAPHICS first (unless it previously failed - sticky failure at (-1, -1))
-        # Even with force=True, skip XTSMGRAPHICS if it previously failed to avoid wasting timeout
-        stime = time.time()
-        if self._xtsmgraphics_cache is None or (force and self._xtsmgraphics_cache != (-1, -1)):
-            # Use half of remaining timeout, saving the other for XTWINOPS fallback
-            half_timeout = timeout / 2 if timeout is not None else None
-            result = self._get_xtsmgraphics(half_timeout)
-            self._xtsmgraphics_cache = result
-            # If XTSMGRAPHICS succeeded, use it
-            if result != (-1, -1):
-                return result
-        elif self._xtsmgraphics_cache != (-1, -1):
-            # Cache hit with successful value (not force mode)
-            return self._xtsmgraphics_cache
+        # All methods failed
+        return (-1, -1)
 
-        # Fallback to XTWINOPS window pixel dimensions when:
-        # - XTSMGRAPHICS previously failed (sticky failure)
-        # - XTSMGRAPHICS just failed, using remaining time left
-        if force or self._xtwinops_cache is None:
-            result = self._get_xtwinops_window_size(_time_left(stime, timeout))
-            self._xtwinops_cache = result
-            return result
-        return self._xtwinops_cache
-
-    def get_sixel_colors(self, timeout: Optional[float] = 1.0,
+    def get_sixel_colors(self, timeout: Optional[float] = 1,
                          force: bool = False) -> int:
         """
         Query number of sixel color registers (XTSMGRAPHICS).
@@ -1551,7 +1579,7 @@ class Terminal():
 
         return self._xtsmgraphics_colors_cache
 
-    def get_cell_height_and_width(self, timeout: Optional[float] = 1.0,
+    def get_cell_height_and_width(self, timeout: Optional[float] = 1,
                                   force: bool = False) -> Tuple[int, int]:
         """
         Query character cell pixel dimensions (XTWINOPS).
@@ -1627,7 +1655,7 @@ class Terminal():
 
         return int(match.group(1))
 
-    def get_kitty_keyboard_state(self, timeout: Optional[float] = None,
+    def get_kitty_keyboard_state(self, timeout: Optional[float] = 1,
                                  force: bool = False) -> Optional[KittyKeyboardProtocol]:
         """
         Query the current Kitty keyboard protocol flags.
@@ -1754,7 +1782,7 @@ class Terminal():
     def enable_kitty_keyboard(self, *, disambiguate: bool = True, report_events: bool = False,
                               report_alternates: bool = False, report_all_keys: bool = False,
                               report_text: bool = False, mode: int = 1,
-                              timeout: Optional[float] = None,
+                              timeout: Optional[float] = 1,
                               force: bool = False) -> Generator[None, None, None]:
         """
         Context manager that enables Kitty keyboard protocol features.

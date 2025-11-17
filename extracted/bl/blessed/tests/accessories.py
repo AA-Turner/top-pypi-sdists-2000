@@ -129,7 +129,7 @@ class as_subprocess():  # pylint: disable=too-few-public-methods
             print(f'TEST RUNNER HAS FORKED, {pid_testrunner}=>{os.getpid()}: EXIT', file=sys.stderr)
             os._exit(1)
 
-        exc_output = str()
+        exc_output = ''
         decoder = codecs.getincrementaldecoder(self.encoding)()
         while True:
             try:
@@ -192,7 +192,7 @@ def read_until_semaphore(fd, semaphore=RECV_SEMAPHORE, encoding='utf8'):
     # process will read xyz\\r\\n -- this is how pseudo terminals
     # behave; a virtual terminal requires both carriage return and
     # line feed, it is only for convenience that \\n does both.
-    outp = str()
+    outp = ''
     decoder = codecs.getincrementaldecoder(encoding)()
     semaphore = semaphore.decode('ascii')
     while not outp.startswith(semaphore):
@@ -216,7 +216,7 @@ def read_until_eof(fd, encoding='utf8'):
     Return decoded string.
     """
     decoder = codecs.getincrementaldecoder(encoding)()
-    outp = str()
+    outp = ''
     while True:
         try:
             _exc = os.read(fd, 100)
@@ -271,7 +271,18 @@ def unicode_parm(cap, *parms):
     return ''
 
 
-def pty_test(child_func, parent_func=None, test_name=None):
+def _setwinsize(fd, rows, cols):
+    """Set PTY window size."""
+    import struct  # pylint: disable=import-outside-toplevel
+    import fcntl  # pylint: disable=import-outside-toplevel
+    import termios as termios_mod  # pylint: disable=import-outside-toplevel
+    TIOCSWINSZ = getattr(termios_mod, 'TIOCSWINSZ', -2146929561)
+    # Note, assume ws_xpixel and ws_ypixel are zero.
+    s = struct.pack('HHHH', rows, cols, 0, 0)
+    fcntl.ioctl(fd, TIOCSWINSZ, s)
+
+
+def pty_test(child_func, parent_func=None, test_name=None, rows=24, cols=80):
     """
     Wrapper for PTY-based tests to reduce boilerplate.
 
@@ -283,6 +294,8 @@ def pty_test(child_func, parent_func=None, test_name=None):
                    Should return bytes/str to write to stdout, or None.
         parent_func: Optional function to run in parent. Receives master_fd.
         test_name: Optional name for coverage tracking. Auto-derived from child_func if None.
+        rows: Terminal height in rows (default 24)
+        cols: Terminal width in columns (default 80)
 
     Returns:
         str: Output from child process (everything written to stdout)
@@ -301,7 +314,7 @@ def pty_test(child_func, parent_func=None, test_name=None):
             assert output == 'x'
     """
     # pylint: disable=too-complex,too-many-branches,too-many-locals
-    # pylint: disable=missing-raises-doc,missing-type-doc
+    # pylint: disable=missing-raises-doc,missing-type-doc,too-many-statements
     if IS_WINDOWS:
         # On Windows, just run child_func directly without PTY
         term = TestTerminal()
@@ -314,6 +327,10 @@ def pty_test(child_func, parent_func=None, test_name=None):
         test_name = getattr(child_func, '__name__', 'pty_test')
 
     pid, master_fd = pty_module.fork()
+
+    # Set PTY window size in parent before child starts reading
+    if pid != 0:
+        _setwinsize(master_fd, rows, cols)
 
     if pid == 0:  # Child process
         cov = init_subproc_coverage(test_name)
@@ -429,7 +446,7 @@ def assert_only_modifiers(ks, *modifiers):
     from blessed.keyboard import KittyModifierBits
 
     # Convert modifiers to a set for easy lookup
-    modifier_set = set(mod.lower() for mod in modifiers)
+    modifier_set = {mod.lower() for mod in modifiers}
 
     # Calculate expected bits using getattr - naturally validates modifier names
     expected_bits = 0

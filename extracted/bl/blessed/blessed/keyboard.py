@@ -292,6 +292,7 @@ class Keystroke(str):
 
         Returns name like 'KEY_CTRL_ALT_A', 'KEY_ALT_SHIFT_5', 'KEY_CTRL_J_RELEASED', etc.
         """
+        # pylint: disable=too-many-return-statements
         if self._mode != DecPrivateMode.SpecialInternalKitty:
             return None
 
@@ -886,6 +887,7 @@ class Keystroke(str):
         Handles Alt+printable, Alt-only special keys, and Ctrl+Alt sequences. Returns the base
         character or empty string for application keys.
         """
+        # pylint: disable=too-many-return-statements
         if not self._is_escape_sequence():
             return None
 
@@ -1263,9 +1265,9 @@ def get_keyboard_sequences(term: 'Terminal') -> typing.OrderedDict[str, int]:
     # This is for fast lookup matching of sequences, preferring
     # full-length sequence such as ('\x1b[D', KEY_LEFT)
     # over simple sequences such as ('\x1b', KEY_EXIT).
-    return OrderedDict((
+    return OrderedDict(
         (seq, sequence_map[seq]) for seq in sorted(
-            sequence_map.keys(), key=len, reverse=True)))
+            sequence_map.keys(), key=len, reverse=True))
 
 
 def get_leading_prefixes(sequences: typing.Iterable[str]) -> Set[str]:

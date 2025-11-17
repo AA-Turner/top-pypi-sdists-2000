@@ -1,12 +1,11 @@
 Metadata-Version: 2.1
 Name: blessed
-Version: 1.23.0
+Version: 1.24.0
 Summary: Easy, practical library for making terminal apps, by providing an elegant, well-documented interface to Colors, Keyboard input, and screen Positioning capabilities.
 Keywords: terminal,sequences,tty,curses,ncurses,formatting,style,color,console,keyboard,ansi,xterm
 Author-email: "Jeff Quast, Erik Rose, Avram Lubkin" <contact@jeffquast.com>
 Requires-Python: >=3.7
 Description-Content-Type: text/x-rst
-Classifier: License :: OSI Approved :: MIT License
 Classifier: Intended Audience :: Developers
 Classifier: Natural Language :: English
 Classifier: Development Status :: 5 - Production/Stable
