@@ -5,7 +5,17 @@ from unittest.mock import Mock, call, patch
 
 import botocore.exceptions
 
-from sagemaker_studio.utils.loggerutils import (
+# Mock aws_embedded_metrics before importing  # noqa: E402
+sys.modules["aws_embedded_metrics"] = Mock()
+sys.modules["aws_embedded_metrics.sinks"] = Mock()
+sys.modules["aws_embedded_metrics.sinks.stdout_sink"] = Mock()
+sys.modules["aws_embedded_metrics.logger"] = Mock()
+sys.modules["aws_embedded_metrics.logger.metrics_logger"] = Mock()
+sys.modules["aws_embedded_metrics.logger.metrics_context"] = Mock()
+sys.modules["aws_embedded_metrics.environment"] = Mock()
+sys.modules["aws_embedded_metrics.environment.local_environment"] = Mock()
+
+from sagemaker_studio.utils.loggerutils import (  # noqa: E402
     ACCESS_DENIED_PATTERNS,
     CONNECTION_ERROR_PATTERNS,
     DEFAULT_HTTP_CODE,
@@ -20,15 +30,6 @@ from sagemaker_studio.utils.loggerutils import (
     _set_context_properties,
     sync_with_metrics,
 )
-
-sys.modules["aws_embedded_metrics"] = Mock()
-sys.modules["aws_embedded_metrics.sinks"] = Mock()
-sys.modules["aws_embedded_metrics.sinks.stdout_sink"] = Mock()
-sys.modules["aws_embedded_metrics.logger"] = Mock()
-sys.modules["aws_embedded_metrics.logger.metrics_logger"] = Mock()
-sys.modules["aws_embedded_metrics.logger.metrics_context"] = Mock()
-sys.modules["aws_embedded_metrics.environment"] = Mock()
-sys.modules["aws_embedded_metrics.environment.local_environment"] = Mock()
 
 
 class TestErrorChecker(unittest.TestCase):

@@ -1039,6 +1039,9 @@ class CfnTableBucket(
                 kms_key_arn="kmsKeyArn",
                 sse_algorithm="sseAlgorithm"
             ),
+            metrics_configuration=s3tables.CfnTableBucket.MetricsConfigurationProperty(
+                status="status"
+            ),
             tags=[CfnTag(
                 key="key",
                 value="value"
@@ -1058,6 +1061,7 @@ class CfnTableBucket(
         *,
         table_bucket_name: builtins.str,
         encryption_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTableBucket.EncryptionConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        metrics_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTableBucket.MetricsConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
         unreferenced_file_removal: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTableBucket.UnreferencedFileRemovalProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
@@ -1067,6 +1071,7 @@ class CfnTableBucket(
         :param id: Construct identifier for this resource (unique in its scope).
         :param table_bucket_name: The name for the table bucket.
         :param encryption_configuration: Configuration specifying how data should be encrypted. This structure defines the encryption algorithm and optional KMS key to be used for server-side encryption.
+        :param metrics_configuration: Settings governing the Metric configuration for the table bucket.
         :param tags: User tags (key-value pairs) to associate with the table bucket.
         :param unreferenced_file_removal: The unreferenced file removal settings for your table bucket. Unreferenced file removal identifies and deletes all objects that are not referenced by any table snapshots. For more information, see the `*Amazon S3 User Guide* <https://docs.aws.amazon.com/AmazonS3/latest/userguide/s3-table-buckets-maintenance.html>`_ .
         '''
@@ -1077,6 +1082,7 @@ class CfnTableBucket(
         props = CfnTableBucketProps(
             table_bucket_name=table_bucket_name,
             encryption_configuration=encryption_configuration,
+            metrics_configuration=metrics_configuration,
             tags=tags,
             unreferenced_file_removal=unreferenced_file_removal,
         )
@@ -1169,6 +1175,24 @@ class CfnTableBucket(
             type_hints = typing.get_type_hints(_typecheckingstub__61499f569b4e5dc20b99defd26e29c6e9b7761b6630e1adec9c20e97e099dd4a)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
         jsii.set(self, "encryptionConfiguration", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="metricsConfiguration")
+    def metrics_configuration(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTableBucket.MetricsConfigurationProperty"]]:
+        '''Settings governing the Metric configuration for the table bucket.'''
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTableBucket.MetricsConfigurationProperty"]], jsii.get(self, "metricsConfiguration"))
+
+    @metrics_configuration.setter
+    def metrics_configuration(
+        self,
+        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTableBucket.MetricsConfigurationProperty"]],
+    ) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__31b7ae51d65703ba2d4aa73c08a7a5a34ad19b1ca27dd0de7d23e3e5bc20d595)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "metricsConfiguration", value) # pyright: ignore[reportArgumentType]
 
     @builtins.property
     @jsii.member(jsii_name="tags")
@@ -1274,6 +1298,59 @@ class CfnTableBucket(
 
         def __repr__(self) -> str:
             return "EncryptionConfigurationProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_s3tables.CfnTableBucket.MetricsConfigurationProperty",
+        jsii_struct_bases=[],
+        name_mapping={"status": "status"},
+    )
+    class MetricsConfigurationProperty:
+        def __init__(self, *, status: typing.Optional[builtins.str] = None) -> None:
+            '''Settings governing the Metric configuration for the table bucket.
+
+            :param status: Indicates whether Metrics are enabled. Default: - "Disabled"
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-s3tables-tablebucket-metricsconfiguration.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_s3tables as s3tables
+                
+                metrics_configuration_property = s3tables.CfnTableBucket.MetricsConfigurationProperty(
+                    status="status"
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__4a462a1fa51e0d85b1c1c751eb482494c139c2d0cdff10d84286172c932d17d6)
+                check_type(argname="argument status", value=status, expected_type=type_hints["status"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if status is not None:
+                self._values["status"] = status
+
+        @builtins.property
+        def status(self) -> typing.Optional[builtins.str]:
+            '''Indicates whether Metrics are enabled.
+
+            :default: - "Disabled"
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-s3tables-tablebucket-metricsconfiguration.html#cfn-s3tables-tablebucket-metricsconfiguration-status
+            '''
+            result = self._values.get("status")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "MetricsConfigurationProperty(%s)" % ", ".join(
                 k + "=" + repr(v) for k, v in self._values.items()
             )
 
@@ -1582,6 +1659,7 @@ class CfnTableBucketPolicyProps:
     name_mapping={
         "table_bucket_name": "tableBucketName",
         "encryption_configuration": "encryptionConfiguration",
+        "metrics_configuration": "metricsConfiguration",
         "tags": "tags",
         "unreferenced_file_removal": "unreferencedFileRemoval",
     },
@@ -1592,6 +1670,7 @@ class CfnTableBucketProps:
         *,
         table_bucket_name: builtins.str,
         encryption_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTableBucket.EncryptionConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        metrics_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTableBucket.MetricsConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
         unreferenced_file_removal: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTableBucket.UnreferencedFileRemovalProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
@@ -1599,6 +1678,7 @@ class CfnTableBucketProps:
 
         :param table_bucket_name: The name for the table bucket.
         :param encryption_configuration: Configuration specifying how data should be encrypted. This structure defines the encryption algorithm and optional KMS key to be used for server-side encryption.
+        :param metrics_configuration: Settings governing the Metric configuration for the table bucket.
         :param tags: User tags (key-value pairs) to associate with the table bucket.
         :param unreferenced_file_removal: The unreferenced file removal settings for your table bucket. Unreferenced file removal identifies and deletes all objects that are not referenced by any table snapshots. For more information, see the `*Amazon S3 User Guide* <https://docs.aws.amazon.com/AmazonS3/latest/userguide/s3-table-buckets-maintenance.html>`_ .
 
@@ -1619,6 +1699,9 @@ class CfnTableBucketProps:
                     kms_key_arn="kmsKeyArn",
                     sse_algorithm="sseAlgorithm"
                 ),
+                metrics_configuration=s3tables.CfnTableBucket.MetricsConfigurationProperty(
+                    status="status"
+                ),
                 tags=[CfnTag(
                     key="key",
                     value="value"
@@ -1634,6 +1717,7 @@ class CfnTableBucketProps:
             type_hints = typing.get_type_hints(_typecheckingstub__6fb9342a13c0e9f7b21679814e793d7ccc0964ccfe53bc5e0916676b628d20f3)
             check_type(argname="argument table_bucket_name", value=table_bucket_name, expected_type=type_hints["table_bucket_name"])
             check_type(argname="argument encryption_configuration", value=encryption_configuration, expected_type=type_hints["encryption_configuration"])
+            check_type(argname="argument metrics_configuration", value=metrics_configuration, expected_type=type_hints["metrics_configuration"])
             check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
             check_type(argname="argument unreferenced_file_removal", value=unreferenced_file_removal, expected_type=type_hints["unreferenced_file_removal"])
         self._values: typing.Dict[builtins.str, typing.Any] = {
@@ -1641,6 +1725,8 @@ class CfnTableBucketProps:
         }
         if encryption_configuration is not None:
             self._values["encryption_configuration"] = encryption_configuration
+        if metrics_configuration is not None:
+            self._values["metrics_configuration"] = metrics_configuration
         if tags is not None:
             self._values["tags"] = tags
         if unreferenced_file_removal is not None:
@@ -1668,6 +1754,17 @@ class CfnTableBucketProps:
         '''
         result = self._values.get("encryption_configuration")
         return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnTableBucket.EncryptionConfigurationProperty]], result)
+
+    @builtins.property
+    def metrics_configuration(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnTableBucket.MetricsConfigurationProperty]]:
+        '''Settings governing the Metric configuration for the table bucket.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-s3tables-tablebucket.html#cfn-s3tables-tablebucket-metricsconfiguration
+        '''
+        result = self._values.get("metrics_configuration")
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnTableBucket.MetricsConfigurationProperty]], result)
 
     @builtins.property
     def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
@@ -2332,6 +2429,7 @@ def _typecheckingstub__de433918cd34eecbcaab0e81b6a287f71a48dd308c2f4d42e07a0e19c
     *,
     table_bucket_name: builtins.str,
     encryption_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTableBucket.EncryptionConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    metrics_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTableBucket.MetricsConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     unreferenced_file_removal: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTableBucket.UnreferencedFileRemovalProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
 ) -> None:
@@ -2362,6 +2460,12 @@ def _typecheckingstub__61499f569b4e5dc20b99defd26e29c6e9b7761b6630e1adec9c20e97e
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__31b7ae51d65703ba2d4aa73c08a7a5a34ad19b1ca27dd0de7d23e3e5bc20d595(
+    value: typing.Optional[typing.Union[_IResolvable_da3f097b, CfnTableBucket.MetricsConfigurationProperty]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__3bd32e36df516fe785d94d21a1dc923e712becb1b93de4a82fa887f57a6b4823(
     value: typing.Optional[typing.List[_CfnTag_f6864754]],
 ) -> None:
@@ -2378,6 +2482,13 @@ def _typecheckingstub__659e946ab1ee4bc0eb13a519adc57d2cb4431347d47a9e6cb4d4086a8
     *,
     kms_key_arn: typing.Optional[builtins.str] = None,
     sse_algorithm: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__4a462a1fa51e0d85b1c1c751eb482494c139c2d0cdff10d84286172c932d17d6(
+    *,
+    status: typing.Optional[builtins.str] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -2437,6 +2548,7 @@ def _typecheckingstub__6fb9342a13c0e9f7b21679814e793d7ccc0964ccfe53bc5e0916676b6
     *,
     table_bucket_name: builtins.str,
     encryption_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTableBucket.EncryptionConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    metrics_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTableBucket.MetricsConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     unreferenced_file_removal: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTableBucket.UnreferencedFileRemovalProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
 ) -> None:

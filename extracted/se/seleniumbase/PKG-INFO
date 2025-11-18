@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: seleniumbase
-Version: 4.44.12
+Version: 4.44.13
 Summary: A complete web automation framework for end-to-end testing.
 Home-page: https://github.com/seleniumbase/SeleniumBase
 Author: Michael Mintz
@@ -341,8 +341,8 @@ with SB(uc=True, test=True, locale="en") as sb:
 from seleniumbase import sb_cdp
 
 url = "https://gitlab.com/users/sign_in"
-sb = sb_cdp.Chrome(url)
-sb.sleep(2.5)
+sb = sb_cdp.Chrome(url, incognito=True)
+sb.sleep(2)
 sb.solve_captcha()
 sb.highlight('h1:contains("GitLab")')
 sb.highlight('button:contains("Sign in")')

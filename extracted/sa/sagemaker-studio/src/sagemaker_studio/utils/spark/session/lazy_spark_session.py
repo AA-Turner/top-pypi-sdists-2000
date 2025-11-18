@@ -8,6 +8,7 @@ initialization until the first attribute access.
 import logging
 from concurrent.futures import ThreadPoolExecutor
 
+from botocore.exceptions import ClientError
 from pyspark.errors.exceptions.connect import SparkConnectGrpcException
 from pyspark.sql.connect.session import SparkSession as _SparkSession
 
@@ -84,6 +85,15 @@ class LazySparkSession:
             # Stop the Spark session to force the creation of a new Athena session
             logger.warning("Spark session failed to connect, creating a new session.")
             self.stop()
+        except ClientError as e:
+            if (
+                e.response["Error"]["Code"] == "InvalidRequestException"
+                and "STOPPED state" in e.response["Error"]["Message"]
+            ):
+                logger.warning("Spark session is stopped, creating a new session.")
+                self.stop()
+            else:
+                raise e
         return getattr(self._get_spark(), name)
 
     def __repr__(self):

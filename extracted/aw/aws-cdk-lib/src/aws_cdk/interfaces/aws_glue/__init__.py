@@ -795,6 +795,57 @@ typing.cast(typing.Any, IDevEndpointRef).__jsii_proxy_class__ = lambda : _IDevEn
 
 
 @jsii.interface(
+    jsii_type="aws-cdk-lib.interfaces.aws_glue.IIdentityCenterConfigurationRef"
+)
+class IIdentityCenterConfigurationRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_f39049ee,
+    typing_extensions.Protocol,
+):
+    '''(experimental) Indicates that this resource can be referenced as a IdentityCenterConfiguration.
+
+    :stability: experimental
+    '''
+
+    @builtins.property
+    @jsii.member(jsii_name="identityCenterConfigurationRef")
+    def identity_center_configuration_ref(
+        self,
+    ) -> "IdentityCenterConfigurationReference":
+        '''(experimental) A reference to a IdentityCenterConfiguration resource.
+
+        :stability: experimental
+        '''
+        ...
+
+
+class _IIdentityCenterConfigurationRefProxy(
+    jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_f39049ee), # type: ignore[misc]
+):
+    '''(experimental) Indicates that this resource can be referenced as a IdentityCenterConfiguration.
+
+    :stability: experimental
+    '''
+
+    __jsii_type__: typing.ClassVar[str] = "aws-cdk-lib.interfaces.aws_glue.IIdentityCenterConfigurationRef"
+
+    @builtins.property
+    @jsii.member(jsii_name="identityCenterConfigurationRef")
+    def identity_center_configuration_ref(
+        self,
+    ) -> "IdentityCenterConfigurationReference":
+        '''(experimental) A reference to a IdentityCenterConfiguration resource.
+
+        :stability: experimental
+        '''
+        return typing.cast("IdentityCenterConfigurationReference", jsii.get(self, "identityCenterConfigurationRef"))
+
+# Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
+typing.cast(typing.Any, IIdentityCenterConfigurationRef).__jsii_proxy_class__ = lambda : _IIdentityCenterConfigurationRefProxy
+
+
+@jsii.interface(
     jsii_type="aws-cdk-lib.interfaces.aws_glue.IIntegrationResourcePropertyRef"
 )
 class IIntegrationResourcePropertyRef(
@@ -1428,6 +1479,55 @@ class _IWorkflowRefProxy(
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IWorkflowRef).__jsii_proxy_class__ = lambda : _IWorkflowRefProxy
+
+
+@jsii.data_type(
+    jsii_type="aws-cdk-lib.interfaces.aws_glue.IdentityCenterConfigurationReference",
+    jsii_struct_bases=[],
+    name_mapping={"account_id": "accountId"},
+)
+class IdentityCenterConfigurationReference:
+    def __init__(self, *, account_id: builtins.str) -> None:
+        '''A reference to a IdentityCenterConfiguration resource.
+
+        :param account_id: The AccountId of the IdentityCenterConfiguration resource.
+
+        :exampleMetadata: fixture=_generated
+
+        Example::
+
+            # The code below shows an example of how to instantiate this type.
+            # The values are placeholders you should change.
+            from aws_cdk.interfaces import aws_glue as interfaces_aws_glue
+            
+            identity_center_configuration_reference = interfaces_aws_glue.IdentityCenterConfigurationReference(
+                account_id="accountId"
+            )
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__dce890d13c4e501fd50bfd966cbe5558eac1e8b2415bc6f873c45a675fef0455)
+            check_type(argname="argument account_id", value=account_id, expected_type=type_hints["account_id"])
+        self._values: typing.Dict[builtins.str, typing.Any] = {
+            "account_id": account_id,
+        }
+
+    @builtins.property
+    def account_id(self) -> builtins.str:
+        '''The AccountId of the IdentityCenterConfiguration resource.'''
+        result = self._values.get("account_id")
+        assert result is not None, "Required property 'account_id' is missing"
+        return typing.cast(builtins.str, result)
+
+    def __eq__(self, rhs: typing.Any) -> builtins.bool:
+        return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+    def __ne__(self, rhs: typing.Any) -> builtins.bool:
+        return not (rhs == self)
+
+    def __repr__(self) -> str:
+        return "IdentityCenterConfigurationReference(%s)" % ", ".join(
+            k + "=" + repr(v) for k, v in self._values.items()
+        )
 
 
 @jsii.data_type(
@@ -2184,6 +2284,7 @@ __all__ = [
     "IDataQualityRulesetRef",
     "IDatabaseRef",
     "IDevEndpointRef",
+    "IIdentityCenterConfigurationRef",
     "IIntegrationResourcePropertyRef",
     "IJobRef",
     "IMLTransformRef",
@@ -2198,6 +2299,7 @@ __all__ = [
     "ITriggerRef",
     "IUsageProfileRef",
     "IWorkflowRef",
+    "IdentityCenterConfigurationReference",
     "IntegrationResourcePropertyReference",
     "JobReference",
     "MLTransformReference",
@@ -2268,6 +2370,13 @@ def _typecheckingstub__b006942e6851e8e5b67ab80d761f762e021506f9975b704097cc0df55
 def _typecheckingstub__050454acd533b9c974358b1bfdec6277e66592a87a752610c62dc6b896b95d0f(
     *,
     dev_endpoint_id: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__dce890d13c4e501fd50bfd966cbe5558eac1e8b2415bc6f873c45a675fef0455(
+    *,
+    account_id: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -2373,5 +2482,5 @@ def _typecheckingstub__05490662a534e7ac737a01a3e54258abf2c5d6dd3a563391b841bd656
     """Type checking stubs"""
     pass
 
-for cls in [IClassifierRef, IConnectionRef, ICrawlerRef, ICustomEntityTypeRef, IDataCatalogEncryptionSettingsRef, IDataQualityRulesetRef, IDatabaseRef, IDevEndpointRef, IIntegrationResourcePropertyRef, IJobRef, IMLTransformRef, IPartitionRef, IRegistryRef, ISchemaRef, ISchemaVersionMetadataRef, ISchemaVersionRef, ISecurityConfigurationRef, ITableOptimizerRef, ITableRef, ITriggerRef, IUsageProfileRef, IWorkflowRef]:
+for cls in [IClassifierRef, IConnectionRef, ICrawlerRef, ICustomEntityTypeRef, IDataCatalogEncryptionSettingsRef, IDataQualityRulesetRef, IDatabaseRef, IDevEndpointRef, IIdentityCenterConfigurationRef, IIntegrationResourcePropertyRef, IJobRef, IMLTransformRef, IPartitionRef, IRegistryRef, ISchemaRef, ISchemaVersionMetadataRef, ISchemaVersionRef, ISecurityConfigurationRef, ITableOptimizerRef, ITableRef, ITriggerRef, IUsageProfileRef, IWorkflowRef]:
     typing.cast(typing.Any, cls).__protocol_attrs__ = typing.cast(typing.Any, cls).__protocol_attrs__ - set(['__jsii_proxy_class__', '__jsii_type__'])

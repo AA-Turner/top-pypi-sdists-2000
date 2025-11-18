@@ -413,6 +413,9 @@ class CfnCluster(
                     )
                 )
             ),
+            rebalancing=msk.CfnCluster.RebalancingProperty(
+                status="status"
+            ),
             storage_mode="storageMode",
             tags={
                 "tags_key": "tags"
@@ -436,6 +439,7 @@ class CfnCluster(
         enhanced_monitoring: typing.Optional[builtins.str] = None,
         logging_info: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCluster.LoggingInfoProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         open_monitoring: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCluster.OpenMonitoringProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        rebalancing: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCluster.RebalancingProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         storage_mode: typing.Optional[builtins.str] = None,
         tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
     ) -> None:
@@ -454,6 +458,7 @@ class CfnCluster(
         :param enhanced_monitoring: Specifies the level of monitoring for the MSK cluster.
         :param logging_info: Logging info details for the cluster.
         :param open_monitoring: The settings for open monitoring.
+        :param rebalancing: 
         :param storage_mode: This controls storage mode for supported storage tiers.
         :param tags: An arbitrary set of tags (key-value pairs) for the cluster.
         '''
@@ -473,6 +478,7 @@ class CfnCluster(
             enhanced_monitoring=enhanced_monitoring,
             logging_info=logging_info,
             open_monitoring=open_monitoring,
+            rebalancing=rebalancing,
             storage_mode=storage_mode,
             tags=tags,
         )
@@ -517,6 +523,15 @@ class CfnCluster(
         :cloudformationAttribute: Arn
         '''
         return typing.cast(builtins.str, jsii.get(self, "attrArn"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrCurrentVersion")
+    def attr_current_version(self) -> builtins.str:
+        '''The current version of the MSK cluster.
+
+        :cloudformationAttribute: CurrentVersion
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrCurrentVersion"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -707,6 +722,23 @@ class CfnCluster(
             type_hints = typing.get_type_hints(_typecheckingstub__75fe28c1f9a57617ff0d6a9ccd61b13cd12fe2b29f73cace2349bfc4cd46f2d8)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
         jsii.set(self, "openMonitoring", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="rebalancing")
+    def rebalancing(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCluster.RebalancingProperty"]]:
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCluster.RebalancingProperty"]], jsii.get(self, "rebalancing"))
+
+    @rebalancing.setter
+    def rebalancing(
+        self,
+        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCluster.RebalancingProperty"]],
+    ) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__de57b95bdc87767afb6b2668a14135769e16c5f132982acd14f9d8223313a9b8)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "rebalancing", value) # pyright: ignore[reportArgumentType]
 
     @builtins.property
     @jsii.member(jsii_name="storageMode")
@@ -2285,6 +2317,56 @@ class CfnCluster(
             )
 
     @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_msk.CfnCluster.RebalancingProperty",
+        jsii_struct_bases=[],
+        name_mapping={"status": "status"},
+    )
+    class RebalancingProperty:
+        def __init__(self, *, status: builtins.str) -> None:
+            '''
+            :param status: 
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-msk-cluster-rebalancing.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_msk as msk
+                
+                rebalancing_property = msk.CfnCluster.RebalancingProperty(
+                    status="status"
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__c2c16650a731d0a6787f90a14889b58b38b503a71ef1901c09da05ce08077ecd)
+                check_type(argname="argument status", value=status, expected_type=type_hints["status"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "status": status,
+            }
+
+        @builtins.property
+        def status(self) -> builtins.str:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-msk-cluster-rebalancing.html#cfn-msk-cluster-rebalancing-status
+            '''
+            result = self._values.get("status")
+            assert result is not None, "Required property 'status' is missing"
+            return typing.cast(builtins.str, result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "RebalancingProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
         jsii_type="aws-cdk-lib.aws_msk.CfnCluster.S3Property",
         jsii_struct_bases=[],
         name_mapping={"enabled": "enabled", "bucket": "bucket", "prefix": "prefix"},
@@ -3315,6 +3397,7 @@ class CfnClusterPolicyProps:
         "enhanced_monitoring": "enhancedMonitoring",
         "logging_info": "loggingInfo",
         "open_monitoring": "openMonitoring",
+        "rebalancing": "rebalancing",
         "storage_mode": "storageMode",
         "tags": "tags",
     },
@@ -3334,6 +3417,7 @@ class CfnClusterProps:
         enhanced_monitoring: typing.Optional[builtins.str] = None,
         logging_info: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCluster.LoggingInfoProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
         open_monitoring: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCluster.OpenMonitoringProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        rebalancing: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCluster.RebalancingProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
         storage_mode: typing.Optional[builtins.str] = None,
         tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
     ) -> None:
@@ -3350,6 +3434,7 @@ class CfnClusterProps:
         :param enhanced_monitoring: Specifies the level of monitoring for the MSK cluster.
         :param logging_info: Logging info details for the cluster.
         :param open_monitoring: The settings for open monitoring.
+        :param rebalancing: 
         :param storage_mode: This controls storage mode for supported storage tiers.
         :param tags: An arbitrary set of tags (key-value pairs) for the cluster.
 
@@ -3470,6 +3555,9 @@ class CfnClusterProps:
                         )
                     )
                 ),
+                rebalancing=msk.CfnCluster.RebalancingProperty(
+                    status="status"
+                ),
                 storage_mode="storageMode",
                 tags={
                     "tags_key": "tags"
@@ -3489,6 +3577,7 @@ class CfnClusterProps:
             check_type(argname="argument enhanced_monitoring", value=enhanced_monitoring, expected_type=type_hints["enhanced_monitoring"])
             check_type(argname="argument logging_info", value=logging_info, expected_type=type_hints["logging_info"])
             check_type(argname="argument open_monitoring", value=open_monitoring, expected_type=type_hints["open_monitoring"])
+            check_type(argname="argument rebalancing", value=rebalancing, expected_type=type_hints["rebalancing"])
             check_type(argname="argument storage_mode", value=storage_mode, expected_type=type_hints["storage_mode"])
             check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
         self._values: typing.Dict[builtins.str, typing.Any] = {
@@ -3511,6 +3600,8 @@ class CfnClusterProps:
             self._values["logging_info"] = logging_info
         if open_monitoring is not None:
             self._values["open_monitoring"] = open_monitoring
+        if rebalancing is not None:
+            self._values["rebalancing"] = rebalancing
         if storage_mode is not None:
             self._values["storage_mode"] = storage_mode
         if tags is not None:
@@ -3632,6 +3723,16 @@ class CfnClusterProps:
         '''
         result = self._values.get("open_monitoring")
         return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnCluster.OpenMonitoringProperty]], result)
+
+    @builtins.property
+    def rebalancing(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnCluster.RebalancingProperty]]:
+        '''
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-msk-cluster.html#cfn-msk-cluster-rebalancing
+        '''
+        result = self._values.get("rebalancing")
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnCluster.RebalancingProperty]], result)
 
     @builtins.property
     def storage_mode(self) -> typing.Optional[builtins.str]:
@@ -6316,6 +6417,7 @@ def _typecheckingstub__d267b4b2dcfdda539084655e7a1234ffaf8e77376f37d4914abbcef6c
     enhanced_monitoring: typing.Optional[builtins.str] = None,
     logging_info: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCluster.LoggingInfoProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     open_monitoring: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCluster.OpenMonitoringProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    rebalancing: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCluster.RebalancingProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     storage_mode: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
 ) -> None:
@@ -6396,6 +6498,12 @@ def _typecheckingstub__9d382c4554000521a60f4a1e25f292506a5889f9f704479e32e61cccc
 
 def _typecheckingstub__75fe28c1f9a57617ff0d6a9ccd61b13cd12fe2b29f73cace2349bfc4cd46f2d8(
     value: typing.Optional[typing.Union[_IResolvable_da3f097b, CfnCluster.OpenMonitoringProperty]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__de57b95bdc87767afb6b2668a14135769e16c5f132982acd14f9d8223313a9b8(
+    value: typing.Optional[typing.Union[_IResolvable_da3f097b, CfnCluster.RebalancingProperty]],
 ) -> None:
     """Type checking stubs"""
     pass
@@ -6563,6 +6671,13 @@ def _typecheckingstub__03c0f11124e397d2c64c42ed84e0f41e63fe036a5dbb8354d7b0a83fd
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__c2c16650a731d0a6787f90a14889b58b38b503a71ef1901c09da05ce08077ecd(
+    *,
+    status: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__802632a907f2036c840a19e8b3c37b50084fc2617376e08f1ea1e98f4a19a35b(
     *,
     enabled: typing.Union[builtins.bool, _IResolvable_da3f097b],
@@ -6708,6 +6823,7 @@ def _typecheckingstub__da9c2c389b7fb44efe639e45c2911a96139b86d7a936606322d8605ae
     enhanced_monitoring: typing.Optional[builtins.str] = None,
     logging_info: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCluster.LoggingInfoProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     open_monitoring: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCluster.OpenMonitoringProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    rebalancing: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCluster.RebalancingProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     storage_mode: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
 ) -> None:

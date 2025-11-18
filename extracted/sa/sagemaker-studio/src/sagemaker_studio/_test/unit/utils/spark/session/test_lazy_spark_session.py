@@ -142,6 +142,10 @@ class TestLazySparkSession:
         assert result is mock_spark_session.sql
         mock_manager.create.assert_called_once()
 
+    @patch(
+        "sagemaker_studio.utils.spark.session.lazy_spark_session.SparkConnectGrpcException",
+        MockSparkConnectGrpcException,
+    )
     def test_getattr_handles_spark_access_exception(self):
         """Test that __getattr__ handles exceptions when accessing Spark attributes."""
         mock_manager = Mock(spec=SparkSessionManager)
@@ -152,6 +156,10 @@ class TestLazySparkSession:
         with pytest.raises(Exception, match="Spark access failed"):
             _ = lazy_session.some_attribute
 
+    @patch(
+        "sagemaker_studio.utils.spark.session.lazy_spark_session.SparkConnectGrpcException",
+        MockSparkConnectGrpcException,
+    )
     def test_getattr_handles_spark_connect_grpc_exception(self):
         """Test that __getattr__ handles SparkConnectGrpcException by recreating the session."""
         mock_manager = Mock(spec=SparkSessionManager)

@@ -1,12 +1,13 @@
 Metadata-Version: 2.4
 Name: apache-airflow-providers-docker
-Version: 4.4.4
+Version: 4.4.5
 Summary: Provider package apache-airflow-providers-docker for Apache Airflow
 Keywords: airflow-provider,docker,airflow,integration
 Author-email: Apache Software Foundation <dev@airflow.apache.org>
 Maintainer-email: Apache Software Foundation <dev@airflow.apache.org>
 Requires-Python: >=3.10
 Description-Content-Type: text/x-rst
+License-Expression: Apache-2.0
 Classifier: Development Status :: 5 - Production/Stable
 Classifier: Environment :: Console
 Classifier: Environment :: Web Environment
@@ -14,19 +15,21 @@ Classifier: Intended Audience :: Developers
 Classifier: Intended Audience :: System Administrators
 Classifier: Framework :: Apache Airflow
 Classifier: Framework :: Apache Airflow :: Provider
-Classifier: License :: OSI Approved :: Apache Software License
 Classifier: Programming Language :: Python :: 3.10
 Classifier: Programming Language :: Python :: 3.11
 Classifier: Programming Language :: Python :: 3.12
 Classifier: Programming Language :: Python :: 3.13
 Classifier: Topic :: System :: Monitoring
+License-File: LICENSE
+License-File: NOTICE
 Requires-Dist: apache-airflow>=2.10.0
+Requires-Dist: apache-airflow-providers-common-compat>=1.8.0
 Requires-Dist: docker>=7.1.0
 Requires-Dist: python-dotenv>=0.21.0
 Requires-Dist: apache-airflow-providers-common-compat ; extra == "common-compat"
 Project-URL: Bug Tracker, https://github.com/apache/airflow/issues
-Project-URL: Changelog, https://airflow.apache.org/docs/apache-airflow-providers-docker/4.4.4/changelog.html
-Project-URL: Documentation, https://airflow.apache.org/docs/apache-airflow-providers-docker/4.4.4
+Project-URL: Changelog, https://airflow.apache.org/docs/apache-airflow-providers-docker/4.4.5/changelog.html
+Project-URL: Documentation, https://airflow.apache.org/docs/apache-airflow-providers-docker/4.4.5
 Project-URL: Mastodon, https://fosstodon.org/@airflow
 Project-URL: Slack Chat, https://s.apache.org/airflow-slack
 Project-URL: Source Code, https://github.com/apache/airflow
@@ -58,7 +61,7 @@ Provides-Extra: common-compat
 
 Package ``apache-airflow-providers-docker``
 
-Release: ``4.4.4``
+Release: ``4.4.5``
 
 
 `Docker <https://www.docker.com/>`__
@@ -71,7 +74,7 @@ This is a provider package for ``docker`` provider. All classes for this provide
 are in ``airflow.providers.docker`` python package.
 
 You can find package information and changelog for the provider
-in the `documentation <https://airflow.apache.org/docs/apache-airflow-providers-docker/4.4.4/>`_.
+in the `documentation <https://airflow.apache.org/docs/apache-airflow-providers-docker/4.4.5/>`_.
 
 Installation
 ------------
@@ -85,13 +88,14 @@ The package supports the following python versions: 3.10,3.11,3.12,3.13
 Requirements
 ------------
 
-==================  ==================
-PIP package         Version required
-==================  ==================
-``apache-airflow``  ``>=2.10.0``
-``docker``          ``>=7.1.0``
-``python-dotenv``   ``>=0.21.0``
-==================  ==================
+==========================================  ==================
+PIP package                                 Version required
+==========================================  ==================
+``apache-airflow``                          ``>=2.10.0``
+``apache-airflow-providers-common-compat``  ``>=1.8.0``
+``docker``                                  ``>=7.1.0``
+``python-dotenv``                           ``>=0.21.0``
+==========================================  ==================
 
 Cross provider package dependencies
 -----------------------------------
@@ -122,5 +126,5 @@ Extra              Dependencies
 =================  ==========================================
 
 The changelog for the provider package can be found in the
-`changelog <https://airflow.apache.org/docs/apache-airflow-providers-docker/4.4.4/changelog.html>`_.
+`changelog <https://airflow.apache.org/docs/apache-airflow-providers-docker/4.4.5/changelog.html>`_.
 

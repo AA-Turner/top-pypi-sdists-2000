@@ -105,15 +105,15 @@ fn validate_manifest() -> anyhow::Result<()> {
         "})?;
 
     // Validate multiple files.
-    cmd_snapshot!(context.filters(), context.validate_manifest().arg(".pre-commit-hooks.yaml").arg("hooks-1.yaml"), @r#"
+    cmd_snapshot!(context.filters(), context.validate_manifest().arg(".pre-commit-hooks.yaml").arg("hooks-1.yaml"), @r"
     success: false
     exit_code: 1
     ----- stdout -----
 
     ----- stderr -----
     error: Failed to parse `hooks-1.yaml`
-      caused by: .[0]: missing field `entry` at line 1 column 5
-    "#);
+      caused by: missing field `entry`
+    ");
 
     Ok(())
 }
@@ -125,24 +125,57 @@ fn unexpected_keys_warning() {
     context.write_pre_commit_config(indoc::indoc! {r"
         repos:
           - repo: local
+            unexpected_repo_key: some_value
             hooks:
               - id: test-hook
                 name: Test Hook
                 entry: echo test
                 language: system
-                unexpected_key_in_hook: some_value
-        unexpected_key: some_value
+        unexpected_top_level_key: some_value
         another_unknown: test
         minimum_pre_commit_version: 1.0.0
     "});
 
-    // TODO: warning about `unexpected_key_in_hook` currently not working
-    cmd_snapshot!(context.filters(), context.validate_config().arg(CONFIG_FILE), @r#"
+    cmd_snapshot!(context.filters(), context.validate_config().arg(CONFIG_FILE), @r"
     success: true
     exit_code: 0
     ----- stdout -----
 
     ----- stderr -----
-    warning: Ignored unexpected keys in `.pre-commit-config.yaml`: `unexpected_key`, `another_unknown`
-    "#);
+    warning: Ignored unexpected keys in `.pre-commit-config.yaml`: `another_unknown`, `unexpected_top_level_key`, `repos[0].unexpected_repo_key`
+    ");
+
+    context.write_pre_commit_config(indoc::indoc! {r"
+        repos:
+          - repo: local
+            unexpected_repo_key: some_value
+            hooks:
+              - id: test-hook
+                name: Test Hook
+                entry: echo test
+                language: system
+                unexpected_hook_key_1: some_value
+                unexpected_hook_key_2: some_value
+                unexpected_hook_key_3: some_value
+                unexpected_hook_key_4: some_value
+        unexpected_top_level_key: some_value
+        another_unknown: test
+        minimum_pre_commit_version: 1.0.0
+    "});
+
+    cmd_snapshot!(context.filters(), context.validate_config().arg(CONFIG_FILE), @r"
+    success: true
+    exit_code: 0
+    ----- stdout -----
+
+    ----- stderr -----
+    warning: Ignored unexpected keys in `.pre-commit-config.yaml`:
+      - `another_unknown`
+      - `unexpected_top_level_key`
+      - `repos[0].unexpected_repo_key`
+      - `repos[0].hooks[0].unexpected_hook_key_1`
+      - `repos[0].hooks[0].unexpected_hook_key_2`
+      - `repos[0].hooks[0].unexpected_hook_key_3`
+      - `repos[0].hooks[0].unexpected_hook_key_4`
+    ");
 }

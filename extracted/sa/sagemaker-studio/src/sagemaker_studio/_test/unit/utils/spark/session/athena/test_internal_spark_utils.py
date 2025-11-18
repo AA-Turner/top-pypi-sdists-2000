@@ -1,8 +1,53 @@
-from unittest.mock import MagicMock, patch
+import sys
+from unittest.mock import MagicMock, Mock, patch
 
 import pytest
 
-from sagemaker_studio.utils.spark.session.athena import internal_spark_utils
+# Mock Project class before any imports to prevent Domain ID error
+with patch("sagemaker_studio.Project"):
+
+    # Mock pyspark before importing  # noqa: E402
+    sys.modules["pyspark"] = Mock()
+    sys.modules["pyspark.sql"] = Mock()
+    sys.modules["pyspark.sql.connect"] = Mock()
+    sys.modules["pyspark.sql.connect.session"] = Mock()
+    sys.modules["pyspark.sql.connect.client"] = Mock()
+
+    pyspark_modules = [
+        "pyspark",
+        "pyspark.sql",
+        "pyspark.sql.session",
+        "pyspark.sql.connect",
+        "pyspark.sql.connect.session",
+        "pyspark.sql.connect.client",
+        "grpc",
+        "pyspark.errors",
+        "pyspark.errors.exceptions",
+        "pyspark.errors.exceptions.connect",
+    ]
+
+    for module_name in pyspark_modules:
+        if module_name not in sys.modules:
+            mock_module = Mock()
+            if module_name == "grpc":
+                # Mock gRPC specific classes and functions
+                mock_module.insecure_channel = Mock()
+                mock_module.secure_channel = Mock()
+                mock_module.intercept_channel = Mock()
+                mock_module.UnaryUnaryClientInterceptor = Mock()
+                mock_module.UnaryStreamClientInterceptor = Mock()
+                mock_module.StreamUnaryClientInterceptor = Mock()
+                mock_module.StreamStreamClientInterceptor = Mock()
+            elif module_name == "pyspark.sql.connect.client":
+                mock_module.ChannelBuilder = Mock()
+            sys.modules[module_name] = mock_module
+
+    # Mock the interceptors module to avoid importing the actual interceptors
+    mock_interceptors = Mock()
+    mock_interceptors.CustomChannelBuilder = Mock()
+    sys.modules["sagemaker_studio.utils.spark.session.athena.interceptors"] = mock_interceptors
+
+    from sagemaker_studio.utils.spark.session.athena import internal_spark_utils
 
 
 @pytest.fixture(autouse=True)

@@ -19,6 +19,7 @@ Usage::
 from __future__ import annotations
 
 import sys
+from collections.abc import Mapping
 from typing import Any, overload
 
 from botocore.client import BaseClient, ClientMeta
@@ -162,6 +163,7 @@ from .type_defs import (
     DeleteDataQualityRulesetRequestTypeDef,
     DeleteDevEndpointRequestTypeDef,
     DeleteIntegrationRequestTypeDef,
+    DeleteIntegrationResourcePropertyRequestTypeDef,
     DeleteIntegrationResponseTypeDef,
     DeleteIntegrationTablePropertiesRequestTypeDef,
     DeleteJobRequestTypeDef,
@@ -381,6 +383,8 @@ from .type_defs import (
     ListDevEndpointsResponseTypeDef,
     ListEntitiesRequestTypeDef,
     ListEntitiesResponseTypeDef,
+    ListIntegrationResourcePropertiesRequestTypeDef,
+    ListIntegrationResourcePropertiesResponseTypeDef,
     ListJobsRequestTypeDef,
     ListJobsResponseTypeDef,
     ListMLTransformsRequestTypeDef,
@@ -507,12 +511,6 @@ from .type_defs import (
     UpdateWorkflowResponseTypeDef,
 )
 
-if sys.version_info >= (3, 9):
-    from builtins import dict as Dict
-    from builtins import type as Type
-    from collections.abc import Mapping
-else:
-    from typing import Dict, Mapping, Type
 if sys.version_info >= (3, 12):
     from typing import Literal, Unpack
 else:
@@ -521,52 +519,52 @@ else:
 __all__ = ("GlueClient",)
 
 class Exceptions(BaseClientExceptions):
-    AccessDeniedException: Type[BotocoreClientError]
-    AlreadyExistsException: Type[BotocoreClientError]
-    ClientError: Type[BotocoreClientError]
-    ColumnStatisticsTaskNotRunningException: Type[BotocoreClientError]
-    ColumnStatisticsTaskRunningException: Type[BotocoreClientError]
-    ColumnStatisticsTaskStoppingException: Type[BotocoreClientError]
-    ConcurrentModificationException: Type[BotocoreClientError]
-    ConcurrentRunsExceededException: Type[BotocoreClientError]
-    ConditionCheckFailureException: Type[BotocoreClientError]
-    ConflictException: Type[BotocoreClientError]
-    CrawlerNotRunningException: Type[BotocoreClientError]
-    CrawlerRunningException: Type[BotocoreClientError]
-    CrawlerStoppingException: Type[BotocoreClientError]
-    EntityNotFoundException: Type[BotocoreClientError]
-    FederatedResourceAlreadyExistsException: Type[BotocoreClientError]
-    FederationSourceException: Type[BotocoreClientError]
-    FederationSourceRetryableException: Type[BotocoreClientError]
-    GlueEncryptionException: Type[BotocoreClientError]
-    IdempotentParameterMismatchException: Type[BotocoreClientError]
-    IllegalBlueprintStateException: Type[BotocoreClientError]
-    IllegalSessionStateException: Type[BotocoreClientError]
-    IllegalWorkflowStateException: Type[BotocoreClientError]
-    IntegrationConflictOperationFault: Type[BotocoreClientError]
-    IntegrationNotFoundFault: Type[BotocoreClientError]
-    IntegrationQuotaExceededFault: Type[BotocoreClientError]
-    InternalServerException: Type[BotocoreClientError]
-    InternalServiceException: Type[BotocoreClientError]
-    InvalidInputException: Type[BotocoreClientError]
-    InvalidIntegrationStateFault: Type[BotocoreClientError]
-    InvalidStateException: Type[BotocoreClientError]
-    KMSKeyNotAccessibleFault: Type[BotocoreClientError]
-    MLTransformNotReadyException: Type[BotocoreClientError]
-    NoScheduleException: Type[BotocoreClientError]
-    OperationNotSupportedException: Type[BotocoreClientError]
-    OperationTimeoutException: Type[BotocoreClientError]
-    PermissionTypeMismatchException: Type[BotocoreClientError]
-    ResourceNotFoundException: Type[BotocoreClientError]
-    ResourceNotReadyException: Type[BotocoreClientError]
-    ResourceNumberLimitExceededException: Type[BotocoreClientError]
-    SchedulerNotRunningException: Type[BotocoreClientError]
-    SchedulerRunningException: Type[BotocoreClientError]
-    SchedulerTransitioningException: Type[BotocoreClientError]
-    TargetResourceNotFound: Type[BotocoreClientError]
-    ThrottlingException: Type[BotocoreClientError]
-    ValidationException: Type[BotocoreClientError]
-    VersionMismatchException: Type[BotocoreClientError]
+    AccessDeniedException: type[BotocoreClientError]
+    AlreadyExistsException: type[BotocoreClientError]
+    ClientError: type[BotocoreClientError]
+    ColumnStatisticsTaskNotRunningException: type[BotocoreClientError]
+    ColumnStatisticsTaskRunningException: type[BotocoreClientError]
+    ColumnStatisticsTaskStoppingException: type[BotocoreClientError]
+    ConcurrentModificationException: type[BotocoreClientError]
+    ConcurrentRunsExceededException: type[BotocoreClientError]
+    ConditionCheckFailureException: type[BotocoreClientError]
+    ConflictException: type[BotocoreClientError]
+    CrawlerNotRunningException: type[BotocoreClientError]
+    CrawlerRunningException: type[BotocoreClientError]
+    CrawlerStoppingException: type[BotocoreClientError]
+    EntityNotFoundException: type[BotocoreClientError]
+    FederatedResourceAlreadyExistsException: type[BotocoreClientError]
+    FederationSourceException: type[BotocoreClientError]
+    FederationSourceRetryableException: type[BotocoreClientError]
+    GlueEncryptionException: type[BotocoreClientError]
+    IdempotentParameterMismatchException: type[BotocoreClientError]
+    IllegalBlueprintStateException: type[BotocoreClientError]
+    IllegalSessionStateException: type[BotocoreClientError]
+    IllegalWorkflowStateException: type[BotocoreClientError]
+    IntegrationConflictOperationFault: type[BotocoreClientError]
+    IntegrationNotFoundFault: type[BotocoreClientError]
+    IntegrationQuotaExceededFault: type[BotocoreClientError]
+    InternalServerException: type[BotocoreClientError]
+    InternalServiceException: type[BotocoreClientError]
+    InvalidInputException: type[BotocoreClientError]
+    InvalidIntegrationStateFault: type[BotocoreClientError]
+    InvalidStateException: type[BotocoreClientError]
+    KMSKeyNotAccessibleFault: type[BotocoreClientError]
+    MLTransformNotReadyException: type[BotocoreClientError]
+    NoScheduleException: type[BotocoreClientError]
+    OperationNotSupportedException: type[BotocoreClientError]
+    OperationTimeoutException: type[BotocoreClientError]
+    PermissionTypeMismatchException: type[BotocoreClientError]
+    ResourceNotFoundException: type[BotocoreClientError]
+    ResourceNotReadyException: type[BotocoreClientError]
+    ResourceNumberLimitExceededException: type[BotocoreClientError]
+    SchedulerNotRunningException: type[BotocoreClientError]
+    SchedulerRunningException: type[BotocoreClientError]
+    SchedulerTransitioningException: type[BotocoreClientError]
+    TargetResourceNotFound: type[BotocoreClientError]
+    ThrottlingException: type[BotocoreClientError]
+    ValidationException: type[BotocoreClientError]
+    VersionMismatchException: type[BotocoreClientError]
 
 class GlueClient(BaseClient):
     """
@@ -786,7 +784,7 @@ class GlueClient(BaseClient):
 
     def cancel_data_quality_rule_recommendation_run(
         self, **kwargs: Unpack[CancelDataQualityRuleRecommendationRunRequestTypeDef]
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """
         Cancels the specified recommendation run that was being used to generate rules.
 
@@ -796,7 +794,7 @@ class GlueClient(BaseClient):
 
     def cancel_data_quality_ruleset_evaluation_run(
         self, **kwargs: Unpack[CancelDataQualityRulesetEvaluationRunRequestTypeDef]
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """
         Cancels a run where a ruleset is being evaluated against a data source.
 
@@ -814,7 +812,7 @@ class GlueClient(BaseClient):
         [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_glue/client/#cancel_ml_task_run)
         """
 
-    def cancel_statement(self, **kwargs: Unpack[CancelStatementRequestTypeDef]) -> Dict[str, Any]:
+    def cancel_statement(self, **kwargs: Unpack[CancelStatementRequestTypeDef]) -> dict[str, Any]:
         """
         Cancels the statement.
 
@@ -842,7 +840,7 @@ class GlueClient(BaseClient):
         [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_glue/client/#create_blueprint)
         """
 
-    def create_catalog(self, **kwargs: Unpack[CreateCatalogRequestTypeDef]) -> Dict[str, Any]:
+    def create_catalog(self, **kwargs: Unpack[CreateCatalogRequestTypeDef]) -> dict[str, Any]:
         """
         Creates a new catalog in the Glue Data Catalog.
 
@@ -850,7 +848,7 @@ class GlueClient(BaseClient):
         [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_glue/client/#create_catalog)
         """
 
-    def create_classifier(self, **kwargs: Unpack[CreateClassifierRequestTypeDef]) -> Dict[str, Any]:
+    def create_classifier(self, **kwargs: Unpack[CreateClassifierRequestTypeDef]) -> dict[str, Any]:
         """
         Creates a classifier in the user's account.
 
@@ -860,7 +858,7 @@ class GlueClient(BaseClient):
 
     def create_column_statistics_task_settings(
         self, **kwargs: Unpack[CreateColumnStatisticsTaskSettingsRequestTypeDef]
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """
         Creates settings for a column statistics task.
 
@@ -878,7 +876,7 @@ class GlueClient(BaseClient):
         [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_glue/client/#create_connection)
         """
 
-    def create_crawler(self, **kwargs: Unpack[CreateCrawlerRequestTypeDef]) -> Dict[str, Any]:
+    def create_crawler(self, **kwargs: Unpack[CreateCrawlerRequestTypeDef]) -> dict[str, Any]:
         """
         Creates a new crawler with specified targets, role, configuration, and optional
         schedule.
@@ -909,7 +907,7 @@ class GlueClient(BaseClient):
         [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_glue/client/#create_data_quality_ruleset)
         """
 
-    def create_database(self, **kwargs: Unpack[CreateDatabaseRequestTypeDef]) -> Dict[str, Any]:
+    def create_database(self, **kwargs: Unpack[CreateDatabaseRequestTypeDef]) -> dict[str, Any]:
         """
         Creates a new database in a Data Catalog.
 
@@ -964,7 +962,7 @@ class GlueClient(BaseClient):
 
     def create_integration_table_properties(
         self, **kwargs: Unpack[CreateIntegrationTablePropertiesRequestTypeDef]
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """
         This API is used to provide optional override properties for the the tables
         that need to be replicated.
@@ -991,7 +989,7 @@ class GlueClient(BaseClient):
         [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_glue/client/#create_ml_transform)
         """
 
-    def create_partition(self, **kwargs: Unpack[CreatePartitionRequestTypeDef]) -> Dict[str, Any]:
+    def create_partition(self, **kwargs: Unpack[CreatePartitionRequestTypeDef]) -> dict[str, Any]:
         """
         Creates a new partition.
 
@@ -1001,7 +999,7 @@ class GlueClient(BaseClient):
 
     def create_partition_index(
         self, **kwargs: Unpack[CreatePartitionIndexRequestTypeDef]
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """
         Creates a specified partition index in an existing table.
 
@@ -1059,7 +1057,7 @@ class GlueClient(BaseClient):
         [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_glue/client/#create_session)
         """
 
-    def create_table(self, **kwargs: Unpack[CreateTableRequestTypeDef]) -> Dict[str, Any]:
+    def create_table(self, **kwargs: Unpack[CreateTableRequestTypeDef]) -> dict[str, Any]:
         """
         Creates a new table definition in the Data Catalog.
 
@@ -1069,7 +1067,7 @@ class GlueClient(BaseClient):
 
     def create_table_optimizer(
         self, **kwargs: Unpack[CreateTableOptimizerRequestTypeDef]
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """
         Creates a new table optimizer for a specific function.
 
@@ -1099,7 +1097,7 @@ class GlueClient(BaseClient):
 
     def create_user_defined_function(
         self, **kwargs: Unpack[CreateUserDefinedFunctionRequestTypeDef]
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """
         Creates a new function definition in the Data Catalog.
 
@@ -1127,7 +1125,7 @@ class GlueClient(BaseClient):
         [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_glue/client/#delete_blueprint)
         """
 
-    def delete_catalog(self, **kwargs: Unpack[DeleteCatalogRequestTypeDef]) -> Dict[str, Any]:
+    def delete_catalog(self, **kwargs: Unpack[DeleteCatalogRequestTypeDef]) -> dict[str, Any]:
         """
         Removes the specified catalog from the Glue Data Catalog.
 
@@ -1135,7 +1133,7 @@ class GlueClient(BaseClient):
         [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_glue/client/#delete_catalog)
         """
 
-    def delete_classifier(self, **kwargs: Unpack[DeleteClassifierRequestTypeDef]) -> Dict[str, Any]:
+    def delete_classifier(self, **kwargs: Unpack[DeleteClassifierRequestTypeDef]) -> dict[str, Any]:
         """
         Removes a classifier from the Data Catalog.
 
@@ -1145,7 +1143,7 @@ class GlueClient(BaseClient):
 
     def delete_column_statistics_for_partition(
         self, **kwargs: Unpack[DeleteColumnStatisticsForPartitionRequestTypeDef]
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """
         Delete the partition column statistics of a column.
 
@@ -1155,7 +1153,7 @@ class GlueClient(BaseClient):
 
     def delete_column_statistics_for_table(
         self, **kwargs: Unpack[DeleteColumnStatisticsForTableRequestTypeDef]
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """
         Retrieves table statistics of columns.
 
@@ -1165,7 +1163,7 @@ class GlueClient(BaseClient):
 
     def delete_column_statistics_task_settings(
         self, **kwargs: Unpack[DeleteColumnStatisticsTaskSettingsRequestTypeDef]
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """
         Deletes settings for a column statistics task.
 
@@ -1173,7 +1171,7 @@ class GlueClient(BaseClient):
         [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_glue/client/#delete_column_statistics_task_settings)
         """
 
-    def delete_connection(self, **kwargs: Unpack[DeleteConnectionRequestTypeDef]) -> Dict[str, Any]:
+    def delete_connection(self, **kwargs: Unpack[DeleteConnectionRequestTypeDef]) -> dict[str, Any]:
         """
         Deletes a connection from the Data Catalog.
 
@@ -1181,7 +1179,7 @@ class GlueClient(BaseClient):
         [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_glue/client/#delete_connection)
         """
 
-    def delete_crawler(self, **kwargs: Unpack[DeleteCrawlerRequestTypeDef]) -> Dict[str, Any]:
+    def delete_crawler(self, **kwargs: Unpack[DeleteCrawlerRequestTypeDef]) -> dict[str, Any]:
         """
         Removes a specified crawler from the Glue Data Catalog, unless the crawler
         state is <code>RUNNING</code>.
@@ -1202,7 +1200,7 @@ class GlueClient(BaseClient):
 
     def delete_data_quality_ruleset(
         self, **kwargs: Unpack[DeleteDataQualityRulesetRequestTypeDef]
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """
         Deletes a data quality ruleset.
 
@@ -1210,7 +1208,7 @@ class GlueClient(BaseClient):
         [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_glue/client/#delete_data_quality_ruleset)
         """
 
-    def delete_database(self, **kwargs: Unpack[DeleteDatabaseRequestTypeDef]) -> Dict[str, Any]:
+    def delete_database(self, **kwargs: Unpack[DeleteDatabaseRequestTypeDef]) -> dict[str, Any]:
         """
         Removes a specified database from a Data Catalog.
 
@@ -1220,7 +1218,7 @@ class GlueClient(BaseClient):
 
     def delete_dev_endpoint(
         self, **kwargs: Unpack[DeleteDevEndpointRequestTypeDef]
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """
         Deletes a specified development endpoint.
 
@@ -1228,7 +1226,7 @@ class GlueClient(BaseClient):
         [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_glue/client/#delete_dev_endpoint)
         """
 
-    def delete_glue_identity_center_configuration(self) -> Dict[str, Any]:
+    def delete_glue_identity_center_configuration(self) -> dict[str, Any]:
         """
         Deletes the existing Glue Identity Center configuration, removing the
         integration between Glue and Amazon Web Services IAM Identity Center.
@@ -1247,9 +1245,20 @@ class GlueClient(BaseClient):
         [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_glue/client/#delete_integration)
         """
 
+    def delete_integration_resource_property(
+        self, **kwargs: Unpack[DeleteIntegrationResourcePropertyRequestTypeDef]
+    ) -> dict[str, Any]:
+        """
+        This API is used for deleting the <code>ResourceProperty</code> of the Glue
+        connection (for the source) or Glue database ARN (for the target).
+
+        [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/glue/client/delete_integration_resource_property.html)
+        [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_glue/client/#delete_integration_resource_property)
+        """
+
     def delete_integration_table_properties(
         self, **kwargs: Unpack[DeleteIntegrationTablePropertiesRequestTypeDef]
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """
         Deletes the table properties that have been created for the tables that need to
         be replicated.
@@ -1276,7 +1285,7 @@ class GlueClient(BaseClient):
         [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_glue/client/#delete_ml_transform)
         """
 
-    def delete_partition(self, **kwargs: Unpack[DeletePartitionRequestTypeDef]) -> Dict[str, Any]:
+    def delete_partition(self, **kwargs: Unpack[DeletePartitionRequestTypeDef]) -> dict[str, Any]:
         """
         Deletes a specified partition.
 
@@ -1286,7 +1295,7 @@ class GlueClient(BaseClient):
 
     def delete_partition_index(
         self, **kwargs: Unpack[DeletePartitionIndexRequestTypeDef]
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """
         Deletes a specified partition index from an existing table.
 
@@ -1306,7 +1315,7 @@ class GlueClient(BaseClient):
 
     def delete_resource_policy(
         self, **kwargs: Unpack[DeleteResourcePolicyRequestTypeDef]
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """
         Deletes a specified policy.
 
@@ -1336,7 +1345,7 @@ class GlueClient(BaseClient):
 
     def delete_security_configuration(
         self, **kwargs: Unpack[DeleteSecurityConfigurationRequestTypeDef]
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """
         Deletes a specified security configuration.
 
@@ -1354,7 +1363,7 @@ class GlueClient(BaseClient):
         [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_glue/client/#delete_session)
         """
 
-    def delete_table(self, **kwargs: Unpack[DeleteTableRequestTypeDef]) -> Dict[str, Any]:
+    def delete_table(self, **kwargs: Unpack[DeleteTableRequestTypeDef]) -> dict[str, Any]:
         """
         Removes a table definition from the Data Catalog.
 
@@ -1364,7 +1373,7 @@ class GlueClient(BaseClient):
 
     def delete_table_optimizer(
         self, **kwargs: Unpack[DeleteTableOptimizerRequestTypeDef]
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """
         Deletes an optimizer and all associated metadata for a table.
 
@@ -1374,7 +1383,7 @@ class GlueClient(BaseClient):
 
     def delete_table_version(
         self, **kwargs: Unpack[DeleteTableVersionRequestTypeDef]
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """
         Deletes a specified version of a table.
 
@@ -1394,7 +1403,7 @@ class GlueClient(BaseClient):
 
     def delete_usage_profile(
         self, **kwargs: Unpack[DeleteUsageProfileRequestTypeDef]
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """
         Deletes the Glue specified usage profile.
 
@@ -1404,7 +1413,7 @@ class GlueClient(BaseClient):
 
     def delete_user_defined_function(
         self, **kwargs: Unpack[DeleteUserDefinedFunctionRequestTypeDef]
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """
         Deletes an existing function definition from the Data Catalog.
 
@@ -2231,7 +2240,7 @@ class GlueClient(BaseClient):
 
     def import_catalog_to_glue(
         self, **kwargs: Unpack[ImportCatalogToGlueRequestTypeDef]
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """
         Imports an existing Amazon Athena Data Catalog to Glue.
 
@@ -2381,6 +2390,16 @@ class GlueClient(BaseClient):
         [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_glue/client/#list_entities)
         """
 
+    def list_integration_resource_properties(
+        self, **kwargs: Unpack[ListIntegrationResourcePropertiesRequestTypeDef]
+    ) -> ListIntegrationResourcePropertiesResponseTypeDef:
+        """
+        List integration resource properties for a single customer.
+
+        [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/glue/client/list_integration_resource_properties.html)
+        [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_glue/client/#list_integration_resource_properties)
+        """
+
     def list_jobs(self, **kwargs: Unpack[ListJobsRequestTypeDef]) -> ListJobsResponseTypeDef:
         """
         Retrieves the names of all job resources in this Amazon Web Services account,
@@ -2505,7 +2524,7 @@ class GlueClient(BaseClient):
 
     def put_data_catalog_encryption_settings(
         self, **kwargs: Unpack[PutDataCatalogEncryptionSettingsRequestTypeDef]
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """
         Sets the security configuration for a specified catalog.
 
@@ -2515,7 +2534,7 @@ class GlueClient(BaseClient):
 
     def put_data_quality_profile_annotation(
         self, **kwargs: Unpack[PutDataQualityProfileAnnotationRequestTypeDef]
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """
         Annotate all datapoints for a Profile.
 
@@ -2545,7 +2564,7 @@ class GlueClient(BaseClient):
 
     def put_workflow_run_properties(
         self, **kwargs: Unpack[PutWorkflowRunPropertiesRequestTypeDef]
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """
         Puts the specified workflow run properties for the given workflow run.
 
@@ -2648,7 +2667,7 @@ class GlueClient(BaseClient):
 
     def start_column_statistics_task_run_schedule(
         self, **kwargs: Unpack[StartColumnStatisticsTaskRunScheduleRequestTypeDef]
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """
         Starts a column statistics task run schedule.
 
@@ -2656,7 +2675,7 @@ class GlueClient(BaseClient):
         [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_glue/client/#start_column_statistics_task_run_schedule)
         """
 
-    def start_crawler(self, **kwargs: Unpack[StartCrawlerRequestTypeDef]) -> Dict[str, Any]:
+    def start_crawler(self, **kwargs: Unpack[StartCrawlerRequestTypeDef]) -> dict[str, Any]:
         """
         Starts a crawl using the specified crawler, regardless of what is scheduled.
 
@@ -2666,7 +2685,7 @@ class GlueClient(BaseClient):
 
     def start_crawler_schedule(
         self, **kwargs: Unpack[StartCrawlerScheduleRequestTypeDef]
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """
         Changes the schedule state of the specified crawler to <code>SCHEDULED</code>,
         unless the crawler is already running or the schedule state is already
@@ -2773,7 +2792,7 @@ class GlueClient(BaseClient):
 
     def stop_column_statistics_task_run(
         self, **kwargs: Unpack[StopColumnStatisticsTaskRunRequestTypeDef]
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """
         Stops a task run for the specified table.
 
@@ -2783,7 +2802,7 @@ class GlueClient(BaseClient):
 
     def stop_column_statistics_task_run_schedule(
         self, **kwargs: Unpack[StopColumnStatisticsTaskRunScheduleRequestTypeDef]
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """
         Stops a column statistics task run schedule.
 
@@ -2791,7 +2810,7 @@ class GlueClient(BaseClient):
         [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_glue/client/#stop_column_statistics_task_run_schedule)
         """
 
-    def stop_crawler(self, **kwargs: Unpack[StopCrawlerRequestTypeDef]) -> Dict[str, Any]:
+    def stop_crawler(self, **kwargs: Unpack[StopCrawlerRequestTypeDef]) -> dict[str, Any]:
         """
         If the specified crawler is running, stops the crawl.
 
@@ -2801,7 +2820,7 @@ class GlueClient(BaseClient):
 
     def stop_crawler_schedule(
         self, **kwargs: Unpack[StopCrawlerScheduleRequestTypeDef]
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """
         Sets the schedule state of the specified crawler to <code>NOT_SCHEDULED</code>,
         but does not stop the crawler if it is already running.
@@ -2830,7 +2849,7 @@ class GlueClient(BaseClient):
         [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_glue/client/#stop_trigger)
         """
 
-    def stop_workflow_run(self, **kwargs: Unpack[StopWorkflowRunRequestTypeDef]) -> Dict[str, Any]:
+    def stop_workflow_run(self, **kwargs: Unpack[StopWorkflowRunRequestTypeDef]) -> dict[str, Any]:
         """
         Stops the execution of the specified workflow run.
 
@@ -2838,7 +2857,7 @@ class GlueClient(BaseClient):
         [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_glue/client/#stop_workflow_run)
         """
 
-    def tag_resource(self, **kwargs: Unpack[TagResourceRequestTypeDef]) -> Dict[str, Any]:
+    def tag_resource(self, **kwargs: Unpack[TagResourceRequestTypeDef]) -> dict[str, Any]:
         """
         Adds tags to a resource.
 
@@ -2846,7 +2865,7 @@ class GlueClient(BaseClient):
         [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_glue/client/#tag_resource)
         """
 
-    def test_connection(self, **kwargs: Unpack[TestConnectionRequestTypeDef]) -> Dict[str, Any]:
+    def test_connection(self, **kwargs: Unpack[TestConnectionRequestTypeDef]) -> dict[str, Any]:
         """
         Tests a connection to a service to validate the service credentials that you
         provide.
@@ -2855,7 +2874,7 @@ class GlueClient(BaseClient):
         [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_glue/client/#test_connection)
         """
 
-    def untag_resource(self, **kwargs: Unpack[UntagResourceRequestTypeDef]) -> Dict[str, Any]:
+    def untag_resource(self, **kwargs: Unpack[UntagResourceRequestTypeDef]) -> dict[str, Any]:
         """
         Removes tags from a resource.
 
@@ -2873,7 +2892,7 @@ class GlueClient(BaseClient):
         [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_glue/client/#update_blueprint)
         """
 
-    def update_catalog(self, **kwargs: Unpack[UpdateCatalogRequestTypeDef]) -> Dict[str, Any]:
+    def update_catalog(self, **kwargs: Unpack[UpdateCatalogRequestTypeDef]) -> dict[str, Any]:
         """
         Updates an existing catalog's properties in the Glue Data Catalog.
 
@@ -2881,7 +2900,7 @@ class GlueClient(BaseClient):
         [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_glue/client/#update_catalog)
         """
 
-    def update_classifier(self, **kwargs: Unpack[UpdateClassifierRequestTypeDef]) -> Dict[str, Any]:
+    def update_classifier(self, **kwargs: Unpack[UpdateClassifierRequestTypeDef]) -> dict[str, Any]:
         """
         Modifies an existing classifier (a <code>GrokClassifier</code>, an
         <code>XMLClassifier</code>, a <code>JsonClassifier</code>, or a
@@ -2913,7 +2932,7 @@ class GlueClient(BaseClient):
 
     def update_column_statistics_task_settings(
         self, **kwargs: Unpack[UpdateColumnStatisticsTaskSettingsRequestTypeDef]
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """
         Updates settings for a column statistics task.
 
@@ -2921,7 +2940,7 @@ class GlueClient(BaseClient):
         [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_glue/client/#update_column_statistics_task_settings)
         """
 
-    def update_connection(self, **kwargs: Unpack[UpdateConnectionRequestTypeDef]) -> Dict[str, Any]:
+    def update_connection(self, **kwargs: Unpack[UpdateConnectionRequestTypeDef]) -> dict[str, Any]:
         """
         Updates a connection definition in the Data Catalog.
 
@@ -2929,7 +2948,7 @@ class GlueClient(BaseClient):
         [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_glue/client/#update_connection)
         """
 
-    def update_crawler(self, **kwargs: Unpack[UpdateCrawlerRequestTypeDef]) -> Dict[str, Any]:
+    def update_crawler(self, **kwargs: Unpack[UpdateCrawlerRequestTypeDef]) -> dict[str, Any]:
         """
         Updates a crawler.
 
@@ -2939,7 +2958,7 @@ class GlueClient(BaseClient):
 
     def update_crawler_schedule(
         self, **kwargs: Unpack[UpdateCrawlerScheduleRequestTypeDef]
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """
         Updates the schedule of a crawler using a <code>cron</code> expression.
 
@@ -2957,7 +2976,7 @@ class GlueClient(BaseClient):
         [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_glue/client/#update_data_quality_ruleset)
         """
 
-    def update_database(self, **kwargs: Unpack[UpdateDatabaseRequestTypeDef]) -> Dict[str, Any]:
+    def update_database(self, **kwargs: Unpack[UpdateDatabaseRequestTypeDef]) -> dict[str, Any]:
         """
         Updates an existing database definition in a Data Catalog.
 
@@ -2967,7 +2986,7 @@ class GlueClient(BaseClient):
 
     def update_dev_endpoint(
         self, **kwargs: Unpack[UpdateDevEndpointRequestTypeDef]
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """
         Updates a specified development endpoint.
 
@@ -2977,7 +2996,7 @@ class GlueClient(BaseClient):
 
     def update_glue_identity_center_configuration(
         self, **kwargs: Unpack[UpdateGlueIdentityCenterConfigurationRequestTypeDef]
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """
         Updates the existing Glue Identity Center configuration, allowing modification
         of scopes and permissions for the integration.
@@ -2999,7 +3018,7 @@ class GlueClient(BaseClient):
 
     def update_integration_table_properties(
         self, **kwargs: Unpack[UpdateIntegrationTablePropertiesRequestTypeDef]
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """
         This API is used to provide optional override properties for the tables that
         need to be replicated.
@@ -3036,7 +3055,7 @@ class GlueClient(BaseClient):
         [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_glue/client/#update_ml_transform)
         """
 
-    def update_partition(self, **kwargs: Unpack[UpdatePartitionRequestTypeDef]) -> Dict[str, Any]:
+    def update_partition(self, **kwargs: Unpack[UpdatePartitionRequestTypeDef]) -> dict[str, Any]:
         """
         Updates a partition.
 
@@ -3075,7 +3094,7 @@ class GlueClient(BaseClient):
         [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_glue/client/#update_source_control_from_job)
         """
 
-    def update_table(self, **kwargs: Unpack[UpdateTableRequestTypeDef]) -> Dict[str, Any]:
+    def update_table(self, **kwargs: Unpack[UpdateTableRequestTypeDef]) -> dict[str, Any]:
         """
         Updates a metadata table in the Data Catalog.
 
@@ -3085,7 +3104,7 @@ class GlueClient(BaseClient):
 
     def update_table_optimizer(
         self, **kwargs: Unpack[UpdateTableOptimizerRequestTypeDef]
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """
         Updates the configuration for an existing table optimizer.
 
@@ -3115,7 +3134,7 @@ class GlueClient(BaseClient):
 
     def update_user_defined_function(
         self, **kwargs: Unpack[UpdateUserDefinedFunctionRequestTypeDef]
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """
         Updates an existing function definition in the Data Catalog.
 

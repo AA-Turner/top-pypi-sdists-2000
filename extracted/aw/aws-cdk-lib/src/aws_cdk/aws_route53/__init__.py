@@ -380,38 +380,38 @@ cross_account_role = iam.Role(self, "CrossAccountRole",
     # The role name must be predictable
     role_name="MyDelegationRole",
     # The other account
-    assumed_by=iam.AccountPrincipal("12345678901"),
-    # You can scope down this role policy to be least privileged.
-    # If you want the other account to be able to manage specific records,
-    # you can scope down by resource and/or normalized record names
-    inline_policies={
-        "cross_account_policy": iam.PolicyDocument(
-            statements=[
-                iam.PolicyStatement(
-                    sid="ListHostedZonesByName",
-                    effect=iam.Effect.ALLOW,
-                    actions=["route53:ListHostedZonesByName"],
-                    resources=["*"]
-                ),
-                iam.PolicyStatement(
-                    sid="GetHostedZoneAndChangeResourceRecordSets",
-                    effect=iam.Effect.ALLOW,
-                    actions=["route53:GetHostedZone", "route53:ChangeResourceRecordSets"],
-                    # This example assumes the RecordSet subdomain.somexample.com
-                    # is contained in the HostedZone
-                    resources=["arn:aws:route53:::hostedzone/HZID00000000000000000"],
-                    conditions={
-                        "ForAllValues:StringLike": {
-                            "route53:ChangeResourceRecordSetsNormalizedRecordNames": ["subdomain.someexample.com"
-                            ]
-                        }
-                    }
-                )
-            ]
-        )
-    }
+    assumed_by=iam.AccountPrincipal("12345678901")
 )
 parent_zone.grant_delegation(cross_account_role)
+```
+
+To restrict the records that can be created with the delegation IAM role, use the optional `delegatedZoneNames` property in the delegation options,
+which enforces the `route53:ChangeResourceRecordSetsNormalizedRecordNames` condition key for record names that match those hosted zone names.
+The `delegatedZoneNames` list may only consist of hosted zones names that are subzones of the parent hosted zone.
+
+If the delegated zone name contains an unresolved token,
+it must resolve to a zone name that satisfies the requirements according to the documentation:
+https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/specifying-conditions-route53.html#route53_rrset_conditionkeys_normalization
+
+> All letters must be lowercase.
+> The DNS name must be without the trailing dot.
+> Characters other than a–z, 0–9, - (hyphen), _ (underscore), and . (period, as a delimiter between labels) must use escape codes in the format \three-digit octal code. For example, \052 is the octal code for character *.
+
+This feature allows you to better follow the minimum permissions privilege principle:
+
+```python
+# beta_cross_account_role: iam.Role
+
+# prod_cross_account_role: iam.Role
+parent_zone = route53.PublicHostedZone(self, "HostedZone",
+    zone_name="someexample.com"
+)
+parent_zone.grant_delegation(beta_cross_account_role,
+    delegated_zone_names=["beta.someexample.com"]
+)
+parent_zone.grant_delegation(prod_cross_account_role,
+    delegated_zone_names=["prod.someexample.com"]
+)
 ```
 
 In the account containing the child zone to be delegated:
@@ -555,6 +555,7 @@ zone = route53.HostedZone.from_hosted_zone_attributes(self, "MyZone",
 
 Alternatively, use the `HostedZone.fromHostedZoneId` to import hosted zones if
 you know the ID and the retrieval for the `zoneName` is undesirable.
+Note that any records created with a hosted zone obtained this way must have their name be fully qualified
 
 ```python
 zone = route53.HostedZone.from_hosted_zone_id(self, "MyZone", "ZOJJZC49E0EPZ")
@@ -7072,6 +7073,75 @@ class GeoLocation(
 
 
 @jsii.data_type(
+    jsii_type="aws-cdk-lib.aws_route53.GrantDelegationOptions",
+    jsii_struct_bases=[],
+    name_mapping={"delegated_zone_names": "delegatedZoneNames"},
+)
+class GrantDelegationOptions:
+    def __init__(
+        self,
+        *,
+        delegated_zone_names: typing.Optional[typing.Sequence[builtins.str]] = None,
+    ) -> None:
+        '''Options for the delegation permissions granted.
+
+        :param delegated_zone_names: List of hosted zone names to allow delegation to in the grant permissions. If the delegated zone name contains an unresolved token, it must resolve to a zone name that satisfies the requirements according to the documentation: https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/specifying-conditions-route53.html#route53_rrset_conditionkeys_normalization .. epigraph:: All letters must be lowercase. The DNS name must be without the trailing dot. Characters other than a–z, 0–9, - (hyphen), _ (underscore), and . (period, as a delimiter between labels) must use escape codes in the format \\three-digit octal code. For example, \\052 is the octal code for character *. Default: the grant allows delegation to any hosted zone
+
+        :exampleMetadata: infused
+
+        Example::
+
+            # beta_cross_account_role: iam.Role
+            
+            # prod_cross_account_role: iam.Role
+            parent_zone = route53.PublicHostedZone(self, "HostedZone",
+                zone_name="someexample.com"
+            )
+            parent_zone.grant_delegation(beta_cross_account_role,
+                delegated_zone_names=["beta.someexample.com"]
+            )
+            parent_zone.grant_delegation(prod_cross_account_role,
+                delegated_zone_names=["prod.someexample.com"]
+            )
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__38046cc745857012f26a1dd33df7a9adb28fcd6fc398761d762529373ae51744)
+            check_type(argname="argument delegated_zone_names", value=delegated_zone_names, expected_type=type_hints["delegated_zone_names"])
+        self._values: typing.Dict[builtins.str, typing.Any] = {}
+        if delegated_zone_names is not None:
+            self._values["delegated_zone_names"] = delegated_zone_names
+
+    @builtins.property
+    def delegated_zone_names(self) -> typing.Optional[typing.List[builtins.str]]:
+        '''List of hosted zone names to allow delegation to in the grant permissions.
+
+        If the delegated zone name contains an unresolved token,
+        it must resolve to a zone name that satisfies the requirements according to the documentation:
+        https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/specifying-conditions-route53.html#route53_rrset_conditionkeys_normalization
+        .. epigraph::
+
+           All letters must be lowercase.
+           The DNS name must be without the trailing dot.
+           Characters other than a–z, 0–9, - (hyphen), _ (underscore), and . (period, as a delimiter between labels) must use escape codes in the format \\three-digit octal code. For example, \\052 is the octal code for character *.
+
+        :default: the grant allows delegation to any hosted zone
+        '''
+        result = self._values.get("delegated_zone_names")
+        return typing.cast(typing.Optional[typing.List[builtins.str]], result)
+
+    def __eq__(self, rhs: typing.Any) -> builtins.bool:
+        return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+    def __ne__(self, rhs: typing.Any) -> builtins.bool:
+        return not (rhs == self)
+
+    def __repr__(self) -> str:
+        return "GrantDelegationOptions(%s)" % ", ".join(
+            k + "=" + repr(v) for k, v in self._values.items()
+        )
+
+
+@jsii.data_type(
     jsii_type="aws-cdk-lib.aws_route53.HealthCheckProps",
     jsii_struct_bases=[],
     name_mapping={
@@ -8035,10 +8105,16 @@ class IHostedZone(_IResource_c80c4260, typing_extensions.Protocol):
         ...
 
     @jsii.member(jsii_name="grantDelegation")
-    def grant_delegation(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def grant_delegation(
+        self,
+        grantee: _IGrantable_71c4f5de,
+        *,
+        delegated_zone_names: typing.Optional[typing.Sequence[builtins.str]] = None,
+    ) -> _Grant_a7ae64f8:
         '''Grant permissions to add delegation records to this zone.
 
         :param grantee: -
+        :param delegated_zone_names: List of hosted zone names to allow delegation to in the grant permissions. If the delegated zone name contains an unresolved token, it must resolve to a zone name that satisfies the requirements according to the documentation: https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/specifying-conditions-route53.html#route53_rrset_conditionkeys_normalization .. epigraph:: All letters must be lowercase. The DNS name must be without the trailing dot. Characters other than a–z, 0–9, - (hyphen), _ (underscore), and . (period, as a delimiter between labels) must use escape codes in the format \\three-digit octal code. For example, \\052 is the octal code for character *. Default: the grant allows delegation to any hosted zone
         '''
         ...
 
@@ -8086,15 +8162,23 @@ class _IHostedZoneProxy(
         return typing.cast(typing.Optional[typing.List[builtins.str]], jsii.get(self, "hostedZoneNameServers"))
 
     @jsii.member(jsii_name="grantDelegation")
-    def grant_delegation(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def grant_delegation(
+        self,
+        grantee: _IGrantable_71c4f5de,
+        *,
+        delegated_zone_names: typing.Optional[typing.Sequence[builtins.str]] = None,
+    ) -> _Grant_a7ae64f8:
         '''Grant permissions to add delegation records to this zone.
 
         :param grantee: -
+        :param delegated_zone_names: List of hosted zone names to allow delegation to in the grant permissions. If the delegated zone name contains an unresolved token, it must resolve to a zone name that satisfies the requirements according to the documentation: https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/specifying-conditions-route53.html#route53_rrset_conditionkeys_normalization .. epigraph:: All letters must be lowercase. The DNS name must be without the trailing dot. Characters other than a–z, 0–9, - (hyphen), _ (underscore), and . (period, as a delimiter between labels) must use escape codes in the format \\three-digit octal code. For example, \\052 is the octal code for character *. Default: the grant allows delegation to any hosted zone
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__97ae48bcbfd92ef96c96db6d1d972ddd9b889f01bba1ab2a3819d9faa9eb4a18)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantDelegation", [grantee]))
+        options = GrantDelegationOptions(delegated_zone_names=delegated_zone_names)
+
+        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantDelegation", [grantee, options]))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IHostedZone).__jsii_proxy_class__ = lambda : _IHostedZoneProxy
@@ -8910,45 +8994,26 @@ class PublicHostedZoneProps(CommonHostedZoneProps):
 
         Example::
 
-            parent_zone = route53.PublicHostedZone(self, "HostedZone",
-                zone_name="someexample.com"
+            sub_zone = route53.PublicHostedZone(self, "SubZone",
+                zone_name="sub.someexample.com"
             )
-            cross_account_role = iam.Role(self, "CrossAccountRole",
-                # The role name must be predictable
-                role_name="MyDelegationRole",
-                # The other account
-                assumed_by=iam.AccountPrincipal("12345678901"),
-                # You can scope down this role policy to be least privileged.
-                # If you want the other account to be able to manage specific records,
-                # you can scope down by resource and/or normalized record names
-                inline_policies={
-                    "cross_account_policy": iam.PolicyDocument(
-                        statements=[
-                            iam.PolicyStatement(
-                                sid="ListHostedZonesByName",
-                                effect=iam.Effect.ALLOW,
-                                actions=["route53:ListHostedZonesByName"],
-                                resources=["*"]
-                            ),
-                            iam.PolicyStatement(
-                                sid="GetHostedZoneAndChangeResourceRecordSets",
-                                effect=iam.Effect.ALLOW,
-                                actions=["route53:GetHostedZone", "route53:ChangeResourceRecordSets"],
-                                # This example assumes the RecordSet subdomain.somexample.com
-                                # is contained in the HostedZone
-                                resources=["arn:aws:route53:::hostedzone/HZID00000000000000000"],
-                                conditions={
-                                    "ForAllValues:StringLike": {
-                                        "route53:ChangeResourceRecordSetsNormalizedRecordNames": ["subdomain.someexample.com"
-                                        ]
-                                    }
-                                }
-                            )
-                        ]
-                    )
-                }
+            
+            # import the delegation role by constructing the roleArn
+            delegation_role_arn = Stack.of(self).format_arn(
+                region="",  # IAM is global in each partition
+                service="iam",
+                account="parent-account-id",
+                resource="role",
+                resource_name="MyDelegationRole"
             )
-            parent_zone.grant_delegation(cross_account_role)
+            delegation_role = iam.Role.from_role_arn(self, "DelegationRole", delegation_role_arn)
+            
+            route53.CrossAccountZoneDelegationRecord(self, "delegate",
+                delegated_zone=sub_zone,
+                parent_hosted_zone_name="someexample.com",  # or you can use parentHostedZoneId
+                delegation_role=delegation_role,
+                assume_role_region="us-east-1"
+            )
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__b51e553dd18a8a033ac24f091492db4b2bc8c672421ced82613174be3995dcdf)
@@ -15091,15 +15156,23 @@ class HostedZone(
         return typing.cast(IKeySigningKey, jsii.invoke(self, "enableDnssec", [options]))
 
     @jsii.member(jsii_name="grantDelegation")
-    def grant_delegation(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def grant_delegation(
+        self,
+        grantee: _IGrantable_71c4f5de,
+        *,
+        delegated_zone_names: typing.Optional[typing.Sequence[builtins.str]] = None,
+    ) -> _Grant_a7ae64f8:
         '''Grant permissions to add delegation records to this zone.
 
         :param grantee: -
+        :param delegated_zone_names: List of hosted zone names to allow delegation to in the grant permissions. If the delegated zone name contains an unresolved token, it must resolve to a zone name that satisfies the requirements according to the documentation: https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/specifying-conditions-route53.html#route53_rrset_conditionkeys_normalization .. epigraph:: All letters must be lowercase. The DNS name must be without the trailing dot. Characters other than a–z, 0–9, - (hyphen), _ (underscore), and . (period, as a delimiter between labels) must use escape codes in the format \\three-digit octal code. For example, \\052 is the octal code for character *. Default: the grant allows delegation to any hosted zone
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__8e256ece77d93011f031e05a119f03b248a4b68d267c298052b0cea131943ab5)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantDelegation", [grantee]))
+        options = GrantDelegationOptions(delegated_zone_names=delegated_zone_names)
+
+        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantDelegation", [grantee, options]))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
@@ -16941,6 +17014,7 @@ __all__ = [
     "DsRecord",
     "DsRecordProps",
     "GeoLocation",
+    "GrantDelegationOptions",
     "HealthCheck",
     "HealthCheckProps",
     "HealthCheckType",
@@ -17751,6 +17825,13 @@ def _typecheckingstub__13d57b34e60c4361c1d97c820e69f3a9c16ba208b123a261ee081931b
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__38046cc745857012f26a1dd33df7a9adb28fcd6fc398761d762529373ae51744(
+    *,
+    delegated_zone_names: typing.Optional[typing.Sequence[builtins.str]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__aa97034136188f7866c26cd6fb12cf33983958b5147a7092dea7494be1142b56(
     *,
     type: HealthCheckType,
@@ -17817,6 +17898,8 @@ def _typecheckingstub__162b54c0ae9f493edc12c5cba6aa323333c184d03d9332edaab8e4f75
 
 def _typecheckingstub__97ae48bcbfd92ef96c96db6d1d972ddd9b889f01bba1ab2a3819d9faa9eb4a18(
     grantee: _IGrantable_71c4f5de,
+    *,
+    delegated_zone_names: typing.Optional[typing.Sequence[builtins.str]] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -18567,6 +18650,8 @@ def _typecheckingstub__5c63a3fccbc53f093c8e4d46a2848bf83b386d2ca5206e82ecd8ecd3d
 
 def _typecheckingstub__8e256ece77d93011f031e05a119f03b248a4b68d267c298052b0cea131943ab5(
     grantee: _IGrantable_71c4f5de,
+    *,
+    delegated_zone_names: typing.Optional[typing.Sequence[builtins.str]] = None,
 ) -> None:
     """Type checking stubs"""
     pass

@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: multimethod
-Version: 2.0.1
+Version: 2.0.2
 Summary: Multiple argument dispatching.
 Author-email: Aric Coady <aric.coady@gmail.com>
 License-Expression: Apache-2.0

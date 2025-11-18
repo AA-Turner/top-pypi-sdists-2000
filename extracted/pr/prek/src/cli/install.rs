@@ -3,7 +3,7 @@ use std::io::Write;
 use std::path::{Path, PathBuf};
 use std::sync::Arc;
 
-use anyhow::Result;
+use anyhow::{Context, Result};
 use bstr::ByteSlice;
 use owo_colors::OwoColorize;
 use same_file::is_same_file;
@@ -95,7 +95,10 @@ pub(crate) async fn install_hooks(
     let reporter = HookInitReporter::from(printer);
     let _lock = store.lock_async().await?;
 
-    let hooks = workspace.init_hooks(store, Some(&reporter)).await?;
+    let hooks = workspace
+        .init_hooks(store, Some(&reporter))
+        .await
+        .context("Failed to init hooks")?;
     let filtered_hooks: Vec<_> = hooks
         .into_iter()
         .filter(|h| selectors.matches_hook(h))
@@ -193,7 +196,6 @@ fn install_hook_script(
 
     args.push(format!("--hook-type={}", hook_type.as_str()));
 
-    let git_root = GIT_ROOT.as_ref()?;
     let mut hint = format!("prek installed at `{}`", hook_path.user_display().cyan());
 
     // Prefer explicit config path if given (non-workspace mode).
@@ -205,6 +207,7 @@ fn install_hook_script(
 
         write!(hint, " with specified config `{}`", config.display().cyan())?;
     } else if let Some(project) = project {
+        let git_root = GIT_ROOT.as_ref()?;
         let project_path = project.path();
         let relative_path = project_path.strip_prefix(git_root).unwrap_or(project_path);
         if !relative_path.as_os_str().is_empty() {

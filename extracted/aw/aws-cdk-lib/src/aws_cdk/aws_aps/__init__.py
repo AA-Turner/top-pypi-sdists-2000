@@ -1495,6 +1495,10 @@ class CfnScraper(
         
                     # the properties below are optional
                     security_group_ids=["securityGroupIds"]
+                ),
+                vpc_configuration=aps.CfnScraper.VpcConfigurationProperty(
+                    security_group_ids=["securityGroupIds"],
+                    subnet_ids=["subnetIds"]
                 )
             ),
         
@@ -2441,17 +2445,22 @@ class CfnScraper(
     @jsii.data_type(
         jsii_type="aws-cdk-lib.aws_aps.CfnScraper.SourceProperty",
         jsii_struct_bases=[],
-        name_mapping={"eks_configuration": "eksConfiguration"},
+        name_mapping={
+            "eks_configuration": "eksConfiguration",
+            "vpc_configuration": "vpcConfiguration",
+        },
     )
     class SourceProperty:
         def __init__(
             self,
             *,
-            eks_configuration: typing.Union[_IResolvable_da3f097b, typing.Union["CfnScraper.EksConfigurationProperty", typing.Dict[builtins.str, typing.Any]]],
+            eks_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnScraper.EksConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            vpc_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnScraper.VpcConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''The source of collected metrics for a scraper.
 
             :param eks_configuration: The Amazon EKS cluster from which a scraper collects metrics.
+            :param vpc_configuration: Configuration for VPC metrics source.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-aps-scraper-source.html
             :exampleMetadata: fixture=_generated
@@ -2469,27 +2478,44 @@ class CfnScraper(
                 
                         # the properties below are optional
                         security_group_ids=["securityGroupIds"]
+                    ),
+                    vpc_configuration=aps.CfnScraper.VpcConfigurationProperty(
+                        security_group_ids=["securityGroupIds"],
+                        subnet_ids=["subnetIds"]
                     )
                 )
             '''
             if __debug__:
                 type_hints = typing.get_type_hints(_typecheckingstub__655e83ac40d7d6fcc3362aa2c25fcfadc0beb5744ef393de105d7d152821a330)
                 check_type(argname="argument eks_configuration", value=eks_configuration, expected_type=type_hints["eks_configuration"])
-            self._values: typing.Dict[builtins.str, typing.Any] = {
-                "eks_configuration": eks_configuration,
-            }
+                check_type(argname="argument vpc_configuration", value=vpc_configuration, expected_type=type_hints["vpc_configuration"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if eks_configuration is not None:
+                self._values["eks_configuration"] = eks_configuration
+            if vpc_configuration is not None:
+                self._values["vpc_configuration"] = vpc_configuration
 
         @builtins.property
         def eks_configuration(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnScraper.EksConfigurationProperty"]:
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnScraper.EksConfigurationProperty"]]:
             '''The Amazon EKS cluster from which a scraper collects metrics.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-aps-scraper-source.html#cfn-aps-scraper-source-eksconfiguration
             '''
             result = self._values.get("eks_configuration")
-            assert result is not None, "Required property 'eks_configuration' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnScraper.EksConfigurationProperty"], result)
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnScraper.EksConfigurationProperty"]], result)
+
+        @builtins.property
+        def vpc_configuration(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnScraper.VpcConfigurationProperty"]]:
+            '''Configuration for VPC metrics source.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-aps-scraper-source.html#cfn-aps-scraper-source-vpcconfiguration
+            '''
+            result = self._values.get("vpc_configuration")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnScraper.VpcConfigurationProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -2499,6 +2525,80 @@ class CfnScraper(
 
         def __repr__(self) -> str:
             return "SourceProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_aps.CfnScraper.VpcConfigurationProperty",
+        jsii_struct_bases=[],
+        name_mapping={
+            "security_group_ids": "securityGroupIds",
+            "subnet_ids": "subnetIds",
+        },
+    )
+    class VpcConfigurationProperty:
+        def __init__(
+            self,
+            *,
+            security_group_ids: typing.Sequence[builtins.str],
+            subnet_ids: typing.Sequence[builtins.str],
+        ) -> None:
+            '''Configuration for VPC metrics source.
+
+            :param security_group_ids: List of security group IDs.
+            :param subnet_ids: List of subnet IDs.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-aps-scraper-vpcconfiguration.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_aps as aps
+                
+                vpc_configuration_property = aps.CfnScraper.VpcConfigurationProperty(
+                    security_group_ids=["securityGroupIds"],
+                    subnet_ids=["subnetIds"]
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__8d146d8aa0a745fdc1f1efcc28a958a65b5bbc1a22d0e9673168bcec89aea649)
+                check_type(argname="argument security_group_ids", value=security_group_ids, expected_type=type_hints["security_group_ids"])
+                check_type(argname="argument subnet_ids", value=subnet_ids, expected_type=type_hints["subnet_ids"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "security_group_ids": security_group_ids,
+                "subnet_ids": subnet_ids,
+            }
+
+        @builtins.property
+        def security_group_ids(self) -> typing.List[builtins.str]:
+            '''List of security group IDs.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-aps-scraper-vpcconfiguration.html#cfn-aps-scraper-vpcconfiguration-securitygroupids
+            '''
+            result = self._values.get("security_group_ids")
+            assert result is not None, "Required property 'security_group_ids' is missing"
+            return typing.cast(typing.List[builtins.str], result)
+
+        @builtins.property
+        def subnet_ids(self) -> typing.List[builtins.str]:
+            '''List of subnet IDs.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-aps-scraper-vpcconfiguration.html#cfn-aps-scraper-vpcconfiguration-subnetids
+            '''
+            result = self._values.get("subnet_ids")
+            assert result is not None, "Required property 'subnet_ids' is missing"
+            return typing.cast(typing.List[builtins.str], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "VpcConfigurationProperty(%s)" % ", ".join(
                 k + "=" + repr(v) for k, v in self._values.items()
             )
 
@@ -2563,6 +2663,10 @@ class CfnScraperProps:
             
                         # the properties below are optional
                         security_group_ids=["securityGroupIds"]
+                    ),
+                    vpc_configuration=aps.CfnScraper.VpcConfigurationProperty(
+                        security_group_ids=["securityGroupIds"],
+                        subnet_ids=["subnetIds"]
                     )
                 ),
             
@@ -4169,7 +4273,16 @@ def _typecheckingstub__63a27055fededd95d1bc1fba74349c5f0f37894ed254d1e1ce3d670de
 
 def _typecheckingstub__655e83ac40d7d6fcc3362aa2c25fcfadc0beb5744ef393de105d7d152821a330(
     *,
-    eks_configuration: typing.Union[_IResolvable_da3f097b, typing.Union[CfnScraper.EksConfigurationProperty, typing.Dict[builtins.str, typing.Any]]],
+    eks_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnScraper.EksConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    vpc_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnScraper.VpcConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__8d146d8aa0a745fdc1f1efcc28a958a65b5bbc1a22d0e9673168bcec89aea649(
+    *,
+    security_group_ids: typing.Sequence[builtins.str],
+    subnet_ids: typing.Sequence[builtins.str],
 ) -> None:
     """Type checking stubs"""
     pass

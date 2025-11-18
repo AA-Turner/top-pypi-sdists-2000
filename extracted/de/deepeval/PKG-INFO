@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: deepeval
-Version: 3.7.1
+Version: 3.7.2
 Summary: The LLM Evaluation Framework
 Home-page: https://github.com/confident-ai/deepeval
 License: Apache-2.0
@@ -439,6 +439,7 @@ Using `.env.local` or `.env` is optional. If they are missing, DeepEval uses you
 ```bash
 cp .env.example .env.local
 # then edit .env.local (ignored by git)
+```
 
 <br />
 

@@ -3902,6 +3902,17 @@ class CfnListener(
                         enabled=False
                     )
                 ),
+                jwt_validation_config=elbv2.CfnListener.JwtValidationConfigProperty(
+                    issuer="issuer",
+                    jwks_endpoint="jwksEndpoint",
+        
+                    # the properties below are optional
+                    additional_claims=[elbv2.CfnListener.JwtValidationActionAdditionalClaimProperty(
+                        format="format",
+                        name="name",
+                        values=["values"]
+                    )]
+                ),
                 order=123,
                 redirect_config=elbv2.CfnListener.RedirectConfigProperty(
                     status_code="statusCode",
@@ -4184,6 +4195,7 @@ class CfnListener(
             "authenticate_oidc_config": "authenticateOidcConfig",
             "fixed_response_config": "fixedResponseConfig",
             "forward_config": "forwardConfig",
+            "jwt_validation_config": "jwtValidationConfig",
             "order": "order",
             "redirect_config": "redirectConfig",
             "target_group_arn": "targetGroupArn",
@@ -4198,6 +4210,7 @@ class CfnListener(
             authenticate_oidc_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnListener.AuthenticateOidcConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             fixed_response_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnListener.FixedResponseConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             forward_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnListener.ForwardConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            jwt_validation_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnListener.JwtValidationConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             order: typing.Optional[jsii.Number] = None,
             redirect_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnListener.RedirectConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             target_group_arn: typing.Optional[builtins.str] = None,
@@ -4209,6 +4222,7 @@ class CfnListener(
             :param authenticate_oidc_config: [HTTPS listeners] Information about an identity provider that is compliant with OpenID Connect (OIDC). Specify only when ``Type`` is ``authenticate-oidc`` .
             :param fixed_response_config: [Application Load Balancer] Information for creating an action that returns a custom HTTP response. Specify only when ``Type`` is ``fixed-response`` .
             :param forward_config: Information for creating an action that distributes requests among multiple target groups. Specify only when ``Type`` is ``forward`` . If you specify both ``ForwardConfig`` and ``TargetGroupArn`` , you can specify only one target group using ``ForwardConfig`` and it must be the same target group specified in ``TargetGroupArn`` .
+            :param jwt_validation_config: 
             :param order: The order for the action. This value is required for rules with multiple actions. The action with the lowest value for order is performed first.
             :param redirect_config: [Application Load Balancer] Information for creating a redirect action. Specify only when ``Type`` is ``redirect`` .
             :param target_group_arn: The Amazon Resource Name (ARN) of the target group. Specify only when ``Type`` is ``forward`` and you want to route to a single target group. To route to multiple target groups, you must use ``ForwardConfig`` instead.
@@ -4275,6 +4289,17 @@ class CfnListener(
                             enabled=False
                         )
                     ),
+                    jwt_validation_config=elbv2.CfnListener.JwtValidationConfigProperty(
+                        issuer="issuer",
+                        jwks_endpoint="jwksEndpoint",
+                
+                        # the properties below are optional
+                        additional_claims=[elbv2.CfnListener.JwtValidationActionAdditionalClaimProperty(
+                            format="format",
+                            name="name",
+                            values=["values"]
+                        )]
+                    ),
                     order=123,
                     redirect_config=elbv2.CfnListener.RedirectConfigProperty(
                         status_code="statusCode",
@@ -4296,6 +4321,7 @@ class CfnListener(
                 check_type(argname="argument authenticate_oidc_config", value=authenticate_oidc_config, expected_type=type_hints["authenticate_oidc_config"])
                 check_type(argname="argument fixed_response_config", value=fixed_response_config, expected_type=type_hints["fixed_response_config"])
                 check_type(argname="argument forward_config", value=forward_config, expected_type=type_hints["forward_config"])
+                check_type(argname="argument jwt_validation_config", value=jwt_validation_config, expected_type=type_hints["jwt_validation_config"])
                 check_type(argname="argument order", value=order, expected_type=type_hints["order"])
                 check_type(argname="argument redirect_config", value=redirect_config, expected_type=type_hints["redirect_config"])
                 check_type(argname="argument target_group_arn", value=target_group_arn, expected_type=type_hints["target_group_arn"])
@@ -4310,6 +4336,8 @@ class CfnListener(
                 self._values["fixed_response_config"] = fixed_response_config
             if forward_config is not None:
                 self._values["forward_config"] = forward_config
+            if jwt_validation_config is not None:
+                self._values["jwt_validation_config"] = jwt_validation_config
             if order is not None:
                 self._values["order"] = order
             if redirect_config is not None:
@@ -4378,6 +4406,16 @@ class CfnListener(
             '''
             result = self._values.get("forward_config")
             return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnListener.ForwardConfigProperty"]], result)
+
+        @builtins.property
+        def jwt_validation_config(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnListener.JwtValidationConfigProperty"]]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-elasticloadbalancingv2-listener-action.html#cfn-elasticloadbalancingv2-listener-action-jwtvalidationconfig
+            '''
+            result = self._values.get("jwt_validation_config")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnListener.JwtValidationConfigProperty"]], result)
 
         @builtins.property
         def order(self) -> typing.Optional[jsii.Number]:
@@ -5104,6 +5142,182 @@ class CfnListener(
 
         def __repr__(self) -> str:
             return "ForwardConfigProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_elasticloadbalancingv2.CfnListener.JwtValidationActionAdditionalClaimProperty",
+        jsii_struct_bases=[],
+        name_mapping={"format": "format", "name": "name", "values": "values"},
+    )
+    class JwtValidationActionAdditionalClaimProperty:
+        def __init__(
+            self,
+            *,
+            format: builtins.str,
+            name: builtins.str,
+            values: typing.Sequence[builtins.str],
+        ) -> None:
+            '''
+            :param format: 
+            :param name: 
+            :param values: 
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-elasticloadbalancingv2-listener-jwtvalidationactionadditionalclaim.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_elasticloadbalancingv2 as elbv2
+                
+                jwt_validation_action_additional_claim_property = elbv2.CfnListener.JwtValidationActionAdditionalClaimProperty(
+                    format="format",
+                    name="name",
+                    values=["values"]
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__e9d0087a9eb7c5f841bfac469715abdae6ee2114ee859f90b00e45143d404212)
+                check_type(argname="argument format", value=format, expected_type=type_hints["format"])
+                check_type(argname="argument name", value=name, expected_type=type_hints["name"])
+                check_type(argname="argument values", value=values, expected_type=type_hints["values"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "format": format,
+                "name": name,
+                "values": values,
+            }
+
+        @builtins.property
+        def format(self) -> builtins.str:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-elasticloadbalancingv2-listener-jwtvalidationactionadditionalclaim.html#cfn-elasticloadbalancingv2-listener-jwtvalidationactionadditionalclaim-format
+            '''
+            result = self._values.get("format")
+            assert result is not None, "Required property 'format' is missing"
+            return typing.cast(builtins.str, result)
+
+        @builtins.property
+        def name(self) -> builtins.str:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-elasticloadbalancingv2-listener-jwtvalidationactionadditionalclaim.html#cfn-elasticloadbalancingv2-listener-jwtvalidationactionadditionalclaim-name
+            '''
+            result = self._values.get("name")
+            assert result is not None, "Required property 'name' is missing"
+            return typing.cast(builtins.str, result)
+
+        @builtins.property
+        def values(self) -> typing.List[builtins.str]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-elasticloadbalancingv2-listener-jwtvalidationactionadditionalclaim.html#cfn-elasticloadbalancingv2-listener-jwtvalidationactionadditionalclaim-values
+            '''
+            result = self._values.get("values")
+            assert result is not None, "Required property 'values' is missing"
+            return typing.cast(typing.List[builtins.str], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "JwtValidationActionAdditionalClaimProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_elasticloadbalancingv2.CfnListener.JwtValidationConfigProperty",
+        jsii_struct_bases=[],
+        name_mapping={
+            "issuer": "issuer",
+            "jwks_endpoint": "jwksEndpoint",
+            "additional_claims": "additionalClaims",
+        },
+    )
+    class JwtValidationConfigProperty:
+        def __init__(
+            self,
+            *,
+            issuer: builtins.str,
+            jwks_endpoint: builtins.str,
+            additional_claims: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnListener.JwtValidationActionAdditionalClaimProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        ) -> None:
+            '''
+            :param issuer: 
+            :param jwks_endpoint: 
+            :param additional_claims: 
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-elasticloadbalancingv2-listener-jwtvalidationconfig.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_elasticloadbalancingv2 as elbv2
+                
+                jwt_validation_config_property = elbv2.CfnListener.JwtValidationConfigProperty(
+                    issuer="issuer",
+                    jwks_endpoint="jwksEndpoint",
+                
+                    # the properties below are optional
+                    additional_claims=[elbv2.CfnListener.JwtValidationActionAdditionalClaimProperty(
+                        format="format",
+                        name="name",
+                        values=["values"]
+                    )]
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__e741a75fc9c6afe2cebc6ef7e70841f66c005ad9c7532432503bb3bd6fbcf625)
+                check_type(argname="argument issuer", value=issuer, expected_type=type_hints["issuer"])
+                check_type(argname="argument jwks_endpoint", value=jwks_endpoint, expected_type=type_hints["jwks_endpoint"])
+                check_type(argname="argument additional_claims", value=additional_claims, expected_type=type_hints["additional_claims"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "issuer": issuer,
+                "jwks_endpoint": jwks_endpoint,
+            }
+            if additional_claims is not None:
+                self._values["additional_claims"] = additional_claims
+
+        @builtins.property
+        def issuer(self) -> builtins.str:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-elasticloadbalancingv2-listener-jwtvalidationconfig.html#cfn-elasticloadbalancingv2-listener-jwtvalidationconfig-issuer
+            '''
+            result = self._values.get("issuer")
+            assert result is not None, "Required property 'issuer' is missing"
+            return typing.cast(builtins.str, result)
+
+        @builtins.property
+        def jwks_endpoint(self) -> builtins.str:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-elasticloadbalancingv2-listener-jwtvalidationconfig.html#cfn-elasticloadbalancingv2-listener-jwtvalidationconfig-jwksendpoint
+            '''
+            result = self._values.get("jwks_endpoint")
+            assert result is not None, "Required property 'jwks_endpoint' is missing"
+            return typing.cast(builtins.str, result)
+
+        @builtins.property
+        def additional_claims(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnListener.JwtValidationActionAdditionalClaimProperty"]]]]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-elasticloadbalancingv2-listener-jwtvalidationconfig.html#cfn-elasticloadbalancingv2-listener-jwtvalidationconfig-additionalclaims
+            '''
+            result = self._values.get("additional_claims")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnListener.JwtValidationActionAdditionalClaimProperty"]]]], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "JwtValidationConfigProperty(%s)" % ", ".join(
                 k + "=" + repr(v) for k, v in self._values.items()
             )
 
@@ -5992,6 +6206,17 @@ class CfnListenerProps:
                             enabled=False
                         )
                     ),
+                    jwt_validation_config=elbv2.CfnListener.JwtValidationConfigProperty(
+                        issuer="issuer",
+                        jwks_endpoint="jwksEndpoint",
+            
+                        # the properties below are optional
+                        additional_claims=[elbv2.CfnListener.JwtValidationActionAdditionalClaimProperty(
+                            format="format",
+                            name="name",
+                            values=["values"]
+                        )]
+                    ),
                     order=123,
                     redirect_config=elbv2.CfnListener.RedirectConfigProperty(
                         status_code="statusCode",
@@ -6254,6 +6479,17 @@ class CfnListenerRule(
                         enabled=False
                     )
                 ),
+                jwt_validation_config=elbv2.CfnListenerRule.JwtValidationConfigProperty(
+                    issuer="issuer",
+                    jwks_endpoint="jwksEndpoint",
+        
+                    # the properties below are optional
+                    additional_claims=[elbv2.CfnListenerRule.JwtValidationActionAdditionalClaimProperty(
+                        format="format",
+                        name="name",
+                        values=["values"]
+                    )]
+                ),
                 order=123,
                 redirect_config=elbv2.CfnListenerRule.RedirectConfigProperty(
                     status_code="statusCode",
@@ -6506,6 +6742,7 @@ class CfnListenerRule(
             "authenticate_oidc_config": "authenticateOidcConfig",
             "fixed_response_config": "fixedResponseConfig",
             "forward_config": "forwardConfig",
+            "jwt_validation_config": "jwtValidationConfig",
             "order": "order",
             "redirect_config": "redirectConfig",
             "target_group_arn": "targetGroupArn",
@@ -6520,6 +6757,7 @@ class CfnListenerRule(
             authenticate_oidc_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnListenerRule.AuthenticateOidcConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             fixed_response_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnListenerRule.FixedResponseConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             forward_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnListenerRule.ForwardConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            jwt_validation_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnListenerRule.JwtValidationConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             order: typing.Optional[jsii.Number] = None,
             redirect_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnListenerRule.RedirectConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             target_group_arn: typing.Optional[builtins.str] = None,
@@ -6531,6 +6769,7 @@ class CfnListenerRule(
             :param authenticate_oidc_config: [HTTPS listeners] Information about an identity provider that is compliant with OpenID Connect (OIDC). Specify only when ``Type`` is ``authenticate-oidc`` .
             :param fixed_response_config: [Application Load Balancer] Information for creating an action that returns a custom HTTP response. Specify only when ``Type`` is ``fixed-response`` .
             :param forward_config: Information for creating an action that distributes requests among multiple target groups. Specify only when ``Type`` is ``forward`` . If you specify both ``ForwardConfig`` and ``TargetGroupArn`` , you can specify only one target group using ``ForwardConfig`` and it must be the same target group specified in ``TargetGroupArn`` .
+            :param jwt_validation_config: 
             :param order: The order for the action. This value is required for rules with multiple actions. The action with the lowest value for order is performed first.
             :param redirect_config: [Application Load Balancer] Information for creating a redirect action. Specify only when ``Type`` is ``redirect`` .
             :param target_group_arn: The Amazon Resource Name (ARN) of the target group. Specify only when ``Type`` is ``forward`` and you want to route to a single target group. To route to multiple target groups, you must use ``ForwardConfig`` instead.
@@ -6597,6 +6836,17 @@ class CfnListenerRule(
                             enabled=False
                         )
                     ),
+                    jwt_validation_config=elbv2.CfnListenerRule.JwtValidationConfigProperty(
+                        issuer="issuer",
+                        jwks_endpoint="jwksEndpoint",
+                
+                        # the properties below are optional
+                        additional_claims=[elbv2.CfnListenerRule.JwtValidationActionAdditionalClaimProperty(
+                            format="format",
+                            name="name",
+                            values=["values"]
+                        )]
+                    ),
                     order=123,
                     redirect_config=elbv2.CfnListenerRule.RedirectConfigProperty(
                         status_code="statusCode",
@@ -6618,6 +6868,7 @@ class CfnListenerRule(
                 check_type(argname="argument authenticate_oidc_config", value=authenticate_oidc_config, expected_type=type_hints["authenticate_oidc_config"])
                 check_type(argname="argument fixed_response_config", value=fixed_response_config, expected_type=type_hints["fixed_response_config"])
                 check_type(argname="argument forward_config", value=forward_config, expected_type=type_hints["forward_config"])
+                check_type(argname="argument jwt_validation_config", value=jwt_validation_config, expected_type=type_hints["jwt_validation_config"])
                 check_type(argname="argument order", value=order, expected_type=type_hints["order"])
                 check_type(argname="argument redirect_config", value=redirect_config, expected_type=type_hints["redirect_config"])
                 check_type(argname="argument target_group_arn", value=target_group_arn, expected_type=type_hints["target_group_arn"])
@@ -6632,6 +6883,8 @@ class CfnListenerRule(
                 self._values["fixed_response_config"] = fixed_response_config
             if forward_config is not None:
                 self._values["forward_config"] = forward_config
+            if jwt_validation_config is not None:
+                self._values["jwt_validation_config"] = jwt_validation_config
             if order is not None:
                 self._values["order"] = order
             if redirect_config is not None:
@@ -6700,6 +6953,16 @@ class CfnListenerRule(
             '''
             result = self._values.get("forward_config")
             return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnListenerRule.ForwardConfigProperty"]], result)
+
+        @builtins.property
+        def jwt_validation_config(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnListenerRule.JwtValidationConfigProperty"]]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-elasticloadbalancingv2-listenerrule-action.html#cfn-elasticloadbalancingv2-listenerrule-action-jwtvalidationconfig
+            '''
+            result = self._values.get("jwt_validation_config")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnListenerRule.JwtValidationConfigProperty"]], result)
 
         @builtins.property
         def order(self) -> typing.Optional[jsii.Number]:
@@ -7603,6 +7866,182 @@ class CfnListenerRule(
 
         def __repr__(self) -> str:
             return "HttpRequestMethodConfigProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_elasticloadbalancingv2.CfnListenerRule.JwtValidationActionAdditionalClaimProperty",
+        jsii_struct_bases=[],
+        name_mapping={"format": "format", "name": "name", "values": "values"},
+    )
+    class JwtValidationActionAdditionalClaimProperty:
+        def __init__(
+            self,
+            *,
+            format: builtins.str,
+            name: builtins.str,
+            values: typing.Sequence[builtins.str],
+        ) -> None:
+            '''
+            :param format: 
+            :param name: 
+            :param values: 
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-elasticloadbalancingv2-listenerrule-jwtvalidationactionadditionalclaim.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_elasticloadbalancingv2 as elbv2
+                
+                jwt_validation_action_additional_claim_property = elbv2.CfnListenerRule.JwtValidationActionAdditionalClaimProperty(
+                    format="format",
+                    name="name",
+                    values=["values"]
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__d42959d5127a29866aa72327275087df135cdbfab35eb6a41db0871ce7b596d1)
+                check_type(argname="argument format", value=format, expected_type=type_hints["format"])
+                check_type(argname="argument name", value=name, expected_type=type_hints["name"])
+                check_type(argname="argument values", value=values, expected_type=type_hints["values"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "format": format,
+                "name": name,
+                "values": values,
+            }
+
+        @builtins.property
+        def format(self) -> builtins.str:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-elasticloadbalancingv2-listenerrule-jwtvalidationactionadditionalclaim.html#cfn-elasticloadbalancingv2-listenerrule-jwtvalidationactionadditionalclaim-format
+            '''
+            result = self._values.get("format")
+            assert result is not None, "Required property 'format' is missing"
+            return typing.cast(builtins.str, result)
+
+        @builtins.property
+        def name(self) -> builtins.str:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-elasticloadbalancingv2-listenerrule-jwtvalidationactionadditionalclaim.html#cfn-elasticloadbalancingv2-listenerrule-jwtvalidationactionadditionalclaim-name
+            '''
+            result = self._values.get("name")
+            assert result is not None, "Required property 'name' is missing"
+            return typing.cast(builtins.str, result)
+
+        @builtins.property
+        def values(self) -> typing.List[builtins.str]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-elasticloadbalancingv2-listenerrule-jwtvalidationactionadditionalclaim.html#cfn-elasticloadbalancingv2-listenerrule-jwtvalidationactionadditionalclaim-values
+            '''
+            result = self._values.get("values")
+            assert result is not None, "Required property 'values' is missing"
+            return typing.cast(typing.List[builtins.str], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "JwtValidationActionAdditionalClaimProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_elasticloadbalancingv2.CfnListenerRule.JwtValidationConfigProperty",
+        jsii_struct_bases=[],
+        name_mapping={
+            "issuer": "issuer",
+            "jwks_endpoint": "jwksEndpoint",
+            "additional_claims": "additionalClaims",
+        },
+    )
+    class JwtValidationConfigProperty:
+        def __init__(
+            self,
+            *,
+            issuer: builtins.str,
+            jwks_endpoint: builtins.str,
+            additional_claims: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnListenerRule.JwtValidationActionAdditionalClaimProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        ) -> None:
+            '''
+            :param issuer: 
+            :param jwks_endpoint: 
+            :param additional_claims: 
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-elasticloadbalancingv2-listenerrule-jwtvalidationconfig.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_elasticloadbalancingv2 as elbv2
+                
+                jwt_validation_config_property = elbv2.CfnListenerRule.JwtValidationConfigProperty(
+                    issuer="issuer",
+                    jwks_endpoint="jwksEndpoint",
+                
+                    # the properties below are optional
+                    additional_claims=[elbv2.CfnListenerRule.JwtValidationActionAdditionalClaimProperty(
+                        format="format",
+                        name="name",
+                        values=["values"]
+                    )]
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__453c3682f266baa85a3319d8ac290c6f36e58efe3ecc37263406d04f135d4160)
+                check_type(argname="argument issuer", value=issuer, expected_type=type_hints["issuer"])
+                check_type(argname="argument jwks_endpoint", value=jwks_endpoint, expected_type=type_hints["jwks_endpoint"])
+                check_type(argname="argument additional_claims", value=additional_claims, expected_type=type_hints["additional_claims"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "issuer": issuer,
+                "jwks_endpoint": jwks_endpoint,
+            }
+            if additional_claims is not None:
+                self._values["additional_claims"] = additional_claims
+
+        @builtins.property
+        def issuer(self) -> builtins.str:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-elasticloadbalancingv2-listenerrule-jwtvalidationconfig.html#cfn-elasticloadbalancingv2-listenerrule-jwtvalidationconfig-issuer
+            '''
+            result = self._values.get("issuer")
+            assert result is not None, "Required property 'issuer' is missing"
+            return typing.cast(builtins.str, result)
+
+        @builtins.property
+        def jwks_endpoint(self) -> builtins.str:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-elasticloadbalancingv2-listenerrule-jwtvalidationconfig.html#cfn-elasticloadbalancingv2-listenerrule-jwtvalidationconfig-jwksendpoint
+            '''
+            result = self._values.get("jwks_endpoint")
+            assert result is not None, "Required property 'jwks_endpoint' is missing"
+            return typing.cast(builtins.str, result)
+
+        @builtins.property
+        def additional_claims(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnListenerRule.JwtValidationActionAdditionalClaimProperty"]]]]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-elasticloadbalancingv2-listenerrule-jwtvalidationconfig.html#cfn-elasticloadbalancingv2-listenerrule-jwtvalidationconfig-additionalclaims
+            '''
+            result = self._values.get("additional_claims")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnListenerRule.JwtValidationActionAdditionalClaimProperty"]]]], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "JwtValidationConfigProperty(%s)" % ", ".join(
                 k + "=" + repr(v) for k, v in self._values.items()
             )
 
@@ -8771,6 +9210,17 @@ class CfnListenerRuleProps:
                             duration_seconds=123,
                             enabled=False
                         )
+                    ),
+                    jwt_validation_config=elbv2.CfnListenerRule.JwtValidationConfigProperty(
+                        issuer="issuer",
+                        jwks_endpoint="jwksEndpoint",
+            
+                        # the properties below are optional
+                        additional_claims=[elbv2.CfnListenerRule.JwtValidationActionAdditionalClaimProperty(
+                            format="format",
+                            name="name",
+                            values=["values"]
+                        )]
                     ),
                     order=123,
                     redirect_config=elbv2.CfnListenerRule.RedirectConfigProperty(
@@ -10047,7 +10497,8 @@ class CfnTargetGroup(
         
                 # the properties below are optional
                 availability_zone="availabilityZone",
-                port=123
+                port=123,
+                quic_server_id="quicServerId"
             )],
             target_type="targetType",
             unhealthy_threshold_count=123,
@@ -10576,6 +11027,7 @@ class CfnTargetGroup(
             "id": "id",
             "availability_zone": "availabilityZone",
             "port": "port",
+            "quic_server_id": "quicServerId",
         },
     )
     class TargetDescriptionProperty:
@@ -10585,12 +11037,14 @@ class CfnTargetGroup(
             id: builtins.str,
             availability_zone: typing.Optional[builtins.str] = None,
             port: typing.Optional[jsii.Number] = None,
+            quic_server_id: typing.Optional[builtins.str] = None,
         ) -> None:
             '''Specifies a target to add to a target group.
 
             :param id: The ID of the target. If the target type of the target group is ``instance`` , specify an instance ID. If the target type is ``ip`` , specify an IP address. If the target type is ``lambda`` , specify the ARN of the Lambda function. If the target type is ``alb`` , specify the ARN of the Application Load Balancer target.
             :param availability_zone: An Availability Zone or ``all`` . This determines whether the target receives traffic from the load balancer nodes in the specified Availability Zone or from all enabled Availability Zones for the load balancer. For Application Load Balancer target groups, the specified Availability Zone value is only applicable when cross-zone load balancing is off. Otherwise the parameter is ignored and treated as ``all`` . This parameter is not supported if the target type of the target group is ``instance`` or ``alb`` . If the target type is ``ip`` and the IP address is in a subnet of the VPC for the target group, the Availability Zone is automatically detected and this parameter is optional. If the IP address is outside the VPC, this parameter is required. For Application Load Balancer target groups with cross-zone load balancing off, if the target type is ``ip`` and the IP address is outside of the VPC for the target group, this should be an Availability Zone inside the VPC for the target group. If the target type is ``lambda`` , this parameter is optional and the only supported value is ``all`` .
             :param port: The port on which the target is listening. If the target group protocol is GENEVE, the supported port is 6081. If the target type is ``alb`` , the targeted Application Load Balancer must have at least one listener whose port matches the target group port. This parameter is not used if the target is a Lambda function.
+            :param quic_server_id: The Server ID used by targets when using QUIC or TCP_QUIC protocols.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-elasticloadbalancingv2-targetgroup-targetdescription.html
             :exampleMetadata: fixture=_generated
@@ -10606,7 +11060,8 @@ class CfnTargetGroup(
                 
                     # the properties below are optional
                     availability_zone="availabilityZone",
-                    port=123
+                    port=123,
+                    quic_server_id="quicServerId"
                 )
             '''
             if __debug__:
@@ -10614,6 +11069,7 @@ class CfnTargetGroup(
                 check_type(argname="argument id", value=id, expected_type=type_hints["id"])
                 check_type(argname="argument availability_zone", value=availability_zone, expected_type=type_hints["availability_zone"])
                 check_type(argname="argument port", value=port, expected_type=type_hints["port"])
+                check_type(argname="argument quic_server_id", value=quic_server_id, expected_type=type_hints["quic_server_id"])
             self._values: typing.Dict[builtins.str, typing.Any] = {
                 "id": id,
             }
@@ -10621,6 +11077,8 @@ class CfnTargetGroup(
                 self._values["availability_zone"] = availability_zone
             if port is not None:
                 self._values["port"] = port
+            if quic_server_id is not None:
+                self._values["quic_server_id"] = quic_server_id
 
         @builtins.property
         def id(self) -> builtins.str:
@@ -10665,6 +11123,15 @@ class CfnTargetGroup(
             '''
             result = self._values.get("port")
             return typing.cast(typing.Optional[jsii.Number], result)
+
+        @builtins.property
+        def quic_server_id(self) -> typing.Optional[builtins.str]:
+            '''The Server ID used by targets when using QUIC or TCP_QUIC protocols.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-elasticloadbalancingv2-targetgroup-targetdescription.html#cfn-elasticloadbalancingv2-targetgroup-targetdescription-quicserverid
+            '''
+            result = self._values.get("quic_server_id")
+            return typing.cast(typing.Optional[builtins.str], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -10903,7 +11370,8 @@ class CfnTargetGroupProps:
             
                     # the properties below are optional
                     availability_zone="availabilityZone",
-                    port=123
+                    port=123,
+                    quic_server_id="quicServerId"
                 )],
                 target_type="targetType",
                 unhealthy_threshold_count=123,
@@ -17424,6 +17892,7 @@ class ListenerAction(
         authenticate_oidc_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnListenerRule.AuthenticateOidcConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
         fixed_response_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnListenerRule.FixedResponseConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
         forward_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnListenerRule.ForwardConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        jwt_validation_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnListenerRule.JwtValidationConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
         order: typing.Optional[jsii.Number] = None,
         redirect_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnListenerRule.RedirectConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
         target_group_arn: typing.Optional[builtins.str] = None,
@@ -17439,6 +17908,7 @@ class ListenerAction(
         :param authenticate_oidc_config: [HTTPS listeners] Information about an identity provider that is compliant with OpenID Connect (OIDC). Specify only when ``Type`` is ``authenticate-oidc`` .
         :param fixed_response_config: [Application Load Balancer] Information for creating an action that returns a custom HTTP response. Specify only when ``Type`` is ``fixed-response`` .
         :param forward_config: Information for creating an action that distributes requests among multiple target groups. Specify only when ``Type`` is ``forward`` . If you specify both ``ForwardConfig`` and ``TargetGroupArn`` , you can specify only one target group using ``ForwardConfig`` and it must be the same target group specified in ``TargetGroupArn`` .
+        :param jwt_validation_config: 
         :param order: The order for the action. This value is required for rules with multiple actions. The action with the lowest value for order is performed first.
         :param redirect_config: [Application Load Balancer] Information for creating a redirect action. Specify only when ``Type`` is ``redirect`` .
         :param target_group_arn: The Amazon Resource Name (ARN) of the target group. Specify only when ``Type`` is ``forward`` and you want to route to a single target group. To route to multiple target groups, you must use ``ForwardConfig`` instead.
@@ -17449,6 +17919,7 @@ class ListenerAction(
             authenticate_oidc_config=authenticate_oidc_config,
             fixed_response_config=fixed_response_config,
             forward_config=forward_config,
+            jwt_validation_config=jwt_validation_config,
             order=order,
             redirect_config=redirect_config,
             target_group_arn=target_group_arn,
@@ -28290,6 +28761,7 @@ def _typecheckingstub__21bb354fe54999be8e8c56cfc027cc3a904c8a530eab683af669ae1b3
     authenticate_oidc_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnListener.AuthenticateOidcConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     fixed_response_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnListener.FixedResponseConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     forward_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnListener.ForwardConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    jwt_validation_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnListener.JwtValidationConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     order: typing.Optional[jsii.Number] = None,
     redirect_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnListener.RedirectConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     target_group_arn: typing.Optional[builtins.str] = None,
@@ -28349,6 +28821,24 @@ def _typecheckingstub__76a2843eb97151186fbdfa49596935d3eaaa57f1a9d2a415ebe1955fc
     *,
     target_groups: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnListener.TargetGroupTupleProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     target_group_stickiness_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnListener.TargetGroupStickinessConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__e9d0087a9eb7c5f841bfac469715abdae6ee2114ee859f90b00e45143d404212(
+    *,
+    format: builtins.str,
+    name: builtins.str,
+    values: typing.Sequence[builtins.str],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__e741a75fc9c6afe2cebc6ef7e70841f66c005ad9c7532432503bb3bd6fbcf625(
+    *,
+    issuer: builtins.str,
+    jwks_endpoint: builtins.str,
+    additional_claims: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnListener.JwtValidationActionAdditionalClaimProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -28525,6 +29015,7 @@ def _typecheckingstub__7150acf06b4a7b7a17a48e47fbd6b5811449714f9389fb8e4f5e930ae
     authenticate_oidc_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnListenerRule.AuthenticateOidcConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     fixed_response_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnListenerRule.FixedResponseConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     forward_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnListenerRule.ForwardConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    jwt_validation_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnListenerRule.JwtValidationConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     order: typing.Optional[jsii.Number] = None,
     redirect_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnListenerRule.RedirectConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     target_group_arn: typing.Optional[builtins.str] = None,
@@ -28601,6 +29092,24 @@ def _typecheckingstub__fc8bc3be7581c3c74e13fd0af458f85ee288dc502b075ed589b066c9d
 def _typecheckingstub__f3fe6a1ff6af190d9fb8cf22cffb0c9765117a47c52e2458d5d8ed20b10a1aed(
     *,
     values: typing.Optional[typing.Sequence[builtins.str]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__d42959d5127a29866aa72327275087df135cdbfab35eb6a41db0871ce7b596d1(
+    *,
+    format: builtins.str,
+    name: builtins.str,
+    values: typing.Sequence[builtins.str],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__453c3682f266baa85a3319d8ac290c6f36e58efe3ecc37263406d04f135d4160(
+    *,
+    issuer: builtins.str,
+    jwks_endpoint: builtins.str,
+    additional_claims: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnListenerRule.JwtValidationActionAdditionalClaimProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -29043,6 +29552,7 @@ def _typecheckingstub__388b8f97da2cf2c66b09da23d64a7eb0e4636b7065284e65a0b0762e0
     id: builtins.str,
     availability_zone: typing.Optional[builtins.str] = None,
     port: typing.Optional[jsii.Number] = None,
+    quic_server_id: typing.Optional[builtins.str] = None,
 ) -> None:
     """Type checking stubs"""
     pass

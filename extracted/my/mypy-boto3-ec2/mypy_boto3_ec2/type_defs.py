@@ -143,6 +143,7 @@ from .literals import (
     FpgaImageStateCodeType,
     GatewayAssociationStateType,
     GroupByType,
+    HaStatusType,
     HostMaintenanceType,
     HostnameTypeType,
     HostRecoveryType,
@@ -325,6 +326,7 @@ from .literals import (
     SpotInstanceStateType,
     SpotInstanceTypeType,
     SpreadLevelType,
+    SqlServerLicenseUsageType,
     SSETypeType,
     StateType,
     StaticSourcesSupportValueType,
@@ -1289,6 +1291,10 @@ __all__ = (
     "DescribeInstanceImageMetadataRequestPaginateTypeDef",
     "DescribeInstanceImageMetadataRequestTypeDef",
     "DescribeInstanceImageMetadataResultTypeDef",
+    "DescribeInstanceSqlHaHistoryStatesRequestTypeDef",
+    "DescribeInstanceSqlHaHistoryStatesResultTypeDef",
+    "DescribeInstanceSqlHaStatesRequestTypeDef",
+    "DescribeInstanceSqlHaStatesResultTypeDef",
     "DescribeInstanceStatusRequestPaginateTypeDef",
     "DescribeInstanceStatusRequestTypeDef",
     "DescribeInstanceStatusRequestWaitExtraTypeDef",
@@ -1689,6 +1695,8 @@ __all__ = (
     "DisableImageDeregistrationProtectionResultTypeDef",
     "DisableImageRequestTypeDef",
     "DisableImageResultTypeDef",
+    "DisableInstanceSqlHaStandbyDetectionsRequestTypeDef",
+    "DisableInstanceSqlHaStandbyDetectionsResultTypeDef",
     "DisableIpamOrganizationAdminAccountRequestTypeDef",
     "DisableIpamOrganizationAdminAccountResultTypeDef",
     "DisableRouteServerPropagationRequestTypeDef",
@@ -1801,6 +1809,8 @@ __all__ = (
     "EnableImageDeregistrationProtectionResultTypeDef",
     "EnableImageRequestTypeDef",
     "EnableImageResultTypeDef",
+    "EnableInstanceSqlHaStandbyDetectionsRequestTypeDef",
+    "EnableInstanceSqlHaStandbyDetectionsResultTypeDef",
     "EnableIpamOrganizationAdminAccountRequestTypeDef",
     "EnableIpamOrganizationAdminAccountResultTypeDef",
     "EnableReachabilityAnalyzerOrganizationSharingRequestTypeDef",
@@ -2599,6 +2609,7 @@ __all__ = (
     "RegisterTransitGatewayMulticastGroupMembersResultTypeDef",
     "RegisterTransitGatewayMulticastGroupSourcesRequestTypeDef",
     "RegisterTransitGatewayMulticastGroupSourcesResultTypeDef",
+    "RegisteredInstanceTypeDef",
     "RejectCapacityReservationBillingOwnershipRequestTypeDef",
     "RejectCapacityReservationBillingOwnershipResultTypeDef",
     "RejectTransitGatewayMulticastDomainAssociationsRequestTypeDef",
@@ -5744,6 +5755,11 @@ class DisableImageRequestTypeDef(TypedDict):
     DryRun: NotRequired[bool]
 
 
+class DisableInstanceSqlHaStandbyDetectionsRequestTypeDef(TypedDict):
+    InstanceIds: Sequence[str]
+    DryRun: NotRequired[bool]
+
+
 class DisableIpamOrganizationAdminAccountRequestTypeDef(TypedDict):
     DelegatedAdminAccountId: str
     DryRun: NotRequired[bool]
@@ -6131,6 +6147,12 @@ class EnableImageDeregistrationProtectionRequestTypeDef(TypedDict):
 
 class EnableImageRequestTypeDef(TypedDict):
     ImageId: str
+    DryRun: NotRequired[bool]
+
+
+class EnableInstanceSqlHaStandbyDetectionsRequestTypeDef(TypedDict):
+    InstanceIds: Sequence[str]
+    SqlServerCredentials: NotRequired[str]
     DryRun: NotRequired[bool]
 
 
@@ -10196,6 +10218,16 @@ class PlacementGroupTypeDef(TypedDict):
     SpreadLevel: NotRequired[SpreadLevelType]
 
 
+class RegisteredInstanceTypeDef(TypedDict):
+    InstanceId: NotRequired[str]
+    SqlServerLicenseUsage: NotRequired[SqlServerLicenseUsageType]
+    HaStatus: NotRequired[HaStatusType]
+    ProcessingStatus: NotRequired[str]
+    LastUpdatedTime: NotRequired[datetime]
+    SqlServerCredentials: NotRequired[str]
+    Tags: NotRequired[list[TagTypeDef]]
+
+
 class ReplaceRootVolumeTaskTypeDef(TypedDict):
     ReplaceRootVolumeTaskId: NotRequired[str]
     InstanceId: NotRequired[str]
@@ -12447,6 +12479,24 @@ class DescribeInstanceImageMetadataRequestTypeDef(TypedDict):
     InstanceIds: NotRequired[Sequence[str]]
     MaxResults: NotRequired[int]
     NextToken: NotRequired[str]
+    DryRun: NotRequired[bool]
+
+
+class DescribeInstanceSqlHaHistoryStatesRequestTypeDef(TypedDict):
+    InstanceIds: NotRequired[Sequence[str]]
+    StartTime: NotRequired[TimestampTypeDef]
+    EndTime: NotRequired[TimestampTypeDef]
+    NextToken: NotRequired[str]
+    MaxResults: NotRequired[int]
+    Filters: NotRequired[Sequence[FilterTypeDef]]
+    DryRun: NotRequired[bool]
+
+
+class DescribeInstanceSqlHaStatesRequestTypeDef(TypedDict):
+    InstanceIds: NotRequired[Sequence[str]]
+    NextToken: NotRequired[str]
+    MaxResults: NotRequired[int]
+    Filters: NotRequired[Sequence[FilterTypeDef]]
     DryRun: NotRequired[bool]
 
 
@@ -16868,6 +16918,28 @@ class CreatePlacementGroupResultTypeDef(TypedDict):
 
 class DescribePlacementGroupsResultTypeDef(TypedDict):
     PlacementGroups: list[PlacementGroupTypeDef]
+    ResponseMetadata: ResponseMetadataTypeDef
+
+
+class DescribeInstanceSqlHaHistoryStatesResultTypeDef(TypedDict):
+    Instances: list[RegisteredInstanceTypeDef]
+    ResponseMetadata: ResponseMetadataTypeDef
+    NextToken: NotRequired[str]
+
+
+class DescribeInstanceSqlHaStatesResultTypeDef(TypedDict):
+    Instances: list[RegisteredInstanceTypeDef]
+    ResponseMetadata: ResponseMetadataTypeDef
+    NextToken: NotRequired[str]
+
+
+class DisableInstanceSqlHaStandbyDetectionsResultTypeDef(TypedDict):
+    Instances: list[RegisteredInstanceTypeDef]
+    ResponseMetadata: ResponseMetadataTypeDef
+
+
+class EnableInstanceSqlHaStandbyDetectionsResultTypeDef(TypedDict):
+    Instances: list[RegisteredInstanceTypeDef]
     ResponseMetadata: ResponseMetadataTypeDef
 
 

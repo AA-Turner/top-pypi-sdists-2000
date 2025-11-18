@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: Scrapy
-Version: 2.13.3
+Version: 2.13.4
 Summary: A high-level Web Crawling and Web Scraping framework
 Project-URL: Homepage, https://scrapy.org/
 Project-URL: Documentation, https://docs.scrapy.org/
@@ -45,7 +45,7 @@ Requires-Dist: pypydispatcher>=2.1.0; platform_python_implementation == 'PyPy'
 Requires-Dist: queuelib>=1.4.2
 Requires-Dist: service-identity>=18.1.0
 Requires-Dist: tldextract
-Requires-Dist: twisted>=21.7.0
+Requires-Dist: twisted<=25.5.0,>=21.7.0
 Requires-Dist: w3lib>=1.17.0
 Requires-Dist: zope-interface>=5.1.0
 Description-Content-Type: text/x-rst

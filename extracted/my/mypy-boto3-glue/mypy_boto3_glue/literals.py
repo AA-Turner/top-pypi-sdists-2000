@@ -899,6 +899,7 @@ ServiceName = Literal[
     "mq",
     "mturk",
     "mwaa",
+    "mwaa-serverless",
     "neptune",
     "neptune-graph",
     "neptunedata",

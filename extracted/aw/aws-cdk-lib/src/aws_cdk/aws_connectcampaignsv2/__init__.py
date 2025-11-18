@@ -2714,7 +2714,7 @@ class CfnCampaign(
 
             :param agentless_config: The agentless outbound mode configuration for telephony.
             :param predictive_config: Contains predictive outbound mode configuration.
-            :param preview_config: Preview config.
+            :param preview_config: Contains preview outbound mode configuration.
             :param progressive_config: Contains progressive telephony outbound mode configuration.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-connectcampaignsv2-campaign-telephonyoutboundmode.html
@@ -2787,7 +2787,7 @@ class CfnCampaign(
         def preview_config(
             self,
         ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCampaign.PreviewConfigProperty"]]:
-            '''Preview config.
+            '''Contains preview outbound mode configuration.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-connectcampaignsv2-campaign-telephonyoutboundmode.html#cfn-connectcampaignsv2-campaign-telephonyoutboundmode-previewconfig
             '''

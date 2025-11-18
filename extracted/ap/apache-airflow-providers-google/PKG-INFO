@@ -1,12 +1,13 @@
 Metadata-Version: 2.4
 Name: apache-airflow-providers-google
-Version: 18.1.0
+Version: 19.0.0
 Summary: Provider package apache-airflow-providers-google for Apache Airflow
 Keywords: airflow-provider,google,airflow,integration
 Author-email: Apache Software Foundation <dev@airflow.apache.org>
 Maintainer-email: Apache Software Foundation <dev@airflow.apache.org>
 Requires-Python: >=3.10
 Description-Content-Type: text/x-rst
+License-Expression: Apache-2.0
 Classifier: Development Status :: 5 - Production/Stable
 Classifier: Environment :: Console
 Classifier: Environment :: Web Environment
@@ -14,12 +15,13 @@ Classifier: Intended Audience :: Developers
 Classifier: Intended Audience :: System Administrators
 Classifier: Framework :: Apache Airflow
 Classifier: Framework :: Apache Airflow :: Provider
-Classifier: License :: OSI Approved :: Apache Software License
 Classifier: Programming Language :: Python :: 3.10
 Classifier: Programming Language :: Python :: 3.11
 Classifier: Programming Language :: Python :: 3.12
 Classifier: Programming Language :: Python :: 3.13
 Classifier: Topic :: System :: Monitoring
+License-File: LICENSE
+License-File: NOTICE
 Requires-Dist: apache-airflow>=2.10.0
 Requires-Dist: apache-airflow-providers-common-compat>=1.8.0
 Requires-Dist: apache-airflow-providers-common-sql>=1.27.0
@@ -113,8 +115,8 @@ Requires-Dist: apache-airflow-providers-sftp ; extra == "sftp"
 Requires-Dist: apache-airflow-providers-ssh ; extra == "ssh"
 Requires-Dist: apache-airflow-providers-trino ; extra == "trino"
 Project-URL: Bug Tracker, https://github.com/apache/airflow/issues
-Project-URL: Changelog, https://airflow.apache.org/docs/apache-airflow-providers-google/18.1.0/changelog.html
-Project-URL: Documentation, https://airflow.apache.org/docs/apache-airflow-providers-google/18.1.0
+Project-URL: Changelog, https://airflow.apache.org/docs/apache-airflow-providers-google/19.0.0/changelog.html
+Project-URL: Documentation, https://airflow.apache.org/docs/apache-airflow-providers-google/19.0.0
 Project-URL: Mastodon, https://fosstodon.org/@airflow
 Project-URL: Slack Chat, https://s.apache.org/airflow-slack
 Project-URL: Source Code, https://github.com/apache/airflow
@@ -164,7 +166,7 @@ Provides-Extra: trino
 
 Package ``apache-airflow-providers-google``
 
-Release: ``18.1.0``
+Release: ``19.0.0``
 
 
 Google services including:
@@ -184,7 +186,7 @@ This is a provider package for ``google`` provider. All classes for this provide
 are in ``airflow.providers.google`` python package.
 
 You can find package information and changelog for the provider
-in the `documentation <https://airflow.apache.org/docs/apache-airflow-providers-google/18.1.0/>`_.
+in the `documentation <https://airflow.apache.org/docs/apache-airflow-providers-google/19.0.0/>`_.
 
 Installation
 ------------
@@ -340,5 +342,5 @@ Extra                 Dependencies
 ====================  =========================================================================================================================================
 
 The changelog for the provider package can be found in the
-`changelog <https://airflow.apache.org/docs/apache-airflow-providers-google/18.1.0/changelog.html>`_.
+`changelog <https://airflow.apache.org/docs/apache-airflow-providers-google/19.0.0/changelog.html>`_.
 

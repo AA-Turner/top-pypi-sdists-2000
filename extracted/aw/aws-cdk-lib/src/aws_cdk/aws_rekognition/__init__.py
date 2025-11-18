@@ -64,6 +64,7 @@ from .. import (
     IInspectable as _IInspectable_c2943556,
     IResolvable as _IResolvable_da3f097b,
     ITaggable as _ITaggable_36806126,
+    ITaggableV2 as _ITaggableV2_4e6798f8,
     TagManager as _TagManager_0a598cb3,
     TreeInspector as _TreeInspector_488e0dd5,
 )
@@ -333,7 +334,7 @@ class CfnCollectionProps:
         )
 
 
-@jsii.implements(_IInspectable_c2943556, _IProjectRef_fbe2a8df)
+@jsii.implements(_IInspectable_c2943556, _IProjectRef_fbe2a8df, _ITaggableV2_4e6798f8)
 class CfnProject(
     _CfnResource_9df397a6,
     metaclass=jsii.JSIIMeta,
@@ -354,7 +355,13 @@ class CfnProject(
         from aws_cdk import aws_rekognition as rekognition
         
         cfn_project = rekognition.CfnProject(self, "MyCfnProject",
-            project_name="projectName"
+            project_name="projectName",
+        
+            # the properties below are optional
+            tags=[CfnTag(
+                key="key",
+                value="value"
+            )]
         )
     '''
 
@@ -364,18 +371,20 @@ class CfnProject(
         id: builtins.str,
         *,
         project_name: builtins.str,
+        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::Rekognition::Project``.
 
         :param scope: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
         :param project_name: The name of the project to create.
+        :param tags: An array of key-value pairs to apply to this resource.
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__14434bd621070d38889fc701fc289b3379981bee9c73fd7502773f1ee6007596)
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
-        props = CfnProjectProps(project_name=project_name)
+        props = CfnProjectProps(project_name=project_name, tags=tags)
 
         jsii.create(self.__class__, self, [scope, id, props])
 
@@ -419,6 +428,12 @@ class CfnProject(
         return typing.cast(builtins.str, jsii.get(self, "attrArn"))
 
     @builtins.property
+    @jsii.member(jsii_name="cdkTagManager")
+    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+        '''Tag Manager which manages the tags for this resource.'''
+        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+
+    @builtins.property
     @jsii.member(jsii_name="cfnProperties")
     def _cfn_properties(self) -> typing.Mapping[builtins.str, typing.Any]:
         return typing.cast(typing.Mapping[builtins.str, typing.Any], jsii.get(self, "cfnProperties"))
@@ -442,17 +457,36 @@ class CfnProject(
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
         jsii.set(self, "projectName", value) # pyright: ignore[reportArgumentType]
 
+    @builtins.property
+    @jsii.member(jsii_name="tags")
+    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+        '''An array of key-value pairs to apply to this resource.'''
+        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tags"))
+
+    @tags.setter
+    def tags(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__9f76ffccbbdb561fc9875ae03156f8aa3928826112049f6a1dc78a9dee69dc1a)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "tags", value) # pyright: ignore[reportArgumentType]
+
 
 @jsii.data_type(
     jsii_type="aws-cdk-lib.aws_rekognition.CfnProjectProps",
     jsii_struct_bases=[],
-    name_mapping={"project_name": "projectName"},
+    name_mapping={"project_name": "projectName", "tags": "tags"},
 )
 class CfnProjectProps:
-    def __init__(self, *, project_name: builtins.str) -> None:
+    def __init__(
+        self,
+        *,
+        project_name: builtins.str,
+        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+    ) -> None:
         '''Properties for defining a ``CfnProject``.
 
         :param project_name: The name of the project to create.
+        :param tags: An array of key-value pairs to apply to this resource.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-rekognition-project.html
         :exampleMetadata: fixture=_generated
@@ -464,15 +498,24 @@ class CfnProjectProps:
             from aws_cdk import aws_rekognition as rekognition
             
             cfn_project_props = rekognition.CfnProjectProps(
-                project_name="projectName"
+                project_name="projectName",
+            
+                # the properties below are optional
+                tags=[CfnTag(
+                    key="key",
+                    value="value"
+                )]
             )
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__c6ffefd83213c744dc48a7e730e4f4ba6abf92dfd04904ffa9f7361b3df6c6d3)
             check_type(argname="argument project_name", value=project_name, expected_type=type_hints["project_name"])
+            check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
         self._values: typing.Dict[builtins.str, typing.Any] = {
             "project_name": project_name,
         }
+        if tags is not None:
+            self._values["tags"] = tags
 
     @builtins.property
     def project_name(self) -> builtins.str:
@@ -483,6 +526,15 @@ class CfnProjectProps:
         result = self._values.get("project_name")
         assert result is not None, "Required property 'project_name' is missing"
         return typing.cast(builtins.str, result)
+
+    @builtins.property
+    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+        '''An array of key-value pairs to apply to this resource.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-rekognition-project.html#cfn-rekognition-project-tags
+        '''
+        result = self._values.get("tags")
+        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1959,6 +2011,7 @@ def _typecheckingstub__14434bd621070d38889fc701fc289b3379981bee9c73fd7502773f1ee
     id: builtins.str,
     *,
     project_name: builtins.str,
+    tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -1981,9 +2034,16 @@ def _typecheckingstub__9a1962fa2cac2e24ef346e8a95c9cce8b1cf9023aaeae155bf61e10c5
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__9f76ffccbbdb561fc9875ae03156f8aa3928826112049f6a1dc78a9dee69dc1a(
+    value: typing.Optional[typing.List[_CfnTag_f6864754]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__c6ffefd83213c744dc48a7e730e4f4ba6abf92dfd04904ffa9f7361b3df6c6d3(
     *,
     project_name: builtins.str,
+    tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
 ) -> None:
     """Type checking stubs"""
     pass

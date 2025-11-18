@@ -34,6 +34,53 @@ import constructs as _constructs_77d1e7e8
 from .. import IEnvironmentAware as _IEnvironmentAware_f39049ee
 
 
+@jsii.interface(
+    jsii_type="aws-cdk-lib.interfaces.aws_rtbfabric.IInboundExternalLinkRef"
+)
+class IInboundExternalLinkRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_f39049ee,
+    typing_extensions.Protocol,
+):
+    '''(experimental) Indicates that this resource can be referenced as a InboundExternalLink.
+
+    :stability: experimental
+    '''
+
+    @builtins.property
+    @jsii.member(jsii_name="inboundExternalLinkRef")
+    def inbound_external_link_ref(self) -> "InboundExternalLinkReference":
+        '''(experimental) A reference to a InboundExternalLink resource.
+
+        :stability: experimental
+        '''
+        ...
+
+
+class _IInboundExternalLinkRefProxy(
+    jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_f39049ee), # type: ignore[misc]
+):
+    '''(experimental) Indicates that this resource can be referenced as a InboundExternalLink.
+
+    :stability: experimental
+    '''
+
+    __jsii_type__: typing.ClassVar[str] = "aws-cdk-lib.interfaces.aws_rtbfabric.IInboundExternalLinkRef"
+
+    @builtins.property
+    @jsii.member(jsii_name="inboundExternalLinkRef")
+    def inbound_external_link_ref(self) -> "InboundExternalLinkReference":
+        '''(experimental) A reference to a InboundExternalLink resource.
+
+        :stability: experimental
+        '''
+        return typing.cast("InboundExternalLinkReference", jsii.get(self, "inboundExternalLinkRef"))
+
+# Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
+typing.cast(typing.Any, IInboundExternalLinkRef).__jsii_proxy_class__ = lambda : _IInboundExternalLinkRefProxy
+
+
 @jsii.interface(jsii_type="aws-cdk-lib.interfaces.aws_rtbfabric.ILinkRef")
 class ILinkRef(
     _constructs_77d1e7e8.IConstruct,
@@ -167,6 +214,55 @@ class _IResponderGatewayRefProxy(
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IResponderGatewayRef).__jsii_proxy_class__ = lambda : _IResponderGatewayRefProxy
+
+
+@jsii.data_type(
+    jsii_type="aws-cdk-lib.interfaces.aws_rtbfabric.InboundExternalLinkReference",
+    jsii_struct_bases=[],
+    name_mapping={"inbound_external_link_arn": "inboundExternalLinkArn"},
+)
+class InboundExternalLinkReference:
+    def __init__(self, *, inbound_external_link_arn: builtins.str) -> None:
+        '''A reference to a InboundExternalLink resource.
+
+        :param inbound_external_link_arn: The Arn of the InboundExternalLink resource.
+
+        :exampleMetadata: fixture=_generated
+
+        Example::
+
+            # The code below shows an example of how to instantiate this type.
+            # The values are placeholders you should change.
+            from aws_cdk.interfaces import aws_rtbfabric as interfaces_aws_rtbfabric
+            
+            inbound_external_link_reference = interfaces_aws_rtbfabric.InboundExternalLinkReference(
+                inbound_external_link_arn="inboundExternalLinkArn"
+            )
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__bdfa6fc10753fecc7651354ecdbd49e27d9714a8b6b2781df195ab63efd6bc3c)
+            check_type(argname="argument inbound_external_link_arn", value=inbound_external_link_arn, expected_type=type_hints["inbound_external_link_arn"])
+        self._values: typing.Dict[builtins.str, typing.Any] = {
+            "inbound_external_link_arn": inbound_external_link_arn,
+        }
+
+    @builtins.property
+    def inbound_external_link_arn(self) -> builtins.str:
+        '''The Arn of the InboundExternalLink resource.'''
+        result = self._values.get("inbound_external_link_arn")
+        assert result is not None, "Required property 'inbound_external_link_arn' is missing"
+        return typing.cast(builtins.str, result)
+
+    def __eq__(self, rhs: typing.Any) -> builtins.bool:
+        return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+    def __ne__(self, rhs: typing.Any) -> builtins.bool:
+        return not (rhs == self)
+
+    def __repr__(self) -> str:
+        return "InboundExternalLinkReference(%s)" % ", ".join(
+            k + "=" + repr(v) for k, v in self._values.items()
+        )
 
 
 @jsii.data_type(
@@ -317,15 +413,24 @@ class ResponderGatewayReference:
 
 
 __all__ = [
+    "IInboundExternalLinkRef",
     "ILinkRef",
     "IRequesterGatewayRef",
     "IResponderGatewayRef",
+    "InboundExternalLinkReference",
     "LinkReference",
     "RequesterGatewayReference",
     "ResponderGatewayReference",
 ]
 
 publication.publish()
+
+def _typecheckingstub__bdfa6fc10753fecc7651354ecdbd49e27d9714a8b6b2781df195ab63efd6bc3c(
+    *,
+    inbound_external_link_arn: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
 
 def _typecheckingstub__6ee5fdcf0604322dd959fcfe412ef348575c9fb082efe86a373a6d37ab6c070f(
     *,
@@ -348,5 +453,5 @@ def _typecheckingstub__3f992d87253eb02f346f69b0f2d9924f3e82c06510bf2db9b3bead8a8
     """Type checking stubs"""
     pass
 
-for cls in [ILinkRef, IRequesterGatewayRef, IResponderGatewayRef]:
+for cls in [IInboundExternalLinkRef, ILinkRef, IRequesterGatewayRef, IResponderGatewayRef]:
     typing.cast(typing.Any, cls).__protocol_attrs__ = typing.cast(typing.Any, cls).__protocol_attrs__ - set(['__jsii_proxy_class__', '__jsii_type__'])

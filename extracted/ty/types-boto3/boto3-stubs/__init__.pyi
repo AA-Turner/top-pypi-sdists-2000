@@ -292,6 +292,7 @@ from types_boto3_mpa.client import MultipartyApprovalClient
 from types_boto3_mq.client import MQClient
 from types_boto3_mturk.client import MTurkClient
 from types_boto3_mwaa.client import MWAAClient
+from types_boto3_mwaa_serverless.client import MWAAServerlessClient
 from types_boto3_neptune.client import NeptuneClient
 from types_boto3_neptune_graph.client import NeptuneGraphClient
 from types_boto3_neptunedata.client import NeptuneDataClient
@@ -5215,6 +5216,24 @@ def client(
 ) -> MWAAClient:
     """
     Create client for MWAA service.
+    """
+
+@overload
+def client(
+    service_name: Literal["mwaa-serverless"],
+    region_name: str | None = ...,
+    api_version: str | None = ...,
+    use_ssl: bool | None = ...,
+    verify: bool | str | None = ...,
+    endpoint_url: str | None = ...,
+    aws_access_key_id: str | None = ...,
+    aws_secret_access_key: str | None = ...,
+    aws_session_token: str | None = ...,
+    config: Config | None = ...,
+    aws_account_id: str | None = ...,
+) -> MWAAServerlessClient:
+    """
+    Create client for MWAAServerless service.
     """
 
 @overload

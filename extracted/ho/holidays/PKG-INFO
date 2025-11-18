@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: holidays
-Version: 0.84
+Version: 0.85
 Summary: Open World Holidays Framework
 Author: Vacanza Team
 Maintainer: Arkadii Yakovets, Panpakorn Siripanich, Serhii Murza
@@ -185,7 +185,7 @@ any) in brackets, available languages and additional holiday categories. All cou
 <td></td>
 </tr>
 <tr>
-<td>Aland Islands</td>
+<td>Åland Islands</td>
 <td>AX</td>
 <td>Can also be loaded as country FI, subdivision 01</td>
 <td>en_US, <strong>fi</strong>, sv_FI, th, uk</td>

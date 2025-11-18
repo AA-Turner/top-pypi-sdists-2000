@@ -14,12 +14,14 @@ dev = [
   "packaging>=21.0",
   "pytest-xdist>=3.8.0",
   "pytest-timeout>=2.4.0",
-  "structlog>=25.5.0"
+  "structlog>=25.5.0",
+  "starlette>=0.39.0",
+  "uvicorn>=0.32.0"
 ]
 
 [project]
 name = "llama-index-workflows"
-version = "2.11.1"
+version = "2.11.2"
 description = "An event-driven, async-first, step-based way to control the execution flow of AI applications like Agents."
 readme = "README.md"
 license = "MIT"
@@ -35,24 +37,6 @@ dependencies = [
 server = ["starlette>=0.39.0", "uvicorn>=0.32.0"]
 client = ["httpx>=0.28.1,<1"]
 
-[tool.basedpyright]
-typeCheckingMode = "standard"
-
-[[tool.basedpyright.executionEnvironments]]
-root = "src"
-pythonVersion = "3.9"
-
-[[tool.basedpyright.executionEnvironments]]
-root = "tests"
-pythonVersion = "3.9"
-
-[[tool.basedpyright.executionEnvironments]]
-root = "examples"
-pythonVersion = "3.14"
-
-[tool.coverage.run]
-omit = ["tests/*"]
-
 [tool.hatch.build.targets.wheel]
 packages = ["src/workflows"]
 
@@ -66,9 +50,3 @@ openapi = "python -m workflows.server.server --output openapi.json"
 [tool.pytest.ini_options]
 asyncio_mode = "auto"
 testpaths = ["tests"]
-
-[tool.uv.sources]
-llama-index-workflows = {workspace = true}
-
-[tool.uv.workspace]
-members = ["packages/llama-index-utils-workflow"]

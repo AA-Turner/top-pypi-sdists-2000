@@ -5,23 +5,59 @@ from unittest.mock import MagicMock, Mock, patch
 
 import pytest
 
-# Mock pyspark before importing  # noqa: E402
-sys.modules["pyspark"] = Mock()
-sys.modules["pyspark.sql"] = Mock()
-sys.modules["pyspark.sql.connect"] = Mock()
-sys.modules["pyspark.sql.connect.session"] = Mock()
-sys.modules["pyspark.sql.connect.client"] = Mock()
-sys.modules["aws_embedded_metrics"] = Mock()
-sys.modules["aws_embedded_metrics.sinks"] = Mock()
-sys.modules["aws_embedded_metrics.sinks.stdout_sink"] = Mock()
-sys.modules["aws_embedded_metrics.logger"] = Mock()
-sys.modules["aws_embedded_metrics.logger.metrics_logger"] = Mock()
-sys.modules["aws_embedded_metrics.logger.metrics_context"] = Mock()
-sys.modules["aws_embedded_metrics.environment"] = Mock()
-sys.modules["aws_embedded_metrics.environment.local_environment"] = Mock()
-
 # Mock Project class before any imports to prevent Domain ID error
 with patch("sagemaker_studio.Project"):
+
+    # Mock pyspark before importing  # noqa: E402
+    sys.modules["pyspark"] = Mock()
+    sys.modules["pyspark.sql"] = Mock()
+    sys.modules["pyspark.sql.connect"] = Mock()
+    sys.modules["pyspark.sql.connect.session"] = Mock()
+    sys.modules["pyspark.sql.connect.client"] = Mock()
+    sys.modules["aws_embedded_metrics"] = Mock()
+    sys.modules["aws_embedded_metrics.sinks"] = Mock()
+    sys.modules["aws_embedded_metrics.sinks.stdout_sink"] = Mock()
+    sys.modules["aws_embedded_metrics.logger"] = Mock()
+    sys.modules["aws_embedded_metrics.logger.metrics_logger"] = Mock()
+    sys.modules["aws_embedded_metrics.logger.metrics_context"] = Mock()
+    sys.modules["aws_embedded_metrics.environment"] = Mock()
+    sys.modules["aws_embedded_metrics.environment.local_environment"] = Mock()
+
+    pyspark_modules = [
+        "pyspark",
+        "pyspark.sql",
+        "pyspark.sql.session",
+        "pyspark.sql.connect",
+        "pyspark.sql.connect.session",
+        "pyspark.sql.connect.client",
+        "grpc",
+        "pyspark.errors",
+        "pyspark.errors.exceptions",
+        "pyspark.errors.exceptions.connect",
+    ]
+
+    for module_name in pyspark_modules:
+        if module_name not in sys.modules:
+            mock_module = Mock()
+            if module_name == "grpc":
+                # Mock gRPC specific classes and functions
+                mock_module.insecure_channel = Mock()
+                mock_module.secure_channel = Mock()
+                mock_module.intercept_channel = Mock()
+                mock_module.UnaryUnaryClientInterceptor = Mock()
+                mock_module.UnaryStreamClientInterceptor = Mock()
+                mock_module.StreamUnaryClientInterceptor = Mock()
+                mock_module.StreamStreamClientInterceptor = Mock()
+                mock_module.ClientCallDetails = Mock()
+            elif module_name == "pyspark.sql.connect.client":
+                mock_module.ChannelBuilder = Mock()
+            sys.modules[module_name] = mock_module
+
+    # Mock the interceptors module to avoid importing the actual interceptors
+    mock_interceptors = Mock()
+    mock_interceptors.CustomChannelBuilder = Mock()
+    sys.modules["sagemaker_studio.utils.spark.session.athena.interceptors"] = mock_interceptors
+
     from sagemaker_studio.utils.spark.session.athena.athena_spark_session_manager import (
         AthenaSparkSessionManager,
     )

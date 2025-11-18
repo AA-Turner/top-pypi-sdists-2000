@@ -1858,6 +1858,11 @@ pub struct PipSyncArgs {
 
     /// Install packages into the specified directory, rather than into the virtual or system Python
     /// environment. The packages will be installed at the top-level of the directory.
+    ///
+    /// Unlike other install operations, this command does not require discovery of an existing Python
+    /// environment and only searches for a Python interpreter to use for package resolution.
+    /// If a suitable Python interpreter cannot be found, uv will install one.
+    /// To disable this, add `--no-python-downloads`.
     #[arg(long, conflicts_with = "prefix")]
     pub target: Option<PathBuf>,
 
@@ -1868,6 +1873,11 @@ pub struct PipSyncArgs {
     /// scripts and other artifacts installed via `--prefix` will reference the installing
     /// interpreter, rather than any interpreter added to the `--prefix` directory, rendering them
     /// non-portable.
+    ///
+    /// Unlike other install operations, this command does not require discovery of an existing Python
+    /// environment and only searches for a Python interpreter to use for package resolution.
+    /// If a suitable Python interpreter cannot be found, uv will install one.
+    /// To disable this, add `--no-python-downloads`.
     #[arg(long, conflicts_with = "target")]
     pub prefix: Option<PathBuf>,
 
@@ -2187,6 +2197,11 @@ pub struct PipInstallArgs {
 
     /// Install packages into the specified directory, rather than into the virtual or system Python
     /// environment. The packages will be installed at the top-level of the directory.
+    ///
+    /// Unlike other install operations, this command does not require discovery of an existing Python
+    /// environment and only searches for a Python interpreter to use for package resolution.
+    /// If a suitable Python interpreter cannot be found, uv will install one.
+    /// To disable this, add `--no-python-downloads`.
     #[arg(long, conflicts_with = "prefix")]
     pub target: Option<PathBuf>,
 
@@ -2197,6 +2212,11 @@ pub struct PipInstallArgs {
     /// scripts and other artifacts installed via `--prefix` will reference the installing
     /// interpreter, rather than any interpreter added to the `--prefix` directory, rendering them
     /// non-portable.
+    ///
+    /// Unlike other install operations, this command does not require discovery of an existing Python
+    /// environment and only searches for a Python interpreter to use for package resolution.
+    /// If a suitable Python interpreter cannot be found, uv will install one.
+    /// To disable this, add `--no-python-downloads`.
     #[arg(long, conflicts_with = "target")]
     pub prefix: Option<PathBuf>,
 
@@ -5730,8 +5750,6 @@ pub struct PythonListArgs {
     pub output_format: PythonListFormat,
 
     /// URL pointing to JSON of custom Python installations.
-    ///
-    /// Note that currently, only local paths are supported.
     #[arg(long)]
     pub python_downloads_json_url: Option<String>,
 }
@@ -5828,8 +5846,6 @@ pub struct PythonInstallArgs {
     pub pypy_mirror: Option<String>,
 
     /// URL pointing to JSON of custom Python installations.
-    ///
-    /// Note that currently, only local paths are supported.
     #[arg(long)]
     pub python_downloads_json_url: Option<String>,
 
@@ -5847,6 +5863,19 @@ pub struct PythonInstallArgs {
     /// Implies `--reinstall`.
     #[arg(long, short)]
     pub force: bool,
+
+    /// Upgrade existing Python installations to the latest patch version.
+    ///
+    /// By default, uv will not upgrade already-installed Python versions to newer patch releases.
+    /// With `--upgrade`, uv will upgrade to the latest available patch version for the specified
+    /// minor version(s).
+    ///
+    /// If the requested versions are not yet installed, uv will install them.
+    ///
+    /// This option is only supported for minor version requests, e.g., `3.12`; uv will exit with an
+    /// error if a patch version, e.g., `3.12.2`, is requested.
+    #[arg(long, short = 'U')]
+    pub upgrade: bool,
 
     /// Use as the default Python version.
     ///
@@ -5919,8 +5948,6 @@ pub struct PythonUpgradeArgs {
     pub reinstall: bool,
 
     /// URL pointing to JSON of custom Python installations.
-    ///
-    /// Note that currently, only local paths are supported.
     #[arg(long)]
     pub python_downloads_json_url: Option<String>,
 }
@@ -5999,6 +6026,10 @@ pub struct PythonFindArgs {
     /// Show the Python version that would be used instead of the path to the interpreter.
     #[arg(long)]
     pub show_version: bool,
+
+    /// URL pointing to JSON of custom Python installations.
+    #[arg(long)]
+    pub python_downloads_json_url: Option<String>,
 }
 
 #[derive(Args)]
@@ -7136,6 +7167,11 @@ pub enum WorkspaceCommand {
     ///
     /// If used outside of a workspace, i.e., if a `pyproject.toml` cannot be found, uv will exit with an error.
     Dir(WorkspaceDirArgs),
+    /// List the members of a workspace.
+    ///
+    /// Displays newline separated names of workspace members.
+    #[command(hide = true)]
+    List(WorkspaceListArgs),
 }
 
 #[derive(Args, Debug)]
@@ -7147,6 +7183,9 @@ pub struct WorkspaceDirArgs {
     #[arg(long)]
     pub package: Option<PackageName>,
 }
+
+#[derive(Args, Debug)]
+pub struct WorkspaceListArgs;
 
 /// See [PEP 517](https://peps.python.org/pep-0517/) and
 /// [PEP 660](https://peps.python.org/pep-0660/) for specifications of the parameters.

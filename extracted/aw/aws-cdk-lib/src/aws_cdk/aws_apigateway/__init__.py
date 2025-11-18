@@ -7971,6 +7971,7 @@ class CfnDomainName(
         cfn_domain_name = apigateway.CfnDomainName(self, "MyCfnDomainName",
             certificate_arn="certificateArn",
             domain_name="domainName",
+            endpoint_access_mode="endpointAccessMode",
             endpoint_configuration=apigateway.CfnDomainName.EndpointConfigurationProperty(
                 ip_address_type="ipAddressType",
                 types=["types"]
@@ -7997,6 +7998,7 @@ class CfnDomainName(
         *,
         certificate_arn: typing.Optional[builtins.str] = None,
         domain_name: typing.Optional[builtins.str] = None,
+        endpoint_access_mode: typing.Optional[builtins.str] = None,
         endpoint_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDomainName.EndpointConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         mutual_tls_authentication: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDomainName.MutualTlsAuthenticationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ownership_verification_certificate_arn: typing.Optional[builtins.str] = None,
@@ -8011,6 +8013,7 @@ class CfnDomainName(
         :param id: Construct identifier for this resource (unique in its scope).
         :param certificate_arn: The reference to an AWS -managed certificate that will be used by edge-optimized endpoint or private endpoint for this domain name. Certificate Manager is the only supported source.
         :param domain_name: The custom domain name as an API host name, for example, ``my-api.example.com`` .
+        :param endpoint_access_mode: 
         :param endpoint_configuration: The endpoint configuration of this DomainName showing the endpoint types and IP address types of the domain name.
         :param mutual_tls_authentication: The mutual TLS authentication configuration for a custom domain name. If specified, API Gateway performs two-way authentication between the client and the server. Clients must present a trusted certificate to access your API.
         :param ownership_verification_certificate_arn: The ARN of the public certificate issued by ACM to validate ownership of your custom domain. Only required when configuring mutual TLS and using an ACM imported or private CA certificate ARN as the RegionalCertificateArn.
@@ -8026,6 +8029,7 @@ class CfnDomainName(
         props = CfnDomainNameProps(
             certificate_arn=certificate_arn,
             domain_name=domain_name,
+            endpoint_access_mode=endpoint_access_mode,
             endpoint_configuration=endpoint_configuration,
             mutual_tls_authentication=mutual_tls_authentication,
             ownership_verification_certificate_arn=ownership_verification_certificate_arn,
@@ -8204,6 +8208,18 @@ class CfnDomainName(
             type_hints = typing.get_type_hints(_typecheckingstub__301350d1701372cecf10b01001cc69af90a5d9626237dfc86d8e6b3930aa621c)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
         jsii.set(self, "domainName", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="endpointAccessMode")
+    def endpoint_access_mode(self) -> typing.Optional[builtins.str]:
+        return typing.cast(typing.Optional[builtins.str], jsii.get(self, "endpointAccessMode"))
+
+    @endpoint_access_mode.setter
+    def endpoint_access_mode(self, value: typing.Optional[builtins.str]) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__f033d9cae7470fbf1b0878638b216a1bc1b009a0eace5a0aaf4e4235c3719bc6)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "endpointAccessMode", value) # pyright: ignore[reportArgumentType]
 
     @builtins.property
     @jsii.member(jsii_name="endpointConfiguration")
@@ -8769,6 +8785,7 @@ class CfnDomainNameAccessAssociationProps:
     name_mapping={
         "certificate_arn": "certificateArn",
         "domain_name": "domainName",
+        "endpoint_access_mode": "endpointAccessMode",
         "endpoint_configuration": "endpointConfiguration",
         "mutual_tls_authentication": "mutualTlsAuthentication",
         "ownership_verification_certificate_arn": "ownershipVerificationCertificateArn",
@@ -8784,6 +8801,7 @@ class CfnDomainNameProps:
         *,
         certificate_arn: typing.Optional[builtins.str] = None,
         domain_name: typing.Optional[builtins.str] = None,
+        endpoint_access_mode: typing.Optional[builtins.str] = None,
         endpoint_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDomainName.EndpointConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
         mutual_tls_authentication: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDomainName.MutualTlsAuthenticationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
         ownership_verification_certificate_arn: typing.Optional[builtins.str] = None,
@@ -8796,6 +8814,7 @@ class CfnDomainNameProps:
 
         :param certificate_arn: The reference to an AWS -managed certificate that will be used by edge-optimized endpoint or private endpoint for this domain name. Certificate Manager is the only supported source.
         :param domain_name: The custom domain name as an API host name, for example, ``my-api.example.com`` .
+        :param endpoint_access_mode: 
         :param endpoint_configuration: The endpoint configuration of this DomainName showing the endpoint types and IP address types of the domain name.
         :param mutual_tls_authentication: The mutual TLS authentication configuration for a custom domain name. If specified, API Gateway performs two-way authentication between the client and the server. Clients must present a trusted certificate to access your API.
         :param ownership_verification_certificate_arn: The ARN of the public certificate issued by ACM to validate ownership of your custom domain. Only required when configuring mutual TLS and using an ACM imported or private CA certificate ARN as the RegionalCertificateArn.
@@ -8816,6 +8835,7 @@ class CfnDomainNameProps:
             cfn_domain_name_props = apigateway.CfnDomainNameProps(
                 certificate_arn="certificateArn",
                 domain_name="domainName",
+                endpoint_access_mode="endpointAccessMode",
                 endpoint_configuration=apigateway.CfnDomainName.EndpointConfigurationProperty(
                     ip_address_type="ipAddressType",
                     types=["types"]
@@ -8838,6 +8858,7 @@ class CfnDomainNameProps:
             type_hints = typing.get_type_hints(_typecheckingstub__703d29eb1e26e9742eff449d68ee5c6089daeb58e8544900d248c3a3743347d3)
             check_type(argname="argument certificate_arn", value=certificate_arn, expected_type=type_hints["certificate_arn"])
             check_type(argname="argument domain_name", value=domain_name, expected_type=type_hints["domain_name"])
+            check_type(argname="argument endpoint_access_mode", value=endpoint_access_mode, expected_type=type_hints["endpoint_access_mode"])
             check_type(argname="argument endpoint_configuration", value=endpoint_configuration, expected_type=type_hints["endpoint_configuration"])
             check_type(argname="argument mutual_tls_authentication", value=mutual_tls_authentication, expected_type=type_hints["mutual_tls_authentication"])
             check_type(argname="argument ownership_verification_certificate_arn", value=ownership_verification_certificate_arn, expected_type=type_hints["ownership_verification_certificate_arn"])
@@ -8850,6 +8871,8 @@ class CfnDomainNameProps:
             self._values["certificate_arn"] = certificate_arn
         if domain_name is not None:
             self._values["domain_name"] = domain_name
+        if endpoint_access_mode is not None:
+            self._values["endpoint_access_mode"] = endpoint_access_mode
         if endpoint_configuration is not None:
             self._values["endpoint_configuration"] = endpoint_configuration
         if mutual_tls_authentication is not None:
@@ -8883,6 +8906,14 @@ class CfnDomainNameProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apigateway-domainname.html#cfn-apigateway-domainname-domainname
         '''
         result = self._values.get("domain_name")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def endpoint_access_mode(self) -> typing.Optional[builtins.str]:
+        '''
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apigateway-domainname.html#cfn-apigateway-domainname-endpointaccessmode
+        '''
+        result = self._values.get("endpoint_access_mode")
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
@@ -9003,6 +9034,7 @@ class CfnDomainNameV2(
         cfn_domain_name_v2 = apigateway.CfnDomainNameV2(self, "MyCfnDomainNameV2",
             certificate_arn="certificateArn",
             domain_name="domainName",
+            endpoint_access_mode="endpointAccessMode",
             endpoint_configuration=apigateway.CfnDomainNameV2.EndpointConfigurationProperty(
                 ip_address_type="ipAddressType",
                 types=["types"]
@@ -9024,6 +9056,7 @@ class CfnDomainNameV2(
         *,
         certificate_arn: typing.Optional[builtins.str] = None,
         domain_name: typing.Optional[builtins.str] = None,
+        endpoint_access_mode: typing.Optional[builtins.str] = None,
         endpoint_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDomainNameV2.EndpointConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         policy: typing.Any = None,
         routing_mode: typing.Optional[builtins.str] = None,
@@ -9036,6 +9069,7 @@ class CfnDomainNameV2(
         :param id: Construct identifier for this resource (unique in its scope).
         :param certificate_arn: The reference to an AWS -managed certificate that will be used by the private endpoint for this domain name. AWS Certificate Manager is the only supported source.
         :param domain_name: Represents a custom domain name as a user-friendly host name of an API (RestApi).
+        :param endpoint_access_mode: 
         :param endpoint_configuration: The endpoint configuration to indicate the types of endpoints an API (RestApi) or its custom domain name (DomainName) has and the IP address types that can invoke it.
         :param policy: A stringified JSON policy document that applies to the ``execute-api`` service for this DomainName regardless of the caller and Method configuration. You can use ``Fn::ToJsonString`` to enter your ``policy`` . For more information, see `Fn::ToJsonString <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/intrinsic-function-reference-ToJsonString.html>`_ .
         :param routing_mode: The routing mode for this domain name. The routing mode determines how API Gateway sends traffic from your custom domain name to your private APIs. Default: - "BASE_PATH_MAPPING_ONLY"
@@ -9049,6 +9083,7 @@ class CfnDomainNameV2(
         props = CfnDomainNameV2Props(
             certificate_arn=certificate_arn,
             domain_name=domain_name,
+            endpoint_access_mode=endpoint_access_mode,
             endpoint_configuration=endpoint_configuration,
             policy=policy,
             routing_mode=routing_mode,
@@ -9148,6 +9183,18 @@ class CfnDomainNameV2(
             type_hints = typing.get_type_hints(_typecheckingstub__c6f92a0eb5f08e654ae978fba555493986c05eed5e088475197fb75aa2780b84)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
         jsii.set(self, "domainName", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="endpointAccessMode")
+    def endpoint_access_mode(self) -> typing.Optional[builtins.str]:
+        return typing.cast(typing.Optional[builtins.str], jsii.get(self, "endpointAccessMode"))
+
+    @endpoint_access_mode.setter
+    def endpoint_access_mode(self, value: typing.Optional[builtins.str]) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__e259ce12277488ce391f0eb54686afe0ca24479695df161a2825a54da72ccf9f)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "endpointAccessMode", value) # pyright: ignore[reportArgumentType]
 
     @builtins.property
     @jsii.member(jsii_name="endpointConfiguration")
@@ -9300,6 +9347,7 @@ class CfnDomainNameV2(
     name_mapping={
         "certificate_arn": "certificateArn",
         "domain_name": "domainName",
+        "endpoint_access_mode": "endpointAccessMode",
         "endpoint_configuration": "endpointConfiguration",
         "policy": "policy",
         "routing_mode": "routingMode",
@@ -9313,6 +9361,7 @@ class CfnDomainNameV2Props:
         *,
         certificate_arn: typing.Optional[builtins.str] = None,
         domain_name: typing.Optional[builtins.str] = None,
+        endpoint_access_mode: typing.Optional[builtins.str] = None,
         endpoint_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDomainNameV2.EndpointConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
         policy: typing.Any = None,
         routing_mode: typing.Optional[builtins.str] = None,
@@ -9323,6 +9372,7 @@ class CfnDomainNameV2Props:
 
         :param certificate_arn: The reference to an AWS -managed certificate that will be used by the private endpoint for this domain name. AWS Certificate Manager is the only supported source.
         :param domain_name: Represents a custom domain name as a user-friendly host name of an API (RestApi).
+        :param endpoint_access_mode: 
         :param endpoint_configuration: The endpoint configuration to indicate the types of endpoints an API (RestApi) or its custom domain name (DomainName) has and the IP address types that can invoke it.
         :param policy: A stringified JSON policy document that applies to the ``execute-api`` service for this DomainName regardless of the caller and Method configuration. You can use ``Fn::ToJsonString`` to enter your ``policy`` . For more information, see `Fn::ToJsonString <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/intrinsic-function-reference-ToJsonString.html>`_ .
         :param routing_mode: The routing mode for this domain name. The routing mode determines how API Gateway sends traffic from your custom domain name to your private APIs. Default: - "BASE_PATH_MAPPING_ONLY"
@@ -9343,6 +9393,7 @@ class CfnDomainNameV2Props:
             cfn_domain_name_v2_props = apigateway.CfnDomainNameV2Props(
                 certificate_arn="certificateArn",
                 domain_name="domainName",
+                endpoint_access_mode="endpointAccessMode",
                 endpoint_configuration=apigateway.CfnDomainNameV2.EndpointConfigurationProperty(
                     ip_address_type="ipAddressType",
                     types=["types"]
@@ -9360,6 +9411,7 @@ class CfnDomainNameV2Props:
             type_hints = typing.get_type_hints(_typecheckingstub__dfb97b3f8aa373f21ebe15318ceaaf08a4d4b4b31e9ba1ed8fb04ef598132e15)
             check_type(argname="argument certificate_arn", value=certificate_arn, expected_type=type_hints["certificate_arn"])
             check_type(argname="argument domain_name", value=domain_name, expected_type=type_hints["domain_name"])
+            check_type(argname="argument endpoint_access_mode", value=endpoint_access_mode, expected_type=type_hints["endpoint_access_mode"])
             check_type(argname="argument endpoint_configuration", value=endpoint_configuration, expected_type=type_hints["endpoint_configuration"])
             check_type(argname="argument policy", value=policy, expected_type=type_hints["policy"])
             check_type(argname="argument routing_mode", value=routing_mode, expected_type=type_hints["routing_mode"])
@@ -9370,6 +9422,8 @@ class CfnDomainNameV2Props:
             self._values["certificate_arn"] = certificate_arn
         if domain_name is not None:
             self._values["domain_name"] = domain_name
+        if endpoint_access_mode is not None:
+            self._values["endpoint_access_mode"] = endpoint_access_mode
         if endpoint_configuration is not None:
             self._values["endpoint_configuration"] = endpoint_configuration
         if policy is not None:
@@ -9399,6 +9453,14 @@ class CfnDomainNameV2Props:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apigateway-domainnamev2.html#cfn-apigateway-domainnamev2-domainname
         '''
         result = self._values.get("domain_name")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def endpoint_access_mode(self) -> typing.Optional[builtins.str]:
+        '''
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apigateway-domainnamev2.html#cfn-apigateway-domainnamev2-endpointaccessmode
+        '''
+        result = self._values.get("endpoint_access_mode")
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
@@ -9853,6 +9915,7 @@ class CfnMethod(
                     },
                     selection_pattern="selectionPattern"
                 )],
+                integration_target="integrationTarget",
                 passthrough_behavior="passthroughBehavior",
                 request_parameters={
                     "request_parameters_key": "requestParameters"
@@ -10196,6 +10259,7 @@ class CfnMethod(
             "credentials": "credentials",
             "integration_http_method": "integrationHttpMethod",
             "integration_responses": "integrationResponses",
+            "integration_target": "integrationTarget",
             "passthrough_behavior": "passthroughBehavior",
             "request_parameters": "requestParameters",
             "request_templates": "requestTemplates",
@@ -10217,6 +10281,7 @@ class CfnMethod(
             credentials: typing.Optional[builtins.str] = None,
             integration_http_method: typing.Optional[builtins.str] = None,
             integration_responses: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnMethod.IntegrationResponseProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            integration_target: typing.Optional[builtins.str] = None,
             passthrough_behavior: typing.Optional[builtins.str] = None,
             request_parameters: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]] = None,
             request_templates: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]] = None,
@@ -10235,6 +10300,7 @@ class CfnMethod(
             :param credentials: Specifies the credentials required for the integration, if any. For AWS integrations, three options are available. To specify an IAM Role for API Gateway to assume, use the role's Amazon Resource Name (ARN). To require that the caller's identity be passed through from the request, specify the string ``arn:aws:iam::\\*:user/\\*`` . To use resource-based permissions on supported AWS services, specify null.
             :param integration_http_method: Specifies the integration's HTTP method type. For the Type property, if you specify ``MOCK`` , this property is optional. For Lambda integrations, you must set the integration method to ``POST`` . For all other types, you must specify this property.
             :param integration_responses: Specifies the integration's responses.
+            :param integration_target: 
             :param passthrough_behavior: Specifies how the method request body of an unmapped content type will be passed through the integration request to the back end without transformation. A content type is unmapped if no mapping template is defined in the integration or the content type does not match any of the mapped content types, as specified in ``requestTemplates`` . The valid value is one of the following: ``WHEN_NO_MATCH`` : passes the method request body through the integration request to the back end without transformation when the method request content type does not match any content type associated with the mapping templates defined in the integration request. ``WHEN_NO_TEMPLATES`` : passes the method request body through the integration request to the back end without transformation when no mapping template is defined in the integration request. If a template is defined when this option is selected, the method request of an unmapped content-type will be rejected with an HTTP 415 Unsupported Media Type response. ``NEVER`` : rejects the method request with an HTTP 415 Unsupported Media Type response when either the method request content type does not match any content type associated with the mapping templates defined in the integration request or no mapping template is defined in the integration request.
             :param request_parameters: A key-value map specifying request parameters that are passed from the method request to the back end. The key is an integration request parameter name and the associated value is a method request parameter value or static value that must be enclosed within single quotes and pre-encoded as required by the back end. The method request parameter value must match the pattern of ``method.request.{location}.{name}`` , where ``location`` is ``querystring`` , ``path`` , or ``header`` and ``name`` must be a valid and unique method request parameter name.
             :param request_templates: Represents a map of Velocity templates that are applied on the request payload based on the value of the Content-Type header sent by the client. The content type value is the key in this map, and the template (as a String) is the value.
@@ -10275,6 +10341,7 @@ class CfnMethod(
                         },
                         selection_pattern="selectionPattern"
                     )],
+                    integration_target="integrationTarget",
                     passthrough_behavior="passthroughBehavior",
                     request_parameters={
                         "request_parameters_key": "requestParameters"
@@ -10298,6 +10365,7 @@ class CfnMethod(
                 check_type(argname="argument credentials", value=credentials, expected_type=type_hints["credentials"])
                 check_type(argname="argument integration_http_method", value=integration_http_method, expected_type=type_hints["integration_http_method"])
                 check_type(argname="argument integration_responses", value=integration_responses, expected_type=type_hints["integration_responses"])
+                check_type(argname="argument integration_target", value=integration_target, expected_type=type_hints["integration_target"])
                 check_type(argname="argument passthrough_behavior", value=passthrough_behavior, expected_type=type_hints["passthrough_behavior"])
                 check_type(argname="argument request_parameters", value=request_parameters, expected_type=type_hints["request_parameters"])
                 check_type(argname="argument request_templates", value=request_templates, expected_type=type_hints["request_templates"])
@@ -10323,6 +10391,8 @@ class CfnMethod(
                 self._values["integration_http_method"] = integration_http_method
             if integration_responses is not None:
                 self._values["integration_responses"] = integration_responses
+            if integration_target is not None:
+                self._values["integration_target"] = integration_target
             if passthrough_behavior is not None:
                 self._values["passthrough_behavior"] = passthrough_behavior
             if request_parameters is not None:
@@ -10435,6 +10505,14 @@ class CfnMethod(
             '''
             result = self._values.get("integration_responses")
             return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnMethod.IntegrationResponseProperty"]]]], result)
+
+        @builtins.property
+        def integration_target(self) -> typing.Optional[builtins.str]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-apigateway-method-integration.html#cfn-apigateway-method-integration-integrationtarget
+            '''
+            result = self._values.get("integration_target")
+            return typing.cast(typing.Optional[builtins.str], result)
 
         @builtins.property
         def passthrough_behavior(self) -> typing.Optional[builtins.str]:
@@ -10861,6 +10939,7 @@ class CfnMethodProps:
                         },
                         selection_pattern="selectionPattern"
                     )],
+                    integration_target="integrationTarget",
                     passthrough_behavior="passthroughBehavior",
                     request_parameters={
                         "request_parameters_key": "requestParameters"
@@ -11960,6 +12039,7 @@ class CfnRestApi(
             clone_from="cloneFrom",
             description="description",
             disable_execute_api_endpoint=False,
+            endpoint_access_mode="endpointAccessMode",
             endpoint_configuration=apigateway.CfnRestApi.EndpointConfigurationProperty(
                 ip_address_type="ipAddressType",
                 types=["types"],
@@ -11993,6 +12073,7 @@ class CfnRestApi(
         clone_from: typing.Optional[builtins.str] = None,
         description: typing.Optional[builtins.str] = None,
         disable_execute_api_endpoint: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        endpoint_access_mode: typing.Optional[builtins.str] = None,
         endpoint_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnRestApi.EndpointConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         fail_on_warnings: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
         minimum_compression_size: typing.Optional[jsii.Number] = None,
@@ -12014,6 +12095,7 @@ class CfnRestApi(
         :param clone_from: The ID of the RestApi that you want to clone from.
         :param description: The description of the RestApi.
         :param disable_execute_api_endpoint: Specifies whether clients can invoke your API by using the default ``execute-api`` endpoint. By default, clients can invoke your API with the default ``https://{api_id}.execute-api.{region}.amazonaws.com`` endpoint. To require that clients use a custom domain name to invoke your API, disable the default endpoint
+        :param endpoint_access_mode: 
         :param endpoint_configuration: A list of the endpoint types and IP address types of the API. Use this property when creating an API. When importing an existing API, specify the endpoint configuration types using the ``Parameters`` property.
         :param fail_on_warnings: A query parameter to indicate whether to rollback the API update ( ``true`` ) or not ( ``false`` ) when a warning is encountered. The default value is ``false`` .
         :param minimum_compression_size: A nullable integer that is used to enable compression (with non-negative between 0 and 10485760 (10M) bytes, inclusive) or disable compression (with a null value) on an API. When compression is enabled, compression or decompression is not applied on the payload if the payload size is smaller than this value. Setting it to zero allows compression for any payload size.
@@ -12036,6 +12118,7 @@ class CfnRestApi(
             clone_from=clone_from,
             description=description,
             disable_execute_api_endpoint=disable_execute_api_endpoint,
+            endpoint_access_mode=endpoint_access_mode,
             endpoint_configuration=endpoint_configuration,
             fail_on_warnings=fail_on_warnings,
             minimum_compression_size=minimum_compression_size,
@@ -12238,6 +12321,18 @@ class CfnRestApi(
             type_hints = typing.get_type_hints(_typecheckingstub__b9945526e80dc90cbfbb86ac5f423295588dfd680221afef09db1c77df2985fb)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
         jsii.set(self, "disableExecuteApiEndpoint", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="endpointAccessMode")
+    def endpoint_access_mode(self) -> typing.Optional[builtins.str]:
+        return typing.cast(typing.Optional[builtins.str], jsii.get(self, "endpointAccessMode"))
+
+    @endpoint_access_mode.setter
+    def endpoint_access_mode(self, value: typing.Optional[builtins.str]) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__4a35223dc5d116faa71dec976afdfe8a7437bf614653ac2dde25677e8351eea3)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "endpointAccessMode", value) # pyright: ignore[reportArgumentType]
 
     @builtins.property
     @jsii.member(jsii_name="endpointConfiguration")
@@ -12590,6 +12685,7 @@ class CfnRestApi(
         "clone_from": "cloneFrom",
         "description": "description",
         "disable_execute_api_endpoint": "disableExecuteApiEndpoint",
+        "endpoint_access_mode": "endpointAccessMode",
         "endpoint_configuration": "endpointConfiguration",
         "fail_on_warnings": "failOnWarnings",
         "minimum_compression_size": "minimumCompressionSize",
@@ -12612,6 +12708,7 @@ class CfnRestApiProps:
         clone_from: typing.Optional[builtins.str] = None,
         description: typing.Optional[builtins.str] = None,
         disable_execute_api_endpoint: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        endpoint_access_mode: typing.Optional[builtins.str] = None,
         endpoint_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnRestApi.EndpointConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
         fail_on_warnings: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
         minimum_compression_size: typing.Optional[jsii.Number] = None,
@@ -12631,6 +12728,7 @@ class CfnRestApiProps:
         :param clone_from: The ID of the RestApi that you want to clone from.
         :param description: The description of the RestApi.
         :param disable_execute_api_endpoint: Specifies whether clients can invoke your API by using the default ``execute-api`` endpoint. By default, clients can invoke your API with the default ``https://{api_id}.execute-api.{region}.amazonaws.com`` endpoint. To require that clients use a custom domain name to invoke your API, disable the default endpoint
+        :param endpoint_access_mode: 
         :param endpoint_configuration: A list of the endpoint types and IP address types of the API. Use this property when creating an API. When importing an existing API, specify the endpoint configuration types using the ``Parameters`` property.
         :param fail_on_warnings: A query parameter to indicate whether to rollback the API update ( ``true`` ) or not ( ``false`` ) when a warning is encountered. The default value is ``false`` .
         :param minimum_compression_size: A nullable integer that is used to enable compression (with non-negative between 0 and 10485760 (10M) bytes, inclusive) or disable compression (with a null value) on an API. When compression is enabled, compression or decompression is not applied on the payload if the payload size is smaller than this value. Setting it to zero allows compression for any payload size.
@@ -12666,6 +12764,7 @@ class CfnRestApiProps:
                 clone_from="cloneFrom",
                 description="description",
                 disable_execute_api_endpoint=False,
+                endpoint_access_mode="endpointAccessMode",
                 endpoint_configuration=apigateway.CfnRestApi.EndpointConfigurationProperty(
                     ip_address_type="ipAddressType",
                     types=["types"],
@@ -12695,6 +12794,7 @@ class CfnRestApiProps:
             check_type(argname="argument clone_from", value=clone_from, expected_type=type_hints["clone_from"])
             check_type(argname="argument description", value=description, expected_type=type_hints["description"])
             check_type(argname="argument disable_execute_api_endpoint", value=disable_execute_api_endpoint, expected_type=type_hints["disable_execute_api_endpoint"])
+            check_type(argname="argument endpoint_access_mode", value=endpoint_access_mode, expected_type=type_hints["endpoint_access_mode"])
             check_type(argname="argument endpoint_configuration", value=endpoint_configuration, expected_type=type_hints["endpoint_configuration"])
             check_type(argname="argument fail_on_warnings", value=fail_on_warnings, expected_type=type_hints["fail_on_warnings"])
             check_type(argname="argument minimum_compression_size", value=minimum_compression_size, expected_type=type_hints["minimum_compression_size"])
@@ -12719,6 +12819,8 @@ class CfnRestApiProps:
             self._values["description"] = description
         if disable_execute_api_endpoint is not None:
             self._values["disable_execute_api_endpoint"] = disable_execute_api_endpoint
+        if endpoint_access_mode is not None:
+            self._values["endpoint_access_mode"] = endpoint_access_mode
         if endpoint_configuration is not None:
             self._values["endpoint_configuration"] = endpoint_configuration
         if fail_on_warnings is not None:
@@ -12812,6 +12914,14 @@ class CfnRestApiProps:
         '''
         result = self._values.get("disable_execute_api_endpoint")
         return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+
+    @builtins.property
+    def endpoint_access_mode(self) -> typing.Optional[builtins.str]:
+        '''
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apigateway-restapi.html#cfn-apigateway-restapi-endpointaccessmode
+        '''
+        result = self._values.get("endpoint_access_mode")
+        return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
     def endpoint_configuration(
@@ -35200,6 +35310,7 @@ def _typecheckingstub__133ab79e698bd61c150ef7c699a84e864403caafbb03bd0bc5874cee6
     *,
     certificate_arn: typing.Optional[builtins.str] = None,
     domain_name: typing.Optional[builtins.str] = None,
+    endpoint_access_mode: typing.Optional[builtins.str] = None,
     endpoint_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDomainName.EndpointConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     mutual_tls_authentication: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDomainName.MutualTlsAuthenticationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     ownership_verification_certificate_arn: typing.Optional[builtins.str] = None,
@@ -35246,6 +35357,12 @@ def _typecheckingstub__4ddcd44c07e8517918b3c0629937de8d9249383bd9fe6dca514c5ae57
     pass
 
 def _typecheckingstub__301350d1701372cecf10b01001cc69af90a5d9626237dfc86d8e6b3930aa621c(
+    value: typing.Optional[builtins.str],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__f033d9cae7470fbf1b0878638b216a1bc1b009a0eace5a0aaf4e4235c3719bc6(
     value: typing.Optional[builtins.str],
 ) -> None:
     """Type checking stubs"""
@@ -35371,6 +35488,7 @@ def _typecheckingstub__703d29eb1e26e9742eff449d68ee5c6089daeb58e8544900d248c3a37
     *,
     certificate_arn: typing.Optional[builtins.str] = None,
     domain_name: typing.Optional[builtins.str] = None,
+    endpoint_access_mode: typing.Optional[builtins.str] = None,
     endpoint_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDomainName.EndpointConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     mutual_tls_authentication: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDomainName.MutualTlsAuthenticationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     ownership_verification_certificate_arn: typing.Optional[builtins.str] = None,
@@ -35388,6 +35506,7 @@ def _typecheckingstub__a4f501d10d57d39a48913872efdcb7d389a076fed9b5aabb21034b8e6
     *,
     certificate_arn: typing.Optional[builtins.str] = None,
     domain_name: typing.Optional[builtins.str] = None,
+    endpoint_access_mode: typing.Optional[builtins.str] = None,
     endpoint_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDomainNameV2.EndpointConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     policy: typing.Any = None,
     routing_mode: typing.Optional[builtins.str] = None,
@@ -35416,6 +35535,12 @@ def _typecheckingstub__02e36a521e1f2c0c18cff2c52c016e6370b767eb2b459e2c294bb4288
     pass
 
 def _typecheckingstub__c6f92a0eb5f08e654ae978fba555493986c05eed5e088475197fb75aa2780b84(
+    value: typing.Optional[builtins.str],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__e259ce12277488ce391f0eb54686afe0ca24479695df161a2825a54da72ccf9f(
     value: typing.Optional[builtins.str],
 ) -> None:
     """Type checking stubs"""
@@ -35463,6 +35588,7 @@ def _typecheckingstub__dfb97b3f8aa373f21ebe15318ceaaf08a4d4b4b31e9ba1ed8fb04ef59
     *,
     certificate_arn: typing.Optional[builtins.str] = None,
     domain_name: typing.Optional[builtins.str] = None,
+    endpoint_access_mode: typing.Optional[builtins.str] = None,
     endpoint_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDomainNameV2.EndpointConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     policy: typing.Any = None,
     routing_mode: typing.Optional[builtins.str] = None,
@@ -35660,6 +35786,7 @@ def _typecheckingstub__7fc2a1b31e9e3f92210ced50c17b0bf1cfcdb472f8b61fcc31a3c633b
     credentials: typing.Optional[builtins.str] = None,
     integration_http_method: typing.Optional[builtins.str] = None,
     integration_responses: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnMethod.IntegrationResponseProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+    integration_target: typing.Optional[builtins.str] = None,
     passthrough_behavior: typing.Optional[builtins.str] = None,
     request_parameters: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]] = None,
     request_templates: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]] = None,
@@ -35894,6 +36021,7 @@ def _typecheckingstub__781aae0a2f2512495cbd89d2be23edec0478e71fd6a59c0527cabb245
     clone_from: typing.Optional[builtins.str] = None,
     description: typing.Optional[builtins.str] = None,
     disable_execute_api_endpoint: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+    endpoint_access_mode: typing.Optional[builtins.str] = None,
     endpoint_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnRestApi.EndpointConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     fail_on_warnings: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     minimum_compression_size: typing.Optional[jsii.Number] = None,
@@ -35965,6 +36093,12 @@ def _typecheckingstub__862c58d133c7c7042cd781761e3c59bc0b1a0787a856efc4acf0f9379
 
 def _typecheckingstub__b9945526e80dc90cbfbb86ac5f423295588dfd680221afef09db1c77df2985fb(
     value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__4a35223dc5d116faa71dec976afdfe8a7437bf614653ac2dde25677e8351eea3(
+    value: typing.Optional[builtins.str],
 ) -> None:
     """Type checking stubs"""
     pass
@@ -36051,6 +36185,7 @@ def _typecheckingstub__5e6d4ed4722f0c07021ff207940f8656b0bbeb24224daef1a2a167c70
     clone_from: typing.Optional[builtins.str] = None,
     description: typing.Optional[builtins.str] = None,
     disable_execute_api_endpoint: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+    endpoint_access_mode: typing.Optional[builtins.str] = None,
     endpoint_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnRestApi.EndpointConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     fail_on_warnings: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     minimum_compression_size: typing.Optional[jsii.Number] = None,

@@ -90,6 +90,7 @@ from ..interfaces.aws_glue import (
     IDataQualityRulesetRef as _IDataQualityRulesetRef_f944e18c,
     IDatabaseRef as _IDatabaseRef_df838168,
     IDevEndpointRef as _IDevEndpointRef_5bb61de4,
+    IIdentityCenterConfigurationRef as _IIdentityCenterConfigurationRef_df86a5c7,
     IIntegrationResourcePropertyRef as _IIntegrationResourcePropertyRef_68a80746,
     IJobRef as _IJobRef_b119043c,
     IMLTransformRef as _IMLTransformRef_9f131017,
@@ -104,6 +105,7 @@ from ..interfaces.aws_glue import (
     ITriggerRef as _ITriggerRef_d85f5014,
     IUsageProfileRef as _IUsageProfileRef_7fb2f866,
     IWorkflowRef as _IWorkflowRef_130478b3,
+    IdentityCenterConfigurationReference as _IdentityCenterConfigurationReference_b5f056de,
     IntegrationResourcePropertyReference as _IntegrationResourcePropertyReference_0fbb76f4,
     JobReference as _JobReference_d005117a,
     MLTransformReference as _MLTransformReference_ea7fd169,
@@ -7279,6 +7281,263 @@ class CfnDevEndpointProps:
 
     def __repr__(self) -> str:
         return "CfnDevEndpointProps(%s)" % ", ".join(
+            k + "=" + repr(v) for k, v in self._values.items()
+        )
+
+
+@jsii.implements(_IInspectable_c2943556, _IIdentityCenterConfigurationRef_df86a5c7)
+class CfnIdentityCenterConfiguration(
+    _CfnResource_9df397a6,
+    metaclass=jsii.JSIIMeta,
+    jsii_type="aws-cdk-lib.aws_glue.CfnIdentityCenterConfiguration",
+):
+    '''Resource Type definition for AWS::Glue::IdentityCenterConfiguration.
+
+    :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-glue-identitycenterconfiguration.html
+    :cloudformationResource: AWS::Glue::IdentityCenterConfiguration
+    :exampleMetadata: fixture=_generated
+
+    Example::
+
+        # The code below shows an example of how to instantiate this type.
+        # The values are placeholders you should change.
+        from aws_cdk import aws_glue as glue
+        
+        cfn_identity_center_configuration = glue.CfnIdentityCenterConfiguration(self, "MyCfnIdentityCenterConfiguration",
+            instance_arn="instanceArn",
+        
+            # the properties below are optional
+            scopes=["scopes"],
+            user_background_sessions_enabled=False
+        )
+    '''
+
+    def __init__(
+        self,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        *,
+        instance_arn: builtins.str,
+        scopes: typing.Optional[typing.Sequence[builtins.str]] = None,
+        user_background_sessions_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+    ) -> None:
+        '''Create a new ``AWS::Glue::IdentityCenterConfiguration``.
+
+        :param scope: Scope in which this resource is defined.
+        :param id: Construct identifier for this resource (unique in its scope).
+        :param instance_arn: The IAM identity center instance arn.
+        :param scopes: The downstream scopes that Glue identity center configuration can access.
+        :param user_background_sessions_enabled: Enable or disable user background sessions for Glue Identity Center.
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__e02020a96b7f983d041d512872a4682bdba5253496a16de355e50da3b99b23c4)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+        props = CfnIdentityCenterConfigurationProps(
+            instance_arn=instance_arn,
+            scopes=scopes,
+            user_background_sessions_enabled=user_background_sessions_enabled,
+        )
+
+        jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="inspect")
+    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+        '''Examines the CloudFormation resource and discloses attributes.
+
+        :param inspector: tree inspector to collect and process attributes.
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__24e51b2eeff00706fbd4d0555ff0585adc48cee98f45781ea9eca8e9c47f40e1)
+            check_type(argname="argument inspector", value=inspector, expected_type=type_hints["inspector"])
+        return typing.cast(None, jsii.invoke(self, "inspect", [inspector]))
+
+    @jsii.member(jsii_name="renderProperties")
+    def _render_properties(
+        self,
+        props: typing.Mapping[builtins.str, typing.Any],
+    ) -> typing.Mapping[builtins.str, typing.Any]:
+        '''
+        :param props: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__5041508333168b3b5f51766373c54c32cae6e922011ebdb7011ab38c3c880e38)
+            check_type(argname="argument props", value=props, expected_type=type_hints["props"])
+        return typing.cast(typing.Mapping[builtins.str, typing.Any], jsii.invoke(self, "renderProperties", [props]))
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="CFN_RESOURCE_TYPE_NAME")
+    def CFN_RESOURCE_TYPE_NAME(cls) -> builtins.str:
+        '''The CloudFormation resource type name for this resource class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "CFN_RESOURCE_TYPE_NAME"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrAccountId")
+    def attr_account_id(self) -> builtins.str:
+        '''The identifier for the specified AWS account.
+
+        :cloudformationAttribute: AccountId
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrAccountId"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrApplicationArn")
+    def attr_application_arn(self) -> builtins.str:
+        '''The Glue IAM identity center application arn.
+
+        :cloudformationAttribute: ApplicationArn
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrApplicationArn"))
+
+    @builtins.property
+    @jsii.member(jsii_name="cfnProperties")
+    def _cfn_properties(self) -> typing.Mapping[builtins.str, typing.Any]:
+        return typing.cast(typing.Mapping[builtins.str, typing.Any], jsii.get(self, "cfnProperties"))
+
+    @builtins.property
+    @jsii.member(jsii_name="identityCenterConfigurationRef")
+    def identity_center_configuration_ref(
+        self,
+    ) -> _IdentityCenterConfigurationReference_b5f056de:
+        '''A reference to a IdentityCenterConfiguration resource.'''
+        return typing.cast(_IdentityCenterConfigurationReference_b5f056de, jsii.get(self, "identityCenterConfigurationRef"))
+
+    @builtins.property
+    @jsii.member(jsii_name="instanceArn")
+    def instance_arn(self) -> builtins.str:
+        '''The IAM identity center instance arn.'''
+        return typing.cast(builtins.str, jsii.get(self, "instanceArn"))
+
+    @instance_arn.setter
+    def instance_arn(self, value: builtins.str) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__4edeb5e83678b834e855dafb183d00b3287a4c8ad7fa936c0a08dbdd5b98a0a1)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "instanceArn", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="scopes")
+    def scopes(self) -> typing.Optional[typing.List[builtins.str]]:
+        '''The downstream scopes that Glue identity center configuration can access.'''
+        return typing.cast(typing.Optional[typing.List[builtins.str]], jsii.get(self, "scopes"))
+
+    @scopes.setter
+    def scopes(self, value: typing.Optional[typing.List[builtins.str]]) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__1480d8f92ebf1d654bac06ec9bc5cac7ed1acc8ce2ea75e899529c13d1908781)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "scopes", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="userBackgroundSessionsEnabled")
+    def user_background_sessions_enabled(
+        self,
+    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        '''Enable or disable user background sessions for Glue Identity Center.'''
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "userBackgroundSessionsEnabled"))
+
+    @user_background_sessions_enabled.setter
+    def user_background_sessions_enabled(
+        self,
+        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+    ) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__fd8b4af6cac94138873c696e0b84ed0a234f7b52341fc8027a6ec0c701a6a743)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "userBackgroundSessionsEnabled", value) # pyright: ignore[reportArgumentType]
+
+
+@jsii.data_type(
+    jsii_type="aws-cdk-lib.aws_glue.CfnIdentityCenterConfigurationProps",
+    jsii_struct_bases=[],
+    name_mapping={
+        "instance_arn": "instanceArn",
+        "scopes": "scopes",
+        "user_background_sessions_enabled": "userBackgroundSessionsEnabled",
+    },
+)
+class CfnIdentityCenterConfigurationProps:
+    def __init__(
+        self,
+        *,
+        instance_arn: builtins.str,
+        scopes: typing.Optional[typing.Sequence[builtins.str]] = None,
+        user_background_sessions_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+    ) -> None:
+        '''Properties for defining a ``CfnIdentityCenterConfiguration``.
+
+        :param instance_arn: The IAM identity center instance arn.
+        :param scopes: The downstream scopes that Glue identity center configuration can access.
+        :param user_background_sessions_enabled: Enable or disable user background sessions for Glue Identity Center.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-glue-identitycenterconfiguration.html
+        :exampleMetadata: fixture=_generated
+
+        Example::
+
+            # The code below shows an example of how to instantiate this type.
+            # The values are placeholders you should change.
+            from aws_cdk import aws_glue as glue
+            
+            cfn_identity_center_configuration_props = glue.CfnIdentityCenterConfigurationProps(
+                instance_arn="instanceArn",
+            
+                # the properties below are optional
+                scopes=["scopes"],
+                user_background_sessions_enabled=False
+            )
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__e9676290832d30752d09c04286f6d9bddb63caf93405e528187213aa5a6a48f6)
+            check_type(argname="argument instance_arn", value=instance_arn, expected_type=type_hints["instance_arn"])
+            check_type(argname="argument scopes", value=scopes, expected_type=type_hints["scopes"])
+            check_type(argname="argument user_background_sessions_enabled", value=user_background_sessions_enabled, expected_type=type_hints["user_background_sessions_enabled"])
+        self._values: typing.Dict[builtins.str, typing.Any] = {
+            "instance_arn": instance_arn,
+        }
+        if scopes is not None:
+            self._values["scopes"] = scopes
+        if user_background_sessions_enabled is not None:
+            self._values["user_background_sessions_enabled"] = user_background_sessions_enabled
+
+    @builtins.property
+    def instance_arn(self) -> builtins.str:
+        '''The IAM identity center instance arn.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-glue-identitycenterconfiguration.html#cfn-glue-identitycenterconfiguration-instancearn
+        '''
+        result = self._values.get("instance_arn")
+        assert result is not None, "Required property 'instance_arn' is missing"
+        return typing.cast(builtins.str, result)
+
+    @builtins.property
+    def scopes(self) -> typing.Optional[typing.List[builtins.str]]:
+        '''The downstream scopes that Glue identity center configuration can access.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-glue-identitycenterconfiguration.html#cfn-glue-identitycenterconfiguration-scopes
+        '''
+        result = self._values.get("scopes")
+        return typing.cast(typing.Optional[typing.List[builtins.str]], result)
+
+    @builtins.property
+    def user_background_sessions_enabled(
+        self,
+    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        '''Enable or disable user background sessions for Glue Identity Center.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-glue-identitycenterconfiguration.html#cfn-glue-identitycenterconfiguration-userbackgroundsessionsenabled
+        '''
+        result = self._values.get("user_background_sessions_enabled")
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+
+    def __eq__(self, rhs: typing.Any) -> builtins.bool:
+        return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+    def __ne__(self, rhs: typing.Any) -> builtins.bool:
+        return not (rhs == self)
+
+    def __repr__(self) -> str:
+        return "CfnIdentityCenterConfigurationProps(%s)" % ", ".join(
             k + "=" + repr(v) for k, v in self._values.items()
         )
 
@@ -18160,6 +18419,8 @@ __all__ = [
     "CfnDatabaseProps",
     "CfnDevEndpoint",
     "CfnDevEndpointProps",
+    "CfnIdentityCenterConfiguration",
+    "CfnIdentityCenterConfigurationProps",
     "CfnIntegrationResourceProperty",
     "CfnIntegrationResourcePropertyProps",
     "CfnJob",
@@ -19149,6 +19410,56 @@ def _typecheckingstub__789306655393b50bec94a0cbbc4385fd0d7103127d033ea3eaabe59af
     subnet_id: typing.Optional[builtins.str] = None,
     tags: typing.Any = None,
     worker_type: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__e02020a96b7f983d041d512872a4682bdba5253496a16de355e50da3b99b23c4(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    *,
+    instance_arn: builtins.str,
+    scopes: typing.Optional[typing.Sequence[builtins.str]] = None,
+    user_background_sessions_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__24e51b2eeff00706fbd4d0555ff0585adc48cee98f45781ea9eca8e9c47f40e1(
+    inspector: _TreeInspector_488e0dd5,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__5041508333168b3b5f51766373c54c32cae6e922011ebdb7011ab38c3c880e38(
+    props: typing.Mapping[builtins.str, typing.Any],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__4edeb5e83678b834e855dafb183d00b3287a4c8ad7fa936c0a08dbdd5b98a0a1(
+    value: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__1480d8f92ebf1d654bac06ec9bc5cac7ed1acc8ce2ea75e899529c13d1908781(
+    value: typing.Optional[typing.List[builtins.str]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__fd8b4af6cac94138873c696e0b84ed0a234f7b52341fc8027a6ec0c701a6a743(
+    value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__e9676290832d30752d09c04286f6d9bddb63caf93405e528187213aa5a6a48f6(
+    *,
+    instance_arn: builtins.str,
+    scopes: typing.Optional[typing.Sequence[builtins.str]] = None,
+    user_background_sessions_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
 ) -> None:
     """Type checking stubs"""
     pass

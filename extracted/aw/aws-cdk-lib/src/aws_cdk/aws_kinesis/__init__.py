@@ -645,7 +645,8 @@ class CfnStream(
             tags=[CfnTag(
                 key="key",
                 value="value"
-            )]
+            )],
+            warm_throughput_mi_bps=123
         )
     '''
 
@@ -662,6 +663,7 @@ class CfnStream(
         stream_encryption: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnStream.StreamEncryptionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         stream_mode_details: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnStream.StreamModeDetailsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        warm_throughput_mi_bps: typing.Optional[jsii.Number] = None,
     ) -> None:
         '''Create a new ``AWS::Kinesis::Stream``.
 
@@ -675,6 +677,7 @@ class CfnStream(
         :param stream_encryption: When specified, enables or updates server-side encryption using an AWS KMS key for a specified stream. Removing this property from your stack template and updating your stack disables encryption.
         :param stream_mode_details: Specifies the capacity mode to which you want to set your data stream. Currently, in Kinesis Data Streams, you can choose between an *on-demand* capacity mode and a *provisioned* capacity mode for your data streams.
         :param tags: An arbitrary set of tags (key–value pairs) to associate with the Kinesis stream. For information about constraints for this property, see `Tag Restrictions <https://docs.aws.amazon.com/streams/latest/dev/tagging.html#tagging-restrictions>`_ in the *Amazon Kinesis Developer Guide* .
+        :param warm_throughput_mi_bps: The target warm throughput in MB/s that the stream should be scaled to handle. This represents the throughput capacity that will be immediately available for write operations.
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__b956aa40f3e4f7ebba018fbc1caa3788147e52190c5c7131c5c035b042428a53)
@@ -689,6 +692,7 @@ class CfnStream(
             stream_encryption=stream_encryption,
             stream_mode_details=stream_mode_details,
             tags=tags,
+            warm_throughput_mi_bps=warm_throughput_mi_bps,
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
@@ -773,6 +777,17 @@ class CfnStream(
         :cloudformationAttribute: Arn
         '''
         return typing.cast(builtins.str, jsii.get(self, "attrArn"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrWarmThroughputObject")
+    def attr_warm_throughput_object(self) -> _IResolvable_da3f097b:
+        '''Warm throughput configuration details for the stream.
+
+        Only present for ON_DEMAND streams.
+
+        :cloudformationAttribute: WarmThroughputObject
+        '''
+        return typing.cast(_IResolvable_da3f097b, jsii.get(self, "attrWarmThroughputObject"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -907,6 +922,19 @@ class CfnStream(
             type_hints = typing.get_type_hints(_typecheckingstub__4d0f1c422640008db062b29f115763c109cc7cb0ad3033ed29d2a4f3281b5171)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
         jsii.set(self, "tagsRaw", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="warmThroughputMiBps")
+    def warm_throughput_mi_bps(self) -> typing.Optional[jsii.Number]:
+        '''The target warm throughput in MB/s that the stream should be scaled to handle.'''
+        return typing.cast(typing.Optional[jsii.Number], jsii.get(self, "warmThroughputMiBps"))
+
+    @warm_throughput_mi_bps.setter
+    def warm_throughput_mi_bps(self, value: typing.Optional[jsii.Number]) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__4ebae78a2a0d25afa6afc70acece7f64a104c2da8d03ab9751d1e69033a4b601)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "warmThroughputMiBps", value) # pyright: ignore[reportArgumentType]
 
     @jsii.data_type(
         jsii_type="aws-cdk-lib.aws_kinesis.CfnStream.StreamEncryptionProperty",
@@ -1052,6 +1080,85 @@ class CfnStream(
 
         def __repr__(self) -> str:
             return "StreamModeDetailsProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_kinesis.CfnStream.WarmThroughputObjectProperty",
+        jsii_struct_bases=[],
+        name_mapping={
+            "current_mi_bps": "currentMiBps",
+            "target_mi_bps": "targetMiBps",
+        },
+    )
+    class WarmThroughputObjectProperty:
+        def __init__(
+            self,
+            *,
+            current_mi_bps: typing.Optional[jsii.Number] = None,
+            target_mi_bps: typing.Optional[jsii.Number] = None,
+        ) -> None:
+            '''Represents the warm throughput configuration on the stream.
+
+            This is only present for On-Demand Kinesis Data Streams in accounts that have ``MinimumThroughputBillingCommitment`` enabled.
+
+            :param current_mi_bps: The current warm throughput value on the stream. This is the write throughput in MiBps that the stream is currently scaled to handle.
+            :param target_mi_bps: The target warm throughput value on the stream. This indicates that the stream is currently scaling towards this target value.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesis-stream-warmthroughputobject.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_kinesis as kinesis
+                
+                warm_throughput_object_property = kinesis.CfnStream.WarmThroughputObjectProperty(
+                    current_mi_bps=123,
+                    target_mi_bps=123
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__e3efd7df146efe6aec617c0d3e2e0193eccbea786013bee2661e1f139c12cacf)
+                check_type(argname="argument current_mi_bps", value=current_mi_bps, expected_type=type_hints["current_mi_bps"])
+                check_type(argname="argument target_mi_bps", value=target_mi_bps, expected_type=type_hints["target_mi_bps"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if current_mi_bps is not None:
+                self._values["current_mi_bps"] = current_mi_bps
+            if target_mi_bps is not None:
+                self._values["target_mi_bps"] = target_mi_bps
+
+        @builtins.property
+        def current_mi_bps(self) -> typing.Optional[jsii.Number]:
+            '''The current warm throughput value on the stream.
+
+            This is the write throughput in MiBps that the stream is currently scaled to handle.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesis-stream-warmthroughputobject.html#cfn-kinesis-stream-warmthroughputobject-currentmibps
+            '''
+            result = self._values.get("current_mi_bps")
+            return typing.cast(typing.Optional[jsii.Number], result)
+
+        @builtins.property
+        def target_mi_bps(self) -> typing.Optional[jsii.Number]:
+            '''The target warm throughput value on the stream.
+
+            This indicates that the stream is currently scaling towards this target value.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesis-stream-warmthroughputobject.html#cfn-kinesis-stream-warmthroughputobject-targetmibps
+            '''
+            result = self._values.get("target_mi_bps")
+            return typing.cast(typing.Optional[jsii.Number], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "WarmThroughputObjectProperty(%s)" % ", ".join(
                 k + "=" + repr(v) for k, v in self._values.items()
             )
 
@@ -1365,6 +1472,7 @@ class CfnStreamConsumerProps:
         "stream_encryption": "streamEncryption",
         "stream_mode_details": "streamModeDetails",
         "tags": "tags",
+        "warm_throughput_mi_bps": "warmThroughputMiBps",
     },
 )
 class CfnStreamProps:
@@ -1379,6 +1487,7 @@ class CfnStreamProps:
         stream_encryption: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnStream.StreamEncryptionProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
         stream_mode_details: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnStream.StreamModeDetailsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        warm_throughput_mi_bps: typing.Optional[jsii.Number] = None,
     ) -> None:
         '''Properties for defining a ``CfnStream``.
 
@@ -1390,6 +1499,7 @@ class CfnStreamProps:
         :param stream_encryption: When specified, enables or updates server-side encryption using an AWS KMS key for a specified stream. Removing this property from your stack template and updating your stack disables encryption.
         :param stream_mode_details: Specifies the capacity mode to which you want to set your data stream. Currently, in Kinesis Data Streams, you can choose between an *on-demand* capacity mode and a *provisioned* capacity mode for your data streams.
         :param tags: An arbitrary set of tags (key–value pairs) to associate with the Kinesis stream. For information about constraints for this property, see `Tag Restrictions <https://docs.aws.amazon.com/streams/latest/dev/tagging.html#tagging-restrictions>`_ in the *Amazon Kinesis Developer Guide* .
+        :param warm_throughput_mi_bps: The target warm throughput in MB/s that the stream should be scaled to handle. This represents the throughput capacity that will be immediately available for write operations.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-kinesis-stream.html
         :exampleMetadata: fixture=_generated
@@ -1416,7 +1526,8 @@ class CfnStreamProps:
                 tags=[CfnTag(
                     key="key",
                     value="value"
-                )]
+                )],
+                warm_throughput_mi_bps=123
             )
         '''
         if __debug__:
@@ -1429,6 +1540,7 @@ class CfnStreamProps:
             check_type(argname="argument stream_encryption", value=stream_encryption, expected_type=type_hints["stream_encryption"])
             check_type(argname="argument stream_mode_details", value=stream_mode_details, expected_type=type_hints["stream_mode_details"])
             check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
+            check_type(argname="argument warm_throughput_mi_bps", value=warm_throughput_mi_bps, expected_type=type_hints["warm_throughput_mi_bps"])
         self._values: typing.Dict[builtins.str, typing.Any] = {}
         if desired_shard_level_metrics is not None:
             self._values["desired_shard_level_metrics"] = desired_shard_level_metrics
@@ -1446,6 +1558,8 @@ class CfnStreamProps:
             self._values["stream_mode_details"] = stream_mode_details
         if tags is not None:
             self._values["tags"] = tags
+        if warm_throughput_mi_bps is not None:
+            self._values["warm_throughput_mi_bps"] = warm_throughput_mi_bps
 
     @builtins.property
     def desired_shard_level_metrics(self) -> typing.Optional[typing.List[builtins.str]]:
@@ -1536,6 +1650,17 @@ class CfnStreamProps:
         '''
         result = self._values.get("tags")
         return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+
+    @builtins.property
+    def warm_throughput_mi_bps(self) -> typing.Optional[jsii.Number]:
+        '''The target warm throughput in MB/s that the stream should be scaled to handle.
+
+        This represents the throughput capacity that will be immediately available for write operations.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-kinesis-stream.html#cfn-kinesis-stream-warmthroughputmibps
+        '''
+        result = self._values.get("warm_throughput_mi_bps")
+        return typing.cast(typing.Optional[jsii.Number], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -5932,6 +6057,7 @@ def _typecheckingstub__b956aa40f3e4f7ebba018fbc1caa3788147e52190c5c7131c5c035b04
     stream_encryption: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnStream.StreamEncryptionProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     stream_mode_details: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnStream.StreamModeDetailsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+    warm_throughput_mi_bps: typing.Optional[jsii.Number] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -6012,6 +6138,12 @@ def _typecheckingstub__4d0f1c422640008db062b29f115763c109cc7cb0ad3033ed29d2a4f32
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__4ebae78a2a0d25afa6afc70acece7f64a104c2da8d03ab9751d1e69033a4b601(
+    value: typing.Optional[jsii.Number],
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__c1476c1b2f337416b576d9c95452f57605e1a1126bd1ee7fda17f3275886914f(
     *,
     encryption_type: builtins.str,
@@ -6023,6 +6155,14 @@ def _typecheckingstub__c1476c1b2f337416b576d9c95452f57605e1a1126bd1ee7fda17f3275
 def _typecheckingstub__5385370e91aca0af1d1a9f60e1e9966ef508e08881f2991b33ef8b8bc832c6fa(
     *,
     stream_mode: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__e3efd7df146efe6aec617c0d3e2e0193eccbea786013bee2661e1f139c12cacf(
+    *,
+    current_mi_bps: typing.Optional[jsii.Number] = None,
+    target_mi_bps: typing.Optional[jsii.Number] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -6087,6 +6227,7 @@ def _typecheckingstub__d3bac625363d3769acb567c00e5b48d63afe09fd6d0305829f157ffcc
     stream_encryption: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnStream.StreamEncryptionProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     stream_mode_details: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnStream.StreamModeDetailsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+    warm_throughput_mi_bps: typing.Optional[jsii.Number] = None,
 ) -> None:
     """Type checking stubs"""
     pass

@@ -323,6 +323,7 @@ __all__ = (
     "GetTransitGatewayRouteTablePropagationsPaginatorName",
     "GetVpnConnectionDeviceTypesPaginatorName",
     "GroupByType",
+    "HaStatusType",
     "HostMaintenanceType",
     "HostRecoveryType",
     "HostTenancyType",
@@ -549,6 +550,7 @@ __all__ = (
     "SpotInstanceStateType",
     "SpotInstanceTypeType",
     "SpreadLevelType",
+    "SqlServerLicenseUsageType",
     "StateType",
     "StaticSourcesSupportValueType",
     "StatisticTypeType",
@@ -1221,6 +1223,7 @@ GroupByType = Literal[
     "resource-region",
     "tenancy",
 ]
+HaStatusType = Literal["active", "invalid", "processing", "standby"]
 HostMaintenanceType = Literal["off", "on"]
 HostRecoveryType = Literal["off", "on"]
 HostTenancyType = Literal["dedicated", "default", "host"]
@@ -2968,6 +2971,7 @@ SpotInstanceRequestFulfilledWaiterName = Literal["spot_instance_request_fulfille
 SpotInstanceStateType = Literal["active", "cancelled", "closed", "disabled", "failed", "open"]
 SpotInstanceTypeType = Literal["one-time", "persistent"]
 SpreadLevelType = Literal["host", "rack"]
+SqlServerLicenseUsageType = Literal["full", "waived"]
 StateType = Literal[
     "Available",
     "Deleted",
@@ -3431,6 +3435,7 @@ ServiceName = Literal[
     "mq",
     "mturk",
     "mwaa",
+    "mwaa-serverless",
     "neptune",
     "neptune-graph",
     "neptunedata",

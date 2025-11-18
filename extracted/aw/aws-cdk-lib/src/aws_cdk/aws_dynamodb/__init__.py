@@ -3961,7 +3961,7 @@ class CfnGlobalTable(
         def __init__(
             self,
             *,
-            resource_policy: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnGlobalTable.ResourcePolicyProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            resource_policy: typing.Union[_IResolvable_da3f097b, typing.Union["CfnGlobalTable.ResourcePolicyProperty", typing.Dict[builtins.str, typing.Any]]],
         ) -> None:
             '''Represents the DynamoDB Streams configuration for a global table replica.
 
@@ -3987,14 +3987,14 @@ class CfnGlobalTable(
             if __debug__:
                 type_hints = typing.get_type_hints(_typecheckingstub__00848a241dcb74d0918fbddda5f7ccf1c445a7b63583f8697e2d95d334aa1bed)
                 check_type(argname="argument resource_policy", value=resource_policy, expected_type=type_hints["resource_policy"])
-            self._values: typing.Dict[builtins.str, typing.Any] = {}
-            if resource_policy is not None:
-                self._values["resource_policy"] = resource_policy
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "resource_policy": resource_policy,
+            }
 
         @builtins.property
         def resource_policy(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnGlobalTable.ResourcePolicyProperty"]]:
+        ) -> typing.Union[_IResolvable_da3f097b, "CfnGlobalTable.ResourcePolicyProperty"]:
             '''A resource-based policy document that contains the permissions for the specified stream of a DynamoDB global table replica.
 
             Resource-based policies let you define access permissions by specifying who has access to each resource, and the actions they are allowed to perform on each resource.
@@ -4006,7 +4006,8 @@ class CfnGlobalTable(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-dynamodb-globaltable-replicastreamspecification.html#cfn-dynamodb-globaltable-replicastreamspecification-resourcepolicy
             '''
             result = self._values.get("resource_policy")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnGlobalTable.ResourcePolicyProperty"]], result)
+            assert result is not None, "Required property 'resource_policy' is missing"
+            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnGlobalTable.ResourcePolicyProperty"], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -17226,11 +17227,6 @@ class Table(
         return typing.cast(builtins.bool, jsii.get(self, "hasIndex"))
 
     @builtins.property
-    @jsii.member(jsii_name="table")
-    def _table(self) -> CfnTable:
-        return typing.cast(CfnTable, jsii.get(self, "table"))
-
-    @builtins.property
     @jsii.member(jsii_name="tableArn")
     def table_arn(self) -> builtins.str:
         '''Arn of the dynamodb table.
@@ -17628,7 +17624,7 @@ def _typecheckingstub__912e2bc047b1f65121a39316718e5632909682a5243ef8e21ead42e3e
 
 def _typecheckingstub__00848a241dcb74d0918fbddda5f7ccf1c445a7b63583f8697e2d95d334aa1bed(
     *,
-    resource_policy: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnGlobalTable.ResourcePolicyProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    resource_policy: typing.Union[_IResolvable_da3f097b, typing.Union[CfnGlobalTable.ResourcePolicyProperty, typing.Dict[builtins.str, typing.Any]]],
 ) -> None:
     """Type checking stubs"""
     pass

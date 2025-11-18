@@ -1086,7 +1086,7 @@ class TestDialect(Validator):
             },
         )
         self.validate_all(
-            "DATE_TRUNC('millenium', x)",
+            "DATE_TRUNC('millennium', x)",
             write={
                 "mysql": UnsupportedError,
             },
@@ -1125,7 +1125,7 @@ class TestDialect(Validator):
             },
         )
         self.validate_all(
-            "DATE_TRUNC('millenium', x)",
+            "DATE_TRUNC('millennium', x)",
             write={
                 "mysql": UnsupportedError,
             },
@@ -1235,13 +1235,13 @@ class TestDialect(Validator):
             "TIMESTAMP_TRUNC(x, DAY, 'UTC')",
             write={
                 "": "TIMESTAMP_TRUNC(x, DAY, 'UTC')",
-                "duckdb": "DATE_TRUNC('DAY', x)",
+                "duckdb": "DATE_TRUNC('DAY', x AT TIME ZONE 'UTC') AT TIME ZONE 'UTC'",
                 "materialize": "DATE_TRUNC('DAY', x, 'UTC')",
                 "presto": "DATE_TRUNC('DAY', x)",
                 "postgres": "DATE_TRUNC('DAY', x, 'UTC')",
                 "snowflake": "DATE_TRUNC('DAY', x)",
                 "databricks": "DATE_TRUNC('DAY', x)",
-                "clickhouse": "DATE_TRUNC('DAY', x, 'UTC')",
+                "clickhouse": "dateTrunc('DAY', x, 'UTC')",
             },
         )
 
@@ -3430,7 +3430,6 @@ FROM subquery2""",
                 "trino": "UUID()",
                 "mysql": "UUID()",
                 "postgres": "GEN_RANDOM_UUID()",
-                "bigquery": "GENERATE_UUID()",
                 "snowflake": "UUID_STRING()",
                 "tsql": "NEWID()",
             },
@@ -4293,3 +4292,14 @@ FROM subquery2""",
                         target_dialect
                     )
                     self.assertEqual(sql, "REGEXP_REPLACE('aaa', 'a', 'b', 'g')")
+
+    def test_subquery_unwrap(self):
+        self.validate_identity(
+            "WITH sub_query AS (SELECT a FROM table) (SELECT a FROM sub_query)",
+            "WITH sub_query AS (SELECT a FROM table) SELECT a FROM sub_query",
+        )
+
+        self.validate_identity(
+            "WITH sub_query AS (SELECT a FROM table) ((((SELECT a FROM sub_query))))",
+            "WITH sub_query AS (SELECT a FROM table) SELECT a FROM sub_query",
+        )

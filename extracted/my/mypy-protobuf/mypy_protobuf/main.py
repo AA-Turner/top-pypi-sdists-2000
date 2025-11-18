@@ -2,6 +2,7 @@
 """Protoc Plugin to generate mypy stubs."""
 from __future__ import annotations
 
+import ast
 import sys
 from collections import defaultdict
 from contextlib import contextmanager
@@ -13,8 +14,8 @@ from typing import (
     Iterator,
     List,
     Optional,
-    Set,
     Sequence,
+    Set,
     Tuple,
 )
 
@@ -22,9 +23,10 @@ import google.protobuf.descriptor_pb2 as d
 from google.protobuf.compiler import plugin_pb2 as plugin_pb2
 from google.protobuf.internal.containers import RepeatedCompositeFieldContainer
 from google.protobuf.internal.well_known_types import WKTBASES
+
 from . import extensions_pb2
 
-__version__ = "3.6.0"
+__version__ = "3.7.0"
 
 # SourceCodeLocation is defined by `message Location` here
 # https://github.com/protocolbuffers/protobuf/blob/master/src/google/protobuf/descriptor.proto
@@ -85,6 +87,11 @@ PROTO_ENUM_RESERVED = {
 }
 
 
+def _build_typevar_name(service_name: str, method_name: str) -> str:
+    # Prefix with underscore to avoid public api error: https://stackoverflow.com/a/78871465
+    return f"_{service_name}{method_name}Type"
+
+
 def _mangle_global_identifier(name: str) -> str:
     """
     Module level identifiers are mangled and aliased so that they can be disambiguated
@@ -92,10 +99,10 @@ def _mangle_global_identifier(name: str) -> str:
 
     Eg:
     Enum variant `Name` or message field `Name` might conflict with a top level
-    message or enum named `Name`, so mangle it with a global___ prefix for
+    message or enum named `Name`, so mangle it with a `Global___` prefix for
     internal references. Note that this doesn't affect inner enums/messages
-    because they get fuly qualified when referenced within a file"""
-    return f"global___{name}"
+    because they get fully qualified when referenced within a file"""
+    return f"Global___{name}"
 
 
 class Descriptors(object):
@@ -143,12 +150,14 @@ class PkgWriter(object):
         descriptors: Descriptors,
         readable_stubs: bool,
         relax_strict_optional_primitives: bool,
+        use_default_deprecation_warnings: bool,
         grpc: bool,
     ) -> None:
         self.fd = fd
         self.descriptors = descriptors
         self.readable_stubs = readable_stubs
         self.relax_strict_optional_primitives = relax_strict_optional_primitives
+        self.use_default_depreaction_warnings = use_default_deprecation_warnings
         self.grpc = grpc
         self.lines: List[str] = []
         self.indent = ""
@@ -159,6 +168,7 @@ class PkgWriter(object):
         # if {z} is None, then it shortens to `from {x} import {y}`
         self.from_imports: Dict[str, Set[Tuple[str, str | None]]] = defaultdict(set)
         self.typing_extensions_min: Optional[Tuple[int, int]] = None
+        self.deprecated_min: Optional[Tuple[int, int]] = None
 
         # Comments
         self.source_code_info_by_scl = {tuple(location.path): location for location in fd.source_code_info.location}
@@ -168,13 +178,16 @@ class PkgWriter(object):
         eg. self._import("typing", "Literal") -> "Literal"
         """
         if path == "typing_extensions":
-            stabilization = {
-                "TypeAlias": (3, 10),
-            }
+            stabilization = {"TypeAlias": (3, 10), "TypeVar": (3, 13)}
             assert name in stabilization
             if not self.typing_extensions_min or self.typing_extensions_min < stabilization[name]:
                 self.typing_extensions_min = stabilization[name]
             return "typing_extensions." + name
+
+        if path == "warnings" and name == "deprecated":
+            if not self.deprecated_min or self.deprecated_min < (3, 11):
+                self.deprecated_min = (3, 13)
+            return name
 
         imp = path.replace("/", ".")
         if self.readable_stubs:
@@ -246,6 +259,51 @@ class PkgWriter(object):
     def _has_comments(self, scl: SourceCodeLocation) -> bool:
         sci_loc = self.source_code_info_by_scl.get(tuple(scl))
         return sci_loc is not None and bool(sci_loc.leading_detached_comments or sci_loc.leading_comments or sci_loc.trailing_comments)
+
+    def _get_comments(self, scl: SourceCodeLocation) -> List[str]:
+        """Return list of comment lines"""
+        if not self._has_comments(scl):
+            return []
+
+        sci_loc = self.source_code_info_by_scl.get(tuple(scl))
+        assert sci_loc is not None
+
+        leading_detached_lines = []
+        leading_lines = []
+        trailing_lines = []
+        for leading_detached_comment in sci_loc.leading_detached_comments:
+            leading_detached_lines = self._break_text(leading_detached_comment)
+        if sci_loc.leading_comments is not None:
+            leading_lines = self._break_text(sci_loc.leading_comments)
+        # Trailing comments also go in the header - to make sure it gets into the docstring
+        if sci_loc.trailing_comments is not None:
+            trailing_lines = self._break_text(sci_loc.trailing_comments)
+
+        lines = leading_detached_lines
+        if leading_detached_lines and (leading_lines or trailing_lines):
+            lines.append("")
+        lines.extend(leading_lines)
+        lines.extend(trailing_lines)
+
+        return lines
+
+    def _write_deprecation_warning(self, scl: SourceCodeLocation, default_message: str) -> None:
+        msg = default_message
+        if not self.use_default_depreaction_warnings and (comments := self._get_comments(scl)):
+            # Make sure the comment string is a valid python string literal
+            joined = "\\n".join(comments)
+            # Check that it is valid python string by using ast.parse
+            try:
+                ast.parse(f'"""{joined}"""')
+                msg = joined
+            except SyntaxError as e:
+                print(f"Warning: Deprecation comment {joined} could not be parsed as a python string literal. Using default deprecation message. {e}", file=sys.stderr)
+                pass
+        self._write_line(
+            '@{}("""{}""")',
+            self._import("warnings", "deprecated"),
+            msg,
+        )
 
     def _write_comments(self, scl: SourceCodeLocation) -> bool:
         """Return true if any comments were written"""
@@ -360,6 +418,11 @@ class PkgWriter(object):
                 )
             wl("")
 
+            if enum.options.deprecated:
+                self._write_deprecation_warning(
+                    scl + [d.EnumDescriptorProto.OPTIONS_FIELD_NUMBER] + [d.EnumOptions.DEPRECATED_FIELD_NUMBER],
+                    "This enum has been marked as deprecated using proto enum options.",
+                )
             if self._has_comments(scl):
                 wl(f"class {class_name}({enum_helper_class}, metaclass={etw_helper_class}):")
                 with self._indent():
@@ -376,7 +439,7 @@ class PkgWriter(object):
                 scl + [d.EnumDescriptorProto.VALUE_FIELD_NUMBER],
             )
             if prefix == "" and not self.readable_stubs:
-                wl(f"{_mangle_global_identifier(class_name)} = {class_name}")
+                wl(f"{_mangle_global_identifier(class_name)}: {self._import('typing_extensions', 'TypeAlias')} = {class_name}")
             wl("")
 
     def write_messages(
@@ -405,6 +468,11 @@ class PkgWriter(object):
 
             class_name = desc.name if desc.name not in PYTHON_RESERVED else "_r_" + desc.name
             message_class = self._import("google.protobuf.message", "Message")
+            if desc.options.deprecated:
+                self._write_deprecation_warning(
+                    scl_prefix + [i] + [d.DescriptorProto.OPTIONS_FIELD_NUMBER] + [d.MessageOptions.DEPRECATED_FIELD_NUMBER],
+                    "This message has been marked as deprecated using proto message options.",
+                )
             wl("@{}", self._import("typing", "final"))
             wl(f"class {class_name}({message_class}{addl_base}):")
             with self._indent():
@@ -483,7 +551,7 @@ class PkgWriter(object):
 
             if prefix == "" and not self.readable_stubs:
                 wl("")
-                wl(f"{_mangle_global_identifier(class_name)} = {class_name}")
+                wl(f"{_mangle_global_identifier(class_name)}: {self._import('typing_extensions', 'TypeAlias')} = {class_name}")
             wl("")
 
     def write_stringly_typed_fields(self, desc: d.DescriptorProto) -> None:
@@ -732,6 +800,46 @@ class PkgWriter(object):
             wl("...")
         wl("")
 
+    def write_grpc_type_vars(self, service: d.ServiceDescriptorProto) -> None:
+        wl = self._write_line
+        methods = [(i, m) for i, m in enumerate(service.method) if m.name not in PYTHON_RESERVED]
+        if not methods:
+            return
+        for _, method in methods:
+            wl("{} = {}(", _build_typevar_name(service.name, method.name), self._import("typing_extensions", "TypeVar"))
+            with self._indent():
+                wl("'{}',", _build_typevar_name(service.name, method.name))
+                wl("{}[", self._callable_type(method, is_async=False))
+                with self._indent():
+                    wl("{},", self._input_type(method))
+                    wl("{},", self._output_type(method))
+                wl("],")
+                wl("{}[", self._callable_type(method, is_async=True))
+                with self._indent():
+                    wl("{},", self._input_type(method))
+                    wl("{},", self._output_type(method))
+                wl("],")
+                wl("default={}[", self._callable_type(method, is_async=False))
+                with self._indent():
+                    wl("{},", self._input_type(method))
+                    wl("{},", self._output_type(method))
+                wl("],")
+            wl(")")
+            wl("")
+
+    def write_self_types(self, service: d.ServiceDescriptorProto, is_async: bool) -> None:
+        wl = self._write_line
+        methods = [(i, m) for i, m in enumerate(service.method) if m.name not in PYTHON_RESERVED]
+        if not methods:
+            return
+        for _, method in methods:
+            with self._indent():
+                wl("{}[", self._callable_type(method, is_async=is_async))
+                with self._indent():
+                    wl("{},", self._input_type(method))
+                    wl("{},", self._output_type(method))
+                wl("],")
+
     def write_grpc_methods(self, service: d.ServiceDescriptorProto, scl_prefix: SourceCodeLocation) -> None:
         wl = self._write_line
         methods = [(i, m) for i, m in enumerate(service.method) if m.name not in PYTHON_RESERVED]
@@ -769,11 +877,7 @@ class PkgWriter(object):
         for i, method in methods:
             scl = scl_prefix + [d.ServiceDescriptorProto.METHOD_FIELD_NUMBER, i]
 
-            wl("{}: {}[", method.name, self._callable_type(method, is_async=is_async))
-            with self._indent():
-                wl("{},", self._input_type(method))
-                wl("{},", self._output_type(method))
-            wl("]")
+            wl("{}: {}", method.name, f"{_build_typevar_name(service.name, method.name)}")
             self._write_comments(scl)
             wl("")
 
@@ -783,37 +887,68 @@ class PkgWriter(object):
         scl_prefix: SourceCodeLocation,
     ) -> None:
         wl = self._write_line
+        wl("GRPC_GENERATED_VERSION: str")
+        wl("GRPC_VERSION: str")
         for i, service in enumerate(services):
             if service.name in PYTHON_RESERVED:
                 continue
 
             scl = scl_prefix + [i]
 
+            # Type vars
+            self.write_grpc_type_vars(service)
+
             # The stub client
+            if service.options.deprecated:
+                self._write_deprecation_warning(
+                    scl + [d.ServiceDescriptorProto.OPTIONS_FIELD_NUMBER] + [d.ServiceOptions.DEPRECATED_FIELD_NUMBER],
+                    "This stub has been marked as deprecated using proto service options.",
+                )
+            class_name = f"{service.name}Stub"
             wl(
-                "class {}Stub:",
-                service.name,
+                "class {}({}[{}]):",
+                class_name,
+                self._import("typing", "Generic"),
+                ", ".join(f"{_build_typevar_name(service.name, method.name)}" for method in service.method),
             )
             with self._indent():
                 if self._write_comments(scl):
                     wl("")
-                # To support casting into FooAsyncStub, allow both Channel and aio.Channel here.
-                channel = f"{self._import('typing', 'Union')}[{self._import('grpc', 'Channel')}, {self._import('grpc.aio', 'Channel')}]"
-                wl("def __init__(self, channel: {}) -> None: ...", channel)
+
+                # Write sync overload
+                wl("@{}", self._import("typing", "overload"))
+                wl("def __init__(self: {}[", class_name)
+                self.write_self_types(service, False)
+                wl(
+                    "], channel: {}) -> None: ...",
+                    self._import("grpc", "Channel"),
+                )
+                wl("")
+
+                # Write async overload
+                wl("@{}", self._import("typing", "overload"))
+                wl("def __init__(self: {}[", class_name)
+                self.write_self_types(service, True)
+                wl(
+                    "], channel: {}) -> None: ...",
+                    self._import("grpc.aio", "Channel"),
+                )
+                wl("")
+
                 self.write_grpc_stub_methods(service, scl)
 
-            # The (fake) async stub client
-            wl(
-                "class {}AsyncStub:",
-                service.name,
-            )
-            with self._indent():
-                if self._write_comments(scl):
-                    wl("")
-                # No __init__ since this isn't a real class (yet), and requires manual casting to work.
-                self.write_grpc_stub_methods(service, scl, is_async=True)
+            # Write AsyncStub alias
+            wl("{}AsyncStub: {} = {}[", service.name, self._import("typing_extensions", "TypeAlias"), class_name)
+            self.write_self_types(service, True)
+            wl("]")
+            wl("")
 
             # The service definition interface
+            if service.options.deprecated:
+                self._write_deprecation_warning(
+                    scl + [d.ServiceDescriptorProto.OPTIONS_FIELD_NUMBER] + [d.ServiceOptions.DEPRECATED_FIELD_NUMBER],
+                    "This servicer has been marked as deprecated using proto service options.",
+                )
             wl(
                 "class {}Servicer(metaclass={}):",
                 service.name,
@@ -825,6 +960,11 @@ class PkgWriter(object):
                 self.write_grpc_methods(service, scl)
             server = self._import("grpc", "Server")
             aserver = self._import("grpc.aio", "Server")
+            if service.options.deprecated:
+                self._write_deprecation_warning(
+                    scl + [d.ServiceDescriptorProto.OPTIONS_FIELD_NUMBER] + [d.ServiceOptions.DEPRECATED_FIELD_NUMBER],
+                    "This servicer has been marked as deprecated using proto service options.",
+                )
             wl(
                 "def add_{}Servicer_to_server(servicer: {}Servicer, server: {}) -> None: ...",
                 service.name,
@@ -940,7 +1080,7 @@ class PkgWriter(object):
                 # n,n to force a reexport (from x import y as y)
                 self.from_imports[reexport_imp].update((n, n) for n in names)
 
-        if self.typing_extensions_min:
+        if self.typing_extensions_min or self.deprecated_min:
             self.imports.add("sys")
         for pkg in sorted(self.imports):
             self._write_line(f"import {pkg}")
@@ -950,6 +1090,12 @@ class PkgWriter(object):
             self._write_line("    import typing as typing_extensions")
             self._write_line("else:")
             self._write_line("    import typing_extensions")
+        if self.deprecated_min:
+            self._write_line("")
+            self._write_line(f"if sys.version_info >= {self.deprecated_min}:")
+            self._write_line("    from warnings import deprecated")
+            self._write_line("else:")
+            self._write_line("    from typing_extensions import deprecated")
 
         for pkg, items in sorted(self.from_imports.items()):
             self._write_line(f"from {pkg} import (")
@@ -980,6 +1126,7 @@ def generate_mypy_stubs(
     quiet: bool,
     readable_stubs: bool,
     relax_strict_optional_primitives: bool,
+    use_default_deprecation_warnings: bool,
 ) -> None:
     for name, fd in descriptors.to_generate.items():
         pkg_writer = PkgWriter(
@@ -987,6 +1134,7 @@ def generate_mypy_stubs(
             descriptors,
             readable_stubs,
             relax_strict_optional_primitives,
+            use_default_deprecation_warnings,
             grpc=False,
         )
 
@@ -1012,6 +1160,7 @@ def generate_mypy_grpc_stubs(
     quiet: bool,
     readable_stubs: bool,
     relax_strict_optional_primitives: bool,
+    use_default_deprecation_warnings: bool,
 ) -> None:
     for name, fd in descriptors.to_generate.items():
         pkg_writer = PkgWriter(
@@ -1019,6 +1168,7 @@ def generate_mypy_grpc_stubs(
             descriptors,
             readable_stubs,
             relax_strict_optional_primitives,
+            use_default_deprecation_warnings,
             grpc=True,
         )
         pkg_writer.write_grpc_async_hacks()
@@ -1070,6 +1220,7 @@ def main() -> None:
             "quiet" in request.parameter,
             "readable_stubs" in request.parameter,
             "relax_strict_optional_primitives" in request.parameter,
+            "use_default_deprecation_warnings" in request.parameter,
         )
 
 
@@ -1082,6 +1233,7 @@ def grpc() -> None:
             "quiet" in request.parameter,
             "readable_stubs" in request.parameter,
             "relax_strict_optional_primitives" in request.parameter,
+            "use_default_deprecation_warnings" in request.parameter,
         )
 
 

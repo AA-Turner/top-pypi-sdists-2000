@@ -2552,6 +2552,9 @@ class CfnGatewayTarget(
                             )
                         )
                     ),
+                    mcp_server=bedrockagentcore.CfnGatewayTarget.McpServerTargetConfigurationProperty(
+                        endpoint="endpoint"
+                    ),
                     open_api_schema=bedrockagentcore.CfnGatewayTarget.ApiSchemaConfigurationProperty(
                         inline_payload="inlinePayload",
                         s3=bedrockagentcore.CfnGatewayTarget.S3ConfigurationProperty(
@@ -2656,6 +2659,14 @@ class CfnGatewayTarget(
         :cloudformationAttribute: GatewayArn
         '''
         return typing.cast(builtins.str, jsii.get(self, "attrGatewayArn"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrLastSynchronizedAt")
+    def attr_last_synchronized_at(self) -> builtins.str:
+        '''
+        :cloudformationAttribute: LastSynchronizedAt
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrLastSynchronizedAt"))
 
     @builtins.property
     @jsii.member(jsii_name="attrStatus")
@@ -3258,10 +3269,61 @@ class CfnGatewayTarget(
             )
 
     @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_bedrockagentcore.CfnGatewayTarget.McpServerTargetConfigurationProperty",
+        jsii_struct_bases=[],
+        name_mapping={"endpoint": "endpoint"},
+    )
+    class McpServerTargetConfigurationProperty:
+        def __init__(self, *, endpoint: builtins.str) -> None:
+            '''
+            :param endpoint: 
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrockagentcore-gatewaytarget-mcpservertargetconfiguration.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_bedrockagentcore as bedrockagentcore
+                
+                mcp_server_target_configuration_property = bedrockagentcore.CfnGatewayTarget.McpServerTargetConfigurationProperty(
+                    endpoint="endpoint"
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__d73da9473e37697d875f5f3c74a1ab3e3ace8090917b37837b001996968f456a)
+                check_type(argname="argument endpoint", value=endpoint, expected_type=type_hints["endpoint"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "endpoint": endpoint,
+            }
+
+        @builtins.property
+        def endpoint(self) -> builtins.str:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrockagentcore-gatewaytarget-mcpservertargetconfiguration.html#cfn-bedrockagentcore-gatewaytarget-mcpservertargetconfiguration-endpoint
+            '''
+            result = self._values.get("endpoint")
+            assert result is not None, "Required property 'endpoint' is missing"
+            return typing.cast(builtins.str, result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "McpServerTargetConfigurationProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
         jsii_type="aws-cdk-lib.aws_bedrockagentcore.CfnGatewayTarget.McpTargetConfigurationProperty",
         jsii_struct_bases=[],
         name_mapping={
             "lambda_": "lambda",
+            "mcp_server": "mcpServer",
             "open_api_schema": "openApiSchema",
             "smithy_model": "smithyModel",
         },
@@ -3271,12 +3333,14 @@ class CfnGatewayTarget(
             self,
             *,
             lambda_: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnGatewayTarget.McpLambdaTargetConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            mcp_server: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnGatewayTarget.McpServerTargetConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             open_api_schema: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnGatewayTarget.ApiSchemaConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             smithy_model: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnGatewayTarget.ApiSchemaConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''The MCP target configuration for the gateway target.
 
             :param lambda_: The Lambda MCP configuration for the gateway target.
+            :param mcp_server: 
             :param open_api_schema: The OpenApi schema for the gateway target MCP configuration.
             :param smithy_model: The target configuration for the Smithy model target.
 
@@ -3329,6 +3393,9 @@ class CfnGatewayTarget(
                             )
                         )
                     ),
+                    mcp_server=bedrockagentcore.CfnGatewayTarget.McpServerTargetConfigurationProperty(
+                        endpoint="endpoint"
+                    ),
                     open_api_schema=bedrockagentcore.CfnGatewayTarget.ApiSchemaConfigurationProperty(
                         inline_payload="inlinePayload",
                         s3=bedrockagentcore.CfnGatewayTarget.S3ConfigurationProperty(
@@ -3348,11 +3415,14 @@ class CfnGatewayTarget(
             if __debug__:
                 type_hints = typing.get_type_hints(_typecheckingstub__0b1d88210caa384ede03a06bee42d13165c8bf4cc4206a236d795c44da216e3c)
                 check_type(argname="argument lambda_", value=lambda_, expected_type=type_hints["lambda_"])
+                check_type(argname="argument mcp_server", value=mcp_server, expected_type=type_hints["mcp_server"])
                 check_type(argname="argument open_api_schema", value=open_api_schema, expected_type=type_hints["open_api_schema"])
                 check_type(argname="argument smithy_model", value=smithy_model, expected_type=type_hints["smithy_model"])
             self._values: typing.Dict[builtins.str, typing.Any] = {}
             if lambda_ is not None:
                 self._values["lambda_"] = lambda_
+            if mcp_server is not None:
+                self._values["mcp_server"] = mcp_server
             if open_api_schema is not None:
                 self._values["open_api_schema"] = open_api_schema
             if smithy_model is not None:
@@ -3368,6 +3438,16 @@ class CfnGatewayTarget(
             '''
             result = self._values.get("lambda_")
             return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnGatewayTarget.McpLambdaTargetConfigurationProperty"]], result)
+
+        @builtins.property
+        def mcp_server(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnGatewayTarget.McpServerTargetConfigurationProperty"]]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrockagentcore-gatewaytarget-mcptargetconfiguration.html#cfn-bedrockagentcore-gatewaytarget-mcptargetconfiguration-mcpserver
+            '''
+            result = self._values.get("mcp_server")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnGatewayTarget.McpServerTargetConfigurationProperty"]], result)
 
         @builtins.property
         def open_api_schema(
@@ -3764,6 +3844,9 @@ class CfnGatewayTarget(
                                 )
                             )
                         ),
+                        mcp_server=bedrockagentcore.CfnGatewayTarget.McpServerTargetConfigurationProperty(
+                            endpoint="endpoint"
+                        ),
                         open_api_schema=bedrockagentcore.CfnGatewayTarget.ApiSchemaConfigurationProperty(
                             inline_payload="inlinePayload",
                             s3=bedrockagentcore.CfnGatewayTarget.S3ConfigurationProperty(
@@ -4155,6 +4238,9 @@ class CfnGatewayTargetProps:
                                     uri="uri"
                                 )
                             )
+                        ),
+                        mcp_server=bedrockagentcore.CfnGatewayTarget.McpServerTargetConfigurationProperty(
+                            endpoint="endpoint"
                         ),
                         open_api_schema=bedrockagentcore.CfnGatewayTarget.ApiSchemaConfigurationProperty(
                             inline_payload="inlinePayload",
@@ -9758,9 +9844,17 @@ def _typecheckingstub__e6ba80f262600990b7647765d60a5f51fb86eeeaf8708f22bc73e4794
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__d73da9473e37697d875f5f3c74a1ab3e3ace8090917b37837b001996968f456a(
+    *,
+    endpoint: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__0b1d88210caa384ede03a06bee42d13165c8bf4cc4206a236d795c44da216e3c(
     *,
     lambda_: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnGatewayTarget.McpLambdaTargetConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    mcp_server: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnGatewayTarget.McpServerTargetConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     open_api_schema: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnGatewayTarget.ApiSchemaConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     smithy_model: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnGatewayTarget.ApiSchemaConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
 ) -> None:

@@ -838,6 +838,63 @@ cr.AwsCustomResource(self, "CrossAccount",
 )
 ```
 
+#### Using External IDs for Enhanced Security
+
+When assuming cross-account roles, you can specify an external ID to prevent the "confused deputy" problem. The external ID is a unique identifier provided by the third-party service that helps ensure the service is acting on behalf of the correct customer:
+
+```python
+cross_account_role_arn = "arn:aws:iam::OTHERACCOUNT:role/CrossAccountRoleName"
+service_external_id = "unique-secret-value-12345" # External ID provided by the third party service. This value should be unique among the third-party service's customers.
+
+
+cr.AwsCustomResource(self, "SecureCrossAccount",
+    on_create=cr.AwsSdkCall(
+        assumed_role_arn=cross_account_role_arn,
+        external_id=service_external_id,  # Prevents confused deputy attacks
+        service="sts",
+        action="GetCallerIdentity",
+        physical_resource_id=cr.PhysicalResourceId.of("id")
+    ),
+    policy=cr.AwsCustomResourcePolicy.from_statements([iam.PolicyStatement.from_json({
+        "Effect": "Allow",
+        "Action": "sts:AssumeRole",
+        "Resource": cross_account_role_arn
+    })])
+)
+```
+
+The external ID can also be different for each lifecycle operation:
+
+```python
+# create_role_arn: str
+# update_role_arn: str
+
+
+cr.AwsCustomResource(self, "MultiRoleSecure",
+    on_create=cr.AwsSdkCall(
+        assumed_role_arn=create_role_arn,
+        external_id="create-secret-123",
+        service="ec2",
+        action="DescribeInstances",
+        physical_resource_id=cr.PhysicalResourceId.of("id")
+    ),
+    on_update=cr.AwsSdkCall(
+        assumed_role_arn=update_role_arn,
+        external_id="update-secret-456",
+        service="ec2",
+        action="DescribeInstances"
+    ),
+    policy=cr.AwsCustomResourcePolicy.from_statements([
+        iam.PolicyStatement(
+            actions=["sts:AssumeRole"],
+            resources=[create_role_arn, update_role_arn]
+        )
+    ])
+)
+```
+
+For more information on external IDs and preventing confused deputy attacks, see the [AWS IAM User Guide](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_common-scenarios_third-party.html).
+
 #### Custom Resource Config
 
 **This feature is currently experimental**
@@ -1051,22 +1108,24 @@ class AwsCustomResource(
 
     Example::
 
-        get_parameter = cr.AwsCustomResource(self, "GetParameter",
-            on_update=cr.AwsSdkCall( # will also be called for a CREATE event
-                service="SSM",
-                action="GetParameter",
-                parameters={
-                    "Name": "my-parameter",
-                    "WithDecryption": True
-                },
-                physical_resource_id=cr.PhysicalResourceId.of(Date.now().to_string())),
-            policy=cr.AwsCustomResourcePolicy.from_sdk_calls(
-                resources=cr.AwsCustomResourcePolicy.ANY_RESOURCE
-            )
-        )
+        cross_account_role_arn = "arn:aws:iam::OTHERACCOUNT:role/CrossAccountRoleName" # arn of role deployed in separate account
         
-        # Use the value in another construct with
-        get_parameter.get_response_field("Parameter.Value")
+        call_region = "us-west-1" # sdk call to be made in specified region (optional)
+        
+        cr.AwsCustomResource(self, "CrossAccount",
+            on_create=cr.AwsSdkCall(
+                assumed_role_arn=cross_account_role_arn,
+                region=call_region,  # optional
+                service="sts",
+                action="GetCallerIdentity",
+                physical_resource_id=cr.PhysicalResourceId.of("id")
+            ),
+            policy=cr.AwsCustomResourcePolicy.from_statements([iam.PolicyStatement.from_json({
+                "Effect": "Allow",
+                "Action": "sts:AssumeRole",
+                "Resource": cross_account_role_arn
+            })])
+        )
     '''
 
     def __init__(
@@ -1205,20 +1264,23 @@ class AwsCustomResourcePolicy(
 
     Example::
 
-        get_parameter = cr.AwsCustomResource(self, "GetParameter",
-            on_update=cr.AwsSdkCall(
-                service="SSM",
-                action="GetParameter",
-                parameters={
-                    "Name": "my-parameter",
-                    "WithDecryption": True
-                },
-                physical_resource_id=cr.PhysicalResourceId.of(Date.now().to_string()),
-                logging=cr.Logging.with_data_hidden()
+        cross_account_role_arn = "arn:aws:iam::OTHERACCOUNT:role/CrossAccountRoleName" # arn of role deployed in separate account
+        
+        call_region = "us-west-1" # sdk call to be made in specified region (optional)
+        
+        cr.AwsCustomResource(self, "CrossAccount",
+            on_create=cr.AwsSdkCall(
+                assumed_role_arn=cross_account_role_arn,
+                region=call_region,  # optional
+                service="sts",
+                action="GetCallerIdentity",
+                physical_resource_id=cr.PhysicalResourceId.of("id")
             ),
-            policy=cr.AwsCustomResourcePolicy.from_sdk_calls(
-                resources=cr.AwsCustomResourcePolicy.ANY_RESOURCE
-            )
+            policy=cr.AwsCustomResourcePolicy.from_statements([iam.PolicyStatement.from_json({
+                "Effect": "Allow",
+                "Action": "sts:AssumeRole",
+                "Resource": cross_account_role_arn
+            })])
         )
     '''
 
@@ -1348,22 +1410,24 @@ class AwsCustomResourceProps:
 
         Example::
 
-            get_parameter = cr.AwsCustomResource(self, "GetParameter",
-                on_update=cr.AwsSdkCall( # will also be called for a CREATE event
-                    service="SSM",
-                    action="GetParameter",
-                    parameters={
-                        "Name": "my-parameter",
-                        "WithDecryption": True
-                    },
-                    physical_resource_id=cr.PhysicalResourceId.of(Date.now().to_string())),
-                policy=cr.AwsCustomResourcePolicy.from_sdk_calls(
-                    resources=cr.AwsCustomResourcePolicy.ANY_RESOURCE
-                )
-            )
+            cross_account_role_arn = "arn:aws:iam::OTHERACCOUNT:role/CrossAccountRoleName" # arn of role deployed in separate account
             
-            # Use the value in another construct with
-            get_parameter.get_response_field("Parameter.Value")
+            call_region = "us-west-1" # sdk call to be made in specified region (optional)
+            
+            cr.AwsCustomResource(self, "CrossAccount",
+                on_create=cr.AwsSdkCall(
+                    assumed_role_arn=cross_account_role_arn,
+                    region=call_region,  # optional
+                    service="sts",
+                    action="GetCallerIdentity",
+                    physical_resource_id=cr.PhysicalResourceId.of("id")
+                ),
+                policy=cr.AwsCustomResourcePolicy.from_statements([iam.PolicyStatement.from_json({
+                    "Effect": "Allow",
+                    "Action": "sts:AssumeRole",
+                    "Resource": cross_account_role_arn
+                })])
+            )
         '''
         if isinstance(on_create, dict):
             on_create = AwsSdkCall(**on_create)
@@ -1636,6 +1700,7 @@ class AwsCustomResourceProps:
         "service": "service",
         "api_version": "apiVersion",
         "assumed_role_arn": "assumedRoleArn",
+        "external_id": "externalId",
         "ignore_error_codes_matching": "ignoreErrorCodesMatching",
         "logging": "logging",
         "output_paths": "outputPaths",
@@ -1652,6 +1717,7 @@ class AwsSdkCall:
         service: builtins.str,
         api_version: typing.Optional[builtins.str] = None,
         assumed_role_arn: typing.Optional[builtins.str] = None,
+        external_id: typing.Optional[builtins.str] = None,
         ignore_error_codes_matching: typing.Optional[builtins.str] = None,
         logging: typing.Optional["Logging"] = None,
         output_paths: typing.Optional[typing.Sequence[builtins.str]] = None,
@@ -1665,6 +1731,7 @@ class AwsSdkCall:
         :param service: The service to call. This is the name of an AWS service, in one of the following forms: - An AWS SDK for JavaScript v3 package name (``@aws-sdk/client-api-gateway``) - An AWS SDK for JavaScript v3 client name (``api-gateway``) - An AWS SDK for JavaScript v2 constructor name (``APIGateway``) - A lowercase AWS SDK for JavaScript v2 constructor name (``apigateway``)
         :param api_version: API version to use for the service. Default: - use latest available API version
         :param assumed_role_arn: Used for running the SDK calls in underlying lambda with a different role. Can be used primarily for cross-account requests to for example connect hostedzone with a shared vpc. Region controls where assumeRole call is made. Example for Route53 / associateVPCWithHostedZone Default: - run without assuming role
+        :param external_id: External ID to use when assuming the role for cross-account requests. This is an additional security measure that helps prevent the "confused deputy" problem where an entity that doesn't have permission to perform an action can coerce a more-privileged entity to perform the action. The external ID must be provided by the third-party service and should not be generated by you. This value should be unique among the third-party service's customers. This property is only used when ``assumedRoleArn`` is specified. Default: - no external ID
         :param ignore_error_codes_matching: The regex pattern to use to catch API errors. The ``code`` property of the ``Error`` object will be tested against this pattern. If there is a match an error will not be thrown. Default: - do not catch errors
         :param logging: A property used to configure logging during lambda function execution. Note: The default Logging configuration is all. This configuration will enable logging on all logged data in the lambda handler. This includes: - The event object that is received by the lambda handler - The response received after making a API call - The response object that the lambda handler will return - SDK versioning information - Caught and uncaught errors Default: Logging.all()
         :param output_paths: Restrict the data returned by the custom resource to specific paths in the API response. Use this to limit the data returned by the custom resource if working with API calls that could potentially result in custom response objects exceeding the hard limit of 4096 bytes. Example for ECS / updateService: ['service.deploymentConfiguration.maximumPercent'] Default: - return all data
@@ -1694,6 +1761,7 @@ class AwsSdkCall:
             check_type(argname="argument service", value=service, expected_type=type_hints["service"])
             check_type(argname="argument api_version", value=api_version, expected_type=type_hints["api_version"])
             check_type(argname="argument assumed_role_arn", value=assumed_role_arn, expected_type=type_hints["assumed_role_arn"])
+            check_type(argname="argument external_id", value=external_id, expected_type=type_hints["external_id"])
             check_type(argname="argument ignore_error_codes_matching", value=ignore_error_codes_matching, expected_type=type_hints["ignore_error_codes_matching"])
             check_type(argname="argument logging", value=logging, expected_type=type_hints["logging"])
             check_type(argname="argument output_paths", value=output_paths, expected_type=type_hints["output_paths"])
@@ -1708,6 +1776,8 @@ class AwsSdkCall:
             self._values["api_version"] = api_version
         if assumed_role_arn is not None:
             self._values["assumed_role_arn"] = assumed_role_arn
+        if external_id is not None:
+            self._values["external_id"] = external_id
         if ignore_error_codes_matching is not None:
             self._values["ignore_error_codes_matching"] = ignore_error_codes_matching
         if logging is not None:
@@ -1778,6 +1848,27 @@ class AwsSdkCall:
         :default: - run without assuming role
         '''
         result = self._values.get("assumed_role_arn")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def external_id(self) -> typing.Optional[builtins.str]:
+        '''External ID to use when assuming the role for cross-account requests.
+
+        This is an additional security measure that helps prevent the "confused deputy"
+        problem where an entity that doesn't have permission to perform an action
+        can coerce a more-privileged entity to perform the action.
+
+        The external ID must be provided by the third-party service and should not
+        be generated by you. This value should be unique among the third-party
+        service's customers.
+
+        This property is only used when ``assumedRoleArn`` is specified.
+
+        :default: - no external ID
+
+        :see: https://docs.aws.amazon.com/IAM/latest/UserGuide/confused-deputy.html
+        '''
+        result = self._values.get("external_id")
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
@@ -3360,6 +3451,7 @@ def _typecheckingstub__af7bb124668b93c6ce7d641df2daeabfe424e271742385a76e7e56ec9
     service: builtins.str,
     api_version: typing.Optional[builtins.str] = None,
     assumed_role_arn: typing.Optional[builtins.str] = None,
+    external_id: typing.Optional[builtins.str] = None,
     ignore_error_codes_matching: typing.Optional[builtins.str] = None,
     logging: typing.Optional[Logging] = None,
     output_paths: typing.Optional[typing.Sequence[builtins.str]] = None,

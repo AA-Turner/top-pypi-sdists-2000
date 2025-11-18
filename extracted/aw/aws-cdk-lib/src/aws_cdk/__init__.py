@@ -15052,6 +15052,18 @@ class FileSystem(metaclass=jsii.JSIIMeta, jsii_type="aws-cdk-lib.FileSystem"):
             check_type(argname="argument prefix", value=prefix, expected_type=type_hints["prefix"])
         return typing.cast(builtins.str, jsii.sinvoke(cls, "mkdtemp", [prefix]))
 
+    @jsii.member(jsii_name="rmrf")
+    @builtins.classmethod
+    def rmrf(cls, dirname: builtins.str) -> None:
+        '''Deletes a directory.
+
+        :param dirname: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__b7abcad49e8ba02f15feb7f2eaa99424ae561eda67452732c36925f4fb761872)
+            check_type(argname="argument dirname", value=dirname, expected_type=type_hints["dirname"])
+        return typing.cast(None, jsii.sinvoke(cls, "rmrf", [dirname]))
+
     @jsii.python.classproperty
     @jsii.member(jsii_name="tmpdir")
     def tmpdir(cls) -> builtins.str:
@@ -40616,6 +40628,12 @@ def _typecheckingstub__35c0ba523e1cafab7b097299e6d08618213eb99b7f5c141c19aa07b00
 
 def _typecheckingstub__04cde75c7956e809744e60404a6ac6cbcbafe03a002f260dc69e1acc5e363c54(
     prefix: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__b7abcad49e8ba02f15feb7f2eaa99424ae561eda67452732c36925f4fb761872(
+    dirname: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass

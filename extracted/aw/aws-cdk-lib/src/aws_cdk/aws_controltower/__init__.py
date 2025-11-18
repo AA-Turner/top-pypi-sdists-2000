@@ -876,6 +876,7 @@ class CfnLandingZone(
             version="version",
         
             # the properties below are optional
+            remediation_types=["remediationTypes"],
             tags=[CfnTag(
                 key="key",
                 value="value"
@@ -890,6 +891,7 @@ class CfnLandingZone(
         *,
         manifest: typing.Any,
         version: builtins.str,
+        remediation_types: typing.Optional[typing.Sequence[builtins.str]] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::ControlTower::LandingZone``.
@@ -898,13 +900,19 @@ class CfnLandingZone(
         :param id: Construct identifier for this resource (unique in its scope).
         :param manifest: The landing zone manifest JSON text file that specifies the landing zone configurations.
         :param version: The landing zone's current deployed version.
+        :param remediation_types: The types of remediation actions configured for the landing zone, such as automatic drift correction or compliance enforcement.
         :param tags: Tags to be applied to the landing zone.
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__af3c2c6625c6aae1afd50bbbd83dafe3289d77c3e128938fa7a5e5c8c7ddf150)
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
-        props = CfnLandingZoneProps(manifest=manifest, version=version, tags=tags)
+        props = CfnLandingZoneProps(
+            manifest=manifest,
+            version=version,
+            remediation_types=remediation_types,
+            tags=tags,
+        )
 
         jsii.create(self.__class__, self, [scope, id, props])
 
@@ -1029,6 +1037,22 @@ class CfnLandingZone(
         jsii.set(self, "version", value) # pyright: ignore[reportArgumentType]
 
     @builtins.property
+    @jsii.member(jsii_name="remediationTypes")
+    def remediation_types(self) -> typing.Optional[typing.List[builtins.str]]:
+        '''The types of remediation actions configured for the landing zone, such as automatic drift correction or compliance enforcement.'''
+        return typing.cast(typing.Optional[typing.List[builtins.str]], jsii.get(self, "remediationTypes"))
+
+    @remediation_types.setter
+    def remediation_types(
+        self,
+        value: typing.Optional[typing.List[builtins.str]],
+    ) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__badc32ecfa75b42f613106c567a87838b0d41f56d15482c8dc388641897b80ff)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "remediationTypes", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
     @jsii.member(jsii_name="tags")
     def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
         '''Tags to be applied to the landing zone.'''
@@ -1045,7 +1069,12 @@ class CfnLandingZone(
 @jsii.data_type(
     jsii_type="aws-cdk-lib.aws_controltower.CfnLandingZoneProps",
     jsii_struct_bases=[],
-    name_mapping={"manifest": "manifest", "version": "version", "tags": "tags"},
+    name_mapping={
+        "manifest": "manifest",
+        "version": "version",
+        "remediation_types": "remediationTypes",
+        "tags": "tags",
+    },
 )
 class CfnLandingZoneProps:
     def __init__(
@@ -1053,12 +1082,14 @@ class CfnLandingZoneProps:
         *,
         manifest: typing.Any,
         version: builtins.str,
+        remediation_types: typing.Optional[typing.Sequence[builtins.str]] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnLandingZone``.
 
         :param manifest: The landing zone manifest JSON text file that specifies the landing zone configurations.
         :param version: The landing zone's current deployed version.
+        :param remediation_types: The types of remediation actions configured for the landing zone, such as automatic drift correction or compliance enforcement.
         :param tags: Tags to be applied to the landing zone.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-controltower-landingzone.html
@@ -1077,6 +1108,7 @@ class CfnLandingZoneProps:
                 version="version",
             
                 # the properties below are optional
+                remediation_types=["remediationTypes"],
                 tags=[CfnTag(
                     key="key",
                     value="value"
@@ -1087,11 +1119,14 @@ class CfnLandingZoneProps:
             type_hints = typing.get_type_hints(_typecheckingstub__19c72c4436a305fc4b4dfd189564d877d145ce92e0c75f37eafddc778100f13e)
             check_type(argname="argument manifest", value=manifest, expected_type=type_hints["manifest"])
             check_type(argname="argument version", value=version, expected_type=type_hints["version"])
+            check_type(argname="argument remediation_types", value=remediation_types, expected_type=type_hints["remediation_types"])
             check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
         self._values: typing.Dict[builtins.str, typing.Any] = {
             "manifest": manifest,
             "version": version,
         }
+        if remediation_types is not None:
+            self._values["remediation_types"] = remediation_types
         if tags is not None:
             self._values["tags"] = tags
 
@@ -1114,6 +1149,15 @@ class CfnLandingZoneProps:
         result = self._values.get("version")
         assert result is not None, "Required property 'version' is missing"
         return typing.cast(builtins.str, result)
+
+    @builtins.property
+    def remediation_types(self) -> typing.Optional[typing.List[builtins.str]]:
+        '''The types of remediation actions configured for the landing zone, such as automatic drift correction or compliance enforcement.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-controltower-landingzone.html#cfn-controltower-landingzone-remediationtypes
+        '''
+        result = self._values.get("remediation_types")
+        return typing.cast(typing.Optional[typing.List[builtins.str]], result)
 
     @builtins.property
     def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
@@ -1293,6 +1337,7 @@ def _typecheckingstub__af3c2c6625c6aae1afd50bbbd83dafe3289d77c3e128938fa7a5e5c8c
     *,
     manifest: typing.Any,
     version: builtins.str,
+    remediation_types: typing.Optional[typing.Sequence[builtins.str]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
 ) -> None:
     """Type checking stubs"""
@@ -1322,6 +1367,12 @@ def _typecheckingstub__e32b3e7b64f2950f24c12755b01848b9ebe791c11c2152b740f8f6225
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__badc32ecfa75b42f613106c567a87838b0d41f56d15482c8dc388641897b80ff(
+    value: typing.Optional[typing.List[builtins.str]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__74f7c6529f7d31ad5ed3d98ad190f8c0fed87380c25f04fc3e960c88ff73bdaf(
     value: typing.Optional[typing.List[_CfnTag_f6864754]],
 ) -> None:
@@ -1332,6 +1383,7 @@ def _typecheckingstub__19c72c4436a305fc4b4dfd189564d877d145ce92e0c75f37eafddc778
     *,
     manifest: typing.Any,
     version: builtins.str,
+    remediation_types: typing.Optional[typing.Sequence[builtins.str]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
 ) -> None:
     """Type checking stubs"""

@@ -631,6 +631,7 @@ async fn run(mut cli: Cli) -> Result<ExitStatus> {
                 &args.settings.extra_build_dependencies,
                 &args.settings.extra_build_variables,
                 args.settings.build_options,
+                args.settings.install_mirrors,
                 args.settings.python_version,
                 args.settings.python_platform,
                 args.settings.universal,
@@ -711,6 +712,8 @@ async fn run(mut cli: Cli) -> Result<ExitStatus> {
                 args.settings.build_options,
                 args.settings.python_version,
                 args.settings.python_platform,
+                globals.python_downloads,
+                args.settings.install_mirrors,
                 args.settings.strict,
                 args.settings.exclude_newer,
                 args.settings.python,
@@ -862,6 +865,8 @@ async fn run(mut cli: Cli) -> Result<ExitStatus> {
                 args.modifications,
                 args.settings.python_version,
                 args.settings.python_platform,
+                globals.python_downloads,
+                args.settings.install_mirrors,
                 args.settings.strict,
                 args.settings.exclude_newer,
                 args.settings.sources,
@@ -1527,6 +1532,7 @@ async fn run(mut cli: Cli) -> Result<ExitStatus> {
                 args.python_downloads_json_url,
                 globals.python_preference,
                 globals.python_downloads,
+                &client_builder,
                 &cache,
                 printer,
                 globals.preview,
@@ -1539,15 +1545,13 @@ async fn run(mut cli: Cli) -> Result<ExitStatus> {
             // Resolve the settings from the command-line arguments and workspace configuration.
             let args = settings::PythonInstallSettings::resolve(args, filesystem, environment);
             show_settings!(args);
-            // TODO(john): If we later want to support `--upgrade`, we need to replace this.
-            let upgrade = false;
 
             commands::python_install(
                 &project_dir,
                 args.install_dir,
                 args.targets,
                 args.reinstall,
-                upgrade,
+                args.upgrade,
                 args.bin,
                 args.registry,
                 args.force,
@@ -1569,7 +1573,7 @@ async fn run(mut cli: Cli) -> Result<ExitStatus> {
             // Resolve the settings from the command-line arguments and workspace configuration.
             let args = settings::PythonUpgradeSettings::resolve(args, filesystem, environment);
             show_settings!(args);
-            let upgrade = true;
+            let upgrade = commands::PythonUpgrade::Enabled(commands::PythonUpgradeSource::Upgrade);
 
             commands::python_install(
                 &project_dir,
@@ -1612,7 +1616,7 @@ async fn run(mut cli: Cli) -> Result<ExitStatus> {
             command: PythonCommand::Find(args),
         }) => {
             // Resolve the settings from the command-line arguments and workspace configuration.
-            let args = settings::PythonFindSettings::resolve(args, filesystem);
+            let args = settings::PythonFindSettings::resolve(args, filesystem, environment);
 
             // Initialize the cache.
             let cache = cache.init()?;
@@ -1639,6 +1643,8 @@ async fn run(mut cli: Cli) -> Result<ExitStatus> {
                     cli.top_level.no_config,
                     args.system,
                     globals.python_preference,
+                    args.python_downloads_json_url.as_deref(),
+                    &client_builder,
                     &cache,
                     printer,
                     globals.preview,
@@ -1739,6 +1745,9 @@ async fn run(mut cli: Cli) -> Result<ExitStatus> {
             }
             WorkspaceCommand::Dir(args) => {
                 commands::dir(args.package, &project_dir, globals.preview, printer).await
+            }
+            WorkspaceCommand::List(_args) => {
+                commands::list(&project_dir, globals.preview, printer).await
             }
         },
         Commands::BuildBackend { command } => spawn_blocking(move || match command {

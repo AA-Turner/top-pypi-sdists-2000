@@ -786,6 +786,10 @@ from .type_defs import (
     DescribeInstanceEventWindowsResultTypeDef,
     DescribeInstanceImageMetadataRequestTypeDef,
     DescribeInstanceImageMetadataResultTypeDef,
+    DescribeInstanceSqlHaHistoryStatesRequestTypeDef,
+    DescribeInstanceSqlHaHistoryStatesResultTypeDef,
+    DescribeInstanceSqlHaStatesRequestTypeDef,
+    DescribeInstanceSqlHaStatesResultTypeDef,
     DescribeInstancesRequestTypeDef,
     DescribeInstancesResultTypeDef,
     DescribeInstanceStatusRequestTypeDef,
@@ -1044,6 +1048,8 @@ from .type_defs import (
     DisableImageDeregistrationProtectionResultTypeDef,
     DisableImageRequestTypeDef,
     DisableImageResultTypeDef,
+    DisableInstanceSqlHaStandbyDetectionsRequestTypeDef,
+    DisableInstanceSqlHaStandbyDetectionsResultTypeDef,
     DisableIpamOrganizationAdminAccountRequestTypeDef,
     DisableIpamOrganizationAdminAccountResultTypeDef,
     DisableRouteServerPropagationRequestTypeDef,
@@ -1116,6 +1122,8 @@ from .type_defs import (
     EnableImageDeregistrationProtectionResultTypeDef,
     EnableImageRequestTypeDef,
     EnableImageResultTypeDef,
+    EnableInstanceSqlHaStandbyDetectionsRequestTypeDef,
+    EnableInstanceSqlHaStandbyDetectionsResultTypeDef,
     EnableIpamOrganizationAdminAccountRequestTypeDef,
     EnableIpamOrganizationAdminAccountResultTypeDef,
     EnableReachabilityAnalyzerOrganizationSharingRequestTypeDef,
@@ -4861,6 +4869,29 @@ class EC2Client(BaseClient):
         [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_ec2/client/#describe_instance_image_metadata)
         """
 
+    def describe_instance_sql_ha_history_states(
+        self, **kwargs: Unpack[DescribeInstanceSqlHaHistoryStatesRequestTypeDef]
+    ) -> DescribeInstanceSqlHaHistoryStatesResultTypeDef:
+        """
+        Describes the historical SQL Server High Availability states for Amazon EC2
+        instances that are enabled for Amazon EC2 High Availability for SQL Server
+        monitoring.
+
+        [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/ec2/client/describe_instance_sql_ha_history_states.html)
+        [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_ec2/client/#describe_instance_sql_ha_history_states)
+        """
+
+    def describe_instance_sql_ha_states(
+        self, **kwargs: Unpack[DescribeInstanceSqlHaStatesRequestTypeDef]
+    ) -> DescribeInstanceSqlHaStatesResultTypeDef:
+        """
+        Describes the SQL Server High Availability states for Amazon EC2 instances that
+        are enabled for Amazon EC2 High Availability for SQL Server monitoring.
+
+        [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/ec2/client/describe_instance_sql_ha_states.html)
+        [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_ec2/client/#describe_instance_sql_ha_states)
+        """
+
     def describe_instance_status(
         self, **kwargs: Unpack[DescribeInstanceStatusRequestTypeDef]
     ) -> DescribeInstanceStatusResultTypeDef:
@@ -6205,6 +6236,17 @@ class EC2Client(BaseClient):
         [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_ec2/client/#disable_image_deregistration_protection)
         """
 
+    def disable_instance_sql_ha_standby_detections(
+        self, **kwargs: Unpack[DisableInstanceSqlHaStandbyDetectionsRequestTypeDef]
+    ) -> DisableInstanceSqlHaStandbyDetectionsResultTypeDef:
+        """
+        Disable Amazon EC2 instances running in an SQL Server High Availability cluster
+        from SQL Server High Availability instance standby detection monitoring.
+
+        [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/ec2/client/disable_instance_sql_ha_standby_detections.html)
+        [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_ec2/client/#disable_instance_sql_ha_standby_detections)
+        """
+
     def disable_ipam_organization_admin_account(
         self, **kwargs: Unpack[DisableIpamOrganizationAdminAccountRequestTypeDef]
     ) -> DisableIpamOrganizationAdminAccountResultTypeDef:
@@ -6583,6 +6625,17 @@ class EC2Client(BaseClient):
 
         [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/ec2/client/enable_image_deregistration_protection.html)
         [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_ec2/client/#enable_image_deregistration_protection)
+        """
+
+    def enable_instance_sql_ha_standby_detections(
+        self, **kwargs: Unpack[EnableInstanceSqlHaStandbyDetectionsRequestTypeDef]
+    ) -> EnableInstanceSqlHaStandbyDetectionsResultTypeDef:
+        """
+        Enable Amazon EC2 instances running in an SQL Server High Availability cluster
+        for SQL Server High Availability instance standby detection monitoring.
+
+        [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/ec2/client/enable_instance_sql_ha_standby_detections.html)
+        [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_ec2/client/#enable_instance_sql_ha_standby_detections)
         """
 
     def enable_ipam_organization_admin_account(

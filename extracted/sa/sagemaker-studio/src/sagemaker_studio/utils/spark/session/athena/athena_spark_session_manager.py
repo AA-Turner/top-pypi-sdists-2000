@@ -171,14 +171,12 @@ class AthenaSparkSessionManager(SparkSessionManager):
 
             # 3. Get auth token
             logger.debug("Getting session endpoint URL and auth token...")
-            get_session_endpoint_url_response = self.athena_client.get_session_endpoint_url(
+            get_session_endpoint_response = self.athena_client.get_session_endpoint(
                 SessionId=session_id
             )
 
             # 4. Construct spark connect url
-            spark_connect_url = self._construct_spark_endpoint_url(
-                get_session_endpoint_url_response
-            )
+            spark_connect_url = self._construct_spark_endpoint_url(get_session_endpoint_response)
             logger.debug("Successfully constructed Spark connect URL")
             return session_id, spark_connect_url
 
@@ -187,10 +185,10 @@ class AthenaSparkSessionManager(SparkSessionManager):
             logger.error(f"Traceback: {traceback.format_exc()}")
             raise
 
-    def _construct_spark_endpoint_url(self, get_session_endpoint_url_response) -> str:
+    def _construct_spark_endpoint_url(self, get_session_endpoint_response) -> str:
         # Change url schema from https to sc
-        endpoint_url = get_session_endpoint_url_response["EndpointUrl"]
-        auth_token = get_session_endpoint_url_response["AuthToken"]
+        endpoint_url = get_session_endpoint_response["EndpointUrl"]
+        auth_token = get_session_endpoint_response["AuthToken"]
         if endpoint_url.startswith("https://"):
             endpoint_url = endpoint_url.replace("https://", "sc://", 1)
 

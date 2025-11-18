@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: langchain-anthropic
-Version: 1.0.4
+Version: 1.1.0
 Summary: Integration package connecting Claude (Anthropic) APIs and LangChain
 Project-URL: Homepage, https://docs.langchain.com/oss/python/integrations/providers/anthropic
 Project-URL: Documentation, https://reference.langchain.com/python/integrations/langchain_anthropic/
@@ -12,8 +12,8 @@ Project-URL: Reddit, https://www.reddit.com/r/LangChain/
 License: MIT
 License-File: LICENSE
 Requires-Python: <4.0.0,>=3.10.0
-Requires-Dist: anthropic<1.0.0,>=0.69.0
-Requires-Dist: langchain-core<2.0.0,>=1.0.4
+Requires-Dist: anthropic<1.0.0,>=0.73.0
+Requires-Dist: langchain-core<2.0.0,>=1.0.5
 Requires-Dist: pydantic<3.0.0,>=2.7.4
 Description-Content-Type: text/markdown
 
@@ -38,4 +38,14 @@ This package contains the LangChain integration for Anthropic's generative model
 
 ## 📖 Documentation
 
-View the [documentation](https://docs.langchain.com/oss/python/integrations/providers/anthropic) for more details.
+For full documentation, see the [API reference](https://reference.langchain.com/python/integrations/langchain_anthropic/). For conceptual guides, tutorials, and examples on using these classes, see the [LangChain Docs](https://docs.langchain.com/oss/python/integrations/providers/anthropic).
+
+## 📕 Releases & Versioning
+
+See our [Releases](https://docs.langchain.com/oss/python/release-policy) and [Versioning](https://docs.langchain.com/oss/python/versioning) policies.
+
+## 💁 Contributing
+
+As an open-source project in a rapidly developing field, we are extremely open to contributions, whether it be in the form of a new feature, improved infrastructure, or better documentation.
+
+For detailed information on how to contribute, see the [Contributing Guide](https://docs.langchain.com/oss/python/contributing/overview).

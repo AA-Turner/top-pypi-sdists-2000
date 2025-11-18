@@ -14,12 +14,15 @@ dev = [
   "ipython>=8.12.3,<9",
   "jupyter>=1.1.1,<2",
   "mypy>=1.14.1,<2",
-  "pydantic-settings>=2.10.1"
+  "pydantic-settings>=2.10.1",
+  "pandas",
+  "openpyxl",
+  "pyarrow"
 ]
 
 [project]
 name = "llama-cloud-services"
-version = "0.6.79"
+version = "0.6.81"
 description = "Tailored SDK clients for LlamaCloud services."
 authors = [{name = "Logan Markewich", email = "logan@runllama.ai"}]
 requires-python = ">=3.9,<4.0"

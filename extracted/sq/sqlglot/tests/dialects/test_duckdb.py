@@ -1,4 +1,4 @@
-from sqlglot import ErrorLevel, ParseError, UnsupportedError, exp, parse_one, transpile
+from sqlglot import ParseError, UnsupportedError, exp, parse_one
 from sqlglot.generator import logger as generator_logger
 from sqlglot.helper import logger as helper_logger
 from sqlglot.optimizer.annotate_types import annotate_types
@@ -196,6 +196,49 @@ class TestDuckDB(Validator):
 
         self.validate_identity("SELECT EXP(1)")
         self.validate_identity("""SELECT '{"duck": [1, 2, 3]}' -> '$.duck[#-1]'""")
+
+        self.validate_all(
+            "SELECT RANGE(1, 5)",
+            write={
+                "duckdb": "SELECT RANGE(1, 5)",
+                "spark": "SELECT SEQUENCE(1, 4)",
+            },
+        )
+        self.validate_all(
+            "SELECT RANGE(1, 5, 2)",
+            write={
+                "duckdb": "SELECT RANGE(1, 5, 2)",
+                "spark": "SELECT SEQUENCE(1, 3, 2)",
+            },
+        )
+        self.validate_all(
+            "SELECT RANGE(1, 1)",
+            write={
+                "duckdb": "SELECT RANGE(1, 1)",
+                "spark": "SELECT ARRAY()",
+            },
+        )
+        self.validate_all(
+            "SELECT RANGE(5, 1, -1)",
+            write={
+                "duckdb": "SELECT RANGE(5, 1, -1)",
+                "spark": "SELECT SEQUENCE(5, 2, -1)",
+            },
+        )
+        self.validate_all(
+            "SELECT RANGE(5, 1, 0)",
+            write={
+                "duckdb": "SELECT RANGE(5, 1, 0)",
+                "spark": "SELECT ARRAY()",
+            },
+        )
+        self.validate_all(
+            "WITH t AS (SELECT 5 AS c) SELECT RANGE(1, c) FROM t",
+            write={
+                "duckdb": "WITH t AS (SELECT 5 AS c) SELECT RANGE(1, c) FROM t",
+                "spark": "WITH t AS (SELECT 5 AS c) SELECT IF((c - 1) <= 1, ARRAY(), SEQUENCE(1, (c - 1))) FROM t",
+            },
+        )
         self.validate_all(
             """SELECT JSON_EXTRACT('{"duck": [1, 2, 3]}', '/duck/0')""",
             write={
@@ -884,15 +927,6 @@ class TestDuckDB(Validator):
             },
         )
 
-        with self.assertRaises(UnsupportedError):
-            # bq has the position arg, but duckdb doesn't
-            transpile(
-                "SELECT REGEXP_EXTRACT(a, 'pattern', 1) from table",
-                read="bigquery",
-                write="duckdb",
-                unsupported_level=ErrorLevel.IMMEDIATE,
-            )
-
         self.validate_all(
             "SELECT REGEXP_EXTRACT(a, 'pattern') FROM t",
             read={
@@ -980,7 +1014,7 @@ class TestDuckDB(Validator):
             "DATE_TRUNC('DAY', x)",
             write={
                 "duckdb": "DATE_TRUNC('DAY', x)",
-                "clickhouse": "DATE_TRUNC('DAY', x)",
+                "clickhouse": "dateTrunc('DAY', x)",
             },
         )
         self.validate_identity("EDITDIST3(col1, col2)", "LEVENSHTEIN(col1, col2)")
@@ -1040,6 +1074,7 @@ class TestDuckDB(Validator):
             },
             write={
                 "duckdb": "SELECT e'Hello\nworld'",
+                "bigquery": "SELECT CAST(b'Hello\\nworld' AS STRING)",
             },
         )
 
@@ -1163,6 +1198,29 @@ class TestDuckDB(Validator):
 
         self.validate_identity("FORMAT('foo')")
         self.validate_identity("FORMAT('foo', 'foo2', 'foo3')")
+        self.assertEqual(
+            annotate_types(self.parse_one("LOWER('HELLO')")).sql("duckdb"), "LOWER('HELLO')"
+        )
+        self.assertEqual(
+            annotate_types(self.parse_one("UPPER('hello')")).sql("duckdb"), "UPPER('hello')"
+        )
+        self.validate_all(
+            "SELECT UUID()",
+            write={
+                "duckdb": "SELECT UUID()",
+                "bigquery": "SELECT GENERATE_UUID()",
+            },
+        )
+        self.assertEqual(
+            annotate_types(
+                self.parse_one("SELECT REPLACE('apple pie', 'pie', 'cobbler') AS result")
+            ).sql("duckdb"),
+            "SELECT REPLACE('apple pie', 'pie', 'cobbler') AS result",
+        )
+        self.validate_identity("SELECT REPLACE('apple pie', 'pie', 'cobbler') AS result")
+        self.validate_identity(
+            "SELECT REPLACE(CAST(CAST('apple pie' AS BLOB) AS TEXT), CAST(CAST('pie' AS BLOB) AS TEXT), CAST(CAST('cobbler' AS BLOB) AS TEXT)) AS result"
+        )
 
     def test_array_index(self):
         with self.assertLogs(helper_logger) as cm:
@@ -1435,6 +1493,7 @@ class TestDuckDB(Validator):
         self.validate_identity("CAST(x AS INT64)", "CAST(x AS BIGINT)")
         self.validate_identity("CAST(x AS INT32)", "CAST(x AS INT)")
         self.validate_identity("CAST(x AS INT16)", "CAST(x AS SMALLINT)")
+        self.validate_identity("CAST(x AS INT8)", "CAST(x AS BIGINT)")
         self.validate_identity("CAST(x AS NUMERIC(1, 2))", "CAST(x AS DECIMAL(1, 2))")
         self.validate_identity("CAST(x AS HUGEINT)", "CAST(x AS INT128)")
         self.validate_identity("CAST(x AS UHUGEINT)", "CAST(x AS UINT128)")
@@ -1899,6 +1958,15 @@ class TestDuckDB(Validator):
 
         self.validate_identity("SET VARIABLE my_var TO 30", "SET VARIABLE my_var = 30")
 
+        self.validate_all(
+            "SET VARIABLE a = 1",
+            write={
+                "duckdb": "SET VARIABLE a = 1",
+                "bigquery": "SET a = 1",
+                "snowflake": "SET a = 1",
+            },
+        )
+
     def test_reset(self):
         self.validate_identity("RESET threads", check_command_warning=True)
         self.validate_identity("RESET memory_limit", check_command_warning=True)
@@ -1943,3 +2011,13 @@ class TestDuckDB(Validator):
         self.validate_identity(
             "WITH RECURSIVE tbl(a, b) USING KEY (a, b) AS (SELECT a, b FROM (VALUES (1, 3), (2, 4)) AS t(a, b) UNION SELECT a + 1, b FROM tbl WHERE a < 3) SELECT * FROM tbl"
         )
+
+    def test_udf(self):
+        for keyword in ("FUNCTION", "MACRO"):
+            with self.subTest(f"Testing DuckDB's UDF for keyword: {keyword}"):
+                self.validate_identity(f"SELECT {keyword}")
+
+                self.validate_identity(f"CREATE {keyword} add(a, b) AS a + b")
+                self.validate_identity(
+                    f"CREATE {keyword} ifelse(a, b, c) AS CASE WHEN a THEN b ELSE c END"
+                )

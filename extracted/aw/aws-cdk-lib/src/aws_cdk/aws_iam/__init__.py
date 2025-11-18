@@ -10669,26 +10669,22 @@ class PolicyDocumentProps:
 
         Example::
 
-            import aws_cdk.aws_iam as iam
-            
-            
-            my_file_system_policy = iam.PolicyDocument(
-                statements=[iam.PolicyStatement(
-                    actions=["elasticfilesystem:ClientWrite", "elasticfilesystem:ClientMount"
-                    ],
-                    principals=[iam.AccountRootPrincipal()],
-                    resources=["*"],
-                    conditions={
-                        "Bool": {
-                            "elasticfilesystem:AccessedViaMountTarget": "true"
-                        }
-                    }
-                )]
+            topic = sns.Topic(self, "Topic")
+            policy_document = iam.PolicyDocument(
+                assign_sids=True,
+                statements=[
+                    iam.PolicyStatement(
+                        actions=["sns:Publish"],
+                        principals=[iam.ServicePrincipal("s3.amazonaws.com")],
+                        resources=[topic.topic_arn]
+                    )
+                ]
             )
             
-            file_system = efs.FileSystem(self, "MyEfsFileSystem",
-                vpc=ec2.Vpc(self, "VPC"),
-                file_system_policy=my_file_system_policy
+            topic_policy = sns.TopicPolicy(self, "Policy",
+                topics=[topic],
+                policy_document=policy_document,
+                enforce_sSL=True
             )
         '''
         if __debug__:

@@ -5,6 +5,7 @@ use std::process;
 use std::str::FromStr;
 use std::time::Duration;
 
+use crate::commands::{PythonUpgrade, PythonUpgradeSource};
 use uv_auth::Service;
 use uv_cache::{CacheArgs, Refresh};
 use uv_cli::comma::CommaSeparatedRequirements;
@@ -1061,6 +1062,7 @@ pub(crate) struct PythonInstallSettings {
     pub(crate) targets: Vec<String>,
     pub(crate) reinstall: bool,
     pub(crate) force: bool,
+    pub(crate) upgrade: PythonUpgrade,
     pub(crate) bin: Option<bool>,
     pub(crate) registry: Option<bool>,
     pub(crate) python_install_mirror: Option<String>,
@@ -1101,6 +1103,7 @@ impl PythonInstallSettings {
             registry,
             no_registry,
             force,
+            upgrade,
             mirror: _,
             pypy_mirror: _,
             python_downloads_json_url: _,
@@ -1112,6 +1115,11 @@ impl PythonInstallSettings {
             targets,
             reinstall,
             force,
+            upgrade: if upgrade {
+                PythonUpgrade::Enabled(PythonUpgradeSource::Install)
+            } else {
+                PythonUpgrade::Disabled
+            },
             bin: flag(bin, no_bin, "bin").or(environment.python_install_bin),
             registry: flag(registry, no_registry, "registry")
                 .or(environment.python_install_registry),
@@ -1227,12 +1235,17 @@ pub(crate) struct PythonFindSettings {
     pub(crate) show_version: bool,
     pub(crate) no_project: bool,
     pub(crate) system: bool,
+    pub(crate) python_downloads_json_url: Option<String>,
 }
 
 impl PythonFindSettings {
     /// Resolve the [`PythonFindSettings`] from the CLI and workspace configuration.
     #[allow(clippy::needless_pass_by_value)]
-    pub(crate) fn resolve(args: PythonFindArgs, _filesystem: Option<FilesystemOptions>) -> Self {
+    pub(crate) fn resolve(
+        args: PythonFindArgs,
+        filesystem: Option<FilesystemOptions>,
+        environment: EnvironmentOptions,
+    ) -> Self {
         let PythonFindArgs {
             request,
             show_version,
@@ -1240,13 +1253,32 @@ impl PythonFindSettings {
             system,
             no_system,
             script: _,
+            python_downloads_json_url,
         } = args;
+
+        let filesystem_install_mirrors = filesystem
+            .map(|fs| fs.install_mirrors.clone())
+            .unwrap_or_default();
+
+        let install_mirrors = PythonInstallMirrors {
+            python_downloads_json_url,
+            ..Default::default()
+        }
+        .combine(environment.install_mirrors)
+        .combine(filesystem_install_mirrors);
+
+        let PythonInstallMirrors {
+            python_install_mirror: _,
+            pypy_install_mirror: _,
+            python_downloads_json_url,
+        } = install_mirrors;
 
         Self {
             request,
             show_version,
             no_project,
             system: flag(system, no_system, "system").unwrap_or_default(),
+            python_downloads_json_url,
         }
     }
 }

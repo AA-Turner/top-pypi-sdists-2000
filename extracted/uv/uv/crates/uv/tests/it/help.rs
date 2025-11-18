@@ -541,9 +541,7 @@ fn help_subsubcommand() {
               Distributions can be read from a local directory by using the `file://` URL scheme.
 
           --python-downloads-json-url <PYTHON_DOWNLOADS_JSON_URL>
-              URL pointing to JSON of custom Python installations.
-              
-              Note that currently, only local paths are supported.
+              URL pointing to JSON of custom Python installations
 
       -r, --reinstall
               Reinstall the requested Python version, if it's already installed.
@@ -556,6 +554,18 @@ fn help_subsubcommand() {
               By default, uv will refuse to replace executables that it does not manage.
               
               Implies `--reinstall`.
+
+      -U, --upgrade
+              Upgrade existing Python installations to the latest patch version.
+              
+              By default, uv will not upgrade already-installed Python versions to newer patch releases.
+              With `--upgrade`, uv will upgrade to the latest available patch version for the specified
+              minor version(s).
+              
+              If the requested versions are not yet installed, uv will install them.
+              
+              This option is only supported for minor version requests, e.g., `3.12`; uv will exit with
+              an error if a patch version, e.g., `3.12.2`, is requested.
 
           --default
               Use as the default Python version.
@@ -819,6 +829,8 @@ fn help_flag_subsubcommand() {
               Reinstall the requested Python version, if it's already installed
       -f, --force
               Replace existing Python executables during installation
+      -U, --upgrade
+              Upgrade existing Python installations to the latest patch version
           --default
               Use as the default Python version
 

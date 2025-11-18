@@ -38,6 +38,7 @@ How It Works:
 
 """
 
+import datetime
 import logging as _logging
 from collections import namedtuple as _namedtuple
 
@@ -68,26 +69,22 @@ class SparkConnectGRPCInterceptor(
         self.cache_auth_token = None
         # Offset window for refreshing the cache before it expires.
         # Current value refreshes the cache 5 minutes prior to expiration.
-        self.cache_early_refresh_margin = 5 * 60 * 1000
-        self.cache_expiration_time = 0
+        self.cache_early_refresh_margin = 5 * 60
+        self.cache_expiration_time = datetime.datetime.min.replace(tzinfo=datetime.timezone.utc)
 
     def _refresh_token(self):
         if self.athena_session_id is not None:
-            import datetime
 
             self.logger.debug(f"Refreshing token for session {self.athena_session_id}")
             try:
-                get_session_endpoint_url_response = self.athena.get_session_endpoint_url(
+                get_session_endpoint_response = self.athena.get_session_endpoint(
                     SessionId=self.athena_session_id
                 )
-                self.cache_auth_token = get_session_endpoint_url_response["AuthToken"]
-                self.cache_expiration_time = (
-                    get_session_endpoint_url_response["AuthTokenExpirationTime"]
-                    - self.cache_early_refresh_margin
-                )
-                self.logger.debug(
-                    f"Next token refresh at {datetime.datetime.fromtimestamp(self.cache_expiration_time / 1000, datetime.timezone.utc) }"
-                )
+                self.cache_auth_token = get_session_endpoint_response["AuthToken"]
+                self.cache_expiration_time = get_session_endpoint_response[
+                    "AuthTokenExpirationTime"
+                ] - datetime.timedelta(seconds=self.cache_early_refresh_margin)
+                self.logger.info(f"Next token refresh at {self.cache_expiration_time}")
 
             except Exception as e:
                 self.logger.error(
@@ -96,14 +93,13 @@ class SparkConnectGRPCInterceptor(
                 raise
 
     def _with_metadata(self, client_call_details):
-        import time
 
-        now_in_ms = time.time() * 1000
+        now = datetime.datetime.now(datetime.timezone.utc)
 
         # Refresh the auth token if it is expired.
-        if self.cache_expiration_time < now_in_ms:
+        if self.cache_expiration_time < now:
             self._refresh_token()
-            self.cache_last_update = now_in_ms
+            self.cache_last_update = now
 
         dict_metadata = dict(client_call_details.metadata)
         dict_metadata["x-aws-proxy-auth"] = self.cache_auth_token
