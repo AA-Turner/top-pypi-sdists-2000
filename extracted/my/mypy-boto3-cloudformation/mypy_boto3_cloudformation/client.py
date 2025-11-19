@@ -29,6 +29,7 @@ from botocore.exceptions import ClientError as BotocoreClientError
 from .paginator import (
     DescribeAccountLimitsPaginator,
     DescribeChangeSetPaginator,
+    DescribeEventsPaginator,
     DescribeStackEventsPaginator,
     DescribeStacksPaginator,
     ListChangeSetsPaginator,
@@ -81,6 +82,8 @@ from .type_defs import (
     DescribeChangeSetHooksOutputTypeDef,
     DescribeChangeSetInputTypeDef,
     DescribeChangeSetOutputTypeDef,
+    DescribeEventsInputTypeDef,
+    DescribeEventsOutputTypeDef,
     DescribeGeneratedTemplateInputTypeDef,
     DescribeGeneratedTemplateOutputTypeDef,
     DescribeOrganizationsAccessInputTypeDef,
@@ -517,6 +520,16 @@ class CloudFormationClient(BaseClient):
 
         [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/cloudformation/client/describe_change_set_hooks.html)
         [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_cloudformation/client/#describe_change_set_hooks)
+        """
+
+    def describe_events(
+        self, **kwargs: Unpack[DescribeEventsInputTypeDef]
+    ) -> DescribeEventsOutputTypeDef:
+        """
+        Returns CloudFormation events based on flexible query criteria.
+
+        [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/cloudformation/client/describe_events.html)
+        [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_cloudformation/client/#describe_events)
         """
 
     def describe_generated_template(
@@ -1213,6 +1226,17 @@ class CloudFormationClient(BaseClient):
     def get_paginator(  # type: ignore[override]
         self, operation_name: Literal["describe_change_set"]
     ) -> DescribeChangeSetPaginator:
+        """
+        Create a paginator for an operation.
+
+        [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/cloudformation/client/get_paginator.html)
+        [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_cloudformation/client/#get_paginator)
+        """
+
+    @overload  # type: ignore[override]
+    def get_paginator(  # type: ignore[override]
+        self, operation_name: Literal["describe_events"]
+    ) -> DescribeEventsPaginator:
         """
         Create a paginator for an operation.
 

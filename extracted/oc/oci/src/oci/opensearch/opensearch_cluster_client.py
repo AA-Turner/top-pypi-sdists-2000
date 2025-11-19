@@ -162,7 +162,7 @@ class OpensearchClusterClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/opensearch/backup_opensearch_cluster.py.html>`__ to see an example of how to use backup_opensearch_cluster API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/opensearch/backup_opensearch_cluster.py.html>`__ to see an example of how to use backup_opensearch_cluster API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['opensearchClusterId']
@@ -280,7 +280,7 @@ class OpensearchClusterClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/opensearch/configure_outbound_cluster.py.html>`__ to see an example of how to use configure_outbound_cluster API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/opensearch/configure_outbound_cluster.py.html>`__ to see an example of how to use configure_outbound_cluster API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['opensearchClusterId']
@@ -388,7 +388,7 @@ class OpensearchClusterClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/opensearch/create_opensearch_cluster.py.html>`__ to see an example of how to use create_opensearch_cluster API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/opensearch/create_opensearch_cluster.py.html>`__ to see an example of how to use create_opensearch_cluster API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -482,7 +482,7 @@ class OpensearchClusterClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/opensearch/delete_opensearch_cluster.py.html>`__ to see an example of how to use delete_opensearch_cluster API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/opensearch/delete_opensearch_cluster.py.html>`__ to see an example of how to use delete_opensearch_cluster API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['opensearchClusterId']
@@ -578,7 +578,7 @@ class OpensearchClusterClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/opensearch/get_opensearch_cluster.py.html>`__ to see an example of how to use get_opensearch_cluster API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/opensearch/get_opensearch_cluster.py.html>`__ to see an example of how to use get_opensearch_cluster API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['opensearchClusterId']
@@ -674,7 +674,7 @@ class OpensearchClusterClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/opensearch/get_work_request.py.html>`__ to see an example of how to use get_work_request API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/opensearch/get_work_request.py.html>`__ to see an example of how to use get_work_request API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workRequestId']
@@ -767,7 +767,7 @@ class OpensearchClusterClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/opensearch/list_opensearch_cluster_shapes.py.html>`__ to see an example of how to use list_opensearch_cluster_shapes API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/opensearch/list_opensearch_cluster_shapes.py.html>`__ to see an example of how to use list_opensearch_cluster_shapes API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['compartmentId']
@@ -878,7 +878,7 @@ class OpensearchClusterClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/opensearch/list_opensearch_clusters.py.html>`__ to see an example of how to use list_opensearch_clusters API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/opensearch/list_opensearch_clusters.py.html>`__ to see an example of how to use list_opensearch_clusters API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['compartmentId']
@@ -1007,7 +1007,7 @@ class OpensearchClusterClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/opensearch/list_opensearch_versions.py.html>`__ to see an example of how to use list_opensearch_versions API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/opensearch/list_opensearch_versions.py.html>`__ to see an example of how to use list_opensearch_versions API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['compartmentId']
@@ -1105,7 +1105,7 @@ class OpensearchClusterClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/opensearch/list_work_request_errors.py.html>`__ to see an example of how to use list_work_request_errors API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/opensearch/list_work_request_errors.py.html>`__ to see an example of how to use list_work_request_errors API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workRequestId']
@@ -1217,7 +1217,7 @@ class OpensearchClusterClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/opensearch/list_work_request_logs.py.html>`__ to see an example of how to use list_work_request_logs API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/opensearch/list_work_request_logs.py.html>`__ to see an example of how to use list_work_request_logs API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workRequestId']
@@ -1335,7 +1335,7 @@ class OpensearchClusterClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/opensearch/list_work_requests.py.html>`__ to see an example of how to use list_work_requests API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/opensearch/list_work_requests.py.html>`__ to see an example of how to use list_work_requests API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['compartmentId']
@@ -1451,7 +1451,7 @@ class OpensearchClusterClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/opensearch/opensearch_cluster_restore.py.html>`__ to see an example of how to use opensearch_cluster_restore API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/opensearch/opensearch_cluster_restore.py.html>`__ to see an example of how to use opensearch_cluster_restore API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['opensearchClusterId']
@@ -1569,7 +1569,7 @@ class OpensearchClusterClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/opensearch/resize_opensearch_cluster_horizontal.py.html>`__ to see an example of how to use resize_opensearch_cluster_horizontal API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/opensearch/resize_opensearch_cluster_horizontal.py.html>`__ to see an example of how to use resize_opensearch_cluster_horizontal API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['opensearchClusterId']
@@ -1687,7 +1687,7 @@ class OpensearchClusterClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/opensearch/resize_opensearch_cluster_vertical.py.html>`__ to see an example of how to use resize_opensearch_cluster_vertical API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/opensearch/resize_opensearch_cluster_vertical.py.html>`__ to see an example of how to use resize_opensearch_cluster_vertical API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['opensearchClusterId']
@@ -1798,7 +1798,7 @@ class OpensearchClusterClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/opensearch/update_opensearch_cluster.py.html>`__ to see an example of how to use update_opensearch_cluster API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/opensearch/update_opensearch_cluster.py.html>`__ to see an example of how to use update_opensearch_cluster API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['opensearchClusterId']
@@ -1913,7 +1913,7 @@ class OpensearchClusterClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/opensearch/upgrade_open_search_cluster.py.html>`__ to see an example of how to use upgrade_open_search_cluster API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/opensearch/upgrade_open_search_cluster.py.html>`__ to see an example of how to use upgrade_open_search_cluster API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['opensearchClusterId']

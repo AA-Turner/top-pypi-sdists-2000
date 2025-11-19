@@ -78,7 +78,7 @@ def _symmetrize(x: Array) -> Array: return (x + _H(x)) / 2
 
 
 @export
-@partial(api.jit, static_argnames=['upper', 'symmetrize_input'])
+@api.jit(static_argnames=['upper', 'symmetrize_input'])
 def cholesky(a: ArrayLike, *, upper: bool = False, symmetrize_input: bool = True) -> Array:
   """Compute the Cholesky decomposition of a matrix.
 
@@ -330,7 +330,7 @@ def svd(
 
 
 @export
-@partial(api.jit, static_argnames=('n',))
+@api.jit(static_argnames=('n',))
 def matrix_power(a: ArrayLike, n: int) -> Array:
   """Raise a square matrix to an integer power.
 
@@ -510,7 +510,7 @@ def _slogdet_qr(a: Array) -> tuple[Array, Array]:
 
 
 @export
-@partial(api.jit, static_argnames=('method',))
+@api.jit(static_argnames=('method',))
 def slogdet(a: ArrayLike, *, method: str | None = None) -> SlogdetResult:
   """
   Compute the sign and (natural) logarithm of the determinant of an array.
@@ -812,7 +812,7 @@ def eigvals(a: ArrayLike) -> Array:
 
 
 @export
-@partial(api.jit, static_argnames=('UPLO', 'symmetrize_input'))
+@api.jit(static_argnames=('UPLO', 'symmetrize_input'))
 def eigh(a: ArrayLike, UPLO: str | None = None,
          symmetrize_input: bool = True) -> EighResult:
   """
@@ -870,7 +870,7 @@ def eigh(a: ArrayLike, UPLO: str | None = None,
 
 
 @export
-@partial(api.jit, static_argnames=('UPLO', 'symmetrize_input'))
+@api.jit(static_argnames=('UPLO', 'symmetrize_input'))
 def eigvalsh(a: ArrayLike, UPLO: str | None = 'L', *,
              symmetrize_input: bool = True) -> Array:
   """
@@ -965,7 +965,7 @@ def pinv(a: ArrayLike, rtol: ArrayLike | None = None,
 
 
 @partial(custom_jvp, nondiff_argnums=(1, 2))
-@partial(api.jit, static_argnames=('hermitian'))
+@api.jit(static_argnames=('hermitian'))
 def _pinv(a: ArrayLike, rtol: ArrayLike | None = None, hermitian: bool = False) -> Array:
   # Uses same algorithm as
   # https://github.com/numpy/numpy/blob/v1.17.0/numpy/linalg/linalg.py#L1890-L1979
@@ -1080,7 +1080,7 @@ def inv(a: ArrayLike) -> Array:
 
 
 @export
-@partial(api.jit, static_argnames=('ord', 'axis', 'keepdims'))
+@api.jit(static_argnames=('ord', 'axis', 'keepdims'))
 def norm(x: ArrayLike, ord: int | str | None = None,
          axis: None | tuple[int, ...] | int = None,
          keepdims: bool = False) -> Array:
@@ -1216,12 +1216,16 @@ def norm(x: ArrayLike, ord: int | str | None = None,
                      " compute a vector-norm, or two axes to compute a matrix-norm.")
 
 @overload
+def qr(a: ArrayLike,
+       mode: Literal["reduced", "complete", "raw", "full"] = "reduced",
+       ) -> QRResult: ...
+@overload
 def qr(a: ArrayLike, mode: Literal["r"]) -> Array: ...
 @overload
-def qr(a: ArrayLike, mode: str = "reduced") -> Array | QRResult: ...
+def qr(a: ArrayLike, mode: str) -> Array | QRResult: ...
 
 @export
-@partial(api.jit, static_argnames=('mode',))
+@api.jit(static_argnames=('mode',))
 def qr(a: ArrayLike, mode: str = "reduced") -> Array | QRResult:
   """Compute the QR decomposition of an array
 
@@ -1395,7 +1399,7 @@ def _lstsq(a: ArrayLike, b: ArrayLike, rcond: float | None, *,
     else:
       rcond = jnp.where(rcond < 0, jnp.finfo(dtype).eps, rcond)
     u, s, vt = svd(a, full_matrices=False)
-    mask = s >= jnp.array(rcond, dtype=s.dtype) * s[0]
+    mask = (s > 0) & (s >= jnp.array(rcond, dtype=s.dtype) * s[0])
     rank = mask.sum()
     safe_s = jnp.where(mask, s, 1).astype(a.dtype)
     s_inv = jnp.where(mask, 1 / safe_s, 0)[:, np.newaxis]
@@ -2130,7 +2134,7 @@ def multi_dot(arrays: Sequence[ArrayLike], *, precision: lax.PrecisionLike = Non
 
 
 @export
-@partial(api.jit, static_argnames=['p'])
+@api.jit(static_argnames=['p'])
 def cond(x: ArrayLike, p=None):
   """Compute the condition number of a matrix.
 

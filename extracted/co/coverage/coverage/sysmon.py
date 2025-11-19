@@ -5,6 +5,7 @@
 
 from __future__ import annotations
 
+import collections
 import functools
 import inspect
 import os
@@ -19,7 +20,7 @@ from typing import Any, Callable, NewType, Optional, cast
 from coverage import env
 from coverage.bytecode import TBranchTrails, always_jumps, branch_trails
 from coverage.debug import short_filename, short_stack
-from coverage.exceptions import NotPython
+from coverage.exceptions import NoSource, NotPython
 from coverage.misc import isolate_module
 from coverage.parser import PythonParser
 from coverage.types import (
@@ -223,6 +224,10 @@ class SysMonitor(Tracer):
         # A list of code_objects, just to keep them alive so that id's are
         # useful as identity.
         self.code_objects: list[CodeType] = []
+
+        # Map filename:__name__ -> set(id(code_object))
+        self.filename_code_ids: dict[str, set[int]] = collections.defaultdict(set)
+
         self.sysmon_on = False
         self.lock = threading.Lock()
 
@@ -281,6 +286,22 @@ class SysMonitor(Tracer):
             self.sysmon_on = False
             sys_monitoring.free_tool_id(self.myid)
 
+        if LOG:  # pragma: debugging
+            items = sorted(
+                self.filename_code_ids.items(),
+                key=lambda item: len(item[1]),
+                reverse=True,
+            )
+            code_objs = sum(len(code_ids) for _, code_ids in items)
+            dupes = code_objs - len(items)
+            if dupes:
+                log(f"==== Duplicate code objects: {dupes} duplicates, {code_objs} total")
+                for filename, code_ids in items:
+                    if len(code_ids) > 1:
+                        log(f"{len(code_ids):>5} objects: {filename}")
+            else:
+                log("==== Duplicate code objects: none")
+
     @panopticon()
     def post_fork(self) -> None:
         """The process has forked, clean up as needed."""
@@ -301,11 +322,11 @@ class SysMonitor(Tracer):
     @panopticon("code", "@")
     def sysmon_py_start(self, code: CodeType, instruction_offset: TOffset) -> MonitorReturn:
         """Handle sys.monitoring.events.PY_START events."""
-        # Entering a new frame.  Decide if we should trace in this file.
         self._activity = True
         if self.stats is not None:
             self.stats["starts"] += 1
 
+        # Entering a new frame.  Decide if we should trace in this file.
         code_info = self.code_infos.get(id(code))
         tracing_code: bool | None = None
         file_data: TTraceFileData | None = None
@@ -320,7 +341,7 @@ class SysMonitor(Tracer):
                 frame = inspect.currentframe()
                 if frame is not None:
                     frame = inspect.currentframe().f_back  # type: ignore[union-attr]
-                    if LOG:
+                    if LOG:  # pragma: debugging
                         # @panopticon adds a frame.
                         frame = frame.f_back  # type: ignore[union-attr]
                 disp = self.should_trace(filename, frame)  # type: ignore[arg-type]
@@ -368,6 +389,12 @@ class SysMonitor(Tracer):
                             )
                         sys_monitoring.set_local_events(self.myid, code, local_events)
 
+                        if LOG:  # pragma: debugging
+                            if code.co_filename not in {"<string>"}:
+                                self.filename_code_ids[f"{code.co_filename}:{code.co_name}"].add(
+                                    id(code)
+                                )
+
         return DISABLE
 
     @panopticon("code", "@", None)
@@ -383,7 +410,7 @@ class SysMonitor(Tracer):
         code_info = self.code_infos.get(id(code))
         # code_info is not None and code_info.file_data is not None, since we
         # wouldn't have enabled this event if they were.
-        last_line = code_info.byte_to_line[instruction_offset]  # type: ignore
+        last_line = code_info.byte_to_line.get(instruction_offset)  # type: ignore
         if last_line is not None:
             arc = (last_line, -code.co_firstlineno)
             code_info.file_data.add(arc)  # type: ignore
@@ -457,12 +484,13 @@ class SysMonitor(Tracer):
         if not added_arc:
             # This could be an exception jumping from line to line.
             assert code_info.byte_to_line is not None
-            l1 = code_info.byte_to_line[instruction_offset]
-            l2 = code_info.byte_to_line.get(destination_offset)
-            if l2 is not None and l1 != l2:
-                arc = (l1, l2)
-                code_info.file_data.add(arc)  # type: ignore
-                # log(f"adding unforeseen {arc=}")
+            l1 = code_info.byte_to_line.get(instruction_offset)
+            if l1 is not None:
+                l2 = code_info.byte_to_line.get(destination_offset)
+                if l2 is not None and l1 != l2:
+                    arc = (l1, l2)
+                    code_info.file_data.add(arc)  # type: ignore
+                    # log(f"adding unforeseen {arc=}")
 
         return DISABLE
 
@@ -470,13 +498,16 @@ class SysMonitor(Tracer):
 @functools.lru_cache(maxsize=5)
 def get_multiline_map(filename: str) -> dict[TLineNo, TLineNo]:
     """Get a PythonParser for the given filename, cached."""
-    parser = PythonParser(filename=filename)
     try:
+        parser = PythonParser(filename=filename)
         parser.parse_source()
     except NotPython:
         # The file was not Python. This can happen when the code object refers
         # to an original non-Python source file, like a Jinja template.
         # In that case, just return an empty map, which might lead to slightly
         # wrong branch coverage, but we don't have any better option.
+        return {}
+    except NoSource:
+        # This can happen if open() in python.py fails.
         return {}
     return parser.multiline_map

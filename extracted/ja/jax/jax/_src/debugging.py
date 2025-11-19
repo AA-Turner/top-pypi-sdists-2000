@@ -16,6 +16,7 @@
 from __future__ import annotations
 
 from collections.abc import Callable, Sequence
+import copy
 from functools import partial
 import importlib.util
 import logging
@@ -34,8 +35,9 @@ from jax._src import dispatch
 from jax._src import effects
 from jax._src import lax
 from jax._src import mesh as mesh_lib
-from jax._src import sharding_impls
 from jax._src import shard_map
+from jax._src import sharding_impls
+from jax._src import source_info_util
 from jax._src import tree_util
 from jax._src import util
 from jax._src import xla_bridge
@@ -93,7 +95,9 @@ def debug_callback_impl(*args, callback: Callable[..., Any],
         " JAX_PLATFORMS environment variable."
     ) from e
   args = api.device_put(args, cpu_device)
-  with config.default_device(cpu_device):
+  with (config.default_device(cpu_device),
+        sharding_impls._internal_use_concrete_mesh(mesh_lib.empty_concrete_mesh),
+        mesh_lib.use_abstract_mesh(mesh_lib.empty_abstract_mesh)):
     try:
       callback(*args)
     except BaseException:
@@ -320,9 +324,11 @@ def debug_print_impl(
     static_args,
     np_printoptions,
     has_placeholders,
+    logging_record,
 ):
   callback = partial(
-      _format_print_callback, fmt, dict(np_printoptions), has_placeholders
+      _format_print_callback, fmt, dict(np_printoptions), has_placeholders,
+      logging_record,
   )
   callback = _make_flat_callback(in_tree, callback, static_args)
   effect = ordered_debug_effect if ordered else debug_effect
@@ -369,9 +375,14 @@ def debug_print_lowering_rule(
     static_args,
     np_printoptions,
     has_placeholders,
+    logging_record,
 ):
   callback = partial(
-      _format_print_callback, fmt, dict(np_printoptions), has_placeholders
+      _format_print_callback,
+      fmt,
+      dict(np_printoptions),
+      has_placeholders,
+      logging_record,
   )
   callback = _make_flat_callback(in_tree, callback, static_args)
   effect = ordered_debug_effect if ordered else debug_effect
@@ -488,14 +499,35 @@ formatter = _DebugPrintFormatChecker()
 
 
 def _format_print_callback(
-    fmt: str, np_printoptions, has_placeholders, *args, **kwargs
+    fmt: str, np_printoptions, has_placeholders, logging_record, *args, **kwargs
 ):
   if has_placeholders:
     with np.printoptions(**np_printoptions):
-      sys.stdout.write(fmt.format(*args, **kwargs) + "\n")
+      msg = fmt.format(*args, **kwargs)
   else:
     assert not kwargs, "Format without placeholders should not have kwargs."
-    sys.stdout.write(" ".join((fmt, *(str(a) for a in args))) + "\n")
+    msg = " ".join((fmt, *(str(a) for a in args)))
+  if logging_record:
+    logging_record = copy.copy(logging_record)
+    logging_record.msg = msg
+    logger.handle(logging_record)
+  else:
+    sys.stdout.write(msg + "\n")
+
+
+def _make_logging_record(level):
+  si = source_info_util.current()
+  user_frame = source_info_util.user_frame(si.traceback)
+
+  file_name = "(unknown file)"
+  line_no = 0
+  if user_frame:
+    file_name = user_frame.file_name
+    line_no = user_frame.start_line
+  args = ()
+  return logger.makeRecord(
+      logger.name, level, file_name, line_no, "", args, None
+  )
 
 
 def debug_print(
@@ -504,6 +536,7 @@ def debug_print(
     ordered: bool = False,
     partitioned: bool = False,
     skip_format_check: bool = False,
+    _use_logging: bool = False,
     **kwargs,
 ) -> None:
   """Prints values and works in staged out JAX functions.
@@ -564,8 +597,12 @@ def debug_print(
       static_args=static_args,
       np_printoptions=np_printoptions,
       has_placeholders=has_placeholders,
+      logging_record=(_make_logging_record(logging.INFO) if _use_logging
+                      else None),
   )
 
+
+debug_log = partial(debug_print, _use_logging=True)
 
 # Sharding visualization
 
@@ -905,10 +942,12 @@ def _debug_print_eager_rule(
     static_args,
     np_printoptions,
     has_placeholders,
+    logging_record,
 ):
   del ordered, partitioned
   callback = partial(
-      _format_print_callback, fmt, dict(np_printoptions), has_placeholders
+      _format_print_callback, fmt, dict(np_printoptions), has_placeholders,
+      logging_record,
   )
   callback = _make_flat_callback(in_tree, callback, static_args)
   with core.eval_context():

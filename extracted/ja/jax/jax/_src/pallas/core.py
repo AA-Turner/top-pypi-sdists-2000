@@ -479,6 +479,10 @@ class BlockSpec:
 
   def __post_init__(self):
     if self.index_map is not None:
+      # TODO(sharadmv): Add this once we have a better way to handle
+      # index_map equality.
+      # self.index_map = _IndexMapFunc(
+      #     traceback_util.api_boundary(self.index_map, repro_user_func=True))
       self.index_map = _IndexMapFunc(self.index_map)
 
   def to_block_mapping(
@@ -1208,7 +1212,7 @@ def get_grid_mapping(
   if grid_spec.scratch_shapes:
     flat_scratch_shapes, scratch_tree = tree_util.tree_flatten(
         grid_spec.scratch_shapes)
-    flat_scratch_avals = tuple(s.get_ref_aval() for s in  flat_scratch_shapes)
+    flat_scratch_avals = tuple(s.get_ref_aval() for s in flat_scratch_shapes)
     jaxpr_scratch_avals = tree_util.tree_unflatten(
         scratch_tree, flat_scratch_avals)
     if not isinstance(jaxpr_scratch_avals, (tuple, list)):
@@ -1391,6 +1395,7 @@ def core_map(
     interpret: Whether to run the function in interpret mode.
     debug: Whether or not to out helpful debugging information.
     cost_estimate: The cost estimate of the function.
+    name: The (optional) name of the kernel.
     metadata: Optional dictionary of information about the kernel that will be
       serialized as JSON in the HLO. Can be used for debugging and analysis.
   """
@@ -1535,6 +1540,7 @@ def default_mesh_discharge_rule(
     name,
     memory_space=MemorySpace.ANY,
     metadata,
+    scratch_shapes,
 ):
   """Discharges a ``core_map`` over a mesh to a ``pallas_call``."""
   del out_avals  # Unused.
@@ -1578,6 +1584,7 @@ def default_mesh_discharge_rule(
           grid=tuple(mesh.shape.items()),
           in_specs=in_specs,
           out_specs=out_specs,
+          scratch_shapes=scratch_shapes,
       ),
       mesh=mesh,
       compiler_params=compiler_params,

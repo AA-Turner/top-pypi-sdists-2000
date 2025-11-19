@@ -166,7 +166,7 @@ class ComputeClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/core/accept_shielded_integrity_policy.py.html>`__ to see an example of how to use accept_shielded_integrity_policy API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/core/accept_shielded_integrity_policy.py.html>`__ to see an example of how to use accept_shielded_integrity_policy API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['instanceId']
@@ -270,7 +270,7 @@ class ComputeClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/core/add_image_shape_compatibility_entry.py.html>`__ to see an example of how to use add_image_shape_compatibility_entry API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/core/add_image_shape_compatibility_entry.py.html>`__ to see an example of how to use add_image_shape_compatibility_entry API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['imageId', 'shapeName']
@@ -371,7 +371,7 @@ class ComputeClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/core/attach_boot_volume.py.html>`__ to see an example of how to use attach_boot_volume API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/core/attach_boot_volume.py.html>`__ to see an example of how to use attach_boot_volume API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -478,7 +478,7 @@ class ComputeClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/core/attach_compute_host_group_host.py.html>`__ to see an example of how to use attach_compute_host_group_host API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/core/attach_compute_host_group_host.py.html>`__ to see an example of how to use attach_compute_host_group_host API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['computeHostId']
@@ -591,7 +591,7 @@ class ComputeClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/core/attach_vnic.py.html>`__ to see an example of how to use attach_vnic API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/core/attach_vnic.py.html>`__ to see an example of how to use attach_vnic API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -682,7 +682,7 @@ class ComputeClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/core/attach_volume.py.html>`__ to see an example of how to use attach_volume API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/core/attach_volume.py.html>`__ to see an example of how to use attach_volume API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -789,7 +789,7 @@ class ComputeClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/core/capture_console_history.py.html>`__ to see an example of how to use capture_console_history API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/core/capture_console_history.py.html>`__ to see an example of how to use capture_console_history API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -896,7 +896,7 @@ class ComputeClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/core/change_compute_capacity_reservation_compartment.py.html>`__ to see an example of how to use change_compute_capacity_reservation_compartment API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/core/change_compute_capacity_reservation_compartment.py.html>`__ to see an example of how to use change_compute_capacity_reservation_compartment API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['capacityReservationId']
@@ -1018,7 +1018,7 @@ class ComputeClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/core/change_compute_capacity_topology_compartment.py.html>`__ to see an example of how to use change_compute_capacity_topology_compartment API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/core/change_compute_capacity_topology_compartment.py.html>`__ to see an example of how to use change_compute_capacity_topology_compartment API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['computeCapacityTopologyId']
@@ -1149,7 +1149,7 @@ class ComputeClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/core/change_compute_cluster_compartment.py.html>`__ to see an example of how to use change_compute_cluster_compartment API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/core/change_compute_cluster_compartment.py.html>`__ to see an example of how to use change_compute_cluster_compartment API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['computeClusterId']
@@ -1269,7 +1269,7 @@ class ComputeClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/core/change_compute_gpu_memory_cluster_compartment.py.html>`__ to see an example of how to use change_compute_gpu_memory_cluster_compartment API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/core/change_compute_gpu_memory_cluster_compartment.py.html>`__ to see an example of how to use change_compute_gpu_memory_cluster_compartment API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['computeGpuMemoryClusterId']
@@ -1391,7 +1391,7 @@ class ComputeClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/core/change_compute_gpu_memory_fabric_compartment.py.html>`__ to see an example of how to use change_compute_gpu_memory_fabric_compartment API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/core/change_compute_gpu_memory_fabric_compartment.py.html>`__ to see an example of how to use change_compute_gpu_memory_fabric_compartment API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['computeGpuMemoryFabricId']
@@ -1515,7 +1515,7 @@ class ComputeClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/core/change_compute_host_compartment.py.html>`__ to see an example of how to use change_compute_host_compartment API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/core/change_compute_host_compartment.py.html>`__ to see an example of how to use change_compute_host_compartment API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['computeHostId']
@@ -1639,7 +1639,7 @@ class ComputeClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/core/change_compute_host_group_compartment.py.html>`__ to see an example of how to use change_compute_host_group_compartment API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/core/change_compute_host_group_compartment.py.html>`__ to see an example of how to use change_compute_host_group_compartment API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['computeHostGroupId']
@@ -1762,7 +1762,7 @@ class ComputeClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/core/change_compute_image_capability_schema_compartment.py.html>`__ to see an example of how to use change_compute_image_capability_schema_compartment API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/core/change_compute_image_capability_schema_compartment.py.html>`__ to see an example of how to use change_compute_image_capability_schema_compartment API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['computeImageCapabilitySchemaId']
@@ -1881,7 +1881,7 @@ class ComputeClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/core/change_dedicated_vm_host_compartment.py.html>`__ to see an example of how to use change_dedicated_vm_host_compartment API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/core/change_dedicated_vm_host_compartment.py.html>`__ to see an example of how to use change_dedicated_vm_host_compartment API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['dedicatedVmHostId']
@@ -2004,7 +2004,7 @@ class ComputeClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/core/change_image_compartment.py.html>`__ to see an example of how to use change_image_compartment API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/core/change_image_compartment.py.html>`__ to see an example of how to use change_image_compartment API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['imageId']
@@ -2132,7 +2132,7 @@ class ComputeClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/core/change_instance_compartment.py.html>`__ to see an example of how to use change_instance_compartment API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/core/change_instance_compartment.py.html>`__ to see an example of how to use change_instance_compartment API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['instanceId']
@@ -2237,7 +2237,7 @@ class ComputeClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/core/create_app_catalog_subscription.py.html>`__ to see an example of how to use create_app_catalog_subscription API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/core/create_app_catalog_subscription.py.html>`__ to see an example of how to use create_app_catalog_subscription API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -2339,7 +2339,7 @@ class ComputeClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/core/create_compute_capacity_report.py.html>`__ to see an example of how to use create_compute_capacity_report API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/core/create_compute_capacity_report.py.html>`__ to see an example of how to use create_compute_capacity_report API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -2446,7 +2446,7 @@ class ComputeClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/core/create_compute_capacity_reservation.py.html>`__ to see an example of how to use create_compute_capacity_reservation API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/core/create_compute_capacity_reservation.py.html>`__ to see an example of how to use create_compute_capacity_reservation API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -2548,7 +2548,7 @@ class ComputeClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/core/create_compute_capacity_topology.py.html>`__ to see an example of how to use create_compute_capacity_topology API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/core/create_compute_capacity_topology.py.html>`__ to see an example of how to use create_compute_capacity_topology API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -2672,7 +2672,7 @@ class ComputeClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/core/create_compute_cluster.py.html>`__ to see an example of how to use create_compute_cluster API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/core/create_compute_cluster.py.html>`__ to see an example of how to use create_compute_cluster API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -2769,7 +2769,7 @@ class ComputeClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/core/create_compute_gpu_memory_cluster.py.html>`__ to see an example of how to use create_compute_gpu_memory_cluster API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/core/create_compute_gpu_memory_cluster.py.html>`__ to see an example of how to use create_compute_gpu_memory_cluster API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -2868,7 +2868,7 @@ class ComputeClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/core/create_compute_host_group.py.html>`__ to see an example of how to use create_compute_host_group API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/core/create_compute_host_group.py.html>`__ to see an example of how to use create_compute_host_group API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -2963,7 +2963,7 @@ class ComputeClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/core/create_compute_image_capability_schema.py.html>`__ to see an example of how to use create_compute_image_capability_schema API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/core/create_compute_image_capability_schema.py.html>`__ to see an example of how to use create_compute_image_capability_schema API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -3065,7 +3065,7 @@ class ComputeClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/core/create_dedicated_vm_host.py.html>`__ to see an example of how to use create_dedicated_vm_host API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/core/create_dedicated_vm_host.py.html>`__ to see an example of how to use create_dedicated_vm_host API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -3185,7 +3185,7 @@ class ComputeClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/core/create_image.py.html>`__ to see an example of how to use create_image API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/core/create_image.py.html>`__ to see an example of how to use create_image API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -3284,7 +3284,7 @@ class ComputeClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/core/create_instance_console_connection.py.html>`__ to see an example of how to use create_instance_console_connection API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/core/create_instance_console_connection.py.html>`__ to see an example of how to use create_instance_console_connection API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -3376,7 +3376,7 @@ class ComputeClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/core/delete_app_catalog_subscription.py.html>`__ to see an example of how to use delete_app_catalog_subscription API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/core/delete_app_catalog_subscription.py.html>`__ to see an example of how to use delete_app_catalog_subscription API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['listingId', 'compartmentId', 'resourceVersion']
@@ -3466,7 +3466,7 @@ class ComputeClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/core/delete_compute_capacity_reservation.py.html>`__ to see an example of how to use delete_compute_capacity_reservation API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/core/delete_compute_capacity_reservation.py.html>`__ to see an example of how to use delete_compute_capacity_reservation API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['capacityReservationId']
@@ -3570,7 +3570,7 @@ class ComputeClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/core/delete_compute_capacity_topology.py.html>`__ to see an example of how to use delete_compute_capacity_topology API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/core/delete_compute_capacity_topology.py.html>`__ to see an example of how to use delete_compute_capacity_topology API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['computeCapacityTopologyId']
@@ -3685,7 +3685,7 @@ class ComputeClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/core/delete_compute_cluster.py.html>`__ to see an example of how to use delete_compute_cluster API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/core/delete_compute_cluster.py.html>`__ to see an example of how to use delete_compute_cluster API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['computeClusterId']
@@ -3787,7 +3787,7 @@ class ComputeClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/core/delete_compute_gpu_memory_cluster.py.html>`__ to see an example of how to use delete_compute_gpu_memory_cluster API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/core/delete_compute_gpu_memory_cluster.py.html>`__ to see an example of how to use delete_compute_gpu_memory_cluster API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['computeGpuMemoryClusterId']
@@ -3893,7 +3893,7 @@ class ComputeClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/core/delete_compute_host_group.py.html>`__ to see an example of how to use delete_compute_host_group API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/core/delete_compute_host_group.py.html>`__ to see an example of how to use delete_compute_host_group API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['computeHostGroupId']
@@ -3991,7 +3991,7 @@ class ComputeClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/core/delete_compute_image_capability_schema.py.html>`__ to see an example of how to use delete_compute_image_capability_schema API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/core/delete_compute_image_capability_schema.py.html>`__ to see an example of how to use delete_compute_image_capability_schema API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['computeImageCapabilitySchemaId']
@@ -4087,7 +4087,7 @@ class ComputeClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/core/delete_console_history.py.html>`__ to see an example of how to use delete_console_history API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/core/delete_console_history.py.html>`__ to see an example of how to use delete_console_history API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['instanceConsoleHistoryId']
@@ -4185,7 +4185,7 @@ class ComputeClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/core/delete_dedicated_vm_host.py.html>`__ to see an example of how to use delete_dedicated_vm_host API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/core/delete_dedicated_vm_host.py.html>`__ to see an example of how to use delete_dedicated_vm_host API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['dedicatedVmHostId']
@@ -4283,7 +4283,7 @@ class ComputeClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/core/delete_image.py.html>`__ to see an example of how to use delete_image API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/core/delete_image.py.html>`__ to see an example of how to use delete_image API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['imageId']
@@ -4379,7 +4379,7 @@ class ComputeClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/core/delete_instance_console_connection.py.html>`__ to see an example of how to use delete_instance_console_connection API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/core/delete_instance_console_connection.py.html>`__ to see an example of how to use delete_instance_console_connection API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['instanceConsoleConnectionId']
@@ -4478,7 +4478,7 @@ class ComputeClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/core/detach_boot_volume.py.html>`__ to see an example of how to use detach_boot_volume API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/core/detach_boot_volume.py.html>`__ to see an example of how to use detach_boot_volume API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['bootVolumeAttachmentId']
@@ -4592,7 +4592,7 @@ class ComputeClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/core/detach_compute_host_group_host.py.html>`__ to see an example of how to use detach_compute_host_group_host API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/core/detach_compute_host_group_host.py.html>`__ to see an example of how to use detach_compute_host_group_host API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['computeHostId']
@@ -4708,7 +4708,7 @@ class ComputeClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/core/detach_vnic.py.html>`__ to see an example of how to use detach_vnic API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/core/detach_vnic.py.html>`__ to see an example of how to use detach_vnic API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['vnicAttachmentId']
@@ -4807,7 +4807,7 @@ class ComputeClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/core/detach_volume.py.html>`__ to see an example of how to use detach_volume API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/core/detach_volume.py.html>`__ to see an example of how to use detach_volume API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['volumeAttachmentId']
@@ -4929,7 +4929,7 @@ class ComputeClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/core/export_image.py.html>`__ to see an example of how to use export_image API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/core/export_image.py.html>`__ to see an example of how to use export_image API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['imageId']
@@ -5029,7 +5029,7 @@ class ComputeClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/core/get_app_catalog_listing.py.html>`__ to see an example of how to use get_app_catalog_listing API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/core/get_app_catalog_listing.py.html>`__ to see an example of how to use get_app_catalog_listing API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['listingId']
@@ -5120,7 +5120,7 @@ class ComputeClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/core/get_app_catalog_listing_agreements.py.html>`__ to see an example of how to use get_app_catalog_listing_agreements API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/core/get_app_catalog_listing_agreements.py.html>`__ to see an example of how to use get_app_catalog_listing_agreements API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['listingId', 'resourceVersion']
@@ -5212,7 +5212,7 @@ class ComputeClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/core/get_app_catalog_listing_resource_version.py.html>`__ to see an example of how to use get_app_catalog_listing_resource_version API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/core/get_app_catalog_listing_resource_version.py.html>`__ to see an example of how to use get_app_catalog_listing_resource_version API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['listingId', 'resourceVersion']
@@ -5301,7 +5301,7 @@ class ComputeClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/core/get_boot_volume_attachment.py.html>`__ to see an example of how to use get_boot_volume_attachment API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/core/get_boot_volume_attachment.py.html>`__ to see an example of how to use get_boot_volume_attachment API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['bootVolumeAttachmentId']
@@ -5391,7 +5391,7 @@ class ComputeClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/core/get_compute_capacity_reservation.py.html>`__ to see an example of how to use get_compute_capacity_reservation API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/core/get_compute_capacity_reservation.py.html>`__ to see an example of how to use get_compute_capacity_reservation API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['capacityReservationId']
@@ -5490,7 +5490,7 @@ class ComputeClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/core/get_compute_capacity_topology.py.html>`__ to see an example of how to use get_compute_capacity_topology API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/core/get_compute_capacity_topology.py.html>`__ to see an example of how to use get_compute_capacity_topology API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['computeCapacityTopologyId']
@@ -5597,7 +5597,7 @@ class ComputeClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/core/get_compute_cluster.py.html>`__ to see an example of how to use get_compute_cluster API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/core/get_compute_cluster.py.html>`__ to see an example of how to use get_compute_cluster API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['computeClusterId']
@@ -5692,7 +5692,7 @@ class ComputeClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/core/get_compute_global_image_capability_schema.py.html>`__ to see an example of how to use get_compute_global_image_capability_schema API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/core/get_compute_global_image_capability_schema.py.html>`__ to see an example of how to use get_compute_global_image_capability_schema API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['computeGlobalImageCapabilitySchemaId']
@@ -5785,7 +5785,7 @@ class ComputeClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/core/get_compute_global_image_capability_schema_version.py.html>`__ to see an example of how to use get_compute_global_image_capability_schema_version API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/core/get_compute_global_image_capability_schema_version.py.html>`__ to see an example of how to use get_compute_global_image_capability_schema_version API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['computeGlobalImageCapabilitySchemaId', 'computeGlobalImageCapabilitySchemaVersionName']
@@ -5878,7 +5878,7 @@ class ComputeClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/core/get_compute_gpu_memory_cluster.py.html>`__ to see an example of how to use get_compute_gpu_memory_cluster API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/core/get_compute_gpu_memory_cluster.py.html>`__ to see an example of how to use get_compute_gpu_memory_cluster API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['computeGpuMemoryClusterId']
@@ -5975,7 +5975,7 @@ class ComputeClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/core/get_compute_gpu_memory_fabric.py.html>`__ to see an example of how to use get_compute_gpu_memory_fabric API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/core/get_compute_gpu_memory_fabric.py.html>`__ to see an example of how to use get_compute_gpu_memory_fabric API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['computeGpuMemoryFabricId']
@@ -6076,7 +6076,7 @@ class ComputeClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/core/get_compute_host.py.html>`__ to see an example of how to use get_compute_host API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/core/get_compute_host.py.html>`__ to see an example of how to use get_compute_host API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['computeHostId']
@@ -6177,7 +6177,7 @@ class ComputeClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/core/get_compute_host_group.py.html>`__ to see an example of how to use get_compute_host_group API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/core/get_compute_host_group.py.html>`__ to see an example of how to use get_compute_host_group API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['computeHostGroupId']
@@ -6275,7 +6275,7 @@ class ComputeClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/core/get_compute_image_capability_schema.py.html>`__ to see an example of how to use get_compute_image_capability_schema API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/core/get_compute_image_capability_schema.py.html>`__ to see an example of how to use get_compute_image_capability_schema API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['computeImageCapabilitySchemaId']
@@ -6377,7 +6377,7 @@ class ComputeClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/core/get_console_history.py.html>`__ to see an example of how to use get_console_history API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/core/get_console_history.py.html>`__ to see an example of how to use get_console_history API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['instanceConsoleHistoryId']
@@ -6471,7 +6471,7 @@ class ComputeClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/core/get_console_history_content.py.html>`__ to see an example of how to use get_console_history_content API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/core/get_console_history_content.py.html>`__ to see an example of how to use get_console_history_content API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['instanceConsoleHistoryId']
@@ -6575,7 +6575,7 @@ class ComputeClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/core/get_dedicated_vm_host.py.html>`__ to see an example of how to use get_dedicated_vm_host API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/core/get_dedicated_vm_host.py.html>`__ to see an example of how to use get_dedicated_vm_host API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['dedicatedVmHostId']
@@ -6670,7 +6670,7 @@ class ComputeClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/core/get_image.py.html>`__ to see an example of how to use get_image API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/core/get_image.py.html>`__ to see an example of how to use get_image API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['imageId']
@@ -6767,7 +6767,7 @@ class ComputeClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/core/get_image_shape_compatibility_entry.py.html>`__ to see an example of how to use get_image_shape_compatibility_entry API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/core/get_image_shape_compatibility_entry.py.html>`__ to see an example of how to use get_image_shape_compatibility_entry API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['imageId', 'shapeName']
@@ -6868,7 +6868,7 @@ class ComputeClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/core/get_instance.py.html>`__ to see an example of how to use get_instance API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/core/get_instance.py.html>`__ to see an example of how to use get_instance API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['instanceId']
@@ -6954,7 +6954,7 @@ class ComputeClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/core/get_instance_console_connection.py.html>`__ to see an example of how to use get_instance_console_connection API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/core/get_instance_console_connection.py.html>`__ to see an example of how to use get_instance_console_connection API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['instanceConsoleConnectionId']
@@ -7044,7 +7044,7 @@ class ComputeClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/core/get_instance_maintenance_event.py.html>`__ to see an example of how to use get_instance_maintenance_event API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/core/get_instance_maintenance_event.py.html>`__ to see an example of how to use get_instance_maintenance_event API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['instanceMaintenanceEventId']
@@ -7146,7 +7146,7 @@ class ComputeClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/core/get_instance_maintenance_reboot.py.html>`__ to see an example of how to use get_instance_maintenance_reboot API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/core/get_instance_maintenance_reboot.py.html>`__ to see an example of how to use get_instance_maintenance_reboot API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['instanceId']
@@ -7245,7 +7245,7 @@ class ComputeClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/core/get_measured_boot_report.py.html>`__ to see an example of how to use get_measured_boot_report API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/core/get_measured_boot_report.py.html>`__ to see an example of how to use get_measured_boot_report API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['instanceId']
@@ -7338,7 +7338,7 @@ class ComputeClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/core/get_vnic_attachment.py.html>`__ to see an example of how to use get_vnic_attachment API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/core/get_vnic_attachment.py.html>`__ to see an example of how to use get_vnic_attachment API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['vnicAttachmentId']
@@ -7424,7 +7424,7 @@ class ComputeClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/core/get_volume_attachment.py.html>`__ to see an example of how to use get_volume_attachment API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/core/get_volume_attachment.py.html>`__ to see an example of how to use get_volume_attachment API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['volumeAttachmentId']
@@ -7513,7 +7513,7 @@ class ComputeClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/core/get_windows_instance_initial_credentials.py.html>`__ to see an example of how to use get_windows_instance_initial_credentials API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/core/get_windows_instance_initial_credentials.py.html>`__ to see an example of how to use get_windows_instance_initial_credentials API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['instanceId']
@@ -7667,7 +7667,7 @@ class ComputeClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/core/instance_action.py.html>`__ to see an example of how to use instance_action API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/core/instance_action.py.html>`__ to see an example of how to use instance_action API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['instanceId', 'action']
@@ -7833,7 +7833,7 @@ class ComputeClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/core/launch_instance.py.html>`__ to see an example of how to use launch_instance API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/core/launch_instance.py.html>`__ to see an example of how to use launch_instance API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -7939,7 +7939,7 @@ class ComputeClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/core/list_app_catalog_listing_resource_versions.py.html>`__ to see an example of how to use list_app_catalog_listing_resource_versions API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/core/list_app_catalog_listing_resource_versions.py.html>`__ to see an example of how to use list_app_catalog_listing_resource_versions API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['listingId']
@@ -8078,7 +8078,7 @@ class ComputeClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/core/list_app_catalog_listings.py.html>`__ to see an example of how to use list_app_catalog_listings API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/core/list_app_catalog_listings.py.html>`__ to see an example of how to use list_app_catalog_listings API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -8222,7 +8222,7 @@ class ComputeClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/core/list_app_catalog_subscriptions.py.html>`__ to see an example of how to use list_app_catalog_subscriptions API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/core/list_app_catalog_subscriptions.py.html>`__ to see an example of how to use list_app_catalog_subscriptions API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['compartmentId']
@@ -8363,7 +8363,7 @@ class ComputeClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/core/list_boot_volume_attachments.py.html>`__ to see an example of how to use list_boot_volume_attachments API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/core/list_boot_volume_attachments.py.html>`__ to see an example of how to use list_boot_volume_attachments API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['availabilityDomain', 'compartmentId']
@@ -8505,7 +8505,7 @@ class ComputeClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/core/list_compute_capacity_reservation_instance_shapes.py.html>`__ to see an example of how to use list_compute_capacity_reservation_instance_shapes API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/core/list_compute_capacity_reservation_instance_shapes.py.html>`__ to see an example of how to use list_compute_capacity_reservation_instance_shapes API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['compartmentId']
@@ -8667,7 +8667,7 @@ class ComputeClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/core/list_compute_capacity_reservation_instances.py.html>`__ to see an example of how to use list_compute_capacity_reservation_instances API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/core/list_compute_capacity_reservation_instances.py.html>`__ to see an example of how to use list_compute_capacity_reservation_instances API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['capacityReservationId']
@@ -8848,7 +8848,7 @@ class ComputeClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/core/list_compute_capacity_reservations.py.html>`__ to see an example of how to use list_compute_capacity_reservations API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/core/list_compute_capacity_reservations.py.html>`__ to see an example of how to use list_compute_capacity_reservations API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['compartmentId']
@@ -9020,7 +9020,7 @@ class ComputeClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/core/list_compute_capacity_topologies.py.html>`__ to see an example of how to use list_compute_capacity_topologies API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/core/list_compute_capacity_topologies.py.html>`__ to see an example of how to use list_compute_capacity_topologies API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['compartmentId']
@@ -9201,7 +9201,7 @@ class ComputeClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/core/list_compute_capacity_topology_compute_bare_metal_hosts.py.html>`__ to see an example of how to use list_compute_capacity_topology_compute_bare_metal_hosts API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/core/list_compute_capacity_topology_compute_bare_metal_hosts.py.html>`__ to see an example of how to use list_compute_capacity_topology_compute_bare_metal_hosts API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['computeCapacityTopologyId']
@@ -9384,7 +9384,7 @@ class ComputeClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/core/list_compute_capacity_topology_compute_hpc_islands.py.html>`__ to see an example of how to use list_compute_capacity_topology_compute_hpc_islands API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/core/list_compute_capacity_topology_compute_hpc_islands.py.html>`__ to see an example of how to use list_compute_capacity_topology_compute_hpc_islands API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['computeCapacityTopologyId']
@@ -9566,7 +9566,7 @@ class ComputeClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/core/list_compute_capacity_topology_compute_network_blocks.py.html>`__ to see an example of how to use list_compute_capacity_topology_compute_network_blocks API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/core/list_compute_capacity_topology_compute_network_blocks.py.html>`__ to see an example of how to use list_compute_capacity_topology_compute_network_blocks API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['computeCapacityTopologyId']
@@ -9746,7 +9746,7 @@ class ComputeClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/core/list_compute_clusters.py.html>`__ to see an example of how to use list_compute_clusters API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/core/list_compute_clusters.py.html>`__ to see an example of how to use list_compute_clusters API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['compartmentId']
@@ -9899,7 +9899,7 @@ class ComputeClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/core/list_compute_global_image_capability_schema_versions.py.html>`__ to see an example of how to use list_compute_global_image_capability_schema_versions API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/core/list_compute_global_image_capability_schema_versions.py.html>`__ to see an example of how to use list_compute_global_image_capability_schema_versions API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['computeGlobalImageCapabilitySchemaId']
@@ -10058,7 +10058,7 @@ class ComputeClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/core/list_compute_global_image_capability_schemas.py.html>`__ to see an example of how to use list_compute_global_image_capability_schemas API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/core/list_compute_global_image_capability_schemas.py.html>`__ to see an example of how to use list_compute_global_image_capability_schemas API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -10208,7 +10208,7 @@ class ComputeClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/core/list_compute_gpu_memory_cluster_instances.py.html>`__ to see an example of how to use list_compute_gpu_memory_cluster_instances API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/core/list_compute_gpu_memory_cluster_instances.py.html>`__ to see an example of how to use list_compute_gpu_memory_cluster_instances API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['computeGpuMemoryClusterId']
@@ -10390,7 +10390,7 @@ class ComputeClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/core/list_compute_gpu_memory_clusters.py.html>`__ to see an example of how to use list_compute_gpu_memory_clusters API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/core/list_compute_gpu_memory_clusters.py.html>`__ to see an example of how to use list_compute_gpu_memory_clusters API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['compartmentId']
@@ -10581,7 +10581,7 @@ class ComputeClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/core/list_compute_gpu_memory_fabrics.py.html>`__ to see an example of how to use list_compute_gpu_memory_fabrics API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/core/list_compute_gpu_memory_fabrics.py.html>`__ to see an example of how to use list_compute_gpu_memory_fabrics API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['compartmentId']
@@ -10743,7 +10743,7 @@ class ComputeClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/core/list_compute_host_groups.py.html>`__ to see an example of how to use list_compute_host_groups API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/core/list_compute_host_groups.py.html>`__ to see an example of how to use list_compute_host_groups API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['compartmentId']
@@ -10909,7 +10909,7 @@ class ComputeClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/core/list_compute_hosts.py.html>`__ to see an example of how to use list_compute_hosts API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/core/list_compute_hosts.py.html>`__ to see an example of how to use list_compute_hosts API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['compartmentId']
@@ -11077,7 +11077,7 @@ class ComputeClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/core/list_compute_image_capability_schemas.py.html>`__ to see an example of how to use list_compute_image_capability_schemas API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/core/list_compute_image_capability_schemas.py.html>`__ to see an example of how to use list_compute_image_capability_schemas API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -11241,7 +11241,7 @@ class ComputeClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/core/list_console_histories.py.html>`__ to see an example of how to use list_console_histories API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/core/list_console_histories.py.html>`__ to see an example of how to use list_console_histories API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['compartmentId']
@@ -11392,7 +11392,7 @@ class ComputeClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/core/list_dedicated_vm_host_instance_shapes.py.html>`__ to see an example of how to use list_dedicated_vm_host_instance_shapes API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/core/list_dedicated_vm_host_instance_shapes.py.html>`__ to see an example of how to use list_dedicated_vm_host_instance_shapes API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['compartmentId']
@@ -11539,7 +11539,7 @@ class ComputeClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/core/list_dedicated_vm_host_instances.py.html>`__ to see an example of how to use list_dedicated_vm_host_instances API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/core/list_dedicated_vm_host_instances.py.html>`__ to see an example of how to use list_dedicated_vm_host_instances API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['dedicatedVmHostId', 'compartmentId']
@@ -11695,7 +11695,7 @@ class ComputeClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/core/list_dedicated_vm_host_shapes.py.html>`__ to see an example of how to use list_dedicated_vm_host_shapes API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/core/list_dedicated_vm_host_shapes.py.html>`__ to see an example of how to use list_dedicated_vm_host_shapes API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['compartmentId']
@@ -11859,7 +11859,7 @@ class ComputeClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/core/list_dedicated_vm_hosts.py.html>`__ to see an example of how to use list_dedicated_vm_hosts API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/core/list_dedicated_vm_hosts.py.html>`__ to see an example of how to use list_dedicated_vm_hosts API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['compartmentId']
@@ -12012,7 +12012,7 @@ class ComputeClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/core/list_image_shape_compatibility_entries.py.html>`__ to see an example of how to use list_image_shape_compatibility_entries API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/core/list_image_shape_compatibility_entries.py.html>`__ to see an example of how to use list_image_shape_compatibility_entries API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['imageId']
@@ -12188,7 +12188,7 @@ class ComputeClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/core/list_images.py.html>`__ to see an example of how to use list_images API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/core/list_images.py.html>`__ to see an example of how to use list_images API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['compartmentId']
@@ -12339,7 +12339,7 @@ class ComputeClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/core/list_instance_console_connections.py.html>`__ to see an example of how to use list_instance_console_connections API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/core/list_instance_console_connections.py.html>`__ to see an example of how to use list_instance_console_connections API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['compartmentId']
@@ -12476,7 +12476,7 @@ class ComputeClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/core/list_instance_devices.py.html>`__ to see an example of how to use list_instance_devices API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/core/list_instance_devices.py.html>`__ to see an example of how to use list_instance_devices API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['instanceId']
@@ -12665,7 +12665,7 @@ class ComputeClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/core/list_instance_maintenance_events.py.html>`__ to see an example of how to use list_instance_maintenance_events API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/core/list_instance_maintenance_events.py.html>`__ to see an example of how to use list_instance_maintenance_events API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['compartmentId']
@@ -12860,7 +12860,7 @@ class ComputeClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/core/list_instances.py.html>`__ to see an example of how to use list_instances API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/core/list_instances.py.html>`__ to see an example of how to use list_instances API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['compartmentId']
@@ -13013,7 +13013,7 @@ class ComputeClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/core/list_shapes.py.html>`__ to see an example of how to use list_shapes API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/core/list_shapes.py.html>`__ to see an example of how to use list_shapes API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['compartmentId']
@@ -13137,7 +13137,7 @@ class ComputeClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/core/list_vnic_attachments.py.html>`__ to see an example of how to use list_vnic_attachments API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/core/list_vnic_attachments.py.html>`__ to see an example of how to use list_vnic_attachments API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['compartmentId']
@@ -13265,7 +13265,7 @@ class ComputeClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/core/list_volume_attachments.py.html>`__ to see an example of how to use list_volume_attachments API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/core/list_volume_attachments.py.html>`__ to see an example of how to use list_volume_attachments API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['compartmentId']
@@ -13365,7 +13365,7 @@ class ComputeClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/core/remove_image_shape_compatibility_entry.py.html>`__ to see an example of how to use remove_image_shape_compatibility_entry API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/core/remove_image_shape_compatibility_entry.py.html>`__ to see an example of how to use remove_image_shape_compatibility_entry API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['imageId', 'shapeName']
@@ -13484,7 +13484,7 @@ class ComputeClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/core/terminate_instance.py.html>`__ to see an example of how to use terminate_instance API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/core/terminate_instance.py.html>`__ to see an example of how to use terminate_instance API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['instanceId']
@@ -13608,7 +13608,7 @@ class ComputeClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/core/update_compute_capacity_reservation.py.html>`__ to see an example of how to use update_compute_capacity_reservation API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/core/update_compute_capacity_reservation.py.html>`__ to see an example of how to use update_compute_capacity_reservation API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['capacityReservationId']
@@ -13717,7 +13717,7 @@ class ComputeClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/core/update_compute_capacity_topology.py.html>`__ to see an example of how to use update_compute_capacity_topology API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/core/update_compute_capacity_topology.py.html>`__ to see an example of how to use update_compute_capacity_topology API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['computeCapacityTopologyId']
@@ -13847,7 +13847,7 @@ class ComputeClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/core/update_compute_cluster.py.html>`__ to see an example of how to use update_compute_cluster API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/core/update_compute_cluster.py.html>`__ to see an example of how to use update_compute_cluster API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['computeClusterId']
@@ -13966,7 +13966,7 @@ class ComputeClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/core/update_compute_gpu_memory_cluster.py.html>`__ to see an example of how to use update_compute_gpu_memory_cluster API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/core/update_compute_gpu_memory_cluster.py.html>`__ to see an example of how to use update_compute_gpu_memory_cluster API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['computeGpuMemoryClusterId']
@@ -14046,7 +14046,8 @@ class ComputeClient(object):
 
     def update_compute_gpu_memory_fabric(self, compute_gpu_memory_fabric_id, update_compute_gpu_memory_fabric_details, **kwargs):
         """
-        Customer can update displayName, tags and for compute GPU memory fabric record
+        Customer can update displayName, tags and  desired firmware bundle, recycle level for
+        compute GPU memory fabric record
 
 
         :param str compute_gpu_memory_fabric_id: (required)
@@ -14087,7 +14088,7 @@ class ComputeClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/core/update_compute_gpu_memory_fabric.py.html>`__ to see an example of how to use update_compute_gpu_memory_fabric API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/core/update_compute_gpu_memory_fabric.py.html>`__ to see an example of how to use update_compute_gpu_memory_fabric API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['computeGpuMemoryFabricId']
@@ -14210,7 +14211,7 @@ class ComputeClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/core/update_compute_host.py.html>`__ to see an example of how to use update_compute_host API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/core/update_compute_host.py.html>`__ to see an example of how to use update_compute_host API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['computeHostId']
@@ -14331,7 +14332,7 @@ class ComputeClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/core/update_compute_host_group.py.html>`__ to see an example of how to use update_compute_host_group API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/core/update_compute_host_group.py.html>`__ to see an example of how to use update_compute_host_group API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['computeHostGroupId']
@@ -14441,7 +14442,7 @@ class ComputeClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/core/update_compute_image_capability_schema.py.html>`__ to see an example of how to use update_compute_image_capability_schema API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/core/update_compute_image_capability_schema.py.html>`__ to see an example of how to use update_compute_image_capability_schema API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['computeImageCapabilitySchemaId']
@@ -14544,7 +14545,7 @@ class ComputeClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/core/update_console_history.py.html>`__ to see an example of how to use update_console_history API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/core/update_console_history.py.html>`__ to see an example of how to use update_console_history API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['instanceConsoleHistoryId']
@@ -14659,7 +14660,7 @@ class ComputeClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/core/update_dedicated_vm_host.py.html>`__ to see an example of how to use update_dedicated_vm_host API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/core/update_dedicated_vm_host.py.html>`__ to see an example of how to use update_dedicated_vm_host API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['dedicatedVmHostId']
@@ -14776,7 +14777,7 @@ class ComputeClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/core/update_image.py.html>`__ to see an example of how to use update_image API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/core/update_image.py.html>`__ to see an example of how to use update_image API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['imageId']
@@ -14897,7 +14898,7 @@ class ComputeClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/core/update_instance.py.html>`__ to see an example of how to use update_instance API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/core/update_instance.py.html>`__ to see an example of how to use update_instance API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['instanceId']
@@ -15007,7 +15008,7 @@ class ComputeClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/core/update_instance_console_connection.py.html>`__ to see an example of how to use update_instance_console_connection API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/core/update_instance_console_connection.py.html>`__ to see an example of how to use update_instance_console_connection API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['instanceConsoleConnectionId']
@@ -15123,7 +15124,7 @@ class ComputeClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/core/update_instance_maintenance_event.py.html>`__ to see an example of how to use update_instance_maintenance_event API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/core/update_instance_maintenance_event.py.html>`__ to see an example of how to use update_instance_maintenance_event API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['instanceMaintenanceEventId']
@@ -15235,7 +15236,7 @@ class ComputeClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/core/update_volume_attachment.py.html>`__ to see an example of how to use update_volume_attachment API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/core/update_volume_attachment.py.html>`__ to see an example of how to use update_volume_attachment API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['volumeAttachmentId']

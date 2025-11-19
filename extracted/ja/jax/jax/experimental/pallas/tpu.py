@@ -13,6 +13,7 @@
 # limitations under the License.
 
 """Mosaic-specific Pallas APIs."""
+import typing
 
 from jax._src.pallas.mosaic import core as core
 from jax._src.pallas.mosaic.core import create_tensorcore_mesh as create_tensorcore_mesh
@@ -21,6 +22,7 @@ from jax._src.pallas.mosaic.core import GridDimensionSemantics as GridDimensionS
 from jax._src.pallas.mosaic.core import KernelType as KernelType
 from jax._src.pallas.mosaic.core import PrefetchScalarGridSpec as PrefetchScalarGridSpec
 from jax._src.pallas.mosaic.core import SemaphoreType as SemaphoreType
+from jax._src.pallas.mosaic.core import SideEffectType as SideEffectType
 from jax._src.pallas.mosaic.core import MemorySpace as MemorySpace
 from jax._src.pallas.mosaic.core import CompilerParams as CompilerParams
 from jax._src.pallas.mosaic.helpers import sync_copy as sync_copy
@@ -40,43 +42,40 @@ from jax._src.pallas.mosaic.pipeline import make_pipeline_allocations as make_pi
 from jax._src.pallas.mosaic.primitives import async_copy as async_copy
 from jax._src.pallas.mosaic.primitives import async_remote_copy as async_remote_copy
 from jax._src.pallas.mosaic.primitives import bitcast as bitcast
-from jax._src.pallas.mosaic.primitives import delay as delay
 from jax._src.pallas.mosaic.primitives import get_barrier_semaphore as get_barrier_semaphore
 from jax._src.pallas.mosaic.primitives import load as load
 from jax._src.pallas.mosaic.primitives import make_async_copy as make_async_copy
 from jax._src.pallas.mosaic.primitives import make_async_remote_copy as make_async_remote_copy
+from jax._src.pallas.mosaic.primitives import pack_elementwise as pack_elementwise
 from jax._src.pallas.mosaic.primitives import prng_random_bits as prng_random_bits
 from jax._src.pallas.mosaic.primitives import prng_seed as prng_seed
 from jax._src.pallas.mosaic.primitives import repeat as repeat
 from jax._src.pallas.mosaic.primitives import roll as roll
+from jax._src.pallas.mosaic.primitives import stochastic_round as stochastic_round
 from jax._src.pallas.mosaic.primitives import store as store
 from jax._src.pallas.mosaic.primitives import touch as touch
+from jax._src.pallas.mosaic.primitives import unpack_elementwise as unpack_elementwise
 from jax._src.pallas.mosaic.primitives import with_memory_space_constraint as with_memory_space_constraint
+from jax._src.pallas.mosaic.random import sample_block as sample_block
 from jax._src.pallas.mosaic.random import stateful_bernoulli as stateful_bernoulli
 from jax._src.pallas.mosaic.random import stateful_bits as stateful_bits
 from jax._src.pallas.mosaic.random import stateful_normal as stateful_normal
 from jax._src.pallas.mosaic.random import stateful_uniform as stateful_uniform
-from jax._src.pallas.mosaic.random import sample_block as sample_block
 from jax._src.pallas.mosaic.random import to_pallas_key as to_pallas_key
+from jax._src.pallas.mosaic.tpu_info import ChipVersion as ChipVersion
+from jax._src.pallas.mosaic.tpu_info import get_tpu_info as get_tpu_info
+from jax._src.pallas.mosaic.tpu_info import is_tpu_device as is_tpu_device
+from jax._src.pallas.mosaic.tpu_info import TpuInfo as TpuInfo
 
 # Those primitives got moved to Pallas core. Keeping the updated imports
 # here for backward compatibility.
+from jax._src.pallas import primitives as pl_primitives
 from jax._src.pallas.core import semaphore as semaphore
 from jax._src.pallas.core import MemorySpace as GeneralMemorySpace
 from jax._src.pallas.primitives import DeviceIdType as DeviceIdType
 from jax._src.pallas.primitives import semaphore_read as semaphore_read
 from jax._src.pallas.primitives import semaphore_signal as semaphore_signal
 from jax._src.pallas.primitives import semaphore_wait as semaphore_wait
-
-import types
-from jax._src.pallas.mosaic.verification import assume
-from jax._src.pallas.mosaic.verification import pretend
-from jax._src.pallas.mosaic.verification import skip
-from jax._src.pallas.mosaic.verification import define_model
-verification = types.SimpleNamespace(
-    assume=assume, pretend=pretend, skip=skip, define_model=define_model
-)
-del types, assume, pretend, skip, define_model  # Clean up.
 
 PARALLEL = GridDimensionSemantics.PARALLEL
 CORE_PARALLEL = GridDimensionSemantics.CORE_PARALLEL
@@ -93,3 +92,21 @@ SEMAPHORE = MemorySpace.SEMAPHORE
 # Expose ANY for backward compatibility.
 ANY = GeneralMemorySpace.ANY
 del GeneralMemorySpace
+
+
+_deprecations = {
+    # Added Oct 31, 2025
+    "delay": (
+      "pltpu.delay is deprecated, use pl.delay instead.",
+      pl_primitives.delay
+    ),
+}
+
+if typing.TYPE_CHECKING:
+  delay = pl_primitives.delay
+else:
+  from jax._src.deprecations import deprecation_getattr as _deprecation_getattr
+  __getattr__ = _deprecation_getattr(__name__, _deprecations)
+  del _deprecation_getattr
+del typing
+del pl_primitives

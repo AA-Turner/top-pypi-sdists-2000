@@ -243,6 +243,7 @@ __all__ = (
     "DescribeVpcEndpointsPaginatorName",
     "DescribeVpcPeeringConnectionsPaginatorName",
     "DescribeVpcsPaginatorName",
+    "DescribeVpnConcentratorsPaginatorName",
     "DestinationFileFormatType",
     "DeviceTrustProviderTypeType",
     "DeviceTypeType",
@@ -636,6 +637,7 @@ __all__ = (
     "VpcPeeringConnectionStateReasonCodeType",
     "VpcStateType",
     "VpcTenancyType",
+    "VpnConcentratorTypeType",
     "VpnConnectionAvailableWaiterName",
     "VpnConnectionDeletedWaiterName",
     "VpnEcmpSupportValueType",
@@ -1059,6 +1061,7 @@ DescribeVpcEndpointServicesPaginatorName = Literal["describe_vpc_endpoint_servic
 DescribeVpcEndpointsPaginatorName = Literal["describe_vpc_endpoints"]
 DescribeVpcPeeringConnectionsPaginatorName = Literal["describe_vpc_peering_connections"]
 DescribeVpcsPaginatorName = Literal["describe_vpcs"]
+DescribeVpnConcentratorsPaginatorName = Literal["describe_vpn_concentrators"]
 DestinationFileFormatType = Literal["parquet", "plain-text"]
 DeviceTrustProviderTypeType = Literal["crowdstrike", "jamf", "jumpcloud"]
 DeviceTypeType = Literal["ebs", "instance-store"]
@@ -2885,6 +2888,7 @@ ResourceTypeType = Literal[
     "vpc-endpoint-service-permission",
     "vpc-flow-log",
     "vpc-peering-connection",
+    "vpn-concentrator",
     "vpn-connection",
     "vpn-connection-device-type",
     "vpn-gateway",
@@ -3033,7 +3037,14 @@ TransitGatewayAssociationStateType = Literal[
     "associated", "associating", "disassociated", "disassociating"
 ]
 TransitGatewayAttachmentResourceTypeType = Literal[
-    "connect", "direct-connect-gateway", "network-function", "peering", "tgw-peering", "vpc", "vpn"
+    "connect",
+    "direct-connect-gateway",
+    "network-function",
+    "peering",
+    "tgw-peering",
+    "vpc",
+    "vpn",
+    "vpn-concentrator",
 ]
 TransitGatewayAttachmentStateType = Literal[
     "available",
@@ -3158,6 +3169,7 @@ VpcPeeringConnectionStateReasonCodeType = Literal[
 ]
 VpcStateType = Literal["available", "pending"]
 VpcTenancyType = Literal["default"]
+VpnConcentratorTypeType = Literal["ipsec.1"]
 VpnConnectionAvailableWaiterName = Literal["vpn_connection_available"]
 VpnConnectionDeletedWaiterName = Literal["vpn_connection_deleted"]
 VpnEcmpSupportValueType = Literal["disable", "enable"]
@@ -3714,6 +3726,7 @@ PaginatorName = Literal[
     "describe_vpc_endpoints",
     "describe_vpc_peering_connections",
     "describe_vpcs",
+    "describe_vpn_concentrators",
     "get_associated_ipv6_pool_cidrs",
     "get_aws_network_performance_data",
     "get_capacity_manager_metric_data",

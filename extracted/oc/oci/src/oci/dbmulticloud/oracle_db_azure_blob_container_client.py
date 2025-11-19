@@ -51,6 +51,12 @@ class OracleDBAzureBlobContainerClient(object):
     <b>Google Key Rings Resource:</b>&nbsp;&nbsp;The Google Key Rings Resource is used to register and manage Google Cloud Key Rings within Oracle Cloud Infrastructure (OCI) for use with services such as Oracle Exadata Database Service on Dedicated Infrastructure.
 
     <b>Google Key Resource:</b>&nbsp;&nbsp;The Google Key Resource is used to register and manage a Google Cloud Key within Oracle Cloud Infrastructure (OCI) under an associated Google Key Ring.
+    <br>
+
+    <b>AWS</b>:<br>
+    <b>Oracle AWS Connector Resource:</b>&nbsp;&nbsp;The Oracle AWS Connector Resource is used to install the AWS Identity Connector on an Exadata VM cluster in Oracle Exadata Database Service on Dedicated Infrastructure (ExaDB-D).
+
+    <b>Google AWS Key Resource:</b>&nbsp;&nbsp;The Oracle AWS Key Resource is used to register and manage a AWS Key within Oracle Cloud Infrastructure (OCI).
     """
 
     def __init__(self, config, **kwargs):
@@ -192,7 +198,7 @@ class OracleDBAzureBlobContainerClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/dbmulticloud/change_oracle_db_azure_blob_container_compartment.py.html>`__ to see an example of how to use change_oracle_db_azure_blob_container_compartment API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/dbmulticloud/change_oracle_db_azure_blob_container_compartment.py.html>`__ to see an example of how to use change_oracle_db_azure_blob_container_compartment API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['oracleDbAzureBlobContainerId']
@@ -309,7 +315,7 @@ class OracleDBAzureBlobContainerClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/dbmulticloud/create_oracle_db_azure_blob_container.py.html>`__ to see an example of how to use create_oracle_db_azure_blob_container API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/dbmulticloud/create_oracle_db_azure_blob_container.py.html>`__ to see an example of how to use create_oracle_db_azure_blob_container API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -411,7 +417,7 @@ class OracleDBAzureBlobContainerClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/dbmulticloud/delete_oracle_db_azure_blob_container.py.html>`__ to see an example of how to use delete_oracle_db_azure_blob_container API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/dbmulticloud/delete_oracle_db_azure_blob_container.py.html>`__ to see an example of how to use delete_oracle_db_azure_blob_container API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['oracleDbAzureBlobContainerId']
@@ -524,7 +530,7 @@ class OracleDBAzureBlobContainerClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/dbmulticloud/get_oracle_db_azure_blob_container.py.html>`__ to see an example of how to use get_oracle_db_azure_blob_container API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/dbmulticloud/get_oracle_db_azure_blob_container.py.html>`__ to see an example of how to use get_oracle_db_azure_blob_container API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['oracleDbAzureBlobContainerId']
@@ -676,7 +682,7 @@ class OracleDBAzureBlobContainerClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/dbmulticloud/list_oracle_db_azure_blob_containers.py.html>`__ to see an example of how to use list_oracle_db_azure_blob_containers API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/dbmulticloud/list_oracle_db_azure_blob_containers.py.html>`__ to see an example of how to use list_oracle_db_azure_blob_containers API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['compartmentId']
@@ -822,7 +828,7 @@ class OracleDBAzureBlobContainerClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/dbmulticloud/update_oracle_db_azure_blob_container.py.html>`__ to see an example of how to use update_oracle_db_azure_blob_container API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/dbmulticloud/update_oracle_db_azure_blob_container.py.html>`__ to see an example of how to use update_oracle_db_azure_blob_container API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['oracleDbAzureBlobContainerId']

@@ -17,7 +17,6 @@ from __future__ import annotations
 
 import collections
 from collections.abc import Callable, Iterable, Iterator, Sequence
-import contextlib
 import dataclasses
 import functools
 from functools import partial
@@ -49,7 +48,6 @@ from jax._src import util
 from jax._src import xla_bridge as xb
 from jax._src.interpreters import partial_eval as pe
 from jax._src.layout import AutoLayout, Layout
-from jax._src.lib import version as jaxlib_version
 from jax._src.lib import _jax
 from jax._src.lib import jax_mlir_ext
 from jax._src.lib import xla_client as xc
@@ -562,9 +560,7 @@ def make_ir_context() -> ir.Context:
 
   context.set_thread_pool(global_thread_pool)
   dialects.sdy.register_dialect(context)
-  # TODO(joelwee): Remove this once jaxlib 0.8 is the minimum.
-  if dialects.mpmd:
-    dialects.mpmd.register_dialect(context)
+  dialects.mpmd.register_dialect(context)
   dialects.mhlo.register_mhlo_dialect(context)
   dialects.chlo.register_dialect(context)
   dialects.hlo.register_dialect(context)
@@ -572,8 +568,9 @@ def make_ir_context() -> ir.Context:
   # multi threaded execution aborts the process if we try to register a new
   # dialect after this point. The dialect registry in a context is not thread
   # safe, and a fatal error is much better than a data race.
-  if jaxlib_version >= (0, 8):
-    jax_mlir_ext.enter_multi_threaded_execution(context)
+  # jax_mlir_ext.enter_multi_threaded_execution(context)
+  # TODO(phawkins): clean up users who add their own dialects to JAX's contexts
+  # and enable this.
   return context
 
 
@@ -1230,7 +1227,6 @@ def lower_jaxpr_to_module(
   See https://docs.jax.dev/en/latest/internals/constants.html
   """
   util.test_event("lower_jaxpr_to_module")
-  assert not jaxpr.is_high
   platforms = tuple(map(xb.canonicalize_platform, platforms))
 
   sharded_in_avals = (in_avals if arg_shardings is None else
@@ -1577,7 +1573,6 @@ def lower_jaxpr_to_fun(
     MLIR func op
   """
   util.test_event("lower_jaxpr_to_fun", name)
-  assert not jaxpr.is_high
   if not config.use_simplified_jaxpr_constants.value:
     check_jaxpr_constants(jaxpr)
 
@@ -2016,7 +2011,6 @@ def jaxpr_subcomp(ctx: ModuleContext, jaxpr: core.Jaxpr,
     See https://docs.jax.dev/en/latest/internals/constants.html
   """
   assert "gpu" not in ctx.platforms
-  assert not jaxpr.is_high
 
   def read(v: core.Atom) -> IrValues:
     if type(v) is core.Literal:
@@ -2470,54 +2464,47 @@ def lower_fun(fun: Callable, multiple_results: bool = True) -> Callable:
     f = fun if multiple_results else lambda *args, **kw: (fun(*args, **kw),)
     wrapped_fun = lu.wrap_init(f, params,
         debug_info=api_util.debug_info("lower_fun", fun, args, {}))
-    manager = (contextlib.nullcontext() if ctx.jaxpr_eqn_ctx is None else
-               ctx.jaxpr_eqn_ctx.manager)
 
-    with manager:
-      if config.dynamic_shapes.value:
-        # We might be applying this function to arguments with dynamic shapes,
-        # i.e. there might be Vars in the shape tuples of ctx.avals_in. In that
-        # case, we need to form a jaxpr with leading binders for those axis size
-        # arguments (by computing an InputType and using trace_to_jaxpr_dynamic2),
-        # and we need to call jaxpr_subcomp with these arguments made explicit.
-        assert ctx.axis_size_env is not None
-        args = (*ctx.axis_size_env.values(), *args)
-        idx = {d: core.DBIdx(i) for i, d in enumerate(ctx.axis_size_env)}
-        i32_aval = core.ShapedArray((), np.dtype('int32'))
-        implicit_args = [(i32_aval, False)] * len(ctx.axis_size_env)
-        explicit_args = [(a.update(shape=tuple(idx.get(d, d) for d in a.shape))  # type: ignore
-                          if type(a) is core.DShapedArray else a, True)
-                        for a in ctx.avals_in]
-        wrapped_fun = lu.annotate(wrapped_fun, (*implicit_args, *explicit_args))
-        jaxpr, _, consts_for_constvars = pe.trace_to_jaxpr_dynamic2(wrapped_fun)
-      else:
-        jaxpr, _, consts_for_constvars = pe.trace_to_jaxpr_dynamic(
-            wrapped_fun, ctx.avals_in, lower=True)
-        # TODO(frostig,mattjj): check ctx.avals_out against jaxpr avals out?
+    if config.dynamic_shapes.value:
+      # We might be applying this function to arguments with dynamic shapes,
+      # i.e. there might be Vars in the shape tuples of ctx.avals_in. In that
+      # case, we need to form a jaxpr with leading binders for those axis size
+      # arguments (by computing an InputType and using trace_to_jaxpr_dynamic2),
+      # and we need to call jaxpr_subcomp with these arguments made explicit.
+      assert ctx.axis_size_env is not None
+      args = (*ctx.axis_size_env.values(), *args)
+      idx = {d: core.DBIdx(i) for i, d in enumerate(ctx.axis_size_env)}
+      i32_aval = core.ShapedArray((), np.dtype('int32'))
+      implicit_args = [(i32_aval, False)] * len(ctx.axis_size_env)
+      explicit_args = [(a.update(shape=tuple(idx.get(d, d) for d in a.shape))  # type: ignore
+                        if type(a) is core.DShapedArray else a, True)
+                      for a in ctx.avals_in]
+      wrapped_fun = lu.annotate(wrapped_fun, (*implicit_args, *explicit_args))
+      jaxpr, _, consts_for_constvars = pe.trace_to_jaxpr_dynamic2(wrapped_fun)
+    else:
+      jaxpr, _, consts_for_constvars = pe.trace_to_jaxpr_dynamic(wrapped_fun,
+                                                                  ctx.avals_in)
+      # TODO(frostig,mattjj): check ctx.avals_out against jaxpr avals out?
 
-      if ctx.platforms is not None:
-        sub_context = ctx.module_context.replace(platforms=ctx.platforms)
-      else:
-        sub_context = ctx.module_context
-      assert not jaxpr.is_high
-      out, tokens = jaxpr_subcomp(
-          sub_context, jaxpr, ctx.name_stack, ctx.tokens_in,
-          ir_consts(consts_for_constvars, [v.aval for v in jaxpr.constvars]),
-          *args,
-          dim_var_values=ctx.dim_var_values,
-          const_lowering=ctx.const_lowering)
-      ctx.set_tokens_out(tokens)
-      return out
+    if ctx.platforms is not None:
+      sub_context = ctx.module_context.replace(platforms=ctx.platforms)
+    else:
+      sub_context = ctx.module_context
+    out, tokens = jaxpr_subcomp(
+        sub_context, jaxpr, ctx.name_stack, ctx.tokens_in,
+        ir_consts(consts_for_constvars, [v.aval for v in jaxpr.constvars]),
+        *args,
+        dim_var_values=ctx.dim_var_values,
+        const_lowering=ctx.const_lowering)
+    ctx.set_tokens_out(tokens)
+    return out
 
   return f_lowered
 
 
-def _lower_jaxpr_to_fun_cached(ctx: ModuleContext,
-                               fn_name, call_jaxpr: core.ClosedJaxpr,
-                               num_const_args: int,
-                               effects,
-                               in_avals,
-                               arg_names=None, result_names=None):
+def _lower_jaxpr_to_fun_cached(
+    ctx: ModuleContext, fn_name, call_jaxpr: core.ClosedJaxpr,
+    num_const_args: int, effects, in_avals, arg_names=None, result_names=None):
   assert num_const_args + len(call_jaxpr.in_avals) == len(in_avals)
   if not call_jaxpr.consts and arg_names is result_names is None:
     # Cacheable.
@@ -2527,12 +2514,8 @@ def _lower_jaxpr_to_fun_cached(ctx: ModuleContext,
     except KeyError:
       num_callbacks = len(ctx.host_callbacks)
       func_op = lower_jaxpr_to_fun(
-          ctx, fn_name, call_jaxpr, effects,
-          num_const_args=num_const_args,
-          in_avals=in_avals,
-          arg_names=arg_names,
-          result_names=result_names)
-
+          ctx, fn_name, call_jaxpr, effects, num_const_args=num_const_args,
+          in_avals=in_avals, arg_names=arg_names, result_names=result_names)
       # If this Jaxpr includes callbacks, we can't cache the lowering because
       # on TPU every callback must have a globally unique channel, but the
       # channel gets assigned during lowering.
@@ -2565,32 +2548,17 @@ def check_backend_matches(inner_backend: str | None,
 
 
 def lower_called_computation(
-    fn_name,
-    call_jaxpr: core.ClosedJaxpr,
-    ctx: ModuleContext,
-    num_const_args: int,
-    in_avals,
-    out_avals,
-    tokens_in,
-    backend=None,
-    arg_names=None,
-    result_names=None,
-):
+    fn_name, call_jaxpr: core.ClosedJaxpr, ctx: ModuleContext,
+    num_const_args: int, in_avals, out_avals, tokens_in, backend=None,
+    arg_names=None, result_names=None):
   assert isinstance(call_jaxpr, core.ClosedJaxpr), type(call_jaxpr)
   check_backend_matches(backend, ctx.platforms)
   effects = list(tokens_in.effects())
   output_types = map(aval_to_ir_type, out_avals)
   output_types = [token_type()] * len(effects) + output_types
   func_op = _lower_jaxpr_to_fun_cached(
-      ctx,
-      fn_name,
-      call_jaxpr,
-      num_const_args,
-      effects,
-      in_avals=in_avals,
-      arg_names=arg_names,
-      result_names=result_names,
-  )
+      ctx, fn_name, call_jaxpr, num_const_args, effects, in_avals=in_avals,
+      arg_names=arg_names, result_names=result_names)
   return func_op, output_types, effects
 
 
@@ -2654,7 +2622,7 @@ def map_compute_type(c_type: str) -> str:
   elif c_type == "device":
     return "dense"
   elif c_type == "tpu_sparsecore":
-    return "sparse"
+    return "sparseoffload"
   raise ValueError(f"Invalid compute type {c_type}. Current supported values "
                    "are `device_host`, `device` and `tpu_sparsecore`")
 
@@ -2681,8 +2649,8 @@ def wrap_xla_metadata_in_place(ctx: LoweringRuleContext, op: ir.Operation) -> No
     if isinstance(op, ir.Operation):
       # combine with existing mhlo.frontend_attributes
       for attr in op.attributes:
-        if attr.name == "mhlo.frontend_attributes":
-          for a in attr.attr:
+        if attr == "mhlo.frontend_attributes":
+          for a in op.attributes[attr]:
             existing_attributes[a.name] = a.attr
       op.attributes["mhlo.frontend_attributes"] = ir.DictAttr.get(
           ctx_attributes | existing_attributes
@@ -3329,4 +3297,4 @@ def refine_polymorphic_shapes(module: ir.Module) -> ir.Module:
 
 ########################### pvary ##################################
 
-register_lowering(core.pvary_p, lambda ctx, *x, axes, axis_index_groups: x)
+register_lowering(core.pvary_p, lambda ctx, *x, axes: x)

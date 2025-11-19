@@ -25,7 +25,6 @@ from typing import Any, TypeVar
 
 from jax._src import traceback_util
 from jax._src.lib import pytree
-from jax._src.lib import version as jaxlib_version
 from jax._src.util import safe_zip, set_module
 from jax._src.util import unzip2
 
@@ -124,8 +123,6 @@ def treedef_tuple(treedefs: Iterable[PyTreeDef]) -> PyTreeDef:
   See Also:
     - :func:`jax.tree_util.treedef_children`
   """
-  if jaxlib_version < (0, 8, 0):
-    return pytree.tuple(default_registry, list(treedefs))  # type: ignore
   return pytree.treedef_tuple(default_registry, list(treedefs))
 
 
@@ -998,7 +995,7 @@ def register_dataclass(
   registries use the optimized C++ dataclass builtin instead of the argument
   functions.
 
-  See :ref:`extending-pytrees` for more information about registering pytrees.
+  See :ref:`pytrees-custom-pytree-nodes` for more information about registering pytrees.
 
   Args:
     nodetype: a Python type to treat as an internal pytree node. This is assumed

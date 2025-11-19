@@ -1,14 +1,22 @@
 from typing import TYPE_CHECKING
 
-from .constants import STRING_DELIMITERS, JSONReturnType
-from .json_context import ContextValues
+from .parse_string_helpers.parse_boolean_or_null import parse_boolean_or_null
 from .parse_string_helpers.parse_json_llm_block import parse_json_llm_block
+from .utils.constants import STRING_DELIMITERS, JSONReturnType
+from .utils.json_context import ContextValues
 
 if TYPE_CHECKING:
     from .json_parser import JSONParser
 
 
 def parse_string(self: "JSONParser") -> JSONReturnType:
+    # Utility function to append a character to the accumulator and update the index
+    def _append_literal_char(acc: str, current_char: str | None) -> tuple[str, str | None]:
+        acc += str(current_char)
+        self.index += 1
+        char = self.get_char_at()
+        return acc, char
+
     # <string> is a string of valid characters enclosed in quotes
     # i.e. { name: "John" }
     # Somehow all weird cases in an invalid JSON happen to be resolved in this function, so be careful here
@@ -40,7 +48,7 @@ def parse_string(self: "JSONParser") -> JSONReturnType:
         # This could be a <boolean> and not a string. Because (T)rue or (F)alse or (N)ull are valid
         # But remember, object keys are only of type string
         if char.lower() in ["t", "f", "n"] and self.context.current != ContextValues.OBJECT_KEY:
-            value = self.parse_boolean_or_null()
+            value = parse_boolean_or_null(self)
             if value != "":
                 return value
         self.log(
@@ -59,10 +67,12 @@ def parse_string(self: "JSONParser") -> JSONReturnType:
             "While parsing a string, we found code fences but they did not enclose valid JSON, continuing parsing the string",
         )
     # There is sometimes a weird case of doubled quotes, we manage this also later in the while loop
-    if self.get_char_at() in STRING_DELIMITERS and self.get_char_at() == lstring_delimiter:
+    if self.get_char_at() == lstring_delimiter:
         # If it's an empty key, this was easy
-        if (self.context.current == ContextValues.OBJECT_KEY and self.get_char_at(1) == ":") or (
-            self.context.current == ContextValues.OBJECT_VALUE and self.get_char_at(1) in [",", "}"]
+        if (
+            (self.context.current == ContextValues.OBJECT_KEY and self.get_char_at(1) == ":")
+            or (self.context.current == ContextValues.OBJECT_VALUE and self.get_char_at(1) in [",", "}"])
+            or (self.context.current == ContextValues.ARRAY and self.get_char_at(1) in [",", "]"])
         ):
             self.index += 1
             return ""
@@ -71,13 +81,16 @@ def parse_string(self: "JSONParser") -> JSONReturnType:
             self.log(
                 "While parsing a string, we found a doubled quote and then a quote again, ignoring it",
             )
-            return ""
+            if self.strict:
+                raise ValueError("Found doubled quotes followed by another quote.")
+            else:
+                return ""
         # Find the next delimiter
         i = self.skip_to_character(character=rstring_delimiter, idx=1)
         next_c = self.get_char_at(i)
         # Now check that the next character is also a delimiter to ensure that we have "".....""
         # In that case we ignore this rstring delimiter
-        if next_c and (self.get_char_at(i + 1) or "") == rstring_delimiter:
+        if self.get_char_at(i + 1) == rstring_delimiter:
             self.log(
                 "While parsing a string, we found a valid starting doubled quote",
             )
@@ -85,13 +98,17 @@ def parse_string(self: "JSONParser") -> JSONReturnType:
             self.index += 1
         else:
             # Ok this is not a doubled quote, check if this is an empty string or not
-            i = self.skip_whitespaces_at(idx=1, move_main_index=False)
+            i = self.scroll_whitespaces(idx=1)
             next_c = self.get_char_at(i)
             if next_c in STRING_DELIMITERS + ["{", "["]:
                 # something fishy is going on here
                 self.log(
                     "While parsing a string, we found a doubled quote but also another quote afterwards, ignoring it",
                 )
+                if self.strict:
+                    raise ValueError(
+                        "Found doubled quotes followed by another quote while parsing a string.",
+                    )
                 self.index += 1
                 return ""
             elif next_c not in [",", "]", "}"]:
@@ -135,7 +152,7 @@ def parse_string(self: "JSONParser") -> JSONReturnType:
         ):
             rstring_delimiter_missing = True
             # check if this is a case in which the closing comma is NOT missing instead
-            self.skip_whitespaces_at()
+            self.skip_whitespaces()
             if self.get_char_at(1) == "\\":
                 # Ok this is a quoted string, skip
                 rstring_delimiter_missing = False
@@ -145,7 +162,7 @@ def parse_string(self: "JSONParser") -> JSONReturnType:
                 i += 1
                 # found a delimiter, now we need to check that is followed strictly by a comma or brace
                 # or the string ended
-                i = self.skip_whitespaces_at(idx=i, move_main_index=False)
+                i = self.scroll_whitespaces(idx=i)
                 next_c = self.get_char_at(i)
                 if not next_c or next_c in [",", "}"]:
                     rstring_delimiter_missing = False
@@ -160,7 +177,7 @@ def parse_string(self: "JSONParser") -> JSONReturnType:
                     else:
                         # But again, this could just be something a bit stupid like "lorem, "ipsum" sic"
                         # Check if we find a : afterwards (skipping space)
-                        i = self.skip_whitespaces_at(idx=i + 1, move_main_index=False)
+                        i = self.scroll_whitespaces(idx=i + 1)
                         next_c = self.get_char_at(i)
                         if next_c and next_c != ":":
                             rstring_delimiter_missing = False
@@ -175,7 +192,7 @@ def parse_string(self: "JSONParser") -> JSONReturnType:
                     break
                 else:
                     # skip any whitespace first
-                    i = self.skip_whitespaces_at(idx=1, move_main_index=False)
+                    i = self.scroll_whitespaces(idx=1)
                     # We couldn't find any rstring_delimeter before the end of the string
                     # check if this is the last string of an object and therefore we can keep going
                     # make an exception if this is the last char before the closing brace
@@ -212,19 +229,15 @@ def parse_string(self: "JSONParser") -> JSONReturnType:
         if self.context.current == ContextValues.OBJECT_VALUE and char == "}":
             # We found the end of an object while parsing a value
             # Check if the object is really over, to avoid doubling the closing brace
-            i = self.skip_whitespaces_at(idx=1, move_main_index=False)
+            i = self.scroll_whitespaces(idx=1)
             next_c = self.get_char_at(i)
-            if next_c and next_c == "`":
+            if next_c == "`" and self.get_char_at(i + 1) == "`" and self.get_char_at(i + 2) == "`":
                 # This could be a special case in which the LLM added code fences after the object
                 # So we need to check if there are another two ` after this one`
-                next_c = self.get_char_at(i + 1)
-                if next_c and next_c == "`":
-                    next_c = self.get_char_at(i + 2)
-                    if next_c and next_c == "`":
-                        self.log(
-                            "While parsing a string in object value context, we found a } that closes the object before code fences, stopping here",
-                        )
-                        break
+                self.log(
+                    "While parsing a string in object value context, we found a } that closes the object before code fences, stopping here",
+                )
+                break
             if not next_c:
                 self.log(
                     "While parsing a string in object value context, we found a } that closes the object, stopping here",
@@ -282,12 +295,13 @@ def parse_string(self: "JSONParser") -> JSONReturnType:
                     # found a second delimiter
                     i += 1
                     # Skip spaces
-                    i = self.skip_whitespaces_at(idx=i, move_main_index=False)
-                    next_c = self.get_char_at(i)
-                    if next_c and next_c in [",", "}"]:
+                    i = self.scroll_whitespaces(idx=i)
+                    if self.get_char_at(i) in [",", "}"]:
                         # Ok then this is a missing right quote
                         self.log(
-                            "While parsing a string missing the right delimiter in object key context, we found a :, stopping here",
+                            "While parsing a string missing the right delimiter in object key context, we found a "
+                            + str(self.get_char_at(i))
+                            + " stopping here",
                         )
                         break
             else:
@@ -316,9 +330,8 @@ def parse_string(self: "JSONParser") -> JSONReturnType:
                     # We found a quote, now let's make sure there's a ":" following
                     i += 1
                     # found a delimiter, now we need to check that is followed strictly by a comma or brace
-                    i = self.skip_whitespaces_at(idx=i, move_main_index=False)
-                    next_c = self.get_char_at(i)
-                    if next_c and next_c == ":":
+                    i = self.scroll_whitespaces(idx=i)
+                    if self.get_char_at(i) == ":":
                         # Reset the cursor
                         self.index -= 1
                         char = self.get_char_at()
@@ -328,9 +341,7 @@ def parse_string(self: "JSONParser") -> JSONReturnType:
                         break
             elif unmatched_delimiter:
                 unmatched_delimiter = False
-                string_acc += str(char)
-                self.index += 1
-                char = self.get_char_at()
+                string_acc, char = _append_literal_char(string_acc, char)
             else:
                 # Check if eventually there is a rstring delimiter, otherwise we bail
                 i = 1
@@ -365,22 +376,20 @@ def parse_string(self: "JSONParser") -> JSONReturnType:
                     next_c = self.get_char_at(i)
                     # Ok now I found a delimiter, let's skip whitespaces and see if next we find a } or a ,
                     i += 1
-                    i = self.skip_whitespaces_at(idx=i, move_main_index=False)
+                    i = self.scroll_whitespaces(idx=i)
                     next_c = self.get_char_at(i)
                     if next_c in ["}", ","]:
                         self.log(
-                            "While parsing a string, we a misplaced quote that would have closed the string but has a different meaning here, ignoring it",
+                            "While parsing a string, we found a misplaced quote that would have closed the string but has a different meaning here, ignoring it",
                         )
-                        string_acc += str(char)
-                        self.index += 1
-                        char = self.get_char_at()
+                        string_acc, char = _append_literal_char(string_acc, char)
                         continue
                 elif next_c == rstring_delimiter and self.get_char_at(i - 1) != "\\":
                     # Check if self.index:self.index+i is only whitespaces, break if that's the case
                     if all(str(self.get_char_at(j)).isspace() for j in range(1, i) if self.get_char_at(j)):
                         break
                     if self.context.current == ContextValues.OBJECT_VALUE:
-                        i = self.skip_whitespaces_at(idx=i + 1, move_main_index=False)
+                        i = self.scroll_whitespaces(idx=i + 1)
                         if self.get_char_at(i) == ",":
                             # So we found a comma, this could be a case of a single quote like "va"lue",
                             # Search if it's followed by another key, starting with the first delimeter
@@ -388,15 +397,13 @@ def parse_string(self: "JSONParser") -> JSONReturnType:
                             i += 1
                             i = self.skip_to_character(character=rstring_delimiter, idx=i + 1)
                             i += 1
-                            i = self.skip_whitespaces_at(idx=i, move_main_index=False)
+                            i = self.scroll_whitespaces(idx=i)
                             next_c = self.get_char_at(i)
                             if next_c == ":":
                                 self.log(
-                                    "While parsing a string, we a misplaced quote that would have closed the string but has a different meaning here, ignoring it",
+                                    "While parsing a string, we found a misplaced quote that would have closed the string but has a different meaning here, ignoring it",
                                 )
-                                string_acc += str(char)
-                                self.index += 1
-                                char = self.get_char_at()
+                                string_acc, char = _append_literal_char(string_acc, char)
                                 continue
                         # We found a delimiter and we need to check if this is a key
                         # so find a rstring_delimiter and a colon after
@@ -413,12 +420,10 @@ def parse_string(self: "JSONParser") -> JSONReturnType:
                         # Only if we fail to find a ':' then we know this is misplaced quote
                         if next_c != ":":
                             self.log(
-                                "While parsing a string, we a misplaced quote that would have closed the string but has a different meaning here, ignoring it",
+                                "While parsing a string, we found a misplaced quote that would have closed the string but has a different meaning here, ignoring it",
                             )
                             unmatched_delimiter = not unmatched_delimiter
-                            string_acc += str(char)
-                            self.index += 1
-                            char = self.get_char_at()
+                            string_acc, char = _append_literal_char(string_acc, char)
                     elif self.context.current == ContextValues.ARRAY:
                         # So here we can have a few valid cases:
                         # ["bla bla bla "puppy" bla bla bla "kitty" bla bla"]
@@ -442,9 +447,7 @@ def parse_string(self: "JSONParser") -> JSONReturnType:
                                 "While parsing a string in Array context, we detected a quoted section that would have closed the string but has a different meaning here, ignoring it",
                             )
                             unmatched_delimiter = not unmatched_delimiter
-                            string_acc += str(char)
-                            self.index += 1
-                            char = self.get_char_at()
+                            string_acc, char = _append_literal_char(string_acc, char)
                         else:
                             break
                     elif self.context.current == ContextValues.OBJECT_KEY:
@@ -452,14 +455,12 @@ def parse_string(self: "JSONParser") -> JSONReturnType:
                         self.log(
                             "While parsing a string in Object Key context, we detected a quoted section that would have closed the string but has a different meaning here, ignoring it",
                         )
-                        string_acc += str(char)
-                        self.index += 1
-                        char = self.get_char_at()
+                        string_acc, char = _append_literal_char(string_acc, char)
     if char and missing_quotes and self.context.current == ContextValues.OBJECT_KEY and char.isspace():
         self.log(
             "While parsing a string, handling an extreme corner case in which the LLM added a comment instead of valid string, invalidate the string and return an empty value",
         )
-        self.skip_whitespaces_at()
+        self.skip_whitespaces()
         if self.get_char_at() not in [":", ","]:
             return ""
 

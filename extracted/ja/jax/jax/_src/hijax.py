@@ -17,18 +17,20 @@ from __future__ import annotations
 from dataclasses import dataclass
 from functools import partial
 import itertools as it
-from typing import Any
+from typing import Any, Hashable
 
 from jax._src import core
+from jax._src import dtypes
 from jax._src import effects
 from jax._src.interpreters import ad
 from jax._src.interpreters import batching
 from jax._src import ad_util
 from jax._src.util import safe_zip, safe_map, split_list
-from jax._src.tree_util import tree_flatten, tree_unflatten, tree_leaves
+from jax._src.tree_util import tree_flatten, tree_unflatten, tree_leaves, tree_map
 map, unsafe_map = safe_map, map
 zip, unsafe_zip = safe_zip, zip
 
+PyTreeOfAvals = Any
 PyTreeDef = Any
 LoVal = Any
 HiVal = Any
@@ -127,6 +129,7 @@ class MutableHiType(core.AbstractValue):
 
 def register_hitype(val_cls, typeof_fn) -> None:
   core.pytype_aval_mappings[val_cls] = typeof_fn
+  dtypes.canonicalize_value_handlers[val_cls] = lambda x: x
 
 def hijax_method(f):
   return core.aval_method(f)
@@ -322,27 +325,50 @@ box_get_p = BoxGet('box_get')
 
 # === new-style hijax primitive implementation ===
 
-class NewstyleHiPrimitive:
-  # Operation implementation in terms of lojax primitives
-  def __init__(self, in_avals, out_aval, **params):
-    self.in_avals = tuple(in_avals)  # pytrees
-    self.in_avals_flat, self.in_tree = tree_flatten(in_avals)
-    self.out_aval = out_aval  # pytree of out avals
-    self.out_avals_flat, self.out_tree = tree_flatten(out_aval)
-    self.params = params
-    self.__dict__.update(params)
+class VJPHiPrimitive:
+  in_avals: tuple[PyTreeOfAvals, ...]
+  out_aval: PyTreeOfAvals
+  params: dict[str, Hashable]
 
+  def __init__(self):
+    if not hasattr(self, 'in_avals'):
+      raise AttributeError("subclass __init__ should set `self.in_avals`")
+    if not hasattr(self, 'out_aval'):
+      raise AttributeError("subclass __init__ should set `self.out_aval`")
+    if not hasattr(self, 'params'):
+      raise AttributeError("subclass __init__ should set `self.params`")
+    if (type(self).vjp_bwd is not VJPHiPrimitive.vjp_bwd and
+        type(self).vjp_bwd_retval is not VJPHiPrimitive.vjp_bwd_retval):
+      raise AttributeError(f"subclass {type(self)} should not override both "
+                           "`vjp_bwd` and `vjp_bwd_retval`")
+    self.in_avals_flat, self.in_tree = tree_flatten(self.in_avals)
+    self.out_avals_flat, self.out_tree = tree_flatten(self.out_aval)
+    self.__dict__.update(self.params)
+
+  # Operation implementation in terms of lojax primitives
   def expand(self, *args):
-    raise NotImplementedError("subclass {type(self)} should always implement this")
+    raise NotImplementedError(f"subclass {type(self)} must implement `expand`")
 
   def vjp_fwd(self, *args):
-    raise NotImplementedError("for AD support, subclass {type(self)} should implement this")
+    raise NotImplementedError(f"for grad support, subclass {type(self)} must "
+                              "implement `vjp_fwd`")
 
-  def vjp_bwd(self, res, *args):
-    raise NotImplementedError("for AD support, subclass {type(self)} should implement this")
+  def vjp_bwd(self, res, outgrad, *arg_accums):
+    args_grad = self.vjp_bwd_retval(res, outgrad)
+    tree_map(lambda acc, leaf_grad: acc.accum(leaf_grad), arg_accums, args_grad)
+
+  def vjp_bwd_retval(self, res, outgrad):
+    # Classic API: returns values instead of using accumulators
+    raise NotImplementedError(f"for grad support, subclass {type(self)} must "
+                              "implement `vjp_bwd` or `vjp_bwd_retval`")
 
   def batch(self, axis_data, args, dims):
-    raise NotImplementedError("for vmap support, subclass {type(self)} should implement this")
+    raise NotImplementedError(f"for vmap support, subclass {type(self)} must "
+                              "implement `batch`")
+
+  def jvp(self, primals, tangents):
+    raise NotImplementedError(f"for jvp support, subclass {type(self)} must "
+                              "implement `jvp`")
 
   def __call__(self, *args):
     args_flat = tree_leaves_checked(self.in_tree, args)
@@ -383,8 +409,8 @@ def _call_hi_primitive_batcher(axis_data, args_flat, dims_flat, prim):
   args = tree_unflatten(prim.in_tree, args_flat)
   dims = tree_unflatten(prim.in_tree, dims_flat)
   ans, dims = prim.batch(axis_data, args, dims)
-  ans_flat, ans_tree = tree_flatten(ans)
-  dims_flat = ans_tree.flatten_up_to(dims)
+  ans_flat = tree_leaves_checked(prim.out_tree, ans)
+  dims_flat = prim.out_tree.flatten_up_to(dims)
   return ans_flat, dims_flat
 batching.fancy_primitive_batchers[call_hi_primitive_p] = _call_hi_primitive_batcher
 
@@ -414,10 +440,19 @@ def _call_hi_primitive_linearized_abstract_eval(*_args, prim, residuals_tree):
   return [t.to_tangent_aval() for t in prim.out_avals_flat]  # TODO(dougalm): handle nonzeros
 
 def _call_hi_primitive_linearized_transpose(cts_flat, *args, prim, residuals_tree):
-  residuals_flat, _ = split_list(args, [residuals_tree.num_leaves])
+  residuals_flat, accums_flat = split_list(args, [residuals_tree.num_leaves])
   residuals = tree_unflatten(residuals_tree, residuals_flat)
+  accums = tree_unflatten(prim.in_tree, accums_flat)
   cts = tree_unflatten(prim.out_tree, cts_flat)
-  cts_out = prim.vjp_bwd(residuals, cts)
-  assert isinstance(cts_out, tuple)
-  return [None for _ in residuals_flat] + tree_leaves_checked(prim.in_tree, cts_out)
-ad.primitive_transposes[call_hi_primitive_linearized_p] = _call_hi_primitive_linearized_transpose
+  none = prim.vjp_bwd(residuals, cts, *accums)
+  assert none is None
+ad.fancy_transposes[call_hi_primitive_linearized_p] = _call_hi_primitive_linearized_transpose
+
+def _call_hi_primitive_jvp(primals, tangents, *, prim):
+  primals = tree_unflatten(prim.in_tree, primals)
+  tangents = tree_unflatten(prim.in_tree, tangents)
+  out_primals, out_tangents =  prim.jvp(primals, tangents)
+  out_primals_flat = tree_leaves_checked(prim.out_tree, out_primals)
+  out_tangents_flat = prim.out_tree.flatten_up_to(out_tangents)
+  return out_primals_flat, out_tangents_flat
+ad.primitive_jvps[call_hi_primitive_p] = _call_hi_primitive_jvp

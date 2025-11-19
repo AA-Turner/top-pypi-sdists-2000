@@ -39,7 +39,8 @@ dependencies = [
     'jinxed>=1.1.0; platform_system == "Windows"',
 ]
 dynamic = ['version']
-license = {file = "LICENSE"}
+license = 'MIT'
+license-files = ['LICENSE']
 keywords = ['terminal', 'sequences', 'tty', 'curses', 'ncurses', 'formatting',
             'style', 'color', 'console', 'keyboard', 'ansi', 'xterm']
 readme = 'docs/intro.rst'

@@ -89,6 +89,10 @@ class Templite:
 
         {% if var %}...{% endif %}
 
+    if-else::
+
+        {% if var %}...{% else %}...{% endif %}
+
     Comments are within curly-hash markers::
 
         {# This will be ignored #}
@@ -186,6 +190,14 @@ class Templite:
                             self._syntax_error("Don't understand if", token)
                         ops_stack.append("if")
                         code.add_line("if %s:" % self._expr_code(words[1]))
+                        code.indent()
+                    elif words[0] == "else":
+                        if len(words) != 1:
+                            self._syntax_error("Don't understand else", token)
+                        if not ops_stack or ops_stack[-1] != "if":
+                            self._syntax_error("Mismatched else", token)
+                        code.dedent()
+                        code.add_line("else:")
                         code.indent()
                     elif words[0] == "for":
                         # A loop: iterate over expression result.

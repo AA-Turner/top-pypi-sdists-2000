@@ -1,7 +1,7 @@
 Metadata-Version: 2.4
 Name: mypy-boto3-cloudformation
-Version: 1.40.73
-Summary: Type annotations for boto3 CloudFormation 1.40.73 service generated with mypy-boto3-builder 8.12.0
+Version: 1.40.76
+Summary: Type annotations for boto3 CloudFormation 1.40.76 service generated with mypy-boto3-builder 8.12.0
 Author-email: Vlad Emelianov <vlad.emelianov.nz@gmail.com>
 License-Expression: MIT
 Project-URL: Homepage, https://github.com/youtype/mypy_boto3_builder
@@ -43,7 +43,7 @@ Dynamic: license-file
 ![boto3.typed](https://github.com/youtype/mypy_boto3_builder/raw/main/logo.png)
 
 Type annotations for
-[boto3 CloudFormation 1.40.73](https://pypi.org/project/boto3/) compatible with
+[boto3 CloudFormation 1.40.76](https://pypi.org/project/boto3/) compatible with
 [VSCode](https://code.visualstudio.com/),
 [PyCharm](https://www.jetbrains.com/pycharm/),
 [Emacs](https://www.gnu.org/software/emacs/),
@@ -110,7 +110,7 @@ You can generate type annotations for `boto3` package locally with
 isolation.
 
 1. Run mypy-boto3-builder in your package root directory:
-   `uvx --with 'boto3==1.40.73' mypy-boto3-builder`
+   `uvx --with 'boto3==1.40.76' mypy-boto3-builder`
 2. Select `boto3-stubs` AWS SDK.
 3. Add `CloudFormation` service.
 4. Use provided commands to install generated packages.
@@ -373,6 +373,7 @@ from mypy_boto3_cloudformation import CloudFormationClient
 from mypy_boto3_cloudformation.paginator import (
     DescribeAccountLimitsPaginator,
     DescribeChangeSetPaginator,
+    DescribeEventsPaginator,
     DescribeStackEventsPaginator,
     DescribeStacksPaginator,
     ListChangeSetsPaginator,
@@ -403,6 +404,7 @@ describe_account_limits_paginator: DescribeAccountLimitsPaginator = client.get_p
 describe_change_set_paginator: DescribeChangeSetPaginator = client.get_paginator(
     "describe_change_set"
 )
+describe_events_paginator: DescribeEventsPaginator = client.get_paginator("describe_events")
 describe_stack_events_paginator: DescribeStackEventsPaginator = client.get_paginator(
     "describe_stack_events"
 )

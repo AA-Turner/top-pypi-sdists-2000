@@ -6,6 +6,7 @@
 from __future__ import annotations
 
 import textwrap
+from unittest import mock
 
 import pytest
 
@@ -13,6 +14,7 @@ from tests.coveragetest import CoverageTest
 from tests.helpers import assert_count_equal
 
 import coverage
+from coverage import env
 from coverage.data import sorted_lines
 from coverage.files import abs_file
 
@@ -1378,6 +1380,36 @@ class ExceptionArcTest(CoverageTest):
             branchz_missing="",
         )
 
+    @pytest.mark.skipif(env.PYVERSION < (3, 11), reason="ExceptionGroup is new in Python 3.11")
+    def test_exception_group(self) -> None:
+        # PyPy3.11 traces this incorrectly: https://github.com/pypy/pypy/issues/5354
+        if env.PYPY:
+            missing = "5, 11"
+        else:
+            missing = "5-6, 11-12"
+        self.check_coverage(
+            """\
+            a = 1
+            try:
+                raise ExceptionGroup("Zero!", [ZeroDivisionError()])
+            except* ValueError:
+                a = 5
+                b = 6/0
+            except* ZeroDivisionError:
+                a = 8
+                b = 9
+            except* Exception:
+                a = 11
+                b = 12/0
+            assert a == 8
+            assert b == 9
+            """,
+            lines=[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14],
+            missing=missing,
+            branchz="",
+            branchz_missing="",
+        )
+
 
 class YieldTest(CoverageTest):
     """Arc tests for generators."""
@@ -1916,6 +1948,25 @@ class MiscArcTest(CoverageTest):
             branchz_missing="",
         )
 
+    def test_failing_open(self) -> None:
+        with mock.patch.object(coverage.python, "open", side_effect=IOError("Nope")):
+            self.make_file(
+                "some_branches.py",
+                """\
+                def forelse(seq):
+                    for n in seq:
+                        if n > 5:
+                            break
+                    else:
+                        print('None of the values were greater than 5')
+                    print('Done')
+                forelse([1,2])
+                """,
+            )
+            cov = coverage.Coverage(branch=True)
+            self.start_import_stop(cov, "some_branches")
+            # No assert: the test passes if it didn't raise an exception.
+
 
 class DecoratorArcTest(CoverageTest):
     """Tests of arcs with decorators."""
@@ -2333,8 +2384,6 @@ class LineDataTest(CoverageTest):
     """Tests that line_data gives us what we expect."""
 
     def test_branch(self) -> None:
-        cov = coverage.Coverage(branch=True)
-
         self.make_file(
             "fun1.py",
             """\
@@ -2346,6 +2395,7 @@ class LineDataTest(CoverageTest):
             """,
         )
 
+        cov = coverage.Coverage(branch=True)
         self.start_import_stop(cov, "fun1")
 
         data = cov.get_data()

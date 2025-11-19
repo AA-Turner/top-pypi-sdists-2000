@@ -156,7 +156,7 @@ class AIServiceLanguageClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/ailanguage/batch_detect_dominant_language.py.html>`__ to see an example of how to use batch_detect_dominant_language API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/ailanguage/batch_detect_dominant_language.py.html>`__ to see an example of how to use batch_detect_dominant_language API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -247,7 +247,7 @@ class AIServiceLanguageClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/ailanguage/batch_detect_health_entity.py.html>`__ to see an example of how to use batch_detect_health_entity API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/ailanguage/batch_detect_health_entity.py.html>`__ to see an example of how to use batch_detect_health_entity API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -342,7 +342,7 @@ class AIServiceLanguageClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/ailanguage/batch_detect_language_entities.py.html>`__ to see an example of how to use batch_detect_language_entities API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/ailanguage/batch_detect_language_entities.py.html>`__ to see an example of how to use batch_detect_language_entities API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -433,7 +433,7 @@ class AIServiceLanguageClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/ailanguage/batch_detect_language_key_phrases.py.html>`__ to see an example of how to use batch_detect_language_key_phrases API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/ailanguage/batch_detect_language_key_phrases.py.html>`__ to see an example of how to use batch_detect_language_key_phrases API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -524,7 +524,7 @@ class AIServiceLanguageClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/ailanguage/batch_detect_language_pii_entities.py.html>`__ to see an example of how to use batch_detect_language_pii_entities API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/ailanguage/batch_detect_language_pii_entities.py.html>`__ to see an example of how to use batch_detect_language_pii_entities API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -631,7 +631,7 @@ class AIServiceLanguageClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/ailanguage/batch_detect_language_sentiments.py.html>`__ to see an example of how to use batch_detect_language_sentiments API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/ailanguage/batch_detect_language_sentiments.py.html>`__ to see an example of how to use batch_detect_language_sentiments API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -744,7 +744,7 @@ class AIServiceLanguageClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/ailanguage/batch_detect_language_text_classification.py.html>`__ to see an example of how to use batch_detect_language_text_classification API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/ailanguage/batch_detect_language_text_classification.py.html>`__ to see an example of how to use batch_detect_language_text_classification API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -834,7 +834,7 @@ class AIServiceLanguageClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/ailanguage/batch_language_translation.py.html>`__ to see an example of how to use batch_language_translation API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/ailanguage/batch_language_translation.py.html>`__ to see an example of how to use batch_language_translation API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -934,7 +934,7 @@ class AIServiceLanguageClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/ailanguage/cancel_job.py.html>`__ to see an example of how to use cancel_job API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/ailanguage/cancel_job.py.html>`__ to see an example of how to use cancel_job API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['jobId']
@@ -1050,7 +1050,7 @@ class AIServiceLanguageClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/ailanguage/change_endpoint_compartment.py.html>`__ to see an example of how to use change_endpoint_compartment API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/ailanguage/change_endpoint_compartment.py.html>`__ to see an example of how to use change_endpoint_compartment API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['endpointId']
@@ -1168,7 +1168,7 @@ class AIServiceLanguageClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/ailanguage/change_job_compartment.py.html>`__ to see an example of how to use change_job_compartment API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/ailanguage/change_job_compartment.py.html>`__ to see an example of how to use change_job_compartment API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['jobId']
@@ -1286,7 +1286,7 @@ class AIServiceLanguageClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/ailanguage/change_model_compartment.py.html>`__ to see an example of how to use change_model_compartment API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/ailanguage/change_model_compartment.py.html>`__ to see an example of how to use change_model_compartment API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['modelId']
@@ -1404,7 +1404,7 @@ class AIServiceLanguageClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/ailanguage/change_project_compartment.py.html>`__ to see an example of how to use change_project_compartment API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/ailanguage/change_project_compartment.py.html>`__ to see an example of how to use change_project_compartment API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['projectId']
@@ -1514,7 +1514,7 @@ class AIServiceLanguageClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/ailanguage/create_endpoint.py.html>`__ to see an example of how to use create_endpoint API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/ailanguage/create_endpoint.py.html>`__ to see an example of how to use create_endpoint API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -1612,7 +1612,7 @@ class AIServiceLanguageClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/ailanguage/create_job.py.html>`__ to see an example of how to use create_job API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/ailanguage/create_job.py.html>`__ to see an example of how to use create_job API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -1710,7 +1710,7 @@ class AIServiceLanguageClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/ailanguage/create_model.py.html>`__ to see an example of how to use create_model API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/ailanguage/create_model.py.html>`__ to see an example of how to use create_model API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -1808,7 +1808,7 @@ class AIServiceLanguageClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/ailanguage/create_project.py.html>`__ to see an example of how to use create_project API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/ailanguage/create_project.py.html>`__ to see an example of how to use create_project API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -1906,7 +1906,7 @@ class AIServiceLanguageClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/ailanguage/delete_endpoint.py.html>`__ to see an example of how to use delete_endpoint API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/ailanguage/delete_endpoint.py.html>`__ to see an example of how to use delete_endpoint API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['endpointId']
@@ -2011,7 +2011,7 @@ class AIServiceLanguageClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/ailanguage/delete_job.py.html>`__ to see an example of how to use delete_job API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/ailanguage/delete_job.py.html>`__ to see an example of how to use delete_job API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['jobId']
@@ -2116,7 +2116,7 @@ class AIServiceLanguageClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/ailanguage/delete_model.py.html>`__ to see an example of how to use delete_model API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/ailanguage/delete_model.py.html>`__ to see an example of how to use delete_model API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['modelId']
@@ -2221,7 +2221,7 @@ class AIServiceLanguageClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/ailanguage/delete_project.py.html>`__ to see an example of how to use delete_project API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/ailanguage/delete_project.py.html>`__ to see an example of how to use delete_project API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['projectId']
@@ -2330,7 +2330,7 @@ class AIServiceLanguageClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/ailanguage/detect_dominant_language.py.html>`__ to see an example of how to use detect_dominant_language API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/ailanguage/detect_dominant_language.py.html>`__ to see an example of how to use detect_dominant_language API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -2433,7 +2433,7 @@ class AIServiceLanguageClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/ailanguage/detect_language_entities.py.html>`__ to see an example of how to use detect_language_entities API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/ailanguage/detect_language_entities.py.html>`__ to see an example of how to use detect_language_entities API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -2543,7 +2543,7 @@ class AIServiceLanguageClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/ailanguage/detect_language_key_phrases.py.html>`__ to see an example of how to use detect_language_key_phrases API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/ailanguage/detect_language_key_phrases.py.html>`__ to see an example of how to use detect_language_key_phrases API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -2644,7 +2644,7 @@ class AIServiceLanguageClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/ailanguage/detect_language_sentiments.py.html>`__ to see an example of how to use detect_language_sentiments API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/ailanguage/detect_language_sentiments.py.html>`__ to see an example of how to use detect_language_sentiments API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -2741,7 +2741,7 @@ class AIServiceLanguageClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/ailanguage/detect_language_text_classification.py.html>`__ to see an example of how to use detect_language_text_classification API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/ailanguage/detect_language_text_classification.py.html>`__ to see an example of how to use detect_language_text_classification API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -2827,7 +2827,7 @@ class AIServiceLanguageClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/ailanguage/get_endpoint.py.html>`__ to see an example of how to use get_endpoint API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/ailanguage/get_endpoint.py.html>`__ to see an example of how to use get_endpoint API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['endpointId']
@@ -2925,7 +2925,7 @@ class AIServiceLanguageClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/ailanguage/get_job.py.html>`__ to see an example of how to use get_job API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/ailanguage/get_job.py.html>`__ to see an example of how to use get_job API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['jobId']
@@ -3023,7 +3023,7 @@ class AIServiceLanguageClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/ailanguage/get_model.py.html>`__ to see an example of how to use get_model API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/ailanguage/get_model.py.html>`__ to see an example of how to use get_model API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['modelId']
@@ -3121,7 +3121,7 @@ class AIServiceLanguageClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/ailanguage/get_model_type.py.html>`__ to see an example of how to use get_model_type API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/ailanguage/get_model_type.py.html>`__ to see an example of how to use get_model_type API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['modelType']
@@ -3219,7 +3219,7 @@ class AIServiceLanguageClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/ailanguage/get_project.py.html>`__ to see an example of how to use get_project API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/ailanguage/get_project.py.html>`__ to see an example of how to use get_project API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['projectId']
@@ -3317,7 +3317,7 @@ class AIServiceLanguageClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/ailanguage/get_work_request.py.html>`__ to see an example of how to use get_work_request API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/ailanguage/get_work_request.py.html>`__ to see an example of how to use get_work_request API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workRequestId']
@@ -3452,7 +3452,7 @@ class AIServiceLanguageClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/ailanguage/list_endpoints.py.html>`__ to see an example of how to use list_endpoints API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/ailanguage/list_endpoints.py.html>`__ to see an example of how to use list_endpoints API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['compartmentId']
@@ -3590,7 +3590,7 @@ class AIServiceLanguageClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/ailanguage/list_evaluation_results.py.html>`__ to see an example of how to use list_evaluation_results API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/ailanguage/list_evaluation_results.py.html>`__ to see an example of how to use list_evaluation_results API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['modelId']
@@ -3725,7 +3725,7 @@ class AIServiceLanguageClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/ailanguage/list_jobs.py.html>`__ to see an example of how to use list_jobs API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/ailanguage/list_jobs.py.html>`__ to see an example of how to use list_jobs API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['compartmentId']
@@ -3887,7 +3887,7 @@ class AIServiceLanguageClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/ailanguage/list_models.py.html>`__ to see an example of how to use list_models API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/ailanguage/list_models.py.html>`__ to see an example of how to use list_models API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['compartmentId']
@@ -4048,7 +4048,7 @@ class AIServiceLanguageClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/ailanguage/list_projects.py.html>`__ to see an example of how to use list_projects API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/ailanguage/list_projects.py.html>`__ to see an example of how to use list_projects API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['compartmentId']
@@ -4192,7 +4192,7 @@ class AIServiceLanguageClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/ailanguage/list_work_request_errors.py.html>`__ to see an example of how to use list_work_request_errors API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/ailanguage/list_work_request_errors.py.html>`__ to see an example of how to use list_work_request_errors API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workRequestId']
@@ -4334,7 +4334,7 @@ class AIServiceLanguageClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/ailanguage/list_work_request_logs.py.html>`__ to see an example of how to use list_work_request_logs API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/ailanguage/list_work_request_logs.py.html>`__ to see an example of how to use list_work_request_logs API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workRequestId']
@@ -4482,7 +4482,7 @@ class AIServiceLanguageClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/ailanguage/list_work_requests.py.html>`__ to see an example of how to use list_work_requests API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/ailanguage/list_work_requests.py.html>`__ to see an example of how to use list_work_requests API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['compartmentId']
@@ -4611,7 +4611,7 @@ class AIServiceLanguageClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/ailanguage/update_endpoint.py.html>`__ to see an example of how to use update_endpoint API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/ailanguage/update_endpoint.py.html>`__ to see an example of how to use update_endpoint API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['endpointId']
@@ -4721,7 +4721,7 @@ class AIServiceLanguageClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/ailanguage/update_job.py.html>`__ to see an example of how to use update_job API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/ailanguage/update_job.py.html>`__ to see an example of how to use update_job API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['jobId']
@@ -4833,7 +4833,7 @@ class AIServiceLanguageClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/ailanguage/update_model.py.html>`__ to see an example of how to use update_model API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/ailanguage/update_model.py.html>`__ to see an example of how to use update_model API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['modelId']
@@ -4943,7 +4943,7 @@ class AIServiceLanguageClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/ailanguage/update_project.py.html>`__ to see an example of how to use update_project API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/ailanguage/update_project.py.html>`__ to see an example of how to use update_project API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['projectId']

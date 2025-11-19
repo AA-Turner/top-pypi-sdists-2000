@@ -149,6 +149,7 @@ Usage::
         DescribeVpcEndpointsPaginator,
         DescribeVpcPeeringConnectionsPaginator,
         DescribeVpcsPaginator,
+        DescribeVpnConcentratorsPaginator,
         EC2Client,
         EC2ServiceResource,
         ExportTaskCancelledWaiter,
@@ -397,6 +398,7 @@ Usage::
     describe_vpc_endpoints_paginator: DescribeVpcEndpointsPaginator = client.get_paginator("describe_vpc_endpoints")
     describe_vpc_peering_connections_paginator: DescribeVpcPeeringConnectionsPaginator = client.get_paginator("describe_vpc_peering_connections")
     describe_vpcs_paginator: DescribeVpcsPaginator = client.get_paginator("describe_vpcs")
+    describe_vpn_concentrators_paginator: DescribeVpnConcentratorsPaginator = client.get_paginator("describe_vpn_concentrators")
     get_associated_ipv6_pool_cidrs_paginator: GetAssociatedIpv6PoolCidrsPaginator = client.get_paginator("get_associated_ipv6_pool_cidrs")
     get_aws_network_performance_data_paginator: GetAwsNetworkPerformanceDataPaginator = client.get_paginator("get_aws_network_performance_data")
     get_capacity_manager_metric_data_paginator: GetCapacityManagerMetricDataPaginator = client.get_paginator("get_capacity_manager_metric_data")
@@ -566,6 +568,7 @@ from .paginator import (
     DescribeVpcEndpointsPaginator,
     DescribeVpcPeeringConnectionsPaginator,
     DescribeVpcsPaginator,
+    DescribeVpnConcentratorsPaginator,
     GetAssociatedIpv6PoolCidrsPaginator,
     GetAwsNetworkPerformanceDataPaginator,
     GetCapacityManagerMetricDataPaginator,
@@ -789,6 +792,7 @@ __all__ = (
     "DescribeVpcEndpointsPaginator",
     "DescribeVpcPeeringConnectionsPaginator",
     "DescribeVpcsPaginator",
+    "DescribeVpnConcentratorsPaginator",
     "EC2Client",
     "EC2ServiceResource",
     "ExportTaskCancelledWaiter",

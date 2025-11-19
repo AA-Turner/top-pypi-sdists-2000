@@ -8,9 +8,9 @@ Copyright 2025 Vlad Emelianov
 Usage::
 
     ```python
-    from mypy_boto3_iam.type_defs import AccessDetailTypeDef
+    from mypy_boto3_iam.type_defs import AcceptDelegationRequestRequestTypeDef
 
-    data: AccessDetailTypeDef = ...
+    data: AcceptDelegationRequestRequestTypeDef = ...
     ```
 """
 
@@ -32,6 +32,8 @@ from .literals import (
     FeatureTypeType,
     GlobalEndpointTokenVersionType,
     JobStatusTypeType,
+    PermissionCheckResultTypeType,
+    PermissionCheckStatusTypeType,
     PolicyEvaluationDecisionTypeType,
     PolicyOwnerEntityTypeType,
     PolicyParameterTypeEnumType,
@@ -41,8 +43,10 @@ from .literals import (
     PolicyUsageTypeType,
     ReportStateTypeType,
     SortKeyTypeType,
+    StateTypeType,
     StatusTypeType,
     SummaryKeyTypeType,
+    SummaryStateTypeType,
 )
 
 if sys.version_info >= (3, 12):
@@ -51,6 +55,7 @@ else:
     from typing_extensions import Literal, NotRequired, TypedDict
 
 __all__ = (
+    "AcceptDelegationRequestRequestTypeDef",
     "AccessDetailTypeDef",
     "AccessKeyLastUsedTypeDef",
     "AccessKeyMetadataTypeDef",
@@ -61,6 +66,7 @@ __all__ = (
     "AddUserToGroupRequestGroupAddUserTypeDef",
     "AddUserToGroupRequestTypeDef",
     "AddUserToGroupRequestUserAddGroupTypeDef",
+    "AssociateDelegationRequestRequestTypeDef",
     "AttachGroupPolicyRequestGroupAttachPolicyTypeDef",
     "AttachGroupPolicyRequestPolicyAttachGroupTypeDef",
     "AttachGroupPolicyRequestTypeDef",
@@ -118,7 +124,10 @@ __all__ = (
     "CreateVirtualMFADeviceRequestTypeDef",
     "CreateVirtualMFADeviceResponseTypeDef",
     "DeactivateMFADeviceRequestTypeDef",
+    "DelegationPermissionOutputTypeDef",
     "DelegationPermissionTypeDef",
+    "DelegationPermissionUnionTypeDef",
+    "DelegationRequestTypeDef",
     "DeleteAccessKeyRequestTypeDef",
     "DeleteAccountAliasRequestTypeDef",
     "DeleteGroupPolicyRequestTypeDef",
@@ -180,11 +189,15 @@ __all__ = (
     "GetContextKeysForPolicyResponseTypeDef",
     "GetContextKeysForPrincipalPolicyRequestTypeDef",
     "GetCredentialReportResponseTypeDef",
+    "GetDelegationRequestRequestTypeDef",
+    "GetDelegationRequestResponseTypeDef",
     "GetGroupPolicyRequestTypeDef",
     "GetGroupPolicyResponseTypeDef",
     "GetGroupRequestPaginateTypeDef",
     "GetGroupRequestTypeDef",
     "GetGroupResponseTypeDef",
+    "GetHumanReadableSummaryRequestTypeDef",
+    "GetHumanReadableSummaryResponseTypeDef",
     "GetInstanceProfileRequestTypeDef",
     "GetInstanceProfileRequestWaitTypeDef",
     "GetInstanceProfileResponseTypeDef",
@@ -241,6 +254,8 @@ __all__ = (
     "ListAttachedUserPoliciesRequestPaginateTypeDef",
     "ListAttachedUserPoliciesRequestTypeDef",
     "ListAttachedUserPoliciesResponseTypeDef",
+    "ListDelegationRequestsRequestTypeDef",
+    "ListDelegationRequestsResponseTypeDef",
     "ListEntitiesForPolicyRequestPaginateTypeDef",
     "ListEntitiesForPolicyRequestTypeDef",
     "ListEntitiesForPolicyResponseTypeDef",
@@ -338,6 +353,7 @@ __all__ = (
     "PolicyDocumentTypeDef",
     "PolicyGrantingServiceAccessTypeDef",
     "PolicyGroupTypeDef",
+    "PolicyParameterOutputTypeDef",
     "PolicyParameterTypeDef",
     "PolicyRoleTypeDef",
     "PolicyTypeDef",
@@ -354,6 +370,7 @@ __all__ = (
     "PutUserPolicyRequestTypeDef",
     "PutUserPolicyRequestUserCreatePolicyTypeDef",
     "PutUserPolicyRequestUserPolicyPutTypeDef",
+    "RejectDelegationRequestRequestTypeDef",
     "RemoveClientIDFromOpenIDConnectProviderRequestTypeDef",
     "RemoveRoleFromInstanceProfileRequestInstanceProfileRemoveRoleTypeDef",
     "RemoveRoleFromInstanceProfileRequestTypeDef",
@@ -374,6 +391,7 @@ __all__ = (
     "SAMLProviderListEntryTypeDef",
     "SSHPublicKeyMetadataTypeDef",
     "SSHPublicKeyTypeDef",
+    "SendDelegationTokenRequestTypeDef",
     "ServerCertificateMetadataTypeDef",
     "ServerCertificateTypeDef",
     "ServiceLastAccessedTypeDef",
@@ -416,6 +434,7 @@ __all__ = (
     "UpdateAccountPasswordPolicyRequestTypeDef",
     "UpdateAssumeRolePolicyRequestAssumeRolePolicyUpdateTypeDef",
     "UpdateAssumeRolePolicyRequestTypeDef",
+    "UpdateDelegationRequestRequestTypeDef",
     "UpdateGroupRequestGroupUpdateTypeDef",
     "UpdateGroupRequestTypeDef",
     "UpdateLoginProfileRequestLoginProfileUpdateTypeDef",
@@ -449,6 +468,9 @@ __all__ = (
     "VirtualMFADeviceTypeDef",
     "WaiterConfigTypeDef",
 )
+
+class AcceptDelegationRequestRequestTypeDef(TypedDict):
+    DelegationRequestId: str
 
 AccessDetailTypeDef = TypedDict(
     "AccessDetailTypeDef",
@@ -503,6 +525,9 @@ class AddUserToGroupRequestTypeDef(TypedDict):
 
 class AddUserToGroupRequestUserAddGroupTypeDef(TypedDict):
     GroupName: str
+
+class AssociateDelegationRequestRequestTypeDef(TypedDict):
+    DelegationRequestId: str
 
 class AttachGroupPolicyRequestGroupAttachPolicyTypeDef(TypedDict):
     PolicyArn: str
@@ -653,6 +678,14 @@ class DeactivateMFADeviceRequestTypeDef(TypedDict):
     SerialNumber: str
     UserName: NotRequired[str]
 
+PolicyParameterOutputTypeDef = TypedDict(
+    "PolicyParameterOutputTypeDef",
+    {
+        "Name": NotRequired[str],
+        "Values": NotRequired[list[str]],
+        "Type": NotRequired[PolicyParameterTypeEnumType],
+    },
+)
 PolicyParameterTypeDef = TypedDict(
     "PolicyParameterTypeDef",
     {
@@ -846,6 +879,10 @@ class GetContextKeysForPrincipalPolicyRequestTypeDef(TypedDict):
     PolicySourceArn: str
     PolicyInputList: NotRequired[Sequence[str]]
 
+class GetDelegationRequestRequestTypeDef(TypedDict):
+    DelegationRequestId: str
+    DelegationPermissionCheck: NotRequired[bool]
+
 class GetGroupPolicyRequestTypeDef(TypedDict):
     GroupName: str
     PolicyName: str
@@ -854,6 +891,10 @@ class GetGroupRequestTypeDef(TypedDict):
     GroupName: str
     Marker: NotRequired[str]
     MaxItems: NotRequired[int]
+
+class GetHumanReadableSummaryRequestTypeDef(TypedDict):
+    EntityArn: str
+    Locale: NotRequired[str]
 
 class GetInstanceProfileRequestTypeDef(TypedDict):
     InstanceProfileName: str
@@ -960,6 +1001,11 @@ class ListAttachedRolePoliciesRequestTypeDef(TypedDict):
 class ListAttachedUserPoliciesRequestTypeDef(TypedDict):
     UserName: str
     PathPrefix: NotRequired[str]
+    Marker: NotRequired[str]
+    MaxItems: NotRequired[int]
+
+class ListDelegationRequestsRequestTypeDef(TypedDict):
+    OwnerId: NotRequired[str]
     Marker: NotRequired[str]
     MaxItems: NotRequired[int]
 
@@ -1226,6 +1272,10 @@ class PutUserPolicyRequestUserCreatePolicyTypeDef(TypedDict):
 class PutUserPolicyRequestUserPolicyPutTypeDef(TypedDict):
     PolicyDocument: str
 
+class RejectDelegationRequestRequestTypeDef(TypedDict):
+    DelegationRequestId: str
+    Notes: NotRequired[str]
+
 class RemoveClientIDFromOpenIDConnectProviderRequestTypeDef(TypedDict):
     OpenIDConnectProviderArn: str
     ClientID: str
@@ -1264,6 +1314,9 @@ class ResyncMFADeviceRequestTypeDef(TypedDict):
 class RoleLastUsedTypeDef(TypedDict):
     LastUsedDate: NotRequired[datetime]
     Region: NotRequired[str]
+
+class SendDelegationTokenRequestTypeDef(TypedDict):
+    DelegationRequestId: str
 
 class TrackedActionLastAccessedTypeDef(TypedDict):
     ActionName: NotRequired[str]
@@ -1368,6 +1421,10 @@ class UpdateAssumeRolePolicyRequestAssumeRolePolicyUpdateTypeDef(TypedDict):
 class UpdateAssumeRolePolicyRequestTypeDef(TypedDict):
     RoleName: str
     PolicyDocument: str
+
+class UpdateDelegationRequestRequestTypeDef(TypedDict):
+    DelegationRequestId: str
+    Notes: NotRequired[str]
 
 class UpdateGroupRequestGroupUpdateTypeDef(TypedDict):
     NewPath: NotRequired[str]
@@ -1557,6 +1614,12 @@ class GetCredentialReportResponseTypeDef(TypedDict):
     Content: bytes
     ReportFormat: Literal["text/csv"]
     GeneratedTime: datetime
+    ResponseMetadata: ResponseMetadataTypeDef
+
+class GetHumanReadableSummaryResponseTypeDef(TypedDict):
+    SummaryContent: str
+    Locale: str
+    SummaryState: SummaryStateTypeType
     ResponseMetadata: ResponseMetadataTypeDef
 
 class GetMFADeviceResponseTypeDef(TypedDict):
@@ -1881,6 +1944,10 @@ class CreateServiceSpecificCredentialResponseTypeDef(TypedDict):
 class ResetServiceSpecificCredentialResponseTypeDef(TypedDict):
     ServiceSpecificCredential: ServiceSpecificCredentialTypeDef
     ResponseMetadata: ResponseMetadataTypeDef
+
+class DelegationPermissionOutputTypeDef(TypedDict):
+    PolicyTemplateArn: NotRequired[str]
+    Parameters: NotRequired[list[PolicyParameterOutputTypeDef]]
 
 class DelegationPermissionTypeDef(TypedDict):
     PolicyTemplateArn: NotRequired[str]
@@ -2236,16 +2303,30 @@ class VirtualMFADeviceTypeDef(TypedDict):
     EnableDate: NotRequired[datetime]
     Tags: NotRequired[list[TagTypeDef]]
 
-class CreateDelegationRequestRequestTypeDef(TypedDict):
-    Description: str
-    Permissions: DelegationPermissionTypeDef
-    RequestorWorkflowId: str
-    NotificationChannel: str
-    SessionDuration: int
+class DelegationRequestTypeDef(TypedDict):
+    DelegationRequestId: NotRequired[str]
     OwnerAccountId: NotRequired[str]
+    Description: NotRequired[str]
     RequestMessage: NotRequired[str]
+    Permissions: NotRequired[DelegationPermissionOutputTypeDef]
+    PermissionPolicy: NotRequired[str]
+    RolePermissionRestrictionArns: NotRequired[list[str]]
+    OwnerId: NotRequired[str]
+    ApproverId: NotRequired[str]
+    State: NotRequired[StateTypeType]
+    RequestorId: NotRequired[str]
+    RequestorName: NotRequired[str]
+    CreateDate: NotRequired[datetime]
+    SessionDuration: NotRequired[int]
     RedirectUrl: NotRequired[str]
+    Notes: NotRequired[str]
+    RejectionReason: NotRequired[str]
     OnlySendByOwner: NotRequired[bool]
+    UpdatedTime: NotRequired[datetime]
+
+DelegationPermissionUnionTypeDef = Union[
+    DelegationPermissionTypeDef, DelegationPermissionOutputTypeDef
+]
 
 class GetServiceLinkedRoleDeletionStatusResponseTypeDef(TypedDict):
     Status: DeletionTaskStatusTypeType
@@ -2302,6 +2383,29 @@ class ListVirtualMFADevicesResponseTypeDef(TypedDict):
     IsTruncated: bool
     Marker: str
     ResponseMetadata: ResponseMetadataTypeDef
+
+class GetDelegationRequestResponseTypeDef(TypedDict):
+    DelegationRequest: DelegationRequestTypeDef
+    PermissionCheckStatus: PermissionCheckStatusTypeType
+    PermissionCheckResult: PermissionCheckResultTypeType
+    ResponseMetadata: ResponseMetadataTypeDef
+
+class ListDelegationRequestsResponseTypeDef(TypedDict):
+    DelegationRequests: list[DelegationRequestTypeDef]
+    Marker: str
+    isTruncated: bool
+    ResponseMetadata: ResponseMetadataTypeDef
+
+class CreateDelegationRequestRequestTypeDef(TypedDict):
+    Description: str
+    Permissions: DelegationPermissionUnionTypeDef
+    RequestorWorkflowId: str
+    NotificationChannel: str
+    SessionDuration: int
+    OwnerAccountId: NotRequired[str]
+    RequestMessage: NotRequired[str]
+    RedirectUrl: NotRequired[str]
+    OnlySendByOwner: NotRequired[bool]
 
 class GetGroupPolicyResponseTypeDef(TypedDict):
     GroupName: str

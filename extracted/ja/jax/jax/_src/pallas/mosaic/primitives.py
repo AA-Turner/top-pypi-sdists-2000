@@ -16,6 +16,7 @@
 from __future__ import annotations
 
 import dataclasses
+import functools
 import logging
 from typing import Any
 
@@ -50,7 +51,7 @@ Ref = state.AbstractRef | state.TransformedRef
 
 repeat_p = jax_core.Primitive('repeat')
 
-def repeat(x, repeats, axis):
+def repeat(x: jax.Array, repeats: int, axis: int) -> jax.Array:
   axis = util.canonicalize_axis(axis, x.ndim)
   return repeat_p.bind(x, repeats=repeats, axis=axis)
 
@@ -63,21 +64,28 @@ def _repeat_abstract_eval(x, *, repeats, axis):
   return jax_core.ShapedArray(shape, x.dtype)
 
 
+@repeat_p.def_impl
+def repeat_impl(x: jax.Array, *, repeats: int, axis: int):
+  reps = [repeats if i == axis else 1 for i in range(x.ndim)]
+  return jnp.tile(x, reps)
+
+
 def _repeat_lowering_rule(ctx: mlir.LoweringRuleContext, x, *, repeats, axis):
-  def _repeat(x):
-    return jnp.repeat(x, repeats, axis)
-  return mlir.lower_fun(_repeat, multiple_results=False)(ctx, x)
+  return mlir.lower_fun(
+      functools.partial(repeat_impl, repeats=repeats, axis=axis),
+      multiple_results=False,
+  )(ctx, x)
 mlir.register_lowering(repeat_p, _repeat_lowering_rule)
 
 bitcast_p = jax_core.Primitive("bitcast")
 
 
-def bitcast(x, ty: DTypeLike):
+def bitcast(x: jax.Array, ty: DTypeLike) -> jax.Array:
   ty = dtypes.check_and_canonicalize_user_dtype(ty)
   if len(x.shape) < 2:
     raise ValueError("Not implemented: bitcast 1D")
-  src_bitwidth = dtypes.bit_width(x.dtype)
-  dst_bitwidth = dtypes.bit_width(ty)
+  src_bitwidth = dtypes.itemsize_bits(x.dtype)
+  dst_bitwidth = dtypes.itemsize_bits(ty)
   if x.shape[-2] * src_bitwidth % dst_bitwidth:
     raise ValueError(
         "Not implemented: the 2nd minor dim can not be perfectly packed or"
@@ -89,16 +97,16 @@ def bitcast(x, ty: DTypeLike):
 @bitcast_p.def_abstract_eval
 def _bitcast_abstract_eval(x, *, ty):
   shape = list(x.shape)
-  src_bitwidth = dtypes.bit_width(x.dtype)
-  dst_bitwidth = dtypes.bit_width(ty)
+  src_bitwidth = dtypes.itemsize_bits(x.dtype)
+  dst_bitwidth = dtypes.itemsize_bits(ty)
   shape[-2] = shape[-2] * src_bitwidth // dst_bitwidth
   return jax_core.ShapedArray(shape, ty)
 
 
 def _bitcast_lowering_rule(ctx: mlir.LoweringRuleContext, x, *, ty):
   def _bitcast(x):
-    src_bitwidth = dtypes.bit_width(x.dtype)
-    dst_bitwidth = dtypes.bit_width(ty)
+    src_bitwidth = dtypes.itemsize_bits(x.dtype)
+    dst_bitwidth = dtypes.itemsize_bits(ty)
     if src_bitwidth < dst_bitwidth:
       *leading, m, n = x.shape
       packing = dst_bitwidth // src_bitwidth
@@ -120,13 +128,13 @@ roll_p = jax_core.Primitive("roll")
 
 
 def roll(
-    x,
-    shift,
+    x: jax.Array,
+    shift: jax.Array | int,
     axis: int,
     *,
     stride: int | None = None,
     stride_axis: int | None = None,
-):
+) -> jax.Array:
   if isinstance(shift, int) and shift < 0:
     raise ValueError("shift must be non-negative.")
   if axis < 0 or axis >= len(x.shape):
@@ -228,7 +236,7 @@ class AsyncCopyDescriptor:
           self.device_id,
       )
 
-  def start(self, priority: int = 0):
+  def start(self, priority: int = 0, *, add: bool = False):
     self._used = True
     flat_args, tree = self._get_args_and_tree()
     dma_start_p.bind(
@@ -236,6 +244,7 @@ class AsyncCopyDescriptor:
         tree=tree,
         device_id_type=self.device_id_type,
         priority=priority,
+        add=add,
     )
 
   def wait(self):
@@ -375,7 +384,7 @@ dma_start_p = jax_core.Primitive('dma_start')
 dma_start_p.multiple_results = True
 
 @dma_start_p.def_effectful_abstract_eval
-def _dma_start_abstract_eval(*args, tree, device_id_type, priority):
+def _dma_start_abstract_eval(*args, tree, device_id_type, priority, add):
   if priority < 0:
     raise ValueError(f"DMA start priority must be non-negative: {priority}")
   (
@@ -424,6 +433,7 @@ def _dma_start_pp_eqn(eqn: jax_core.JaxprEqn,
   invars = eqn.invars
   tree = eqn.params["tree"]
   priority = eqn.params["priority"]
+  add = eqn.params["add"]
   (
       src_ref,
       src_transforms,
@@ -440,7 +450,7 @@ def _dma_start_pp_eqn(eqn: jax_core.JaxprEqn,
   if src_sem or device_id:
     return jax_core._pp_eqn(eqn, context, settings)
   return pp.concat([
-      pp.text(f"dma_start(p{priority})"),
+      pp.text(f"dma_start(p{priority}{', add' if add else ''})"),
       pp.text(" "),
       sp.pp_ref_transforms(context, src_ref, src_transforms),
       pp.text(" -> "),
@@ -453,10 +463,14 @@ jax_core.pp_eqn_rules[dma_start_p] = _dma_start_pp_eqn
 
 
 def dma_start_partial_discharge_rule(
-    should_discharge, in_avals, out_avals, *args, tree, device_id_type, priority
+    should_discharge, in_avals, out_avals, *args, tree, device_id_type,
+    priority, add
 ):
   # Note: we ignore the DMA priority in discharge rules.
   del priority
+  if add:
+    raise NotImplementedError(
+        "DMA partial discharge add=True not yet implemented.")
   (
       src_ref,
       src_transforms,
@@ -709,7 +723,7 @@ def dma_wait_partial_discharge_rule(should_discharge,
 
   num_sem_transforms = len(tree_util.tree_leaves(dst_sem_transforms_avals))
   num_transforms = len(tree_util.tree_leaves(dst_ref_transforms_avals))
-  updates = state_discharge.transform_array(dst_ref, dst_ref_transforms)
+  updates = state_discharge.transform_array(dst_ref[...], dst_ref_transforms)
   copy_size = jnp.minimum(updates.size, pl_core.SEMAPHORE_MAX_VALUE)
   copy_size = jnp.array(copy_size, dtype=pl_core.SEMAPHORE_INTERPRET_DTYPE)
   sem_value = primitives._transform_semaphore(dst_sem, dst_sem_transforms, dst_sem_aval)
@@ -754,11 +768,11 @@ def make_async_copy(src_ref, dst_ref, sem) -> AsyncCopyDescriptor:
 
 
 def async_copy(
-    src_ref, dst_ref, sem, *, priority: int = 0
+    src_ref, dst_ref, sem, *, priority: int = 0, add: bool = False,
 ) -> AsyncCopyDescriptor:
   """Issues a DMA copying from src_ref to dst_ref."""
   copy_descriptor = make_async_copy(src_ref, dst_ref, sem)
-  copy_descriptor.start(priority=priority)
+  copy_descriptor.start(priority=priority, add=add)
   return copy_descriptor
 
 
@@ -859,20 +873,6 @@ def get_barrier_semaphore():
   """
   return get_barrier_semaphore_p.bind()
 
-delay_p = jax_core.Primitive("delay")
-delay_p.multiple_results = True
-
-
-@delay_p.def_abstract_eval
-def _delay_abstract_eval(nanos):
-  del nanos
-  return []
-
-
-def delay(nanos):
-  """Delays vector execution for the given number of nanosconds."""
-  delay_p.bind(nanos)
-
 
 # RNG Ops
 prng_seed_p = jax_core.Primitive("prng_seed")
@@ -946,6 +946,82 @@ def wrap_pallas_seed(*seeds, impl):
   """Joins scalar into a single PRNG key."""
   impl = jax_random.resolve_prng_impl(impl)
   return join_key_p.bind(*seeds, impl=impl)
+
+
+stochastic_round_p = jax_core.Primitive("stochastic_round")
+
+
+def stochastic_round(x, random_bits, *, target_dtype):
+  return stochastic_round_p.bind(x, random_bits, target_dtype=target_dtype)
+
+
+@stochastic_round_p.def_abstract_eval
+def _stochastic_round_abstract_eval(x, random_bits, *, target_dtype):
+  if random_bits.shape != x.shape:
+    raise ValueError(
+        "The shape of `random_bits` must match the shape of `x` for "
+        f"stochastic_round, but got {random_bits.shape} and {x.shape}"
+    )
+  if random_bits.dtype != jnp.dtype("uint32"):
+    raise ValueError(
+        "The dtype of `random_bits` must be uint32 for stochastic_round, "
+        f"but got {random_bits.dtype}"
+    )
+  return jax_core.ShapedArray(x.shape, target_dtype)
+
+def _get_elementwise_packing_factor(unpacked_dtype, packed_dtype):
+  unpacked_bitwidth = dtypes.itemsize_bits(unpacked_dtype)
+  packed_bitwidth = dtypes.itemsize_bits(packed_dtype)
+  if unpacked_bitwidth % packed_bitwidth != 0:
+    raise ValueError(
+        "Unpacked bitwidth must be a multiple of packed bitwidth, got "
+        f"{unpacked_bitwidth} and {packed_bitwidth}"
+    )
+  return unpacked_bitwidth // packed_bitwidth
+
+pack_elementwise_p = jax_core.Primitive("pack_elementwise")
+
+
+def pack_elementwise(xs, *, packed_dtype):
+  return pack_elementwise_p.bind(*xs, packed_dtype=packed_dtype)
+
+
+@pack_elementwise_p.def_abstract_eval
+def _pack_elementwise_abstract_eval(*xs, packed_dtype):
+  if not xs:
+    raise ValueError("At least one source is required")
+  first = xs[0]
+  if not all(x.shape == first.shape for x in xs):
+    raise ValueError("All sources must have the same shape")
+  if not all(x.dtype == first.dtype for x in xs):
+    raise ValueError("All sources must have the same dtype")
+  packing_factor = _get_elementwise_packing_factor(first.dtype, packed_dtype)
+  if len(xs) != packing_factor:
+    raise ValueError(
+        "The number of sources must match the packing factor "
+        f"({packing_factor}), got {len(xs)}"
+    )
+  return jax_core.ShapedArray(first.shape, jnp.uint32)
+
+
+unpack_elementwise_p = jax_core.Primitive("unpack_elementwise")
+
+
+def unpack_elementwise(x, *, index, packed_dtype, unpacked_dtype):
+  return unpack_elementwise_p.bind(
+      x, index=index, packed_dtype=packed_dtype, unpacked_dtype=unpacked_dtype
+  )
+
+
+@unpack_elementwise_p.def_abstract_eval
+def _unpack_elementwise_abstract_eval(x, *, index, packed_dtype, unpacked_dtype):
+  if x.dtype != jnp.uint32:
+    raise ValueError(f"Source must be uint32, got {x.dtype}")
+  packing_factor = _get_elementwise_packing_factor(unpacked_dtype, packed_dtype)
+  if index < 0 or index >= packing_factor:
+    raise ValueError(
+        f"Index {index} is out of bounds for packing factor {packing_factor}")
+  return jax_core.ShapedArray(x.shape, unpacked_dtype)
 
 
 def with_memory_space_constraint(

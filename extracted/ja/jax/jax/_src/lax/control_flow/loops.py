@@ -45,6 +45,7 @@ from jax._src.interpreters import mlir
 from jax._src.interpreters import partial_eval as pe
 from jax._src.interpreters import pxla
 from jax._src import sharding_impls as sharding
+from jax._src.mesh import use_abstract_mesh
 from jax._src.lax import lax
 from jax._src.lax import slicing
 from jax._src.lax import windowed_reductions
@@ -110,7 +111,7 @@ Carry = TypeVar('Carry')
 X = TypeVar('X')
 Y = TypeVar('Y')
 
-@api_boundary
+@partial(api_boundary, repro_api_name="jax.lax.scan")
 def scan(f: Callable[[Carry, X], tuple[Carry, Y]],
          init: Carry,
          xs: X | None = None,
@@ -191,11 +192,12 @@ def scan(f: Callable[[Carry, X], tuple[Carry, Y]],
     reverse: optional boolean specifying whether to run the scan iteration
       forward (the default) or in reverse, equivalent to reversing the leading
       axes of the arrays in both ``xs`` and in ``ys``.
-    unroll: optional positive int or bool specifying, in the underlying
+    unroll: optional non-negative int or bool specifying, in the underlying
       operation of the scan primitive, how many scan iterations to unroll within
       a single iteration of a loop. If an integer is provided, it determines how
       many unrolled loop iterations to run within a single rolled iteration of
-      the loop. If a boolean is provided, it will determine if the loop is
+      the loop. `unroll=0` unrolls the entire loop.
+      If a boolean is provided, it will determine if the loop is
       completely unrolled (i.e. `unroll=True`) or left completely rolled (i.e.
       `unroll=False`).
     _split_transpose: experimental optional bool specifying whether to further
@@ -320,8 +322,8 @@ def scan(f: Callable[[Carry, X], tuple[Carry, Y]],
       "value.")
   if isinstance(unroll, bool):
     unroll = max(length, 1) if unroll else 1
-  if unroll < 1:
-    raise ValueError("`unroll` must be a `bool` or a positive `int`.")
+  if unroll < 0:
+    raise ValueError("`unroll` must be a `bool` or a non-negative `int`.")
 
   # If the body forwards an input carry to an output carry, that input is
   # read-only and can be moved to be a const. Doing so can lead to efficiency
@@ -465,7 +467,10 @@ def _scan_impl(*args, reverse, length, num_consts, num_carry, jaxpr, linear,
   del _split_transpose
   consts, carry, xs_ = split_list(args, [num_consts, num_carry])
   _, y_avals = split_list(jaxpr.out_avals, [num_carry])
-  num_trips, remainder = divmod(length, unroll)
+  if unroll == 0:
+    num_trips, remainder = 0, length
+  else:
+    num_trips, remainder = divmod(length, unroll)
 
   if unroll != 1 and num_trips == 1 and remainder == 0:
     # In that case, we explicitly want to fully unroll the loop. Put everything
@@ -502,15 +507,22 @@ def _scan_impl(*args, reverse, length, num_consts, num_carry, jaxpr, linear,
 
   def body_fun(while_carry):
     i_, carry, yss = while_carry
-    i = num_trips - i_ - 1 if reverse else i_
-    xs = [slicing.dynamic_index_in_dim(xs, i, keepdims=False,
-                                       allow_negative_indices=False)
-          for xs in xss]
+    with use_abstract_mesh(core.typeof(i_).sharding.mesh):
+      i = num_trips - i_ - 1 if reverse else i_
+    xs = []
+    for x in xss:
+      with use_abstract_mesh(core.typeof(x).sharding.mesh):
+        o = slicing.dynamic_index_in_dim(
+            x, i, keepdims=False, allow_negative_indices=False)
+      xs.append(o)
     carry, ys = inner(unroll, carry, xs)
-    yss = [slicing.dynamic_update_index_in_dim(y, upd, i, 0,
-                                               allow_negative_indices=False)
-           for y, upd in zip(yss, ys)]
-    return i_ + 1, carry, yss
+    out_yss = []
+    for y, upd in zip(yss, ys):
+      with use_abstract_mesh(core.typeof(y).sharding.mesh):
+        o = slicing.dynamic_update_index_in_dim(
+            y, upd, i, 0, allow_negative_indices=False)
+      out_yss.append(o)
+    return i_ + 1, carry, out_yss
 
   def cond_fun(while_carry):
     i, _, _ = while_carry
@@ -556,7 +568,8 @@ def _empty_array(prefix, length_spec, aval):
   # return core.pvary(empty, tuple(aval.vma))
   empty = core.pvary(lax.empty2(aval.dtype, memory_space=aval.memory_space),
                      tuple(aval.vma))
-  out = lax.broadcast(empty, (*prefix, *aval.shape), out_sharding=sharding)
+  with use_abstract_mesh(sharding.mesh):
+    out = lax.broadcast(empty, (*prefix, *aval.shape), out_sharding=sharding)
   return out
 
 eval_jaxpr_p = core.Primitive('eval_jaxpr')
@@ -1452,7 +1465,7 @@ def _scan_typecheck(bind_time, *in_atoms, reverse, length, num_consts,
   tc(jaxpr, 'jaxpr', 'ClosedJaxpr', type(jaxpr) is ClosedJaxpr)
   tc(linear, 'linear', 'tuple of bool',
      type(linear) is tuple and all(type(x) is bool for x in linear))
-  tc(unroll, 'unroll', 'positive int', type(unroll) is int and unroll > 0)
+  tc(unroll, 'unroll', 'non-negative int', type(unroll) is int and unroll >= 0)
 
   tc(length, 'length', 'non-negative int', length >= 0)
 
@@ -1619,7 +1632,7 @@ def _move_right(lst, to_move):
 
 ### while_loop
 
-@api_boundary
+@partial(api_boundary, repro_api_name="jax.lax.while_loop")
 def while_loop(cond_fun: Callable[[T], BooleanNumeric],
                body_fun: Callable[[T], T],
                init_val: T) -> T:
@@ -2531,7 +2544,7 @@ def _fori_scan_body_fun(body_fun: Callable, body_fun_dbg: core.DebugInfo) -> Cal
       scanned_fun, body_fun_dbg._replace(result_paths=None))
   return scanned_fun
 
-@api_boundary
+@partial(api_boundary, repro_api_name="jax.lax.fori_loop")
 def fori_loop(lower, upper, body_fun, init_val,
               *, unroll: int | bool | None = None):
   """Loop from ``lower`` to ``upper`` by reduction to :func:`jax.lax.while_loop`.

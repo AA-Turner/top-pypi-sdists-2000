@@ -900,6 +900,8 @@ __all__ = (
     "CreateVpcRequestServiceResourceCreateVpcTypeDef",
     "CreateVpcRequestTypeDef",
     "CreateVpcResultTypeDef",
+    "CreateVpnConcentratorRequestTypeDef",
+    "CreateVpnConcentratorResultTypeDef",
     "CreateVpnConnectionRequestTypeDef",
     "CreateVpnConnectionResultTypeDef",
     "CreateVpnConnectionRouteRequestTypeDef",
@@ -1085,6 +1087,8 @@ __all__ = (
     "DeleteVpcPeeringConnectionResultTypeDef",
     "DeleteVpcRequestTypeDef",
     "DeleteVpcRequestVpcDeleteTypeDef",
+    "DeleteVpnConcentratorRequestTypeDef",
+    "DeleteVpnConcentratorResultTypeDef",
     "DeleteVpnConnectionRequestTypeDef",
     "DeleteVpnConnectionRouteRequestTypeDef",
     "DeleteVpnGatewayRequestTypeDef",
@@ -1638,6 +1642,9 @@ __all__ = (
     "DescribeVpcsRequestWaitExtraTypeDef",
     "DescribeVpcsRequestWaitTypeDef",
     "DescribeVpcsResultTypeDef",
+    "DescribeVpnConcentratorsRequestPaginateTypeDef",
+    "DescribeVpnConcentratorsRequestTypeDef",
+    "DescribeVpnConcentratorsResultTypeDef",
     "DescribeVpnConnectionsRequestTypeDef",
     "DescribeVpnConnectionsRequestWaitExtraTypeDef",
     "DescribeVpnConnectionsRequestWaitTypeDef",
@@ -3012,6 +3019,7 @@ __all__ = (
     "VpcPeeringConnectionTypeDef",
     "VpcPeeringConnectionVpcInfoTypeDef",
     "VpcTypeDef",
+    "VpnConcentratorTypeDef",
     "VpnConnectionDeviceTypeTypeDef",
     "VpnConnectionOptionsSpecificationTypeDef",
     "VpnConnectionOptionsTypeDef",
@@ -4744,6 +4752,10 @@ class DeleteVpcRequestTypeDef(TypedDict):
     DryRun: NotRequired[bool]
 
 class DeleteVpcRequestVpcDeleteTypeDef(TypedDict):
+    DryRun: NotRequired[bool]
+
+class DeleteVpnConcentratorRequestTypeDef(TypedDict):
+    VpnConcentratorId: str
     DryRun: NotRequired[bool]
 
 class DeleteVpnConnectionRequestTypeDef(TypedDict):
@@ -8156,6 +8168,10 @@ class DeleteVpcPeeringConnectionResultTypeDef(TypedDict):
     Return: bool
     ResponseMetadata: ResponseMetadataTypeDef
 
+class DeleteVpnConcentratorResultTypeDef(TypedDict):
+    Return: bool
+    ResponseMetadata: ResponseMetadataTypeDef
+
 class DeprovisionPublicIpv4PoolCidrResultTypeDef(TypedDict):
     PoolId: str
     DeprovisionedAddresses: list[str]
@@ -9328,6 +9344,18 @@ class VpcClassicLinkTypeDef(TypedDict):
 class VpcCreateTagsRequestTypeDef(TypedDict):
     Tags: Sequence[TagTypeDef]
     DryRun: NotRequired[bool]
+
+VpnConcentratorTypeDef = TypedDict(
+    "VpnConcentratorTypeDef",
+    {
+        "VpnConcentratorId": NotRequired[str],
+        "State": NotRequired[str],
+        "TransitGatewayId": NotRequired[str],
+        "TransitGatewayAttachmentId": NotRequired[str],
+        "Type": NotRequired[str],
+        "Tags": NotRequired[list[TagTypeDef]],
+    },
+)
 
 class AllocateIpamPoolCidrResultTypeDef(TypedDict):
     IpamPoolAllocation: IpamPoolAllocationTypeDef
@@ -12290,6 +12318,19 @@ class DescribeVpcsRequestTypeDef(TypedDict):
     MaxResults: NotRequired[int]
     DryRun: NotRequired[bool]
 
+class DescribeVpnConcentratorsRequestPaginateTypeDef(TypedDict):
+    VpnConcentratorIds: NotRequired[Sequence[str]]
+    Filters: NotRequired[Sequence[FilterTypeDef]]
+    DryRun: NotRequired[bool]
+    PaginationConfig: NotRequired[PaginatorConfigTypeDef]
+
+class DescribeVpnConcentratorsRequestTypeDef(TypedDict):
+    VpnConcentratorIds: NotRequired[Sequence[str]]
+    Filters: NotRequired[Sequence[FilterTypeDef]]
+    MaxResults: NotRequired[int]
+    NextToken: NotRequired[str]
+    DryRun: NotRequired[bool]
+
 class DescribeVpnConnectionsRequestTypeDef(TypedDict):
     Filters: NotRequired[Sequence[FilterTypeDef]]
     VpnConnectionIds: NotRequired[Sequence[str]]
@@ -15124,6 +15165,15 @@ class ModifyVpcBlockPublicAccessExclusionResultTypeDef(TypedDict):
 class DescribeVpcClassicLinkResultTypeDef(TypedDict):
     Vpcs: list[VpcClassicLinkTypeDef]
     ResponseMetadata: ResponseMetadataTypeDef
+
+class CreateVpnConcentratorResultTypeDef(TypedDict):
+    VpnConcentrator: VpnConcentratorTypeDef
+    ResponseMetadata: ResponseMetadataTypeDef
+
+class DescribeVpnConcentratorsResultTypeDef(TypedDict):
+    VpnConcentrators: list[VpnConcentratorTypeDef]
+    ResponseMetadata: ResponseMetadataTypeDef
+    NextToken: NotRequired[str]
 
 class ExplanationTypeDef(TypedDict):
     Acl: NotRequired[AnalysisComponentTypeDef]
@@ -18136,6 +18186,15 @@ class CreateVpcRequestTypeDef(TypedDict):
     InstanceTenancy: NotRequired[TenancyType]
     AmazonProvidedIpv6CidrBlock: NotRequired[bool]
 
+CreateVpnConcentratorRequestTypeDef = TypedDict(
+    "CreateVpnConcentratorRequestTypeDef",
+    {
+        "Type": Literal["ipsec.1"],
+        "TransitGatewayId": NotRequired[str],
+        "TagSpecifications": NotRequired[Sequence[TagSpecificationUnionTypeDef]],
+        "DryRun": NotRequired[bool],
+    },
+)
 CreateVpnGatewayRequestTypeDef = TypedDict(
     "CreateVpnGatewayRequestTypeDef",
     {
@@ -18982,6 +19041,7 @@ CreateVpnConnectionRequestTypeDef = TypedDict(
         "Type": str,
         "VpnGatewayId": NotRequired[str],
         "TransitGatewayId": NotRequired[str],
+        "VpnConcentratorId": NotRequired[str],
         "TagSpecifications": NotRequired[Sequence[TagSpecificationUnionTypeDef]],
         "PreSharedKeyStorage": NotRequired[str],
         "DryRun": NotRequired[bool],
@@ -18993,6 +19053,7 @@ VpnConnectionTypeDef = TypedDict(
     {
         "Category": NotRequired[str],
         "TransitGatewayId": NotRequired[str],
+        "VpnConcentratorId": NotRequired[str],
         "CoreNetworkArn": NotRequired[str],
         "CoreNetworkAttachmentArn": NotRequired[str],
         "GatewayAssociationState": NotRequired[GatewayAssociationStateType],

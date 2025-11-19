@@ -968,7 +968,8 @@ def _run_scoped_lowering_rule(ctx, *args, jaxpr, collective_axes):
 
 get_global_p = jax_core.Primitive("get_global")
 get_global_p.multiple_results = False
-
+get_global_p.ref_primitive = True
+jax_core._ref_allocating_primitives.add(get_global_p)
 
 def get_global(what: pallas_core.ScratchShape) -> jax.Array:
   """Returns a global reference that persists across all kernel invocations.
@@ -1133,13 +1134,15 @@ def _semaphore_signal_abstract_eval(
   ) = tree_util.tree_unflatten(args_tree, avals)
   check_sem_avals(sem_aval, sem_transforms_avals, "signal")
   if value_aval.dtype != jnp.dtype("int32"):
-    raise ValueError("Must signal an int32 value.")
+    raise ValueError(f"Must signal an int32 value, but got {value_aval.dtype}")
   effs : set[effects.Effect] = set()
   if device_id_avals is not None:
     device_id_flat_avals = tree_util.tree_leaves(device_id_avals)
     for aval in device_id_flat_avals:
       if aval.dtype != jnp.dtype("int32"):
-        raise ValueError("`device_id`s must be an int32 value.")
+        raise ValueError(
+            f"`device_id`s must be an int32 value, but got {aval.dtype}"
+        )
     effs.add(pallas_core.comms_effect)
   return [], effs
 
@@ -1327,6 +1330,11 @@ def device_id_to_logical(
     # Mesh means we are passed the mesh coordinates for the device
     device_ids = tree_util.tree_leaves(device_id)
     mesh_strides = mesh_context.mesh_strides
+    if len(device_ids) != len(mesh_strides):
+      raise ValueError(
+          "Number of device ids must match the number of mesh axes, but got"
+          f" {len(device_ids)} ids for a {len(mesh_strides)}D mesh."
+      )
 
     i32 = ir.IntegerType.get_signless(32)
     if len(device_ids) == 0:
@@ -1341,3 +1349,18 @@ def device_id_to_logical(
   elif device_id_type is DeviceIdType.LOGICAL:
     return device_id, non_mesh_axes
   raise NotImplementedError(f"Unsupported device id type: {device_id_type}")
+
+
+delay_p = jax_core.Primitive("delay")
+delay_p.multiple_results = True
+
+
+@delay_p.def_abstract_eval
+def _delay_abstract_eval(nanos):
+  del nanos
+  return []
+
+
+def delay(nanos: int | jax.Array) -> None:
+  """Sleeps for the given number of nanoseconds."""
+  delay_p.bind(nanos)

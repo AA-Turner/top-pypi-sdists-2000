@@ -1355,7 +1355,7 @@ def _bessel_jn(z: ArrayLike, *, v: int, n_iter: int=50) -> Array:
   return j_vals
 
 
-@partial(jit, static_argnames=["v", "n_iter"])
+@jit(static_argnames=["v", "n_iter"])
 def bessel_jn(z: ArrayLike, *, v: int, n_iter: int=50) -> Array:
   """Bessel function of the first kind of integer order and real argument.
 
@@ -1448,7 +1448,7 @@ def _gen_recurrence_mask(
   return (d0_mask_3d, d1_mask_3d)
 
 
-@partial(jit, static_argnums=(2))
+@jit(static_argnums=(2))
 def _gen_derivatives(p: Array,
                      x: Array,
                      is_normalized: bool) -> Array:
@@ -1543,7 +1543,7 @@ def _gen_derivatives(p: Array,
   return p_derivative
 
 
-@partial(jit, static_argnums=(0, 2))
+@jit(static_argnums=(0, 2))
 def _gen_associated_legendre(l_max: int,
                              x: Array,
                              is_normalized: bool) -> Array:
@@ -1744,7 +1744,7 @@ def lpmn_values(m: int, n: int, z: Array, is_normalized: bool) -> Array:
 
 
 
-@partial(jit, static_argnums=(4,))
+@jit(static_argnums=(4,))
 def _sph_harm(n: Array,
               m: Array,
               theta: Array,
@@ -3129,6 +3129,7 @@ def softmax(x: ArrayLike,
     x : input array
     axis: the axis or axes along which the softmax should be computed. The
       softmax output summed across these dimensions should sum to :math:`1`.
+      ``None`` means all axes.
 
   Returns:
     An array of the same shape as ``x``.
@@ -3163,7 +3164,7 @@ def log_softmax(x: ArrayLike,
   Args:
     x : input array
     axis: the axis or axes along which the :code:`log_softmax` should be
-      computed.
+      computed. ``None`` means all axes.
 
   Returns:
     An array of the same shape as ``x``

@@ -67,6 +67,8 @@ __all__ = (
     "ListUsersPaginatorName",
     "ListVirtualMFADevicesPaginatorName",
     "PaginatorName",
+    "PermissionCheckResultTypeType",
+    "PermissionCheckStatusTypeType",
     "PermissionsBoundaryAttachmentTypeType",
     "PolicyEvaluationDecisionTypeType",
     "PolicyExistsWaiterName",
@@ -84,8 +86,10 @@ __all__ = (
     "SimulateCustomPolicyPaginatorName",
     "SimulatePrincipalPolicyPaginatorName",
     "SortKeyTypeType",
+    "StateTypeType",
     "StatusTypeType",
     "SummaryKeyTypeType",
+    "SummaryStateTypeType",
     "UserExistsWaiterName",
     "WaiterName",
 )
@@ -146,6 +150,8 @@ ListUserPoliciesPaginatorName = Literal["list_user_policies"]
 ListUserTagsPaginatorName = Literal["list_user_tags"]
 ListUsersPaginatorName = Literal["list_users"]
 ListVirtualMFADevicesPaginatorName = Literal["list_virtual_mfa_devices"]
+PermissionCheckResultTypeType = Literal["ALLOWED", "DENIED", "UNSURE"]
+PermissionCheckStatusTypeType = Literal["COMPLETE", "FAILED", "IN_PROGRESS"]
 PermissionsBoundaryAttachmentTypeType = Literal["PermissionsBoundaryPolicy"]
 PolicyEvaluationDecisionTypeType = Literal["allowed", "explicitDeny", "implicitDeny"]
 PolicyExistsWaiterName = Literal["policy_exists"]
@@ -167,6 +173,9 @@ SortKeyTypeType = Literal[
     "LAST_AUTHENTICATED_TIME_DESCENDING",
     "SERVICE_NAMESPACE_ASCENDING",
     "SERVICE_NAMESPACE_DESCENDING",
+]
+StateTypeType = Literal[
+    "ACCEPTED", "ASSIGNED", "EXPIRED", "FINALIZED", "PENDING_APPROVAL", "REJECTED", "UNASSIGNED"
 ]
 StatusTypeType = Literal["Active", "Expired", "Inactive"]
 SummaryKeyTypeType = Literal[
@@ -205,6 +214,7 @@ SummaryKeyTypeType = Literal[
     "UsersQuota",
     "VersionsPerPolicyQuota",
 ]
+SummaryStateTypeType = Literal["AVAILABLE", "FAILED", "NOT_AVAILABLE", "NOT_SUPPORTED"]
 UserExistsWaiterName = Literal["user_exists"]
 IAMServiceName = Literal["iam"]
 ServiceName = Literal[
@@ -472,6 +482,7 @@ ServiceName = Literal[
     "mq",
     "mturk",
     "mwaa",
+    "mwaa-serverless",
     "neptune",
     "neptune-graph",
     "neptunedata",

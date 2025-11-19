@@ -326,6 +326,7 @@ class OpenAIResponsesModel(Model):
             extra_body=model_settings.extra_body,
             text=response_format,
             store=self._non_null_or_omit(model_settings.store),
+            prompt_cache_retention=self._non_null_or_omit(model_settings.prompt_cache_retention),
             reasoning=self._non_null_or_omit(model_settings.reasoning),
             metadata=self._non_null_or_omit(model_settings.metadata),
             **extra_args,
@@ -377,7 +378,7 @@ class Converter:
         elif tool_choice == "web_search":
             return {
                 # TODO: revist the type: ignore comment when ToolChoice is updated in the future
-                "type": "web_search",  # type: ignore [typeddict-item]
+                "type": "web_search",  # type: ignore[misc, return-value]
             }
         elif tool_choice == "web_search_preview":
             return {
@@ -398,7 +399,7 @@ class Converter:
         elif tool_choice == "mcp":
             # Note that this is still here for backwards compatibility,
             # but migrating to MCPToolChoice is recommended.
-            return {"type": "mcp"}  # type: ignore [typeddict-item]
+            return {"type": "mcp"}  # type: ignore[misc, return-value]
         else:
             return {
                 "type": "function",

@@ -27,6 +27,8 @@ from .literals import (
     AnnotationSeverityLevelType,
     AnnotationStatusType,
     AttributeChangeTypeType,
+    BeaconStackOperationStatusType,
+    BeforeValueFromType,
     CallAsType,
     CapabilityType,
     CategoryType,
@@ -40,7 +42,9 @@ from .literals import (
     DeprecatedStatusType,
     DetailedStatusType,
     DifferenceTypeType,
+    DriftIgnoredReasonType,
     EvaluationTypeType,
+    EventTypeType,
     ExecutionStatusType,
     GeneratedTemplateDeletionPolicyType,
     GeneratedTemplateResourceStatusType,
@@ -55,6 +59,7 @@ from .literals import (
     OnFailureType,
     OnStackFailureType,
     OperationStatusType,
+    OperationTypeType,
     OrganizationStatusType,
     PermissionModelsType,
     PolicyActionType,
@@ -92,6 +97,7 @@ from .literals import (
     TemplateStageType,
     ThirdPartyTypeType,
     TypeTestsStatusType,
+    ValidationStatusType,
     VersionBumpType,
     VisibilityType,
     WarningTypeType,
@@ -154,6 +160,9 @@ __all__ = (
     "DescribeChangeSetInputTypeDef",
     "DescribeChangeSetInputWaitTypeDef",
     "DescribeChangeSetOutputTypeDef",
+    "DescribeEventsInputPaginateTypeDef",
+    "DescribeEventsInputTypeDef",
+    "DescribeEventsOutputTypeDef",
     "DescribeGeneratedTemplateInputTypeDef",
     "DescribeGeneratedTemplateOutputTypeDef",
     "DescribeOrganizationsAccessInputTypeDef",
@@ -206,6 +215,7 @@ __all__ = (
     "EmptyResponseMetadataTypeDef",
     "EstimateTemplateCostInputTypeDef",
     "EstimateTemplateCostOutputTypeDef",
+    "EventFilterTypeDef",
     "ExecuteChangeSetInputTypeDef",
     "ExecuteStackRefactorInputTypeDef",
     "ExportTypeDef",
@@ -281,9 +291,12 @@ __all__ = (
     "ListTypesInputPaginateTypeDef",
     "ListTypesInputTypeDef",
     "ListTypesOutputTypeDef",
+    "LiveResourceDriftTypeDef",
     "LoggingConfigTypeDef",
     "ManagedExecutionTypeDef",
     "ModuleInfoTypeDef",
+    "OperationEntryTypeDef",
+    "OperationEventTypeDef",
     "OperationResultFilterTypeDef",
     "OutputTypeDef",
     "PaginatorConfigTypeDef",
@@ -304,6 +317,7 @@ __all__ = (
     "ResourceChangeTypeDef",
     "ResourceDefinitionTypeDef",
     "ResourceDetailTypeDef",
+    "ResourceDriftIgnoredAttributeTypeDef",
     "ResourceIdentifierSummaryTypeDef",
     "ResourceLocationTypeDef",
     "ResourceMappingTypeDef",
@@ -587,6 +601,38 @@ class WaiterConfigTypeDef(TypedDict):
     Delay: NotRequired[int]
     MaxAttempts: NotRequired[int]
 
+class EventFilterTypeDef(TypedDict):
+    FailedEvents: NotRequired[bool]
+
+class OperationEventTypeDef(TypedDict):
+    EventId: NotRequired[str]
+    StackId: NotRequired[str]
+    OperationId: NotRequired[str]
+    OperationType: NotRequired[OperationTypeType]
+    OperationStatus: NotRequired[BeaconStackOperationStatusType]
+    EventType: NotRequired[EventTypeType]
+    LogicalResourceId: NotRequired[str]
+    PhysicalResourceId: NotRequired[str]
+    ResourceType: NotRequired[str]
+    Timestamp: NotRequired[datetime]
+    StartTime: NotRequired[datetime]
+    EndTime: NotRequired[datetime]
+    ResourceStatus: NotRequired[ResourceStatusType]
+    ResourceStatusReason: NotRequired[str]
+    ResourceProperties: NotRequired[str]
+    ClientRequestToken: NotRequired[str]
+    HookType: NotRequired[str]
+    HookStatus: NotRequired[HookStatusType]
+    HookStatusReason: NotRequired[str]
+    HookInvocationPoint: NotRequired[Literal["PRE_PROVISION"]]
+    HookFailureMode: NotRequired[HookFailureModeType]
+    DetailedStatus: NotRequired[DetailedStatusType]
+    ValidationFailureMode: NotRequired[HookFailureModeType]
+    ValidationName: NotRequired[str]
+    ValidationStatus: NotRequired[ValidationStatusType]
+    ValidationStatusReason: NotRequired[str]
+    ValidationPath: NotRequired[str]
+
 class DescribeGeneratedTemplateInputTypeDef(TypedDict):
     GeneratedTemplateName: str
 
@@ -620,6 +666,7 @@ class StackEventTypeDef(TypedDict):
     EventId: str
     StackName: str
     Timestamp: datetime
+    OperationId: NotRequired[str]
     LogicalResourceId: NotRequired[str]
     PhysicalResourceId: NotRequired[str]
     ResourceType: NotRequired[str]
@@ -953,9 +1000,18 @@ TypeSummaryTypeDef = TypedDict(
     },
 )
 
+class LiveResourceDriftTypeDef(TypedDict):
+    PreviousValue: NotRequired[str]
+    ActualValue: NotRequired[str]
+    DriftDetectionTimestamp: NotRequired[datetime]
+
 class ModuleInfoTypeDef(TypedDict):
     TypeHierarchy: NotRequired[str]
     LogicalIdHierarchy: NotRequired[str]
+
+class OperationEntryTypeDef(TypedDict):
+    OperationType: NotRequired[OperationTypeType]
+    OperationId: NotRequired[str]
 
 class OutputTypeDef(TypedDict):
     OutputKey: NotRequired[str]
@@ -999,14 +1055,9 @@ class RegisterPublisherInputTypeDef(TypedDict):
     AcceptTermsAndConditions: NotRequired[bool]
     ConnectionArn: NotRequired[str]
 
-class ResourceTargetDefinitionTypeDef(TypedDict):
-    Attribute: NotRequired[ResourceAttributeType]
-    Name: NotRequired[str]
-    RequiresRecreation: NotRequired[RequiresRecreationType]
+class ResourceDriftIgnoredAttributeTypeDef(TypedDict):
     Path: NotRequired[str]
-    BeforeValue: NotRequired[str]
-    AfterValue: NotRequired[str]
-    AttributeChangeType: NotRequired[AttributeChangeTypeType]
+    Reason: NotRequired[DriftIgnoredReasonType]
 
 class ResourceLocationTypeDef(TypedDict):
     StackName: str
@@ -1203,6 +1254,7 @@ class CreateStackInstancesOutputTypeDef(TypedDict):
 
 class CreateStackOutputTypeDef(TypedDict):
     StackId: str
+    OperationId: str
     ResponseMetadata: ResponseMetadataTypeDef
 
 class CreateStackRefactorOutputTypeDef(TypedDict):
@@ -1317,6 +1369,7 @@ class RegisterTypeOutputTypeDef(TypedDict):
 
 class RollbackStackOutputTypeDef(TypedDict):
     StackId: str
+    OperationId: str
     ResponseMetadata: ResponseMetadataTypeDef
 
 class SetTypeConfigurationOutputTypeDef(TypedDict):
@@ -1341,6 +1394,7 @@ class UpdateStackInstancesOutputTypeDef(TypedDict):
 
 class UpdateStackOutputTypeDef(TypedDict):
     StackId: str
+    OperationId: str
     ResponseMetadata: ResponseMetadataTypeDef
 
 class UpdateStackSetOutputTypeDef(TypedDict):
@@ -1534,6 +1588,25 @@ class DescribeStacksInputWaitTypeDef(TypedDict):
 class DescribeTypeRegistrationInputWaitTypeDef(TypedDict):
     RegistrationToken: str
     WaiterConfig: NotRequired[WaiterConfigTypeDef]
+
+class DescribeEventsInputPaginateTypeDef(TypedDict):
+    StackName: NotRequired[str]
+    ChangeSetName: NotRequired[str]
+    OperationId: NotRequired[str]
+    Filters: NotRequired[EventFilterTypeDef]
+    PaginationConfig: NotRequired[PaginatorConfigTypeDef]
+
+class DescribeEventsInputTypeDef(TypedDict):
+    StackName: NotRequired[str]
+    ChangeSetName: NotRequired[str]
+    OperationId: NotRequired[str]
+    Filters: NotRequired[EventFilterTypeDef]
+    NextToken: NotRequired[str]
+
+class DescribeEventsOutputTypeDef(TypedDict):
+    OperationEvents: list[OperationEventTypeDef]
+    ResponseMetadata: ResponseMetadataTypeDef
+    NextToken: NotRequired[str]
 
 class DescribeResourceScanOutputTypeDef(TypedDict):
     ResourceScanId: str
@@ -1730,6 +1803,18 @@ class ListTypesOutputTypeDef(TypedDict):
     ResponseMetadata: ResponseMetadataTypeDef
     NextToken: NotRequired[str]
 
+class ResourceTargetDefinitionTypeDef(TypedDict):
+    Attribute: NotRequired[ResourceAttributeType]
+    Name: NotRequired[str]
+    RequiresRecreation: NotRequired[RequiresRecreationType]
+    Path: NotRequired[str]
+    BeforeValue: NotRequired[str]
+    AfterValue: NotRequired[str]
+    BeforeValueFrom: NotRequired[BeforeValueFromType]
+    AfterValueFrom: NotRequired[Literal["TEMPLATE"]]
+    Drift: NotRequired[LiveResourceDriftTypeDef]
+    AttributeChangeType: NotRequired[AttributeChangeTypeType]
+
 class ParameterDeclarationTypeDef(TypedDict):
     ParameterKey: NotRequired[str]
     DefaultValue: NotRequired[str]
@@ -1762,12 +1847,6 @@ class StackResourceDriftTypeDef(TypedDict):
     ModuleInfo: NotRequired[ModuleInfoTypeDef]
     DriftStatusReason: NotRequired[str]
 
-class ResourceChangeDetailTypeDef(TypedDict):
-    Target: NotRequired[ResourceTargetDefinitionTypeDef]
-    Evaluation: NotRequired[EvaluationTypeType]
-    ChangeSource: NotRequired[ChangeSourceType]
-    CausingEntity: NotRequired[str]
-
 class ResourceMappingTypeDef(TypedDict):
     Source: ResourceLocationTypeDef
     Destination: ResourceLocationTypeDef
@@ -1794,6 +1873,7 @@ class StackSummaryTypeDef(TypedDict):
     ParentId: NotRequired[str]
     RootId: NotRequired[str]
     DriftInformation: NotRequired[StackDriftInformationSummaryTypeDef]
+    LastOperations: NotRequired[list[OperationEntryTypeDef]]
 
 class StackInstanceSummaryTypeDef(TypedDict):
     StackSetId: NotRequired[str]
@@ -1948,6 +2028,12 @@ class ListStackSetsOutputTypeDef(TypedDict):
     ResponseMetadata: ResponseMetadataTypeDef
     NextToken: NotRequired[str]
 
+class ResourceChangeDetailTypeDef(TypedDict):
+    Target: NotRequired[ResourceTargetDefinitionTypeDef]
+    Evaluation: NotRequired[EvaluationTypeType]
+    ChangeSource: NotRequired[ChangeSourceType]
+    CausingEntity: NotRequired[str]
+
 class GetTemplateSummaryOutputTypeDef(TypedDict):
     Parameters: list[ParameterDeclarationTypeDef]
     Description: str
@@ -1974,20 +2060,6 @@ class DescribeStackResourceDriftsOutputTypeDef(TypedDict):
 class DetectStackResourceDriftOutputTypeDef(TypedDict):
     StackResourceDrift: StackResourceDriftTypeDef
     ResponseMetadata: ResponseMetadataTypeDef
-
-class ResourceChangeTypeDef(TypedDict):
-    PolicyAction: NotRequired[PolicyActionType]
-    Action: NotRequired[ChangeActionType]
-    LogicalResourceId: NotRequired[str]
-    PhysicalResourceId: NotRequired[str]
-    ResourceType: NotRequired[str]
-    Replacement: NotRequired[ReplacementType]
-    Scope: NotRequired[list[ResourceAttributeType]]
-    Details: NotRequired[list[ResourceChangeDetailTypeDef]]
-    ChangeSetId: NotRequired[str]
-    ModuleInfo: NotRequired[ModuleInfoTypeDef]
-    BeforeContext: NotRequired[str]
-    AfterContext: NotRequired[str]
 
 class CreateStackRefactorInputTypeDef(TypedDict):
     StackDefinitions: Sequence[StackDefinitionTypeDef]
@@ -2033,6 +2105,7 @@ class StackTypeDef(TypedDict):
     RetainExceptOnCreate: NotRequired[bool]
     DeletionMode: NotRequired[DeletionModeType]
     DetailedStatus: NotRequired[DetailedStatusType]
+    LastOperations: NotRequired[list[OperationEntryTypeDef]]
 
 RollbackConfigurationUnionTypeDef = Union[
     RollbackConfigurationTypeDef, RollbackConfigurationOutputTypeDef
@@ -2166,14 +2239,22 @@ class DescribeChangeSetHooksOutputTypeDef(TypedDict):
     ResponseMetadata: ResponseMetadataTypeDef
     NextToken: NotRequired[str]
 
-ChangeTypeDef = TypedDict(
-    "ChangeTypeDef",
-    {
-        "Type": NotRequired[Literal["Resource"]],
-        "HookInvocationCount": NotRequired[int],
-        "ResourceChange": NotRequired[ResourceChangeTypeDef],
-    },
-)
+class ResourceChangeTypeDef(TypedDict):
+    PolicyAction: NotRequired[PolicyActionType]
+    Action: NotRequired[ChangeActionType]
+    LogicalResourceId: NotRequired[str]
+    PhysicalResourceId: NotRequired[str]
+    ResourceType: NotRequired[str]
+    Replacement: NotRequired[ReplacementType]
+    Scope: NotRequired[list[ResourceAttributeType]]
+    ResourceDriftStatus: NotRequired[StackResourceDriftStatusType]
+    ResourceDriftIgnoredAttributes: NotRequired[list[ResourceDriftIgnoredAttributeTypeDef]]
+    Details: NotRequired[list[ResourceChangeDetailTypeDef]]
+    ChangeSetId: NotRequired[str]
+    ModuleInfo: NotRequired[ModuleInfoTypeDef]
+    BeforeContext: NotRequired[str]
+    AfterContext: NotRequired[str]
+    PreviousDeploymentContext: NotRequired[str]
 
 class ListStackRefactorActionsOutputTypeDef(TypedDict):
     StackRefactorActions: list[StackRefactorActionTypeDef]
@@ -2205,6 +2286,7 @@ class CreateChangeSetInputTypeDef(TypedDict):
     IncludeNestedStacks: NotRequired[bool]
     OnStackFailure: NotRequired[OnStackFailureType]
     ImportExistingResources: NotRequired[bool]
+    DeploymentMode: NotRequired[Literal["REVERT_DRIFT"]]
 
 class CreateStackInputServiceResourceCreateStackTypeDef(TypedDict):
     StackName: str
@@ -2299,6 +2381,15 @@ class DescribeGeneratedTemplateOutputTypeDef(TypedDict):
     TotalWarnings: int
     ResponseMetadata: ResponseMetadataTypeDef
 
+ChangeTypeDef = TypedDict(
+    "ChangeTypeDef",
+    {
+        "Type": NotRequired[Literal["Resource"]],
+        "HookInvocationCount": NotRequired[int],
+        "ResourceChange": NotRequired[ResourceChangeTypeDef],
+    },
+)
+
 class DescribeChangeSetOutputTypeDef(TypedDict):
     ChangeSetName: str
     ChangeSetId: str
@@ -2310,6 +2401,7 @@ class DescribeChangeSetOutputTypeDef(TypedDict):
     ExecutionStatus: ExecutionStatusType
     Status: ChangeSetStatusType
     StatusReason: str
+    StackDriftStatus: StackDriftStatusType
     NotificationARNs: list[str]
     RollbackConfiguration: RollbackConfigurationOutputTypeDef
     Capabilities: list[CapabilityType]
@@ -2320,5 +2412,6 @@ class DescribeChangeSetOutputTypeDef(TypedDict):
     RootChangeSetId: str
     OnStackFailure: OnStackFailureType
     ImportExistingResources: bool
+    DeploymentMode: Literal["REVERT_DRIFT"]
     ResponseMetadata: ResponseMetadataTypeDef
     NextToken: NotRequired[str]

@@ -168,7 +168,7 @@ class EventClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/osmanagementhub/change_event_compartment.py.html>`__ to see an example of how to use change_event_compartment API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/osmanagementhub/change_event_compartment.py.html>`__ to see an example of how to use change_event_compartment API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['eventId']
@@ -280,7 +280,7 @@ class EventClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/osmanagementhub/delete_event.py.html>`__ to see an example of how to use delete_event API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/osmanagementhub/delete_event.py.html>`__ to see an example of how to use delete_event API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['eventId']
@@ -394,7 +394,7 @@ class EventClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/osmanagementhub/delete_event_content.py.html>`__ to see an example of how to use delete_event_content API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/osmanagementhub/delete_event_content.py.html>`__ to see an example of how to use delete_event_content API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['eventId']
@@ -497,7 +497,7 @@ class EventClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/osmanagementhub/get_event.py.html>`__ to see an example of how to use get_event API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/osmanagementhub/get_event.py.html>`__ to see an example of how to use get_event API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['eventId']
@@ -597,7 +597,7 @@ class EventClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/osmanagementhub/get_event_content.py.html>`__ to see an example of how to use get_event_content API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/osmanagementhub/get_event_content.py.html>`__ to see an example of how to use get_event_content API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['eventId']
@@ -711,7 +711,7 @@ class EventClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/osmanagementhub/import_event_content.py.html>`__ to see an example of how to use import_event_content API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/osmanagementhub/import_event_content.py.html>`__ to see an example of how to use import_event_content API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['eventId']
@@ -878,7 +878,7 @@ class EventClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/osmanagementhub/list_events.py.html>`__ to see an example of how to use list_events API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/osmanagementhub/list_events.py.html>`__ to see an example of how to use list_events API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -1041,7 +1041,7 @@ class EventClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/osmanagementhub/update_event.py.html>`__ to see an example of how to use update_event API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/osmanagementhub/update_event.py.html>`__ to see an example of how to use update_event API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['eventId']

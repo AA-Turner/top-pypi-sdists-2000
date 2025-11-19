@@ -117,7 +117,6 @@ addopts = [
     "-n", "auto",
     "--dist", "loadgroup",
     "-p", "no:legacypath",
-    "-p", "no:terminalprogress", # https://github.com/pytest-dev/pytest/issues/13896
     "--no-flaky-report",
     "-rfEX",
     "--failed-first",

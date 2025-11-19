@@ -120,7 +120,8 @@ class MultiCloudsMetadataClient(object):
 
     def get_multi_cloud_metadata(self, compartment_id, subscription_id, **kwargs):
         """
-        Gets information about multicloud base compartment
+        Gets information about the Multicloud base compartment for a given tenancy Id.
+        A Multicloud base compartment is an OCI compartment that maps to a subscription in a Cloud Service Provider (such as Azure, AWS, or Google Cloud).
 
 
         :param str compartment_id: (required)
@@ -155,7 +156,7 @@ class MultiCloudsMetadataClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/multicloud/get_multi_cloud_metadata.py.html>`__ to see an example of how to use get_multi_cloud_metadata API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/multicloud/get_multi_cloud_metadata.py.html>`__ to see an example of how to use get_multi_cloud_metadata API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['subscriptionId', 'compartmentId']
@@ -235,7 +236,8 @@ class MultiCloudsMetadataClient(object):
 
     def list_multi_cloud_metadata(self, compartment_id, **kwargs):
         """
-        Gets a list of multicloud metadata with multicloud base compartment and subscription across Cloud Service Providers.
+        Gets a list of multicloud metadata with pairs of Multicloud base compartment and subscription across Cloud Service Providers from a tenancy Id.
+        A Multicloud base compartment is an OCI compartment that maps to a subscription in a Cloud Service Provider (such as Azure, AWS, or Google Cloud).
 
 
         :param str compartment_id: (required)
@@ -290,7 +292,7 @@ class MultiCloudsMetadataClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/multicloud/list_multi_cloud_metadata.py.html>`__ to see an example of how to use list_multi_cloud_metadata API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/multicloud/list_multi_cloud_metadata.py.html>`__ to see an example of how to use list_multi_cloud_metadata API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['compartmentId']

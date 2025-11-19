@@ -199,7 +199,7 @@ checkpoint_policies = types.SimpleNamespace(
 
 ### Main API
 
-@api_boundary
+@partial(api_boundary, repro_api_name="jax.checkpoint")
 def checkpoint(fun: Callable, *, prevent_cse: bool = True,
                policy: Callable[..., bool] | None = None,
                static_argnums: int | tuple[int, ...] = (),
@@ -363,7 +363,8 @@ def checkpoint(fun: Callable, *, prevent_cse: bool = True,
     in_avals = [core.shaped_abstractify(x) for x in args_flat]
     jaxpr, consts, out_tree = _trace_to_jaxpr(fun_, in_tree, tuple(in_avals), debug)
     if isinstance(prevent_cse, tuple):
-      cse = (*broadcast_prefix(prevent_cse, (args, kwargs) if kwargs else args),)
+      cse_args = (tuple(args), kwargs) if kwargs else tuple(args)
+      cse = (False,) * len(consts) + tuple(broadcast_prefix(prevent_cse, cse_args))
     else:
       cse = prevent_cse
     out_flat = remat_p.bind(
@@ -547,21 +548,6 @@ def print_saved_residuals(f, *args, **kwargs):
 
 remat_p = core.Primitive('remat2')
 remat_p.multiple_results = True
-
-if config.vmap_primitive.value:
-  remat_p.is_high = lambda *_, jaxpr, **__: True  # type: ignore
-
-  def _remat_to_lojax(*args, jaxpr, prevent_cse, differentiated, policy):
-    del policy
-    if isinstance(prevent_cse, bool):
-      prevent_cse = (prevent_cse,) * len(args)  # type: ignore
-    assert isinstance(prevent_cse, tuple)
-    if differentiated and any(prevent_cse):
-      other_args, barrier_args = partition_list(prevent_cse, args)
-      barrier_args = lax_internal.optimization_barrier(barrier_args)
-      args = merge_lists(prevent_cse, other_args, barrier_args)
-    return core.eval_jaxpr(jaxpr, (), *args)
-  remat_p.to_lojax = _remat_to_lojax  # type: ignore
 
 def _remat_bind(*args, jaxpr, prevent_cse, differentiated, policy):
   assert isinstance(prevent_cse, bool) or len(prevent_cse) == len(args)

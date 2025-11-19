@@ -703,7 +703,7 @@ class AgentEngines(_api_module.BaseModule):
     _sessions = None
 
     @property
-    def memories(self):
+    def memories(self) -> Any:
         if self._memories is None:
             try:
                 # We need to lazy load the memories module to handle the
@@ -722,7 +722,7 @@ class AgentEngines(_api_module.BaseModule):
         "The Vertex SDK GenAI agent_engines.sandboxes module is experimental, "
         "and may change in future versions."
     )
-    def sandboxes(self):
+    def sandboxes(self) -> Any:
         if self._sandboxes is None:
             try:
                 # We need to lazy load the sandboxes module to handle the
@@ -737,7 +737,7 @@ class AgentEngines(_api_module.BaseModule):
         return self._sandboxes.Sandboxes(self._api_client)
 
     @property
-    def sessions(self):
+    def sessions(self) -> Any:
         if self._sessions is None:
             try:
                 # We need to lazy load the sessions module to handle the
@@ -938,6 +938,7 @@ class AgentEngines(_api_module.BaseModule):
             requirements_file=config.requirements_file,
             agent_framework=config.agent_framework,
             python_version=config.python_version,
+            build_options=config.build_options,
         )
         operation = self._create(config=api_config)
         # TODO: Use a more specific link.
@@ -1004,6 +1005,7 @@ class AgentEngines(_api_module.BaseModule):
         requirements_file: Optional[str] = None,
         agent_framework: Optional[str] = None,
         python_version: Optional[str] = None,
+        build_options: Optional[dict[str, list[str]]] = None,
     ) -> types.UpdateAgentEngineConfigDict:
         import sys
 
@@ -1039,7 +1041,7 @@ class AgentEngines(_api_module.BaseModule):
             sys_version = python_version
         else:
             sys_version = f"{sys.version_info.major}.{sys.version_info.minor}"
-        agent_engine_spec = None
+        agent_engine_spec: Any = None
         if agent is not None:
             if source_packages is not None:
                 raise ValueError(
@@ -1065,8 +1067,9 @@ class AgentEngines(_api_module.BaseModule):
                 agent=agent,
                 requirements=requirements,
             )
-            extra_packages = _agent_engines_utils._validate_extra_packages_or_raise(
-                extra_packages=extra_packages,
+            extra_packages = _agent_engines_utils._validate_packages_or_raise(
+                packages=extra_packages,
+                build_options=build_options,
             )
             # Prepares the Agent Engine for creation/update in Vertex AI. This
             # involves packaging and uploading the artifacts for agent_engine,
@@ -1132,6 +1135,10 @@ class AgentEngines(_api_module.BaseModule):
             }
 
         if source_packages is not None:
+            source_packages = _agent_engines_utils._validate_packages_or_raise(
+                packages=source_packages,
+                build_options=build_options,
+            )
             update_masks.append("spec.source_code_spec.inline_source.source_archive")
             source_code_spec = {
                 "inline_source": {
@@ -1465,6 +1472,7 @@ class AgentEngines(_api_module.BaseModule):
             requirements_file=config.requirements_file,
             agent_framework=config.agent_framework,
             python_version=config.python_version,
+            build_options=config.build_options,
         )
         operation = self._update(name=name, config=api_config)
         logger.info(

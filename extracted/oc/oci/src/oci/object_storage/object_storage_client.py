@@ -160,7 +160,7 @@ class ObjectStorageClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/objectstorage/abort_multipart_upload.py.html>`__ to see an example of how to use abort_multipart_upload API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/objectstorage/abort_multipart_upload.py.html>`__ to see an example of how to use abort_multipart_upload API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['namespaceName', 'bucketName', 'objectName', 'uploadId']
@@ -238,6 +238,114 @@ class ObjectStorageClient(object):
                 api_reference_link=api_reference_link,
                 required_arguments=required_arguments)
 
+    def batch_delete_objects(self, namespace_name, bucket_name, batch_delete_objects_details, **kwargs):
+        """
+        Deletes a batch of objects.
+
+
+        :param str namespace_name: (required)
+            The Object Storage namespace used for the request.
+
+        :param str bucket_name: (required)
+            The name of the bucket. Avoid entering confidential information.
+            Example: `my-new-bucket1`
+
+        :param oci.object_storage.models.BatchDeleteObjectsDetails batch_delete_objects_details: (required)
+            Details about batch of objects to be deleted.
+
+        :param str opc_client_request_id: (optional)
+            The client request ID for tracing.
+
+        :param obj retry_strategy: (optional)
+            A retry strategy to apply to this specific operation/call. This will override any retry strategy set at the client-level.
+
+            This should be one of the strategies available in the :py:mod:`~oci.retry` module. This operation uses :py:data:`~oci.retry.DEFAULT_RETRY_STRATEGY` as default if no retry strategy is provided.
+            The specifics of the default retry strategy are described `here <https://docs.oracle.com/en-us/iaas/tools/python/latest/sdk_behaviors/retries.html>`__.
+
+            To have this operation explicitly not perform any retries, pass an instance of :py:class:`~oci.retry.NoneRetryStrategy`.
+
+        :param bool allow_control_chars: (optional)
+            allow_control_chars is a boolean to indicate whether or not this request should allow control characters in the response object.
+            By default, the response will not allow control characters in strings
+
+        :return: A :class:`~oci.response.Response` object with data of type :class:`~oci.object_storage.models.BatchDeleteObjectsResult`
+        :rtype: :class:`~oci.response.Response`
+
+        :example:
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/objectstorage/batch_delete_objects.py.html>`__ to see an example of how to use batch_delete_objects API.
+        """
+        # Required path and query arguments. These are in camelCase to replace values in service endpoints.
+        required_arguments = ['namespaceName', 'bucketName']
+        resource_path = "/n/{namespaceName}/b/{bucketName}/actions/batchDeleteObjects"
+        method = "POST"
+        operation_name = "batch_delete_objects"
+        api_reference_link = "https://docs.oracle.com/iaas/api/#/en/objectstorage/20160918/Object/BatchDeleteObjects"
+
+        # Don't accept unknown kwargs
+        expected_kwargs = [
+            "allow_control_chars",
+            "retry_strategy",
+            "opc_client_request_id"
+        ]
+        extra_kwargs = [_key for _key in six.iterkeys(kwargs) if _key not in expected_kwargs]
+        if extra_kwargs:
+            raise ValueError(
+                f"batch_delete_objects got unknown kwargs: {extra_kwargs!r}")
+
+        path_params = {
+            "namespaceName": namespace_name,
+            "bucketName": bucket_name
+        }
+
+        path_params = {k: v for (k, v) in six.iteritems(path_params) if v is not missing}
+
+        for (k, v) in six.iteritems(path_params):
+            if v is None or (isinstance(v, six.string_types) and len(v.strip()) == 0):
+                raise ValueError(f'Parameter {k} cannot be None, whitespace or empty string')
+
+        header_params = {
+            "accept": "application/json",
+            "content-type": "application/json",
+            "opc-client-request-id": kwargs.get("opc_client_request_id", missing)
+        }
+        header_params = {k: v for (k, v) in six.iteritems(header_params) if v is not missing and v is not None}
+
+        retry_strategy = self.base_client.get_preferred_retry_strategy(
+            operation_retry_strategy=kwargs.get('retry_strategy'),
+            client_retry_strategy=self.retry_strategy
+        )
+        if retry_strategy is None:
+            retry_strategy = retry.DEFAULT_RETRY_STRATEGY
+
+        if retry_strategy:
+            if not isinstance(retry_strategy, retry.NoneRetryStrategy):
+                self.base_client.add_opc_client_retries_header(header_params)
+                retry_strategy.add_circuit_breaker_callback(self.circuit_breaker_callback)
+            return retry_strategy.make_retrying_call(
+                self.base_client.call_api,
+                resource_path=resource_path,
+                method=method,
+                path_params=path_params,
+                header_params=header_params,
+                body=batch_delete_objects_details,
+                response_type="BatchDeleteObjectsResult",
+                allow_control_chars=kwargs.get('allow_control_chars'),
+                operation_name=operation_name,
+                api_reference_link=api_reference_link,
+                required_arguments=required_arguments)
+        else:
+            return self.base_client.call_api(
+                resource_path=resource_path,
+                method=method,
+                path_params=path_params,
+                header_params=header_params,
+                body=batch_delete_objects_details,
+                response_type="BatchDeleteObjectsResult",
+                allow_control_chars=kwargs.get('allow_control_chars'),
+                operation_name=operation_name,
+                api_reference_link=api_reference_link,
+                required_arguments=required_arguments)
+
     def cancel_work_request(self, work_request_id, **kwargs):
         """
         Cancels a work request.
@@ -265,7 +373,7 @@ class ObjectStorageClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/objectstorage/cancel_work_request.py.html>`__ to see an example of how to use cancel_work_request API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/objectstorage/cancel_work_request.py.html>`__ to see an example of how to use cancel_work_request API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workRequestId']
@@ -384,7 +492,7 @@ class ObjectStorageClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/objectstorage/commit_multipart_upload.py.html>`__ to see an example of how to use commit_multipart_upload API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/objectstorage/commit_multipart_upload.py.html>`__ to see an example of how to use commit_multipart_upload API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['namespaceName', 'bucketName', 'objectName', 'uploadId']
@@ -555,7 +663,7 @@ class ObjectStorageClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/objectstorage/copy_object.py.html>`__ to see an example of how to use copy_object API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/objectstorage/copy_object.py.html>`__ to see an example of how to use copy_object API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['namespaceName', 'bucketName']
@@ -672,7 +780,7 @@ class ObjectStorageClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/objectstorage/create_bucket.py.html>`__ to see an example of how to use create_bucket API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/objectstorage/create_bucket.py.html>`__ to see an example of how to use create_bucket API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['namespaceName']
@@ -825,7 +933,7 @@ class ObjectStorageClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/objectstorage/create_multipart_upload.py.html>`__ to see an example of how to use create_multipart_upload API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/objectstorage/create_multipart_upload.py.html>`__ to see an example of how to use create_multipart_upload API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['namespaceName', 'bucketName']
@@ -947,7 +1055,7 @@ class ObjectStorageClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/objectstorage/create_preauthenticated_request.py.html>`__ to see an example of how to use create_preauthenticated_request API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/objectstorage/create_preauthenticated_request.py.html>`__ to see an example of how to use create_preauthenticated_request API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['namespaceName', 'bucketName']
@@ -1051,7 +1159,7 @@ class ObjectStorageClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/objectstorage/create_private_endpoint.py.html>`__ to see an example of how to use create_private_endpoint API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/objectstorage/create_private_endpoint.py.html>`__ to see an example of how to use create_private_endpoint API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['namespaceName']
@@ -1156,7 +1264,7 @@ class ObjectStorageClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/objectstorage/create_replication_policy.py.html>`__ to see an example of how to use create_replication_policy API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/objectstorage/create_replication_policy.py.html>`__ to see an example of how to use create_replication_policy API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['namespaceName', 'bucketName']
@@ -1265,7 +1373,7 @@ class ObjectStorageClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/objectstorage/create_retention_rule.py.html>`__ to see an example of how to use create_retention_rule API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/objectstorage/create_retention_rule.py.html>`__ to see an example of how to use create_retention_rule API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['namespaceName', 'bucketName']
@@ -1378,7 +1486,7 @@ class ObjectStorageClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/objectstorage/delete_bucket.py.html>`__ to see an example of how to use delete_bucket API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/objectstorage/delete_bucket.py.html>`__ to see an example of how to use delete_bucket API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['namespaceName', 'bucketName']
@@ -1493,7 +1601,7 @@ class ObjectStorageClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/objectstorage/delete_object.py.html>`__ to see an example of how to use delete_object API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/objectstorage/delete_object.py.html>`__ to see an example of how to use delete_object API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['namespaceName', 'bucketName', 'objectName']
@@ -1610,7 +1718,7 @@ class ObjectStorageClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/objectstorage/delete_object_lifecycle_policy.py.html>`__ to see an example of how to use delete_object_lifecycle_policy API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/objectstorage/delete_object_lifecycle_policy.py.html>`__ to see an example of how to use delete_object_lifecycle_policy API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['namespaceName', 'bucketName']
@@ -1717,7 +1825,7 @@ class ObjectStorageClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/objectstorage/delete_preauthenticated_request.py.html>`__ to see an example of how to use delete_preauthenticated_request API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/objectstorage/delete_preauthenticated_request.py.html>`__ to see an example of how to use delete_preauthenticated_request API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['namespaceName', 'bucketName', 'parId']
@@ -1824,7 +1932,7 @@ class ObjectStorageClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/objectstorage/delete_private_endpoint.py.html>`__ to see an example of how to use delete_private_endpoint API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/objectstorage/delete_private_endpoint.py.html>`__ to see an example of how to use delete_private_endpoint API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['namespaceName', 'peName']
@@ -1930,7 +2038,7 @@ class ObjectStorageClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/objectstorage/delete_replication_policy.py.html>`__ to see an example of how to use delete_replication_policy API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/objectstorage/delete_replication_policy.py.html>`__ to see an example of how to use delete_replication_policy API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['namespaceName', 'bucketName', 'replicationId']
@@ -2040,7 +2148,7 @@ class ObjectStorageClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/objectstorage/delete_retention_rule.py.html>`__ to see an example of how to use delete_retention_rule API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/objectstorage/delete_retention_rule.py.html>`__ to see an example of how to use delete_retention_rule API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['namespaceName', 'bucketName', 'retentionRuleId']
@@ -2162,7 +2270,7 @@ class ObjectStorageClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/objectstorage/get_bucket.py.html>`__ to see an example of how to use get_bucket API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/objectstorage/get_bucket.py.html>`__ to see an example of how to use get_bucket API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['namespaceName', 'bucketName']
@@ -2291,7 +2399,7 @@ class ObjectStorageClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/objectstorage/get_namespace.py.html>`__ to see an example of how to use get_namespace API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/objectstorage/get_namespace.py.html>`__ to see an example of how to use get_namespace API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -2393,7 +2501,7 @@ class ObjectStorageClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/objectstorage/get_namespace_metadata.py.html>`__ to see an example of how to use get_namespace_metadata API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/objectstorage/get_namespace_metadata.py.html>`__ to see an example of how to use get_namespace_metadata API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['namespaceName']
@@ -2556,7 +2664,7 @@ class ObjectStorageClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/objectstorage/get_object.py.html>`__ to see an example of how to use get_object API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/objectstorage/get_object.py.html>`__ to see an example of how to use get_object API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['namespaceName', 'bucketName', 'objectName']
@@ -2692,7 +2800,7 @@ class ObjectStorageClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/objectstorage/get_object_lifecycle_policy.py.html>`__ to see an example of how to use get_object_lifecycle_policy API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/objectstorage/get_object_lifecycle_policy.py.html>`__ to see an example of how to use get_object_lifecycle_policy API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['namespaceName', 'bucketName']
@@ -2799,7 +2907,7 @@ class ObjectStorageClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/objectstorage/get_preauthenticated_request.py.html>`__ to see an example of how to use get_preauthenticated_request API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/objectstorage/get_preauthenticated_request.py.html>`__ to see an example of how to use get_preauthenticated_request API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['namespaceName', 'bucketName', 'parId']
@@ -2913,7 +3021,7 @@ class ObjectStorageClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/objectstorage/get_private_endpoint.py.html>`__ to see an example of how to use get_private_endpoint API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/objectstorage/get_private_endpoint.py.html>`__ to see an example of how to use get_private_endpoint API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['namespaceName', 'peName']
@@ -3023,7 +3131,7 @@ class ObjectStorageClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/objectstorage/get_replication_policy.py.html>`__ to see an example of how to use get_replication_policy API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/objectstorage/get_replication_policy.py.html>`__ to see an example of how to use get_replication_policy API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['namespaceName', 'bucketName', 'replicationId']
@@ -3130,7 +3238,7 @@ class ObjectStorageClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/objectstorage/get_retention_rule.py.html>`__ to see an example of how to use get_retention_rule API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/objectstorage/get_retention_rule.py.html>`__ to see an example of how to use get_retention_rule API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['namespaceName', 'bucketName', 'retentionRuleId']
@@ -3230,7 +3338,7 @@ class ObjectStorageClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/objectstorage/get_work_request.py.html>`__ to see an example of how to use get_work_request API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/objectstorage/get_work_request.py.html>`__ to see an example of how to use get_work_request API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workRequestId']
@@ -3342,7 +3450,7 @@ class ObjectStorageClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/objectstorage/head_bucket.py.html>`__ to see an example of how to use head_bucket API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/objectstorage/head_bucket.py.html>`__ to see an example of how to use head_bucket API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['namespaceName', 'bucketName']
@@ -3484,7 +3592,7 @@ class ObjectStorageClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/objectstorage/head_object.py.html>`__ to see an example of how to use head_object API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/objectstorage/head_object.py.html>`__ to see an example of how to use head_object API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['namespaceName', 'bucketName', 'objectName']
@@ -3632,7 +3740,7 @@ class ObjectStorageClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/objectstorage/list_buckets.py.html>`__ to see an example of how to use list_buckets API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/objectstorage/list_buckets.py.html>`__ to see an example of how to use list_buckets API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['namespaceName', 'compartmentId']
@@ -3775,7 +3883,7 @@ class ObjectStorageClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/objectstorage/list_multipart_upload_parts.py.html>`__ to see an example of how to use list_multipart_upload_parts API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/objectstorage/list_multipart_upload_parts.py.html>`__ to see an example of how to use list_multipart_upload_parts API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['namespaceName', 'bucketName', 'objectName', 'uploadId']
@@ -3903,7 +4011,7 @@ class ObjectStorageClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/objectstorage/list_multipart_uploads.py.html>`__ to see an example of how to use list_multipart_uploads API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/objectstorage/list_multipart_uploads.py.html>`__ to see an example of how to use list_multipart_uploads API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['namespaceName', 'bucketName']
@@ -4066,7 +4174,7 @@ class ObjectStorageClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/objectstorage/list_object_versions.py.html>`__ to see an example of how to use list_object_versions API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/objectstorage/list_object_versions.py.html>`__ to see an example of how to use list_object_versions API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['namespaceName', 'bucketName']
@@ -4237,7 +4345,7 @@ class ObjectStorageClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/objectstorage/list_objects.py.html>`__ to see an example of how to use list_objects API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/objectstorage/list_objects.py.html>`__ to see an example of how to use list_objects API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['namespaceName', 'bucketName']
@@ -4376,7 +4484,7 @@ class ObjectStorageClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/objectstorage/list_preauthenticated_requests.py.html>`__ to see an example of how to use list_preauthenticated_requests API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/objectstorage/list_preauthenticated_requests.py.html>`__ to see an example of how to use list_preauthenticated_requests API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['namespaceName', 'bucketName']
@@ -4521,7 +4629,7 @@ class ObjectStorageClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/objectstorage/list_private_endpoints.py.html>`__ to see an example of how to use list_private_endpoints API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/objectstorage/list_private_endpoints.py.html>`__ to see an example of how to use list_private_endpoints API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['namespaceName', 'compartmentId']
@@ -4666,7 +4774,7 @@ class ObjectStorageClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/objectstorage/list_replication_policies.py.html>`__ to see an example of how to use list_replication_policies API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/objectstorage/list_replication_policies.py.html>`__ to see an example of how to use list_replication_policies API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['namespaceName', 'bucketName']
@@ -4792,7 +4900,7 @@ class ObjectStorageClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/objectstorage/list_replication_sources.py.html>`__ to see an example of how to use list_replication_sources API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/objectstorage/list_replication_sources.py.html>`__ to see an example of how to use list_replication_sources API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['namespaceName', 'bucketName']
@@ -4909,7 +5017,7 @@ class ObjectStorageClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/objectstorage/list_retention_rules.py.html>`__ to see an example of how to use list_retention_rules API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/objectstorage/list_retention_rules.py.html>`__ to see an example of how to use list_retention_rules API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['namespaceName', 'bucketName']
@@ -5026,7 +5134,7 @@ class ObjectStorageClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/objectstorage/list_work_request_errors.py.html>`__ to see an example of how to use list_work_request_errors API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/objectstorage/list_work_request_errors.py.html>`__ to see an example of how to use list_work_request_errors API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workRequestId']
@@ -5147,7 +5255,7 @@ class ObjectStorageClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/objectstorage/list_work_request_logs.py.html>`__ to see an example of how to use list_work_request_logs API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/objectstorage/list_work_request_logs.py.html>`__ to see an example of how to use list_work_request_logs API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workRequestId']
@@ -5271,7 +5379,7 @@ class ObjectStorageClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/objectstorage/list_work_requests.py.html>`__ to see an example of how to use list_work_requests API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/objectstorage/list_work_requests.py.html>`__ to see an example of how to use list_work_requests API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['compartmentId']
@@ -5377,7 +5485,7 @@ class ObjectStorageClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/objectstorage/make_bucket_writable.py.html>`__ to see an example of how to use make_bucket_writable API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/objectstorage/make_bucket_writable.py.html>`__ to see an example of how to use make_bucket_writable API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['namespaceName', 'bucketName']
@@ -5631,7 +5739,7 @@ class ObjectStorageClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/objectstorage/put_object.py.html>`__ to see an example of how to use put_object API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/objectstorage/put_object.py.html>`__ to see an example of how to use put_object API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['namespaceName', 'bucketName', 'objectName']
@@ -5816,7 +5924,7 @@ class ObjectStorageClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/objectstorage/put_object_lifecycle_policy.py.html>`__ to see an example of how to use put_object_lifecycle_policy API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/objectstorage/put_object_lifecycle_policy.py.html>`__ to see an example of how to use put_object_lifecycle_policy API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['namespaceName', 'bucketName']
@@ -5939,7 +6047,7 @@ class ObjectStorageClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/objectstorage/reencrypt_bucket.py.html>`__ to see an example of how to use reencrypt_bucket API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/objectstorage/reencrypt_bucket.py.html>`__ to see an example of how to use reencrypt_bucket API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['namespaceName', 'bucketName']
@@ -6058,7 +6166,7 @@ class ObjectStorageClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/objectstorage/reencrypt_object.py.html>`__ to see an example of how to use reencrypt_object API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/objectstorage/reencrypt_object.py.html>`__ to see an example of how to use reencrypt_object API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['namespaceName', 'bucketName', 'objectName']
@@ -6178,7 +6286,7 @@ class ObjectStorageClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/objectstorage/rename_object.py.html>`__ to see an example of how to use rename_object API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/objectstorage/rename_object.py.html>`__ to see an example of how to use rename_object API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['namespaceName', 'bucketName']
@@ -6285,7 +6393,7 @@ class ObjectStorageClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/objectstorage/restore_objects.py.html>`__ to see an example of how to use restore_objects API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/objectstorage/restore_objects.py.html>`__ to see an example of how to use restore_objects API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['namespaceName', 'bucketName']
@@ -6402,7 +6510,7 @@ class ObjectStorageClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/objectstorage/update_bucket.py.html>`__ to see an example of how to use update_bucket API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/objectstorage/update_bucket.py.html>`__ to see an example of how to use update_bucket API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['namespaceName', 'bucketName']
@@ -6514,7 +6622,7 @@ class ObjectStorageClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/objectstorage/update_namespace_metadata.py.html>`__ to see an example of how to use update_namespace_metadata API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/objectstorage/update_namespace_metadata.py.html>`__ to see an example of how to use update_namespace_metadata API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['namespaceName']
@@ -6621,7 +6729,7 @@ class ObjectStorageClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/objectstorage/update_object_storage_tier.py.html>`__ to see an example of how to use update_object_storage_tier API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/objectstorage/update_object_storage_tier.py.html>`__ to see an example of how to use update_object_storage_tier API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['namespaceName', 'bucketName']
@@ -6741,7 +6849,7 @@ class ObjectStorageClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/objectstorage/update_private_endpoint.py.html>`__ to see an example of how to use update_private_endpoint API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/objectstorage/update_private_endpoint.py.html>`__ to see an example of how to use update_private_endpoint API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['namespaceName', 'peName']
@@ -6857,7 +6965,7 @@ class ObjectStorageClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/objectstorage/update_retention_rule.py.html>`__ to see an example of how to use update_retention_rule API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/objectstorage/update_retention_rule.py.html>`__ to see an example of how to use update_retention_rule API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['namespaceName', 'bucketName', 'retentionRuleId']
@@ -7072,7 +7180,7 @@ class ObjectStorageClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/objectstorage/upload_part.py.html>`__ to see an example of how to use upload_part API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/objectstorage/upload_part.py.html>`__ to see an example of how to use upload_part API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['namespaceName', 'bucketName', 'objectName', 'uploadId', 'uploadPartNum']

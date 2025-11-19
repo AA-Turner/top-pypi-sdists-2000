@@ -164,7 +164,7 @@ class DiscoveryClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/cloudbridge/change_asset_source_compartment.py.html>`__ to see an example of how to use change_asset_source_compartment API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/cloudbridge/change_asset_source_compartment.py.html>`__ to see an example of how to use change_asset_source_compartment API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['assetSourceId']
@@ -286,7 +286,7 @@ class DiscoveryClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/cloudbridge/change_discovery_schedule_compartment.py.html>`__ to see an example of how to use change_discovery_schedule_compartment API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/cloudbridge/change_discovery_schedule_compartment.py.html>`__ to see an example of how to use change_discovery_schedule_compartment API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['discoveryScheduleId']
@@ -396,7 +396,7 @@ class DiscoveryClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/cloudbridge/create_asset_source.py.html>`__ to see an example of how to use create_asset_source API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/cloudbridge/create_asset_source.py.html>`__ to see an example of how to use create_asset_source API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -494,7 +494,7 @@ class DiscoveryClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/cloudbridge/create_discovery_schedule.py.html>`__ to see an example of how to use create_discovery_schedule API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/cloudbridge/create_discovery_schedule.py.html>`__ to see an example of how to use create_discovery_schedule API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -594,7 +594,7 @@ class DiscoveryClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/cloudbridge/delete_asset_source.py.html>`__ to see an example of how to use delete_asset_source API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/cloudbridge/delete_asset_source.py.html>`__ to see an example of how to use delete_asset_source API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['assetSourceId']
@@ -701,7 +701,7 @@ class DiscoveryClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/cloudbridge/delete_discovery_schedule.py.html>`__ to see an example of how to use delete_discovery_schedule API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/cloudbridge/delete_discovery_schedule.py.html>`__ to see an example of how to use delete_discovery_schedule API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['discoveryScheduleId']
@@ -801,7 +801,7 @@ class DiscoveryClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/cloudbridge/get_asset_source.py.html>`__ to see an example of how to use get_asset_source API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/cloudbridge/get_asset_source.py.html>`__ to see an example of how to use get_asset_source API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['assetSourceId']
@@ -901,7 +901,7 @@ class DiscoveryClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/cloudbridge/get_discovery_schedule.py.html>`__ to see an example of how to use get_discovery_schedule API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/cloudbridge/get_discovery_schedule.py.html>`__ to see an example of how to use get_discovery_schedule API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['discoveryScheduleId']
@@ -1007,7 +1007,7 @@ class DiscoveryClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/cloudbridge/list_asset_source_connections.py.html>`__ to see an example of how to use list_asset_source_connections API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/cloudbridge/list_asset_source_connections.py.html>`__ to see an example of how to use list_asset_source_connections API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['assetSourceId']
@@ -1144,7 +1144,7 @@ class DiscoveryClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/cloudbridge/list_asset_sources.py.html>`__ to see an example of how to use list_asset_sources API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/cloudbridge/list_asset_sources.py.html>`__ to see an example of how to use list_asset_sources API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['compartmentId']
@@ -1301,7 +1301,7 @@ class DiscoveryClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/cloudbridge/list_discovery_schedules.py.html>`__ to see an example of how to use list_discovery_schedules API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/cloudbridge/list_discovery_schedules.py.html>`__ to see an example of how to use list_discovery_schedules API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['compartmentId']
@@ -1450,7 +1450,7 @@ class DiscoveryClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/cloudbridge/list_supported_cloud_regions.py.html>`__ to see an example of how to use list_supported_cloud_regions API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/cloudbridge/list_supported_cloud_regions.py.html>`__ to see an example of how to use list_supported_cloud_regions API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -1584,7 +1584,7 @@ class DiscoveryClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/cloudbridge/refresh_asset_source.py.html>`__ to see an example of how to use refresh_asset_source API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/cloudbridge/refresh_asset_source.py.html>`__ to see an example of how to use refresh_asset_source API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['assetSourceId']
@@ -1695,7 +1695,7 @@ class DiscoveryClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/cloudbridge/update_asset_source.py.html>`__ to see an example of how to use update_asset_source API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/cloudbridge/update_asset_source.py.html>`__ to see an example of how to use update_asset_source API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['assetSourceId']
@@ -1807,7 +1807,7 @@ class DiscoveryClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/cloudbridge/update_discovery_schedule.py.html>`__ to see an example of how to use update_discovery_schedule API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/cloudbridge/update_discovery_schedule.py.html>`__ to see an example of how to use update_discovery_schedule API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['discoveryScheduleId']

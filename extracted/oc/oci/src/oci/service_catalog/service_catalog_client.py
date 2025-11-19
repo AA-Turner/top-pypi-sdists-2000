@@ -22,7 +22,8 @@ missing = Sentinel("Missing")
 
 class ServiceCatalogClient(object):
     """
-    Manage solutions in Oracle Cloud Infrastructure Service Catalog.
+    Use the Service Catalog API to manage solutions in Oracle Cloud Infrastructure Service Catalog.
+    For more information, see [Overview of Service Catalog](/iaas/Content/service-catalog/overview_of_service_catalog.htm).
     """
 
     def __init__(self, config, **kwargs):
@@ -141,7 +142,7 @@ class ServiceCatalogClient(object):
         :param obj retry_strategy: (optional)
             A retry strategy to apply to this specific operation/call. This will override any retry strategy set at the client-level.
 
-            This should be one of the strategies available in the :py:mod:`~oci.retry` module. This operation will not retry by default, users can also use the convenient :py:data:`~oci.retry.DEFAULT_RETRY_STRATEGY` provided by the SDK to enable retries for it.
+            This should be one of the strategies available in the :py:mod:`~oci.retry` module. This operation uses :py:data:`~oci.retry.DEFAULT_RETRY_STRATEGY` as default if no retry strategy is provided.
             The specifics of the default retry strategy are described `here <https://docs.oracle.com/en-us/iaas/tools/python/latest/sdk_behaviors/retries.html>`__.
 
             To have this operation explicitly not perform any retries, pass an instance of :py:class:`~oci.retry.NoneRetryStrategy`.
@@ -154,7 +155,7 @@ class ServiceCatalogClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/servicecatalog/bulk_replace_service_catalog_associations.py.html>`__ to see an example of how to use bulk_replace_service_catalog_associations API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/servicecatalog/bulk_replace_service_catalog_associations.py.html>`__ to see an example of how to use bulk_replace_service_catalog_associations API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['serviceCatalogId']
@@ -197,6 +198,8 @@ class ServiceCatalogClient(object):
             operation_retry_strategy=kwargs.get('retry_strategy'),
             client_retry_strategy=self.retry_strategy
         )
+        if retry_strategy is None:
+            retry_strategy = retry.DEFAULT_RETRY_STRATEGY
 
         if retry_strategy:
             if not isinstance(retry_strategy, retry.NoneRetryStrategy):
@@ -248,7 +251,7 @@ class ServiceCatalogClient(object):
         :param obj retry_strategy: (optional)
             A retry strategy to apply to this specific operation/call. This will override any retry strategy set at the client-level.
 
-            This should be one of the strategies available in the :py:mod:`~oci.retry` module. This operation will not retry by default, users can also use the convenient :py:data:`~oci.retry.DEFAULT_RETRY_STRATEGY` provided by the SDK to enable retries for it.
+            This should be one of the strategies available in the :py:mod:`~oci.retry` module. This operation uses :py:data:`~oci.retry.DEFAULT_RETRY_STRATEGY` as default if no retry strategy is provided.
             The specifics of the default retry strategy are described `here <https://docs.oracle.com/en-us/iaas/tools/python/latest/sdk_behaviors/retries.html>`__.
 
             To have this operation explicitly not perform any retries, pass an instance of :py:class:`~oci.retry.NoneRetryStrategy`.
@@ -261,7 +264,7 @@ class ServiceCatalogClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/servicecatalog/change_private_application_compartment.py.html>`__ to see an example of how to use change_private_application_compartment API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/servicecatalog/change_private_application_compartment.py.html>`__ to see an example of how to use change_private_application_compartment API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['privateApplicationId']
@@ -304,6 +307,8 @@ class ServiceCatalogClient(object):
             operation_retry_strategy=kwargs.get('retry_strategy'),
             client_retry_strategy=self.retry_strategy
         )
+        if retry_strategy is None:
+            retry_strategy = retry.DEFAULT_RETRY_STRATEGY
 
         if retry_strategy:
             if not isinstance(retry_strategy, retry.NoneRetryStrategy):
@@ -355,7 +360,7 @@ class ServiceCatalogClient(object):
         :param obj retry_strategy: (optional)
             A retry strategy to apply to this specific operation/call. This will override any retry strategy set at the client-level.
 
-            This should be one of the strategies available in the :py:mod:`~oci.retry` module. This operation will not retry by default, users can also use the convenient :py:data:`~oci.retry.DEFAULT_RETRY_STRATEGY` provided by the SDK to enable retries for it.
+            This should be one of the strategies available in the :py:mod:`~oci.retry` module. This operation uses :py:data:`~oci.retry.DEFAULT_RETRY_STRATEGY` as default if no retry strategy is provided.
             The specifics of the default retry strategy are described `here <https://docs.oracle.com/en-us/iaas/tools/python/latest/sdk_behaviors/retries.html>`__.
 
             To have this operation explicitly not perform any retries, pass an instance of :py:class:`~oci.retry.NoneRetryStrategy`.
@@ -368,7 +373,7 @@ class ServiceCatalogClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/servicecatalog/change_service_catalog_compartment.py.html>`__ to see an example of how to use change_service_catalog_compartment API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/servicecatalog/change_service_catalog_compartment.py.html>`__ to see an example of how to use change_service_catalog_compartment API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['serviceCatalogId']
@@ -411,6 +416,8 @@ class ServiceCatalogClient(object):
             operation_retry_strategy=kwargs.get('retry_strategy'),
             client_retry_strategy=self.retry_strategy
         )
+        if retry_strategy is None:
+            retry_strategy = retry.DEFAULT_RETRY_STRATEGY
 
         if retry_strategy:
             if not isinstance(retry_strategy, retry.NoneRetryStrategy):
@@ -460,7 +467,7 @@ class ServiceCatalogClient(object):
         :param obj retry_strategy: (optional)
             A retry strategy to apply to this specific operation/call. This will override any retry strategy set at the client-level.
 
-            This should be one of the strategies available in the :py:mod:`~oci.retry` module. This operation will not retry by default, users can also use the convenient :py:data:`~oci.retry.DEFAULT_RETRY_STRATEGY` provided by the SDK to enable retries for it.
+            This should be one of the strategies available in the :py:mod:`~oci.retry` module. This operation uses :py:data:`~oci.retry.DEFAULT_RETRY_STRATEGY` as default if no retry strategy is provided.
             The specifics of the default retry strategy are described `here <https://docs.oracle.com/en-us/iaas/tools/python/latest/sdk_behaviors/retries.html>`__.
 
             To have this operation explicitly not perform any retries, pass an instance of :py:class:`~oci.retry.NoneRetryStrategy`.
@@ -473,7 +480,7 @@ class ServiceCatalogClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/servicecatalog/create_private_application.py.html>`__ to see an example of how to use create_private_application API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/servicecatalog/create_private_application.py.html>`__ to see an example of how to use create_private_application API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -506,6 +513,8 @@ class ServiceCatalogClient(object):
             operation_retry_strategy=kwargs.get('retry_strategy'),
             client_retry_strategy=self.retry_strategy
         )
+        if retry_strategy is None:
+            retry_strategy = retry.DEFAULT_RETRY_STRATEGY
 
         if retry_strategy:
             if not isinstance(retry_strategy, retry.NoneRetryStrategy):
@@ -556,7 +565,7 @@ class ServiceCatalogClient(object):
         :param obj retry_strategy: (optional)
             A retry strategy to apply to this specific operation/call. This will override any retry strategy set at the client-level.
 
-            This should be one of the strategies available in the :py:mod:`~oci.retry` module. This operation will not retry by default, users can also use the convenient :py:data:`~oci.retry.DEFAULT_RETRY_STRATEGY` provided by the SDK to enable retries for it.
+            This should be one of the strategies available in the :py:mod:`~oci.retry` module. This operation uses :py:data:`~oci.retry.DEFAULT_RETRY_STRATEGY` as default if no retry strategy is provided.
             The specifics of the default retry strategy are described `here <https://docs.oracle.com/en-us/iaas/tools/python/latest/sdk_behaviors/retries.html>`__.
 
             To have this operation explicitly not perform any retries, pass an instance of :py:class:`~oci.retry.NoneRetryStrategy`.
@@ -569,7 +578,7 @@ class ServiceCatalogClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/servicecatalog/create_service_catalog.py.html>`__ to see an example of how to use create_service_catalog API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/servicecatalog/create_service_catalog.py.html>`__ to see an example of how to use create_service_catalog API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -602,6 +611,8 @@ class ServiceCatalogClient(object):
             operation_retry_strategy=kwargs.get('retry_strategy'),
             client_retry_strategy=self.retry_strategy
         )
+        if retry_strategy is None:
+            retry_strategy = retry.DEFAULT_RETRY_STRATEGY
 
         if retry_strategy:
             if not isinstance(retry_strategy, retry.NoneRetryStrategy):
@@ -652,7 +663,7 @@ class ServiceCatalogClient(object):
         :param obj retry_strategy: (optional)
             A retry strategy to apply to this specific operation/call. This will override any retry strategy set at the client-level.
 
-            This should be one of the strategies available in the :py:mod:`~oci.retry` module. This operation will not retry by default, users can also use the convenient :py:data:`~oci.retry.DEFAULT_RETRY_STRATEGY` provided by the SDK to enable retries for it.
+            This should be one of the strategies available in the :py:mod:`~oci.retry` module. This operation uses :py:data:`~oci.retry.DEFAULT_RETRY_STRATEGY` as default if no retry strategy is provided.
             The specifics of the default retry strategy are described `here <https://docs.oracle.com/en-us/iaas/tools/python/latest/sdk_behaviors/retries.html>`__.
 
             To have this operation explicitly not perform any retries, pass an instance of :py:class:`~oci.retry.NoneRetryStrategy`.
@@ -665,7 +676,7 @@ class ServiceCatalogClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/servicecatalog/create_service_catalog_association.py.html>`__ to see an example of how to use create_service_catalog_association API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/servicecatalog/create_service_catalog_association.py.html>`__ to see an example of how to use create_service_catalog_association API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -698,6 +709,8 @@ class ServiceCatalogClient(object):
             operation_retry_strategy=kwargs.get('retry_strategy'),
             client_retry_strategy=self.retry_strategy
         )
+        if retry_strategy is None:
+            retry_strategy = retry.DEFAULT_RETRY_STRATEGY
 
         if retry_strategy:
             if not isinstance(retry_strategy, retry.NoneRetryStrategy):
@@ -747,7 +760,7 @@ class ServiceCatalogClient(object):
         :param obj retry_strategy: (optional)
             A retry strategy to apply to this specific operation/call. This will override any retry strategy set at the client-level.
 
-            This should be one of the strategies available in the :py:mod:`~oci.retry` module. This operation will not retry by default, users can also use the convenient :py:data:`~oci.retry.DEFAULT_RETRY_STRATEGY` provided by the SDK to enable retries for it.
+            This should be one of the strategies available in the :py:mod:`~oci.retry` module. This operation uses :py:data:`~oci.retry.DEFAULT_RETRY_STRATEGY` as default if no retry strategy is provided.
             The specifics of the default retry strategy are described `here <https://docs.oracle.com/en-us/iaas/tools/python/latest/sdk_behaviors/retries.html>`__.
 
             To have this operation explicitly not perform any retries, pass an instance of :py:class:`~oci.retry.NoneRetryStrategy`.
@@ -760,7 +773,7 @@ class ServiceCatalogClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/servicecatalog/delete_private_application.py.html>`__ to see an example of how to use delete_private_application API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/servicecatalog/delete_private_application.py.html>`__ to see an example of how to use delete_private_application API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['privateApplicationId']
@@ -803,6 +816,8 @@ class ServiceCatalogClient(object):
             operation_retry_strategy=kwargs.get('retry_strategy'),
             client_retry_strategy=self.retry_strategy
         )
+        if retry_strategy is None:
+            retry_strategy = retry.DEFAULT_RETRY_STRATEGY
 
         if retry_strategy:
             if not isinstance(retry_strategy, retry.NoneRetryStrategy):
@@ -849,7 +864,7 @@ class ServiceCatalogClient(object):
         :param obj retry_strategy: (optional)
             A retry strategy to apply to this specific operation/call. This will override any retry strategy set at the client-level.
 
-            This should be one of the strategies available in the :py:mod:`~oci.retry` module. This operation will not retry by default, users can also use the convenient :py:data:`~oci.retry.DEFAULT_RETRY_STRATEGY` provided by the SDK to enable retries for it.
+            This should be one of the strategies available in the :py:mod:`~oci.retry` module. This operation uses :py:data:`~oci.retry.DEFAULT_RETRY_STRATEGY` as default if no retry strategy is provided.
             The specifics of the default retry strategy are described `here <https://docs.oracle.com/en-us/iaas/tools/python/latest/sdk_behaviors/retries.html>`__.
 
             To have this operation explicitly not perform any retries, pass an instance of :py:class:`~oci.retry.NoneRetryStrategy`.
@@ -862,7 +877,7 @@ class ServiceCatalogClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/servicecatalog/delete_service_catalog.py.html>`__ to see an example of how to use delete_service_catalog API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/servicecatalog/delete_service_catalog.py.html>`__ to see an example of how to use delete_service_catalog API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['serviceCatalogId']
@@ -905,6 +920,8 @@ class ServiceCatalogClient(object):
             operation_retry_strategy=kwargs.get('retry_strategy'),
             client_retry_strategy=self.retry_strategy
         )
+        if retry_strategy is None:
+            retry_strategy = retry.DEFAULT_RETRY_STRATEGY
 
         if retry_strategy:
             if not isinstance(retry_strategy, retry.NoneRetryStrategy):
@@ -951,7 +968,7 @@ class ServiceCatalogClient(object):
         :param obj retry_strategy: (optional)
             A retry strategy to apply to this specific operation/call. This will override any retry strategy set at the client-level.
 
-            This should be one of the strategies available in the :py:mod:`~oci.retry` module. This operation will not retry by default, users can also use the convenient :py:data:`~oci.retry.DEFAULT_RETRY_STRATEGY` provided by the SDK to enable retries for it.
+            This should be one of the strategies available in the :py:mod:`~oci.retry` module. This operation uses :py:data:`~oci.retry.DEFAULT_RETRY_STRATEGY` as default if no retry strategy is provided.
             The specifics of the default retry strategy are described `here <https://docs.oracle.com/en-us/iaas/tools/python/latest/sdk_behaviors/retries.html>`__.
 
             To have this operation explicitly not perform any retries, pass an instance of :py:class:`~oci.retry.NoneRetryStrategy`.
@@ -964,7 +981,7 @@ class ServiceCatalogClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/servicecatalog/delete_service_catalog_association.py.html>`__ to see an example of how to use delete_service_catalog_association API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/servicecatalog/delete_service_catalog_association.py.html>`__ to see an example of how to use delete_service_catalog_association API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['serviceCatalogAssociationId']
@@ -1007,6 +1024,8 @@ class ServiceCatalogClient(object):
             operation_retry_strategy=kwargs.get('retry_strategy'),
             client_retry_strategy=self.retry_strategy
         )
+        if retry_strategy is None:
+            retry_strategy = retry.DEFAULT_RETRY_STRATEGY
 
         if retry_strategy:
             if not isinstance(retry_strategy, retry.NoneRetryStrategy):
@@ -1033,6 +1052,100 @@ class ServiceCatalogClient(object):
                 api_reference_link=api_reference_link,
                 required_arguments=required_arguments)
 
+    def get_configuration(self, compartment_id, **kwargs):
+        """
+        Get the detail of whether the tenancy is in service catalog mode or not.
+
+
+        :param str compartment_id: (required)
+            The unique identifier for the compartment.
+
+        :param str opc_request_id: (optional)
+            Unique Oracle-assigned identifier for the request. If you need to contact Oracle about a particular request,
+            please provide the request ID.
+
+        :param obj retry_strategy: (optional)
+            A retry strategy to apply to this specific operation/call. This will override any retry strategy set at the client-level.
+
+            This should be one of the strategies available in the :py:mod:`~oci.retry` module. This operation uses :py:data:`~oci.retry.DEFAULT_RETRY_STRATEGY` as default if no retry strategy is provided.
+            The specifics of the default retry strategy are described `here <https://docs.oracle.com/en-us/iaas/tools/python/latest/sdk_behaviors/retries.html>`__.
+
+            To have this operation explicitly not perform any retries, pass an instance of :py:class:`~oci.retry.NoneRetryStrategy`.
+
+        :param bool allow_control_chars: (optional)
+            allow_control_chars is a boolean to indicate whether or not this request should allow control characters in the response object.
+            By default, the response will not allow control characters in strings
+
+        :return: A :class:`~oci.response.Response` object with data of type :class:`~oci.service_catalog.models.Configuration`
+        :rtype: :class:`~oci.response.Response`
+
+        :example:
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/servicecatalog/get_configuration.py.html>`__ to see an example of how to use get_configuration API.
+        """
+        # Required path and query arguments. These are in camelCase to replace values in service endpoints.
+        required_arguments = ['compartmentId']
+        resource_path = "/configuration"
+        method = "GET"
+        operation_name = "get_configuration"
+        api_reference_link = "https://docs.oracle.com/iaas/api/#/en/service-catalog/20210527/Configuration/GetConfiguration"
+
+        # Don't accept unknown kwargs
+        expected_kwargs = [
+            "allow_control_chars",
+            "retry_strategy",
+            "opc_request_id"
+        ]
+        extra_kwargs = [_key for _key in six.iterkeys(kwargs) if _key not in expected_kwargs]
+        if extra_kwargs:
+            raise ValueError(
+                f"get_configuration got unknown kwargs: {extra_kwargs!r}")
+
+        query_params = {
+            "compartmentId": compartment_id
+        }
+        query_params = {k: v for (k, v) in six.iteritems(query_params) if v is not missing and v is not None}
+
+        header_params = {
+            "accept": "application/json",
+            "content-type": "application/json",
+            "opc-request-id": kwargs.get("opc_request_id", missing)
+        }
+        header_params = {k: v for (k, v) in six.iteritems(header_params) if v is not missing and v is not None}
+
+        retry_strategy = self.base_client.get_preferred_retry_strategy(
+            operation_retry_strategy=kwargs.get('retry_strategy'),
+            client_retry_strategy=self.retry_strategy
+        )
+        if retry_strategy is None:
+            retry_strategy = retry.DEFAULT_RETRY_STRATEGY
+
+        if retry_strategy:
+            if not isinstance(retry_strategy, retry.NoneRetryStrategy):
+                self.base_client.add_opc_client_retries_header(header_params)
+                retry_strategy.add_circuit_breaker_callback(self.circuit_breaker_callback)
+            return retry_strategy.make_retrying_call(
+                self.base_client.call_api,
+                resource_path=resource_path,
+                method=method,
+                query_params=query_params,
+                header_params=header_params,
+                response_type="Configuration",
+                allow_control_chars=kwargs.get('allow_control_chars'),
+                operation_name=operation_name,
+                api_reference_link=api_reference_link,
+                required_arguments=required_arguments)
+        else:
+            return self.base_client.call_api(
+                resource_path=resource_path,
+                method=method,
+                query_params=query_params,
+                header_params=header_params,
+                response_type="Configuration",
+                allow_control_chars=kwargs.get('allow_control_chars'),
+                operation_name=operation_name,
+                api_reference_link=api_reference_link,
+                required_arguments=required_arguments)
+
     def get_private_application(self, private_application_id, **kwargs):
         """
         Gets the details of the specified private application.
@@ -1048,7 +1161,7 @@ class ServiceCatalogClient(object):
         :param obj retry_strategy: (optional)
             A retry strategy to apply to this specific operation/call. This will override any retry strategy set at the client-level.
 
-            This should be one of the strategies available in the :py:mod:`~oci.retry` module. This operation will not retry by default, users can also use the convenient :py:data:`~oci.retry.DEFAULT_RETRY_STRATEGY` provided by the SDK to enable retries for it.
+            This should be one of the strategies available in the :py:mod:`~oci.retry` module. This operation uses :py:data:`~oci.retry.DEFAULT_RETRY_STRATEGY` as default if no retry strategy is provided.
             The specifics of the default retry strategy are described `here <https://docs.oracle.com/en-us/iaas/tools/python/latest/sdk_behaviors/retries.html>`__.
 
             To have this operation explicitly not perform any retries, pass an instance of :py:class:`~oci.retry.NoneRetryStrategy`.
@@ -1061,7 +1174,7 @@ class ServiceCatalogClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/servicecatalog/get_private_application.py.html>`__ to see an example of how to use get_private_application API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/servicecatalog/get_private_application.py.html>`__ to see an example of how to use get_private_application API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['privateApplicationId']
@@ -1102,6 +1215,8 @@ class ServiceCatalogClient(object):
             operation_retry_strategy=kwargs.get('retry_strategy'),
             client_retry_strategy=self.retry_strategy
         )
+        if retry_strategy is None:
+            retry_strategy = retry.DEFAULT_RETRY_STRATEGY
 
         if retry_strategy:
             if not isinstance(retry_strategy, retry.NoneRetryStrategy):
@@ -1145,7 +1260,7 @@ class ServiceCatalogClient(object):
         :param obj retry_strategy: (optional)
             A retry strategy to apply to this specific operation/call. This will override any retry strategy set at the client-level.
 
-            This should be one of the strategies available in the :py:mod:`~oci.retry` module. This operation will not retry by default, users can also use the convenient :py:data:`~oci.retry.DEFAULT_RETRY_STRATEGY` provided by the SDK to enable retries for it.
+            This should be one of the strategies available in the :py:mod:`~oci.retry` module. This operation uses :py:data:`~oci.retry.DEFAULT_RETRY_STRATEGY` as default if no retry strategy is provided.
             The specifics of the default retry strategy are described `here <https://docs.oracle.com/en-us/iaas/tools/python/latest/sdk_behaviors/retries.html>`__.
 
             To have this operation explicitly not perform any retries, pass an instance of :py:class:`~oci.retry.NoneRetryStrategy`.
@@ -1158,7 +1273,7 @@ class ServiceCatalogClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/servicecatalog/get_private_application_action_download_logo.py.html>`__ to see an example of how to use get_private_application_action_download_logo API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/servicecatalog/get_private_application_action_download_logo.py.html>`__ to see an example of how to use get_private_application_action_download_logo API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['privateApplicationId']
@@ -1199,6 +1314,8 @@ class ServiceCatalogClient(object):
             operation_retry_strategy=kwargs.get('retry_strategy'),
             client_retry_strategy=self.retry_strategy
         )
+        if retry_strategy is None:
+            retry_strategy = retry.DEFAULT_RETRY_STRATEGY
 
         if retry_strategy:
             if not isinstance(retry_strategy, retry.NoneRetryStrategy):
@@ -1242,7 +1359,7 @@ class ServiceCatalogClient(object):
         :param obj retry_strategy: (optional)
             A retry strategy to apply to this specific operation/call. This will override any retry strategy set at the client-level.
 
-            This should be one of the strategies available in the :py:mod:`~oci.retry` module. This operation will not retry by default, users can also use the convenient :py:data:`~oci.retry.DEFAULT_RETRY_STRATEGY` provided by the SDK to enable retries for it.
+            This should be one of the strategies available in the :py:mod:`~oci.retry` module. This operation uses :py:data:`~oci.retry.DEFAULT_RETRY_STRATEGY` as default if no retry strategy is provided.
             The specifics of the default retry strategy are described `here <https://docs.oracle.com/en-us/iaas/tools/python/latest/sdk_behaviors/retries.html>`__.
 
             To have this operation explicitly not perform any retries, pass an instance of :py:class:`~oci.retry.NoneRetryStrategy`.
@@ -1255,7 +1372,7 @@ class ServiceCatalogClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/servicecatalog/get_private_application_package.py.html>`__ to see an example of how to use get_private_application_package API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/servicecatalog/get_private_application_package.py.html>`__ to see an example of how to use get_private_application_package API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['privateApplicationPackageId']
@@ -1296,6 +1413,8 @@ class ServiceCatalogClient(object):
             operation_retry_strategy=kwargs.get('retry_strategy'),
             client_retry_strategy=self.retry_strategy
         )
+        if retry_strategy is None:
+            retry_strategy = retry.DEFAULT_RETRY_STRATEGY
 
         if retry_strategy:
             if not isinstance(retry_strategy, retry.NoneRetryStrategy):
@@ -1339,7 +1458,7 @@ class ServiceCatalogClient(object):
         :param obj retry_strategy: (optional)
             A retry strategy to apply to this specific operation/call. This will override any retry strategy set at the client-level.
 
-            This should be one of the strategies available in the :py:mod:`~oci.retry` module. This operation will not retry by default, users can also use the convenient :py:data:`~oci.retry.DEFAULT_RETRY_STRATEGY` provided by the SDK to enable retries for it.
+            This should be one of the strategies available in the :py:mod:`~oci.retry` module. This operation uses :py:data:`~oci.retry.DEFAULT_RETRY_STRATEGY` as default if no retry strategy is provided.
             The specifics of the default retry strategy are described `here <https://docs.oracle.com/en-us/iaas/tools/python/latest/sdk_behaviors/retries.html>`__.
 
             To have this operation explicitly not perform any retries, pass an instance of :py:class:`~oci.retry.NoneRetryStrategy`.
@@ -1352,7 +1471,7 @@ class ServiceCatalogClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/servicecatalog/get_private_application_package_action_download_config.py.html>`__ to see an example of how to use get_private_application_package_action_download_config API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/servicecatalog/get_private_application_package_action_download_config.py.html>`__ to see an example of how to use get_private_application_package_action_download_config API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['privateApplicationPackageId']
@@ -1393,6 +1512,8 @@ class ServiceCatalogClient(object):
             operation_retry_strategy=kwargs.get('retry_strategy'),
             client_retry_strategy=self.retry_strategy
         )
+        if retry_strategy is None:
+            retry_strategy = retry.DEFAULT_RETRY_STRATEGY
 
         if retry_strategy:
             if not isinstance(retry_strategy, retry.NoneRetryStrategy):
@@ -1436,7 +1557,7 @@ class ServiceCatalogClient(object):
         :param obj retry_strategy: (optional)
             A retry strategy to apply to this specific operation/call. This will override any retry strategy set at the client-level.
 
-            This should be one of the strategies available in the :py:mod:`~oci.retry` module. This operation will not retry by default, users can also use the convenient :py:data:`~oci.retry.DEFAULT_RETRY_STRATEGY` provided by the SDK to enable retries for it.
+            This should be one of the strategies available in the :py:mod:`~oci.retry` module. This operation uses :py:data:`~oci.retry.DEFAULT_RETRY_STRATEGY` as default if no retry strategy is provided.
             The specifics of the default retry strategy are described `here <https://docs.oracle.com/en-us/iaas/tools/python/latest/sdk_behaviors/retries.html>`__.
 
             To have this operation explicitly not perform any retries, pass an instance of :py:class:`~oci.retry.NoneRetryStrategy`.
@@ -1449,7 +1570,7 @@ class ServiceCatalogClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/servicecatalog/get_service_catalog.py.html>`__ to see an example of how to use get_service_catalog API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/servicecatalog/get_service_catalog.py.html>`__ to see an example of how to use get_service_catalog API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['serviceCatalogId']
@@ -1490,6 +1611,8 @@ class ServiceCatalogClient(object):
             operation_retry_strategy=kwargs.get('retry_strategy'),
             client_retry_strategy=self.retry_strategy
         )
+        if retry_strategy is None:
+            retry_strategy = retry.DEFAULT_RETRY_STRATEGY
 
         if retry_strategy:
             if not isinstance(retry_strategy, retry.NoneRetryStrategy):
@@ -1533,7 +1656,7 @@ class ServiceCatalogClient(object):
         :param obj retry_strategy: (optional)
             A retry strategy to apply to this specific operation/call. This will override any retry strategy set at the client-level.
 
-            This should be one of the strategies available in the :py:mod:`~oci.retry` module. This operation will not retry by default, users can also use the convenient :py:data:`~oci.retry.DEFAULT_RETRY_STRATEGY` provided by the SDK to enable retries for it.
+            This should be one of the strategies available in the :py:mod:`~oci.retry` module. This operation uses :py:data:`~oci.retry.DEFAULT_RETRY_STRATEGY` as default if no retry strategy is provided.
             The specifics of the default retry strategy are described `here <https://docs.oracle.com/en-us/iaas/tools/python/latest/sdk_behaviors/retries.html>`__.
 
             To have this operation explicitly not perform any retries, pass an instance of :py:class:`~oci.retry.NoneRetryStrategy`.
@@ -1546,7 +1669,7 @@ class ServiceCatalogClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/servicecatalog/get_service_catalog_association.py.html>`__ to see an example of how to use get_service_catalog_association API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/servicecatalog/get_service_catalog_association.py.html>`__ to see an example of how to use get_service_catalog_association API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['serviceCatalogAssociationId']
@@ -1587,6 +1710,8 @@ class ServiceCatalogClient(object):
             operation_retry_strategy=kwargs.get('retry_strategy'),
             client_retry_strategy=self.retry_strategy
         )
+        if retry_strategy is None:
+            retry_strategy = retry.DEFAULT_RETRY_STRATEGY
 
         if retry_strategy:
             if not isinstance(retry_strategy, retry.NoneRetryStrategy):
@@ -1630,7 +1755,7 @@ class ServiceCatalogClient(object):
         :param obj retry_strategy: (optional)
             A retry strategy to apply to this specific operation/call. This will override any retry strategy set at the client-level.
 
-            This should be one of the strategies available in the :py:mod:`~oci.retry` module. This operation will not retry by default, users can also use the convenient :py:data:`~oci.retry.DEFAULT_RETRY_STRATEGY` provided by the SDK to enable retries for it.
+            This should be one of the strategies available in the :py:mod:`~oci.retry` module. This operation uses :py:data:`~oci.retry.DEFAULT_RETRY_STRATEGY` as default if no retry strategy is provided.
             The specifics of the default retry strategy are described `here <https://docs.oracle.com/en-us/iaas/tools/python/latest/sdk_behaviors/retries.html>`__.
 
             To have this operation explicitly not perform any retries, pass an instance of :py:class:`~oci.retry.NoneRetryStrategy`.
@@ -1643,7 +1768,7 @@ class ServiceCatalogClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/servicecatalog/get_work_request.py.html>`__ to see an example of how to use get_work_request API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/servicecatalog/get_work_request.py.html>`__ to see an example of how to use get_work_request API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workRequestId']
@@ -1684,6 +1809,8 @@ class ServiceCatalogClient(object):
             operation_retry_strategy=kwargs.get('retry_strategy'),
             client_retry_strategy=self.retry_strategy
         )
+        if retry_strategy is None:
+            retry_strategy = retry.DEFAULT_RETRY_STRATEGY
 
         if retry_strategy:
             if not isinstance(retry_strategy, retry.NoneRetryStrategy):
@@ -1707,6 +1834,183 @@ class ServiceCatalogClient(object):
                 path_params=path_params,
                 header_params=header_params,
                 response_type="WorkRequest",
+                allow_control_chars=kwargs.get('allow_control_chars'),
+                operation_name=operation_name,
+                api_reference_link=api_reference_link,
+                required_arguments=required_arguments)
+
+    def list_all_applications(self, **kwargs):
+        """
+        Lists all the available listings and private applications in a compartment.
+        A new API for catalog manager use when creating/updating a service catalog.
+
+
+        :param str compartment_id: (optional)
+            The unique identifier for the compartment.
+
+        :param str entity_type: (optional)
+            The type of the application in the service catalog.
+
+        :param str opc_request_id: (optional)
+            Unique Oracle-assigned identifier for the request. If you need to contact Oracle about a particular request,
+            please provide the request ID.
+
+        :param int limit: (optional)
+            How many records to return. Specify a value greater than zero and less than or equal to 1000. The default is 30.
+
+        :param str page: (optional)
+            The value of the `opc-next-page` response header from the previous \"List\" call.
+
+        :param str display_name: (optional)
+            Exact match name filter.
+
+        :param str entity_id: (optional)
+            The unique identifier of the entity associated with service catalog.
+
+        :param list[str] publisher_id: (optional)
+            Limit results to just this publisher.
+
+        :param list[str] package_type: (optional)
+            Name of the package type. If multiple package types are provided, then any resource with
+            one or more matching package types will be returned.
+
+            Allowed values are: "STACK", "IMAGE"
+
+        :param list[str] pricing: (optional)
+            Name of the pricing type. If multiple pricing types are provided, then any resource with
+            one or more matching pricing models will be returned.
+
+            Allowed values are: "FREE", "BYOL", "PAYGO"
+
+        :param bool is_featured: (optional)
+            Indicates whether to show only featured resources. If this is set to `false` or is omitted, then all resources will be returned.
+
+        :param str sort_order: (optional)
+            The sort order to apply, either `ASC` or `DESC`. Default is `ASC`.
+
+            Allowed values are: "ASC", "DESC"
+
+        :param obj retry_strategy: (optional)
+            A retry strategy to apply to this specific operation/call. This will override any retry strategy set at the client-level.
+
+            This should be one of the strategies available in the :py:mod:`~oci.retry` module. This operation uses :py:data:`~oci.retry.DEFAULT_RETRY_STRATEGY` as default if no retry strategy is provided.
+            The specifics of the default retry strategy are described `here <https://docs.oracle.com/en-us/iaas/tools/python/latest/sdk_behaviors/retries.html>`__.
+
+            To have this operation explicitly not perform any retries, pass an instance of :py:class:`~oci.retry.NoneRetryStrategy`.
+
+        :param bool allow_control_chars: (optional)
+            allow_control_chars is a boolean to indicate whether or not this request should allow control characters in the response object.
+            By default, the response will not allow control characters in strings
+
+        :return: A :class:`~oci.response.Response` object with data of type :class:`~oci.service_catalog.models.ApplicationCollection`
+        :rtype: :class:`~oci.response.Response`
+
+        :example:
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/servicecatalog/list_all_applications.py.html>`__ to see an example of how to use list_all_applications API.
+        """
+        # Required path and query arguments. These are in camelCase to replace values in service endpoints.
+        required_arguments = []
+        resource_path = "/allApplications"
+        method = "GET"
+        operation_name = "list_all_applications"
+        api_reference_link = "https://docs.oracle.com/iaas/api/#/en/service-catalog/20210527/ApplicationSummary/ListAllApplications"
+
+        # Don't accept unknown kwargs
+        expected_kwargs = [
+            "allow_control_chars",
+            "retry_strategy",
+            "compartment_id",
+            "entity_type",
+            "opc_request_id",
+            "limit",
+            "page",
+            "display_name",
+            "entity_id",
+            "publisher_id",
+            "package_type",
+            "pricing",
+            "is_featured",
+            "sort_order"
+        ]
+        extra_kwargs = [_key for _key in six.iterkeys(kwargs) if _key not in expected_kwargs]
+        if extra_kwargs:
+            raise ValueError(
+                f"list_all_applications got unknown kwargs: {extra_kwargs!r}")
+
+        if 'package_type' in kwargs:
+            package_type_allowed_values = ["STACK", "IMAGE"]
+            for package_type_item in kwargs['package_type']:
+                if package_type_item not in package_type_allowed_values:
+                    raise ValueError(
+                        f"Invalid value for `package_type`, must be one of { package_type_allowed_values }"
+                    )
+
+        if 'pricing' in kwargs:
+            pricing_allowed_values = ["FREE", "BYOL", "PAYGO"]
+            for pricing_item in kwargs['pricing']:
+                if pricing_item not in pricing_allowed_values:
+                    raise ValueError(
+                        f"Invalid value for `pricing`, must be one of { pricing_allowed_values }"
+                    )
+
+        if 'sort_order' in kwargs:
+            sort_order_allowed_values = ["ASC", "DESC"]
+            if kwargs['sort_order'] not in sort_order_allowed_values:
+                raise ValueError(
+                    f"Invalid value for `sort_order`, must be one of { sort_order_allowed_values }"
+                )
+
+        query_params = {
+            "compartmentId": kwargs.get("compartment_id", missing),
+            "entityType": kwargs.get("entity_type", missing),
+            "limit": kwargs.get("limit", missing),
+            "page": kwargs.get("page", missing),
+            "displayName": kwargs.get("display_name", missing),
+            "entityId": kwargs.get("entity_id", missing),
+            "publisherId": self.base_client.generate_collection_format_param(kwargs.get("publisher_id", missing), 'multi'),
+            "packageType": self.base_client.generate_collection_format_param(kwargs.get("package_type", missing), 'multi'),
+            "pricing": self.base_client.generate_collection_format_param(kwargs.get("pricing", missing), 'multi'),
+            "isFeatured": kwargs.get("is_featured", missing),
+            "sortOrder": kwargs.get("sort_order", missing)
+        }
+        query_params = {k: v for (k, v) in six.iteritems(query_params) if v is not missing and v is not None}
+
+        header_params = {
+            "accept": "application/json",
+            "content-type": "application/json",
+            "opc-request-id": kwargs.get("opc_request_id", missing)
+        }
+        header_params = {k: v for (k, v) in six.iteritems(header_params) if v is not missing and v is not None}
+
+        retry_strategy = self.base_client.get_preferred_retry_strategy(
+            operation_retry_strategy=kwargs.get('retry_strategy'),
+            client_retry_strategy=self.retry_strategy
+        )
+        if retry_strategy is None:
+            retry_strategy = retry.DEFAULT_RETRY_STRATEGY
+
+        if retry_strategy:
+            if not isinstance(retry_strategy, retry.NoneRetryStrategy):
+                self.base_client.add_opc_client_retries_header(header_params)
+                retry_strategy.add_circuit_breaker_callback(self.circuit_breaker_callback)
+            return retry_strategy.make_retrying_call(
+                self.base_client.call_api,
+                resource_path=resource_path,
+                method=method,
+                query_params=query_params,
+                header_params=header_params,
+                response_type="ApplicationCollection",
+                allow_control_chars=kwargs.get('allow_control_chars'),
+                operation_name=operation_name,
+                api_reference_link=api_reference_link,
+                required_arguments=required_arguments)
+        else:
+            return self.base_client.call_api(
+                resource_path=resource_path,
+                method=method,
+                query_params=query_params,
+                header_params=header_params,
+                response_type="ApplicationCollection",
                 allow_control_chars=kwargs.get('allow_control_chars'),
                 operation_name=operation_name,
                 api_reference_link=api_reference_link,
@@ -1751,7 +2055,7 @@ class ServiceCatalogClient(object):
             Name of the package type. If multiple package types are provided, then any resource with
             one or more matching package types will be returned.
 
-            Allowed values are: "STACK"
+            Allowed values are: "STACK", "IMAGE"
 
         :param list[str] pricing: (optional)
             Name of the pricing type. If multiple pricing types are provided, then any resource with
@@ -1770,7 +2074,7 @@ class ServiceCatalogClient(object):
         :param obj retry_strategy: (optional)
             A retry strategy to apply to this specific operation/call. This will override any retry strategy set at the client-level.
 
-            This should be one of the strategies available in the :py:mod:`~oci.retry` module. This operation will not retry by default, users can also use the convenient :py:data:`~oci.retry.DEFAULT_RETRY_STRATEGY` provided by the SDK to enable retries for it.
+            This should be one of the strategies available in the :py:mod:`~oci.retry` module. This operation uses :py:data:`~oci.retry.DEFAULT_RETRY_STRATEGY` as default if no retry strategy is provided.
             The specifics of the default retry strategy are described `here <https://docs.oracle.com/en-us/iaas/tools/python/latest/sdk_behaviors/retries.html>`__.
 
             To have this operation explicitly not perform any retries, pass an instance of :py:class:`~oci.retry.NoneRetryStrategy`.
@@ -1783,7 +2087,7 @@ class ServiceCatalogClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/servicecatalog/list_applications.py.html>`__ to see an example of how to use list_applications API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/servicecatalog/list_applications.py.html>`__ to see an example of how to use list_applications API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -1816,7 +2120,7 @@ class ServiceCatalogClient(object):
                 f"list_applications got unknown kwargs: {extra_kwargs!r}")
 
         if 'package_type' in kwargs:
-            package_type_allowed_values = ["STACK"]
+            package_type_allowed_values = ["STACK", "IMAGE"]
             for package_type_item in kwargs['package_type']:
                 if package_type_item not in package_type_allowed_values:
                     raise ValueError(
@@ -1865,6 +2169,8 @@ class ServiceCatalogClient(object):
             operation_retry_strategy=kwargs.get('retry_strategy'),
             client_retry_strategy=self.retry_strategy
         )
+        if retry_strategy is None:
+            retry_strategy = retry.DEFAULT_RETRY_STRATEGY
 
         if retry_strategy:
             if not isinstance(retry_strategy, retry.NoneRetryStrategy):
@@ -1908,7 +2214,7 @@ class ServiceCatalogClient(object):
             Name of the package type. If multiple package types are provided, then any resource with
             one or more matching package types will be returned.
 
-            Allowed values are: "STACK"
+            Allowed values are: "STACK", "IMAGE"
 
         :param int limit: (optional)
             How many records to return. Specify a value greater than zero and less than or equal to 1000. The default is 30.
@@ -1938,7 +2244,7 @@ class ServiceCatalogClient(object):
         :param obj retry_strategy: (optional)
             A retry strategy to apply to this specific operation/call. This will override any retry strategy set at the client-level.
 
-            This should be one of the strategies available in the :py:mod:`~oci.retry` module. This operation will not retry by default, users can also use the convenient :py:data:`~oci.retry.DEFAULT_RETRY_STRATEGY` provided by the SDK to enable retries for it.
+            This should be one of the strategies available in the :py:mod:`~oci.retry` module. This operation uses :py:data:`~oci.retry.DEFAULT_RETRY_STRATEGY` as default if no retry strategy is provided.
             The specifics of the default retry strategy are described `here <https://docs.oracle.com/en-us/iaas/tools/python/latest/sdk_behaviors/retries.html>`__.
 
             To have this operation explicitly not perform any retries, pass an instance of :py:class:`~oci.retry.NoneRetryStrategy`.
@@ -1951,7 +2257,7 @@ class ServiceCatalogClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/servicecatalog/list_private_application_packages.py.html>`__ to see an example of how to use list_private_application_packages API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/servicecatalog/list_private_application_packages.py.html>`__ to see an example of how to use list_private_application_packages API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['privateApplicationId']
@@ -1979,7 +2285,7 @@ class ServiceCatalogClient(object):
                 f"list_private_application_packages got unknown kwargs: {extra_kwargs!r}")
 
         if 'package_type' in kwargs:
-            package_type_allowed_values = ["STACK"]
+            package_type_allowed_values = ["STACK", "IMAGE"]
             for package_type_item in kwargs['package_type']:
                 if package_type_item not in package_type_allowed_values:
                     raise ValueError(
@@ -2023,6 +2329,8 @@ class ServiceCatalogClient(object):
             operation_retry_strategy=kwargs.get('retry_strategy'),
             client_retry_strategy=self.retry_strategy
         )
+        if retry_strategy is None:
+            retry_strategy = retry.DEFAULT_RETRY_STRATEGY
 
         if retry_strategy:
             if not isinstance(retry_strategy, retry.NoneRetryStrategy):
@@ -2089,7 +2397,7 @@ class ServiceCatalogClient(object):
         :param obj retry_strategy: (optional)
             A retry strategy to apply to this specific operation/call. This will override any retry strategy set at the client-level.
 
-            This should be one of the strategies available in the :py:mod:`~oci.retry` module. This operation will not retry by default, users can also use the convenient :py:data:`~oci.retry.DEFAULT_RETRY_STRATEGY` provided by the SDK to enable retries for it.
+            This should be one of the strategies available in the :py:mod:`~oci.retry` module. This operation uses :py:data:`~oci.retry.DEFAULT_RETRY_STRATEGY` as default if no retry strategy is provided.
             The specifics of the default retry strategy are described `here <https://docs.oracle.com/en-us/iaas/tools/python/latest/sdk_behaviors/retries.html>`__.
 
             To have this operation explicitly not perform any retries, pass an instance of :py:class:`~oci.retry.NoneRetryStrategy`.
@@ -2102,7 +2410,7 @@ class ServiceCatalogClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/servicecatalog/list_private_applications.py.html>`__ to see an example of how to use list_private_applications API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/servicecatalog/list_private_applications.py.html>`__ to see an example of how to use list_private_applications API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['compartmentId']
@@ -2164,6 +2472,8 @@ class ServiceCatalogClient(object):
             operation_retry_strategy=kwargs.get('retry_strategy'),
             client_retry_strategy=self.retry_strategy
         )
+        if retry_strategy is None:
+            retry_strategy = retry.DEFAULT_RETRY_STRATEGY
 
         if retry_strategy:
             if not isinstance(retry_strategy, retry.NoneRetryStrategy):
@@ -2232,7 +2542,7 @@ class ServiceCatalogClient(object):
         :param obj retry_strategy: (optional)
             A retry strategy to apply to this specific operation/call. This will override any retry strategy set at the client-level.
 
-            This should be one of the strategies available in the :py:mod:`~oci.retry` module. This operation will not retry by default, users can also use the convenient :py:data:`~oci.retry.DEFAULT_RETRY_STRATEGY` provided by the SDK to enable retries for it.
+            This should be one of the strategies available in the :py:mod:`~oci.retry` module. This operation uses :py:data:`~oci.retry.DEFAULT_RETRY_STRATEGY` as default if no retry strategy is provided.
             The specifics of the default retry strategy are described `here <https://docs.oracle.com/en-us/iaas/tools/python/latest/sdk_behaviors/retries.html>`__.
 
             To have this operation explicitly not perform any retries, pass an instance of :py:class:`~oci.retry.NoneRetryStrategy`.
@@ -2245,7 +2555,7 @@ class ServiceCatalogClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/servicecatalog/list_service_catalog_associations.py.html>`__ to see an example of how to use list_service_catalog_associations API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/servicecatalog/list_service_catalog_associations.py.html>`__ to see an example of how to use list_service_catalog_associations API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -2310,6 +2620,8 @@ class ServiceCatalogClient(object):
             operation_retry_strategy=kwargs.get('retry_strategy'),
             client_retry_strategy=self.retry_strategy
         )
+        if retry_strategy is None:
+            retry_strategy = retry.DEFAULT_RETRY_STRATEGY
 
         if retry_strategy:
             if not isinstance(retry_strategy, retry.NoneRetryStrategy):
@@ -2349,6 +2661,11 @@ class ServiceCatalogClient(object):
         :param str service_catalog_id: (optional)
             The unique identifier for the service catalog.
 
+        :param str status: (optional)
+            Status of the service catalog, use as a filter to filter out all active catalogs.
+
+            Allowed values are: "ACTIVE", "INACTIVE"
+
         :param str opc_request_id: (optional)
             Unique Oracle-assigned identifier for the request. If you need to contact Oracle about a particular request,
             please provide the request ID.
@@ -2375,7 +2692,7 @@ class ServiceCatalogClient(object):
         :param obj retry_strategy: (optional)
             A retry strategy to apply to this specific operation/call. This will override any retry strategy set at the client-level.
 
-            This should be one of the strategies available in the :py:mod:`~oci.retry` module. This operation will not retry by default, users can also use the convenient :py:data:`~oci.retry.DEFAULT_RETRY_STRATEGY` provided by the SDK to enable retries for it.
+            This should be one of the strategies available in the :py:mod:`~oci.retry` module. This operation uses :py:data:`~oci.retry.DEFAULT_RETRY_STRATEGY` as default if no retry strategy is provided.
             The specifics of the default retry strategy are described `here <https://docs.oracle.com/en-us/iaas/tools/python/latest/sdk_behaviors/retries.html>`__.
 
             To have this operation explicitly not perform any retries, pass an instance of :py:class:`~oci.retry.NoneRetryStrategy`.
@@ -2388,7 +2705,7 @@ class ServiceCatalogClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/servicecatalog/list_service_catalogs.py.html>`__ to see an example of how to use list_service_catalogs API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/servicecatalog/list_service_catalogs.py.html>`__ to see an example of how to use list_service_catalogs API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['compartmentId']
@@ -2402,6 +2719,7 @@ class ServiceCatalogClient(object):
             "allow_control_chars",
             "retry_strategy",
             "service_catalog_id",
+            "status",
             "opc_request_id",
             "limit",
             "page",
@@ -2413,6 +2731,13 @@ class ServiceCatalogClient(object):
         if extra_kwargs:
             raise ValueError(
                 f"list_service_catalogs got unknown kwargs: {extra_kwargs!r}")
+
+        if 'status' in kwargs:
+            status_allowed_values = ["ACTIVE", "INACTIVE"]
+            if kwargs['status'] not in status_allowed_values:
+                raise ValueError(
+                    f"Invalid value for `status`, must be one of { status_allowed_values }"
+                )
 
         if 'sort_by' in kwargs:
             sort_by_allowed_values = ["TIMECREATED"]
@@ -2431,6 +2756,7 @@ class ServiceCatalogClient(object):
         query_params = {
             "compartmentId": compartment_id,
             "serviceCatalogId": kwargs.get("service_catalog_id", missing),
+            "status": kwargs.get("status", missing),
             "limit": kwargs.get("limit", missing),
             "page": kwargs.get("page", missing),
             "sortBy": kwargs.get("sort_by", missing),
@@ -2450,6 +2776,8 @@ class ServiceCatalogClient(object):
             operation_retry_strategy=kwargs.get('retry_strategy'),
             client_retry_strategy=self.retry_strategy
         )
+        if retry_strategy is None:
+            retry_strategy = retry.DEFAULT_RETRY_STRATEGY
 
         if retry_strategy:
             if not isinstance(retry_strategy, retry.NoneRetryStrategy):
@@ -2509,7 +2837,7 @@ class ServiceCatalogClient(object):
         :param obj retry_strategy: (optional)
             A retry strategy to apply to this specific operation/call. This will override any retry strategy set at the client-level.
 
-            This should be one of the strategies available in the :py:mod:`~oci.retry` module. This operation will not retry by default, users can also use the convenient :py:data:`~oci.retry.DEFAULT_RETRY_STRATEGY` provided by the SDK to enable retries for it.
+            This should be one of the strategies available in the :py:mod:`~oci.retry` module. This operation uses :py:data:`~oci.retry.DEFAULT_RETRY_STRATEGY` as default if no retry strategy is provided.
             The specifics of the default retry strategy are described `here <https://docs.oracle.com/en-us/iaas/tools/python/latest/sdk_behaviors/retries.html>`__.
 
             To have this operation explicitly not perform any retries, pass an instance of :py:class:`~oci.retry.NoneRetryStrategy`.
@@ -2522,7 +2850,7 @@ class ServiceCatalogClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/servicecatalog/list_work_request_errors.py.html>`__ to see an example of how to use list_work_request_errors API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/servicecatalog/list_work_request_errors.py.html>`__ to see an example of how to use list_work_request_errors API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workRequestId']
@@ -2589,6 +2917,8 @@ class ServiceCatalogClient(object):
             operation_retry_strategy=kwargs.get('retry_strategy'),
             client_retry_strategy=self.retry_strategy
         )
+        if retry_strategy is None:
+            retry_strategy = retry.DEFAULT_RETRY_STRATEGY
 
         if retry_strategy:
             if not isinstance(retry_strategy, retry.NoneRetryStrategy):
@@ -2650,7 +2980,7 @@ class ServiceCatalogClient(object):
         :param obj retry_strategy: (optional)
             A retry strategy to apply to this specific operation/call. This will override any retry strategy set at the client-level.
 
-            This should be one of the strategies available in the :py:mod:`~oci.retry` module. This operation will not retry by default, users can also use the convenient :py:data:`~oci.retry.DEFAULT_RETRY_STRATEGY` provided by the SDK to enable retries for it.
+            This should be one of the strategies available in the :py:mod:`~oci.retry` module. This operation uses :py:data:`~oci.retry.DEFAULT_RETRY_STRATEGY` as default if no retry strategy is provided.
             The specifics of the default retry strategy are described `here <https://docs.oracle.com/en-us/iaas/tools/python/latest/sdk_behaviors/retries.html>`__.
 
             To have this operation explicitly not perform any retries, pass an instance of :py:class:`~oci.retry.NoneRetryStrategy`.
@@ -2663,7 +2993,7 @@ class ServiceCatalogClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/servicecatalog/list_work_request_logs.py.html>`__ to see an example of how to use list_work_request_logs API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/servicecatalog/list_work_request_logs.py.html>`__ to see an example of how to use list_work_request_logs API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['workRequestId']
@@ -2730,6 +3060,8 @@ class ServiceCatalogClient(object):
             operation_retry_strategy=kwargs.get('retry_strategy'),
             client_retry_strategy=self.retry_strategy
         )
+        if retry_strategy is None:
+            retry_strategy = retry.DEFAULT_RETRY_STRATEGY
 
         if retry_strategy:
             if not isinstance(retry_strategy, retry.NoneRetryStrategy):
@@ -2802,7 +3134,7 @@ class ServiceCatalogClient(object):
         :param obj retry_strategy: (optional)
             A retry strategy to apply to this specific operation/call. This will override any retry strategy set at the client-level.
 
-            This should be one of the strategies available in the :py:mod:`~oci.retry` module. This operation will not retry by default, users can also use the convenient :py:data:`~oci.retry.DEFAULT_RETRY_STRATEGY` provided by the SDK to enable retries for it.
+            This should be one of the strategies available in the :py:mod:`~oci.retry` module. This operation uses :py:data:`~oci.retry.DEFAULT_RETRY_STRATEGY` as default if no retry strategy is provided.
             The specifics of the default retry strategy are described `here <https://docs.oracle.com/en-us/iaas/tools/python/latest/sdk_behaviors/retries.html>`__.
 
             To have this operation explicitly not perform any retries, pass an instance of :py:class:`~oci.retry.NoneRetryStrategy`.
@@ -2815,7 +3147,7 @@ class ServiceCatalogClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/servicecatalog/list_work_requests.py.html>`__ to see an example of how to use list_work_requests API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/servicecatalog/list_work_requests.py.html>`__ to see an example of how to use list_work_requests API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = []
@@ -2887,6 +3219,8 @@ class ServiceCatalogClient(object):
             operation_retry_strategy=kwargs.get('retry_strategy'),
             client_retry_strategy=self.retry_strategy
         )
+        if retry_strategy is None:
+            retry_strategy = retry.DEFAULT_RETRY_STRATEGY
 
         if retry_strategy:
             if not isinstance(retry_strategy, retry.NoneRetryStrategy):
@@ -2938,7 +3272,7 @@ class ServiceCatalogClient(object):
         :param obj retry_strategy: (optional)
             A retry strategy to apply to this specific operation/call. This will override any retry strategy set at the client-level.
 
-            This should be one of the strategies available in the :py:mod:`~oci.retry` module. This operation will not retry by default, users can also use the convenient :py:data:`~oci.retry.DEFAULT_RETRY_STRATEGY` provided by the SDK to enable retries for it.
+            This should be one of the strategies available in the :py:mod:`~oci.retry` module. This operation uses :py:data:`~oci.retry.DEFAULT_RETRY_STRATEGY` as default if no retry strategy is provided.
             The specifics of the default retry strategy are described `here <https://docs.oracle.com/en-us/iaas/tools/python/latest/sdk_behaviors/retries.html>`__.
 
             To have this operation explicitly not perform any retries, pass an instance of :py:class:`~oci.retry.NoneRetryStrategy`.
@@ -2951,7 +3285,7 @@ class ServiceCatalogClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/servicecatalog/update_private_application.py.html>`__ to see an example of how to use update_private_application API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/servicecatalog/update_private_application.py.html>`__ to see an example of how to use update_private_application API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['privateApplicationId']
@@ -2994,6 +3328,8 @@ class ServiceCatalogClient(object):
             operation_retry_strategy=kwargs.get('retry_strategy'),
             client_retry_strategy=self.retry_strategy
         )
+        if retry_strategy is None:
+            retry_strategy = retry.DEFAULT_RETRY_STRATEGY
 
         if retry_strategy:
             if not isinstance(retry_strategy, retry.NoneRetryStrategy):
@@ -3047,7 +3383,7 @@ class ServiceCatalogClient(object):
         :param obj retry_strategy: (optional)
             A retry strategy to apply to this specific operation/call. This will override any retry strategy set at the client-level.
 
-            This should be one of the strategies available in the :py:mod:`~oci.retry` module. This operation will not retry by default, users can also use the convenient :py:data:`~oci.retry.DEFAULT_RETRY_STRATEGY` provided by the SDK to enable retries for it.
+            This should be one of the strategies available in the :py:mod:`~oci.retry` module. This operation uses :py:data:`~oci.retry.DEFAULT_RETRY_STRATEGY` as default if no retry strategy is provided.
             The specifics of the default retry strategy are described `here <https://docs.oracle.com/en-us/iaas/tools/python/latest/sdk_behaviors/retries.html>`__.
 
             To have this operation explicitly not perform any retries, pass an instance of :py:class:`~oci.retry.NoneRetryStrategy`.
@@ -3060,7 +3396,7 @@ class ServiceCatalogClient(object):
         :rtype: :class:`~oci.response.Response`
 
         :example:
-        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.163.1/servicecatalog/update_service_catalog.py.html>`__ to see an example of how to use update_service_catalog API.
+        Click `here <https://docs.cloud.oracle.com/en-us/iaas/tools/python-sdk-examples/2.164.0/servicecatalog/update_service_catalog.py.html>`__ to see an example of how to use update_service_catalog API.
         """
         # Required path and query arguments. These are in camelCase to replace values in service endpoints.
         required_arguments = ['serviceCatalogId']
@@ -3103,6 +3439,8 @@ class ServiceCatalogClient(object):
             operation_retry_strategy=kwargs.get('retry_strategy'),
             client_retry_strategy=self.retry_strategy
         )
+        if retry_strategy is None:
+            retry_strategy = retry.DEFAULT_RETRY_STRATEGY
 
         if retry_strategy:
             if not isinstance(retry_strategy, retry.NoneRetryStrategy):

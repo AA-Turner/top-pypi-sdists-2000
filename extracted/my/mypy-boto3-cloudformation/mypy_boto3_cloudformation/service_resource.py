@@ -47,6 +47,7 @@ from .type_defs import (
     CreateStackInputServiceResourceCreateStackTypeDef,
     DeleteStackInputStackDeleteTypeDef,
     ModuleInfoTypeDef,
+    OperationEntryTypeDef,
     OutputTypeDef,
     ParameterTypeDef,
     RollbackConfigurationOutputTypeDef,
@@ -266,6 +267,7 @@ class Event(ServiceResource):
     stack_id: str
     event_id: str
     stack_name: str
+    operation_id: str
     logical_resource_id: str
     physical_resource_id: str
     resource_type: str
@@ -329,6 +331,7 @@ class Stack(ServiceResource):
     retain_except_on_create: bool
     deletion_mode: DeletionModeType
     detailed_status: DetailedStatusType
+    last_operations: list[OperationEntryTypeDef]
     meta: CloudFormationResourceMeta  # type: ignore[override]
 
     def get_available_subresources(self) -> Sequence[str]:

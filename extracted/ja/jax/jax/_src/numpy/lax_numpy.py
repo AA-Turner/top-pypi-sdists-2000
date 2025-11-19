@@ -543,7 +543,7 @@ def trunc(x: ArrayLike) -> Array:
   return where(lax.lt(x, lax._const(x, 0)), ufuncs.ceil(x), ufuncs.floor(x))
 
 
-@partial(api.jit, static_argnames=['mode', 'op', 'precision', 'preferred_element_type'])
+@api.jit(static_argnames=['mode', 'op', 'precision', 'preferred_element_type'])
 def _conv(x: Array, y: Array, mode: str, op: str, precision: lax.PrecisionLike,
           preferred_element_type: DTypeLike | None = None) -> Array:
   if np.ndim(x) != 1 or np.ndim(y) != 1:
@@ -584,7 +584,7 @@ def _conv(x: Array, y: Array, mode: str, op: str, precision: lax.PrecisionLike,
 
 
 @export
-@partial(api.jit, static_argnames=('mode', 'precision', 'preferred_element_type'))
+@api.jit(static_argnames=('mode', 'precision', 'preferred_element_type'))
 def convolve(a: ArrayLike, v: ArrayLike, mode: str = 'full', *,
              precision: lax.PrecisionLike = None,
              preferred_element_type: DTypeLike | None = None) -> Array:
@@ -660,7 +660,7 @@ def convolve(a: ArrayLike, v: ArrayLike, mode: str = 'full', *,
 
 
 @export
-@partial(api.jit, static_argnames=('mode', 'precision', 'preferred_element_type'))
+@api.jit(static_argnames=('mode', 'precision', 'preferred_element_type'))
 def correlate(a: ArrayLike, v: ArrayLike, mode: str = 'valid', *,
               precision: lax.PrecisionLike = None,
               preferred_element_type: DTypeLike | None = None) -> Array:
@@ -1243,7 +1243,7 @@ def matrix_transpose(x: ArrayLike, /) -> Array:
 
 
 @export
-@partial(api.jit, static_argnames=('k', 'axes'))
+@api.jit(static_argnames=('k', 'axes'))
 def rot90(m: ArrayLike, k: int = 1, axes: tuple[int, int] = (0, 1)) -> Array:
   """Rotate an array by 90 degrees counterclockwise in the plane specified by axes.
 
@@ -1386,7 +1386,7 @@ def flip(m: ArrayLike, axis: int | Sequence[int] | None = None) -> Array:
   arr = util.ensure_arraylike("flip", m)
   return _flip(arr, reductions._ensure_optional_axes(axis))
 
-@partial(api.jit, static_argnames=('axis',))
+@api.jit(static_argnames=('axis',))
 def _flip(m: Array, axis: int | tuple[int, ...] | None = None) -> Array:
   if axis is None:
     return lax.rev(m, list(range(len(np.shape(m)))))
@@ -1499,7 +1499,7 @@ def isreal(x: ArrayLike) -> Array:
 
 
 @export
-@partial(api.jit, static_argnames=['deg'])
+@api.jit(static_argnames=['deg'])
 def angle(z: ArrayLike, deg: bool = False) -> Array:
   """Return the angle of a complex valued number or array.
 
@@ -1552,7 +1552,7 @@ def angle(z: ArrayLike, deg: bool = False) -> Array:
 
 
 @export
-@partial(api.jit, static_argnames=('n', 'axis'))
+@api.jit(static_argnames=('n', 'axis'))
 def diff(a: ArrayLike, n: int = 1, axis: int = -1,
          prepend: ArrayLike | None = None,
          append: ArrayLike | None = None) -> Array:
@@ -1727,7 +1727,7 @@ def ediff1d(ary: ArrayLike, to_end: ArrayLike | None = None,
 
 
 @export
-@partial(api.jit, static_argnames=("axis", "edge_order"))
+@api.jit(static_argnames=("axis", "edge_order"))
 def gradient(
     f: ArrayLike,
     *varargs: ArrayLike,
@@ -1978,7 +1978,7 @@ def reshape(
 
 
 @export
-@partial(api.jit, static_argnames=('order', 'out_sharding'), inline=True)
+@api.jit(static_argnames=('order', 'out_sharding'), inline=True)
 def ravel(a: ArrayLike, order: str = "C", *, out_sharding=None) -> Array:
   """Flatten array into a 1-dimensional shape.
 
@@ -2189,7 +2189,7 @@ def unravel_index(indices: ArrayLike, shape: Shape) -> tuple[Array, ...]:
 
 
 @export
-@partial(api.jit, static_argnames=('new_shape',))
+@api.jit(static_argnames=('new_shape',))
 def resize(a: ArrayLike, new_shape: Shape) -> Array:
   """Return a new array with specified shape.
 
@@ -2300,7 +2300,7 @@ def squeeze(a: ArrayLike, axis: int | Sequence[int] | None = None) -> Array:
   arr = util.ensure_arraylike("squeeze", a)
   return _squeeze(arr, _ensure_index_tuple(axis) if axis is not None else None)
 
-@partial(api.jit, static_argnames=('axis',), inline=True)
+@api.jit(static_argnames=('axis',), inline=True)
 def _squeeze(a: Array, axis: tuple[int, ...]) -> Array:
   if axis is None:
     a_shape = np.shape(a)
@@ -2383,7 +2383,7 @@ def expand_dims(a: ArrayLike, axis: int | Sequence[int]) -> Array:
 
 
 @export
-@partial(api.jit, static_argnames=('axis1', 'axis2'), inline=True)
+@api.jit(static_argnames=('axis1', 'axis2'), inline=True)
 def swapaxes(a: ArrayLike, axis1: int, axis2: int) -> Array:
   """Swap two axes of an array.
 
@@ -2483,7 +2483,7 @@ def moveaxis(a: ArrayLike, source: int | Sequence[int],
   return _moveaxis(arr, _ensure_index_tuple(source),
                    _ensure_index_tuple(destination))
 
-@partial(api.jit, static_argnames=('source', 'destination'), inline=True)
+@api.jit(static_argnames=('source', 'destination'), inline=True)
 def _moveaxis(a: Array, source: tuple[int, ...], destination: tuple[int, ...]) -> Array:
   source = tuple(_canonicalize_axis(i, np.ndim(a)) for i in source)
   destination = tuple(_canonicalize_axis(i, np.ndim(a)) for i in destination)
@@ -2497,7 +2497,7 @@ def _moveaxis(a: Array, source: tuple[int, ...], destination: tuple[int, ...]) -
 
 
 @export
-@partial(api.jit, static_argnames=('equal_nan',))
+@api.jit(static_argnames=('equal_nan',))
 def isclose(a: ArrayLike, b: ArrayLike, rtol: ArrayLike = 1e-05, atol: ArrayLike = 1e-08,
             equal_nan: bool = False) -> Array:
   r"""Check if the elements of two arrays are approximately equal within a tolerance.
@@ -3382,7 +3382,7 @@ def clip(
 
 
 @export
-@partial(api.jit, static_argnames=('decimals',))
+@api.jit(static_argnames=('decimals',))
 def round(a: ArrayLike, decimals: int = 0, out: None = None) -> Array:
   """Round input evenly to the given number of decimals.
 
@@ -3457,7 +3457,7 @@ def round(a: ArrayLike, decimals: int = 0, out: None = None) -> Array:
 
 
 @export
-@partial(api.jit, static_argnames=('decimals',))
+@api.jit(static_argnames=('decimals',))
 def around(a: ArrayLike, decimals: int = 0, out: None = None) -> Array:
   """Alias of :func:`jax.numpy.round`"""
   return round(a, decimals, out)
@@ -3569,7 +3569,7 @@ def nan_to_num(x: ArrayLike, copy: bool = True, nan: ArrayLike = 0.0,
 
 
 @export
-@partial(api.jit, static_argnames=('equal_nan',))
+@api.jit(static_argnames=('equal_nan',))
 def allclose(a: ArrayLike, b: ArrayLike, rtol: ArrayLike = 1e-05,
              atol: ArrayLike = 1e-08, equal_nan: bool = False) -> Array:
   r"""Check if two arrays are element-wise approximately equal within a tolerance.
@@ -3773,7 +3773,7 @@ def flatnonzero(a: ArrayLike, *, size: int | None = None,
 
 
 @export
-@partial(api.jit, static_argnames=('axis',))
+@api.jit(static_argnames=('axis',))
 def unwrap(p: ArrayLike, discont: ArrayLike | None = None,
            axis: int = -1, period: ArrayLike = 2 * np.pi) -> Array:
   """Unwrap a periodic signal.
@@ -3978,11 +3978,12 @@ def _pad_symmetric_or_reflect(array: Array, pad_width: PadValue[int],
   assert reflect_type in ("even", "odd")
 
   for i in range(np.ndim(array)):
-    if array.shape[i] == 0:
+    axis_size = array.shape[i]
+    if axis_size == 0:
       _check_no_padding(pad_width[i], mode)
       continue
-
-    axis_size = array.shape[i]
+    if pad_width[i][0] == 0 and pad_width[i][1] == 0:
+      continue
 
     def build_padding(array, padding, before):
       if before:
@@ -4154,7 +4155,7 @@ def _pad_func(array: Array, pad_width: PadValue[int], func: Callable[..., Any], 
   return padded
 
 
-@partial(api.jit, static_argnums=(1, 2, 4, 5, 6))
+@api.jit(static_argnums=(1, 2, 4, 5, 6))
 def _pad(array: ArrayLike, pad_width: PadValueLike[int], mode: str,
          constant_values: ArrayLike, stat_length: PadValueLike[int],
          end_values: PadValueLike[ArrayLike], reflect_type: str):
@@ -4433,7 +4434,7 @@ def stack(arrays: np.ndarray | Array | Sequence[ArrayLike],
 
 
 @export
-@partial(api.jit, static_argnames="axis")
+@api.jit(static_argnames="axis")
 def unstack(x: ArrayLike, /, *, axis: int = 0) -> tuple[Array, ...]:
   """Unstack an array along an axis.
 
@@ -6346,7 +6347,7 @@ def repeat(a: ArrayLike, repeats: ArrayLike, axis: int | None = None, *,
     return _auto_repeat(_repeat, a, repeats, axis, total_repeat_length,
                         out_sharding)
   try:
-    return _repeat(a, repeats=repeats, axis=axis,
+    return _repeat(repeats, a, axis=axis,
                    total_repeat_length=total_repeat_length)
   except core.ShardingTypeError as e:
     raise ValueError(
@@ -6355,7 +6356,7 @@ def repeat(a: ArrayLike, repeats: ArrayLike, axis: int | None = None, *,
 def _auto_repeat(fun, a, repeats, axis, total_repeat_length, out_sharding):
   out_sharding = canonicalize_sharding(out_sharding, 'repeat')
   if total_repeat_length is None:
-    return auto_axes(partial(fun, repeats=repeats, axis=axis,
+    return auto_axes(partial(fun, repeats, axis=axis,
                              total_repeat_length=total_repeat_length),
                      out_sharding=out_sharding,
                      axes=out_sharding.mesh.explicit_axes  # type: ignore
@@ -6365,9 +6366,9 @@ def _auto_repeat(fun, a, repeats, axis, total_repeat_length, out_sharding):
         partial(fun, axis=axis, total_repeat_length=total_repeat_length),
         out_sharding=out_sharding,
         axes=out_sharding.mesh.explicit_axes  # type: ignore
-        )(a, repeats=repeats)
+        )(repeats, a)
 
-def _repeat(a: ArrayLike, *, repeats: ArrayLike, axis: int | None = None,
+def _repeat(repeats: ArrayLike, a: ArrayLike, *, axis: int | None = None,
             total_repeat_length: int | None = None) -> Array:
   if core.is_dim(repeats):
     util.check_arraylike("repeat", a)
@@ -6450,7 +6451,7 @@ def _repeat(a: ArrayLike, *, repeats: ArrayLike, axis: int | None = None,
 
 
 @export
-@partial(api.jit, static_argnames=('axis',))
+@api.jit(static_argnames=('axis',))
 def trapezoid(y: ArrayLike, x: ArrayLike | None = None, dx: ArrayLike = 1.0,
               axis: int = -1) -> Array:
   r"""
@@ -6570,7 +6571,7 @@ def tri(N: int, M: int | None = None, k: int = 0, dtype: DTypeLike | None = None
 
 
 @export
-@partial(api.jit, static_argnames=('k',))
+@api.jit(static_argnames=('k',))
 def tril(m: ArrayLike, k: int = 0) -> Array:
   r"""Return lower triangle of an array.
 
@@ -6633,7 +6634,7 @@ def tril(m: ArrayLike, k: int = 0) -> Array:
 
 
 @export
-@partial(api.jit, static_argnames=('k',))
+@api.jit(static_argnames=('k',))
 def triu(m: ArrayLike, k: int = 0) -> Array:
   r"""Return upper triangle of an array.
 
@@ -6700,7 +6701,7 @@ def triu(m: ArrayLike, k: int = 0) -> Array:
 
 
 @export
-@partial(api.jit, static_argnames=('axis1', 'axis2', 'dtype'))
+@api.jit(static_argnames=('axis1', 'axis2', 'dtype'))
 def trace(a: ArrayLike, offset: int | ArrayLike = 0, axis1: int = 0, axis2: int = 1,
           dtype: DTypeLike | None = None, out: None = None) -> Array:
   """Calculate sum of the diagonal of input along the given axes.
@@ -7085,6 +7086,7 @@ def fill_diagonal(a: ArrayLike, val: ArrayLike, wrap: bool = False, *,
       dimensions must be the same size.
     val: scalar or array with which to fill the diagonal. If an array, it will
       be flattened and repeated to fill the diagonal entries.
+    wrap: Not implemented by JAX. Only the default value of ``False`` is supported.
     inplace: must be set to False to indicate that the input is not modified
       in-place, but rather a modified copy is returned.
 
@@ -7234,7 +7236,7 @@ def diag_indices_from(arr: ArrayLike) -> tuple[Array, ...]:
 
 
 @export
-@partial(api.jit, static_argnames=('offset', 'axis1', 'axis2'))
+@api.jit(static_argnames=('offset', 'axis1', 'axis2'))
 def diagonal(a: ArrayLike, offset: int = 0, axis1: int = 0,
              axis2: int = 1) -> Array:
   """Returns the specified diagonal of an array.
@@ -7359,7 +7361,7 @@ def diag(v: ArrayLike, k: int = 0) -> Array:
   v = util.ensure_arraylike("diag", v)
   return _diag(v, operator.index(k))
 
-@partial(api.jit, static_argnames=('k',))
+@api.jit(static_argnames=('k',))
 def _diag(v: Array, k: int):
   v_shape = np.shape(v)
   if len(v_shape) == 1:
@@ -7517,7 +7519,7 @@ def trim_zeros_tol(filt, tol, trim='fb'):
 
 
 @export
-@partial(api.jit, static_argnames=('axis',))
+@api.jit(static_argnames=('axis',))
 def append(
     arr: ArrayLike, values: ArrayLike, axis: int | None = None
 ) -> Array:
@@ -7931,7 +7933,7 @@ def apply_over_axes(func: Callable[[ArrayLike, int], Array], a: ArrayLike,
 
 
 @export
-@partial(api.jit, static_argnames=('axisa', 'axisb', 'axisc', 'axis'))
+@api.jit(static_argnames=('axisa', 'axisb', 'axisc', 'axis'))
 def cross(a, b, axisa: int = -1, axisb: int = -1, axisc: int = -1,
           axis: int | None = None):
   r"""Compute the (batched) cross product of two arrays.
@@ -8078,7 +8080,7 @@ def kron(a: ArrayLike, b: ArrayLike) -> Array:
 
 
 @export
-@partial(api.jit, static_argnames=('N', 'increasing'))
+@api.jit(static_argnames=('N', 'increasing'))
 def vander(
     x: ArrayLike, N: int | None = None, increasing: bool = False
 ) -> Array:
@@ -8253,7 +8255,7 @@ def argmax(a: ArrayLike, axis: int | None = None, out: None = None,
   return _argmax(arr, None if axis is None else operator.index(axis),
                  keepdims=bool(keepdims))
 
-@partial(api.jit, static_argnames=('axis', 'keepdims'), inline=True)
+@api.jit(static_argnames=('axis', 'keepdims'), inline=True)
 def _argmax(a: Array, axis: int | None = None, keepdims: bool = False) -> Array:
   if axis is None:
     dims = list(range(np.ndim(a)))
@@ -8314,7 +8316,7 @@ def argmin(a: ArrayLike, axis: int | None = None, out: None = None,
   return _argmin(arr, None if axis is None else operator.index(axis),
                  keepdims=bool(keepdims))
 
-@partial(api.jit, static_argnames=('axis', 'keepdims'), inline=True)
+@api.jit(static_argnames=('axis', 'keepdims'), inline=True)
 def _argmin(a: Array, axis: int | None = None, keepdims: bool = False) -> Array:
   if axis is None:
     dims = list(range(np.ndim(a)))
@@ -8387,7 +8389,7 @@ def nanargmax(
   return _nanargmax(a, None if axis is None else operator.index(axis), keepdims=bool(keepdims))
 
 
-@partial(api.jit, static_argnames=('axis', 'keepdims'))
+@api.jit(static_argnames=('axis', 'keepdims'))
 def _nanargmax(a: Array, axis: int | None = None, keepdims: bool = False):
   if not issubdtype(a.dtype, np.inexact):
     return argmax(a, axis=axis, keepdims=keepdims)
@@ -8448,7 +8450,7 @@ def nanargmin(
   return _nanargmin(a, None if axis is None else operator.index(axis), keepdims=bool(keepdims))
 
 
-@partial(api.jit, static_argnames=('axis', 'keepdims'))
+@api.jit(static_argnames=('axis', 'keepdims'))
 def _nanargmin(a: Array, axis: int | None = None, keepdims : bool = False):
   if not issubdtype(a.dtype, np.inexact):
     return argmin(a, axis=axis, keepdims=keepdims)
@@ -8458,7 +8460,7 @@ def _nanargmin(a: Array, axis: int | None = None, keepdims : bool = False):
   return where(reductions.all(nan_mask, axis=axis, keepdims=keepdims), -1, res)
 
 
-@partial(api.jit, static_argnums=(2,))
+@api.jit(static_argnums=(2,))
 def _roll_dynamic(a: Array, shift: Array, axis: Sequence[int]) -> Array:
   b_shape = lax.broadcast_shapes(shift.shape, np.shape(axis))
   if len(b_shape) != 1:
@@ -8474,7 +8476,7 @@ def _roll_dynamic(a: Array, shift: Array, axis: Sequence[int]) -> Array:
     a = lax_slicing.dynamic_slice_in_dim(a_concat, a_shape_i - x, a.shape[i], axis=i)
   return a
 
-@partial(api.jit, static_argnums=(1, 2))
+@api.jit(static_argnums=(1, 2))
 def _roll_static(a: Array, shift: Sequence[int], axis: Sequence[int]) -> Array:
   for ax, s in zip(*np.broadcast_arrays(axis, shift)):
     if a.shape[ax] == 0:
@@ -8540,7 +8542,7 @@ def roll(a: ArrayLike, shift: ArrayLike | Sequence[int],
 
 
 @export
-@partial(api.jit, static_argnames=('axis', 'start'))
+@api.jit(static_argnames=('axis', 'start'))
 def rollaxis(a: ArrayLike, axis: int, start: int = 0) -> Array:
   """Roll the specified axis to a given position.
 
@@ -8606,7 +8608,7 @@ def rollaxis(a: ArrayLike, axis: int, start: int = 0) -> Array:
 
 
 @export
-@partial(api.jit, static_argnames=('axis', 'bitorder'))
+@api.jit(static_argnames=('axis', 'bitorder'))
 def packbits(a: ArrayLike, axis: int | None = None, bitorder: str = "big") -> Array:
   """Pack array of bits into a uint8 array.
 
@@ -8690,7 +8692,7 @@ def packbits(a: ArrayLike, axis: int | None = None, bitorder: str = "big") -> Ar
 
 
 @export
-@partial(api.jit, static_argnames=('axis', 'count', 'bitorder'))
+@api.jit(static_argnames=('axis', 'count', 'bitorder'))
 def unpackbits(
     a: ArrayLike,
     axis: int | None = None,
@@ -9044,11 +9046,12 @@ def compress(condition: ArrayLike, a: ArrayLike, axis: int | None = None,
 
 
 @export
-@partial(api.jit, static_argnames=('rowvar', 'bias', 'ddof'))
+@api.jit(static_argnames=('rowvar', 'bias', 'ddof', 'dtype'))
 def cov(m: ArrayLike, y: ArrayLike | None = None, rowvar: bool = True,
         bias: bool = False, ddof: int | None = None,
         fweights: ArrayLike | None = None,
-        aweights: ArrayLike | None = None) -> Array:
+        aweights: ArrayLike | None = None,
+        dtype: DTypeLike | None = None) -> Array:
   r"""Estimate the weighted sample covariance.
 
   JAX implementation of :func:`numpy.cov`.
@@ -9091,6 +9094,8 @@ def cov(m: ArrayLike, y: ArrayLike | None = None, rowvar: bool = True,
       a relative weight specifying the "importance" of each observation. In the
       ``ddof=0`` case, it is equivalent to assigning probabilities to each
       observation.
+    dtype: optional data type of the result. Must be a float or complex type;
+      if not specified, it will be determined based on the dtype of the input.
 
   Returns:
     A covariance matrix of shape ``(M, M)``, or a scalar with shape ``()`` if ``M = 1``.
@@ -9150,6 +9155,9 @@ def cov(m: ArrayLike, y: ArrayLike | None = None, rowvar: bool = True,
   if m.ndim > 2:
     raise ValueError("m has more than 2 dimensions")  # same as numpy error
 
+  if dtype is not None and not dtypes.issubdtype(dtype, np.inexact):
+    raise ValueError(f"cov: dtype must be a subclass of float or complex; got {dtype=}")
+
   X = atleast_2d(m)
   if not rowvar and m.ndim != 1:
     X = X.T
@@ -9189,6 +9197,10 @@ def cov(m: ArrayLike, y: ArrayLike | None = None, rowvar: bool = True,
     aweights = abs(aweights)
     w = aweights if w is None else w * aweights
 
+  if dtype is not None:
+    X = X.astype(dtype)
+    w = w.astype(dtype) if w is not None else w
+
   avg, w_sum = reductions.average(X, axis=1, weights=w, returned=True)
   w_sum = w_sum[0]
 
@@ -9207,8 +9219,9 @@ def cov(m: ArrayLike, y: ArrayLike | None = None, rowvar: bool = True,
 
 
 @export
-@partial(api.jit, static_argnames=('rowvar',))
-def corrcoef(x: ArrayLike, y: ArrayLike | None = None, rowvar: bool = True) -> Array:
+@api.jit(static_argnames=('rowvar', 'dtype'))
+def corrcoef(x: ArrayLike, y: ArrayLike | None = None, rowvar: bool = True,
+             dtype: DTypeLike | None = None) -> Array:
   r"""Compute the Pearson correlation coefficients.
 
   JAX implementation of :func:`numpy.corrcoef`.
@@ -9232,6 +9245,8 @@ def corrcoef(x: ArrayLike, y: ArrayLike | None = None, rowvar: bool = True) -> A
       ``rowvar = True`` case, ``m`` becomes ``jnp.vstack([m, y])``.
     rowvar: if True (default) then each row of ``m`` represents a variable. If
       False, then each column represents a variable.
+    dtype: optional data type of the result. Must be a float or complex type;
+      if not specified, it will be determined based on the dtype of the input.
 
   Returns:
     A covariance matrix of shape ``(M, M)``.
@@ -9283,7 +9298,9 @@ def corrcoef(x: ArrayLike, y: ArrayLike | None = None, rowvar: bool = True) -> A
      [0.12 0.01 1.  ]]
   """
   util.check_arraylike("corrcoef", x)
-  c = cov(x, y, rowvar)
+  if dtype is not None and not dtypes.issubdtype(dtype, np.inexact):
+    raise ValueError(f"corrcoef: dtype must be a subclass of float or complex; got {dtype=}")
+  c = cov(x, y, rowvar, dtype=dtype)
   if len(np.shape(c)) == 0:
     # scalar - this should yield nan for values (nan/nan, inf/inf, 0/0), 1 otherwise
     return ufuncs.divide(c, c)
@@ -9341,7 +9358,7 @@ def _searchsorted_via_compare_all(sorted_arr: Array, query: Array, side: str, dt
 
 
 @export
-@partial(api.jit, static_argnames=('side', 'method'))
+@api.jit(static_argnames=('side', 'method'))
 def searchsorted(a: ArrayLike, v: ArrayLike, side: str = 'left',
                  sorter: ArrayLike | None = None, *, method: str = 'scan') -> Array:
   """Perform a binary search within a sorted array.
@@ -9432,7 +9449,7 @@ def searchsorted(a: ArrayLike, v: ArrayLike, side: str = 'left',
 
 
 @export
-@partial(api.jit, static_argnames=('right', 'method'))
+@api.jit(static_argnames=('right', 'method'))
 def digitize(x: ArrayLike, bins: ArrayLike, right: bool = False,
              *, method: str | None = None) -> Array:
   """Convert an array to bin indices.
@@ -9570,7 +9587,7 @@ def piecewise(x: ArrayLike, condlist: Array | Sequence[ArrayLike],
                     frozenset(funcs.items()),  # dict is not hashable.
                     *args, **kw)
 
-@partial(api.jit, static_argnames=['funcs'])
+@api.jit(static_argnames=['funcs'])
 def _piecewise(x: Array, condlist: Array, consts: dict[int, ArrayLike],
                funcs: frozenset[tuple[int, Callable[..., Array]]],
                *args, **kw) -> Array:

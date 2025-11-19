@@ -145,6 +145,7 @@ Usage::
         DescribeVpcEndpointsPaginator,
         DescribeVpcPeeringConnectionsPaginator,
         DescribeVpcsPaginator,
+        DescribeVpnConcentratorsPaginator,
         GetAssociatedIpv6PoolCidrsPaginator,
         GetAwsNetworkPerformanceDataPaginator,
         GetCapacityManagerMetricDataPaginator,
@@ -314,6 +315,7 @@ Usage::
     describe_vpc_endpoints_paginator: DescribeVpcEndpointsPaginator = client.get_paginator("describe_vpc_endpoints")
     describe_vpc_peering_connections_paginator: DescribeVpcPeeringConnectionsPaginator = client.get_paginator("describe_vpc_peering_connections")
     describe_vpcs_paginator: DescribeVpcsPaginator = client.get_paginator("describe_vpcs")
+    describe_vpn_concentrators_paginator: DescribeVpnConcentratorsPaginator = client.get_paginator("describe_vpn_concentrators")
     get_associated_ipv6_pool_cidrs_paginator: GetAssociatedIpv6PoolCidrsPaginator = client.get_paginator("get_associated_ipv6_pool_cidrs")
     get_aws_network_performance_data_paginator: GetAwsNetworkPerformanceDataPaginator = client.get_paginator("get_aws_network_performance_data")
     get_capacity_manager_metric_data_paginator: GetCapacityManagerMetricDataPaginator = client.get_paginator("get_capacity_manager_metric_data")
@@ -622,6 +624,8 @@ from .type_defs import (
     DescribeVpcPeeringConnectionsResultTypeDef,
     DescribeVpcsRequestPaginateTypeDef,
     DescribeVpcsResultTypeDef,
+    DescribeVpnConcentratorsRequestPaginateTypeDef,
+    DescribeVpnConcentratorsResultTypeDef,
     GetAssociatedIpv6PoolCidrsRequestPaginateTypeDef,
     GetAssociatedIpv6PoolCidrsResultTypeDef,
     GetAwsNetworkPerformanceDataRequestPaginateTypeDef,
@@ -826,6 +830,7 @@ __all__ = (
     "DescribeVpcEndpointsPaginator",
     "DescribeVpcPeeringConnectionsPaginator",
     "DescribeVpcsPaginator",
+    "DescribeVpnConcentratorsPaginator",
     "GetAssociatedIpv6PoolCidrsPaginator",
     "GetAwsNetworkPerformanceDataPaginator",
     "GetCapacityManagerMetricDataPaginator",
@@ -3851,6 +3856,27 @@ class DescribeVpcsPaginator(_DescribeVpcsPaginatorBase):
         """
         [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/ec2/paginator/DescribeVpcs.html#EC2.Paginator.DescribeVpcs.paginate)
         [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_ec2/paginators/#describevpcspaginator)
+        """
+
+
+if TYPE_CHECKING:
+    _DescribeVpnConcentratorsPaginatorBase = Paginator[DescribeVpnConcentratorsResultTypeDef]
+else:
+    _DescribeVpnConcentratorsPaginatorBase = Paginator  # type: ignore[assignment]
+
+
+class DescribeVpnConcentratorsPaginator(_DescribeVpnConcentratorsPaginatorBase):
+    """
+    [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/ec2/paginator/DescribeVpnConcentrators.html#EC2.Paginator.DescribeVpnConcentrators)
+    [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_ec2/paginators/#describevpnconcentratorspaginator)
+    """
+
+    def paginate(  # type: ignore[override]
+        self, **kwargs: Unpack[DescribeVpnConcentratorsRequestPaginateTypeDef]
+    ) -> PageIterator[DescribeVpnConcentratorsResultTypeDef]:
+        """
+        [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/ec2/paginator/DescribeVpnConcentrators.html#EC2.Paginator.DescribeVpnConcentrators.paginate)
+        [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_ec2/paginators/#describevpnconcentratorspaginator)
         """
 
 

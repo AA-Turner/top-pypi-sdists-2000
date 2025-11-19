@@ -160,6 +160,7 @@ from .paginator import (
     DescribeVpcEndpointsPaginator,
     DescribeVpcPeeringConnectionsPaginator,
     DescribeVpcsPaginator,
+    DescribeVpnConcentratorsPaginator,
     GetAssociatedIpv6PoolCidrsPaginator,
     GetAwsNetworkPerformanceDataPaginator,
     GetCapacityManagerMetricDataPaginator,
@@ -492,6 +493,8 @@ from .type_defs import (
     CreateVpcPeeringConnectionResultTypeDef,
     CreateVpcRequestTypeDef,
     CreateVpcResultTypeDef,
+    CreateVpnConcentratorRequestTypeDef,
+    CreateVpnConcentratorResultTypeDef,
     CreateVpnConnectionRequestTypeDef,
     CreateVpnConnectionResultTypeDef,
     CreateVpnConnectionRouteRequestTypeDef,
@@ -645,6 +648,8 @@ from .type_defs import (
     DeleteVpcPeeringConnectionRequestTypeDef,
     DeleteVpcPeeringConnectionResultTypeDef,
     DeleteVpcRequestTypeDef,
+    DeleteVpnConcentratorRequestTypeDef,
+    DeleteVpnConcentratorResultTypeDef,
     DeleteVpnConnectionRequestTypeDef,
     DeleteVpnConnectionRouteRequestTypeDef,
     DeleteVpnGatewayRequestTypeDef,
@@ -1014,6 +1019,8 @@ from .type_defs import (
     DescribeVpcPeeringConnectionsResultTypeDef,
     DescribeVpcsRequestTypeDef,
     DescribeVpcsResultTypeDef,
+    DescribeVpnConcentratorsRequestTypeDef,
+    DescribeVpnConcentratorsResultTypeDef,
     DescribeVpnConnectionsRequestTypeDef,
     DescribeVpnConnectionsResultTypeDef,
     DescribeVpnGatewaysRequestTypeDef,
@@ -3253,6 +3260,17 @@ class EC2Client(BaseClient):
         [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_ec2/client/#create_vpc_peering_connection)
         """
 
+    def create_vpn_concentrator(
+        self, **kwargs: Unpack[CreateVpnConcentratorRequestTypeDef]
+    ) -> CreateVpnConcentratorResultTypeDef:
+        """
+        Creates a VPN concentrator that aggregates multiple VPN connections to a
+        transit gateway.
+
+        [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/ec2/client/create_vpn_concentrator.html)
+        [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_ec2/client/#create_vpn_concentrator)
+        """
+
     def create_vpn_connection(
         self, **kwargs: Unpack[CreateVpnConnectionRequestTypeDef]
     ) -> CreateVpnConnectionResultTypeDef:
@@ -4102,6 +4120,16 @@ class EC2Client(BaseClient):
 
         [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/ec2/client/delete_vpc_peering_connection.html)
         [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_ec2/client/#delete_vpc_peering_connection)
+        """
+
+    def delete_vpn_concentrator(
+        self, **kwargs: Unpack[DeleteVpnConcentratorRequestTypeDef]
+    ) -> DeleteVpnConcentratorResultTypeDef:
+        """
+        Deletes the specified VPN concentrator.
+
+        [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/ec2/client/delete_vpn_concentrator.html)
+        [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_ec2/client/#delete_vpn_concentrator)
         """
 
     def delete_vpn_connection(
@@ -6037,6 +6065,16 @@ class EC2Client(BaseClient):
 
         [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/ec2/client/describe_vpcs.html)
         [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_ec2/client/#describe_vpcs)
+        """
+
+    def describe_vpn_concentrators(
+        self, **kwargs: Unpack[DescribeVpnConcentratorsRequestTypeDef]
+    ) -> DescribeVpnConcentratorsResultTypeDef:
+        """
+        Describes one or more of your VPN concentrators.
+
+        [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/ec2/client/describe_vpn_concentrators.html)
+        [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_ec2/client/#describe_vpn_concentrators)
         """
 
     def describe_vpn_connections(
@@ -10551,6 +10589,17 @@ class EC2Client(BaseClient):
     def get_paginator(  # type: ignore[override]
         self, operation_name: Literal["describe_vpcs"]
     ) -> DescribeVpcsPaginator:
+        """
+        Create a paginator for an operation.
+
+        [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/ec2/client/get_paginator.html)
+        [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_ec2/client/#get_paginator)
+        """
+
+    @overload  # type: ignore[override]
+    def get_paginator(  # type: ignore[override]
+        self, operation_name: Literal["describe_vpn_concentrators"]
+    ) -> DescribeVpnConcentratorsPaginator:
         """
         Create a paginator for an operation.
 
