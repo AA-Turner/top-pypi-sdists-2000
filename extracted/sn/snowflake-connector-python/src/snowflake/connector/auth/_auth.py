@@ -53,7 +53,9 @@ from ..network import (
     ReauthenticationRequest,
 )
 from ..platform_detection import detect_platforms
-from ..session_manager import SessionManager
+from ..session_manager import BaseHttpConfig, HttpConfig
+from ..session_manager import SessionManager as SyncSessionManager
+from ..session_manager import SessionManagerFactory
 from ..sqlstate import SQLSTATE_CONNECTION_WAS_NOT_ESTABLISHED
 from ..token_cache import TokenCache, TokenKey, TokenType
 from ..version import VERSION
@@ -106,8 +108,17 @@ class Auth:
         network_timeout: int | None = None,
         socket_timeout: int | None = None,
         platform_detection_timeout_seconds: float | None = None,
-        session_manager: SessionManager | None = None,
+        session_manager: SyncSessionManager | None = None,
+        http_config: BaseHttpConfig | None = None,
     ):
+        # Create sync SessionManager for platform detection if config is provided
+        # Platform detection runs in threads and uses sync SessionManager
+        if http_config is not None and session_manager is None:
+            # Extract base fields (automatically excludes subclass-specific fields)
+            # Note: It won't be possible to pass adapter_factory from outer async-code to this part of code
+            sync_config = HttpConfig(**http_config.to_base_dict())
+            session_manager = SessionManagerFactory.get_manager(config=sync_config)
+
         return {
             "data": {
                 "CLIENT_APP_ID": internal_application_name,
@@ -503,6 +514,16 @@ class Auth:
         user: str,
         session_parameters: dict[str, Any],
     ) -> None:
+        """Attempt to load cached credentials to skip interactive authentication.
+
+        SSO (ID_TOKEN): If present, avoids opening browser for external authentication.
+            Controlled by client_store_temporary_credential parameter.
+
+        MFA (MFA_TOKEN): If present, skips MFA prompt on next connection.
+            Controlled by client_request_mfa_token parameter.
+
+        If cached tokens are expired/invalid, they're deleted and normal auth proceeds.
+        """
         if session_parameters.get(PARAMETER_CLIENT_STORE_TEMPORARY_CREDENTIAL, False):
             self._rest.id_token = self._read_temporary_credential(
                 host,
@@ -538,6 +559,13 @@ class Auth:
         session_parameters: dict[str, Any],
         response: dict[str, Any],
     ) -> None:
+        """Cache credentials received from successful authentication for future use.
+
+        Tokens are only cached if:
+        1. Server returned the token in response (server-side caching must be enabled)
+        2. Client has caching enabled via session parameters
+        3. User consented to caching (consent_cache_id_token for ID tokens)
+        """
         if (
             self._rest._connection.auth_class.consent_cache_id_token
             and session_parameters.get(

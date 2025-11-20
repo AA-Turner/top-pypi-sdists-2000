@@ -83,11 +83,11 @@ else:
     # transpile, or freeze this package. Downstream consumers of this submodule
     # *MUST* thus explicitly detect imported globals whose values are "None" and
     # react nicely.
-    except:
+    except Exception:
         from collections import defaultdict as _defaultdict
         _package_metadata = _defaultdict(lambda: None)
 
-# ....................{ METADATA ~ license                 }....................
+# ....................{ METADATA ~ package                 }....................
 PACKAGE_NAME = NAME
 '''
 Fully-qualified name of the top-level Python package containing this submodule.
@@ -96,7 +96,7 @@ Fully-qualified name of the top-level Python package containing this submodule.
 
 PACKAGE_TEST_NAME = f'{PACKAGE_NAME}_test'
 '''
-Fully-qualified name of the top-level Python package exercising this project.
+Fully-qualified name of the top-level Python package testing this project.
 '''
 
 # ....................{ PYTHON ~ version                   }....................
@@ -206,7 +206,7 @@ metadata).
 '''
 
 # ....................{ METADATA ~ version                 }....................
-VERSION = '0.22.5'
+VERSION = '0.22.6'
 '''
 Human-readable package version as a ``.``-delimited string.
 '''

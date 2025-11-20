@@ -146,13 +146,53 @@ def test_construct_spark_endpoint_url(manager):
     assert "x-aws-proxy-auth=XYZ" in url
 
 
-def test_get_user_id_parses_correctly(manager, mock_boto3_clients):
-    """Ensure _get_user_id extracts correct portion of UserId."""
+def test_get_user_id_parses_correctly_from_metadata(manager, mock_boto3_clients):
+    """Ensure _get_user_id gets values from InternalUtils metadata when available."""
     _, sts_client = mock_boto3_clients
     manager.sts_client = sts_client
-    user_id, account_id = manager._get_user_id_account_id()
-    assert user_id == "random-user-id"
-    assert account_id == "1234567890"
+
+    # Mock InternalUtils to return metadata values
+    with patch(
+        "sagemaker_studio.utils.spark.session.athena.athena_spark_session_manager.InternalUtils"
+    ) as mock_utils:
+        mock_utils_instance = mock_utils.return_value
+        mock_utils_instance._get_account_id.return_value = "9876543210"
+        mock_utils_instance._get_user_id.return_value = "metadata-user-id"
+
+        user_id, account_id = manager._get_user_id_account_id()
+
+        assert user_id == "metadata-user-id"
+        assert account_id == "9876543210"
+        # Verify InternalUtils was called
+        mock_utils_instance._get_account_id.assert_called_once()
+        mock_utils_instance._get_user_id.assert_called_once()
+        # Verify STS was not called since metadata was available
+        sts_client.get_caller_identity.assert_not_called()
+
+
+def test_get_user_id_parses_correctly_from_sts(manager, mock_boto3_clients):
+    """Ensure _get_user_id falls back to STS when metadata is not available and parses UserId correctly."""
+    _, sts_client = mock_boto3_clients
+    manager.sts_client = sts_client
+
+    # Mock InternalUtils to return None/empty values to trigger STS fallback
+    with patch(
+        "sagemaker_studio.utils.spark.session.athena.athena_spark_session_manager.InternalUtils"
+    ) as mock_utils:
+        mock_utils_instance = mock_utils.return_value
+        mock_utils_instance._get_account_id.return_value = None
+        mock_utils_instance._get_user_id.return_value = None
+
+        user_id, account_id = manager._get_user_id_account_id()
+
+        # Should extract "random-user-id" from "abc:random-user-id"
+        assert user_id == "random-user-id"
+        assert account_id == "1234567890"
+        # Verify InternalUtils was called first
+        mock_utils_instance._get_account_id.assert_called_once()
+        mock_utils_instance._get_user_id.assert_called_once()
+        # Verify STS was called as fallback
+        sts_client.get_caller_identity.assert_called_once()
 
 
 def test_wait_for_athena_session_ready(manager, mock_boto3_clients):

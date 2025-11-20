@@ -88,6 +88,7 @@ from .constants import (
 )
 from .converter import SnowflakeConverter
 from .crl import CRLConfig
+from .crl_cache import CRLCacheFactory
 from .cursor import LOG_MAX_QUERY_LENGTH, SnowflakeCursor, SnowflakeCursorBase
 from .description import (
     CLIENT_NAME,
@@ -129,7 +130,12 @@ from .network import (
     ReauthenticationRequest,
     SnowflakeRestful,
 )
-from .session_manager import HttpConfig, ProxySupportAdapterFactory, SessionManager
+from .session_manager import (
+    HttpConfig,
+    ProxySupportAdapterFactory,
+    SessionManager,
+    SessionManagerFactory,
+)
 from .sqlstate import SQLSTATE_CONNECTION_NOT_EXISTS, SQLSTATE_FEATURE_NOT_SUPPORTED
 from .telemetry import TelemetryClient, TelemetryData, TelemetryField
 from .time_util import HeartBeatTimer, get_time_millis
@@ -199,6 +205,10 @@ DEFAULT_CONFIGURATION: dict[str, tuple[Any, type | tuple[type, ...]]] = {
     "proxy_port": (None, (type(None), str)),  # snowflake
     "proxy_user": (None, (type(None), str)),  # snowflake
     "proxy_password": (None, (type(None), str)),  # snowflake
+    "no_proxy": (
+        None,
+        (type(None), str, Iterable),
+    ),  # hosts/ips to bypass proxy (str or iterable)
     "protocol": ("https", str),  # snowflake
     "warehouse": (None, (type(None), str)),  # snowflake
     "region": (None, (type(None), str)),  # snowflake
@@ -271,8 +281,13 @@ DEFAULT_CONFIGURATION: dict[str, tuple[Any, type | tuple[type, ...]]] = {
     "support_negative_year": (True, bool),  # snowflake
     "log_max_query_length": (LOG_MAX_QUERY_LENGTH, int),  # snowflake
     "disable_request_pooling": (False, bool),  # snowflake
-    # enable temporary credential file for Linux, default false. Mac/Win will overlook this
+    # Cache SSO ID tokens to avoid repeated browser popups. Must be enabled on the server-side.
+    # Storage: keyring (macOS/Windows), file (Linux). Auto-enabled on macOS/Windows.
+    # Sets session PARAMETER_CLIENT_STORE_TEMPORARY_CREDENTIAL as well
     "client_store_temporary_credential": (False, bool),
+    # Cache MFA tokens to skip MFA prompts on reconnect. Must be enabled on the server-side.
+    # Storage: keyring (macOS/Windows), file (Linux). Auto-enabled on macOS/Windows.
+    # In driver, we extract this from session using PARAMETER_CLIENT_REQUEST_MFA_TOKEN.
     "client_request_mfa_token": (False, bool),
     "use_openssl_only": (
         True,
@@ -375,6 +390,11 @@ DEFAULT_CONFIGURATION: dict[str, tuple[Any, type | tuple[type, ...]]] = {
         # SNOW-1825621: OAUTH implementation
     ),
     "oauth_redirect_uri": ("http://127.0.0.1", str),
+    "oauth_socket_uri": (
+        "http://127.0.0.1",
+        str,
+        # SNOW-2194055: Separate server and redirect URIs in AuthHttpServer
+    ),
     "oauth_scope": (
         "",
         str,
@@ -809,6 +829,10 @@ class SnowflakeConnection:
         return self._proxy_password
 
     @property
+    def no_proxy(self) -> str | Iterable | None:
+        return self._no_proxy
+
+    @property
     def account(self) -> str:
         return self._account
 
@@ -1069,6 +1093,15 @@ class SnowflakeConnection:
 
         self._crl_config: CRLConfig = CRLConfig.from_connection(self)
 
+        no_proxy_csv_str = (
+            ",".join(str(x) for x in self.no_proxy)
+            if (
+                self.no_proxy is not None
+                and isinstance(self.no_proxy, Iterable)
+                and not isinstance(self.no_proxy, (str, bytes))
+            )
+            else self.no_proxy
+        )
         self._http_config = HttpConfig(
             adapter_factory=ProxySupportAdapterFactory(),
             use_pooling=(not self.disable_request_pooling),
@@ -1076,8 +1109,9 @@ class SnowflakeConnection:
             proxy_port=self.proxy_port,
             proxy_user=self.proxy_user,
             proxy_password=self.proxy_password,
+            no_proxy=no_proxy_csv_str,
         )
-        self._session_manager = SessionManager(self._http_config)
+        self._session_manager = SessionManagerFactory.get_manager(self._http_config)
 
         if self.enable_connection_diag:
             exceptions_dict = {}
@@ -1119,11 +1153,17 @@ class SnowflakeConnection:
         else:
             self.__open_connection()
 
+        # Register the connection in the pool after successful connection
+        _connections_registry.add_connection(self)
+
     def close(self, retry: bool = True) -> None:
         """Closes the connection."""
         # unregister to dereference connection object as it's already closed after the execution
         atexit.unregister(self._close_at_exit)
         try:
+            # Remove connection from the pool
+            _connections_registry.remove_connection(self)
+
             if not self.rest:
                 logger.debug("Rest object has been destroyed, cannot close session")
                 return
@@ -1135,7 +1175,8 @@ class SnowflakeConnection:
 
             # close telemetry first, since it needs rest to send remaining data
             logger.debug("closed")
-            self._telemetry.close(send_on_close=bool(retry and self.telemetry_enabled))
+            if self.telemetry_enabled:
+                self._telemetry.close(retry=retry)
             if (
                 self._all_async_queries_finished()
                 and not self._server_session_keep_alive
@@ -1368,9 +1409,11 @@ class SnowflakeConnection:
                     backoff_generator=self._backoff_generator,
                 )
             elif self._authenticator == EXTERNAL_BROWSER_AUTHENTICATOR:
+                # Enable SSO credential caching
                 self._session_parameters[
                     PARAMETER_CLIENT_STORE_TEMPORARY_CREDENTIAL
                 ] = (self._client_store_temporary_credential if IS_LINUX else True)
+                # Try to load cached ID token to avoid browser popup
                 auth.read_temporary_credentials(
                     self.host,
                     self.user,
@@ -1434,6 +1477,7 @@ class SnowflakeConnection:
                         host=self.host, port=self.port
                     ),
                     redirect_uri=self._oauth_redirect_uri,
+                    uri=self._oauth_socket_uri,
                     scope=self._oauth_scope,
                     pkce_enabled=not self._oauth_disable_pkce,
                     token_cache=(
@@ -1461,9 +1505,11 @@ class SnowflakeConnection:
                     connection=self,
                 )
             elif self._authenticator == USR_PWD_MFA_AUTHENTICATOR:
+                # Enable MFA token caching
                 self._session_parameters[PARAMETER_CLIENT_REQUEST_MFA_TOKEN] = (
                     self._client_request_mfa_token if IS_LINUX else True
                 )
+                # Try to load cached MFA token to skip MFA prompt
                 if self._session_parameters[PARAMETER_CLIENT_REQUEST_MFA_TOKEN]:
                     auth.read_temporary_credentials(
                         self.host,
@@ -1672,6 +1718,8 @@ class SnowflakeConnection:
             WORKLOAD_IDENTITY_AUTHENTICATOR,
             PROGRAMMATIC_ACCESS_TOKEN,
             PAT_WITH_EXTERNAL_SESSION,
+            OAUTH_AUTHORIZATION_CODE,
+            OAUTH_CLIENT_CREDENTIALS,
         }
 
         if not (self._master_token and self._session_token):
@@ -2492,3 +2540,56 @@ class SnowflakeConnection:
             return "jupyter_notebook"
         if "snowbooks" in sys.modules:
             return "snowflake_notebook"
+
+
+class _ConnectionsRegistry:
+    """Thread-safe registry for tracking opened SnowflakeConnection instances.
+
+    This class maintains a registry of active connections using weak references
+    to avoid preventing garbage collection.
+    """
+
+    def __init__(self):
+        """Initialize the connections registry with an empty registry and a lock."""
+        self._connections: weakref.WeakSet = weakref.WeakSet()
+        self._lock = Lock()
+
+    def add_connection(self, connection: SnowflakeConnection) -> None:
+        """Add a connection to the registry.
+
+        Args:
+            connection: The SnowflakeConnection instance to register.
+        """
+        with self._lock:
+            self._connections.add(connection)
+            logger.debug(
+                f"Connection {id(connection)} added to pool. Total connections: {len(self._connections)}"
+            )
+
+    def remove_connection(self, connection: SnowflakeConnection) -> None:
+        """Remove a connection from the registry.
+
+        Args:
+            connection: The SnowflakeConnection instance to unregister.
+        """
+        with self._lock:
+            self._connections.discard(connection)
+            logger.debug(
+                f"Connection {id(connection)} removed from registry. Total connections: {len(self._connections)}"
+            )
+
+            if len(self._connections) == 0:
+                self._last_connection_handler()
+
+    def _last_connection_handler(self):
+        # If no connections left then stop CRL background task
+        # to avoid script dangling
+        CRLCacheFactory.stop_periodic_cleanup()
+
+    def get_connection_count(self) -> int:
+        with self._lock:
+            return len(self._connections)
+
+
+# Global instance of the connections pool
+_connections_registry = _ConnectionsRegistry()

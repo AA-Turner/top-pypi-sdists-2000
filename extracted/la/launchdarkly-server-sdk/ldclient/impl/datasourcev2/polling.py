@@ -14,21 +14,17 @@ from urllib import parse
 import urllib3
 
 from ldclient.config import Config
-from ldclient.impl.datasystem import BasisResult, Update
+from ldclient.impl.datasource.feature_requester import LATEST_ALL_URI
 from ldclient.impl.datasystem.protocolv2 import (
-    Basis,
-    ChangeSet,
-    ChangeSetBuilder,
     DeleteObject,
     EventName,
-    IntentCode,
-    PutObject,
-    Selector,
-    ServerIntent
+    PutObject
 )
 from ldclient.impl.http import _http_factory
 from ldclient.impl.repeating_task import RepeatingTask
 from ldclient.impl.util import (
+    _LD_ENVID_HEADER,
+    _LD_FD_FALLBACK_HEADER,
     UnsuccessfulResponseException,
     _Fail,
     _headers,
@@ -39,9 +35,21 @@ from ldclient.impl.util import (
     log
 )
 from ldclient.interfaces import (
+    Basis,
+    BasisResult,
+    ChangeSet,
+    ChangeSetBuilder,
     DataSourceErrorInfo,
     DataSourceErrorKind,
-    DataSourceState
+    DataSourceState,
+    Initializer,
+    IntentCode,
+    ObjectKind,
+    Selector,
+    SelectorStore,
+    ServerIntent,
+    Synchronizer,
+    Update
 )
 
 POLLING_ENDPOINT = "/sdk/poll"
@@ -72,7 +80,7 @@ class Requester(Protocol):  # pylint: disable=too-few-public-methods
 CacheEntry = namedtuple("CacheEntry", ["data", "etag"])
 
 
-class PollingDataSource:
+class PollingDataSource(Initializer, Synchronizer):
     """
     PollingDataSource is a data source that can retrieve information from
     LaunchDarkly either as an Initializer or as a Synchronizer.
@@ -86,30 +94,40 @@ class PollingDataSource:
         self._requester = requester
         self._poll_interval = poll_interval
         self._event = Event()
+        self._stop = Event()
         self._task = RepeatingTask(
             "ldclient.datasource.polling", poll_interval, 0, self._poll
         )
 
+    @property
     def name(self) -> str:
         """Returns the name of the initializer."""
         return "PollingDataSourceV2"
 
-    def fetch(self) -> BasisResult:
+    def fetch(self, ss: SelectorStore) -> BasisResult:
         """
         Fetch returns a Basis, or an error if the Basis could not be retrieved.
         """
-        return self._poll()
+        return self._poll(ss)
 
-    def sync(self) -> Generator[Update, None, None]:
+    def sync(self, ss: SelectorStore) -> Generator[Update, None, None]:
         """
         sync begins the synchronization process for the data source, yielding
         Update objects until the connection is closed or an unrecoverable error
         occurs.
         """
         log.info("Starting PollingDataSourceV2 synchronizer")
-        while True:
-            result = self._requester.fetch(None)
+        self._stop.clear()
+        while self._stop.is_set() is False:
+            result = self._requester.fetch(ss.selector())
             if isinstance(result, _Fail):
+                fallback = None
+                envid = None
+
+                if result.headers is not None:
+                    fallback = result.headers.get(_LD_FD_FALLBACK_HEADER) == 'true'
+                    envid = result.headers.get(_LD_ENVID_HEADER)
+
                 if isinstance(result.exception, UnsuccessfulResponseException):
                     error_info = DataSourceErrorInfo(
                         kind=DataSourceErrorKind.ERROR_RESPONSE,
@@ -120,19 +138,28 @@ class PollingDataSource:
                         ),
                     )
 
+                    if fallback:
+                        yield Update(
+                            state=DataSourceState.OFF,
+                            error=error_info,
+                            revert_to_fdv1=True,
+                            environment_id=envid,
+                        )
+                        break
+
                     status_code = result.exception.status
                     if is_http_error_recoverable(status_code):
-                        # TODO(fdv2): Add support for environment ID
                         yield Update(
                             state=DataSourceState.INTERRUPTED,
                             error=error_info,
+                            environment_id=envid,
                         )
                         continue
 
-                    # TODO(fdv2): Add support for environment ID
                     yield Update(
                         state=DataSourceState.OFF,
                         error=error_info,
+                        environment_id=envid,
                     )
                     break
 
@@ -143,27 +170,33 @@ class PollingDataSource:
                     message=result.error,
                 )
 
-                # TODO(fdv2): Go has a designation here to handle JSON decoding separately.
-                # TODO(fdv2): Add support for environment ID
                 yield Update(
                     state=DataSourceState.INTERRUPTED,
                     error=error_info,
+                    environment_id=envid,
                 )
             else:
                 (change_set, headers) = result.value
                 yield Update(
                     state=DataSourceState.VALID,
                     change_set=change_set,
-                    environment_id=headers.get("X-LD-EnvID"),
+                    environment_id=headers.get(_LD_ENVID_HEADER),
+                    revert_to_fdv1=headers.get(_LD_FD_FALLBACK_HEADER) == 'true'
                 )
 
             if self._event.wait(self._poll_interval):
                 break
 
-    def _poll(self) -> BasisResult:
+    def stop(self):
+        """Stops the synchronizer."""
+        log.info("Stopping PollingDataSourceV2 synchronizer")
+        self._event.set()
+        self._task.stop()
+        self._stop.set()
+
+    def _poll(self, ss: SelectorStore) -> BasisResult:
         try:
-            # TODO(fdv2): Need to pass the selector through
-            result = self._requester.fetch(None)
+            result = self._requester.fetch(ss.selector())
 
             if isinstance(result, _Fail):
                 if isinstance(result.exception, UnsuccessfulResponseException):
@@ -185,7 +218,7 @@ class PollingDataSource:
 
             (change_set, headers) = result.value
 
-            env_id = headers.get("X-LD-EnvID")
+            env_id = headers.get(_LD_ENVID_HEADER)
             if not isinstance(env_id, str):
                 env_id = None
 
@@ -204,7 +237,7 @@ class PollingDataSource:
 
 
 # pylint: disable=too-few-public-methods
-class Urllib3PollingRequester:
+class Urllib3PollingRequester(Requester):
     """
     Urllib3PollingRequester is a Requester that uses urllib3 to make HTTP
     requests.
@@ -226,7 +259,7 @@ class Urllib3PollingRequester:
         if self._config.payload_filter_key is not None:
             query_params["filter"] = self._config.payload_filter_key
 
-        if selector is not None:
+        if selector is not None and selector.is_defined():
             query_params["selector"] = selector.state
 
         uri = self._poll_uri
@@ -250,13 +283,13 @@ class Urllib3PollingRequester:
             ),
             retries=1,
         )
+        headers = response.headers
 
         if response.status >= 400:
             return _Fail(
-                f"HTTP error {response}", UnsuccessfulResponseException(response.status)
+                f"HTTP error {response}", UnsuccessfulResponseException(response.status),
+                headers=headers,
             )
-
-        headers = response.headers
 
         if response.status == 304:
             return _Success(value=(ChangeSetBuilder.no_changes(), headers))
@@ -281,6 +314,7 @@ class Urllib3PollingRequester:
         return _Fail(
             error=changeset_result.error,
             exception=changeset_result.exception,
+            headers=headers,  # type: ignore
         )
 
 
@@ -366,3 +400,119 @@ class PollingDataSourceBuilder:
         return PollingDataSource(
             poll_interval=self._config.poll_interval, requester=requester
         )
+
+
+# pylint: disable=too-few-public-methods
+class Urllib3FDv1PollingRequester(Requester):
+    """
+    Urllib3PollingRequesterFDv1 is a Requester that uses urllib3 to make HTTP
+    requests.
+    """
+
+    def __init__(self, config: Config):
+        self._etag = None
+        self._http = _http_factory(config).create_pool_manager(1, config.base_uri)
+        self._config = config
+        self._poll_uri = config.base_uri + LATEST_ALL_URI
+
+    def fetch(self, selector: Optional[Selector]) -> PollingResult:
+        """
+        Fetches the data for the given selector.
+        Returns a Result containing a tuple of ChangeSet and any request headers,
+        or an error if the data could not be retrieved.
+        """
+        query_params = {}
+        if self._config.payload_filter_key is not None:
+            query_params["filter"] = self._config.payload_filter_key
+
+        uri = self._poll_uri
+        if len(query_params) > 0:
+            filter_query = parse.urlencode(query_params)
+            uri += f"?{filter_query}"
+
+        hdrs = _headers(self._config)
+        hdrs["Accept-Encoding"] = "gzip"
+
+        if self._etag is not None:
+            hdrs["If-None-Match"] = self._etag
+
+        response = self._http.request(
+            "GET",
+            uri,
+            headers=hdrs,
+            timeout=urllib3.Timeout(
+                connect=self._config.http.connect_timeout,
+                read=self._config.http.read_timeout,
+            ),
+            retries=1,
+        )
+
+        headers = response.headers
+        if response.status >= 400:
+            return _Fail(
+                f"HTTP error {response}", UnsuccessfulResponseException(response.status),
+                headers=headers
+            )
+
+        if response.status == 304:
+            return _Success(value=(ChangeSetBuilder.no_changes(), headers))
+
+        data = json.loads(response.data.decode("UTF-8"))
+        etag = headers.get("ETag")
+
+        if etag is not None:
+            self._etag = etag
+
+        log.debug(
+            "%s response status:[%d] ETag:[%s]",
+            uri,
+            response.status,
+            etag,
+        )
+
+        changeset_result = fdv1_polling_payload_to_changeset(data)
+        if isinstance(changeset_result, _Success):
+            return _Success(value=(changeset_result.value, headers))
+
+        return _Fail(
+            error=changeset_result.error,
+            exception=changeset_result.exception,
+            headers=headers,
+        )
+
+
+# pylint: disable=too-many-branches,too-many-return-statements
+def fdv1_polling_payload_to_changeset(data: dict) -> _Result[ChangeSet, str]:
+    """
+    Converts a fdv1 polling payload into a ChangeSet.
+    """
+    builder = ChangeSetBuilder()
+    builder.start(IntentCode.TRANSFER_FULL)
+    selector = Selector.no_selector()
+
+    # FDv1 uses "flags" instead of "features", so we need to map accordingly
+    # Map FDv1 JSON keys to ObjectKind enum values
+    kind_mappings = [
+        (ObjectKind.FLAG, "flags"),
+        (ObjectKind.SEGMENT, "segments")
+    ]
+
+    for kind, fdv1_key in kind_mappings:
+        kind_data = data.get(fdv1_key)
+        if kind_data is None:
+            continue
+        if not isinstance(kind_data, dict):
+            return _Fail(error=f"Invalid format: {fdv1_key} is not a dictionary")
+
+        for key in kind_data:
+            flag_or_segment = kind_data.get(key)
+            if flag_or_segment is None or not isinstance(flag_or_segment, dict):
+                return _Fail(error=f"Invalid format: {key} is not a dictionary")
+
+            version = flag_or_segment.get('version')
+            if version is None:
+                return _Fail(error=f"Invalid format: {key} does not have a version set")
+
+            builder.add_put(kind, key, version, flag_or_segment)
+
+    return _Success(builder.finish(selector))

@@ -134,6 +134,7 @@ from .type_defs import (
     EnableMFADeviceRequestTypeDef,
     EnableOrganizationsRootCredentialsManagementResponseTypeDef,
     EnableOrganizationsRootSessionsResponseTypeDef,
+    EnableOutboundWebIdentityFederationResponseTypeDef,
     GenerateCredentialReportResponseTypeDef,
     GenerateOrganizationsAccessReportRequestTypeDef,
     GenerateOrganizationsAccessReportResponseTypeDef,
@@ -167,6 +168,7 @@ from .type_defs import (
     GetOpenIDConnectProviderResponseTypeDef,
     GetOrganizationsAccessReportRequestTypeDef,
     GetOrganizationsAccessReportResponseTypeDef,
+    GetOutboundWebIdentityFederationInfoResponseTypeDef,
     GetPolicyRequestTypeDef,
     GetPolicyResponseTypeDef,
     GetPolicyVersionRequestTypeDef,
@@ -345,6 +347,8 @@ class Exceptions(BaseClientExceptions):
     DuplicateSSHPublicKeyException: type[BotocoreClientError]
     EntityAlreadyExistsException: type[BotocoreClientError]
     EntityTemporarilyUnmodifiableException: type[BotocoreClientError]
+    FeatureDisabledException: type[BotocoreClientError]
+    FeatureEnabledException: type[BotocoreClientError]
     InvalidAuthenticationCodeException: type[BotocoreClientError]
     InvalidCertificateException: type[BotocoreClientError]
     InvalidInputException: type[BotocoreClientError]
@@ -940,6 +944,15 @@ class IAMClient(BaseClient):
         [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_iam/client/#disable_organizations_root_sessions)
         """
 
+    def disable_outbound_web_identity_federation(self) -> EmptyResponseMetadataTypeDef:
+        """
+        Disables the outbound identity federation feature for your Amazon Web Services
+        account.
+
+        [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/iam/client/disable_outbound_web_identity_federation.html)
+        [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_iam/client/#disable_outbound_web_identity_federation)
+        """
+
     def enable_mfa_device(
         self, **kwargs: Unpack[EnableMFADeviceRequestTypeDef]
     ) -> EmptyResponseMetadataTypeDef:
@@ -968,6 +981,17 @@ class IAMClient(BaseClient):
 
         [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/iam/client/enable_organizations_root_sessions.html)
         [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_iam/client/#enable_organizations_root_sessions)
+        """
+
+    def enable_outbound_web_identity_federation(
+        self,
+    ) -> EnableOutboundWebIdentityFederationResponseTypeDef:
+        """
+        Enables the outbound identity federation feature for your Amazon Web Services
+        account.
+
+        [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/iam/client/enable_outbound_web_identity_federation.html)
+        [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_iam/client/#enable_outbound_web_identity_federation)
         """
 
     def generate_credential_report(self) -> GenerateCredentialReportResponseTypeDef:
@@ -1159,6 +1183,17 @@ class IAMClient(BaseClient):
 
         [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/iam/client/get_organizations_access_report.html)
         [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_iam/client/#get_organizations_access_report)
+        """
+
+    def get_outbound_web_identity_federation_info(
+        self,
+    ) -> GetOutboundWebIdentityFederationInfoResponseTypeDef:
+        """
+        Retrieves the configuration information for the outbound identity federation
+        feature in your Amazon Web Services account.
+
+        [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/iam/client/get_outbound_web_identity_federation_info.html)
+        [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_iam/client/#get_outbound_web_identity_federation_info)
         """
 
     def get_policy(self, **kwargs: Unpack[GetPolicyRequestTypeDef]) -> GetPolicyResponseTypeDef:

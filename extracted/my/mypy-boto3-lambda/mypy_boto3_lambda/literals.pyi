@@ -74,6 +74,7 @@ __all__ = (
     "StateReasonCodeType",
     "StateType",
     "SystemLogLevelType",
+    "TenantIsolationModeType",
     "TracingModeType",
     "UpdateRuntimeOnType",
     "WaiterName",
@@ -229,6 +230,7 @@ StateReasonCodeType = Literal[
 ]
 StateType = Literal["Active", "Failed", "Inactive", "Pending"]
 SystemLogLevelType = Literal["DEBUG", "INFO", "WARN"]
+TenantIsolationModeType = Literal["PER_TENANT"]
 TracingModeType = Literal["Active", "PassThrough"]
 UpdateRuntimeOnType = Literal["Auto", "FunctionUpdate", "Manual"]
 LambdaServiceName = Literal["lambda"]
@@ -497,6 +499,7 @@ ServiceName = Literal[
     "mq",
     "mturk",
     "mwaa",
+    "mwaa-serverless",
     "neptune",
     "neptune-graph",
     "neptunedata",
@@ -516,6 +519,7 @@ ServiceName = Literal[
     "osis",
     "outposts",
     "panorama",
+    "partnercentral-channel",
     "partnercentral-selling",
     "payment-cryptography",
     "payment-cryptography-data",
@@ -590,6 +594,7 @@ ServiceName = Literal[
     "sesv2",
     "shield",
     "signer",
+    "signin",
     "simspaceweaver",
     "snow-device-management",
     "snowball",

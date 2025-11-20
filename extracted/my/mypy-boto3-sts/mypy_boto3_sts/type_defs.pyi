@@ -48,6 +48,8 @@ __all__ = (
     "GetFederationTokenResponseTypeDef",
     "GetSessionTokenRequestTypeDef",
     "GetSessionTokenResponseTypeDef",
+    "GetWebIdentityTokenRequestTypeDef",
+    "GetWebIdentityTokenResponseTypeDef",
     "PolicyDescriptorTypeTypeDef",
     "ProvidedContextTypeDef",
     "ResponseMetadataTypeDef",
@@ -143,6 +145,12 @@ class GetFederationTokenRequestTypeDef(TypedDict):
     DurationSeconds: NotRequired[int]
     Tags: NotRequired[Sequence[TagTypeDef]]
 
+class GetWebIdentityTokenRequestTypeDef(TypedDict):
+    Audience: Sequence[str]
+    SigningAlgorithm: str
+    DurationSeconds: NotRequired[int]
+    Tags: NotRequired[Sequence[TagTypeDef]]
+
 class AssumeRoleResponseTypeDef(TypedDict):
     Credentials: CredentialsTypeDef
     AssumedRoleUser: AssumedRoleUserTypeDef
@@ -199,6 +207,11 @@ class GetDelegatedAccessTokenResponseTypeDef(TypedDict):
 
 class GetSessionTokenResponseTypeDef(TypedDict):
     Credentials: CredentialsTypeDef
+    ResponseMetadata: ResponseMetadataTypeDef
+
+class GetWebIdentityTokenResponseTypeDef(TypedDict):
+    WebIdentityToken: str
+    Expiration: datetime
     ResponseMetadata: ResponseMetadataTypeDef
 
 class GetFederationTokenResponseTypeDef(TypedDict):

@@ -195,15 +195,22 @@ class AthenaSparkSessionManager(SparkSessionManager):
         return f"{endpoint_url}:443/;use_ssl=true;x-aws-proxy-port=15002;x-aws-force-h2=true;x-aws-proxy-auth={auth_token}"
 
     def _get_user_id_account_id(self):
-        response = self.sts_client.get_caller_identity()
-        account_id = response["Account"]
-        user_id = response["UserId"]
-        tokens = user_id.split(":")
-        if len(tokens) >= 2:
-            return tokens[1], account_id
-        else:
-            # this should never happen unless sts breaks!
-            raise Exception("Invalid user id!")
+        _utils = InternalUtils()
+        account_id = _utils._get_account_id()
+        user_id = _utils._get_user_id()
+
+        if not account_id or not user_id:
+            response = self.sts_client.get_caller_identity()
+            account_id = response["Account"]
+            user_id = response["UserId"]
+            tokens = user_id.split(":")
+            if len(tokens) >= 2:
+                return tokens[1], account_id
+            else:
+                # this should never happen unless sts breaks!
+                raise Exception("Invalid user id!")
+
+        return user_id, account_id
 
     def _wait_for_athena_session(self, session_id, timeout=120, poll_interval=2):
         """

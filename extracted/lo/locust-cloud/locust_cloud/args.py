@@ -288,12 +288,18 @@ combined_cloud_parser.add_argument(
     help="Set --loglevel DEBUG for extra info.",
     choices=["DEBUG", "INFO", "WARNING", "ERROR"],
     default="INFO",
+    env_var="LOCUST_LOGLEVEL",
 )
 combined_cloud_parser.add_argument(
     "--config",
     is_config_file_arg=True,
     help="File to read additional configuration from. See https://docs.locust.io/en/stable/configuration.html#configuration-file",
     metavar="<filename>",
+)
+combined_cloud_parser.add_argument(
+    "--otel",
+    action="store_true",
+    env_var="LOCUST_ENABLE_OPENTELEMETRY",
 )
 
 

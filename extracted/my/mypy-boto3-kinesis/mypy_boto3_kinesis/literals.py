@@ -31,6 +31,8 @@ __all__ = (
     "ListStreamConsumersPaginatorName",
     "ListStreamsPaginatorName",
     "MetricsNameType",
+    "MinimumThroughputBillingCommitmentInputStatusType",
+    "MinimumThroughputBillingCommitmentOutputStatusType",
     "PaginatorName",
     "RegionName",
     "ResourceServiceName",
@@ -61,6 +63,10 @@ MetricsNameType = Literal[
     "OutgoingRecords",
     "ReadProvisionedThroughputExceeded",
     "WriteProvisionedThroughputExceeded",
+]
+MinimumThroughputBillingCommitmentInputStatusType = Literal["DISABLED", "ENABLED"]
+MinimumThroughputBillingCommitmentOutputStatusType = Literal[
+    "DISABLED", "ENABLED", "ENABLED_UNTIL_EARLIEST_ALLOWED_END"
 ]
 ScalingTypeType = Literal["UNIFORM_SCALING"]
 ShardFilterTypeType = Literal[
@@ -344,6 +350,7 @@ ServiceName = Literal[
     "mq",
     "mturk",
     "mwaa",
+    "mwaa-serverless",
     "neptune",
     "neptune-graph",
     "neptunedata",
@@ -363,6 +370,7 @@ ServiceName = Literal[
     "osis",
     "outposts",
     "panorama",
+    "partnercentral-channel",
     "partnercentral-selling",
     "payment-cryptography",
     "payment-cryptography-data",
@@ -437,6 +445,7 @@ ServiceName = Literal[
     "sesv2",
     "shield",
     "signer",
+    "signin",
     "simspaceweaver",
     "snow-device-management",
     "snowball",

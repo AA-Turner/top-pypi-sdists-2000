@@ -63,6 +63,8 @@ from .type_defs import (
     DeleteRepositoryPolicyResponseTypeDef,
     DeleteRepositoryRequestTypeDef,
     DeleteRepositoryResponseTypeDef,
+    DeregisterPullTimeUpdateExclusionRequestTypeDef,
+    DeregisterPullTimeUpdateExclusionResponseTypeDef,
     DescribeImageReplicationStatusRequestTypeDef,
     DescribeImageReplicationStatusResponseTypeDef,
     DescribeImageScanFindingsRequestTypeDef,
@@ -92,8 +94,12 @@ from .type_defs import (
     GetRepositoryPolicyResponseTypeDef,
     InitiateLayerUploadRequestTypeDef,
     InitiateLayerUploadResponseTypeDef,
+    ListImageReferrersRequestTypeDef,
+    ListImageReferrersResponseTypeDef,
     ListImagesRequestTypeDef,
     ListImagesResponseTypeDef,
+    ListPullTimeUpdateExclusionsRequestTypeDef,
+    ListPullTimeUpdateExclusionsResponseTypeDef,
     ListTagsForResourceRequestTypeDef,
     ListTagsForResourceResponseTypeDef,
     PutAccountSettingRequestTypeDef,
@@ -112,6 +118,8 @@ from .type_defs import (
     PutRegistryScanningConfigurationResponseTypeDef,
     PutReplicationConfigurationRequestTypeDef,
     PutReplicationConfigurationResponseTypeDef,
+    RegisterPullTimeUpdateExclusionRequestTypeDef,
+    RegisterPullTimeUpdateExclusionResponseTypeDef,
     SetRepositoryPolicyRequestTypeDef,
     SetRepositoryPolicyResponseTypeDef,
     StartImageScanRequestTypeDef,
@@ -120,6 +128,8 @@ from .type_defs import (
     StartLifecyclePolicyPreviewResponseTypeDef,
     TagResourceRequestTypeDef,
     UntagResourceRequestTypeDef,
+    UpdateImageStorageClassRequestTypeDef,
+    UpdateImageStorageClassResponseTypeDef,
     UpdatePullThroughCacheRuleRequestTypeDef,
     UpdatePullThroughCacheRuleResponseTypeDef,
     UpdateRepositoryCreationTemplateRequestTypeDef,
@@ -139,11 +149,16 @@ else:
 __all__ = ("ECRClient",)
 
 class Exceptions(BaseClientExceptions):
+    BlockedByOrganizationPolicyException: type[BotocoreClientError]
     ClientError: type[BotocoreClientError]
     EmptyUploadException: type[BotocoreClientError]
+    ExclusionAlreadyExistsException: type[BotocoreClientError]
+    ExclusionNotFoundException: type[BotocoreClientError]
     ImageAlreadyExistsException: type[BotocoreClientError]
+    ImageArchivedException: type[BotocoreClientError]
     ImageDigestDoesNotMatchException: type[BotocoreClientError]
     ImageNotFoundException: type[BotocoreClientError]
+    ImageStorageClassUpdateNotSupportedException: type[BotocoreClientError]
     ImageTagAlreadyExistsException: type[BotocoreClientError]
     InvalidLayerException: type[BotocoreClientError]
     InvalidLayerPartException: type[BotocoreClientError]
@@ -355,6 +370,16 @@ class ECRClient(BaseClient):
         [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_ecr/client/#delete_repository_policy)
         """
 
+    def deregister_pull_time_update_exclusion(
+        self, **kwargs: Unpack[DeregisterPullTimeUpdateExclusionRequestTypeDef]
+    ) -> DeregisterPullTimeUpdateExclusionResponseTypeDef:
+        """
+        Removes a principal from the pull time update exclusion list for a registry.
+
+        [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/ecr/client/deregister_pull_time_update_exclusion.html)
+        [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_ecr/client/#deregister_pull_time_update_exclusion)
+        """
+
     def describe_image_replication_status(
         self, **kwargs: Unpack[DescribeImageReplicationStatusRequestTypeDef]
     ) -> DescribeImageReplicationStatusResponseTypeDef:
@@ -512,12 +537,33 @@ class ECRClient(BaseClient):
         [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_ecr/client/#initiate_layer_upload)
         """
 
+    def list_image_referrers(
+        self, **kwargs: Unpack[ListImageReferrersRequestTypeDef]
+    ) -> ListImageReferrersResponseTypeDef:
+        """
+        Lists the artifacts associated with a specified subject image.
+
+        [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/ecr/client/list_image_referrers.html)
+        [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_ecr/client/#list_image_referrers)
+        """
+
     def list_images(self, **kwargs: Unpack[ListImagesRequestTypeDef]) -> ListImagesResponseTypeDef:
         """
         Lists all the image IDs for the specified repository.
 
         [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/ecr/client/list_images.html)
         [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_ecr/client/#list_images)
+        """
+
+    def list_pull_time_update_exclusions(
+        self, **kwargs: Unpack[ListPullTimeUpdateExclusionsRequestTypeDef]
+    ) -> ListPullTimeUpdateExclusionsResponseTypeDef:
+        """
+        Lists the IAM principals that are excluded from having their image pull times
+        recorded.
+
+        [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/ecr/client/list_pull_time_update_exclusions.html)
+        [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_ecr/client/#list_pull_time_update_exclusions)
         """
 
     def list_tags_for_resource(
@@ -609,6 +655,16 @@ class ECRClient(BaseClient):
         [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_ecr/client/#put_replication_configuration)
         """
 
+    def register_pull_time_update_exclusion(
+        self, **kwargs: Unpack[RegisterPullTimeUpdateExclusionRequestTypeDef]
+    ) -> RegisterPullTimeUpdateExclusionResponseTypeDef:
+        """
+        Adds an IAM principal to the pull time update exclusion list for a registry.
+
+        [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/ecr/client/register_pull_time_update_exclusion.html)
+        [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_ecr/client/#register_pull_time_update_exclusion)
+        """
+
     def set_repository_policy(
         self, **kwargs: Unpack[SetRepositoryPolicyRequestTypeDef]
     ) -> SetRepositoryPolicyResponseTypeDef:
@@ -654,6 +710,16 @@ class ECRClient(BaseClient):
 
         [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/ecr/client/untag_resource.html)
         [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_ecr/client/#untag_resource)
+        """
+
+    def update_image_storage_class(
+        self, **kwargs: Unpack[UpdateImageStorageClassRequestTypeDef]
+    ) -> UpdateImageStorageClassResponseTypeDef:
+        """
+        Transitions an image between storage classes.
+
+        [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/ecr/client/update_image_storage_class.html)
+        [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_ecr/client/#update_image_storage_class)
         """
 
     def update_pull_through_cache_rule(

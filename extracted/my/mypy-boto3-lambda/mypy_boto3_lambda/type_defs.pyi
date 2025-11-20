@@ -17,6 +17,7 @@ Usage::
 from __future__ import annotations
 
 import sys
+from collections.abc import Mapping, Sequence
 from datetime import datetime
 from typing import IO, Any, Union
 
@@ -54,12 +55,6 @@ from .literals import (
     UpdateRuntimeOnType,
 )
 
-if sys.version_info >= (3, 9):
-    from builtins import dict as Dict
-    from builtins import list as List
-    from collections.abc import Mapping, Sequence
-else:
-    from typing import Dict, List, Mapping, Sequence
 if sys.version_info >= (3, 12):
     from typing import Literal, NotRequired, TypedDict
 else:
@@ -262,6 +257,7 @@ __all__ = (
     "SourceAccessConfigurationTypeDef",
     "TagResourceRequestTypeDef",
     "TagsErrorTypeDef",
+    "TenancyConfigTypeDef",
     "TimestampTypeDef",
     "TracingConfigResponseTypeDef",
     "TracingConfigTypeDef",
@@ -303,7 +299,7 @@ class AddLayerVersionPermissionRequestTypeDef(TypedDict):
 class ResponseMetadataTypeDef(TypedDict):
     RequestId: str
     HTTPStatusCode: int
-    HTTPHeaders: Dict[str, str]
+    HTTPHeaders: dict[str, str]
     RetryAttempts: int
     HostId: NotRequired[str]
 
@@ -322,13 +318,13 @@ class AddPermissionRequestTypeDef(TypedDict):
     InvokedViaFunctionUrl: NotRequired[bool]
 
 class AliasRoutingConfigurationOutputTypeDef(TypedDict):
-    AdditionalVersionWeights: NotRequired[Dict[str, float]]
+    AdditionalVersionWeights: NotRequired[dict[str, float]]
 
 class AliasRoutingConfigurationTypeDef(TypedDict):
     AdditionalVersionWeights: NotRequired[Mapping[str, float]]
 
 class AllowedPublishersOutputTypeDef(TypedDict):
-    SigningProfileVersionArns: List[str]
+    SigningProfileVersionArns: list[str]
 
 class AllowedPublishersTypeDef(TypedDict):
     SigningProfileVersionArns: Sequence[str]
@@ -343,10 +339,10 @@ class ConcurrencyTypeDef(TypedDict):
 
 class CorsOutputTypeDef(TypedDict):
     AllowCredentials: NotRequired[bool]
-    AllowHeaders: NotRequired[List[str]]
-    AllowMethods: NotRequired[List[str]]
-    AllowOrigins: NotRequired[List[str]]
-    ExposeHeaders: NotRequired[List[str]]
+    AllowHeaders: NotRequired[list[str]]
+    AllowMethods: NotRequired[list[str]]
+    AllowOrigins: NotRequired[list[str]]
+    ExposeHeaders: NotRequired[list[str]]
     MaxAge: NotRequired[int]
 
 class CorsTypeDef(TypedDict):
@@ -399,6 +395,9 @@ class LoggingConfigTypeDef(TypedDict):
 
 class SnapStartTypeDef(TypedDict):
     ApplyOn: NotRequired[SnapStartApplyOnType]
+
+class TenancyConfigTypeDef(TypedDict):
+    TenantIsolationMode: Literal["PER_TENANT"]
 
 class TracingConfigTypeDef(TypedDict):
     Mode: NotRequired[TracingModeType]
@@ -455,14 +454,14 @@ class EnvironmentErrorTypeDef(TypedDict):
     Message: NotRequired[str]
 
 class EventSourceMappingMetricsConfigOutputTypeDef(TypedDict):
-    Metrics: NotRequired[List[Literal["EventCount"]]]
+    Metrics: NotRequired[list[Literal["EventCount"]]]
 
 class FilterCriteriaErrorTypeDef(TypedDict):
     ErrorCode: NotRequired[str]
     Message: NotRequired[str]
 
 class SelfManagedEventSourceOutputTypeDef(TypedDict):
-    Endpoints: NotRequired[Dict[Literal["KAFKA_BOOTSTRAP_SERVERS"], List[str]]]
+    Endpoints: NotRequired[dict[Literal["KAFKA_BOOTSTRAP_SERVERS"], list[str]]]
 
 class EventSourceMappingMetricsConfigTypeDef(TypedDict):
     Metrics: NotRequired[Sequence[Literal["EventCount"]]]
@@ -495,8 +494,8 @@ class TracingConfigResponseTypeDef(TypedDict):
     Mode: NotRequired[TracingModeType]
 
 class VpcConfigResponseTypeDef(TypedDict):
-    SubnetIds: NotRequired[List[str]]
-    SecurityGroupIds: NotRequired[List[str]]
+    SubnetIds: NotRequired[list[str]]
+    SecurityGroupIds: NotRequired[list[str]]
     VpcId: NotRequired[str]
     Ipv6AllowedForDualStack: NotRequired[bool]
 
@@ -578,8 +577,8 @@ class ImageConfigErrorTypeDef(TypedDict):
     Message: NotRequired[str]
 
 class ImageConfigOutputTypeDef(TypedDict):
-    EntryPoint: NotRequired[List[str]]
-    Command: NotRequired[List[str]]
+    EntryPoint: NotRequired[list[str]]
+    Command: NotRequired[list[str]]
     WorkingDirectory: NotRequired[str]
 
 class ImageConfigTypeDef(TypedDict):
@@ -611,9 +610,9 @@ class LayerVersionsListItemTypeDef(TypedDict):
     Version: NotRequired[int]
     Description: NotRequired[str]
     CreatedDate: NotRequired[str]
-    CompatibleRuntimes: NotRequired[List[RuntimeType]]
+    CompatibleRuntimes: NotRequired[list[RuntimeType]]
     LicenseInfo: NotRequired[str]
-    CompatibleArchitectures: NotRequired[List[ArchitectureType]]
+    CompatibleArchitectures: NotRequired[list[ArchitectureType]]
 
 class PaginatorConfigTypeDef(TypedDict):
     MaxItems: NotRequired[int]
@@ -821,11 +820,11 @@ class InvokeAsyncResponseTypeDef(TypedDict):
 
 class ListFunctionsByCodeSigningConfigResponseTypeDef(TypedDict):
     NextMarker: str
-    FunctionArns: List[str]
+    FunctionArns: list[str]
     ResponseMetadata: ResponseMetadataTypeDef
 
 class ListTagsResponseTypeDef(TypedDict):
-    Tags: Dict[str, str]
+    Tags: dict[str, str]
     ResponseMetadata: ResponseMetadataTypeDef
 
 class PutFunctionCodeSigningConfigResponseTypeDef(TypedDict):
@@ -889,6 +888,7 @@ class InvocationRequestTypeDef(TypedDict):
     ClientContext: NotRequired[str]
     Payload: NotRequired[BlobTypeDef]
     Qualifier: NotRequired[str]
+    TenantId: NotRequired[str]
 
 class InvokeAsyncRequestTypeDef(TypedDict):
     FunctionName: str
@@ -901,6 +901,7 @@ class InvokeWithResponseStreamRequestTypeDef(TypedDict):
     ClientContext: NotRequired[str]
     Qualifier: NotRequired[str]
     Payload: NotRequired[BlobTypeDef]
+    TenantId: NotRequired[str]
 
 class LayerVersionContentInputTypeDef(TypedDict):
     S3Bucket: NotRequired[str]
@@ -974,7 +975,7 @@ class DestinationConfigTypeDef(TypedDict):
     OnFailure: NotRequired[OnFailureTypeDef]
 
 class EnvironmentResponseTypeDef(TypedDict):
-    Variables: NotRequired[Dict[str, str]]
+    Variables: NotRequired[dict[str, str]]
     Error: NotRequired[EnvironmentErrorTypeDef]
 
 EventSourceMappingMetricsConfigUnionTypeDef = Union[
@@ -982,7 +983,7 @@ EventSourceMappingMetricsConfigUnionTypeDef = Union[
 ]
 
 class FilterCriteriaOutputTypeDef(TypedDict):
-    Filters: NotRequired[List[FilterTypeDef]]
+    Filters: NotRequired[list[FilterTypeDef]]
 
 class FilterCriteriaTypeDef(TypedDict):
     Filters: NotRequired[Sequence[FilterTypeDef]]
@@ -1024,9 +1025,9 @@ class GetLayerVersionResponseTypeDef(TypedDict):
     Description: str
     CreatedDate: str
     Version: int
-    CompatibleRuntimes: List[RuntimeType]
+    CompatibleRuntimes: list[RuntimeType]
     LicenseInfo: str
-    CompatibleArchitectures: List[ArchitectureType]
+    CompatibleArchitectures: list[ArchitectureType]
     ResponseMetadata: ResponseMetadataTypeDef
 
 class PublishLayerVersionResponseTypeDef(TypedDict):
@@ -1036,9 +1037,9 @@ class PublishLayerVersionResponseTypeDef(TypedDict):
     Description: str
     CreatedDate: str
     Version: int
-    CompatibleRuntimes: List[RuntimeType]
+    CompatibleRuntimes: list[RuntimeType]
     LicenseInfo: str
-    CompatibleArchitectures: List[ArchitectureType]
+    CompatibleArchitectures: list[ArchitectureType]
     ResponseMetadata: ResponseMetadataTypeDef
 
 class ImageConfigResponseTypeDef(TypedDict):
@@ -1054,8 +1055,8 @@ class InvokeWithResponseStreamResponseEventTypeDef(TypedDict):
 class KafkaSchemaRegistryConfigOutputTypeDef(TypedDict):
     SchemaRegistryURI: NotRequired[str]
     EventRecordFormat: NotRequired[SchemaRegistryEventRecordFormatType]
-    AccessConfigs: NotRequired[List[KafkaSchemaRegistryAccessConfigTypeDef]]
-    SchemaValidationConfigs: NotRequired[List[KafkaSchemaValidationConfigTypeDef]]
+    AccessConfigs: NotRequired[list[KafkaSchemaRegistryAccessConfigTypeDef]]
+    SchemaValidationConfigs: NotRequired[list[KafkaSchemaValidationConfigTypeDef]]
 
 class KafkaSchemaRegistryConfigTypeDef(TypedDict):
     SchemaRegistryURI: NotRequired[str]
@@ -1070,7 +1071,7 @@ class LayersListItemTypeDef(TypedDict):
 
 class ListLayerVersionsResponseTypeDef(TypedDict):
     NextMarker: str
-    LayerVersions: List[LayerVersionsListItemTypeDef]
+    LayerVersions: list[LayerVersionsListItemTypeDef]
     ResponseMetadata: ResponseMetadataTypeDef
 
 class ListAliasesRequestPaginateTypeDef(TypedDict):
@@ -1123,7 +1124,7 @@ class ListVersionsByFunctionRequestPaginateTypeDef(TypedDict):
     PaginationConfig: NotRequired[PaginatorConfigTypeDef]
 
 class ListProvisionedConcurrencyConfigsResponseTypeDef(TypedDict):
-    ProvisionedConcurrencyConfigs: List[ProvisionedConcurrencyConfigListItemTypeDef]
+    ProvisionedConcurrencyConfigs: list[ProvisionedConcurrencyConfigListItemTypeDef]
     NextMarker: str
     ResponseMetadata: ResponseMetadataTypeDef
 
@@ -1137,7 +1138,7 @@ SelfManagedEventSourceUnionTypeDef = Union[
 
 class ListAliasesResponseTypeDef(TypedDict):
     NextMarker: str
-    Aliases: List[AliasConfigurationTypeDef]
+    Aliases: list[AliasConfigurationTypeDef]
     ResponseMetadata: ResponseMetadataTypeDef
 
 class CreateAliasRequestTypeDef(TypedDict):
@@ -1185,7 +1186,7 @@ class GetCodeSigningConfigResponseTypeDef(TypedDict):
 
 class ListCodeSigningConfigsResponseTypeDef(TypedDict):
     NextMarker: str
-    CodeSigningConfigs: List[CodeSigningConfigTypeDef]
+    CodeSigningConfigs: list[CodeSigningConfigTypeDef]
     ResponseMetadata: ResponseMetadataTypeDef
 
 class UpdateCodeSigningConfigResponseTypeDef(TypedDict):
@@ -1193,7 +1194,7 @@ class UpdateCodeSigningConfigResponseTypeDef(TypedDict):
     ResponseMetadata: ResponseMetadataTypeDef
 
 class ListFunctionUrlConfigsResponseTypeDef(TypedDict):
-    FunctionUrlConfigs: List[FunctionUrlConfigTypeDef]
+    FunctionUrlConfigs: list[FunctionUrlConfigTypeDef]
     NextMarker: str
     ResponseMetadata: ResponseMetadataTypeDef
 
@@ -1267,6 +1268,7 @@ class CreateFunctionRequestTypeDef(TypedDict):
     EphemeralStorage: NotRequired[EphemeralStorageTypeDef]
     SnapStart: NotRequired[SnapStartTypeDef]
     LoggingConfig: NotRequired[LoggingConfigTypeDef]
+    TenancyConfig: NotRequired[TenancyConfigTypeDef]
 
 class UpdateFunctionConfigurationRequestTypeDef(TypedDict):
     FunctionName: str
@@ -1314,7 +1316,7 @@ class SelfManagedKafkaEventSourceConfigTypeDef(TypedDict):
 
 class ListLayersResponseTypeDef(TypedDict):
     NextMarker: str
-    Layers: List[LayersListItemTypeDef]
+    Layers: list[LayersListItemTypeDef]
     ResponseMetadata: ResponseMetadataTypeDef
 
 class FunctionConfigurationResponseTypeDef(TypedDict):
@@ -1337,23 +1339,24 @@ class FunctionConfigurationResponseTypeDef(TypedDict):
     TracingConfig: TracingConfigResponseTypeDef
     MasterArn: str
     RevisionId: str
-    Layers: List[LayerTypeDef]
+    Layers: list[LayerTypeDef]
     State: StateType
     StateReason: str
     StateReasonCode: StateReasonCodeType
     LastUpdateStatus: LastUpdateStatusType
     LastUpdateStatusReason: str
     LastUpdateStatusReasonCode: LastUpdateStatusReasonCodeType
-    FileSystemConfigs: List[FileSystemConfigTypeDef]
+    FileSystemConfigs: list[FileSystemConfigTypeDef]
     PackageType: PackageTypeType
     ImageConfigResponse: ImageConfigResponseTypeDef
     SigningProfileVersionArn: str
     SigningJobArn: str
-    Architectures: List[ArchitectureType]
+    Architectures: list[ArchitectureType]
     EphemeralStorage: EphemeralStorageTypeDef
     SnapStart: SnapStartResponseTypeDef
     RuntimeVersionConfig: RuntimeVersionConfigTypeDef
     LoggingConfig: LoggingConfigTypeDef
+    TenancyConfig: TenancyConfigTypeDef
     ResponseMetadata: ResponseMetadataTypeDef
 
 class FunctionConfigurationTypeDef(TypedDict):
@@ -1376,26 +1379,27 @@ class FunctionConfigurationTypeDef(TypedDict):
     TracingConfig: NotRequired[TracingConfigResponseTypeDef]
     MasterArn: NotRequired[str]
     RevisionId: NotRequired[str]
-    Layers: NotRequired[List[LayerTypeDef]]
+    Layers: NotRequired[list[LayerTypeDef]]
     State: NotRequired[StateType]
     StateReason: NotRequired[str]
     StateReasonCode: NotRequired[StateReasonCodeType]
     LastUpdateStatus: NotRequired[LastUpdateStatusType]
     LastUpdateStatusReason: NotRequired[str]
     LastUpdateStatusReasonCode: NotRequired[LastUpdateStatusReasonCodeType]
-    FileSystemConfigs: NotRequired[List[FileSystemConfigTypeDef]]
+    FileSystemConfigs: NotRequired[list[FileSystemConfigTypeDef]]
     PackageType: NotRequired[PackageTypeType]
     ImageConfigResponse: NotRequired[ImageConfigResponseTypeDef]
     SigningProfileVersionArn: NotRequired[str]
     SigningJobArn: NotRequired[str]
-    Architectures: NotRequired[List[ArchitectureType]]
+    Architectures: NotRequired[list[ArchitectureType]]
     EphemeralStorage: NotRequired[EphemeralStorageTypeDef]
     SnapStart: NotRequired[SnapStartResponseTypeDef]
     RuntimeVersionConfig: NotRequired[RuntimeVersionConfigTypeDef]
     LoggingConfig: NotRequired[LoggingConfigTypeDef]
+    TenancyConfig: NotRequired[TenancyConfigTypeDef]
 
 class ListFunctionEventInvokeConfigsResponseTypeDef(TypedDict):
-    FunctionEventInvokeConfigs: List[FunctionEventInvokeConfigTypeDef]
+    FunctionEventInvokeConfigs: list[FunctionEventInvokeConfigTypeDef]
     NextMarker: str
     ResponseMetadata: ResponseMetadataTypeDef
 
@@ -1414,15 +1418,15 @@ class EventSourceMappingConfigurationResponseTypeDef(TypedDict):
     State: str
     StateTransitionReason: str
     DestinationConfig: DestinationConfigTypeDef
-    Topics: List[str]
-    Queues: List[str]
-    SourceAccessConfigurations: List[SourceAccessConfigurationTypeDef]
+    Topics: list[str]
+    Queues: list[str]
+    SourceAccessConfigurations: list[SourceAccessConfigurationTypeDef]
     SelfManagedEventSource: SelfManagedEventSourceOutputTypeDef
     MaximumRecordAgeInSeconds: int
     BisectBatchOnFunctionError: bool
     MaximumRetryAttempts: int
     TumblingWindowInSeconds: int
-    FunctionResponseTypes: List[Literal["ReportBatchItemFailures"]]
+    FunctionResponseTypes: list[Literal["ReportBatchItemFailures"]]
     AmazonManagedKafkaEventSourceConfig: AmazonManagedKafkaEventSourceConfigOutputTypeDef
     SelfManagedKafkaEventSourceConfig: SelfManagedKafkaEventSourceConfigOutputTypeDef
     ScalingConfig: ScalingConfigTypeDef
@@ -1449,15 +1453,15 @@ class EventSourceMappingConfigurationTypeDef(TypedDict):
     State: NotRequired[str]
     StateTransitionReason: NotRequired[str]
     DestinationConfig: NotRequired[DestinationConfigTypeDef]
-    Topics: NotRequired[List[str]]
-    Queues: NotRequired[List[str]]
-    SourceAccessConfigurations: NotRequired[List[SourceAccessConfigurationTypeDef]]
+    Topics: NotRequired[list[str]]
+    Queues: NotRequired[list[str]]
+    SourceAccessConfigurations: NotRequired[list[SourceAccessConfigurationTypeDef]]
     SelfManagedEventSource: NotRequired[SelfManagedEventSourceOutputTypeDef]
     MaximumRecordAgeInSeconds: NotRequired[int]
     BisectBatchOnFunctionError: NotRequired[bool]
     MaximumRetryAttempts: NotRequired[int]
     TumblingWindowInSeconds: NotRequired[int]
-    FunctionResponseTypes: NotRequired[List[Literal["ReportBatchItemFailures"]]]
+    FunctionResponseTypes: NotRequired[list[Literal["ReportBatchItemFailures"]]]
     AmazonManagedKafkaEventSourceConfig: NotRequired[
         AmazonManagedKafkaEventSourceConfigOutputTypeDef
     ]
@@ -1480,24 +1484,24 @@ SelfManagedKafkaEventSourceConfigUnionTypeDef = Union[
 class GetFunctionResponseTypeDef(TypedDict):
     Configuration: FunctionConfigurationTypeDef
     Code: FunctionCodeLocationTypeDef
-    Tags: Dict[str, str]
+    Tags: dict[str, str]
     TagsError: TagsErrorTypeDef
     Concurrency: ConcurrencyTypeDef
     ResponseMetadata: ResponseMetadataTypeDef
 
 class ListFunctionsResponseTypeDef(TypedDict):
     NextMarker: str
-    Functions: List[FunctionConfigurationTypeDef]
+    Functions: list[FunctionConfigurationTypeDef]
     ResponseMetadata: ResponseMetadataTypeDef
 
 class ListVersionsByFunctionResponseTypeDef(TypedDict):
     NextMarker: str
-    Versions: List[FunctionConfigurationTypeDef]
+    Versions: list[FunctionConfigurationTypeDef]
     ResponseMetadata: ResponseMetadataTypeDef
 
 class ListEventSourceMappingsResponseTypeDef(TypedDict):
     NextMarker: str
-    EventSourceMappings: List[EventSourceMappingConfigurationTypeDef]
+    EventSourceMappings: list[EventSourceMappingConfigurationTypeDef]
     ResponseMetadata: ResponseMetadataTypeDef
 
 class CreateEventSourceMappingRequestTypeDef(TypedDict):

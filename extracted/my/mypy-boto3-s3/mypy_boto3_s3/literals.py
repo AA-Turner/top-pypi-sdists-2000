@@ -40,6 +40,7 @@ __all__ = (
     "DataRedundancyType",
     "DeleteMarkerReplicationStatusType",
     "EncodingTypeType",
+    "EncryptionTypeType",
     "EventType",
     "ExistingObjectReplicationStatusType",
     "ExpirationStateType",
@@ -164,6 +165,7 @@ CompressionTypeType = Literal["BZIP2", "GZIP", "NONE"]
 DataRedundancyType = Literal["SingleAvailabilityZone", "SingleLocalZone"]
 DeleteMarkerReplicationStatusType = Literal["Disabled", "Enabled"]
 EncodingTypeType = Literal["url"]
+EncryptionTypeType = Literal["NONE", "SSE-C"]
 EventType = Literal[
     "s3:IntelligentTiering",
     "s3:LifecycleExpiration:*",
@@ -576,6 +578,7 @@ ServiceName = Literal[
     "mq",
     "mturk",
     "mwaa",
+    "mwaa-serverless",
     "neptune",
     "neptune-graph",
     "neptunedata",
@@ -595,6 +598,7 @@ ServiceName = Literal[
     "osis",
     "outposts",
     "panorama",
+    "partnercentral-channel",
     "partnercentral-selling",
     "payment-cryptography",
     "payment-cryptography-data",
@@ -669,6 +673,7 @@ ServiceName = Literal[
     "sesv2",
     "shield",
     "signer",
+    "signin",
     "simspaceweaver",
     "snow-device-management",
     "snowball",

@@ -40,6 +40,7 @@ Usage::
 from __future__ import annotations
 
 import sys
+from collections.abc import Callable, Iterator, Sequence
 from datetime import datetime
 from typing import Any
 
@@ -142,12 +143,6 @@ from .type_defs import (
     UploadPartRequestMultipartUploadPartUploadTypeDef,
 )
 
-if sys.version_info >= (3, 9):
-    from builtins import dict as Dict
-    from builtins import list as List
-    from collections.abc import Callable, Iterator, Sequence
-else:
-    from typing import Callable, Dict, Iterator, List, Sequence
 if sys.version_info >= (3, 12):
     from typing import Literal, Unpack
 else:
@@ -230,7 +225,7 @@ class ServiceResourceBucketsCollection(ResourceCollection):
         [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_s3/service_resource/#serviceresourcebucketscollection)
         """
 
-    def pages(self) -> Iterator[List[Bucket]]:
+    def pages(self) -> Iterator[list[Bucket]]:
         """
         A generator which yields pages of Buckets.
 
@@ -299,7 +294,7 @@ class BucketMultipartUploadsCollection(ResourceCollection):
         [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_s3/service_resource/#bucketmultipart_uploads)
         """
 
-    def pages(self) -> Iterator[List[MultipartUpload]]:
+    def pages(self) -> Iterator[list[MultipartUpload]]:
         """
         A generator which yields pages of MultipartUploads.
 
@@ -361,7 +356,7 @@ class BucketObjectVersionsCollection(ResourceCollection):
         BypassGovernanceRetention: bool = ...,
         ExpectedBucketOwner: str = ...,
         ChecksumAlgorithm: ChecksumAlgorithmType = ...,
-    ) -> List[DeleteObjectsOutputTypeDef]:
+    ) -> list[DeleteObjectsOutputTypeDef]:
         """
         Batch method.
 
@@ -385,7 +380,7 @@ class BucketObjectVersionsCollection(ResourceCollection):
         [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_s3/service_resource/#bucketobject_versions)
         """
 
-    def pages(self) -> Iterator[List[ObjectVersion]]:
+    def pages(self) -> Iterator[list[ObjectVersion]]:
         """
         A generator which yields pages of ObjectVersions.
 
@@ -446,7 +441,7 @@ class BucketObjectsCollection(ResourceCollection):
         BypassGovernanceRetention: bool = ...,
         ExpectedBucketOwner: str = ...,
         ChecksumAlgorithm: ChecksumAlgorithmType = ...,
-    ) -> List[DeleteObjectsOutputTypeDef]:
+    ) -> list[DeleteObjectsOutputTypeDef]:
         """
         Batch method.
 
@@ -470,7 +465,7 @@ class BucketObjectsCollection(ResourceCollection):
         [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_s3/service_resource/#bucketobjects)
         """
 
-    def pages(self) -> Iterator[List[ObjectSummary]]:
+    def pages(self) -> Iterator[list[ObjectSummary]]:
         """
         A generator which yields pages of ObjectSummarys.
 
@@ -537,7 +532,7 @@ class MultipartUploadPartsCollection(ResourceCollection):
         [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_s3/service_resource/#multipartuploadparts)
         """
 
-    def pages(self) -> Iterator[List[MultipartUploadPart]]:
+    def pages(self) -> Iterator[list[MultipartUploadPart]]:
         """
         A generator which yields pages of MultipartUploadParts.
 
@@ -740,7 +735,7 @@ class Bucket(ServiceResource):
         self,
         CopySource: CopySourceTypeDef,
         Key: str,
-        ExtraArgs: Dict[str, Any] | None = ...,
+        ExtraArgs: dict[str, Any] | None = ...,
         Callback: Callable[..., Any] | None = ...,
         SourceClient: BaseClient | None = ...,
         Config: TransferConfig | None = ...,
@@ -756,7 +751,7 @@ class Bucket(ServiceResource):
         self,
         Key: str,
         Filename: str,
-        ExtraArgs: Dict[str, Any] | None = ...,
+        ExtraArgs: dict[str, Any] | None = ...,
         Callback: Callable[..., Any] | None = ...,
         Config: TransferConfig | None = ...,
     ) -> None:
@@ -771,7 +766,7 @@ class Bucket(ServiceResource):
         self,
         Key: str,
         Fileobj: FileobjTypeDef,
-        ExtraArgs: Dict[str, Any] | None = ...,
+        ExtraArgs: dict[str, Any] | None = ...,
         Callback: Callable[..., Any] | None = ...,
         Config: TransferConfig | None = ...,
     ) -> None:
@@ -786,7 +781,7 @@ class Bucket(ServiceResource):
         self,
         Filename: str,
         Key: str,
-        ExtraArgs: Dict[str, Any] | None = ...,
+        ExtraArgs: dict[str, Any] | None = ...,
         Callback: Callable[..., Any] | None = ...,
         Config: TransferConfig | None = ...,
     ) -> None:
@@ -801,7 +796,7 @@ class Bucket(ServiceResource):
         self,
         Fileobj: FileobjTypeDef,
         Key: str,
-        ExtraArgs: Dict[str, Any] | None = ...,
+        ExtraArgs: dict[str, Any] | None = ...,
         Callback: Callable[..., Any] | None = ...,
         Config: TransferConfig | None = ...,
     ) -> None:
@@ -824,7 +819,7 @@ class BucketAcl(ServiceResource):
 
     bucket_name: str
     owner: OwnerTypeDef
-    grants: List[GrantTypeDef]
+    grants: list[GrantTypeDef]
     meta: S3ResourceMeta  # type: ignore[override]
 
     def get_available_subresources(self) -> Sequence[str]:
@@ -875,7 +870,7 @@ class BucketCors(ServiceResource):
     """
 
     bucket_name: str
-    cors_rules: List[CORSRuleOutputTypeDef]
+    cors_rules: list[CORSRuleOutputTypeDef]
     meta: S3ResourceMeta  # type: ignore[override]
 
     def get_available_subresources(self) -> Sequence[str]:
@@ -933,7 +928,7 @@ class BucketLifecycle(ServiceResource):
     """
 
     bucket_name: str
-    rules: List[RuleOutputTypeDef]
+    rules: list[RuleOutputTypeDef]
     meta: S3ResourceMeta  # type: ignore[override]
 
     def get_available_subresources(self) -> Sequence[str]:
@@ -993,7 +988,7 @@ class BucketLifecycleConfiguration(ServiceResource):
     """
 
     bucket_name: str
-    rules: List[LifecycleRuleOutputTypeDef]
+    rules: list[LifecycleRuleOutputTypeDef]
     transition_default_minimum_object_size: TransitionDefaultMinimumObjectSizeType
     meta: S3ResourceMeta  # type: ignore[override]
 
@@ -1113,10 +1108,10 @@ class BucketNotification(ServiceResource):
     """
 
     bucket_name: str
-    topic_configurations: List[TopicConfigurationOutputTypeDef]
-    queue_configurations: List[QueueConfigurationOutputTypeDef]
-    lambda_function_configurations: List[LambdaFunctionConfigurationOutputTypeDef]
-    event_bridge_configuration: Dict[str, Any]
+    topic_configurations: list[TopicConfigurationOutputTypeDef]
+    queue_configurations: list[QueueConfigurationOutputTypeDef]
+    lambda_function_configurations: list[LambdaFunctionConfigurationOutputTypeDef]
+    event_bridge_configuration: dict[str, Any]
     meta: S3ResourceMeta  # type: ignore[override]
 
     def get_available_subresources(self) -> Sequence[str]:
@@ -1279,7 +1274,7 @@ class BucketTagging(ServiceResource):
     """
 
     bucket_name: str
-    tag_set: List[TagTypeDef]
+    tag_set: list[TagTypeDef]
     meta: S3ResourceMeta  # type: ignore[override]
 
     def get_available_subresources(self) -> Sequence[str]:
@@ -1413,7 +1408,7 @@ class BucketWebsite(ServiceResource):
     redirect_all_requests_to: RedirectAllRequestsToTypeDef
     index_document: IndexDocumentTypeDef
     error_document: ErrorDocumentTypeDef
-    routing_rules: List[RoutingRuleTypeDef]
+    routing_rules: list[RoutingRuleTypeDef]
     meta: S3ResourceMeta  # type: ignore[override]
 
     def get_available_subresources(self) -> Sequence[str]:
@@ -1627,7 +1622,7 @@ class Object(ServiceResource):
     expires: datetime
     website_redirect_location: str
     server_side_encryption: ServerSideEncryptionType
-    metadata: Dict[str, str]
+    metadata: dict[str, str]
     sse_customer_algorithm: str
     sse_customer_key_md5: str
     ssekms_key_id: str
@@ -1759,7 +1754,7 @@ class Object(ServiceResource):
     def copy(
         self,
         CopySource: CopySourceTypeDef,
-        ExtraArgs: Dict[str, Any] | None = ...,
+        ExtraArgs: dict[str, Any] | None = ...,
         Callback: Callable[..., Any] | None = ...,
         SourceClient: BaseClient | None = ...,
         Config: TransferConfig | None = ...,
@@ -1774,7 +1769,7 @@ class Object(ServiceResource):
     def download_file(
         self,
         Filename: str,
-        ExtraArgs: Dict[str, Any] | None = ...,
+        ExtraArgs: dict[str, Any] | None = ...,
         Callback: Callable[..., Any] | None = ...,
         Config: TransferConfig | None = ...,
     ) -> None:
@@ -1788,7 +1783,7 @@ class Object(ServiceResource):
     def download_fileobj(
         self,
         Fileobj: FileobjTypeDef,
-        ExtraArgs: Dict[str, Any] | None = ...,
+        ExtraArgs: dict[str, Any] | None = ...,
         Callback: Callable[..., Any] | None = ...,
         Config: TransferConfig | None = ...,
     ) -> None:
@@ -1802,7 +1797,7 @@ class Object(ServiceResource):
     def upload_file(
         self,
         Filename: str,
-        ExtraArgs: Dict[str, Any] | None = ...,
+        ExtraArgs: dict[str, Any] | None = ...,
         Callback: Callable[..., Any] | None = ...,
         Config: TransferConfig | None = ...,
     ) -> None:
@@ -1816,7 +1811,7 @@ class Object(ServiceResource):
     def upload_fileobj(
         self,
         Fileobj: FileobjTypeDef,
-        ExtraArgs: Dict[str, Any] | None = ...,
+        ExtraArgs: dict[str, Any] | None = ...,
         Callback: Callable[..., Any] | None = ...,
         Config: TransferConfig | None = ...,
     ) -> None:
@@ -1852,7 +1847,7 @@ class ObjectAcl(ServiceResource):
     bucket_name: str
     object_key: str
     owner: OwnerTypeDef
-    grants: List[GrantTypeDef]
+    grants: list[GrantTypeDef]
     request_charged: Literal["requester"]
     meta: S3ResourceMeta  # type: ignore[override]
 
@@ -1909,7 +1904,7 @@ class ObjectSummary(ServiceResource):
     key: str
     last_modified: datetime
     e_tag: str
-    checksum_algorithm: List[ChecksumAlgorithmType]
+    checksum_algorithm: list[ChecksumAlgorithmType]
     checksum_type: ChecksumTypeType
     size: int
     storage_class: ObjectStorageClassType
@@ -2067,7 +2062,7 @@ class ObjectVersion(ServiceResource):
     object_key: str
     id: str
     e_tag: str
-    checksum_algorithm: List[ChecksumAlgorithmType]
+    checksum_algorithm: list[ChecksumAlgorithmType]
     checksum_type: ChecksumTypeType
     size: int
     storage_class: Literal["STANDARD"]

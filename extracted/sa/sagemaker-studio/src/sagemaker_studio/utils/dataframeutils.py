@@ -63,10 +63,15 @@ def read_catalog_table(
 
     if catalog_type == "NATIVE":
         if format is None:
-            table_info = wr.catalog.get_table_parameters(
-                database=database, table=table, catalog_id=catalog_obj.id
-            )
-            format = table_info.get("classification") if table_info else None
+            try:
+                table_info = wr.catalog.get_table_parameters(
+                    database=database, table=table, catalog_id=catalog_obj.id
+                )
+                format = table_info.get("classification") if table_info else "parquet"
+            except Exception:
+                # If get_table_parameters fails, set format to parquet
+                format = "parquet"
+
             if format is None:
                 format = "parquet"
 

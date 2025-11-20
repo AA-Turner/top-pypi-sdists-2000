@@ -36,6 +36,7 @@ __all__ = (
     "ListStateMachinesPaginatorName",
     "LogLevelType",
     "MapRunStatusType",
+    "MockResponseValidationModeType",
     "PaginatorName",
     "RegionName",
     "ResourceServiceName",
@@ -128,6 +129,7 @@ ListMapRunsPaginatorName = Literal["list_map_runs"]
 ListStateMachinesPaginatorName = Literal["list_state_machines"]
 LogLevelType = Literal["ALL", "ERROR", "FATAL", "OFF"]
 MapRunStatusType = Literal["ABORTED", "FAILED", "RUNNING", "SUCCEEDED"]
+MockResponseValidationModeType = Literal["NONE", "PRESENT", "STRICT"]
 StateMachineStatusType = Literal["ACTIVE", "DELETING"]
 StateMachineTypeType = Literal["EXPRESS", "STANDARD"]
 SyncExecutionStatusType = Literal["FAILED", "SUCCEEDED", "TIMED_OUT"]
@@ -161,7 +163,6 @@ ServiceName = Literal[
     "apprunner",
     "appstream",
     "appsync",
-    "apptest",
     "arc-region-switch",
     "arc-zonal-shift",
     "artifact",
@@ -329,7 +330,6 @@ ServiceName = Literal[
     "iotdeviceadvisor",
     "iotevents",
     "iotevents-data",
-    "iotfleethub",
     "iotfleetwise",
     "iotsecuretunneling",
     "iotsitewise",
@@ -368,8 +368,6 @@ ServiceName = Literal[
     "location",
     "logs",
     "lookoutequipment",
-    "lookoutmetrics",
-    "lookoutvision",
     "m2",
     "machinelearning",
     "macie2",
@@ -404,6 +402,7 @@ ServiceName = Literal[
     "mq",
     "mturk",
     "mwaa",
+    "mwaa-serverless",
     "neptune",
     "neptune-graph",
     "neptunedata",
@@ -423,6 +422,7 @@ ServiceName = Literal[
     "osis",
     "outposts",
     "panorama",
+    "partnercentral-channel",
     "partnercentral-selling",
     "payment-cryptography",
     "payment-cryptography-data",
@@ -444,8 +444,6 @@ ServiceName = Literal[
     "qapps",
     "qbusiness",
     "qconnect",
-    "qldb",
-    "qldb-session",
     "quicksight",
     "ram",
     "rbin",
@@ -460,7 +458,6 @@ ServiceName = Literal[
     "resource-explorer-2",
     "resource-groups",
     "resourcegroupstaggingapi",
-    "robomaker",
     "rolesanywhere",
     "route53",
     "route53-recovery-cluster",
@@ -500,6 +497,7 @@ ServiceName = Literal[
     "sesv2",
     "shield",
     "signer",
+    "signin",
     "simspaceweaver",
     "snow-device-management",
     "snowball",

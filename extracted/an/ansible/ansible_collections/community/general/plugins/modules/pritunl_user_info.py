@@ -1,12 +1,10 @@
 #!/usr/bin/python
-# -*- coding: utf-8 -*-
 # Copyright (c) 2021, Florian Dambrine <android.florian@gmail.com>
 # GNU General Public License v3.0+ (see LICENSES/GPL-3.0-or-later.txt or https://www.gnu.org/licenses/gpl-3.0.txt)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-from __future__ import absolute_import, division, print_function
+from __future__ import annotations
 
-__metaclass__ = type
 
 DOCUMENTATION = r"""
 module: pritunl_user_info
@@ -29,12 +27,10 @@ options:
       - The name of the organization the user is part of.
   user_name:
     type: str
-    required: false
     description:
       - Name of the user to filter on Pritunl.
   user_type:
     type: str
-    required: false
     default: client
     choices:
       - client
@@ -117,10 +113,7 @@ def get_pritunl_user(module):
     )
 
     if len(org_obj_list) == 0:
-        module.fail_json(
-            msg="Can not list users from the organization '%s' which does not exist"
-            % org_name
-        )
+        module.fail_json(msg=f"Can not list users from the organization '{org_name}' which does not exist")
 
     org_id = org_obj_list[0]["id"]
 
@@ -129,11 +122,7 @@ def get_pritunl_user(module):
             get_pritunl_settings(module),
             {
                 "organization_id": org_id,
-                "filters": (
-                    {"type": user_type}
-                    if user_name is None
-                    else {"name": user_name, "type": user_type}
-                ),
+                "filters": ({"type": user_type} if user_name is None else {"name": user_name, "type": user_type}),
             },
         )
     )

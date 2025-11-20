@@ -8,9 +8,9 @@ Copyright 2025 Vlad Emelianov
 Usage::
 
     ```python
-    from mypy_boto3_ecr.literals import DescribeImageScanFindingsPaginatorName
+    from mypy_boto3_ecr.literals import ArtifactStatusFilterType
 
-    data: DescribeImageScanFindingsPaginatorName = "describe_image_scan_findings"
+    data: ArtifactStatusFilterType = "ACTIVATING"
     ```
 """
 
@@ -22,6 +22,8 @@ else:
     from typing_extensions import Literal
 
 __all__ = (
+    "ArtifactStatusFilterType",
+    "ArtifactStatusType",
     "DescribeImageScanFindingsPaginatorName",
     "DescribeImagesPaginatorName",
     "DescribePullThroughCacheRulesPaginatorName",
@@ -34,12 +36,16 @@ __all__ = (
     "ImageActionTypeType",
     "ImageFailureCodeType",
     "ImageScanCompleteWaiterName",
+    "ImageStatusFilterType",
+    "ImageStatusType",
     "ImageTagMutabilityExclusionFilterTypeType",
     "ImageTagMutabilityType",
     "LayerAvailabilityType",
     "LayerFailureCodeType",
     "LifecyclePolicyPreviewCompleteWaiterName",
     "LifecyclePolicyPreviewStatusType",
+    "LifecyclePolicyStorageClassType",
+    "LifecyclePolicyTargetStorageClassType",
     "ListImagesPaginatorName",
     "PaginatorName",
     "RCTAppliedForType",
@@ -54,10 +60,13 @@ __all__ = (
     "ScanningRepositoryFilterTypeType",
     "ServiceName",
     "TagStatusType",
+    "TargetStorageClassType",
     "UpstreamRegistryType",
     "WaiterName",
 )
 
+ArtifactStatusFilterType = Literal["ACTIVATING", "ACTIVE", "ANY", "ARCHIVED"]
+ArtifactStatusType = Literal["ACTIVATING", "ACTIVE", "ARCHIVED"]
 DescribeImageScanFindingsPaginatorName = Literal["describe_image_scan_findings"]
 DescribeImagesPaginatorName = Literal["describe_images"]
 DescribePullThroughCacheRulesPaginatorName = Literal["describe_pull_through_cache_rules"]
@@ -66,8 +75,9 @@ DescribeRepositoryCreationTemplatesPaginatorName = Literal["describe_repository_
 EncryptionTypeType = Literal["AES256", "KMS", "KMS_DSSE"]
 FindingSeverityType = Literal["CRITICAL", "HIGH", "INFORMATIONAL", "LOW", "MEDIUM", "UNDEFINED"]
 GetLifecyclePolicyPreviewPaginatorName = Literal["get_lifecycle_policy_preview"]
-ImageActionTypeType = Literal["EXPIRE"]
+ImageActionTypeType = Literal["EXPIRE", "TRANSITION"]
 ImageFailureCodeType = Literal[
+    "ImageInaccessible",
     "ImageNotFound",
     "ImageReferencedByManifestList",
     "ImageTagDoesNotMatchDigest",
@@ -80,14 +90,18 @@ ImageFailureCodeType = Literal[
     "UpstreamUnavailable",
 ]
 ImageScanCompleteWaiterName = Literal["image_scan_complete"]
+ImageStatusFilterType = Literal["ACTIVATING", "ACTIVE", "ANY", "ARCHIVED"]
+ImageStatusType = Literal["ACTIVATING", "ACTIVE", "ARCHIVED"]
 ImageTagMutabilityExclusionFilterTypeType = Literal["WILDCARD"]
 ImageTagMutabilityType = Literal[
     "IMMUTABLE", "IMMUTABLE_WITH_EXCLUSION", "MUTABLE", "MUTABLE_WITH_EXCLUSION"
 ]
-LayerAvailabilityType = Literal["AVAILABLE", "UNAVAILABLE"]
+LayerAvailabilityType = Literal["ARCHIVED", "AVAILABLE", "UNAVAILABLE"]
 LayerFailureCodeType = Literal["InvalidLayerDigest", "MissingLayerDigest"]
 LifecyclePolicyPreviewCompleteWaiterName = Literal["lifecycle_policy_preview_complete"]
 LifecyclePolicyPreviewStatusType = Literal["COMPLETE", "EXPIRED", "FAILED", "IN_PROGRESS"]
+LifecyclePolicyStorageClassType = Literal["ARCHIVE", "STANDARD"]
+LifecyclePolicyTargetStorageClassType = Literal["ARCHIVE"]
 ListImagesPaginatorName = Literal["list_images"]
 RCTAppliedForType = Literal["PULL_THROUGH_CACHE", "REPLICATION"]
 ReplicationStatusType = Literal["COMPLETE", "FAILED", "IN_PROGRESS"]
@@ -98,6 +112,7 @@ ScanStatusType = Literal[
     "COMPLETE",
     "FAILED",
     "FINDINGS_UNAVAILABLE",
+    "IMAGE_ARCHIVED",
     "IN_PROGRESS",
     "LIMIT_EXCEEDED",
     "PENDING",
@@ -108,6 +123,7 @@ ScanTypeType = Literal["BASIC", "ENHANCED"]
 ScanningConfigurationFailureCodeType = Literal["REPOSITORY_NOT_FOUND"]
 ScanningRepositoryFilterTypeType = Literal["WILDCARD"]
 TagStatusType = Literal["ANY", "TAGGED", "UNTAGGED"]
+TargetStorageClassType = Literal["ARCHIVE", "STANDARD"]
 UpstreamRegistryType = Literal[
     "azure-container-registry",
     "docker-hub",
@@ -384,6 +400,7 @@ ServiceName = Literal[
     "mq",
     "mturk",
     "mwaa",
+    "mwaa-serverless",
     "neptune",
     "neptune-graph",
     "neptunedata",
@@ -403,6 +420,7 @@ ServiceName = Literal[
     "osis",
     "outposts",
     "panorama",
+    "partnercentral-channel",
     "partnercentral-selling",
     "payment-cryptography",
     "payment-cryptography-data",
@@ -477,6 +495,7 @@ ServiceName = Literal[
     "sesv2",
     "shield",
     "signer",
+    "signin",
     "simspaceweaver",
     "snow-device-management",
     "snowball",

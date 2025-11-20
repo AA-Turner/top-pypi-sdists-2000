@@ -4,8 +4,7 @@
 # GNU General Public License v3.0+ (see LICENSES/GPL-3.0-or-later.txt or https://www.gnu.org/licenses/gpl-3.0.txt)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-from __future__ import absolute_import, division, print_function
-__metaclass__ = type
+from __future__ import annotations
 
 
 DOCUMENTATION = r"""
@@ -24,9 +23,9 @@ notes:
     (except O(image)). Therefore, always specify B(all) options relevant to the container.
   - When O(restart) is set to V(true), the module will only restart the container if no config changes are detected.
 extends_documentation_fragment:
-  - community.docker.docker.api_documentation
-  - community.docker.attributes
-  - community.docker.attributes.actiongroup_docker
+  - community.docker._docker.api_documentation
+  - community.docker._attributes
+  - community.docker._attributes.actiongroup_docker
 
 attributes:
   check_mode:
@@ -752,6 +751,21 @@ options:
             Daemon at least in some cases. When passed on creation, this seems to work better.
         type: str
         version_added: 3.6.0
+      driver_opts:
+        description:
+          - Dictionary of driver options for this network endpoint.
+          - Allows setting endpoint-specific driver options like C(com.docker.network.endpoint.ifname) to set a custom network interface name.
+          - Requires Docker API version 1.32 or newer.
+        type: dict
+        version_added: 5.0.0
+      gw_priority:
+        description:
+          - Gateway priority for this network endpoint.
+          - When a container is connected to multiple networks, this controls which network's gateway is used as the default gateway.
+          - Higher values indicate higher priority.
+          - Requires Docker API version 1.48 or newer.
+        type: int
+        version_added: 5.0.0
   networks_cli_compatible:
     description:
       - If O(networks_cli_compatible=true) (default), this module will behave as C(docker run --network) and will B(not) add
@@ -1333,19 +1347,18 @@ status:
   sample: 0
 """
 
-from ansible_collections.community.docker.plugins.module_utils.module_container.docker_api import (
+from ansible_collections.community.docker.plugins.module_utils._module_container.docker_api import (
     DockerAPIEngineDriver,
 )
-
-from ansible_collections.community.docker.plugins.module_utils.module_container.module import (
+from ansible_collections.community.docker.plugins.module_utils._module_container.module import (
     run_module,
 )
 
 
-def main():
+def main() -> None:
     engine_driver = DockerAPIEngineDriver()
     run_module(engine_driver)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

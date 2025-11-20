@@ -17,6 +17,7 @@ Usage::
 from __future__ import annotations
 
 import sys
+from collections.abc import Mapping, Sequence
 from datetime import datetime
 from typing import Any, Union
 
@@ -38,12 +39,6 @@ from .literals import (
     WorkGroupStateType,
 )
 
-if sys.version_info >= (3, 9):
-    from builtins import dict as Dict
-    from builtins import list as List
-    from collections.abc import Mapping, Sequence
-else:
-    from typing import Dict, List, Mapping, Sequence
 if sys.version_info >= (3, 12):
     from typing import Literal, NotRequired, TypedDict
 else:
@@ -250,7 +245,7 @@ class AclConfigurationTypeDef(TypedDict):
 
 class ApplicationDPUSizesTypeDef(TypedDict):
     ApplicationRuntimeId: NotRequired[str]
-    SupportedDPUSizes: NotRequired[List[int]]
+    SupportedDPUSizes: NotRequired[list[int]]
 
 class AthenaErrorTypeDef(TypedDict):
     ErrorCategory: NotRequired[int]
@@ -272,7 +267,7 @@ class NamedQueryTypeDef(TypedDict):
 class ResponseMetadataTypeDef(TypedDict):
     RequestId: str
     HTTPStatusCode: int
-    HTTPHeaders: Dict[str, str]
+    HTTPHeaders: dict[str, str]
     RetryAttempts: int
     HostId: NotRequired[str]
 
@@ -334,7 +329,7 @@ class CapacityAllocationTypeDef(TypedDict):
     RequestCompletionTime: NotRequired[datetime]
 
 class CapacityAssignmentOutputTypeDef(TypedDict):
-    WorkGroupNames: NotRequired[List[str]]
+    WorkGroupNames: NotRequired[list[str]]
 
 class CapacityAssignmentTypeDef(TypedDict):
     WorkGroupNames: NotRequired[Sequence[str]]
@@ -373,7 +368,7 @@ DataCatalogTypeDef = TypedDict(
         "Name": str,
         "Type": DataCatalogTypeType,
         "Description": NotRequired[str],
-        "Parameters": NotRequired[Dict[str, str]],
+        "Parameters": NotRequired[dict[str, str]],
         "Status": NotRequired[DataCatalogStatusType],
         "ConnectionType": NotRequired[ConnectionTypeType],
         "Error": NotRequired[str],
@@ -419,7 +414,7 @@ DataCatalogSummaryTypeDef = TypedDict(
 class DatabaseTypeDef(TypedDict):
     Name: str
     Description: NotRequired[str]
-    Parameters: NotRequired[Dict[str, str]]
+    Parameters: NotRequired[dict[str, str]]
 
 class DatumTypeDef(TypedDict):
     VarCharValue: NotRequired[str]
@@ -453,8 +448,8 @@ class EngineConfigurationOutputTypeDef(TypedDict):
     MaxConcurrentDpus: int
     CoordinatorDpuSize: NotRequired[int]
     DefaultExecutorDpuSize: NotRequired[int]
-    AdditionalConfigs: NotRequired[Dict[str, str]]
-    SparkProperties: NotRequired[Dict[str, str]]
+    AdditionalConfigs: NotRequired[dict[str, str]]
+    SparkProperties: NotRequired[dict[str, str]]
 
 class EngineConfigurationTypeDef(TypedDict):
     MaxConcurrentDpus: int
@@ -704,8 +699,8 @@ class QueryRuntimeStatisticsTimelineTypeDef(TypedDict):
 class QueryStagePlanNodeTypeDef(TypedDict):
     Name: NotRequired[str]
     Identifier: NotRequired[str]
-    Children: NotRequired[List[Dict[str, Any]]]
-    RemoteSources: NotRequired[List[str]]
+    Children: NotRequired[list[dict[str, Any]]]
+    RemoteSources: NotRequired[list[str]]
 
 class ResultReuseByAgeConfigurationTypeDef(TypedDict):
     Enabled: bool
@@ -800,17 +795,17 @@ class ImportNotebookOutputTypeDef(TypedDict):
     ResponseMetadata: ResponseMetadataTypeDef
 
 class ListApplicationDPUSizesOutputTypeDef(TypedDict):
-    ApplicationDPUSizes: List[ApplicationDPUSizesTypeDef]
+    ApplicationDPUSizes: list[ApplicationDPUSizesTypeDef]
     ResponseMetadata: ResponseMetadataTypeDef
     NextToken: NotRequired[str]
 
 class ListNamedQueriesOutputTypeDef(TypedDict):
-    NamedQueryIds: List[str]
+    NamedQueryIds: list[str]
     ResponseMetadata: ResponseMetadataTypeDef
     NextToken: NotRequired[str]
 
 class ListQueryExecutionsOutputTypeDef(TypedDict):
-    QueryExecutionIds: List[str]
+    QueryExecutionIds: list[str]
     ResponseMetadata: ResponseMetadataTypeDef
     NextToken: NotRequired[str]
 
@@ -837,8 +832,8 @@ class TerminateSessionResponseTypeDef(TypedDict):
     ResponseMetadata: ResponseMetadataTypeDef
 
 class BatchGetNamedQueryOutputTypeDef(TypedDict):
-    NamedQueries: List[NamedQueryTypeDef]
-    UnprocessedNamedQueryIds: List[UnprocessedNamedQueryIdTypeDef]
+    NamedQueries: list[NamedQueryTypeDef]
+    UnprocessedNamedQueryIds: list[UnprocessedNamedQueryIdTypeDef]
     ResponseMetadata: ResponseMetadataTypeDef
 
 class GetPreparedStatementOutputTypeDef(TypedDict):
@@ -846,8 +841,8 @@ class GetPreparedStatementOutputTypeDef(TypedDict):
     ResponseMetadata: ResponseMetadataTypeDef
 
 class BatchGetPreparedStatementOutputTypeDef(TypedDict):
-    PreparedStatements: List[PreparedStatementTypeDef]
-    UnprocessedPreparedStatementNames: List[UnprocessedPreparedStatementNameTypeDef]
+    PreparedStatements: list[PreparedStatementTypeDef]
+    UnprocessedPreparedStatementNames: list[UnprocessedPreparedStatementNameTypeDef]
     ResponseMetadata: ResponseMetadataTypeDef
 
 class StartCalculationExecutionRequestTypeDef(TypedDict):
@@ -888,21 +883,21 @@ class CapacityReservationTypeDef(TypedDict):
 
 class CapacityAssignmentConfigurationTypeDef(TypedDict):
     CapacityReservationName: NotRequired[str]
-    CapacityAssignments: NotRequired[List[CapacityAssignmentOutputTypeDef]]
+    CapacityAssignments: NotRequired[list[CapacityAssignmentOutputTypeDef]]
 
 CapacityAssignmentUnionTypeDef = Union[CapacityAssignmentTypeDef, CapacityAssignmentOutputTypeDef]
 
 class ResultSetMetadataTypeDef(TypedDict):
-    ColumnInfo: NotRequired[List[ColumnInfoTypeDef]]
+    ColumnInfo: NotRequired[list[ColumnInfoTypeDef]]
 
 class TableMetadataTypeDef(TypedDict):
     Name: str
     CreateTime: NotRequired[datetime]
     LastAccessTime: NotRequired[datetime]
     TableType: NotRequired[str]
-    Columns: NotRequired[List[ColumnTypeDef]]
-    PartitionKeys: NotRequired[List[ColumnTypeDef]]
-    Parameters: NotRequired[Dict[str, str]]
+    Columns: NotRequired[list[ColumnTypeDef]]
+    PartitionKeys: NotRequired[list[ColumnTypeDef]]
+    Parameters: NotRequired[dict[str, str]]
 
 class CreateCapacityReservationInputTypeDef(TypedDict):
     TargetDpus: int
@@ -921,7 +916,7 @@ CreateDataCatalogInputTypeDef = TypedDict(
 )
 
 class ListTagsForResourceOutputTypeDef(TypedDict):
-    Tags: List[TagTypeDef]
+    Tags: list[TagTypeDef]
     ResponseMetadata: ResponseMetadataTypeDef
     NextToken: NotRequired[str]
 
@@ -942,7 +937,7 @@ class GetDataCatalogOutputTypeDef(TypedDict):
     ResponseMetadata: ResponseMetadataTypeDef
 
 class ListDataCatalogsOutputTypeDef(TypedDict):
-    DataCatalogsSummary: List[DataCatalogSummaryTypeDef]
+    DataCatalogsSummary: list[DataCatalogSummaryTypeDef]
     ResponseMetadata: ResponseMetadataTypeDef
     NextToken: NotRequired[str]
 
@@ -951,12 +946,12 @@ class GetDatabaseOutputTypeDef(TypedDict):
     ResponseMetadata: ResponseMetadataTypeDef
 
 class ListDatabasesOutputTypeDef(TypedDict):
-    DatabaseList: List[DatabaseTypeDef]
+    DatabaseList: list[DatabaseTypeDef]
     ResponseMetadata: ResponseMetadataTypeDef
     NextToken: NotRequired[str]
 
 class RowTypeDef(TypedDict):
-    Data: NotRequired[List[DatumTypeDef]]
+    Data: NotRequired[list[DatumTypeDef]]
 
 class ResultConfigurationTypeDef(TypedDict):
     OutputLocation: NotRequired[str]
@@ -985,7 +980,7 @@ EngineConfigurationUnionTypeDef = Union[
 ]
 
 class ListEngineVersionsOutputTypeDef(TypedDict):
-    EngineVersions: List[EngineVersionTypeDef]
+    EngineVersions: list[EngineVersionTypeDef]
     ResponseMetadata: ResponseMetadataTypeDef
     NextToken: NotRequired[str]
 
@@ -999,7 +994,7 @@ class WorkGroupSummaryTypeDef(TypedDict):
 
 class ListExecutorsResponseTypeDef(TypedDict):
     SessionId: str
-    ExecutorsSummary: List[ExecutorsSummaryTypeDef]
+    ExecutorsSummary: list[ExecutorsSummaryTypeDef]
     ResponseMetadata: ResponseMetadataTypeDef
     NextToken: NotRequired[str]
 
@@ -1013,7 +1008,7 @@ class GetNotebookMetadataOutputTypeDef(TypedDict):
     ResponseMetadata: ResponseMetadataTypeDef
 
 class ListNotebookMetadataOutputTypeDef(TypedDict):
-    NotebookMetadataList: List[NotebookMetadataTypeDef]
+    NotebookMetadataList: list[NotebookMetadataTypeDef]
     ResponseMetadata: ResponseMetadataTypeDef
     NextToken: NotRequired[str]
 
@@ -1069,12 +1064,12 @@ class SessionSummaryTypeDef(TypedDict):
     Status: NotRequired[SessionStatusTypeDef]
 
 class ListNotebookSessionsResponseTypeDef(TypedDict):
-    NotebookSessionsList: List[NotebookSessionSummaryTypeDef]
+    NotebookSessionsList: list[NotebookSessionSummaryTypeDef]
     ResponseMetadata: ResponseMetadataTypeDef
     NextToken: NotRequired[str]
 
 class ListPreparedStatementsOutputTypeDef(TypedDict):
-    PreparedStatements: List[PreparedStatementSummaryTypeDef]
+    PreparedStatements: list[PreparedStatementSummaryTypeDef]
     ResponseMetadata: ResponseMetadataTypeDef
     NextToken: NotRequired[str]
 
@@ -1107,13 +1102,13 @@ class QueryStageTypeDef(TypedDict):
     InputRows: NotRequired[int]
     ExecutionTime: NotRequired[int]
     QueryStagePlan: NotRequired[QueryStagePlanNodeTypeDef]
-    SubStages: NotRequired[List[Dict[str, Any]]]
+    SubStages: NotRequired[list[dict[str, Any]]]
 
 class ResultReuseConfigurationTypeDef(TypedDict):
     ResultReuseByAgeConfiguration: NotRequired[ResultReuseByAgeConfigurationTypeDef]
 
 class ListCalculationExecutionsResponseTypeDef(TypedDict):
-    Calculations: List[CalculationSummaryTypeDef]
+    Calculations: list[CalculationSummaryTypeDef]
     ResponseMetadata: ResponseMetadataTypeDef
     NextToken: NotRequired[str]
 
@@ -1122,7 +1117,7 @@ class GetCapacityReservationOutputTypeDef(TypedDict):
     ResponseMetadata: ResponseMetadataTypeDef
 
 class ListCapacityReservationsOutputTypeDef(TypedDict):
-    CapacityReservations: List[CapacityReservationTypeDef]
+    CapacityReservations: list[CapacityReservationTypeDef]
     ResponseMetadata: ResponseMetadataTypeDef
     NextToken: NotRequired[str]
 
@@ -1139,12 +1134,12 @@ class GetTableMetadataOutputTypeDef(TypedDict):
     ResponseMetadata: ResponseMetadataTypeDef
 
 class ListTableMetadataOutputTypeDef(TypedDict):
-    TableMetadataList: List[TableMetadataTypeDef]
+    TableMetadataList: list[TableMetadataTypeDef]
     ResponseMetadata: ResponseMetadataTypeDef
     NextToken: NotRequired[str]
 
 class ResultSetTypeDef(TypedDict):
-    Rows: NotRequired[List[RowTypeDef]]
+    Rows: NotRequired[list[RowTypeDef]]
     ResultSetMetadata: NotRequired[ResultSetMetadataTypeDef]
 
 class GetSessionResponseTypeDef(TypedDict):
@@ -1168,12 +1163,12 @@ class StartSessionRequestTypeDef(TypedDict):
     ClientRequestToken: NotRequired[str]
 
 class ListWorkGroupsOutputTypeDef(TypedDict):
-    WorkGroups: List[WorkGroupSummaryTypeDef]
+    WorkGroups: list[WorkGroupSummaryTypeDef]
     ResponseMetadata: ResponseMetadataTypeDef
     NextToken: NotRequired[str]
 
 class ListSessionsResponseTypeDef(TypedDict):
-    Sessions: List[SessionSummaryTypeDef]
+    Sessions: list[SessionSummaryTypeDef]
     ResponseMetadata: ResponseMetadataTypeDef
     NextToken: NotRequired[str]
 
@@ -1235,7 +1230,7 @@ class QueryExecutionTypeDef(TypedDict):
     Statistics: NotRequired[QueryExecutionStatisticsTypeDef]
     WorkGroup: NotRequired[str]
     EngineVersion: NotRequired[EngineVersionTypeDef]
-    ExecutionParameters: NotRequired[List[str]]
+    ExecutionParameters: NotRequired[list[str]]
     SubstatementType: NotRequired[str]
     QueryResultsS3AccessGrantsConfiguration: NotRequired[
         QueryResultsS3AccessGrantsConfigurationTypeDef
@@ -1281,8 +1276,8 @@ class GetQueryRuntimeStatisticsOutputTypeDef(TypedDict):
     ResponseMetadata: ResponseMetadataTypeDef
 
 class BatchGetQueryExecutionOutputTypeDef(TypedDict):
-    QueryExecutions: List[QueryExecutionTypeDef]
-    UnprocessedQueryExecutionIds: List[UnprocessedQueryExecutionIdTypeDef]
+    QueryExecutions: list[QueryExecutionTypeDef]
+    UnprocessedQueryExecutionIds: list[UnprocessedQueryExecutionIdTypeDef]
     ResponseMetadata: ResponseMetadataTypeDef
 
 class GetQueryExecutionOutputTypeDef(TypedDict):

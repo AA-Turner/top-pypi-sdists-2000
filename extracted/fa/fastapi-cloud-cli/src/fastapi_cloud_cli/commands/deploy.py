@@ -2,15 +2,14 @@ import contextlib
 import json
 import logging
 import subprocess
-import tarfile
 import tempfile
 import time
-import uuid
 from enum import Enum
 from itertools import cycle
 from pathlib import Path
 from typing import Any, Dict, Generator, List, Optional, Union
 
+import fastar
 import rignore
 import typer
 from httpx import Client
@@ -35,7 +34,14 @@ def _get_app_name(path: Path) -> str:
 
 
 def _should_exclude_entry(path: Path) -> bool:
-    parts_to_exclude = [".venv", "__pycache__", ".mypy_cache", ".pytest_cache"]
+    parts_to_exclude = [
+        ".venv",
+        "__pycache__",
+        ".mypy_cache",
+        ".pytest_cache",
+        ".gitignore",
+        ".fastapicloudignore",
+    ]
 
     if any(part in path.parts for part in parts_to_exclude):
         return True
@@ -46,29 +52,26 @@ def _should_exclude_entry(path: Path) -> bool:
     return False
 
 
-def archive(path: Path) -> Path:
+def archive(path: Path, tar_path: Path) -> Path:
     logger.debug("Starting archive creation for path: %s", path)
     files = rignore.walk(
         path,
         should_exclude_entry=_should_exclude_entry,
         additional_ignore_paths=[".fastapicloudignore"],
+        ignore_hidden=False,
     )
 
-    temp_dir = tempfile.mkdtemp()
-    logger.debug("Created temp directory: %s", temp_dir)
-
-    name = f"fastapi-cloud-deploy-{uuid.uuid4()}"
-    tar_path = Path(temp_dir) / f"{name}.tar"
     logger.debug("Archive will be created at: %s", tar_path)
 
     file_count = 0
-    with tarfile.open(tar_path, "w") as tar:
+    with fastar.open(tar_path, "w") as tar:
         for filename in files:
             if filename.is_dir():
                 continue
 
-            logger.debug("Adding %s to archive", filename.relative_to(path))
-            tar.add(filename, arcname=filename.relative_to(path))
+            arcname = filename.relative_to(path)
+            logger.debug("Adding %s to archive", arcname)
+            tar.append(filename, arcname=arcname)
             file_count += 1
 
     logger.debug("Archive created successfully with %s files", file_count)
@@ -120,6 +123,7 @@ class DeploymentStatus(str, Enum):
     deploying_failed = "deploying_failed"
     verifying = "verifying"
     verifying_failed = "verifying_failed"
+    verifying_skipped = "verifying_skipped"
     success = "success"
     failed = "failed"
 
@@ -137,6 +141,7 @@ class DeploymentStatus(str, Enum):
             cls.deploying_failed: "Deploying failed",
             cls.verifying: "Verifying",
             cls.verifying_failed: "Verifying failed",
+            cls.verifying_skipped: "Verification skipped",
             cls.success: "Success",
             cls.failed: "Failed",
         }[status]
@@ -494,7 +499,7 @@ def _waitlist_form(toolkit: RichToolkit) -> None:
 
         with contextlib.suppress(Exception):
             subprocess.run(
-                ["open", "raycast://confetti"],
+                ["open", "raycast://confetti?emojis=🐔⚡"],
                 stdout=subprocess.DEVNULL,
                 stderr=subprocess.DEVNULL,
                 check=False,
@@ -579,16 +584,19 @@ def deploy(
         if not app:
             toolkit.print_line()
             toolkit.print(
-                "If you deleted this app, you can run [bold]fastapi unlink[/] to unlink the local configuration.",
+                "If you deleted this app, you can run [bold]fastapi cloud unlink[/] to unlink the local configuration.",
                 tag="tip",
             )
             raise typer.Exit(1)
 
-        logger.debug("Creating archive for deployment")
-        archive_path = archive(path or Path.cwd())  # noqa: F841
+        with tempfile.TemporaryDirectory() as temp_dir:
+            logger.debug("Creating archive for deployment")
+            archive_path = Path(temp_dir) / "archive.tar"
+            archive(path or Path.cwd(), archive_path)
 
-        with toolkit.progress(title="Creating deployment") as progress:
-            with handle_http_errors(progress):
+            with toolkit.progress(
+                title="Creating deployment"
+            ) as progress, handle_http_errors(progress):
                 logger.debug("Creating deployment for app: %s", app.id)
                 deployment = _create_deployment(app.id)
 
@@ -600,7 +608,7 @@ def deploy(
 
                 _upload_deployment(deployment.id, archive_path)
 
-            progress.log("Deployment uploaded successfully!")
+                progress.log("Deployment uploaded successfully!")
 
         toolkit.print_line()
 

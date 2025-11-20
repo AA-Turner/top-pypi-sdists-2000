@@ -4,7 +4,7 @@ import sys
 import time
 from dataclasses import dataclass
 from datetime import timedelta
-from typing import Any, Generic, Optional, TypeVar, Union
+from typing import Any, Dict, Generic, Mapping, Optional, TypeVar, Union
 from urllib.parse import urlparse, urlunparse
 
 from ldclient.impl.http import _base_headers
@@ -34,6 +34,9 @@ _RETRYABLE_STATUSES = [400, 408, 429]
 
 # Compiled regex pattern for valid characters in application values and SDK keys
 _VALID_CHARACTERS_REGEX = re.compile(r"[^a-zA-Z0-9._-]")
+
+_LD_ENVID_HEADER = 'X-LD-EnvID'
+_LD_FD_FALLBACK_HEADER = 'X-LD-FD-Fallback'
 
 
 def validate_application_info(application: dict, logger: logging.Logger) -> dict:
@@ -285,6 +288,7 @@ class _Success(Generic[T]):
 class _Fail(Generic[E]):
     error: E
     exception: Optional[Exception] = None
+    headers: Optional[Mapping[str, Any]] = None
 
 
 # TODO(breaking): Replace the above Result class with an improved generic

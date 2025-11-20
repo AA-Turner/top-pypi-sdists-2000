@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: langchain
-Version: 1.0.7
+Version: 1.0.8
 Summary: Building applications with LLMs through composability
 Project-URL: Homepage, https://docs.langchain.com/
 Project-URL: Documentation, https://reference.langchain.com/python/langchain/langchain/
@@ -12,7 +12,7 @@ Project-URL: Reddit, https://www.reddit.com/r/LangChain/
 License: MIT
 License-File: LICENSE
 Requires-Python: <4.0.0,>=3.10.0
-Requires-Dist: langchain-core<2.0.0,>=1.0.4
+Requires-Dist: langchain-core<2.0.0,>=1.0.6
 Requires-Dist: langgraph<1.1.0,>=1.0.2
 Requires-Dist: pydantic<3.0.0,>=2.7.4
 Provides-Extra: anthropic

@@ -51,6 +51,9 @@ __all__ = (
     "AutoAcceptSharedAssociationsValueType",
     "AutoAcceptSharedAttachmentsValueType",
     "AutoPlacementType",
+    "AutoProvisionZonesStateType",
+    "AutoScalingIpsStateType",
+    "AvailabilityModeType",
     "AvailabilityZoneOptInStatusType",
     "AvailabilityZoneStateType",
     "BandwidthWeightingTypeType",
@@ -386,6 +389,9 @@ __all__ = (
     "IpamMeteredAccountType",
     "IpamNetworkInterfaceAttachmentStatusType",
     "IpamOverlapStatusType",
+    "IpamPolicyManagedByType",
+    "IpamPolicyResourceTypeType",
+    "IpamPolicyStateType",
     "IpamPoolAllocationResourceTypeType",
     "IpamPoolAwsServiceType",
     "IpamPoolCidrFailureCodeType",
@@ -728,6 +734,9 @@ AttachmentStatusType = Literal["attached", "attaching", "detached", "detaching"]
 AutoAcceptSharedAssociationsValueType = Literal["disable", "enable"]
 AutoAcceptSharedAttachmentsValueType = Literal["disable", "enable"]
 AutoPlacementType = Literal["off", "on"]
+AutoProvisionZonesStateType = Literal["disabled", "enabled"]
+AutoScalingIpsStateType = Literal["disabled", "enabled"]
+AvailabilityModeType = Literal["regional", "zonal"]
 AvailabilityZoneOptInStatusType = Literal["not-opted-in", "opt-in-not-required", "opted-in"]
 AvailabilityZoneStateType = Literal[
     "available", "constrained", "impaired", "information", "unavailable"
@@ -1152,7 +1161,12 @@ FleetStateCodeType = Literal[
 FleetTypeType = Literal["instant", "maintain", "request"]
 FlexibleEnaQueuesSupportType = Literal["supported", "unsupported"]
 FlowLogsResourceTypeType = Literal[
-    "NetworkInterface", "Subnet", "TransitGateway", "TransitGatewayAttachment", "VPC"
+    "NetworkInterface",
+    "RegionalNatGateway",
+    "Subnet",
+    "TransitGateway",
+    "TransitGatewayAttachment",
+    "VPC",
 ]
 FpgaImageAttributeNameType = Literal["description", "loadPermission", "name", "productCodes"]
 FpgaImageStateCodeType = Literal["available", "failed", "pending", "unavailable"]
@@ -2429,6 +2443,22 @@ IpamManagementStateType = Literal["ignored", "managed", "unmanaged"]
 IpamMeteredAccountType = Literal["ipam-owner", "resource-owner"]
 IpamNetworkInterfaceAttachmentStatusType = Literal["available", "in-use"]
 IpamOverlapStatusType = Literal["ignored", "nonoverlapping", "overlapping"]
+IpamPolicyManagedByType = Literal["account", "delegated-administrator-for-ipam"]
+IpamPolicyResourceTypeType = Literal["alb", "eip", "rds", "rnat"]
+IpamPolicyStateType = Literal[
+    "create-complete",
+    "create-failed",
+    "create-in-progress",
+    "delete-complete",
+    "delete-failed",
+    "delete-in-progress",
+    "isolate-complete",
+    "isolate-in-progress",
+    "modify-complete",
+    "modify-failed",
+    "modify-in-progress",
+    "restore-in-progress",
+]
 IpamPoolAllocationResourceTypeType = Literal[
     "custom", "ec2-public-ipv4-pool", "eip", "ipam-pool", "subnet", "vpc"
 ]
@@ -2820,6 +2850,7 @@ ResourceTypeType = Literal[
     "internet-gateway",
     "ipam",
     "ipam-external-resource-verification-token",
+    "ipam-policy",
     "ipam-pool",
     "ipam-prefix-list-resolver",
     "ipam-prefix-list-resolver-target",
@@ -2948,7 +2979,7 @@ ServiceConnectivityTypeType = Literal["ipv4", "ipv6"]
 ServiceLinkVirtualInterfaceConfigurationStateType = Literal[
     "available", "deleted", "deleting", "pending"
 ]
-ServiceManagedType = Literal["alb", "nlb", "rnat"]
+ServiceManagedType = Literal["alb", "nlb", "rds", "rnat"]
 ServiceStateType = Literal["Available", "Deleted", "Deleting", "Failed", "Pending"]
 ServiceTypeType = Literal["Gateway", "GatewayLoadBalancer", "Interface"]
 ShutdownBehaviorType = Literal["stop", "terminate"]
@@ -3465,6 +3496,7 @@ ServiceName = Literal[
     "osis",
     "outposts",
     "panorama",
+    "partnercentral-channel",
     "partnercentral-selling",
     "payment-cryptography",
     "payment-cryptography-data",
@@ -3539,6 +3571,7 @@ ServiceName = Literal[
     "sesv2",
     "shield",
     "signer",
+    "signin",
     "simspaceweaver",
     "snow-device-management",
     "snowball",

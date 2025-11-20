@@ -9,8 +9,9 @@ from ldclient.impl.datasourcev2.polling import (
     Selector,
     polling_payload_to_changeset
 )
-from ldclient.impl.datasystem.protocolv2 import ChangeSetBuilder, IntentCode
 from ldclient.impl.util import UnsuccessfulResponseException, _Fail, _Success
+from ldclient.interfaces import ChangeSetBuilder, IntentCode
+from ldclient.testing.mock_components import MockSelectorStore
 
 
 class MockExceptionThrowingPollingRequester:  # pylint: disable=too-few-public-methods
@@ -30,14 +31,14 @@ def test_polling_has_a_name():
     mock_requester = MockPollingRequester(_Fail(error="failure message"))
     ds = PollingDataSource(poll_interval=1.0, requester=mock_requester)
 
-    assert ds.name() == "PollingDataSourceV2"
+    assert ds.name == "PollingDataSourceV2"
 
 
 def test_error_is_returned_on_failure():
     mock_requester = MockPollingRequester(_Fail(error="failure message"))
     ds = PollingDataSource(poll_interval=1.0, requester=mock_requester)
 
-    result = ds.fetch()
+    result = ds.fetch(MockSelectorStore(Selector.no_selector()))
 
     assert isinstance(result, _Fail)
     assert result.error == "failure message"
@@ -50,7 +51,7 @@ def test_error_is_recoverable():
     )
     ds = PollingDataSource(poll_interval=1.0, requester=mock_requester)
 
-    result = ds.fetch()
+    result = ds.fetch(MockSelectorStore(Selector.no_selector()))
 
     assert isinstance(result, _Fail)
     assert result.error is not None
@@ -64,7 +65,7 @@ def test_error_is_unrecoverable():
     )
     ds = PollingDataSource(poll_interval=1.0, requester=mock_requester)
 
-    result = ds.fetch()
+    result = ds.fetch(MockSelectorStore(Selector.no_selector()))
 
     assert isinstance(result, _Fail)
     assert result.error is not None
@@ -78,7 +79,7 @@ def test_handles_transfer_none():
     )
     ds = PollingDataSource(poll_interval=1.0, requester=mock_requester)
 
-    result = ds.fetch()
+    result = ds.fetch(MockSelectorStore(Selector.no_selector()))
 
     assert isinstance(result, _Success)
     assert result.value is not None
@@ -92,7 +93,7 @@ def test_handles_uncaught_exception():
     mock_requester = MockExceptionThrowingPollingRequester()
     ds = PollingDataSource(poll_interval=1.0, requester=mock_requester)
 
-    result = ds.fetch()
+    result = ds.fetch(MockSelectorStore(Selector.no_selector()))
 
     assert isinstance(result, _Fail)
     assert result.error is not None
@@ -111,7 +112,7 @@ def test_handles_transfer_full():
     mock_requester = MockPollingRequester(_Success(value=(change_set_result.value, {})))
     ds = PollingDataSource(poll_interval=1.0, requester=mock_requester)
 
-    result = ds.fetch()
+    result = ds.fetch(MockSelectorStore(Selector.no_selector()))
 
     assert isinstance(result, _Success)
     assert result.value is not None
@@ -129,7 +130,7 @@ def test_handles_transfer_changes():
     mock_requester = MockPollingRequester(_Success(value=(change_set_result.value, {})))
     ds = PollingDataSource(poll_interval=1.0, requester=mock_requester)
 
-    result = ds.fetch()
+    result = ds.fetch(MockSelectorStore(Selector.no_selector()))
 
     assert isinstance(result, _Success)
     assert result.value is not None

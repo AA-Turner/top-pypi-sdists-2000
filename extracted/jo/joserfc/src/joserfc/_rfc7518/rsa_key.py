@@ -39,7 +39,9 @@ RSADictKey = TypedDict(
 
 
 class RSABinding(CryptographyBinding):
+    key_type = "RSA"
     ssh_type = b"ssh-rsa"
+    _cryptography_key_types = (RSAPrivateKey, RSAPublicKey)
 
     @staticmethod
     def import_private_key(obj: RSADictKey) -> RSAPrivateKey:

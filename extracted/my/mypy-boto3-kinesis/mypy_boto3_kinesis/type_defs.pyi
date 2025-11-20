@@ -17,6 +17,7 @@ Usage::
 from __future__ import annotations
 
 import sys
+from collections.abc import Mapping, Sequence
 from datetime import datetime
 from typing import IO, Any, Union
 
@@ -27,18 +28,14 @@ from .literals import (
     ConsumerStatusType,
     EncryptionTypeType,
     MetricsNameType,
+    MinimumThroughputBillingCommitmentInputStatusType,
+    MinimumThroughputBillingCommitmentOutputStatusType,
     ShardFilterTypeType,
     ShardIteratorTypeType,
     StreamModeType,
     StreamStatusType,
 )
 
-if sys.version_info >= (3, 9):
-    from builtins import dict as Dict
-    from builtins import list as List
-    from collections.abc import Mapping, Sequence
-else:
-    from typing import Dict, List, Mapping, Sequence
 if sys.version_info >= (3, 12):
     from typing import Literal, NotRequired, TypedDict
 else:
@@ -55,6 +52,7 @@ __all__ = (
     "DeleteResourcePolicyInputTypeDef",
     "DeleteStreamInputTypeDef",
     "DeregisterStreamConsumerInputTypeDef",
+    "DescribeAccountSettingsOutputTypeDef",
     "DescribeLimitsOutputTypeDef",
     "DescribeStreamConsumerInputTypeDef",
     "DescribeStreamConsumerOutputTypeDef",
@@ -99,6 +97,8 @@ __all__ = (
     "ListTagsForStreamInputTypeDef",
     "ListTagsForStreamOutputTypeDef",
     "MergeShardsInputTypeDef",
+    "MinimumThroughputBillingCommitmentInputTypeDef",
+    "MinimumThroughputBillingCommitmentOutputTypeDef",
     "PaginatorConfigTypeDef",
     "PutRecordInputTypeDef",
     "PutRecordOutputTypeDef",
@@ -133,11 +133,16 @@ __all__ = (
     "TagTypeDef",
     "TimestampTypeDef",
     "UntagResourceInputTypeDef",
+    "UpdateAccountSettingsInputTypeDef",
+    "UpdateAccountSettingsOutputTypeDef",
     "UpdateMaxRecordSizeInputTypeDef",
     "UpdateShardCountInputTypeDef",
     "UpdateShardCountOutputTypeDef",
     "UpdateStreamModeInputTypeDef",
+    "UpdateStreamWarmThroughputInputTypeDef",
+    "UpdateStreamWarmThroughputOutputTypeDef",
     "WaiterConfigTypeDef",
+    "WarmThroughputObjectTypeDef",
 )
 
 class AddTagsToStreamInputTypeDef(TypedDict):
@@ -185,10 +190,16 @@ class DeregisterStreamConsumerInputTypeDef(TypedDict):
     ConsumerName: NotRequired[str]
     ConsumerARN: NotRequired[str]
 
+class MinimumThroughputBillingCommitmentOutputTypeDef(TypedDict):
+    Status: MinimumThroughputBillingCommitmentOutputStatusType
+    StartedAt: NotRequired[datetime]
+    EndedAt: NotRequired[datetime]
+    EarliestAllowedEndAt: NotRequired[datetime]
+
 class ResponseMetadataTypeDef(TypedDict):
     RequestId: str
     HTTPStatusCode: int
-    HTTPHeaders: Dict[str, str]
+    HTTPHeaders: dict[str, str]
     RetryAttempts: int
     HostId: NotRequired[str]
 
@@ -227,7 +238,7 @@ class EnableEnhancedMonitoringInputTypeDef(TypedDict):
     StreamARN: NotRequired[str]
 
 class EnhancedMetricsTypeDef(TypedDict):
-    ShardLevelMetrics: NotRequired[List[MetricsNameType]]
+    ShardLevelMetrics: NotRequired[list[MetricsNameType]]
 
 class GetRecordsInputTypeDef(TypedDict):
     ShardIterator: str
@@ -296,6 +307,9 @@ class MergeShardsInputTypeDef(TypedDict):
     StreamName: NotRequired[str]
     StreamARN: NotRequired[str]
 
+class MinimumThroughputBillingCommitmentInputTypeDef(TypedDict):
+    Status: MinimumThroughputBillingCommitmentInputStatusType
+
 class PutRecordsResultEntryTypeDef(TypedDict):
     SequenceNumber: NotRequired[str]
     ShardId: NotRequired[str]
@@ -344,6 +358,10 @@ class StopStreamEncryptionInputTypeDef(TypedDict):
     StreamName: NotRequired[str]
     StreamARN: NotRequired[str]
 
+class WarmThroughputObjectTypeDef(TypedDict):
+    TargetMiBps: NotRequired[int]
+    CurrentMiBps: NotRequired[int]
+
 class TagResourceInputTypeDef(TypedDict):
     Tags: Mapping[str, str]
     ResourceARN: str
@@ -362,6 +380,11 @@ class UpdateShardCountInputTypeDef(TypedDict):
     StreamName: NotRequired[str]
     StreamARN: NotRequired[str]
 
+class UpdateStreamWarmThroughputInputTypeDef(TypedDict):
+    WarmThroughputMiBps: int
+    StreamARN: NotRequired[str]
+    StreamName: NotRequired[str]
+
 class PutRecordInputTypeDef(TypedDict):
     Data: BlobTypeDef
     PartitionKey: str
@@ -377,7 +400,7 @@ class PutRecordsRequestEntryTypeDef(TypedDict):
 
 class ChildShardTypeDef(TypedDict):
     ShardId: str
-    ParentShards: List[str]
+    ParentShards: list[str]
     HashKeyRange: HashKeyRangeTypeDef
 
 class CreateStreamInputTypeDef(TypedDict):
@@ -385,6 +408,7 @@ class CreateStreamInputTypeDef(TypedDict):
     ShardCount: NotRequired[int]
     StreamModeDetails: NotRequired[StreamModeDetailsTypeDef]
     Tags: NotRequired[Mapping[str, str]]
+    WarmThroughputMiBps: NotRequired[int]
     MaxRecordSizeInKiB: NotRequired[int]
 
 class StreamSummaryTypeDef(TypedDict):
@@ -397,6 +421,11 @@ class StreamSummaryTypeDef(TypedDict):
 class UpdateStreamModeInputTypeDef(TypedDict):
     StreamARN: str
     StreamModeDetails: StreamModeDetailsTypeDef
+    WarmThroughputMiBps: NotRequired[int]
+
+class DescribeAccountSettingsOutputTypeDef(TypedDict):
+    MinimumThroughputBillingCommitment: MinimumThroughputBillingCommitmentOutputTypeDef
+    ResponseMetadata: ResponseMetadataTypeDef
 
 class DescribeLimitsOutputTypeDef(TypedDict):
     ShardLimit: int
@@ -414,8 +443,8 @@ class EmptyResponseMetadataTypeDef(TypedDict):
 
 class EnhancedMonitoringOutputTypeDef(TypedDict):
     StreamName: str
-    CurrentShardLevelMetrics: List[MetricsNameType]
-    DesiredShardLevelMetrics: List[MetricsNameType]
+    CurrentShardLevelMetrics: list[MetricsNameType]
+    DesiredShardLevelMetrics: list[MetricsNameType]
     StreamARN: str
     ResponseMetadata: ResponseMetadataTypeDef
 
@@ -428,7 +457,7 @@ class GetShardIteratorOutputTypeDef(TypedDict):
     ResponseMetadata: ResponseMetadataTypeDef
 
 class ListStreamConsumersOutputTypeDef(TypedDict):
-    Consumers: List[ConsumerTypeDef]
+    Consumers: list[ConsumerTypeDef]
     ResponseMetadata: ResponseMetadataTypeDef
     NextToken: NotRequired[str]
 
@@ -440,6 +469,10 @@ class PutRecordOutputTypeDef(TypedDict):
 
 class RegisterStreamConsumerOutputTypeDef(TypedDict):
     Consumer: ConsumerTypeDef
+    ResponseMetadata: ResponseMetadataTypeDef
+
+class UpdateAccountSettingsOutputTypeDef(TypedDict):
+    MinimumThroughputBillingCommitment: MinimumThroughputBillingCommitmentOutputTypeDef
     ResponseMetadata: ResponseMetadataTypeDef
 
 class UpdateShardCountOutputTypeDef(TypedDict):
@@ -471,20 +504,6 @@ class DescribeStreamInputWaitTypeDef(TypedDict):
     ExclusiveStartShardId: NotRequired[str]
     StreamARN: NotRequired[str]
     WaiterConfig: NotRequired[WaiterConfigTypeDef]
-
-class StreamDescriptionSummaryTypeDef(TypedDict):
-    StreamName: str
-    StreamARN: str
-    StreamStatus: StreamStatusType
-    RetentionPeriodHours: int
-    StreamCreationTimestamp: datetime
-    EnhancedMonitoring: List[EnhancedMetricsTypeDef]
-    OpenShardCount: int
-    StreamModeDetails: NotRequired[StreamModeDetailsTypeDef]
-    EncryptionType: NotRequired[EncryptionTypeType]
-    KeyId: NotRequired[str]
-    ConsumerCount: NotRequired[int]
-    MaxRecordSizeInKiB: NotRequired[int]
 
 class GetShardIteratorInputTypeDef(TypedDict):
     ShardId: str
@@ -523,17 +542,20 @@ StartingPositionTypeDef = TypedDict(
 )
 
 class ListTagsForResourceOutputTypeDef(TypedDict):
-    Tags: List[TagTypeDef]
+    Tags: list[TagTypeDef]
     ResponseMetadata: ResponseMetadataTypeDef
 
 class ListTagsForStreamOutputTypeDef(TypedDict):
-    Tags: List[TagTypeDef]
+    Tags: list[TagTypeDef]
     HasMoreTags: bool
     ResponseMetadata: ResponseMetadataTypeDef
 
+class UpdateAccountSettingsInputTypeDef(TypedDict):
+    MinimumThroughputBillingCommitment: MinimumThroughputBillingCommitmentInputTypeDef
+
 class PutRecordsOutputTypeDef(TypedDict):
     FailedRecordCount: int
-    Records: List[PutRecordsResultEntryTypeDef]
+    Records: list[PutRecordsResultEntryTypeDef]
     EncryptionType: EncryptionTypeType
     ResponseMetadata: ResponseMetadataTypeDef
 
@@ -544,34 +566,51 @@ class ShardTypeDef(TypedDict):
     ParentShardId: NotRequired[str]
     AdjacentParentShardId: NotRequired[str]
 
+class StreamDescriptionSummaryTypeDef(TypedDict):
+    StreamName: str
+    StreamARN: str
+    StreamStatus: StreamStatusType
+    RetentionPeriodHours: int
+    StreamCreationTimestamp: datetime
+    EnhancedMonitoring: list[EnhancedMetricsTypeDef]
+    OpenShardCount: int
+    StreamModeDetails: NotRequired[StreamModeDetailsTypeDef]
+    EncryptionType: NotRequired[EncryptionTypeType]
+    KeyId: NotRequired[str]
+    ConsumerCount: NotRequired[int]
+    WarmThroughput: NotRequired[WarmThroughputObjectTypeDef]
+    MaxRecordSizeInKiB: NotRequired[int]
+
+class UpdateStreamWarmThroughputOutputTypeDef(TypedDict):
+    StreamARN: str
+    StreamName: str
+    WarmThroughput: WarmThroughputObjectTypeDef
+    ResponseMetadata: ResponseMetadataTypeDef
+
 class PutRecordsInputTypeDef(TypedDict):
     Records: Sequence[PutRecordsRequestEntryTypeDef]
     StreamName: NotRequired[str]
     StreamARN: NotRequired[str]
 
 class GetRecordsOutputTypeDef(TypedDict):
-    Records: List[RecordTypeDef]
+    Records: list[RecordTypeDef]
     NextShardIterator: str
     MillisBehindLatest: int
-    ChildShards: List[ChildShardTypeDef]
+    ChildShards: list[ChildShardTypeDef]
     ResponseMetadata: ResponseMetadataTypeDef
 
 class SubscribeToShardEventTypeDef(TypedDict):
-    Records: List[RecordTypeDef]
+    Records: list[RecordTypeDef]
     ContinuationSequenceNumber: str
     MillisBehindLatest: int
-    ChildShards: NotRequired[List[ChildShardTypeDef]]
+    ChildShards: NotRequired[list[ChildShardTypeDef]]
 
 class ListStreamsOutputTypeDef(TypedDict):
-    StreamNames: List[str]
+    StreamNames: list[str]
     HasMoreStreams: bool
-    StreamSummaries: List[StreamSummaryTypeDef]
+    StreamSummaries: list[StreamSummaryTypeDef]
     ResponseMetadata: ResponseMetadataTypeDef
     NextToken: NotRequired[str]
-
-class DescribeStreamSummaryOutputTypeDef(TypedDict):
-    StreamDescriptionSummary: StreamDescriptionSummaryTypeDef
-    ResponseMetadata: ResponseMetadataTypeDef
 
 class ListShardsInputPaginateTypeDef(TypedDict):
     StreamName: NotRequired[str]
@@ -596,7 +635,7 @@ class SubscribeToShardInputTypeDef(TypedDict):
     StartingPosition: StartingPositionTypeDef
 
 class ListShardsOutputTypeDef(TypedDict):
-    Shards: List[ShardTypeDef]
+    Shards: list[ShardTypeDef]
     ResponseMetadata: ResponseMetadataTypeDef
     NextToken: NotRequired[str]
 
@@ -604,14 +643,18 @@ class StreamDescriptionTypeDef(TypedDict):
     StreamName: str
     StreamARN: str
     StreamStatus: StreamStatusType
-    Shards: List[ShardTypeDef]
+    Shards: list[ShardTypeDef]
     HasMoreShards: bool
     RetentionPeriodHours: int
     StreamCreationTimestamp: datetime
-    EnhancedMonitoring: List[EnhancedMetricsTypeDef]
+    EnhancedMonitoring: list[EnhancedMetricsTypeDef]
     StreamModeDetails: NotRequired[StreamModeDetailsTypeDef]
     EncryptionType: NotRequired[EncryptionTypeType]
     KeyId: NotRequired[str]
+
+class DescribeStreamSummaryOutputTypeDef(TypedDict):
+    StreamDescriptionSummary: StreamDescriptionSummaryTypeDef
+    ResponseMetadata: ResponseMetadataTypeDef
 
 class SubscribeToShardEventStreamTypeDef(TypedDict):
     SubscribeToShardEvent: SubscribeToShardEventTypeDef

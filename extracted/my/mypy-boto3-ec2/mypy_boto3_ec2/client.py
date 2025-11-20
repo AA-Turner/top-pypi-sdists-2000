@@ -363,6 +363,8 @@ from .type_defs import (
     CreateInternetGatewayResultTypeDef,
     CreateIpamExternalResourceVerificationTokenRequestTypeDef,
     CreateIpamExternalResourceVerificationTokenResultTypeDef,
+    CreateIpamPolicyRequestTypeDef,
+    CreateIpamPolicyResultTypeDef,
     CreateIpamPoolRequestTypeDef,
     CreateIpamPoolResultTypeDef,
     CreateIpamPrefixListResolverRequestTypeDef,
@@ -531,6 +533,8 @@ from .type_defs import (
     DeleteInternetGatewayRequestTypeDef,
     DeleteIpamExternalResourceVerificationTokenRequestTypeDef,
     DeleteIpamExternalResourceVerificationTokenResultTypeDef,
+    DeleteIpamPolicyRequestTypeDef,
+    DeleteIpamPolicyResultTypeDef,
     DeleteIpamPoolRequestTypeDef,
     DeleteIpamPoolResultTypeDef,
     DeleteIpamPrefixListResolverRequestTypeDef,
@@ -811,6 +815,8 @@ from .type_defs import (
     DescribeIpamByoasnResultTypeDef,
     DescribeIpamExternalResourceVerificationTokensRequestTypeDef,
     DescribeIpamExternalResourceVerificationTokensResultTypeDef,
+    DescribeIpamPoliciesRequestTypeDef,
+    DescribeIpamPoliciesResultTypeDef,
     DescribeIpamPoolsRequestTypeDef,
     DescribeIpamPoolsResultTypeDef,
     DescribeIpamPrefixListResolversRequestTypeDef,
@@ -1059,6 +1065,8 @@ from .type_defs import (
     DisableInstanceSqlHaStandbyDetectionsResultTypeDef,
     DisableIpamOrganizationAdminAccountRequestTypeDef,
     DisableIpamOrganizationAdminAccountResultTypeDef,
+    DisableIpamPolicyRequestTypeDef,
+    DisableIpamPolicyResultTypeDef,
     DisableRouteServerPropagationRequestTypeDef,
     DisableRouteServerPropagationResultTypeDef,
     DisableSerialConsoleAccessRequestTypeDef,
@@ -1133,6 +1141,8 @@ from .type_defs import (
     EnableInstanceSqlHaStandbyDetectionsResultTypeDef,
     EnableIpamOrganizationAdminAccountRequestTypeDef,
     EnableIpamOrganizationAdminAccountResultTypeDef,
+    EnableIpamPolicyRequestTypeDef,
+    EnableIpamPolicyResultTypeDef,
     EnableReachabilityAnalyzerOrganizationSharingRequestTypeDef,
     EnableReachabilityAnalyzerOrganizationSharingResultTypeDef,
     EnableRouteServerPropagationRequestTypeDef,
@@ -1191,6 +1201,8 @@ from .type_defs import (
     GetEbsDefaultKmsKeyIdResultTypeDef,
     GetEbsEncryptionByDefaultRequestTypeDef,
     GetEbsEncryptionByDefaultResultTypeDef,
+    GetEnabledIpamPolicyRequestTypeDef,
+    GetEnabledIpamPolicyResultTypeDef,
     GetFlowLogsIntegrationTemplateRequestTypeDef,
     GetFlowLogsIntegrationTemplateResultTypeDef,
     GetGroupsForCapacityReservationRequestTypeDef,
@@ -1217,6 +1229,10 @@ from .type_defs import (
     GetIpamDiscoveredPublicAddressesResultTypeDef,
     GetIpamDiscoveredResourceCidrsRequestTypeDef,
     GetIpamDiscoveredResourceCidrsResultTypeDef,
+    GetIpamPolicyAllocationRulesRequestTypeDef,
+    GetIpamPolicyAllocationRulesResultTypeDef,
+    GetIpamPolicyOrganizationTargetsRequestTypeDef,
+    GetIpamPolicyOrganizationTargetsResultTypeDef,
     GetIpamPoolAllocationsRequestTypeDef,
     GetIpamPoolAllocationsResultTypeDef,
     GetIpamPoolCidrsRequestTypeDef,
@@ -1352,6 +1368,8 @@ from .type_defs import (
     ModifyInstanceNetworkPerformanceResultTypeDef,
     ModifyInstancePlacementRequestTypeDef,
     ModifyInstancePlacementResultTypeDef,
+    ModifyIpamPolicyAllocationRulesRequestTypeDef,
+    ModifyIpamPolicyAllocationRulesResultTypeDef,
     ModifyIpamPoolRequestTypeDef,
     ModifyIpamPoolResultTypeDef,
     ModifyIpamPrefixListResolverRequestTypeDef,
@@ -2572,6 +2590,16 @@ class EC2Client(BaseClient):
         [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_ec2/client/#create_ipam_external_resource_verification_token)
         """
 
+    def create_ipam_policy(
+        self, **kwargs: Unpack[CreateIpamPolicyRequestTypeDef]
+    ) -> CreateIpamPolicyResultTypeDef:
+        """
+        Creates an IPAM policy.
+
+        [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/ec2/client/create_ipam_policy.html)
+        [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_ec2/client/#create_ipam_policy)
+        """
+
     def create_ipam_pool(
         self, **kwargs: Unpack[CreateIpamPoolRequestTypeDef]
     ) -> CreateIpamPoolResultTypeDef:
@@ -3479,6 +3507,16 @@ class EC2Client(BaseClient):
 
         [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/ec2/client/delete_ipam_external_resource_verification_token.html)
         [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_ec2/client/#delete_ipam_external_resource_verification_token)
+        """
+
+    def delete_ipam_policy(
+        self, **kwargs: Unpack[DeleteIpamPolicyRequestTypeDef]
+    ) -> DeleteIpamPolicyResultTypeDef:
+        """
+        Deletes an IPAM policy.
+
+        [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/ec2/client/delete_ipam_policy.html)
+        [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_ec2/client/#delete_ipam_policy)
         """
 
     def delete_ipam_pool(
@@ -5002,6 +5040,16 @@ class EC2Client(BaseClient):
         [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_ec2/client/#describe_ipam_external_resource_verification_tokens)
         """
 
+    def describe_ipam_policies(
+        self, **kwargs: Unpack[DescribeIpamPoliciesRequestTypeDef]
+    ) -> DescribeIpamPoliciesResultTypeDef:
+        """
+        Describes one or more IPAM policies.
+
+        [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/ec2/client/describe_ipam_policies.html)
+        [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_ec2/client/#describe_ipam_policies)
+        """
+
     def describe_ipam_pools(
         self, **kwargs: Unpack[DescribeIpamPoolsRequestTypeDef]
     ) -> DescribeIpamPoolsResultTypeDef:
@@ -6295,6 +6343,16 @@ class EC2Client(BaseClient):
         [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_ec2/client/#disable_ipam_organization_admin_account)
         """
 
+    def disable_ipam_policy(
+        self, **kwargs: Unpack[DisableIpamPolicyRequestTypeDef]
+    ) -> DisableIpamPolicyResultTypeDef:
+        """
+        Disables an IPAM policy.
+
+        [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/ec2/client/disable_ipam_policy.html)
+        [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_ec2/client/#disable_ipam_policy)
+        """
+
     def disable_route_server_propagation(
         self, **kwargs: Unpack[DisableRouteServerPropagationRequestTypeDef]
     ) -> DisableRouteServerPropagationResultTypeDef:
@@ -6686,6 +6744,16 @@ class EC2Client(BaseClient):
         [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_ec2/client/#enable_ipam_organization_admin_account)
         """
 
+    def enable_ipam_policy(
+        self, **kwargs: Unpack[EnableIpamPolicyRequestTypeDef]
+    ) -> EnableIpamPolicyResultTypeDef:
+        """
+        Enables an IPAM policy.
+
+        [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/ec2/client/enable_ipam_policy.html)
+        [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_ec2/client/#enable_ipam_policy)
+        """
+
     def enable_reachability_analyzer_organization_sharing(
         self, **kwargs: Unpack[EnableReachabilityAnalyzerOrganizationSharingRequestTypeDef]
     ) -> EnableReachabilityAnalyzerOrganizationSharingResultTypeDef:
@@ -7004,6 +7072,16 @@ class EC2Client(BaseClient):
         [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_ec2/client/#get_ebs_encryption_by_default)
         """
 
+    def get_enabled_ipam_policy(
+        self, **kwargs: Unpack[GetEnabledIpamPolicyRequestTypeDef]
+    ) -> GetEnabledIpamPolicyResultTypeDef:
+        """
+        Gets the enabled IPAM policy.
+
+        [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/ec2/client/get_enabled_ipam_policy.html)
+        [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_ec2/client/#get_enabled_ipam_policy)
+        """
+
     def get_flow_logs_integration_template(
         self, **kwargs: Unpack[GetFlowLogsIntegrationTemplateRequestTypeDef]
     ) -> GetFlowLogsIntegrationTemplateResultTypeDef:
@@ -7138,6 +7216,26 @@ class EC2Client(BaseClient):
 
         [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/ec2/client/get_ipam_discovered_resource_cidrs.html)
         [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_ec2/client/#get_ipam_discovered_resource_cidrs)
+        """
+
+    def get_ipam_policy_allocation_rules(
+        self, **kwargs: Unpack[GetIpamPolicyAllocationRulesRequestTypeDef]
+    ) -> GetIpamPolicyAllocationRulesResultTypeDef:
+        """
+        Gets the allocation rules for an IPAM policy.
+
+        [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/ec2/client/get_ipam_policy_allocation_rules.html)
+        [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_ec2/client/#get_ipam_policy_allocation_rules)
+        """
+
+    def get_ipam_policy_organization_targets(
+        self, **kwargs: Unpack[GetIpamPolicyOrganizationTargetsRequestTypeDef]
+    ) -> GetIpamPolicyOrganizationTargetsResultTypeDef:
+        """
+        Gets the Amazon Web Services Organizations targets for an IPAM policy.
+
+        [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/ec2/client/get_ipam_policy_organization_targets.html)
+        [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_ec2/client/#get_ipam_policy_organization_targets)
         """
 
     def get_ipam_pool_allocations(
@@ -7855,6 +7953,16 @@ class EC2Client(BaseClient):
 
         [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/ec2/client/modify_ipam.html)
         [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_ec2/client/#modify_ipam)
+        """
+
+    def modify_ipam_policy_allocation_rules(
+        self, **kwargs: Unpack[ModifyIpamPolicyAllocationRulesRequestTypeDef]
+    ) -> ModifyIpamPolicyAllocationRulesResultTypeDef:
+        """
+        Modifies the allocation rules in an IPAM policy.
+
+        [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/ec2/client/modify_ipam_policy_allocation_rules.html)
+        [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_ec2/client/#modify_ipam_policy_allocation_rules)
         """
 
     def modify_ipam_pool(

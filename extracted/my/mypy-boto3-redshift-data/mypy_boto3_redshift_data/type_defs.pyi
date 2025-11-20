@@ -17,16 +17,11 @@ Usage::
 from __future__ import annotations
 
 import sys
+from collections.abc import Sequence
 from datetime import datetime
 
 from .literals import ResultFormatStringType, StatementStatusStringType, StatusStringType
 
-if sys.version_info >= (3, 9):
-    from builtins import dict as Dict
-    from builtins import list as List
-    from collections.abc import Sequence
-else:
-    from typing import Dict, List, Sequence
 if sys.version_info >= (3, 12):
     from typing import NotRequired, TypedDict
 else:
@@ -90,7 +85,7 @@ class BatchExecuteStatementInputTypeDef(TypedDict):
 class ResponseMetadataTypeDef(TypedDict):
     RequestId: str
     HTTPStatusCode: int
-    HTTPHeaders: Dict[str, str]
+    HTTPHeaders: dict[str, str]
     RetryAttempts: int
     HostId: NotRequired[str]
 
@@ -223,7 +218,7 @@ class BatchExecuteStatementOutputTypeDef(TypedDict):
     ClusterIdentifier: str
     CreatedAt: datetime
     Database: str
-    DbGroups: List[str]
+    DbGroups: list[str]
     DbUser: str
     Id: str
     SecretArn: str
@@ -239,7 +234,7 @@ class ExecuteStatementOutputTypeDef(TypedDict):
     ClusterIdentifier: str
     CreatedAt: datetime
     Database: str
-    DbGroups: List[str]
+    DbGroups: list[str]
     DbUser: str
     Id: str
     SecretArn: str
@@ -248,17 +243,17 @@ class ExecuteStatementOutputTypeDef(TypedDict):
     ResponseMetadata: ResponseMetadataTypeDef
 
 class ListDatabasesResponseTypeDef(TypedDict):
-    Databases: List[str]
+    Databases: list[str]
     ResponseMetadata: ResponseMetadataTypeDef
     NextToken: NotRequired[str]
 
 class ListSchemasResponseTypeDef(TypedDict):
-    Schemas: List[str]
+    Schemas: list[str]
     ResponseMetadata: ResponseMetadataTypeDef
     NextToken: NotRequired[str]
 
 class DescribeTableResponseTypeDef(TypedDict):
-    ColumnList: List[ColumnMetadataTypeDef]
+    ColumnList: list[ColumnMetadataTypeDef]
     TableName: str
     ResponseMetadata: ResponseMetadataTypeDef
     NextToken: NotRequired[str]
@@ -282,9 +277,9 @@ class StatementDataTypeDef(TypedDict):
     Id: str
     CreatedAt: NotRequired[datetime]
     IsBatchStatement: NotRequired[bool]
-    QueryParameters: NotRequired[List[SqlParameterTypeDef]]
+    QueryParameters: NotRequired[list[SqlParameterTypeDef]]
     QueryString: NotRequired[str]
-    QueryStrings: NotRequired[List[str]]
+    QueryStrings: NotRequired[list[str]]
     ResultFormat: NotRequired[ResultFormatStringType]
     SecretArn: NotRequired[str]
     SessionId: NotRequired[str]
@@ -301,7 +296,7 @@ class DescribeStatementResponseTypeDef(TypedDict):
     Error: str
     HasResultSet: bool
     Id: str
-    QueryParameters: List[SqlParameterTypeDef]
+    QueryParameters: list[SqlParameterTypeDef]
     QueryString: str
     RedshiftPid: int
     RedshiftQueryId: int
@@ -311,7 +306,7 @@ class DescribeStatementResponseTypeDef(TypedDict):
     SecretArn: str
     SessionId: str
     Status: StatusStringType
-    SubStatements: List[SubStatementDataTypeDef]
+    SubStatements: list[SubStatementDataTypeDef]
     UpdatedAt: datetime
     WorkgroupName: str
     ResponseMetadata: ResponseMetadataTypeDef
@@ -374,26 +369,26 @@ class ListTablesRequestPaginateTypeDef(TypedDict):
     PaginationConfig: NotRequired[PaginatorConfigTypeDef]
 
 class GetStatementResultResponseTypeDef(TypedDict):
-    ColumnMetadata: List[ColumnMetadataTypeDef]
-    Records: List[List[FieldTypeDef]]
+    ColumnMetadata: list[ColumnMetadataTypeDef]
+    Records: list[list[FieldTypeDef]]
     TotalNumRows: int
     ResponseMetadata: ResponseMetadataTypeDef
     NextToken: NotRequired[str]
 
 class GetStatementResultV2ResponseTypeDef(TypedDict):
-    ColumnMetadata: List[ColumnMetadataTypeDef]
-    Records: List[QueryRecordsTypeDef]
+    ColumnMetadata: list[ColumnMetadataTypeDef]
+    Records: list[QueryRecordsTypeDef]
     ResultFormat: ResultFormatStringType
     TotalNumRows: int
     ResponseMetadata: ResponseMetadataTypeDef
     NextToken: NotRequired[str]
 
 class ListTablesResponseTypeDef(TypedDict):
-    Tables: List[TableMemberTypeDef]
+    Tables: list[TableMemberTypeDef]
     ResponseMetadata: ResponseMetadataTypeDef
     NextToken: NotRequired[str]
 
 class ListStatementsResponseTypeDef(TypedDict):
-    Statements: List[StatementDataTypeDef]
+    Statements: list[StatementDataTypeDef]
     ResponseMetadata: ResponseMetadataTypeDef
     NextToken: NotRequired[str]

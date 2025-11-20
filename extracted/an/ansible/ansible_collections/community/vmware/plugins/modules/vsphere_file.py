@@ -52,7 +52,7 @@ options:
 notes:
 - The vSphere folder API does not allow to remove directory objects.
 extends_documentation_fragment:
-- community.vmware.vmware.documentation
+- vmware.vmware.base_options
 '''
 
 EXAMPLES = r'''
@@ -112,7 +112,7 @@ from urllib.error import HTTPError
 from urllib.parse import quote, urlencode
 from ansible.module_utils.urls import open_url
 from ansible.module_utils.common.text.converters import to_native
-from ansible_collections.community.vmware.plugins.module_utils._argument_spec import base_argument_spec
+from ansible_collections.vmware.vmware.plugins.module_utils.argument_spec import base_argument_spec
 
 
 def vmware_path(datastore, datacenter, path):

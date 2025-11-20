@@ -170,6 +170,7 @@ __all__ = (
     "EnableMFADeviceRequestUserEnableMfaTypeDef",
     "EnableOrganizationsRootCredentialsManagementResponseTypeDef",
     "EnableOrganizationsRootSessionsResponseTypeDef",
+    "EnableOutboundWebIdentityFederationResponseTypeDef",
     "EntityDetailsTypeDef",
     "EntityInfoTypeDef",
     "ErrorDetailsTypeDef",
@@ -210,6 +211,7 @@ __all__ = (
     "GetOpenIDConnectProviderResponseTypeDef",
     "GetOrganizationsAccessReportRequestTypeDef",
     "GetOrganizationsAccessReportResponseTypeDef",
+    "GetOutboundWebIdentityFederationInfoResponseTypeDef",
     "GetPolicyRequestTypeDef",
     "GetPolicyRequestWaitTypeDef",
     "GetPolicyResponseTypeDef",
@@ -1821,6 +1823,11 @@ class EnableOrganizationsRootSessionsResponseTypeDef(TypedDict):
     ResponseMetadata: ResponseMetadataTypeDef
 
 
+class EnableOutboundWebIdentityFederationResponseTypeDef(TypedDict):
+    IssuerIdentifier: str
+    ResponseMetadata: ResponseMetadataTypeDef
+
+
 class GenerateCredentialReportResponseTypeDef(TypedDict):
     State: ReportStateTypeType
     Description: str
@@ -1872,6 +1879,12 @@ class GetMFADeviceResponseTypeDef(TypedDict):
     SerialNumber: str
     EnableDate: datetime
     Certifications: dict[str, str]
+    ResponseMetadata: ResponseMetadataTypeDef
+
+
+class GetOutboundWebIdentityFederationInfoResponseTypeDef(TypedDict):
+    IssuerIdentifier: str
+    JwtVendingEnabled: bool
     ResponseMetadata: ResponseMetadataTypeDef
 
 

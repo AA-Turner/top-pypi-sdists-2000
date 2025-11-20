@@ -24,19 +24,26 @@ from typing import IO, Any, Union
 from botocore.response import StreamingBody
 
 from .literals import (
+    ArtifactStatusFilterType,
+    ArtifactStatusType,
     EncryptionTypeType,
     FindingSeverityType,
+    ImageActionTypeType,
     ImageFailureCodeType,
+    ImageStatusFilterType,
+    ImageStatusType,
     ImageTagMutabilityType,
     LayerAvailabilityType,
     LayerFailureCodeType,
     LifecyclePolicyPreviewStatusType,
+    LifecyclePolicyStorageClassType,
     RCTAppliedForType,
     ReplicationStatusType,
     ScanFrequencyType,
     ScanStatusType,
     ScanTypeType,
     TagStatusType,
+    TargetStorageClassType,
     UpstreamRegistryType,
 )
 
@@ -81,6 +88,8 @@ __all__ = (
     "DeleteRepositoryPolicyResponseTypeDef",
     "DeleteRepositoryRequestTypeDef",
     "DeleteRepositoryResponseTypeDef",
+    "DeregisterPullTimeUpdateExclusionRequestTypeDef",
+    "DeregisterPullTimeUpdateExclusionResponseTypeDef",
     "DescribeImageReplicationStatusRequestTypeDef",
     "DescribeImageReplicationStatusResponseTypeDef",
     "DescribeImageScanFindingsRequestPaginateTypeDef",
@@ -123,6 +132,7 @@ __all__ = (
     "ImageDetailTypeDef",
     "ImageFailureTypeDef",
     "ImageIdentifierTypeDef",
+    "ImageReferrerTypeDef",
     "ImageReplicationStatusTypeDef",
     "ImageScanFindingTypeDef",
     "ImageScanFindingsSummaryTypeDef",
@@ -139,10 +149,15 @@ __all__ = (
     "LifecyclePolicyPreviewResultTypeDef",
     "LifecyclePolicyPreviewSummaryTypeDef",
     "LifecyclePolicyRuleActionTypeDef",
+    "ListImageReferrersFilterTypeDef",
+    "ListImageReferrersRequestTypeDef",
+    "ListImageReferrersResponseTypeDef",
     "ListImagesFilterTypeDef",
     "ListImagesRequestPaginateTypeDef",
     "ListImagesRequestTypeDef",
     "ListImagesResponseTypeDef",
+    "ListPullTimeUpdateExclusionsRequestTypeDef",
+    "ListPullTimeUpdateExclusionsResponseTypeDef",
     "ListTagsForResourceRequestTypeDef",
     "ListTagsForResourceResponseTypeDef",
     "PackageVulnerabilityDetailsTypeDef",
@@ -165,6 +180,8 @@ __all__ = (
     "PutReplicationConfigurationRequestTypeDef",
     "PutReplicationConfigurationResponseTypeDef",
     "RecommendationTypeDef",
+    "RegisterPullTimeUpdateExclusionRequestTypeDef",
+    "RegisterPullTimeUpdateExclusionResponseTypeDef",
     "RegistryScanningConfigurationTypeDef",
     "RegistryScanningRuleOutputTypeDef",
     "RegistryScanningRuleTypeDef",
@@ -192,9 +209,13 @@ __all__ = (
     "StartImageScanResponseTypeDef",
     "StartLifecyclePolicyPreviewRequestTypeDef",
     "StartLifecyclePolicyPreviewResponseTypeDef",
+    "SubjectIdentifierTypeDef",
     "TagResourceRequestTypeDef",
     "TagTypeDef",
+    "TransitioningImageTotalCountTypeDef",
     "UntagResourceRequestTypeDef",
+    "UpdateImageStorageClassRequestTypeDef",
+    "UpdateImageStorageClassResponseTypeDef",
     "UpdatePullThroughCacheRuleRequestTypeDef",
     "UpdatePullThroughCacheRuleResponseTypeDef",
     "UpdateRepositoryCreationTemplateRequestTypeDef",
@@ -359,6 +380,10 @@ class DeleteRepositoryRequestTypeDef(TypedDict):
     force: NotRequired[bool]
 
 
+class DeregisterPullTimeUpdateExclusionRequestTypeDef(TypedDict):
+    principalArn: str
+
+
 class ImageReplicationStatusTypeDef(TypedDict):
     region: NotRequired[str]
     registryId: NotRequired[str]
@@ -384,6 +409,7 @@ class ImageScanStatusTypeDef(TypedDict):
 
 class DescribeImagesFilterTypeDef(TypedDict):
     tagStatus: NotRequired[TagStatusType]
+    imageStatus: NotRequired[ImageStatusFilterType]
 
 
 class DescribePullThroughCacheRulesRequestTypeDef(TypedDict):
@@ -436,10 +462,6 @@ class LifecyclePolicyPreviewFilterTypeDef(TypedDict):
     tagStatus: NotRequired[TagStatusType]
 
 
-class LifecyclePolicyPreviewSummaryTypeDef(TypedDict):
-    expiringImageTotalCount: NotRequired[int]
-
-
 class GetLifecyclePolicyRequestTypeDef(TypedDict):
     repositoryName: str
     registryId: NotRequired[str]
@@ -456,6 +478,15 @@ class ImageScanFindingsSummaryTypeDef(TypedDict):
     findingSeverityCounts: NotRequired[dict[FindingSeverityType, int]]
 
 
+class ImageReferrerTypeDef(TypedDict):
+    digest: str
+    mediaType: str
+    size: int
+    artifactType: NotRequired[str]
+    annotations: NotRequired[dict[str, str]]
+    artifactStatus: NotRequired[ArtifactStatusType]
+
+
 class InitiateLayerUploadRequestTypeDef(TypedDict):
     repositoryName: str
     registryId: NotRequired[str]
@@ -464,13 +495,34 @@ class InitiateLayerUploadRequestTypeDef(TypedDict):
 LifecyclePolicyRuleActionTypeDef = TypedDict(
     "LifecyclePolicyRuleActionTypeDef",
     {
-        "type": NotRequired[Literal["EXPIRE"]],
+        "type": NotRequired[ImageActionTypeType],
+        "targetStorageClass": NotRequired[Literal["ARCHIVE"]],
     },
 )
 
 
+class TransitioningImageTotalCountTypeDef(TypedDict):
+    targetStorageClass: NotRequired[Literal["ARCHIVE"]]
+    imageTotalCount: NotRequired[int]
+
+
+class ListImageReferrersFilterTypeDef(TypedDict):
+    artifactTypes: NotRequired[Sequence[str]]
+    artifactStatus: NotRequired[ArtifactStatusFilterType]
+
+
+class SubjectIdentifierTypeDef(TypedDict):
+    imageDigest: str
+
+
 class ListImagesFilterTypeDef(TypedDict):
     tagStatus: NotRequired[TagStatusType]
+    imageStatus: NotRequired[ImageStatusFilterType]
+
+
+class ListPullTimeUpdateExclusionsRequestTypeDef(TypedDict):
+    maxResults: NotRequired[int]
+    nextToken: NotRequired[str]
 
 
 class ListTagsForResourceRequestTypeDef(TypedDict):
@@ -516,6 +568,10 @@ class PutRegistryPolicyRequestTypeDef(TypedDict):
 class RecommendationTypeDef(TypedDict):
     url: NotRequired[str]
     text: NotRequired[str]
+
+
+class RegisterPullTimeUpdateExclusionRequestTypeDef(TypedDict):
+    principalArn: str
 
 
 ScanningRepositoryFilterTypeDef = TypedDict(
@@ -641,6 +697,11 @@ class DeleteRepositoryPolicyResponseTypeDef(TypedDict):
     ResponseMetadata: ResponseMetadataTypeDef
 
 
+class DeregisterPullTimeUpdateExclusionResponseTypeDef(TypedDict):
+    principalArn: str
+    ResponseMetadata: ResponseMetadataTypeDef
+
+
 class GetAccountSettingResponseTypeDef(TypedDict):
     name: str
     value: str
@@ -685,6 +746,12 @@ class InitiateLayerUploadResponseTypeDef(TypedDict):
     ResponseMetadata: ResponseMetadataTypeDef
 
 
+class ListPullTimeUpdateExclusionsResponseTypeDef(TypedDict):
+    pullTimeUpdateExclusions: list[str]
+    ResponseMetadata: ResponseMetadataTypeDef
+    nextToken: NotRequired[str]
+
+
 class PutAccountSettingResponseTypeDef(TypedDict):
     name: str
     value: str
@@ -701,6 +768,12 @@ class PutLifecyclePolicyResponseTypeDef(TypedDict):
 class PutRegistryPolicyResponseTypeDef(TypedDict):
     registryId: str
     policyText: str
+    ResponseMetadata: ResponseMetadataTypeDef
+
+
+class RegisterPullTimeUpdateExclusionResponseTypeDef(TypedDict):
+    principalArn: str
+    createdAt: datetime
     ResponseMetadata: ResponseMetadataTypeDef
 
 
@@ -800,6 +873,21 @@ class StartImageScanRequestTypeDef(TypedDict):
     repositoryName: str
     imageId: ImageIdentifierTypeDef
     registryId: NotRequired[str]
+
+
+class UpdateImageStorageClassRequestTypeDef(TypedDict):
+    repositoryName: str
+    imageId: ImageIdentifierTypeDef
+    targetStorageClass: TargetStorageClassType
+    registryId: NotRequired[str]
+
+
+class UpdateImageStorageClassResponseTypeDef(TypedDict):
+    registryId: str
+    repositoryName: str
+    imageId: ImageIdentifierTypeDef
+    imageStatus: ImageStatusType
+    ResponseMetadata: ResponseMetadataTypeDef
 
 
 class UploadLayerPartRequestTypeDef(TypedDict):
@@ -1058,6 +1146,16 @@ class ImageDetailTypeDef(TypedDict):
     imageManifestMediaType: NotRequired[str]
     artifactMediaType: NotRequired[str]
     lastRecordedPullTime: NotRequired[datetime]
+    subjectManifestDigest: NotRequired[str]
+    imageStatus: NotRequired[ImageStatusType]
+    lastArchivedAt: NotRequired[datetime]
+    lastActivatedAt: NotRequired[datetime]
+
+
+class ListImageReferrersResponseTypeDef(TypedDict):
+    referrers: list[ImageReferrerTypeDef]
+    ResponseMetadata: ResponseMetadataTypeDef
+    nextToken: NotRequired[str]
 
 
 class LifecyclePolicyPreviewResultTypeDef(TypedDict):
@@ -1066,8 +1164,25 @@ class LifecyclePolicyPreviewResultTypeDef(TypedDict):
     imagePushedAt: NotRequired[datetime]
     action: NotRequired[LifecyclePolicyRuleActionTypeDef]
     appliedRulePriority: NotRequired[int]
+    storageClass: NotRequired[LifecyclePolicyStorageClassType]
 
 
+class LifecyclePolicyPreviewSummaryTypeDef(TypedDict):
+    expiringImageTotalCount: NotRequired[int]
+    transitioningImageTotalCounts: NotRequired[list[TransitioningImageTotalCountTypeDef]]
+
+
+ListImageReferrersRequestTypeDef = TypedDict(
+    "ListImageReferrersRequestTypeDef",
+    {
+        "repositoryName": str,
+        "subjectId": SubjectIdentifierTypeDef,
+        "registryId": NotRequired[str],
+        "filter": NotRequired[ListImageReferrersFilterTypeDef],
+        "nextToken": NotRequired[str],
+        "maxResults": NotRequired[int],
+    },
+)
 ListImagesRequestPaginateTypeDef = TypedDict(
     "ListImagesRequestPaginateTypeDef",
     {

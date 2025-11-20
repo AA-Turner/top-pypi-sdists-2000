@@ -359,7 +359,7 @@ options:
         required: false
         type: dict
 extends_documentation_fragment:
-- community.vmware.vmware.documentation
+- vmware.vmware.base_options
 
 """
 
@@ -370,7 +370,6 @@ EXAMPLES = r'''
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
     portgroup_name: vlan-123-portrgoup
-    portgroup_description: 'Trunk 1-1000, 1005, 1100-1200'
     switch_name: dvSwitch
     vlan_id: 123
     num_ports: 120
@@ -384,6 +383,7 @@ EXAMPLES = r'''
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
     portgroup_name: vlan-trunk-portrgoup
+    portgroup_description: 'Trunk 1-1000, 1005, 1100-1200'
     switch_name: dvSwitch
     vlan_id: 1-1000, 1005, 1100-1200
     vlan_trunk: true
@@ -463,7 +463,7 @@ from ansible_collections.community.vmware.plugins.module_utils.vmware import (
     is_boolean,
     is_truthy,
     wait_for_task)
-from ansible_collections.community.vmware.plugins.module_utils._argument_spec import base_argument_spec
+from ansible_collections.vmware.vmware.plugins.module_utils.argument_spec import base_argument_spec
 
 
 class VMwareDvsPortgroup(PyVmomi):

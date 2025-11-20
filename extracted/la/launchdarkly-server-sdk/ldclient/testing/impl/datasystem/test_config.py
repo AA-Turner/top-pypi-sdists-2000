@@ -1,12 +1,11 @@
 import dataclasses
-from unittest.mock import MagicMock, Mock
+from unittest.mock import Mock
 
 import pytest
 
 from ldclient.config import Config as LDConfig
-from ldclient.impl.datasystem import Initializer, Synchronizer
-from ldclient.impl.datasystem.config import (
-    Config,
+from ldclient.config import DataSystemConfig
+from ldclient.datasystem import (
     ConfigBuilder,
     custom,
     default,
@@ -63,29 +62,10 @@ def test_config_builder_build_success():
 
     config = builder.build()
 
-    assert isinstance(config, Config)
+    assert isinstance(config, DataSystemConfig)
     assert config.initializers == [mock_initializer]
     assert config.primary_synchronizer == mock_primary
     assert config.secondary_synchronizer == mock_secondary
-
-
-def test_config_builder_build_missing_primary_synchronizer():
-    """Test that build fails when primary synchronizer is not set."""
-    builder = ConfigBuilder()
-
-    with pytest.raises(ValueError, match="Primary synchronizer must be set"):
-        builder.build()
-
-
-def test_config_builder_build_with_initializers_only():
-    """Test that build fails when only initializers are set."""
-    builder = ConfigBuilder()
-    mock_initializer = Mock()
-
-    builder.initializers([mock_initializer])
-
-    with pytest.raises(ValueError, match="Primary synchronizer must be set"):
-        builder.build()
 
 
 def test_config_builder_method_chaining():
@@ -146,9 +126,7 @@ def test_custom_builder():
 
 def test_default_config_builder():
     """Test that default() returns a properly configured ConfigBuilder."""
-    mock_ld_config = Mock(spec=LDConfig)
-
-    builder = default(mock_ld_config)
+    builder = default()
 
     assert isinstance(builder, ConfigBuilder)
     # The actual implementation details would be tested in integration tests
@@ -157,9 +135,7 @@ def test_default_config_builder():
 
 def test_streaming_config_builder():
     """Test that streaming() returns a properly configured ConfigBuilder."""
-    mock_ld_config = Mock(spec=LDConfig)
-
-    builder = streaming(mock_ld_config)
+    builder = streaming()
 
     assert isinstance(builder, ConfigBuilder)
     # The actual implementation details would be tested in integration tests
@@ -168,9 +144,7 @@ def test_streaming_config_builder():
 
 def test_polling_config_builder():
     """Test that polling() returns a properly configured ConfigBuilder."""
-    mock_ld_config = Mock(spec=LDConfig)
-
-    builder = polling(mock_ld_config)
+    builder = polling()
 
     assert isinstance(builder, ConfigBuilder)
     # The actual implementation details would be tested in integration tests
@@ -178,11 +152,11 @@ def test_polling_config_builder():
 
 
 def test_config_dataclass_immutability():
-    """Test that Config instances are immutable (frozen dataclass)."""
+    """Test that DataSystemConfig instances are immutable (frozen dataclass)."""
     mock_primary = Mock()
     mock_secondary = Mock()
 
-    config = Config(
+    config = DataSystemConfig(
         initializers=None,
         primary_synchronizer=mock_primary,
         secondary_synchronizer=mock_secondary,

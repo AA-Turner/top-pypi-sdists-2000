@@ -19,6 +19,7 @@ Usage::
 from __future__ import annotations
 
 import sys
+from collections.abc import Mapping
 from typing import Any, overload
 
 from botocore.client import BaseClient, ClientMeta
@@ -160,12 +161,6 @@ from .waiter import (
     PublishedVersionActiveWaiter,
 )
 
-if sys.version_info >= (3, 9):
-    from builtins import dict as Dict
-    from builtins import type as Type
-    from collections.abc import Mapping
-else:
-    from typing import Dict, Mapping, Type
 if sys.version_info >= (3, 12):
     from typing import Literal, Unpack
 else:
@@ -174,46 +169,46 @@ else:
 __all__ = ("LambdaClient",)
 
 class Exceptions(BaseClientExceptions):
-    ClientError: Type[BotocoreClientError]
-    CodeSigningConfigNotFoundException: Type[BotocoreClientError]
-    CodeStorageExceededException: Type[BotocoreClientError]
-    CodeVerificationFailedException: Type[BotocoreClientError]
-    EC2AccessDeniedException: Type[BotocoreClientError]
-    EC2ThrottledException: Type[BotocoreClientError]
-    EC2UnexpectedException: Type[BotocoreClientError]
-    EFSIOException: Type[BotocoreClientError]
-    EFSMountConnectivityException: Type[BotocoreClientError]
-    EFSMountFailureException: Type[BotocoreClientError]
-    EFSMountTimeoutException: Type[BotocoreClientError]
-    ENILimitReachedException: Type[BotocoreClientError]
-    InvalidCodeSignatureException: Type[BotocoreClientError]
-    InvalidParameterValueException: Type[BotocoreClientError]
-    InvalidRequestContentException: Type[BotocoreClientError]
-    InvalidRuntimeException: Type[BotocoreClientError]
-    InvalidSecurityGroupIDException: Type[BotocoreClientError]
-    InvalidSubnetIDException: Type[BotocoreClientError]
-    InvalidZipFileException: Type[BotocoreClientError]
-    KMSAccessDeniedException: Type[BotocoreClientError]
-    KMSDisabledException: Type[BotocoreClientError]
-    KMSInvalidStateException: Type[BotocoreClientError]
-    KMSNotFoundException: Type[BotocoreClientError]
-    PolicyLengthExceededException: Type[BotocoreClientError]
-    PreconditionFailedException: Type[BotocoreClientError]
-    ProvisionedConcurrencyConfigNotFoundException: Type[BotocoreClientError]
-    RecursiveInvocationException: Type[BotocoreClientError]
-    RequestTooLargeException: Type[BotocoreClientError]
-    ResourceConflictException: Type[BotocoreClientError]
-    ResourceInUseException: Type[BotocoreClientError]
-    ResourceNotFoundException: Type[BotocoreClientError]
-    ResourceNotReadyException: Type[BotocoreClientError]
-    SerializedRequestEntityTooLargeException: Type[BotocoreClientError]
-    ServiceException: Type[BotocoreClientError]
-    SnapStartException: Type[BotocoreClientError]
-    SnapStartNotReadyException: Type[BotocoreClientError]
-    SnapStartTimeoutException: Type[BotocoreClientError]
-    SubnetIPAddressLimitReachedException: Type[BotocoreClientError]
-    TooManyRequestsException: Type[BotocoreClientError]
-    UnsupportedMediaTypeException: Type[BotocoreClientError]
+    ClientError: type[BotocoreClientError]
+    CodeSigningConfigNotFoundException: type[BotocoreClientError]
+    CodeStorageExceededException: type[BotocoreClientError]
+    CodeVerificationFailedException: type[BotocoreClientError]
+    EC2AccessDeniedException: type[BotocoreClientError]
+    EC2ThrottledException: type[BotocoreClientError]
+    EC2UnexpectedException: type[BotocoreClientError]
+    EFSIOException: type[BotocoreClientError]
+    EFSMountConnectivityException: type[BotocoreClientError]
+    EFSMountFailureException: type[BotocoreClientError]
+    EFSMountTimeoutException: type[BotocoreClientError]
+    ENILimitReachedException: type[BotocoreClientError]
+    InvalidCodeSignatureException: type[BotocoreClientError]
+    InvalidParameterValueException: type[BotocoreClientError]
+    InvalidRequestContentException: type[BotocoreClientError]
+    InvalidRuntimeException: type[BotocoreClientError]
+    InvalidSecurityGroupIDException: type[BotocoreClientError]
+    InvalidSubnetIDException: type[BotocoreClientError]
+    InvalidZipFileException: type[BotocoreClientError]
+    KMSAccessDeniedException: type[BotocoreClientError]
+    KMSDisabledException: type[BotocoreClientError]
+    KMSInvalidStateException: type[BotocoreClientError]
+    KMSNotFoundException: type[BotocoreClientError]
+    PolicyLengthExceededException: type[BotocoreClientError]
+    PreconditionFailedException: type[BotocoreClientError]
+    ProvisionedConcurrencyConfigNotFoundException: type[BotocoreClientError]
+    RecursiveInvocationException: type[BotocoreClientError]
+    RequestTooLargeException: type[BotocoreClientError]
+    ResourceConflictException: type[BotocoreClientError]
+    ResourceInUseException: type[BotocoreClientError]
+    ResourceNotFoundException: type[BotocoreClientError]
+    ResourceNotReadyException: type[BotocoreClientError]
+    SerializedRequestEntityTooLargeException: type[BotocoreClientError]
+    ServiceException: type[BotocoreClientError]
+    SnapStartException: type[BotocoreClientError]
+    SnapStartNotReadyException: type[BotocoreClientError]
+    SnapStartTimeoutException: type[BotocoreClientError]
+    SubnetIPAddressLimitReachedException: type[BotocoreClientError]
+    TooManyRequestsException: type[BotocoreClientError]
+    UnsupportedMediaTypeException: type[BotocoreClientError]
 
 class LambdaClient(BaseClient):
     """
@@ -339,7 +334,7 @@ class LambdaClient(BaseClient):
 
     def delete_code_signing_config(
         self, **kwargs: Unpack[DeleteCodeSigningConfigRequestTypeDef]
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """
         Deletes the code signing configuration.
 

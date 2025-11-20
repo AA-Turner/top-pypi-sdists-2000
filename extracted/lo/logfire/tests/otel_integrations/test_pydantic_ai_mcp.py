@@ -30,7 +30,7 @@ except Exception:
 pytestmark = [
     pytest.mark.skipif(sys.version_info < (3, 10), reason='MCP requires Python 3.10 or higher'),
     pytest.mark.skipif(
-        get_version(pydantic.__version__) < get_version('2.10'), reason='Pydantic AI requires Pydantic 2.10 or higher'
+        get_version(pydantic.__version__) < get_version('2.11'), reason='Requires Pydantic 2.11 or higher'
     ),
 ]
 
@@ -295,9 +295,6 @@ Because it found something more "sole-ful!"\
                 'start_time': 16000000000,
                 'end_time': 21000000000,
                 'attributes': {
-                    'code.filepath': 'test_pydantic_ai_mcp.py',
-                    'code.function': 'joker',
-                    'code.lineno': 123,
                     'request': {
                         'method': 'sampling/createMessage',
                         'params': {

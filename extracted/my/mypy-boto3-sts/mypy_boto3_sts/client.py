@@ -46,6 +46,8 @@ from .type_defs import (
     GetFederationTokenResponseTypeDef,
     GetSessionTokenRequestTypeDef,
     GetSessionTokenResponseTypeDef,
+    GetWebIdentityTokenRequestTypeDef,
+    GetWebIdentityTokenResponseTypeDef,
 )
 
 if sys.version_info >= (3, 12):
@@ -65,9 +67,12 @@ class Exceptions(BaseClientExceptions):
     IDPRejectedClaimException: type[BotocoreClientError]
     InvalidAuthorizationMessageException: type[BotocoreClientError]
     InvalidIdentityTokenException: type[BotocoreClientError]
+    JWTPayloadSizeExceededException: type[BotocoreClientError]
     MalformedPolicyDocumentException: type[BotocoreClientError]
+    OutboundWebIdentityFederationDisabledException: type[BotocoreClientError]
     PackedPolicyTooLargeException: type[BotocoreClientError]
     RegionDisabledException: type[BotocoreClientError]
+    SessionDurationEscalationException: type[BotocoreClientError]
 
 
 class STSClient(BaseClient):
@@ -179,7 +184,8 @@ class STSClient(BaseClient):
         self, **kwargs: Unpack[GetDelegatedAccessTokenRequestTypeDef]
     ) -> GetDelegatedAccessTokenResponseTypeDef:
         """
-        This API is currently unavailable for general use.
+        Exchanges a trade-in token for temporary Amazon Web Services credentials with
+        the permissions associated with the assumed principal.
 
         [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/sts/client/get_delegated_access_token.html)
         [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_sts/client/#get_delegated_access_token)
@@ -205,4 +211,15 @@ class STSClient(BaseClient):
 
         [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/sts/client/get_session_token.html)
         [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_sts/client/#get_session_token)
+        """
+
+    def get_web_identity_token(
+        self, **kwargs: Unpack[GetWebIdentityTokenRequestTypeDef]
+    ) -> GetWebIdentityTokenResponseTypeDef:
+        """
+        Returns a signed JSON Web Token (JWT) that represents the calling Amazon Web
+        Services identity.
+
+        [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/sts/client/get_web_identity_token.html)
+        [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_sts/client/#get_web_identity_token)
         """
